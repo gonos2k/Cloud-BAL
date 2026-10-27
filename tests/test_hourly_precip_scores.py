@@ -24,6 +24,7 @@ from plot_hourly_precip_scores import (  # noqa: E402
     add_not_evaluated_rows,
     build_summary,
     load_and_score,
+    hourly_score_title,
     longitude_aspect_ratio,
     prepare_output_dir,
     score_first_hour_pairs,
@@ -92,6 +93,16 @@ class HourlyPrecipScoreTests(unittest.TestCase):
         self.assertEqual(first["FAR"], 1.0)
         self.assertIsNone(first["frequency_bias"])
 
+    def test_plot_title_uses_row_valid_time_range(self) -> None:
+        rows = load_and_score(self.csv_path, START, expected_cells=EXPECTED_CELLS)
+        self.assertEqual(hourly_score_title(rows),
+                         "Hourly precipitation CSI · 2026-08-16 · 1-hour windows ending 13–18 UTC")
+        for row in rows:
+            valid = datetime(2026, 8, 16, 22, tzinfo=timezone.utc) + timedelta(hours=row["lead_hour"])
+            row["valid_utc"] = valid.strftime("%Y-%m-%dT%H:%M:%SZ")
+        self.assertEqual(hourly_score_title(rows),
+                         "Hourly precipitation CSI · 1-hour windows ending 2026-08-16 23–2026-08-17 04 UTC")
+
     def test_zero_event_scores_are_undefined(self) -> None:
         zero_event = self.rows[0]
         zero_event.update(hit=0, miss=0, false_alarm=0, correct_dry=EXPECTED_CELLS, CSI="")
@@ -128,6 +139,56 @@ class HourlyPrecipScoreTests(unittest.TestCase):
         write_rows(self.csv_path, self.rows[:-1])
         with self.assertRaisesRegex(ValueError, "expected 72 archived rows"):
             load_and_score(self.csv_path, START, expected_cells=EXPECTED_CELLS)
+
+    def test_complete_hourly_mode_scores_all_six_thresholds(self) -> None:
+        complete_rows = [dict(row) for row in self.rows]
+        for case in CASES:
+            for lead in LEADS:
+                for threshold in (0.5, 2.5):
+                    hit, miss, false_alarm = 1, 2, 1
+                    complete_rows.append({
+                        "case": case,
+                        "lead_hour": lead,
+                        "valid_utc": (datetime.strptime(START, "%Y-%m-%dT%H:%M:%SZ")
+                                      .replace(tzinfo=timezone.utc) + timedelta(hours=lead))
+                                     .strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        "threshold_mm": threshold,
+                        "valid_cells": EXPECTED_CELLS,
+                        "hit": hit,
+                        "miss": miss,
+                        "false_alarm": false_alarm,
+                        "correct_dry": EXPECTED_CELLS - hit - miss - false_alarm,
+                        "CSI": hit / (hit + miss + false_alarm),
+                    })
+        write_rows(self.csv_path, complete_rows)
+        scored = load_and_score(self.csv_path, START, expected_cells=EXPECTED_CELLS,
+                                thresholds=THRESHOLDS)
+        self.assertEqual(len(scored), 108)
+        self.assertEqual({row["source_kind"] for row in scored}, {"hourly_contingency_csv"})
+        summary = build_summary(scored, START, self.csv_path, complete_hourly_csv=True)
+        self.assertEqual(summary["scope"]["evaluated_rows"], 108)
+        self.assertEqual(summary["scope"]["not_evaluated_rows"], 0)
+        self.assertNotIn("later leads are NOT_EVALUATED", " ".join(summary["limitations"]))
+
+    def test_complete_hourly_mode_rejects_missing_threshold_row(self) -> None:
+        complete_rows = [dict(row) for row in self.rows]
+        # Add all rows for the two thresholds absent from the default archive.
+        for case in CASES:
+            for lead in LEADS:
+                valid = (datetime.strptime(START, "%Y-%m-%dT%H:%M:%SZ")
+                         .replace(tzinfo=timezone.utc) + timedelta(hours=lead))
+                for threshold in (0.5, 2.5):
+                    complete_rows.append({
+                        "case": case, "lead_hour": lead,
+                        "valid_utc": valid.strftime("%Y-%m-%dT%H:%M:%SZ"),
+                        "threshold_mm": threshold, "valid_cells": EXPECTED_CELLS,
+                        "hit": 1, "miss": 2, "false_alarm": 1,
+                        "correct_dry": EXPECTED_CELLS - 4, "CSI": 0.25,
+                    })
+        write_rows(self.csv_path, complete_rows[:-1])
+        with self.assertRaisesRegex(ValueError, "expected 108 complete hourly rows"):
+            load_and_score(self.csv_path, START, expected_cells=EXPECTED_CELLS,
+                            thresholds=THRESHOLDS)
 
     def test_rejects_bad_count_sum(self) -> None:
         self.rows[0]["correct_dry"] = 5

@@ -1,0 +1,1323 @@
+{
+  "status": "SIX_HOUR_HOURLY_CSI_COMPUTED",
+  "evidence_class": "hourly_model_precipitation_vs_RN1_analysis_product",
+  "initial_time_utc": "2026-08-16T12:00:00Z",
+  "valid_hours_utc": [
+    "2026-08-16T13:00:00Z",
+    "2026-08-16T14:00:00Z",
+    "2026-08-16T15:00:00Z",
+    "2026-08-16T16:00:00Z",
+    "2026-08-16T17:00:00Z",
+    "2026-08-16T18:00:00Z"
+  ],
+  "region": "South Korean land-only source-bound mask; geographic country interpretation remains the mask receipt's documented provenance inference",
+  "grid": {
+    "target_shape_yx": [
+      253,
+      149
+    ],
+    "source_native_shape_yx": [
+      282,
+      234
+    ],
+    "source_corner_crop_inclusive_yx": [
+      [
+        5,
+        258
+      ],
+      [
+        74,
+        223
+      ]
+    ],
+    "fixed_mask_cells": 3688,
+    "mapping_valid_cells": 3688,
+    "bilinear_residual_max_deg": 2.842170943040401e-14,
+    "mapping": "existing one-cell-halo native WRF curvilinear bilinear interpolation to ODAM points; source-bound cells only; no extrapolation"
+  },
+  "accumulation": {
+    "model": "hourly differences of cumulative RAINC + RAINNC; RAINSH is checked separately and excluded because the source-bound contract records it as zero",
+    "reference": "RN1 file for the matching UTC hour",
+    "pooled_definition": "sum of six consecutive 1-hour contingency tables; no six-hour accumulated threshold",
+    "missing_policy": "one fixed source-bound mask and one common valid mask per hour shared by all three cases and all thresholds"
+  },
+  "rainsh": {
+    "policy": "exclude_zero",
+    "source": "Registry.EM_COMMON:1593-1595 (rh01du, units mm); run_contract.md:38",
+    "model_driver": "retained WRF history output; run_contract.md:38 and ONE_HOUR_REPRODUCTION.json",
+    "included_in_total": false,
+    "variable_description_examples": [
+      "ACCUMULATED SHALLOW CUMULUS PRECIPITATION"
+    ]
+  },
+  "bucket_contract": {
+    "BUCKET_MM": -1.0,
+    "PREC_ACC_DT": 0.0
+  },
+  "reset_bucket_checks": {
+    "off": {
+      "components": {
+        "RAINC": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        },
+        "RAINNC": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        },
+        "RAINSH": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        }
+      }
+    },
+    "hydro": {
+      "components": {
+        "RAINC": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        },
+        "RAINNC": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        },
+        "RAINSH": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        }
+      }
+    },
+    "liquid": {
+      "components": {
+        "RAINC": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        },
+        "RAINNC": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        },
+        "RAINSH": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        }
+      }
+    }
+  },
+  "sources": {
+    "inventory": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/inventory.json",
+      "sha256": "fc65b7ff026d2813ede107d3c60e58f702f6d6286ae8c0940196ff7283d3f460",
+      "size": 16533
+    },
+    "mask": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/south_korea_land_mask_149x253_uint8_fortran.bin",
+      "sha256": "25a43d7e2981b6551cb753362f9d52ce11037a6e2d61a4750c1e21d152742b46",
+      "size": 37697
+    },
+    "mask_receipt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/mask_receipt.json",
+      "sha256": "b179bf6b1902c0decdbd7a3cf667cbeda9a359874f7151a3bbc05809dba7bec7",
+      "size": 1625
+    },
+    "analysis_coordinates": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/DFSD/20260816/klps_lc05_anal_20260816_1300",
+      "sha256": "bfa8e9d050244166ee53973be9593cdcad0e322d9b69209084c8dd19d159b23e",
+      "size": 94462752
+    },
+    "run_contract": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/run_contract.md",
+      "sha256": "10e671b307d1936aec5602bf1897120cbbc0796a4c56d217649ef4f5ad1b12f1",
+      "size": 8684
+    },
+    "one_hour_reproduction": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/ONE_HOUR_REPRODUCTION.json",
+      "sha256": "aeb248edfe39df069e014ce360fcbc77e54157ec72fa6764aa98ed464a767c66",
+      "size": 1659
+    },
+    "rn1": [
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161300",
+        "sha256": "5f435e9e7845860636b8ac6d4a982563f1d709f4340dadb7828df2f2cda8e9a1",
+        "size": 267686,
+        "hour_utc": 13
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161400",
+        "sha256": "54ba0fe609630eec8366b9f4a21fddd29baabbd1ad89e8a2ac4e769900887497",
+        "size": 267686,
+        "hour_utc": 14
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161500",
+        "sha256": "00219ebc741da5bbdc79b408a1363e4a920d4f58d41118978234d2cbe089f346",
+        "size": 267686,
+        "hour_utc": 15
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161600",
+        "sha256": "74f2b96af4e0686b15dc1c8a75e337f964a9e25841540a61b3d3546e22187af6",
+        "size": 267686,
+        "hour_utc": 16
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161700",
+        "sha256": "77145a0b095203e452cc029cf56a97f1ff10a5485b69f76ab1d21219c15fa2d5",
+        "size": 267686,
+        "hour_utc": 17
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161800",
+        "sha256": "f0b6834a27449904efb7f6242e47a6246d75ad1403d6eb24ce82c689f00557bc",
+        "size": 267686,
+        "hour_utc": 18
+      }
+    ],
+    "wrfout": {
+      "off": [
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfout_d01_2026-08-16_12:00:00",
+          "sha256": "e25ccaa70e78b4d4d4d71d6f840286905b88cfae74cd0e638591d4b110310f61",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfout_d01_2026-08-16_13:00:00",
+          "sha256": "f6eeb5a7107ac273140f075b2595ac89f718001a2f092b6723b52b80495b5e0e",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfout_d01_2026-08-16_14:00:00",
+          "sha256": "3ebde42b3854410a81fef1d9b14531fb08d39d086cf7329d49d8dc69e97c8bb2",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfout_d01_2026-08-16_15:00:00",
+          "sha256": "9c558db169c16f1fa643f4e9238c668002109c201ca3bd9fbc4be1d19755e2b0",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfout_d01_2026-08-16_16:00:00",
+          "sha256": "e251b3c6cb28643f8b306f722faad8c04bf256b0421efde299c5f08e6d61b803",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfout_d01_2026-08-16_17:00:00",
+          "sha256": "14791f6f03389edf4389a25234591ac019fc5161db58bcf857a56e95d3eff41e",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfout_d01_2026-08-16_18:00:00",
+          "sha256": "4d25d672bb5b2339f61ed7ba7d439b9da854f1d200d1b1431283c40e61fa5d1b",
+          "size": 328253340
+        }
+      ],
+      "hydro": [
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_12:00:00",
+          "sha256": "203edd6d035b74a53d1e81cda11a58be22b18f056624f613ae3e0485e4a24388",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_13:00:00",
+          "sha256": "108ed8a27a73eae8f6aa1e9fc8993efbcc880c3fbc8e998a4cf91e7ea254de77",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_14:00:00",
+          "sha256": "f941af9fd2830eca147d4bdb23142c4f7843808eeba2822c7b64a4a2e245584d",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_15:00:00",
+          "sha256": "14e07084369a15f8ca765dca127561cfecb897b545dd201368ba17b75abc4325",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_16:00:00",
+          "sha256": "a1cda63613593bfe1e91ee3906f91c57d942f7c20c74fc44748df5a5b91917d8",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_17:00:00",
+          "sha256": "8893514dd834d7922850e2ebc2b6d220445eca8f003c42f91a02b8ea28f7ab16",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_18:00:00",
+          "sha256": "ed63ebacddb8dac720ac6f91b6627626e03688ebb07aa4967949b5b52228e234",
+          "size": 328253340
+        }
+      ],
+      "liquid": [
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfout_d01_2026-08-16_12:00:00",
+          "sha256": "354041bc46ba3e746ca20695ebd2a17a7926f00b411848da1234608cbc7764a3",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfout_d01_2026-08-16_13:00:00",
+          "sha256": "447546d38fb6d4af1c326b9b03340ad8238b40b9070eb113ea08d5a23dcc86af",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfout_d01_2026-08-16_14:00:00",
+          "sha256": "e8f2e7a7b0e7679f4cb0a2015f79df05c9dcf0a4299969918ccee505a7118ac2",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfout_d01_2026-08-16_15:00:00",
+          "sha256": "d803caf1971f86dfa78a00d72716db23221e0f241ae5b4e15b3ef49d535ee84a",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfout_d01_2026-08-16_16:00:00",
+          "sha256": "d8f9856bfe62212880311cd9ab6b32cc9f09304bdf5ba495d7dd8371ac93bba0",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfout_d01_2026-08-16_17:00:00",
+          "sha256": "3b31d6586de153bc7aa4d568867107fd4094c911a43429bdf6d1a6644cec704f",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfout_d01_2026-08-16_18:00:00",
+          "sha256": "1b64593ce42540edc7b5fdcb0278a4eaf9737e46d14c4cc84708b1ea84cc7024",
+          "size": 328253340
+        }
+      ]
+    }
+  },
+  "cases": {
+    "off": {
+      "hourly": {
+        "13": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 56.498450891338436,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 642,
+              "miss": 951,
+              "false_alarm": 54,
+              "correct_dry": 2041,
+              "CSI": 0.38979963570127507
+            },
+            "0.5": {
+              "hit": 382,
+              "miss": 754,
+              "false_alarm": 85,
+              "correct_dry": 2467,
+              "CSI": 0.31285831285831284
+            },
+            "1.0": {
+              "hit": 265,
+              "miss": 448,
+              "false_alarm": 109,
+              "correct_dry": 2866,
+              "CSI": 0.3223844282238443
+            },
+            "2.5": {
+              "hit": 163,
+              "miss": 188,
+              "false_alarm": 105,
+              "correct_dry": 3232,
+              "CSI": 0.3574561403508772
+            },
+            "5.0": {
+              "hit": 74,
+              "miss": 80,
+              "false_alarm": 115,
+              "correct_dry": 3419,
+              "CSI": 0.275092936802974
+            },
+            "10.0": {
+              "hit": 7,
+              "miss": 52,
+              "false_alarm": 83,
+              "correct_dry": 3546,
+              "CSI": 0.04929577464788732
+            }
+          }
+        },
+        "14": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 60.615509842148725,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 708,
+              "miss": 959,
+              "false_alarm": 427,
+              "correct_dry": 1594,
+              "CSI": 0.33810888252148996
+            },
+            "0.5": {
+              "hit": 397,
+              "miss": 716,
+              "false_alarm": 212,
+              "correct_dry": 2363,
+              "CSI": 0.29962264150943396
+            },
+            "1.0": {
+              "hit": 249,
+              "miss": 444,
+              "false_alarm": 156,
+              "correct_dry": 2839,
+              "CSI": 0.29328621908127206
+            },
+            "2.5": {
+              "hit": 116,
+              "miss": 267,
+              "false_alarm": 106,
+              "correct_dry": 3199,
+              "CSI": 0.23721881390593047
+            },
+            "5.0": {
+              "hit": 59,
+              "miss": 159,
+              "false_alarm": 107,
+              "correct_dry": 3363,
+              "CSI": 0.18153846153846154
+            },
+            "10.0": {
+              "hit": 23,
+              "miss": 56,
+              "false_alarm": 87,
+              "correct_dry": 3522,
+              "CSI": 0.13855421686746988
+            }
+          }
+        },
+        "15": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 54.11345793519406,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 786,
+              "miss": 796,
+              "false_alarm": 817,
+              "correct_dry": 1289,
+              "CSI": 0.3276365152146728
+            },
+            "0.5": {
+              "hit": 453,
+              "miss": 705,
+              "false_alarm": 464,
+              "correct_dry": 2066,
+              "CSI": 0.2792848335388409
+            },
+            "1.0": {
+              "hit": 327,
+              "miss": 520,
+              "false_alarm": 299,
+              "correct_dry": 2542,
+              "CSI": 0.28534031413612565
+            },
+            "2.5": {
+              "hit": 202,
+              "miss": 370,
+              "false_alarm": 207,
+              "correct_dry": 2909,
+              "CSI": 0.2593068035943517
+            },
+            "5.0": {
+              "hit": 85,
+              "miss": 260,
+              "false_alarm": 179,
+              "correct_dry": 3164,
+              "CSI": 0.16221374045801526
+            },
+            "10.0": {
+              "hit": 21,
+              "miss": 111,
+              "false_alarm": 126,
+              "correct_dry": 3430,
+              "CSI": 0.08139534883720931
+            }
+          }
+        },
+        "16": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 96.78290620419551,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 810,
+              "miss": 810,
+              "false_alarm": 822,
+              "correct_dry": 1246,
+              "CSI": 0.3316953316953317
+            },
+            "0.5": {
+              "hit": 491,
+              "miss": 731,
+              "false_alarm": 538,
+              "correct_dry": 1928,
+              "CSI": 0.27897727272727274
+            },
+            "1.0": {
+              "hit": 361,
+              "miss": 581,
+              "false_alarm": 448,
+              "correct_dry": 2298,
+              "CSI": 0.25971223021582734
+            },
+            "2.5": {
+              "hit": 167,
+              "miss": 424,
+              "false_alarm": 336,
+              "correct_dry": 2761,
+              "CSI": 0.18015102481121897
+            },
+            "5.0": {
+              "hit": 66,
+              "miss": 278,
+              "false_alarm": 231,
+              "correct_dry": 3113,
+              "CSI": 0.11478260869565217
+            },
+            "10.0": {
+              "hit": 18,
+              "miss": 147,
+              "false_alarm": 121,
+              "correct_dry": 3402,
+              "CSI": 0.06293706293706294
+            }
+          }
+        },
+        "17": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 65.82190878660587,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 796,
+              "miss": 901,
+              "false_alarm": 726,
+              "correct_dry": 1265,
+              "CSI": 0.328518365662402
+            },
+            "0.5": {
+              "hit": 452,
+              "miss": 777,
+              "false_alarm": 557,
+              "correct_dry": 1902,
+              "CSI": 0.2530795072788354
+            },
+            "1.0": {
+              "hit": 323,
+              "miss": 602,
+              "false_alarm": 485,
+              "correct_dry": 2278,
+              "CSI": 0.22907801418439716
+            },
+            "2.5": {
+              "hit": 195,
+              "miss": 378,
+              "false_alarm": 329,
+              "correct_dry": 2786,
+              "CSI": 0.21618625277161863
+            },
+            "5.0": {
+              "hit": 104,
+              "miss": 226,
+              "false_alarm": 238,
+              "correct_dry": 3120,
+              "CSI": 0.18309859154929578
+            },
+            "10.0": {
+              "hit": 45,
+              "miss": 123,
+              "false_alarm": 107,
+              "correct_dry": 3413,
+              "CSI": 0.16363636363636364
+            }
+          }
+        },
+        "18": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 54.37953565397683,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 939,
+              "miss": 695,
+              "false_alarm": 889,
+              "correct_dry": 1165,
+              "CSI": 0.37217598097502974
+            },
+            "0.5": {
+              "hit": 646,
+              "miss": 603,
+              "false_alarm": 624,
+              "correct_dry": 1815,
+              "CSI": 0.3449012279765083
+            },
+            "1.0": {
+              "hit": 505,
+              "miss": 463,
+              "false_alarm": 479,
+              "correct_dry": 2241,
+              "CSI": 0.34899792674498964
+            },
+            "2.5": {
+              "hit": 325,
+              "miss": 286,
+              "false_alarm": 304,
+              "correct_dry": 2773,
+              "CSI": 0.3551912568306011
+            },
+            "5.0": {
+              "hit": 155,
+              "miss": 193,
+              "false_alarm": 243,
+              "correct_dry": 3097,
+              "CSI": 0.2622673434856176
+            },
+            "10.0": {
+              "hit": 51,
+              "miss": 73,
+              "false_alarm": 155,
+              "correct_dry": 3409,
+              "CSI": 0.1827956989247312
+            }
+          }
+        }
+      },
+      "pooled_6h": {
+        "0.1": {
+          "hit": 4681,
+          "miss": 5112,
+          "false_alarm": 3735,
+          "correct_dry": 8600,
+          "CSI": 0.34602306327616794
+        },
+        "0.5": {
+          "hit": 2821,
+          "miss": 4286,
+          "false_alarm": 2480,
+          "correct_dry": 12541,
+          "CSI": 0.2942526337749035
+        },
+        "1.0": {
+          "hit": 2030,
+          "miss": 3058,
+          "false_alarm": 1976,
+          "correct_dry": 15064,
+          "CSI": 0.2873725934314836
+        },
+        "2.5": {
+          "hit": 1168,
+          "miss": 1913,
+          "false_alarm": 1387,
+          "correct_dry": 17660,
+          "CSI": 0.26141450313339304
+        },
+        "5.0": {
+          "hit": 543,
+          "miss": 1196,
+          "false_alarm": 1113,
+          "correct_dry": 19276,
+          "CSI": 0.19039270687237025
+        },
+        "10.0": {
+          "hit": 165,
+          "miss": 562,
+          "false_alarm": 679,
+          "correct_dry": 20722,
+          "CSI": 0.11735419630156473
+        }
+      }
+    },
+    "hydro": {
+      "hourly": {
+        "13": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 55.535461294308064,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 613,
+              "miss": 980,
+              "false_alarm": 56,
+              "correct_dry": 2039,
+              "CSI": 0.37174044875682233
+            },
+            "0.5": {
+              "hit": 339,
+              "miss": 797,
+              "false_alarm": 80,
+              "correct_dry": 2472,
+              "CSI": 0.2787828947368421
+            },
+            "1.0": {
+              "hit": 237,
+              "miss": 476,
+              "false_alarm": 100,
+              "correct_dry": 2875,
+              "CSI": 0.2915129151291513
+            },
+            "2.5": {
+              "hit": 148,
+              "miss": 203,
+              "false_alarm": 102,
+              "correct_dry": 3235,
+              "CSI": 0.32671081677704195
+            },
+            "5.0": {
+              "hit": 55,
+              "miss": 99,
+              "false_alarm": 103,
+              "correct_dry": 3431,
+              "CSI": 0.2140077821011673
+            },
+            "10.0": {
+              "hit": 6,
+              "miss": 53,
+              "false_alarm": 79,
+              "correct_dry": 3550,
+              "CSI": 0.043478260869565216
+            }
+          }
+        },
+        "14": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 60.68746728196187,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 705,
+              "miss": 962,
+              "false_alarm": 417,
+              "correct_dry": 1604,
+              "CSI": 0.33829174664107486
+            },
+            "0.5": {
+              "hit": 400,
+              "miss": 713,
+              "false_alarm": 212,
+              "correct_dry": 2363,
+              "CSI": 0.3018867924528302
+            },
+            "1.0": {
+              "hit": 273,
+              "miss": 420,
+              "false_alarm": 154,
+              "correct_dry": 2841,
+              "CSI": 0.32231404958677684
+            },
+            "2.5": {
+              "hit": 125,
+              "miss": 258,
+              "false_alarm": 107,
+              "correct_dry": 3198,
+              "CSI": 0.25510204081632654
+            },
+            "5.0": {
+              "hit": 58,
+              "miss": 160,
+              "false_alarm": 105,
+              "correct_dry": 3365,
+              "CSI": 0.17956656346749225
+            },
+            "10.0": {
+              "hit": 24,
+              "miss": 55,
+              "false_alarm": 85,
+              "correct_dry": 3524,
+              "CSI": 0.14634146341463414
+            }
+          }
+        },
+        "15": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 45.375130458712846,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 760,
+              "miss": 822,
+              "false_alarm": 851,
+              "correct_dry": 1255,
+              "CSI": 0.31237155774763664
+            },
+            "0.5": {
+              "hit": 436,
+              "miss": 722,
+              "false_alarm": 473,
+              "correct_dry": 2057,
+              "CSI": 0.2673206621704476
+            },
+            "1.0": {
+              "hit": 322,
+              "miss": 525,
+              "false_alarm": 307,
+              "correct_dry": 2534,
+              "CSI": 0.27902946273830154
+            },
+            "2.5": {
+              "hit": 193,
+              "miss": 379,
+              "false_alarm": 197,
+              "correct_dry": 2919,
+              "CSI": 0.25097529258777634
+            },
+            "5.0": {
+              "hit": 84,
+              "miss": 261,
+              "false_alarm": 174,
+              "correct_dry": 3169,
+              "CSI": 0.16184971098265896
+            },
+            "10.0": {
+              "hit": 21,
+              "miss": 111,
+              "false_alarm": 130,
+              "correct_dry": 3426,
+              "CSI": 0.08015267175572519
+            }
+          }
+        },
+        "16": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 82.39787743281461,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 772,
+              "miss": 848,
+              "false_alarm": 801,
+              "correct_dry": 1267,
+              "CSI": 0.31887649731515905
+            },
+            "0.5": {
+              "hit": 476,
+              "miss": 746,
+              "false_alarm": 537,
+              "correct_dry": 1929,
+              "CSI": 0.27060830017055143
+            },
+            "1.0": {
+              "hit": 330,
+              "miss": 612,
+              "false_alarm": 439,
+              "correct_dry": 2307,
+              "CSI": 0.2389572773352643
+            },
+            "2.5": {
+              "hit": 158,
+              "miss": 433,
+              "false_alarm": 323,
+              "correct_dry": 2774,
+              "CSI": 0.17286652078774617
+            },
+            "5.0": {
+              "hit": 68,
+              "miss": 276,
+              "false_alarm": 223,
+              "correct_dry": 3121,
+              "CSI": 0.11992945326278659
+            },
+            "10.0": {
+              "hit": 15,
+              "miss": 150,
+              "false_alarm": 113,
+              "correct_dry": 3410,
+              "CSI": 0.0539568345323741
+            }
+          }
+        },
+        "17": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 54.12043496010233,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 799,
+              "miss": 898,
+              "false_alarm": 715,
+              "correct_dry": 1276,
+              "CSI": 0.3312603648424544
+            },
+            "0.5": {
+              "hit": 484,
+              "miss": 745,
+              "false_alarm": 549,
+              "correct_dry": 1910,
+              "CSI": 0.2722159730033746
+            },
+            "1.0": {
+              "hit": 338,
+              "miss": 587,
+              "false_alarm": 474,
+              "correct_dry": 2289,
+              "CSI": 0.2416011436740529
+            },
+            "2.5": {
+              "hit": 207,
+              "miss": 366,
+              "false_alarm": 318,
+              "correct_dry": 2797,
+              "CSI": 0.23232323232323232
+            },
+            "5.0": {
+              "hit": 92,
+              "miss": 238,
+              "false_alarm": 227,
+              "correct_dry": 3131,
+              "CSI": 0.1651705565529623
+            },
+            "10.0": {
+              "hit": 28,
+              "miss": 140,
+              "false_alarm": 102,
+              "correct_dry": 3418,
+              "CSI": 0.1037037037037037
+            }
+          }
+        },
+        "18": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 47.582058650510575,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 904,
+              "miss": 730,
+              "false_alarm": 842,
+              "correct_dry": 1212,
+              "CSI": 0.3651050080775444
+            },
+            "0.5": {
+              "hit": 624,
+              "miss": 625,
+              "false_alarm": 577,
+              "correct_dry": 1862,
+              "CSI": 0.3417305585980285
+            },
+            "1.0": {
+              "hit": 509,
+              "miss": 459,
+              "false_alarm": 455,
+              "correct_dry": 2265,
+              "CSI": 0.3576950105411103
+            },
+            "2.5": {
+              "hit": 337,
+              "miss": 274,
+              "false_alarm": 288,
+              "correct_dry": 2789,
+              "CSI": 0.37486095661846497
+            },
+            "5.0": {
+              "hit": 163,
+              "miss": 185,
+              "false_alarm": 237,
+              "correct_dry": 3103,
+              "CSI": 0.27863247863247864
+            },
+            "10.0": {
+              "hit": 51,
+              "miss": 73,
+              "false_alarm": 159,
+              "correct_dry": 3405,
+              "CSI": 0.18021201413427562
+            }
+          }
+        }
+      },
+      "pooled_6h": {
+        "0.1": {
+          "hit": 4553,
+          "miss": 5240,
+          "false_alarm": 3682,
+          "correct_dry": 8653,
+          "CSI": 0.33788497217068647
+        },
+        "0.5": {
+          "hit": 2759,
+          "miss": 4348,
+          "false_alarm": 2428,
+          "correct_dry": 12593,
+          "CSI": 0.28935500786575774
+        },
+        "1.0": {
+          "hit": 2009,
+          "miss": 3079,
+          "false_alarm": 1929,
+          "correct_dry": 15111,
+          "CSI": 0.28630468861336755
+        },
+        "2.5": {
+          "hit": 1168,
+          "miss": 1913,
+          "false_alarm": 1335,
+          "correct_dry": 17712,
+          "CSI": 0.2644927536231884
+        },
+        "5.0": {
+          "hit": 520,
+          "miss": 1219,
+          "false_alarm": 1069,
+          "correct_dry": 19320,
+          "CSI": 0.18518518518518517
+        },
+        "10.0": {
+          "hit": 145,
+          "miss": 582,
+          "false_alarm": 668,
+          "correct_dry": 20733,
+          "CSI": 0.1039426523297491
+        }
+      }
+    },
+    "liquid": {
+      "hourly": {
+        "13": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 55.21106633195154,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 613,
+              "miss": 980,
+              "false_alarm": 53,
+              "correct_dry": 2042,
+              "CSI": 0.3724179829890644
+            },
+            "0.5": {
+              "hit": 341,
+              "miss": 795,
+              "false_alarm": 78,
+              "correct_dry": 2474,
+              "CSI": 0.2808896210873147
+            },
+            "1.0": {
+              "hit": 242,
+              "miss": 471,
+              "false_alarm": 105,
+              "correct_dry": 2870,
+              "CSI": 0.29584352078239606
+            },
+            "2.5": {
+              "hit": 149,
+              "miss": 202,
+              "false_alarm": 99,
+              "correct_dry": 3238,
+              "CSI": 0.33111111111111113
+            },
+            "5.0": {
+              "hit": 55,
+              "miss": 99,
+              "false_alarm": 99,
+              "correct_dry": 3435,
+              "CSI": 0.21739130434782608
+            },
+            "10.0": {
+              "hit": 7,
+              "miss": 52,
+              "false_alarm": 78,
+              "correct_dry": 3551,
+              "CSI": 0.051094890510948905
+            }
+          }
+        },
+        "14": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 61.296001134266746,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 705,
+              "miss": 962,
+              "false_alarm": 406,
+              "correct_dry": 1615,
+              "CSI": 0.34008683068017365
+            },
+            "0.5": {
+              "hit": 395,
+              "miss": 718,
+              "false_alarm": 201,
+              "correct_dry": 2374,
+              "CSI": 0.3006088280060883
+            },
+            "1.0": {
+              "hit": 272,
+              "miss": 421,
+              "false_alarm": 152,
+              "correct_dry": 2843,
+              "CSI": 0.32189349112426036
+            },
+            "2.5": {
+              "hit": 127,
+              "miss": 256,
+              "false_alarm": 106,
+              "correct_dry": 3199,
+              "CSI": 0.25971370143149286
+            },
+            "5.0": {
+              "hit": 59,
+              "miss": 159,
+              "false_alarm": 107,
+              "correct_dry": 3363,
+              "CSI": 0.18153846153846154
+            },
+            "10.0": {
+              "hit": 26,
+              "miss": 53,
+              "false_alarm": 86,
+              "correct_dry": 3523,
+              "CSI": 0.15757575757575756
+            }
+          }
+        },
+        "15": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 45.624274535724,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 748,
+              "miss": 834,
+              "false_alarm": 860,
+              "correct_dry": 1246,
+              "CSI": 0.3063063063063063
+            },
+            "0.5": {
+              "hit": 439,
+              "miss": 719,
+              "false_alarm": 465,
+              "correct_dry": 2065,
+              "CSI": 0.270486752926679
+            },
+            "1.0": {
+              "hit": 321,
+              "miss": 526,
+              "false_alarm": 311,
+              "correct_dry": 2530,
+              "CSI": 0.2772020725388601
+            },
+            "2.5": {
+              "hit": 198,
+              "miss": 374,
+              "false_alarm": 199,
+              "correct_dry": 2917,
+              "CSI": 0.25680933852140075
+            },
+            "5.0": {
+              "hit": 87,
+              "miss": 258,
+              "false_alarm": 171,
+              "correct_dry": 3172,
+              "CSI": 0.1686046511627907
+            },
+            "10.0": {
+              "hit": 21,
+              "miss": 111,
+              "false_alarm": 126,
+              "correct_dry": 3430,
+              "CSI": 0.08139534883720931
+            }
+          }
+        },
+        "16": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 79.64754729440718,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 771,
+              "miss": 849,
+              "false_alarm": 811,
+              "correct_dry": 1257,
+              "CSI": 0.3171534348004936
+            },
+            "0.5": {
+              "hit": 462,
+              "miss": 760,
+              "false_alarm": 523,
+              "correct_dry": 1943,
+              "CSI": 0.264756446991404
+            },
+            "1.0": {
+              "hit": 328,
+              "miss": 614,
+              "false_alarm": 427,
+              "correct_dry": 2319,
+              "CSI": 0.239590942293645
+            },
+            "2.5": {
+              "hit": 162,
+              "miss": 429,
+              "false_alarm": 323,
+              "correct_dry": 2774,
+              "CSI": 0.1772428884026258
+            },
+            "5.0": {
+              "hit": 67,
+              "miss": 277,
+              "false_alarm": 230,
+              "correct_dry": 3114,
+              "CSI": 0.11672473867595819
+            },
+            "10.0": {
+              "hit": 16,
+              "miss": 149,
+              "false_alarm": 118,
+              "correct_dry": 3405,
+              "CSI": 0.05653710247349823
+            }
+          }
+        },
+        "17": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 53.4969426858018,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 804,
+              "miss": 893,
+              "false_alarm": 712,
+              "correct_dry": 1279,
+              "CSI": 0.33374844333748444
+            },
+            "0.5": {
+              "hit": 457,
+              "miss": 772,
+              "false_alarm": 553,
+              "correct_dry": 1906,
+              "CSI": 0.2564534231200898
+            },
+            "1.0": {
+              "hit": 326,
+              "miss": 599,
+              "false_alarm": 471,
+              "correct_dry": 2292,
+              "CSI": 0.2335243553008596
+            },
+            "2.5": {
+              "hit": 199,
+              "miss": 374,
+              "false_alarm": 328,
+              "correct_dry": 2787,
+              "CSI": 0.22086570477247502
+            },
+            "5.0": {
+              "hit": 93,
+              "miss": 237,
+              "false_alarm": 240,
+              "correct_dry": 3118,
+              "CSI": 0.1631578947368421
+            },
+            "10.0": {
+              "hit": 33,
+              "miss": 135,
+              "false_alarm": 112,
+              "correct_dry": 3408,
+              "CSI": 0.11785714285714285
+            }
+          }
+        },
+        "18": {
+          "valid_cells": 3688,
+          "forecast_min_mm": 0.0,
+          "forecast_max_mm": 60.149135196471576,
+          "threshold_mm": {
+            "0.1": {
+              "hit": 906,
+              "miss": 728,
+              "false_alarm": 821,
+              "correct_dry": 1233,
+              "CSI": 0.3690427698574338
+            },
+            "0.5": {
+              "hit": 618,
+              "miss": 631,
+              "false_alarm": 587,
+              "correct_dry": 1852,
+              "CSI": 0.3366013071895425
+            },
+            "1.0": {
+              "hit": 497,
+              "miss": 471,
+              "false_alarm": 460,
+              "correct_dry": 2260,
+              "CSI": 0.3480392156862745
+            },
+            "2.5": {
+              "hit": 330,
+              "miss": 281,
+              "false_alarm": 314,
+              "correct_dry": 2763,
+              "CSI": 0.3567567567567568
+            },
+            "5.0": {
+              "hit": 168,
+              "miss": 180,
+              "false_alarm": 244,
+              "correct_dry": 3096,
+              "CSI": 0.28378378378378377
+            },
+            "10.0": {
+              "hit": 58,
+              "miss": 66,
+              "false_alarm": 151,
+              "correct_dry": 3413,
+              "CSI": 0.2109090909090909
+            }
+          }
+        }
+      },
+      "pooled_6h": {
+        "0.1": {
+          "hit": 4547,
+          "miss": 5246,
+          "false_alarm": 3663,
+          "correct_dry": 8672,
+          "CSI": 0.33791617122473244
+        },
+        "0.5": {
+          "hit": 2712,
+          "miss": 4395,
+          "false_alarm": 2407,
+          "correct_dry": 12614,
+          "CSI": 0.28505360521336975
+        },
+        "1.0": {
+          "hit": 1986,
+          "miss": 3102,
+          "false_alarm": 1926,
+          "correct_dry": 15114,
+          "CSI": 0.2831479897348161
+        },
+        "2.5": {
+          "hit": 1165,
+          "miss": 1916,
+          "false_alarm": 1369,
+          "correct_dry": 17678,
+          "CSI": 0.26179775280898876
+        },
+        "5.0": {
+          "hit": 529,
+          "miss": 1210,
+          "false_alarm": 1091,
+          "correct_dry": 19298,
+          "CSI": 0.18692579505300352
+        },
+        "10.0": {
+          "hit": 161,
+          "miss": 566,
+          "false_alarm": 671,
+          "correct_dry": 20730,
+          "CSI": 0.11516452074391989
+        }
+      }
+    }
+  },
+  "limitations": [
+    "RN1 is retained under the supplied one-hour/mm product convention; this script does not infer an independent observation uncertainty.",
+    "The fixed land mask and its source-bound coordinates are external local inputs and must be independently inventoried before this result is interpreted.",
+    "No forecast run, source, or maintained document is modified by this script."
+  ]
+}

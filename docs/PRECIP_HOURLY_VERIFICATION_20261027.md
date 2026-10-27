@@ -1,25 +1,25 @@
-# 기존 실험의 시간별 강수 점수 — 2026-10-27
+# 기존 실험의 시간별 강수 검증 — RN1 원본 재확인 (2026-10-27)
 
-이 보고서는 2026-08-16 12 UTC에 초기화한 기존 CP02 OFF/HYDRO/LIQUID 세 실험의 시간별 강수 CSI를 정리합니다. 각 lead는 바로 앞 시각부터의 한 시간량입니다. 최신 C2 실험은 분석 대상이 아니며, 새 예보를 실행하지 않았습니다.
+**RN1 원본 6개를 DATA 보관 경로에서 찾았습니다.** `/NHNHOME/DATA/yhlee_data/ODAM/20260816/`의 13–18 UTC 파일은 기존 inventory의 SHA-256과 6/6 일치합니다. 기존 WORKSPACE 경로 부재를 자료 전체의 부재로 확대했던 판단을 정정합니다. 앞서 찾은 `aroma37/.../PRCP_DATA`의 다른 해시 버전은 사용하지 않았습니다.
 
-## 사건 임계값
+기존 CP02 OFF/HYDRO/LIQUID의 2026-08-16 12 UTC 초기 실험을 대상으로, **직전 1시간 누적량으로 +1~+6시간을 검증**했습니다. 최신 C2의 640초·미완료 1시간 실험과 구분하며 새 예보는 실행하지 않았습니다. 이번 원자료 재판독·보간·계산은 108개 조합을 모두 채웁니다. 기존 72개 분할표의 모든 counts가 정확히 일치했고, 첫 시간의 추가 6개 표도 보존 배열과 일치합니다.
 
-아래 값은 누적시간이 1시간인 RN1/예측 강수량의 이진 사건 기준입니다. 임계값 이상이면 강수 사건으로 분류합니다. 명칭을 별도 기상 강도 등급으로 해석하지 않습니다.
+## 임계값과 계산 정의
 
-| 임계값 | 사건 정의 |
-|---:|---|
-| 0.1 mm / 1 h | 한 시간 강수량 ≥ 0.1 mm |
-| 0.5 mm / 1 h | 한 시간 강수량 ≥ 0.5 mm |
-| 1 mm / 1 h | 한 시간 강수량 ≥ 1 mm |
-| 2.5 mm / 1 h | 한 시간 강수량 ≥ 2.5 mm |
-| 5 mm / 1 h | 한 시간 강수량 ≥ 5 mm |
-| 10 mm / 1 h | 한 시간 강수량 ≥ 10 mm |
+| 임계값 (mm / 1 h) | 사건 정의 | 평가 시간 |
+|---:|---|---|
+| 0.1 | 한 시간 강수량 ≥ 0.1 mm | +1~+6시간 모두 |
+| 0.5 | 한 시간 강수량 ≥ 0.5 mm | +1~+6시간 모두 |
+| 1 | 한 시간 강수량 ≥ 1 mm | +1~+6시간 모두 |
+| 2.5 | 한 시간 강수량 ≥ 2.5 mm | +1~+6시간 모두 |
+| 5 | 한 시간 강수량 ≥ 5 mm | +1~+6시간 모두 |
+| 10 | 한 시간 강수량 ≥ 10 mm | +1~+6시간 모두 |
 
-원자료 기반 6시간 분할표에는 0.1, 1, 5, 10 mm 기준만 보존되어 있습니다. 0.5 및 2.5 mm 기준은 보존된 12–13 UTC 정렬 배열에서만 추가 계산했습니다. 두 기준의 lead 2–6은 자료가 없어 **미평가**이며, 다른 임계값의 결과를 보간하거나 추정하지 않습니다.
+모델량은 인접 시각의 `RAINC + RAINNC` 누적 차이이며, `RAINSH=0`·bucket 설정·누적 reset·시각·단위를 기존 비교기로 검사했습니다. 고정 지리 mask 3,688점과 기존 curvilinear bilinear 보간을 그대로 사용합니다. 각 시간의 세 실험은 같은 참조와 유효점 집합으로 비교합니다. 6시간 누적강수 임계값 점수나 여러 시간의 pooled 점수로 대체하지 않습니다.
+
+CSI=`H/(H+M+F)`, POD=`H/(H+M)`, FAR=`F/(H+F)`, 빈도편향=`(H+F)/(H+M)`입니다. H/M/F는 적중/미탐지/오경보입니다. 분모가 0이면 미정의로 표시하며, 빈도편향 1은 사건 빈도가 같다는 뜻이지 위치가 맞는다는 뜻은 아닙니다.
 
 ## 시간별 CSI
-
-모델 한 시간량은 인접 시각의 누적 `RAINC + RAINNC` 차이로 계산합니다. 공통의 고정 지리 mask 3,688점을 사용했습니다. 시간 창과 점수는 다음 여섯 임계값 각각에 대해 독립적으로 표시합니다.
 
 ### 0.1 mm / 1 h
 
@@ -37,11 +37,11 @@
 | Lead | 시간 창 UTC | OFF | HYDRO | LIQUID |
 |---:|---|---:|---:|---:|
 | 1 | 12:00–13:00 | 0.3129 | 0.2788 | 0.2809 |
-| 2 | 13:00–14:00 | 미평가 | 미평가 | 미평가 |
-| 3 | 14:00–15:00 | 미평가 | 미평가 | 미평가 |
-| 4 | 15:00–16:00 | 미평가 | 미평가 | 미평가 |
-| 5 | 16:00–17:00 | 미평가 | 미평가 | 미평가 |
-| 6 | 17:00–18:00 | 미평가 | 미평가 | 미평가 |
+| 2 | 13:00–14:00 | 0.2996 | 0.3019 | 0.3006 |
+| 3 | 14:00–15:00 | 0.2793 | 0.2673 | 0.2705 |
+| 4 | 15:00–16:00 | 0.2790 | 0.2706 | 0.2648 |
+| 5 | 16:00–17:00 | 0.2531 | 0.2722 | 0.2565 |
+| 6 | 17:00–18:00 | 0.3449 | 0.3417 | 0.3366 |
 
 ### 1 mm / 1 h
 
@@ -59,11 +59,11 @@
 | Lead | 시간 창 UTC | OFF | HYDRO | LIQUID |
 |---:|---|---:|---:|---:|
 | 1 | 12:00–13:00 | 0.3575 | 0.3267 | 0.3311 |
-| 2 | 13:00–14:00 | 미평가 | 미평가 | 미평가 |
-| 3 | 14:00–15:00 | 미평가 | 미평가 | 미평가 |
-| 4 | 15:00–16:00 | 미평가 | 미평가 | 미평가 |
-| 5 | 16:00–17:00 | 미평가 | 미평가 | 미평가 |
-| 6 | 17:00–18:00 | 미평가 | 미평가 | 미평가 |
+| 2 | 13:00–14:00 | 0.2372 | 0.2551 | 0.2597 |
+| 3 | 14:00–15:00 | 0.2593 | 0.2510 | 0.2568 |
+| 4 | 15:00–16:00 | 0.1802 | 0.1729 | 0.1772 |
+| 5 | 16:00–17:00 | 0.2162 | 0.2323 | 0.2209 |
+| 6 | 17:00–18:00 | 0.3552 | 0.3749 | 0.3568 |
 
 ### 5 mm / 1 h
 
@@ -87,74 +87,49 @@
 | 5 | 16:00–17:00 | 0.1636 | 0.1037 | 0.1179 |
 | 6 | 17:00–18:00 | 0.1828 | 0.1802 | 0.2109 |
 
-## 그림에서 보이는 변화
+## 시간·임계값별 해석
 
-CSI는 `H/(H+M+F)`, POD는 `H/(H+M)`, FAR는 `F/(H+F)`, 빈도편향은 `(H+F)/(H+M)`입니다. CSI와 POD는 높을수록, FAR는 낮을수록 낫습니다. 빈도편향은 1일 때 예측 사건 빈도가 관측 사건 빈도와 같다는 뜻이며, 위치 일치도를 나타내지는 않습니다. 세 보조 지표의 lead·임계값별 값은 아래 전체 scores CSV에 포함했습니다.
+새로 채운 0.5 mm에서 HYDRO와 LIQUID는 OFF보다 lead 2·5에서 높고 다른 네 시간에는 낮습니다. 2.5 mm에서는 두 후보 모두 lead 2·5·6에서 높고 lead 1·3·4에서 낮습니다. **미평가였던 구간을 채워도 시간 전반의 일관된 우위는 없습니다.**
 
-차이 그림은 각 시간·임계값에서 HYDRO 또는 LIQUID CSI에서 OFF CSI를 뺍니다. 양수는 해당 표본의 CSI가 OFF보다 높고, 음수는 낮음을 나타냅니다. 0.1 mm에서 HYDRO와 LIQUID는 lead 2·5에만 OFF보다 높습니다. 1 mm에서는 HYDRO가 lead 2·5·6에서 높고, LIQUID는 lead 2·5에서 높습니다.
+기존 5 mm 결과에서도 lead 1은 HYDRO/LIQUID의 CSI가 OFF보다 0.0611/0.0577 낮고 lead 6은 0.0164/0.0215 높습니다. 첫 시간 OFF의 H/M/F=74/80/115에서 후보는 55/99/103 및 55/99/99로 변합니다. 오경보 감소와 함께 적중도 19건 줄었습니다. 10 mm lead 5에서는 후보 모두 악화하지만 lead 6에서는 LIQUID만 개선됩니다. 한 사례의 혼합 결과를 일반적인 예보 개선으로 해석하지 않습니다.
 
-강한 강수 임계값도 시간에 따라 방향이 달라집니다. 5 mm lead 1에서 HYDRO/LIQUID CSI는 OFF보다 각각 0.0611/0.0577 낮고, lead 6에서는 0.0164/0.0215 높습니다. lead 1의 OFF는 H/M/F=74/80/115, HYDRO는 55/99/103, LIQUID는 55/99/99입니다. 두 처리에서 오경보가 줄었지만 적중도 19개 줄어 CSI가 하락했습니다. 따라서 오경보 감소만으로 더 나은 강수 점수라고 볼 수 없습니다. 5 mm lead 6에서는 HYDRO/LIQUID의 POD가 0.4684/0.4828로 OFF의 0.4454보다 높고, FAR는 0.5925/0.5922로 OFF의 0.6106보다 낮아 이 시간에는 두 지표가 함께 개선됐습니다. 반면 10 mm lead 5의 CSI 차이는 HYDRO −0.0599, LIQUID −0.0458이고, lead 6은 HYDRO −0.0026, LIQUID +0.0281입니다.
+![여섯 임계값의 시간별 CSI](evidence/precip_hourly_20261027/rn1_recovery/derived/hourly_csi.png)
 
-따라서 이 사례에서 특정 임계값·시간에는 상대적 개선이 있지만 시간·임계값 전반의 일관된 우위는 없습니다. 한 사례만으로 통계적 유의성이나 일반적 우위를 주장하지 않습니다. 여섯 시간 contingency counts를 합산한 점수나 6시간 누적강수 임계값 점수는 여기서 제시하지 않습니다.
+![OFF 대비 CSI 차이](evidence/precip_hourly_20261027/rn1_recovery/derived/hourly_csi_delta_vs_off.png)
 
-## 그림과 세부 표
+[전체 점수 CSV — counts·CSI·POD·FAR·빈도편향](evidence/precip_hourly_20261027/rn1_recovery/derived/hourly_scores.csv) · [CSI PDF](evidence/precip_hourly_20261027/rn1_recovery/derived/hourly_csi.pdf) · [차이 PDF](evidence/precip_hourly_20261027/rn1_recovery/derived/hourly_csi_delta_vs_off.pdf)
 
-### 임계값별 CSI 시간 변화
+## 강수 그림과 정상성 확인
 
-![여섯 강수 임계값의 lead별 CSI](evidence/precip_hourly_20261027/derived/hourly_csi.png)
+첫 그림의 경위도 종횡비 오류는 `1/cos(평균 위도)`로 수정했습니다. 실제 native 누적강수와 정렬 배열을 대조하여 1시간량임을 확인했고, 이번에는 회수한 원본 RN1에서 각 시간 참조를 다시 읽었습니다. 각 지도는 같은 색 구간·mask를 사용합니다. 점 표시는 격자점 값이며 실제 관측 footprint를 그린 것이 아닙니다.
 
-[CSI 벡터 PDF](evidence/precip_hourly_20261027/derived/hourly_csi.pdf)
+![첫 1시간 강수분포](evidence/precip_hourly_20261027/rn1_recovery/maps/hour_13/first_hour_precipitation.png)
 
-### OFF 대비 CSI 차이
+| Lead | 시간 창 UTC | 강수분포 PNG | 벡터 PDF |
+|---:|---|---|---|
+| 1 | 12–13 | [지도](evidence/precip_hourly_20261027/rn1_recovery/maps/hour_13/first_hour_precipitation.png) | [PDF](evidence/precip_hourly_20261027/rn1_recovery/maps/hour_13/first_hour_precipitation.pdf) |
+| 2 | 13–14 | [지도](evidence/precip_hourly_20261027/rn1_recovery/maps/hour_14/first_hour_precipitation.png) | [PDF](evidence/precip_hourly_20261027/rn1_recovery/maps/hour_14/first_hour_precipitation.pdf) |
+| 3 | 14–15 | [지도](evidence/precip_hourly_20261027/rn1_recovery/maps/hour_15/first_hour_precipitation.png) | [PDF](evidence/precip_hourly_20261027/rn1_recovery/maps/hour_15/first_hour_precipitation.pdf) |
+| 4 | 15–16 | [지도](evidence/precip_hourly_20261027/rn1_recovery/maps/hour_16/first_hour_precipitation.png) | [PDF](evidence/precip_hourly_20261027/rn1_recovery/maps/hour_16/first_hour_precipitation.pdf) |
+| 5 | 16–17 | [지도](evidence/precip_hourly_20261027/rn1_recovery/maps/hour_17/first_hour_precipitation.png) | [PDF](evidence/precip_hourly_20261027/rn1_recovery/maps/hour_17/first_hour_precipitation.pdf) |
+| 6 | 17–18 | [지도](evidence/precip_hourly_20261027/rn1_recovery/maps/hour_18/first_hour_precipitation.png) | [PDF](evidence/precip_hourly_20261027/rn1_recovery/maps/hour_18/first_hour_precipitation.pdf) |
 
-![각 시간 창의 HYDRO−OFF 및 LIQUID−OFF CSI 차이](evidence/precip_hourly_20261027/derived/hourly_csi_delta_vs_off.png)
+첫 시간 공통 3,688점에서 RN1과 OFF의 평균은 0.8735/0.8832 mm로 비슷하지만 최대는 37.6/56.50 mm, ≥0.1 mm 지점은 1,593/696개입니다. OFF의 10 mm H/M/F=7/52/83, POD=0.1186, FAR=0.9222입니다. 세 예측은 참조의 중부 강수보다 남부·남동부 강수에 집중됩니다. **자료와 그림이 올바르게 연결됐다는 확인은 관측과 잘 맞는 정상적인 강수 예측이라는 승인이 아닙니다.**
 
-[CSI 차이 벡터 PDF](evidence/precip_hourly_20261027/derived/hourly_csi_delta_vs_off.pdf)
+마지막 17–18 UTC 지도에서는 참조에 남부·제주 강수가 보이는 반면, 예측에는 중북부 강수대가 추가로 나타나고 제주 강수는 약합니다. 마지막 시간 일부 임계값의 CSI 개선도 이러한 공간 차이가 모두 해소됐다는 뜻은 아닙니다.
 
-### 첫 1시간 강수 공간분포
+## RN1의 정의와 남은 범위
 
-![12–13 UTC 보존 정렬 참조와 OFF/HYDRO/LIQUID 강수량](evidence/precip_hourly_20261027/derived/first_hour_precipitation.png)
+- 파일명 13–18시는 UTC이며 헤더의 22–다음 날 03시는 +9시간 LST입니다. 형식은 149×253, `10F7.1`, x 방향 우선입니다. 모든 파일이 267,686바이트이며 기존 해시와 일치합니다.
+- RN1은 레이더·AWS를 조합한 가공 분석장입니다. ODAM은 상류 강수장의 **5×5 최대값 집계**, AWS 조정, 구름·mask 조건 등을 사용합니다. 따라서 보간한 모델 격자값과 관측 분석장의 공간 규모 차이가 점수에 영향을 줄 수 있습니다. 원시 우량계 독립 검증으로 부르지 않습니다.
+- 생산 wrapper에는 현재 시간 `anal_rain`이 없으면 이전 시간 입력을 연결하는 경로가 있습니다. 이것이 이번 여섯 파일에서 실행됐다는 증거는 없지만, 헤더만으로 매 시각 입력의 최신성을 증명할 수도 없습니다. 당시 실행·입력 기록 확인은 남아 있습니다.
+- 텍스트의 유한한 0은 센서 coverage가 확인된 무강수와 같지 않습니다. 별도 coverage/QC bitmap은 확보되지 않았습니다. 3,688점은 지리적 평가 영역입니다.
+- 전달된 RN1의 1시간/mm 계약으로 비교했습니다. 상류 누적 창·센서 불확실도·자료 계통 독립성을 모두 검증한 것은 아닙니다. U/V·온도·수분이 함께 바뀐 실험으로 omega 단독 효과를 분리하지 않습니다.
 
-[첫 시간 공간분포 벡터 PDF](evidence/precip_hourly_20261027/derived/first_hour_precipitation.pdf)
+## 재현과 검증 자료
 
-- [시간별 모든 counts와 점수 CSV](evidence/precip_hourly_20261027/derived/hourly_scores.csv)
-- [입력 contingency CSV 원본 사본](evidence/precip_hourly_20261027/input_hourly_csi.csv)
-- [입력·영역·검증 범위 manifest](evidence/precip_hourly_20261027/source_manifest.json)
-- [추가 12–13 UTC 임계값 계산 receipt](evidence/precip_hourly_20261027/first_hour_pairs_receipt.json)
-- [첫 1시간 강수 공간분포 비교](evidence/precip_hourly_20261027/derived/first_hour_precipitation.png) · [벡터 PDF](evidence/precip_hourly_20261027/derived/first_hour_precipitation.pdf)
+[원본 회수·해시 확인](evidence/precip_hourly_20261027/rn1_recovery/relocation_receipt.json) · [source 정의·시각·fallback 확인](evidence/precip_hourly_20261027/rn1_recovery/source_findings.md) · [재계산 검증](evidence/precip_hourly_20261027/rn1_recovery/validation.json) · [재계산 입력·출력 manifest](evidence/precip_hourly_20261027/rn1_recovery/manifest.json)
 
-시간별 CSI 그림은 여섯 임계값의 lead별 변화를 보여주며, 차이 그림은 HYDRO−OFF와 LIQUID−OFF를 각각 6×6 행렬로 표시합니다. 두 그림 모두 색과 수치 부호를 같은 기준으로 읽습니다. 첫 1시간 공간도는 **보존된 정렬 참조 배열**과 세 예측장을 같은 mask와 색 범위에 놓은 것입니다. 이 그림은 12–13 UTC 한 시간에만 해당하며 원본 RN1 재판독 결과가 아닙니다.
+과거 `derived/`, `validation.json`, `source_manifest.json`은 원자료 회수 전의 제한된 계산 근거로 보존합니다. 새 계산과 그림은 별도의 `rn1_recovery/`에 기록하며, 기존 미평가 30개를 이번 108개 완전 계산으로 대체합니다. 이전 그림 표시 수정과 native 첫 시간 검산 근거도 그대로 유지합니다.
 
-공간도에서 보존된 RN1 참조는 36–37°N 동쪽·중부의 강수와 남부·제주 부근의 분포를 보이고, 세 예측장은 남부에서 남동쪽으로 이어지는 띠에 더 집중되어 보입니다. 이 차이는 첫 시간 분포의 정성적 관찰이며 새 공간 점수, 관측 coverage 진단, 또는 원인 설명으로 사용하지 않습니다. 평균량이나 CSI 하나만으로 위치 오차를 설명할 수 없다는 점을 함께 보여줍니다.
-
-## 강수 그림 재검토
-
-최초 그림은 경위도 축의 표시 비율에 `cos(위도)`를 잘못 적용해 동서 방향으로 늘어나 보였습니다. 현재 그림은 `1/cos(평균 위도)` 비율과 더 작은 표식을 사용합니다. 이 수정은 도형 표시만 바로잡으며, 강수 값·보간·mask·색 구간·스코어를 바꾸지 않았습니다. 직전 표시 검토는 [기록](evidence/precip_hourly_20261027/map_recheck/plot_review_before_fix.json), 최종 native audit와 배열 대조는 [native 첫 시간 audit](evidence/precip_hourly_20261027/map_recheck/native_firsthour.json), [보존 배열과의 bridge 확인](evidence/precip_hourly_20261027/map_recheck/npz_bridge.json)에 있습니다.
-
-native audit는 세 CP02 실험의 12:00·13:00 UTC history를 직접 읽었습니다. 파일의 `Times`가 두 시각과 일치하고 `RAINC`/`RAINNC` 단위는 mm이며, 12 UTC 초기 누적값은 모두 0입니다. 13–18 UTC 시간 증분에서 음수 reset은 없고 `RAINSH`는 0으로 확인됐습니다. 조사한 첫 시간에는 공통 고정 mask 3,688점으로의 보간값 point-sum에서 `RAINC`가 전체의 약 0.071–0.078%, `RAINNC`가 약 99.922–99.929%였습니다. 비교량은 각 성분의 누적 13 UTC값에서 12 UTC값을 뺀 뒤 합한 한 시간량입니다. point-sum은 격자점 값의 합이며 면적 적분이나 보존적 재격자가 아닙니다.
-
-그 동일 첫 시간 mask에서 OFF 예측 평균은 0.8832 mm, retained RN1 reference 평균은 0.8735 mm로 비슷하지만, 최대값은 각각 56.50 mm와 37.6 mm이고 RMSE는 4.0623 mm입니다. ≥0.1 mm 사건은 예측 696점, 참조 1,593점입니다. ≥10 mm에서 OFF는 H/M/F=7/52/83, POD=0.1186, FAR=0.9222입니다. 따라서 평균 총량의 근접성은 격자별 위치와 강도의 일치를 보여주지 않습니다. 이것은 첫 시간 보존 배열의 비교이며 raw RN1 재판독이 아닙니다. 원 RN1 파일의 coverage/QC mask가 없어 회색 nominal dry/trace 칸은 확인된 무강수로 단정할 수 없습니다.
-
-최종 그림과 native 성분 검사는 공간 표시 및 한 시간 산술이 기대한 의미를 갖는지 확인한 것입니다. 이를 강수 물리의 과학적 승인, 독립 관측 검증, 또는 최신 Cloud-BAL/C2 효과의 판정으로 확장하지 않습니다.
-
-재생성 도구는 저장소의 `tools/plot_hourly_precip_scores.py`입니다. 저장소 루트에서 빈 출력 디렉터리를 지정해 다음과 같이 실행합니다.
-
-```sh
-python3 tools/plot_hourly_precip_scores.py \
-  docs/evidence/precip_hourly_20261027/input_hourly_csi.csv \
-  --first-hour-pairs docs/evidence/precip_hourly_20261027/first_hour_pairs.npz \
-  --start-time 2026-08-16T12:00:00Z \
-  --output-dir /tmp/precip-hourly-reproduction
-```
-
-## 검증 범위와 한계
-
-세부 CSV는 보존된 72개 contingency table과 정렬된 첫 시간 배열에서 추가 계산한 6개 표를 포함합니다. 0.5 및 2.5 mm의 lead 2–6, 총 30개 조합은 `미평가`로 표시합니다. 평가된 모든 분할표의 공간 표본은 3,688점이고 `H+M+F+D=3688`; CSI, POD, FAR, 빈도편향은 저장 counts에서 다시 산출했습니다. 이 검산은 원시 RN1 배열을 다시 읽고 보간해 6시간 점수를 재생성한 검증은 아닙니다.
-
-재생성 도구의 제한 검증은 [validation.json](evidence/precip_hourly_20261027/validation.json)에 기록했습니다. scorer 집중 회귀시험 14개가 통과했고, CSV/JSON과 세 PNG 출력은 새 scratch 경로에서 재생성한 출력과 byte-match했습니다. 기존 출력 디렉터리 재사용 거부도 확인했습니다. 실행 환경은 Python 3.12.3, NumPy 1.26.4, Matplotlib 3.10.8입니다. 전체 portable/native 제품군, 모델 예보 재실행, 원시 RN1 재검증은 수행하지 않았습니다.
-
-기록된 RN1 원문 13–18 UTC 파일 여섯 개가 현재 원래 경로에 없습니다. 다른 위치에서 찾은 대체 파일은 보존된 해시와 파싱 통계가 맞지 않아 사용하지 않았습니다. 따라서 전체 6시간의 원자료 재판독·보간·점수 재실행은 미완료입니다. 남아 있는 첫 시간 정렬 배열로는 12–13 UTC에 대해 별도 연속 오차와 0.5/2.5 mm CSI를 산출했고, 이는 원문을 다시 판독한 결과가 아닙니다.
-
-RN1은 레이더/AWS 기반 가공 분석장으로, 관측과 예측의 계통 독립성은 보장되지 않습니다. 별도 레이더 coverage/QC mask도 보존되지 않아 3,688점은 지리적 평가 영역이지 관측 coverage가 확인된 점 집합이 아닙니다. 명목상 0 값을 모두 관측된 무강수라고 볼 수 없습니다. 제품의 전달된 1시간/mm convention을 사용했지만, 확인한 ODAM 출력 코드만으로는 상류 누적 창의 시작·종료 시각을 독립 확정하지 못했습니다. 이 점수는 독립 관측 skill의 판정이 아닙니다.
-
-비교군은 같은 초기화 민감도 실험의 OFF/HYDRO/LIQUID입니다. 초기 U/V/온도/수분이 함께 달라지므로 강수 차이를 omega 단독 효과로 분리하지 않습니다. 고정 mask의 국가 해석도 source code selection과 `lnd=1` 교차 검토에 근거한 기존 해석이며, 코드 전체의 문자 범례는 없습니다.
+집중 Python 회귀시험 17개가 통과했습니다. 이번 검증은 저장된 모델 출력 후처리이며, 전체 portable/native 시험이나 모델 적분을 다시 수행하지 않았습니다. 그래프 갱신 역시 과학적 승인과 구분합니다.

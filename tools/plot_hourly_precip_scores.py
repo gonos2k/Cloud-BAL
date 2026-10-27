@@ -1,5 +1,5 @@
 #!/usr/bin/env python3
-"""Score archived hourly precipitation contingency counts and plot them.
+"""Score hourly precipitation contingency counts and plot them.
 
 This offline utility consumes the retained hourly CSI CSV and, for two newly
 requested cutoffs at lead 1, retained parsed/aligned NPZ fields. It does not
@@ -62,12 +62,17 @@ def threshold_contingency(forecast: Any, reference: Any, threshold: float) -> di
     }
 
 
-def load_and_score(input_csv: Path, start_time: str, expected_cells: int = 3688) -> list[dict[str, Any]]:
-    """Validate the archived rows and derive CSI, POD, FAR and frequency bias."""
+def load_and_score(
+    input_csv: Path,
+    start_time: str,
+    expected_cells: int = 3688,
+    thresholds: tuple[float, ...] = ARCHIVED_THRESHOLDS,
+) -> list[dict[str, Any]]:
+    """Validate the requested hourly rows and derive CSI, POD, FAR and bias."""
     start = parse_utc(start_time, "start_time")
     expected_keys = {
         (case, lead, threshold)
-        for case in CASES for lead in LEADS for threshold in ARCHIVED_THRESHOLDS
+        for case in CASES for lead in LEADS for threshold in thresholds
     }
     seen: set[tuple[str, int, float]] = set()
     scored: list[dict[str, Any]] = []
@@ -125,7 +130,8 @@ def load_and_score(input_csv: Path, start_time: str, expected_cells: int = 3688)
             window_start = window_end - timedelta(hours=1)
             scored.append({
                 "status": "EVALUATED",
-                "source_kind": "archived_contingency_csv",
+                "source_kind": ("archived_contingency_csv" if thresholds == ARCHIVED_THRESHOLDS
+                                else "hourly_contingency_csv"),
                 "case": case,
                 "lead_hour": lead,
                 "valid_utc": valid_time.strftime(UTC_FORMAT),
@@ -140,9 +146,11 @@ def load_and_score(input_csv: Path, start_time: str, expected_cells: int = 3688)
                 "frequency_bias": frequency_bias,
             })
 
-    if len(seen) != EXPECTED_ARCHIVED_ROWS:
+    expected_rows = len(CASES) * len(LEADS) * len(thresholds)
+    if len(seen) != expected_rows:
         missing = sorted(expected_keys - seen)
-        raise ValueError(f"expected {EXPECTED_ARCHIVED_ROWS} archived rows, found {len(seen)}; missing {missing[:5]}")
+        label = "archived" if thresholds == ARCHIVED_THRESHOLDS else "complete hourly"
+        raise ValueError(f"expected {expected_rows} {label} rows, found {len(seen)}; missing {missing[:5]}")
     return sorted(scored, key=lambda row: (row["threshold_mm"], row["lead_hour"], CASES.index(row["case"])))
 
 
@@ -261,6 +269,21 @@ def write_csv(path: Path, rows: list[dict[str, Any]]) -> None:
         writer.writerows(rows)
 
 
+def hourly_score_title(rows: list[dict[str, Any]]) -> str:
+    """Describe the valid-time range represented by the hourly score rows."""
+    by_key = {(row["case"], row["lead_hour"], row["threshold_mm"]): row for row in rows}
+    first_valid = parse_utc(by_key[("OFF", LEADS[0], THRESHOLDS[0])]["valid_utc"], "valid_utc")
+    last_valid = parse_utc(by_key[("OFF", LEADS[-1], THRESHOLDS[0])]["valid_utc"], "valid_utc")
+    if first_valid.date() == last_valid.date():
+        date_label = first_valid.strftime("%Y-%m-%d")
+        hours_label = f"{first_valid:%H}–{last_valid:%H}"
+    else:
+        date_label = f"{first_valid:%Y-%m-%d %H}–{last_valid:%Y-%m-%d %H}"
+        hours_label = ""
+    period = f"{date_label} · 1-hour windows ending {hours_label} UTC" if hours_label else f"1-hour windows ending {date_label} UTC"
+    return f"Hourly precipitation CSI · {period}"
+
+
 def make_plots(output_dir: Path, rows: list[dict[str, Any]]) -> None:
     import matplotlib
     matplotlib.use("Agg")
@@ -269,7 +292,6 @@ def make_plots(output_dir: Path, rows: list[dict[str, Any]]) -> None:
     import numpy as np
 
     by_key = {(row["case"], row["lead_hour"], row["threshold_mm"]): row for row in rows}
-    plot_date = by_key[("OFF", 1, 0.1)]["valid_utc"][:10]
     threshold_labels = {threshold: f"{threshold:g}" for threshold in THRESHOLDS}
     colors = {"OFF": "#333333", "HYDRO": "#2878b5", "LIQUID": "#d95f02"}
     leads = list(LEADS)
@@ -285,20 +307,29 @@ def make_plots(output_dir: Path, rows: list[dict[str, Any]]) -> None:
         ax.grid(True, alpha=0.3)
         if threshold in (0.5, 2.5):
             unavailable = [lead for lead in LEADS if by_key[("OFF", lead, threshold)]["status"] != "EVALUATED"]
-            note = ("All leads: NOT EVALUATED" if len(unavailable) == len(LEADS)
-                    else "Leads " + ", ".join(map(str, unavailable)) + ": NOT EVALUATED")
-            ax.text(0.98, 0.95, note, transform=ax.transAxes,
-                    ha="right", va="top", fontsize=8, color="#555555")
+            if unavailable:
+                note = ("All leads: NOT EVALUATED" if len(unavailable) == len(LEADS)
+                        else "Leads " + ", ".join(map(str, unavailable)) + ": NOT EVALUATED")
+                ax.text(0.98, 0.95, note, transform=ax.transAxes,
+                        ha="right", va="top", fontsize=8, color="#555555")
     axes[2, 0].set_xlabel("Forecast lead (hour)")
     axes[2, 1].set_xlabel("Forecast lead (hour)")
     axes[0, 0].set_ylabel("CSI")
     axes[1, 0].set_ylabel("CSI")
     axes[2, 0].set_ylabel("CSI")
     axes[0, 0].legend(frameon=False)
-    fig.suptitle(f"Hourly precipitation CSI · {plot_date} · 1-hour windows ending 13–18 UTC")
-    fig.text(0.5, -0.015,
-             "Archived ODAM RN1 contingency counts on 3,688 fixed land points; "
-             "0.5 and 2.5 mm scores use retained aligned fields at lead 1 only.",
+    fig.suptitle(hourly_score_title(rows))
+    evaluated_all = all(by_key[(case, lead, threshold)]["status"] == "EVALUATED"
+                        for case in CASES for lead in LEADS for threshold in THRESHOLDS)
+    caption = "Supplied hourly contingency counts on 3,688 fixed land points."
+    if not evaluated_all:
+        first_hour_only = any(
+            by_key[(case, 1, threshold)]["status"] == "EVALUATED"
+            for case in CASES for threshold in (0.5, 2.5)
+        )
+        caption += (" 0.5 and 2.5 mm use retained aligned fields at lead 1 only."
+                    if first_hour_only else " 0.5 and 2.5 mm scores are NOT_EVALUATED.")
+    fig.text(0.5, -0.015, caption,
              ha="center", fontsize=8)
     for suffix in ("png", "pdf"):
         fig.savefig(output_dir / f"hourly_csi.{suffix}", dpi=180 if suffix == "png" else None)
@@ -345,14 +376,20 @@ def make_plots(output_dir: Path, rows: list[dict[str, Any]]) -> None:
         ax.tick_params(which="minor", bottom=False, left=False)
     axes[0].set_ylabel("Rain threshold")
     fig.colorbar(image, ax=axes, label="ΔCSI", shrink=0.9)
-    fig.suptitle(f"Hourly CSI difference from OFF · {plot_date} · positive favors candidate")
+    fig.suptitle(f"{hourly_score_title(rows)} · positive favors candidate")
     for suffix in ("png", "pdf"):
         fig.savefig(output_dir / f"hourly_csi_delta_vs_off.{suffix}", dpi=180 if suffix == "png" else None)
     plt.close(fig)
 
 
-def make_first_hour_precipitation_plot(output_dir: Path, pairs_npz: Path) -> None:
-    """Plot retained first-hour aligned amounts; this is not raw RN1 replay."""
+def make_first_hour_precipitation_plot(
+    output_dir: Path,
+    pairs_npz: Path,
+    window_start_utc: str = "2026-08-16T12:00:00Z",
+    window_end_utc: str = "2026-08-16T13:00:00Z",
+    reference_label: str = "RN1 retained reference",
+) -> None:
+    """Plot aligned hourly amounts, with provenance supplied by the caller."""
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
@@ -369,7 +406,7 @@ def make_first_hour_precipitation_plot(output_dir: Path, pairs_npz: Path) -> Non
     cmap = ListedColormap(palette)
     cmap.set_over("#67001f")
     norm = BoundaryNorm(boundaries, cmap.N, clip=False)
-    labels = ("RN1 retained reference", "OFF", "HYDRO", "LIQUID")
+    labels = (reference_label, "OFF", "HYDRO", "LIQUID")
     mean_lat = float(np.mean(latitude))
 
     fig, axes = plt.subplots(2, 2, figsize=(11, 8), constrained_layout=True, sharex=True, sharey=True)
@@ -388,13 +425,22 @@ def make_first_hour_precipitation_plot(output_dir: Path, pairs_npz: Path) -> Non
                             extend="max", spacing="uniform", shrink=0.9)
     colorbar.ax.set_yticklabels(bin_labels)
     colorbar.set_label("Precipitation (mm per 1-hour window; nominal <0.1 mm gray; coverage unverified)")
-    fig.suptitle("First-hour precipitation · 2026-08-16 12–13 UTC · retained aligned reference, not raw RN1 replay")
+    window_start = parse_utc(window_start_utc, "window_start_utc")
+    window_end = parse_utc(window_end_utc, "window_end_utc")
+    if window_end - window_start != timedelta(hours=1):
+        raise ValueError("precipitation plot window must be exactly one hour")
+    fig.suptitle(
+        f"Hourly precipitation · {window_start:%Y-%m-%d %H}–{window_end:%H} UTC · {reference_label}"
+    )
     for suffix in ("png", "pdf"):
         fig.savefig(output_dir / f"first_hour_precipitation.{suffix}", dpi=180 if suffix == "png" else None)
     plt.close(fig)
 
 
-def build_summary(rows: list[dict[str, Any]], start_time: str, input_csv: Path, pairs_npz: Path | None = None) -> dict[str, Any]:
+def build_summary(
+    rows: list[dict[str, Any]], start_time: str, input_csv: Path,
+    pairs_npz: Path | None = None, complete_hourly_csv: bool = False,
+) -> dict[str, Any]:
     coverage = {
         str(threshold): {
             "evaluated_leads": [lead for lead in LEADS if any(
@@ -426,7 +472,13 @@ def build_summary(rows: list[dict[str, Any]], start_time: str, input_csv: Path, 
             "fixed_geographic_mask_cells": 3688,
             "score_population": "hourly events only; each score is based on one case, lead, threshold, and fixed point set",
             "observation_product": "ODAM RN1 analysis product under supplied one-hour/mm convention",
-            "input_evidence": "archived contingency-count CSV plus optional retained aligned first-hour NPZ; no raw RN1 or model-grid ingestion",
+            "input_evidence": (
+                "supplied complete six-threshold hourly contingency-count CSV; CSV counts are validated, "
+                "but their provenance is not independently verified"
+                if complete_hourly_csv else
+                "supplied four-threshold hourly contingency-count CSV plus optional retained aligned first-hour NPZ; "
+                "CSV provenance is not independently verified"
+            ),
         },
         "definitions": {
             "wet_event": "amount >= threshold_mm",
@@ -437,18 +489,22 @@ def build_summary(rows: list[dict[str, Any]], start_time: str, input_csv: Path, 
         },
         "limitations": [
             "RN1 is a processed radar/AWS analysis; a separate radar-coverage validity mask is not archived.",
-            "The result scores archived contingency counts and is not a raw-observation reanalysis or new forecast validation.",
+            "The result scores supplied contingency counts and is not a raw-observation reanalysis or new forecast validation.",
             "One case and one six-hour period do not establish statistical generality or an isolated physical mechanism.",
-            "Thresholds 0.5 and 2.5 mm are evaluated for lead 1 only from retained aligned intermediate arrays; later leads are NOT_EVALUATED.",
+            *([] if complete_hourly_csv else [
+                "Thresholds 0.5 and 2.5 mm are evaluated for lead 1 only from retained aligned intermediate arrays; later leads are NOT_EVALUATED."
+            ]),
         ],
     }
 
 
 def parse_args() -> argparse.Namespace:
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("input_csv", type=Path, help="archived four-threshold hourly contingency CSV")
+    parser.add_argument("input_csv", type=Path, help="hourly contingency CSV (four thresholds by default)")
     parser.add_argument("--start-time", required=True, help="initial UTC time, e.g. 2026-08-16T12:00:00Z")
     parser.add_argument("--first-hour-pairs", type=Path, help="optional retained NPZ for lead-1 thresholds 0.5 and 2.5 mm")
+    parser.add_argument("--complete-hourly-csv", action="store_true",
+                        help="require all six thresholds for every case and lead in the input CSV")
     parser.add_argument("--output-dir", required=True, type=Path, help="new empty output directory")
     return parser.parse_args()
 
@@ -463,7 +519,10 @@ def prepare_output_dir(path: Path) -> None:
 
 def main() -> None:
     args = parse_args()
-    rows = load_and_score(args.input_csv, args.start_time)
+    if args.complete_hourly_csv and args.first_hour_pairs:
+        raise SystemExit("--first-hour-pairs cannot be combined with --complete-hourly-csv")
+    thresholds = THRESHOLDS if args.complete_hourly_csv else ARCHIVED_THRESHOLDS
+    rows = load_and_score(args.input_csv, args.start_time, thresholds=thresholds)
     if args.first_hour_pairs:
         rows.extend(score_first_hour_pairs(args.first_hour_pairs, rows, args.start_time))
     rows = add_not_evaluated_rows(rows, args.start_time)
@@ -472,12 +531,20 @@ def main() -> None:
     except ValueError as exc:
         raise SystemExit(str(exc)) from exc
     write_csv(args.output_dir / "hourly_scores.csv", rows)
-    summary = build_summary(rows, args.start_time, args.input_csv, args.first_hour_pairs)
+    summary = build_summary(rows, args.start_time, args.input_csv, args.first_hour_pairs,
+                            complete_hourly_csv=args.complete_hourly_csv)
     (args.output_dir / "scores.json").write_text(json.dumps(summary, indent=2) + "\n", encoding="utf-8")
     try:
         make_plots(args.output_dir, rows)
         if args.first_hour_pairs:
-            make_first_hour_precipitation_plot(args.output_dir, args.first_hour_pairs)
+            start = parse_utc(args.start_time, "start_time")
+            end = start + timedelta(hours=1)
+            make_first_hour_precipitation_plot(
+                args.output_dir,
+                args.first_hour_pairs,
+                window_start_utc=start.strftime(UTC_FORMAT),
+                window_end_utc=end.strftime(UTC_FORMAT),
+            )
     except ImportError as exc:
         raise SystemExit(f"matplotlib and numpy are required for plots: {exc}") from exc
     print(json.dumps({"output_dir": str(args.output_dir), "evaluated_rows": summary["scope"]["evaluated_rows"], "not_evaluated_rows": summary["scope"]["not_evaluated_rows"], "status": summary["status"]}))
