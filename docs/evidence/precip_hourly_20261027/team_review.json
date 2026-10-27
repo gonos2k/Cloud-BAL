@@ -1,0 +1,34 @@
+{
+  "status": "PASS",
+  "review": "Final read-only peer review of hourly precipitation scorer, evidence, figures, and report",
+  "worktree": "/var/tmp/cloudbal-precip-validation",
+  "scope": {
+    "thresholds_mm_per_hour": [0.1, 0.5, 1.0, 2.5, 5.0, 10.0],
+    "hourly_windows_utc": ["12:00–13:00", "13:00–14:00", "14:00–15:00", "15:00–16:00", "16:00–17:00", "17:00–18:00"],
+    "cases": ["OFF", "HYDRO", "LIQUID"],
+    "evaluated_rows": 78,
+    "not_evaluated_rows": 30,
+    "not_evaluated_scope": "0.5 and 2.5 mm/hour at leads 2–6 for all three cases"
+  },
+  "findings": [
+    "No remaining blockers. Corrected report interpretation now states LIQUID exceeds OFF at 1 mm leads 2 and 5.",
+    "Hourly scope uses adjacent cumulative RAINC+RAINNC differences and independent one-hour contingency tables; no pooled six-hour or cumulative-to-lead score is presented.",
+    "Unsupported values remain null/NOT_EVALUATED and are shown as gaps/NA in plots, not zero.",
+    "Raw RN1 replay remains explicitly incomplete; limitations correctly exclude coverage/QC validation, independent observational skill, statistical generality, and isolated omega attribution.",
+    "First-hour retained NPZ fields, indexes, and coordinates were independently verified byte-value-wise against the source aligned NPZ and fixed mask. Manifest hashes for source/test/validation/derived outputs match current files."
+  ],
+  "sha256": {
+    "tools/plot_hourly_precip_scores.py": "9d627a6b7675b7871b8b6a7ff5da98794ce1b72b97a2d48db4f204927fa08dc0",
+    "tests/test_hourly_precip_scores.py": "fc50a94076b23b57d7b43c87a36412a0d0531319cd89316ab6e508b9cac1e97b",
+    "docs/PRECIP_HOURLY_VERIFICATION_20261027.md": "bc3b0d51d270a32f1490516f9b1783fde895c7d80a67c25c49a06d9cfadcd0e6",
+    "docs/evidence/precip_hourly_20261027/source_manifest.json": "97e511af4e7bfda90cea8882b4ef6899a2fbe2c26457ac65adc465f5c4e6554a4",
+    "docs/evidence/precip_hourly_20261027/validation.json": "cb11b471b8840009e5666b99890c58dd76c5620080d6bb8b4633024c0d2a670b",
+    "docs/evidence/precip_hourly_20261027/input_hourly_csi.csv": "bf478797d99807ffe037d2cca2eb93e945c89288123b41fbe40931338a2f92cf",
+    "docs/evidence/precip_hourly_20261027/first_hour_pairs.npz": "296d67585c0a97408da052cfc4b4987295373b204dbd4557e7bb09345ae59c5d",
+    "docs/evidence/precip_hourly_20261027/derived/hourly_scores.csv": "6adc387407ad0ce3e0432a46da7cef8878feb40014fb13e9983e59b3cd5a5337",
+    "docs/evidence/precip_hourly_20261027/derived/scores.json": "8443fa8e00e6c2b7db227e4dc9714f34219fb0ea498d62ed8505993ce6cb9fe1",
+    "docs/evidence/precip_hourly_20261027/derived/hourly_csi.png": "bb58cfb11405a4c1ffeed6cd0f99a546b79b556aec6fd02200fcef12f64df9bb",
+    "docs/evidence/precip_hourly_20261027/derived/hourly_csi_delta_vs_off.png": "b0ba228a9512d8f5483c4756046d303992c94735522646398cadb3ca45e6f883",
+    "docs/evidence/precip_hourly_20261027/derived/first_hour_precipitation.png": "7c0e1ecc4d82ae59ab4a2dd1d3cdb1a81f971f4f3a40fa4d862489b4cfebfdff"
+  }
+}

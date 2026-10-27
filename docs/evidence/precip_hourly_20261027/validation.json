@@ -1,0 +1,49 @@
+{
+  "status": "PASS_SCOPED",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "tests/run_python_test.py",
+        "tests/test_hourly_precip_scores.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/plot_hourly_precip_scores.py",
+        "docs/evidence/precip_hourly_20261027/input_hourly_csi.csv",
+        "--first-hour-pairs",
+        "docs/evidence/precip_hourly_20261027/first_hour_pairs.npz",
+        "--start-time",
+        "2026-08-16T12:00:00Z",
+        "--output-dir",
+        "/var/tmp/precip-pr-validation-xmskhuls/render"
+      ],
+      "returncode": 0
+    }
+  ],
+  "unit_tests": 13,
+  "full_portable_suite_rerun": false,
+  "fresh_render_byte_matches": {
+    "hourly_scores.csv": true,
+    "scores.json": true,
+    "hourly_csi.png": true,
+    "hourly_csi_delta_vs_off.png": true,
+    "first_hour_precipitation.png": true
+  },
+  "pdf_byte_reproducibility": "not asserted: PDF creation metadata may differ",
+  "output_reuse_rejected": true,
+  "versions": {
+    "python": "3.12.3 (main, Nov  6 2025, 13:44:16) [GCC 13.3.0]",
+    "numpy": "1.26.4",
+    "matplotlib": "3.10.8"
+  },
+  "code_sha256": {
+    "tools/plot_hourly_precip_scores.py": "9d627a6b7675b7871b8b6a7ff5da98794ce1b72b97a2d48db4f204927fa08dc0",
+    "tests/test_hourly_precip_scores.py": "fc50a94076b23b57d7b43c87a36412a0d0531319cd89316ab6e508b9cac1e97b"
+  },
+  "raw_RN1_replay": false,
+  "new_forecast": false
+}
