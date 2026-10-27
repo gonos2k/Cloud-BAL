@@ -38,7 +38,9 @@ MODULE laps_static
 
   USE netcdf, ONLY: NF90_MAX_NAME, NF90_MAX_VAR_DIMS, NF90_NOERR, NF90_NOWRITE, &
       NF90_OPEN, NF90_CLOSE, NF90_INQ_DIMID, NF90_INQUIRE_DIMENSION, NF90_INQ_VARID, &
-      NF90_INQUIRE_VARIABLE, NF90_GET_VAR, NF90_STRERROR, NF90_CHAR, NF90_FLOAT
+      NF90_INQUIRE_VARIABLE, NF90_GET_VAR, NF90_INQUIRE_ATTRIBUTE, NF90_GET_ATT, &
+      NF90_STRERROR, NF90_CHAR, NF90_FLOAT, NF90_BYTE, NF90_SHORT, NF90_INT, &
+      NF90_DOUBLE, NF90_ENOTATT, NF90_FILL_FLOAT
   USE, INTRINSIC :: IEEE_ARITHMETIC, ONLY: IEEE_IS_FINITE
   IMPLICIT NONE
   PRIVATE
@@ -112,12 +114,16 @@ CONTAINS
     count = (/x,y,1,1/)
     status = NF90_GET_VAR(ncid,vid,lats,start=start,count=count)
     CALL require_status(status,'read lat',ncid)
+    CALL require_valid_values(ncid,vid,'lat',lats)
+    CALL require_coordinates(lats,'latitude',ncid)
 
     status = NF90_INQ_VARID(ncid,'lon',vid)
     CALL require_status(status,'find lon',ncid)
     CALL require_float_grid(ncid,vid,'lon',xid,yid,x,y)
     status = NF90_GET_VAR(ncid,vid,lons,start=start,count=count)
     CALL require_status(status,'read lon',ncid)
+    CALL require_valid_values(ncid,vid,'lon',lons)
+    CALL require_coordinates(lons,'longitude',ncid)
     la1 = lats(1,1)
     lo1 = lons(1,1)
     la2 = lats(x,y)
@@ -134,6 +140,7 @@ CONTAINS
     CALL require_float_scalar(ncid,vid,'Dx')
     status = NF90_GET_VAR(ncid,vid,dx)
     CALL require_status(status,'read Dx',ncid)
+    CALL require_valid_values(ncid,vid,'Dx',RESHAPE((/dx/),(/1,1/)))
     CALL require_positive_finite(dx,'Dx',ncid)
     dx = dx / 1000
     CALL require_positive_finite(dx,'Dx in km',ncid)
@@ -143,6 +150,7 @@ CONTAINS
     CALL require_float_scalar(ncid,vid,'Dy')
     status = NF90_GET_VAR(ncid,vid,dy)
     CALL require_status(status,'read Dy',ncid)
+    CALL require_valid_values(ncid,vid,'Dy',RESHAPE((/dy/),(/1,1/)))
     CALL require_positive_finite(dy,'Dy',ncid)
     dy = dy / 1000
     CALL require_positive_finite(dy,'Dy in km',ncid)
@@ -152,19 +160,29 @@ CONTAINS
     CALL require_float_scalar(ncid,vid,'LoV')
     status = NF90_GET_VAR(ncid,vid,lov)
     CALL require_status(status,'read LoV',ncid)
+    CALL require_valid_values(ncid,vid,'LoV',RESHAPE((/lov/),(/1,1/)))
+    IF (lov < -180.0 .OR. lov > 360.0) &
+      CALL static_error('LoV must be a longitude in [-180,360]',ncid)
     IF (lov .GT. 180) lov = lov - 360
+    IF (ABS(lov) > 180.0) CALL static_error('LoV must be a longitude in [-180,180]',ncid)
 
     status = NF90_INQ_VARID(ncid,'Latin1',vid)
     CALL require_status(status,'find Latin1',ncid)
     CALL require_float_scalar(ncid,vid,'Latin1')
     status = NF90_GET_VAR(ncid,vid,latin1)
     CALL require_status(status,'read Latin1',ncid)
+    CALL require_valid_values(ncid,vid,'Latin1',RESHAPE((/latin1/),(/1,1/)))
+    CALL require_latitude_parameter(latin1,'Latin1',ncid)
 
     status = NF90_INQ_VARID(ncid,'Latin2',vid)
     CALL require_status(status,'find Latin2',ncid)
     CALL require_float_scalar(ncid,vid,'Latin2')
     status = NF90_GET_VAR(ncid,vid,latin2)
     CALL require_status(status,'read Latin2',ncid)
+    CALL require_valid_values(ncid,vid,'Latin2',RESHAPE((/latin2/),(/1,1/)))
+    IF (grid_type(1:24) == 'secant lambert conformal' .OR. &
+        grid_type(1:28) == 'tangential lambert conformal') &
+      CALL require_latitude_parameter(latin2,'Latin2',ncid)
 
     ALLOCATE(topo(x,y))
     status = NF90_INQ_VARID(ncid,'avg',vid)
@@ -172,6 +190,7 @@ CONTAINS
     CALL require_float_grid(ncid,vid,'avg',xid,yid,x,y)
     status = NF90_GET_VAR(ncid,vid,topo,start=start,count=count)
     CALL require_status(status,'read avg',ncid)
+    CALL require_valid_values(ncid,vid,'avg',topo)
     status = NF90_CLOSE(ncid)
     CALL require_status(status,'close static file')
   END SUBROUTINE get_horiz_grid_spec
@@ -236,6 +255,86 @@ CONTAINS
     CALL require_status(status,'inspect '//TRIM(name)//' record length',ncid)
     IF (length /= 1) CALL static_error(TRIM(name)//' record dimension must be one',ncid)
   END SUBROUTINE require_float_grid
+
+  SUBROUTINE require_valid_values(ncid,vid,name,values)
+    IMPLICIT NONE
+    INTEGER, INTENT(IN) :: ncid,vid
+    CHARACTER(LEN=*), INTENT(IN) :: name
+    REAL, INTENT(IN) :: values(:,:)
+    INTEGER :: status,i,j,xtype,length
+    CHARACTER(LEN=NF90_MAX_NAME), PARAMETER :: attributes(2) = &
+      [CHARACTER(LEN=NF90_MAX_NAME) :: '_FillValue','missing_value']
+    DOUBLE PRECISION, ALLOCATABLE :: sentinels(:)
+
+    IF (.NOT.ALL(IEEE_IS_FINITE(values))) CALL static_error(TRIM(name)//' contains nonfinite values',ncid)
+    IF (ANY(values == NF90_FILL_FLOAT)) CALL static_error(TRIM(name)//' contains default fill values',ncid)
+
+    DO i=1,SIZE(attributes)
+      status = NF90_INQUIRE_ATTRIBUTE(ncid,vid,TRIM(attributes(i)),xtype=xtype,len=length)
+      IF (status == NF90_ENOTATT) CYCLE
+      CALL require_status(status,'inspect '//TRIM(name)//' '//TRIM(attributes(i)),ncid)
+      IF (.NOT.is_numeric_type(xtype) .OR. length <= 0) &
+        CALL static_error(TRIM(name)//' has malformed '//TRIM(attributes(i))//' attribute',ncid)
+      IF (attributes(i) == '_FillValue' .AND. (xtype /= NF90_FLOAT .OR. length /= 1)) &
+        CALL static_error(TRIM(name)//' has malformed _FillValue attribute',ncid)
+      ALLOCATE(sentinels(length))
+      status = NF90_GET_ATT(ncid,vid,TRIM(attributes(i)),sentinels)
+      CALL require_status(status,'read '//TRIM(name)//' '//TRIM(attributes(i)),ncid)
+      DO j=1,length
+        IF (IEEE_IS_FINITE(sentinels(j))) THEN
+          IF (ANY(DBLE(values) == sentinels(j))) &
+            CALL static_error(TRIM(name)//' contains declared '//TRIM(attributes(i))//' sentinel',ncid)
+        END IF
+      END DO
+      DEALLOCATE(sentinels)
+    END DO
+  END SUBROUTINE require_valid_values
+
+  LOGICAL FUNCTION is_numeric_type(xtype)
+    IMPLICIT NONE
+    INTEGER, INTENT(IN) :: xtype
+    is_numeric_type = xtype == NF90_BYTE .OR. xtype == NF90_SHORT .OR. &
+      xtype == NF90_INT .OR. xtype == NF90_FLOAT .OR. xtype == NF90_DOUBLE
+  END FUNCTION is_numeric_type
+
+  SUBROUTINE require_coordinates(values,name,ncid)
+    IMPLICIT NONE
+    REAL, INTENT(IN) :: values(:,:)
+    CHARACTER(LEN=*), INTENT(IN) :: name
+    INTEGER, INTENT(IN) :: ncid
+    REAL :: normalized
+    INTEGER :: i,j
+    DO j=1,SIZE(values,2)
+      DO i=1,SIZE(values,1)
+        normalized = values(i,j)
+        IF (name == 'longitude') THEN
+          IF (normalized < -180.0 .OR. normalized > 360.0) &
+            CALL static_error('longitude coordinate outside [-180,360]',ncid)
+          IF (normalized > 180.0) normalized = normalized - 360.0
+        ELSE
+          IF (normalized < -90.0 .OR. normalized > 360.0) &
+            CALL static_error('latitude coordinate outside [-90,360]',ncid)
+          IF (normalized > 270.0) normalized = normalized - 360.0
+        END IF
+        IF (name == 'latitude') THEN
+          IF (normalized < -90.0 .OR. normalized > 90.0) &
+            CALL static_error('latitude coordinate outside [-90,90]',ncid)
+        ELSE
+          IF (normalized < -180.0 .OR. normalized > 180.0) &
+            CALL static_error('longitude coordinate outside [-180,180] after normalization',ncid)
+        END IF
+      END DO
+    END DO
+  END SUBROUTINE require_coordinates
+
+  SUBROUTINE require_latitude_parameter(value,name,ncid)
+    IMPLICIT NONE
+    REAL, INTENT(IN) :: value
+    CHARACTER(LEN=*), INTENT(IN) :: name
+    INTEGER, INTENT(IN) :: ncid
+    IF (value < -90.0 .OR. value > 90.0) &
+      CALL static_error(TRIM(name)//' must be a latitude in [-90,90]',ncid)
+  END SUBROUTINE require_latitude_parameter
 
   SUBROUTINE require_positive_finite(value,name,ncid)
     IMPLICIT NONE

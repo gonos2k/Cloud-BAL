@@ -1,0 +1,123 @@
+{
+  "review": "PR111 independent final documentation and evidence review",
+  "result": "PASS",
+  "scope": "static-grid value, coordinate and projection validation before WPS output",
+  "baseline": "e381c88ebcc14ecc5f100e7a74d571752dee0789",
+  "source_pin_count": 28,
+  "source_sha256": {
+    "src/common/cloud_bal_balance_operator.f90": "e6d32bb94e822aafe423a6e836bbd8af2aedaa192628270d31eea4c257bc169b",
+    "src/common/cloud_bal_column_physics.f90": "d17e97bb573381529ab3228ac54fb897a792f55e9c663c4aac54521fdc5c733a",
+    "src/common/cloud_bal_field_contracts.f90": "e6227763c858a7c552acbb5a145dbe08edc5938c7bb47487dc66593745216fc8",
+    "src/common/cloud_bal_grid_geometry.f90": "3e2b75c5a64730a65dd4762a4ed9cc8fe82017ca95a11cf40690bfa4bca3e703",
+    "src/common/cloud_bal_lapsprep_adapter.f90": "74cd6339780ba54ba9ea68800163c955d3726f652d2dfec41b85d1a9a07e4f35",
+    "src/common/cloud_bal_moisture.f90": "33fb244ae739d3204461232f01af702a06f90408555edf34d7df43c22b7dbba2",
+    "src/common/cloud_bal_pipeline.f90": "e1bad8706277d3dda95d941b6f3b0e19864f8f18d263b164d6db4d0718579770",
+    "src/common/cloud_bal_pressure_analysis.f90": "c81ebce5b07998dbe26e7ef40c4dcf787e53550be0c7af106b5f5e31710b0396",
+    "src/common/cloud_bal_real_netcdf.f90": "153df8431f890be7df2648230337c5e4160f7eecc1b77403f86a21e4a5c0c514",
+    "src/common/cloud_bal_stage_context.f90": "e08fb711c8be9bba2f2f162c97c62518a9b2d784157910628160479b74637a46",
+    "src/common/cloud_bal_stage_payload.f90": "4bb69f7d21643a17617e903fc1570dde198215d35b80fc1e5f0c8b006b20316a",
+    "src/common/cloud_bal_state.f90": "791e60fbf157c304a6945e7b04c11d3a7f8c36d82bb5c692d0b4a2ab97634d61",
+    "src/common/cloud_bal_wps_adapter.f90": "f063f9b3605fe2504b6d364f858cef82605105a0888825cd795ea03c7c65eacb",
+    "src/lapsprep/lapsprep.f90": "2c1a7c81042ab40928650d9286fb186e8725e52dc7d29e60bb71ac2cce00dfea",
+    "src/lapsprep/module_laps_static.f90": "efdf8b724383ecb7f3bb52b30d3f45edc89e987480090c10fe76cee25e7488af",
+    "src/lapsprep/module_lapsprep_wps.f90": "d41849677d965d3b8ad1e5834cbd74f99f958f3e9894b7157049ec1dae077cce",
+    "src/lapsprep/module_setup.f90": "14586ff3db4cfa69d1dad959d449f80d211a1dabacd2aec78fd6a7a65e46b799",
+    "tests/fixtures/pr110_static_reader/create_fixtures.py": "9e97b96abc45a791aa20a120da5d4d8259e61bdcdea426ac77cdaf88b56721b4",
+    "tests/fixtures/pr110_static_reader/reader_driver.f90": "1ba91b611e340ff618e67b9bc797c137373aac49af11f8507388da411de5093b",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/lapsprep_static_fixture.py": "1bb83e56ac34bb66bee04fa1dff5c3323f40310bdf09112e200d96ea53984e0e",
+    "tests/lapsprep_vapor_fixture.py": "9275ce0a1ffb064157e97e03fca9ee7626c47a1cf13d608ea0fca5e9f4d4a8b8",
+    "tests/lapsprep_vapor_stubs.f90": "95816a2bb7e58f90fb7d01ac86f4cff729d0f7a940c95475e9932c27d08dadf0",
+    "tests/run_lapsprep_vapor.sh": "76b8ada3b7d4552e028502656fb803d8ae124c7f844d8afe8aa599a34f6eeaa3",
+    "tests/run_pr110_static_reader.sh": "b02ef47db268d2bef08aeccc2b0d1e5c947f134903e63a2832fcc7f3a33828df",
+    "tests/test_lapsprep_vapor.py": "e856d4109052dea0490706b4a699c75ecd4f943b848faa76ff4c5c89a5213952",
+    "tests/verify_lapsprep_static_wps.py": "caef6f68a99b9437fea3d3f5dbd0effc6764f9c3ac291947f300b470bd6e84bd",
+    "tools/compare_baseline.py": "5c137411243ca2d0c6ca87c1e305a5d0dc4e7b3e94a0d9ac8ed43e91175d5fe0"
+  },
+  "documentation_sha256": {
+    "docs/PR111_STATIC_VALUE_VALIDATION_20261027.md": "fa52339ec1c8ca7d083f573be67f59f4d86897d248946b494c4ae70680d4dca0",
+    "docs/CURRENT_RESEARCH_STATUS.md": "4aee4e6fc2bbd5f3401aabc01f6be1c772bfd530dee3471a846fd2bd023ab7ed"
+  },
+  "archive": {
+    "path": "docs/evidence/pr111_static_values_20261027/native_logs.tar.gz",
+    "sha256": "e1c6f371423933c4ae09e1e068dc667a8c26836dc2c521b1f47643fb29f1a6fe",
+    "member_count": 64,
+    "manifest_log_count": 64,
+    "all_manifest_entries_match": true,
+    "mismatches": []
+  },
+  "validation": {
+    "result": "PASS_SCOPED",
+    "toolchain": "pinned Intel tests/intel_toolchain.sh",
+    "caller_profiles": [
+      "O0",
+      "O2"
+    ],
+    "caller_returncode": 0,
+    "caller_negative_cases_per_profile": 12,
+    "caller_cases": [
+      "dx_unwritten",
+      "dx_fill_5000",
+      "dx_missing_value_5000",
+      "latin1_nan",
+      "swlat_200",
+      "lat_array_missing",
+      "lat_array_nonfinite",
+      "lon_400",
+      "avg_array_missing",
+      "lov_nan",
+      "lov_400",
+      "latin2_91"
+    ],
+    "reject_requires": [
+      "nonzero return",
+      "case-specific diagnostic",
+      "no WPS output"
+    ],
+    "positive_header_checks": 4,
+    "fields_per_header_check": 23,
+    "reader_profiles": [
+      "O0",
+      "O2"
+    ],
+    "reader_negative_cases_per_profile": 17,
+    "archived_static_sha256": "384b419c8165457432e8c7ce58e8ab07f57ac07f5a08c2da608880b3240b4b9b",
+    "archived_reader_pass": true,
+    "portable_suite_rerun": false
+  },
+  "independent_wrap_check": {
+    "result": "PASS",
+    "profile": "pinned Intel profile from tests/intel_toolchain.sh",
+    "driver_sha256": "a993065fc70cedccf41c68a72a2fbdea04610e8d2d64632df414b9e264067985",
+    "executable_sha256": "d80c4370ffe74f7e613ae41b48f37295cf62a81f636a815ccb5ef82bf1e76628",
+    "log_sha256": "3301a29c3c77a611b3572b40903e1f2cbfbe5fbd63f197ab5393ba36ec040e39",
+    "input_lat_lon": [
+      330.0,
+      350.0
+    ],
+    "normalized_sw_ne_corners": [
+      -30.0,
+      -10.0
+    ]
+  },
+  "review_findings": [
+    {
+      "finding": "LoV >360 accepted after one subtraction",
+      "status": "resolved"
+    },
+    {
+      "finding": "swlat_200 expected diagnostic mismatch",
+      "status": "resolved"
+    },
+    {
+      "finding": "WPS static verifier path/arguments stale",
+      "status": "resolved"
+    }
+  ],
+  "scope_limitations": [
+    "Focused native regression, not full WRF/forecast validation",
+    "Portable registry validated (310 modules); full portable suite not rerun in PR111",
+    "Initial harness development runs superseded by final run with scratch compilation/linking and pipefail",
+    "C2 H/A/N one-hour INCOMPLETE at760s;14UTC skill NOT_EVALUATED"
+  ]
+}

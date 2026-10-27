@@ -10,33 +10,6 @@ MODULE constants
   REAL, PARAMETER :: pi = 3.14159265358
 END MODULE constants
 
-MODULE laps_static
-  IMPLICIT NONE
-  INTEGER :: x, y, z2, z3
-  REAL :: la1, lo1, la2, lo2, dx, dy, lov, latin1, latin2
-  REAL, ALLOCATABLE :: topo(:,:), lats(:,:), lons(:,:)
-  CHARACTER(LEN=132) :: grid_type
-CONTAINS
-  SUBROUTINE get_horiz_grid_spec(laps_data_root)
-    CHARACTER(LEN=*), INTENT(IN) :: laps_data_root
-    x = 2
-    y = 2
-    z2 = 1
-    la1 = 35.0
-    lo1 = 126.0
-    la2 = 36.0
-    lo2 = 127.0
-    dx = 1.0
-    dy = 1.0
-    lov = 126.0
-    latin1 = 30.0
-    latin2 = 60.0
-    grid_type = 'mercator'
-    ALLOCATE(topo(x,y))
-    topo = 100.0
-  END SUBROUTINE get_horiz_grid_spec
-END MODULE laps_static
-
 MODULE lapsprep_mm5
   IMPLICIT NONE
   PRIVATE

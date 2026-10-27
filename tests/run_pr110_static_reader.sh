@@ -50,7 +50,28 @@ for optimization in O0 O2; do
       printf 'expected rejection for %s at %s\n' "$case_name" "$optimization" >&2
       exit 1
     fi
-    grep -q 'laps_static:' "$output"
+    case $case_name in
+      double_dx) expected='Dx must be a one-element REAL32 variable' ;;
+      double_lat) expected='lat must be a rank-4 REAL32 array' ;;
+      double_avg) expected='avg must be a rank-4 REAL32 array' ;;
+      bad_lat_rank) expected='lat must be a rank-4 REAL32 array' ;;
+      missing_lat) expected='find lat: NetCDF: Variable not found' ;;
+      zero_dx|negative_dx) expected='Dx must be finite and positive' ;;
+      nan_dx) expected='Dx contains nonfinite values' ;;
+      zero_dy|negative_dy) expected='Dy must be finite and positive' ;;
+      nan_dy) expected='Dy contains nonfinite values' ;;
+      long_dx) expected='Dx must have length one' ;;
+      swapped_lat_axes) expected='lat must use dimensions x,y first' ;;
+      long_trailing_lat_axis) expected='lat record dimension must be one' ;;
+      bad_grid_type_length) expected='grid_type must fit one 132-character value' ;;
+      bad_grid_type_rank) expected='grid_type must be rank-2 character data' ;;
+      missing_file) expected='open static file: No such file or directory' ;;
+    esac
+    grep -Fq "laps_static: $expected" "$output" || {
+      printf 'unexpected diagnostic for %s at %s\n' "$case_name" "$optimization" >&2
+      cat "$output" >&2
+      exit 1
+    }
   done
 done
 printf 'PR110 static reader O0/O2 PASS\n'
