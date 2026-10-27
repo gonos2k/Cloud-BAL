@@ -1,0 +1,121 @@
+{
+  "artifacts": {
+    "apply_result_path": "/var/tmp/precip_kg_publication_20261027_v3/apply_result.json",
+    "apply_result_sha256": "8a893ec31b0bf750fd56f20a07981fce7a1fb709aa905df6ec2d3da605c0adad",
+    "check_only_path": "/var/tmp/precip_kg_publication_20261027_v3/check_only.json",
+    "check_only_sha256": "be59d02d5c67a33e1dddc3c9e55dcd5c35391b5305826f7bfba3e74d5bd73f91",
+    "fresh_preapply_baseline_sha256": "08f5a9e13c09adf124ea9c764e21b9d3040e190274d4872d5039485cf14f5926",
+    "independent_postapply_review_file_sha256": "62464d0e574c0733c75ef91042c4e29d9d4b5765670c0a22c2c15d8886bb8723",
+    "independent_postapply_review_path": "independent_postapply_review.json",
+    "independent_postapply_review_sha256": "62464d0e574c0733c75ef91042c4e29d9d4b5765670c0a22c2c15d8886bb8723",
+    "independent_review_status": "PASS",
+    "postapply_readback_file_sha256": "cf25c0dcb2c7b063215a0eb13708aaa4f0c1f6fc36d500bf4dfd957fb890a791",
+    "postapply_readback_path": "postapply_readback.json",
+    "postapply_readback_sha256": "cf25c0dcb2c7b063215a0eb13708aaa4f0c1f6fc36d500bf4dfd957fb890a791"
+  },
+  "corpora": {
+    "Cloud-BAL": {
+      "after": {
+        "communities": 1367,
+        "dated_snapshots": 80,
+        "edges": 27331,
+        "nodes": 15456
+      },
+      "before": {
+        "communities": 1388,
+        "dated_snapshots": 78,
+        "edges": 27222,
+        "nodes": 15413
+      },
+      "delta": {
+        "communities": -21,
+        "edges": 109,
+        "nodes": 43
+      },
+      "graph_sha256": "dd782b784d4a9602d055242061764b098958027a3480bdc561d9864e81f7c7ff",
+      "integrity_errors": 0,
+      "new_snapshots": [
+        "2026-10-27-precip-hourly-scores-graphify-raw",
+        "2026-10-27-precip-hourly-scores"
+      ]
+    },
+    "KLAPS50": {
+      "after": {
+        "communities": 3345,
+        "dated_snapshots": 76,
+        "edges": 85788,
+        "nodes": 41284
+      },
+      "before": {
+        "communities": 3368,
+        "dated_snapshots": 74,
+        "edges": 85679,
+        "nodes": 41241
+      },
+      "delta": {
+        "communities": -23,
+        "edges": 109,
+        "nodes": 43
+      },
+      "graph_sha256": "b46e578265340bc714d47c75d1c2a8c071dd493c0e77163cc24ad1f4034b0d7d",
+      "integrity_errors": 0,
+      "new_snapshots": [
+        "2026-10-27-precip-hourly-scores-graphify-raw",
+        "2026-10-27-precip-hourly-scores"
+      ]
+    }
+  },
+  "extraction_limits": [
+    "Graphify AST extraction selected the precipitation scorer and focused tests; report and evidence files were hash-bound only.",
+    "Fortran cross-file CALL extraction remains partial.",
+    "Graph freshness does not establish runtime validation, scientific correctness, or forecast skill."
+  ],
+  "hash_only_paths": [
+    "docs/PRECIP_HOURLY_VERIFICATION_20261027.md",
+    "docs/evidence/precip_hourly_20261027/derived/first_hour_precipitation.pdf",
+    "docs/evidence/precip_hourly_20261027/derived/first_hour_precipitation.png",
+    "docs/evidence/precip_hourly_20261027/derived/hourly_csi.pdf",
+    "docs/evidence/precip_hourly_20261027/derived/hourly_csi.png",
+    "docs/evidence/precip_hourly_20261027/derived/hourly_csi_delta_vs_off.pdf",
+    "docs/evidence/precip_hourly_20261027/derived/hourly_csi_delta_vs_off.png",
+    "docs/evidence/precip_hourly_20261027/derived/hourly_scores.csv",
+    "docs/evidence/precip_hourly_20261027/derived/scores.json",
+    "docs/evidence/precip_hourly_20261027/first_hour_pairs.npz",
+    "docs/evidence/precip_hourly_20261027/first_hour_pairs_receipt.json",
+    "docs/evidence/precip_hourly_20261027/input_hourly_csi.csv",
+    "docs/evidence/precip_hourly_20261027/map_recheck/bridge_check.py",
+    "docs/evidence/precip_hourly_20261027/map_recheck/native_firsthour.json",
+    "docs/evidence/precip_hourly_20261027/map_recheck/native_firsthour_audit.py",
+    "docs/evidence/precip_hourly_20261027/map_recheck/npz_bridge.json",
+    "docs/evidence/precip_hourly_20261027/map_recheck/plot_review_after_fix.json",
+    "docs/evidence/precip_hourly_20261027/map_recheck/plot_review_before_fix.json",
+    "docs/evidence/precip_hourly_20261027/source_manifest.json",
+    "docs/evidence/precip_hourly_20261027/team_review.json",
+    "docs/evidence/precip_hourly_20261027/validation.json"
+  ],
+  "plan_sha256": "b93b6bc18f5bbb9c54f177dd850befe1588ec28bf364846d992258e3142cb549",
+  "preservation": {
+    "active_root_go_pins": 250,
+    "inherited_immutable_pins": 197,
+    "non_target_dirty_status": "PRESERVED",
+    "prior_dated_snapshot_inventory": "PASS",
+    "prior_dated_snapshots_preserved": 152,
+    "protected_content_and_source_pins": "PASS",
+    "published_target_count": 21
+  },
+  "pull_request": "https://github.com/gonos2k/Cloud-BAL/pull/113",
+  "schema": "precip_hourly_kg_update_receipt_v1",
+  "science_validation": "NOT_ESTABLISHED_BY_GRAPH_UPDATE",
+  "selected_code_paths": [
+    "tests/test_hourly_precip_scores.py",
+    "tools/plot_hourly_precip_scores.py"
+  ],
+  "source_freeze": {
+    "approval_base": "2dca6f5aeeb14a0f9f7dc22e58dd66a1ec01e2d7",
+    "commit": "f414d68bd6783f5a65d98950511e3385526769df",
+    "graph_selection_base": "2dca6f5aeeb14a0f9f7dc22e58dd66a1ec01e2d7",
+    "worktree_clean_at_readback": true
+  },
+  "stage_sha256": "24934cc96d82c9bc7eae3c65f3aa36de035e35d2c11686f37e12d7fa499c350c",
+  "status": "PASS"
+}

@@ -1,0 +1,56 @@
+{
+  "status": "PASS_SCOPED",
+  "commands": [
+    {
+      "command": [
+        "python3",
+        "tests/run_python_test.py",
+        "tests/test_hourly_precip_scores.py"
+      ],
+      "returncode": 0
+    },
+    {
+      "command": [
+        "python3",
+        "tools/plot_hourly_precip_scores.py",
+        "docs/evidence/precip_hourly_20261027/input_hourly_csi.csv",
+        "--first-hour-pairs",
+        "docs/evidence/precip_hourly_20261027/first_hour_pairs.npz",
+        "--start-time",
+        "2026-08-16T12:00:00Z",
+        "--output-dir",
+        "/var/tmp/precip-map-validation-7r7nx3rw/render"
+      ],
+      "returncode": 0
+    }
+  ],
+  "unit_tests": 14,
+  "full_portable_suite_rerun": false,
+  "fresh_render_byte_matches": {
+    "hourly_scores.csv": true,
+    "scores.json": true,
+    "hourly_csi.png": true,
+    "hourly_csi_delta_vs_off.png": true,
+    "first_hour_precipitation.png": true
+  },
+  "display_correction": "map aspect cos(latitude) -> 1/cos(latitude), smaller point markers",
+  "score_outputs_unchanged_from_5fd86f9": {
+    "hourly_scores.csv": true,
+    "scores.json": true,
+    "hourly_csi.png": true,
+    "hourly_csi_delta_vs_off.png": true
+  },
+  "pdf_byte_reproducibility": "not asserted: PDF creation metadata may differ",
+  "output_reuse_rejected": true,
+  "versions": {
+    "python": "3.12.3 (main, Nov  6 2025, 13:44:16) [GCC 13.3.0]",
+    "numpy": "1.26.4",
+    "matplotlib": "3.10.8"
+  },
+  "code_sha256": {
+    "tools/plot_hourly_precip_scores.py": "db8dcbb13a8e6c337499f6e97e13a336ad7ddbd4e44ac29c5850fe84d9048a8b",
+    "tests/test_hourly_precip_scores.py": "1b4309eabbc874d7127e35561c5c44a2e43d6d0a6700d8a24711f32602eeea56"
+  },
+  "raw_RN1_replay": false,
+  "new_forecast": false
+}

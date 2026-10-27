@@ -1,0 +1,59 @@
+{
+  "review_status": "GO",
+  "review_scope": "Independent RN1 recovery rescore, precipitation report, evidence manifest and per-hour map readback",
+  "source_output": "/var/tmp/rn1-rescore-final-20261027",
+  "report_checkout": "/var/tmp/cloudbal-precip-validation",
+  "checks": {
+    "raw_rn1_sources": {
+      "status": "PASS",
+      "canonical_inventory_hashes_match": "6/6",
+      "all_six_selected_npz_reference_arrays_equal_raw_values": true,
+      "alternate_aroma37_version_excluded": true
+    },
+    "rescore": {
+      "status": "PASS",
+      "hourly_cases_leads_thresholds": 108,
+      "common_points_per_row": 3688,
+      "independently_recomputed_float64_npz_count_tables": 108,
+      "recomputed_csv_and_json_counts_match": true,
+      "archived_72_count_tables_match_exactly": true,
+      "before_after_pin_files_equal": true,
+      "pin_count": 34,
+      "scope_limit": "I independently recomputed counts from the captured arrays and checked raw RN1 values and hashes. The 21 large WRF file hashes were relied on through the unchanged before/after pin receipt; I did not rerun the WRF remapping."
+    },
+    "report": {
+      "status": "PASS",
+      "documented_values_match_csv_to_four_decimals": true,
+      "lead_and_hour_windows_correct": true,
+      "interpretation_of_candidate_skill_is_consistent_with_counts": true,
+      "first_hour_map_summary_statistics_reproduced": true,
+      "documented_hourly_csi_rows_checked": 36,
+      "root_additional_CSI_values_checked": 108
+    },
+    "maps": {
+      "status": "PASS",
+      "png_pdf_map_pairs_present": 6,
+      "hour_18_title": "2026-08-16 17\u201318 UTC",
+      "hour_18_view": "RN1 has broad southern/central coverage with a separate southwest patch; forecast panels show distinct northern and southern clusters. Figure labels 1-hour amounts and explicitly marks coverage unverified. The plotted land-grid cells and color bins are legible; no time/title or obvious rendering defect found.",
+      "interpretation_limit": "Visual difference describes the fields; it does not establish observation skill because RN1 sensor coverage/QC is not available."
+    },
+    "evidence_manifest": {
+      "status": "PASS",
+      "listed_file_count": 38,
+      "listed_hash_mismatches": 0,
+      "current_plotter_test_report_hashes_match": true
+    },
+    "focused_tests": {
+      "status": "PASS",
+      "command": "pytest -q tests/test_hourly_precip_scores.py",
+      "passed": 17,
+      "diff_check": "PASS"
+    }
+  },
+  "remaining_limits": [
+    "This is postprocessing of retained completed forecasts, not a new forecast run.",
+    "RN1 is a processed ODAM radar/AWS analysis and the hourly window uses the supplied 1-hour/mm product convention; historical wrapper fallback freshness cannot be recovered from headers alone.",
+    "A 3688-cell fixed geographic mask is not an observation coverage mask; independent sensor coverage, uncertainty and source independence remain unverified.",
+    "This review does not establish physical approval, statistically general forecast skill, or an isolated omega effect."
+  ]
+}

@@ -1,0 +1,126 @@
+{
+  "corpora": {
+    "Cloud-BAL": {
+      "added_node_ids": 9,
+      "after": {
+        "communities": 1357,
+        "dated_snapshots": 82,
+        "edges": 27349,
+        "nodes": 15461
+      },
+      "before": {
+        "communities": 1367,
+        "dated_snapshots": 80,
+        "edges": 27331,
+        "nodes": 15456
+      },
+      "delta": {
+        "communities": -10,
+        "edges": 18,
+        "nodes": 5
+      },
+      "graph_sha256": "95e1844ec7bfddbd71d9ffd98fac9b2d055eb61046d8d930f6084a94bb312447",
+      "integrity_errors": 0,
+      "removed_node_ids": 4
+    },
+    "KLAPS50": {
+      "added_node_ids": 9,
+      "after": {
+        "communities": 3376,
+        "dated_snapshots": 78,
+        "edges": 85806,
+        "nodes": 41289
+      },
+      "before": {
+        "communities": 3345,
+        "dated_snapshots": 76,
+        "edges": 85788,
+        "nodes": 41284
+      },
+      "delta": {
+        "communities": 31,
+        "edges": 18,
+        "nodes": 5
+      },
+      "graph_sha256": "c50c445897858592405f964b2ae6a878d24f6cea34cbc4ca38f441cbc51b19cf",
+      "integrity_errors": 0,
+      "removed_node_ids": 4
+    }
+  },
+  "fresh_baseline": {
+    "dated_snapshots": 156,
+    "path": "/var/tmp/precip_rn1_kg_baseline_20261027.json",
+    "sha256": "af7f114b21a59a010dc25ca8a547d5dcb099c6f8e1825a9d2aafb4f07ab729f5"
+  },
+  "frozen_rn1_manifest_modified": false,
+  "graphify_extraction": "Python AST only; documentation and evidence were hash-bound without semantic extraction",
+  "hash_only_path_count": 41,
+  "independent_postapply_readback": {
+    "checks": {
+      "active_root_go_pins": 250,
+      "inherited_immutable_pins": 197,
+      "non_target_dirty_status_preserved": true,
+      "prior_snapshots_preserved": 156,
+      "protected_content_verified": true,
+      "publication_targets": 21,
+      "source_worktree_clean_at_pinned_commit": "ddb63a0445823b97fd04dcd07a6b7b3c54ffbddc",
+      "total_snapshots_after": 160
+    },
+    "external_path": "/var/tmp/precip_rn1_kg_publication_20261027/independent_postapply_review.json",
+    "path": "independent_postapply_review.json",
+    "sha256": "4b975be0c959e4ae60b855946ab261c1a2db5e127fad3e418d74f3f49eb24039",
+    "status": "PASS"
+  },
+  "limitations": [
+    "Fortran cross-file CALL extraction remains partial.",
+    "Community counts may shift during reclustering.",
+    "Graph freshness does not establish runtime validation, scientific correctness, or forecast skill."
+  ],
+  "plan_sha256": "4389cf8a0950ff9d6c9e97fe2964dacc82deb94b49005f21883683c9f7501710",
+  "publication": {
+    "apply_result_path": "/var/tmp/precip_rn1_kg_publication_20261027/apply_result.json",
+    "apply_result_sha256": "0a38f1a8bcadf24837a0c04d6996bc5035ddd40d37154493651513cc74c83a00",
+    "apply_status": "APPLY_PASS",
+    "check_only_path": "/var/tmp/precip_rn1_kg_publication_20261027/check_only.json",
+    "check_only_sha256": "492a356e3ef0657f3045c418fdb6d908059505a316412cb83819800d13827375",
+    "check_only_status": "CHECK_ONLY_PASS_NO_WRITES",
+    "published_targets": 21,
+    "root_go_path": "/var/tmp/precip_rn1_kg_publication_20261027/root_go.json",
+    "root_go_sha256": "f37c4b13305f22765f97570b2a4f87d90f9a1b3815c8e55da172462c7d645d7a"
+  },
+  "pull_request": "https://github.com/gonos2k/Cloud-BAL/pull/113",
+  "rn1_recovery": {
+    "canonical_input_hashes": "MATCH",
+    "canonical_inputs": 6,
+    "observation_independence": "OPEN",
+    "raw_score_rows": 108,
+    "spatial_coverage": "OPEN"
+  },
+  "schema": "precip_rn1_kg_update_manifest_v1",
+  "selected_code_paths": [
+    "tests/test_hourly_precip_scores.py",
+    "tools/plot_hourly_precip_scores.py"
+  ],
+  "snapshots": {
+    "after": 160,
+    "before": 156,
+    "new_names_per_corpus": [
+      "2026-10-27-precip-rn1-recovery-graphify-raw",
+      "2026-10-27-precip-rn1-recovery"
+    ],
+    "preserved_prior_snapshots": 156
+  },
+  "source_freeze": {
+    "approval_base": "e20cffb8d113b6103fcc1dfa537bfee793abc158",
+    "commit": "ddb63a0445823b97fd04dcd07a6b7b3c54ffbddc",
+    "graph_selection_base": "f414d68bd6783f5a65d98950511e3385526769df",
+    "source_worktree_clean_at_preflight": true
+  },
+  "stage_receipt": {
+    "path": "/var/tmp/precip_rn1_kg_stage_20261027/stage_receipt.json",
+    "sha256": "121fad724189393158d058255009aa6f1a513e67b8770ba784fa8f416009fdb2",
+    "stage_sha256": "637f2833db786cd86b95c77f74a0985f8f8c72406af2cf604aafb68252651a9b"
+  },
+  "stage_sha256": "637f2833db786cd86b95c77f74a0985f8f8c72406af2cf604aafb68252651a9b",
+  "status": "PASS"
+}

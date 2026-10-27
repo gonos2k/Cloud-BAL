@@ -1,0 +1,46 @@
+{
+  "schema": "precip_hourly_kg_independent_postapply_review_v1",
+  "status": "PASS",
+  "source_commit": "f414d68bd6783f5a65d98950511e3385526769df",
+  "plan_sha256": "b93b6bc18f5bbb9c54f177dd850befe1588ec28bf364846d992258e3142cb549",
+  "stage_sha256": "24934cc96d82c9bc7eae3c65f3aa36de035e35d2c11686f37e12d7fa499c350c",
+  "apply_result_sha256": "8a893ec31b0bf750fd56f20a07981fce7a1fb709aa905df6ec2d3da605c0adad",
+  "postapply_receipt": "postapply_readback.json",
+  "postapply_receipt_sha256": "cf25c0dcb2c7b063215a0eb13708aaa4f0c1f6fc36d500bf4dfd957fb890a791",
+  "checks": {
+    "all_published_targets_match_stage": true,
+    "published_target_count": 21,
+    "old_target_backups_match_baseline": 17,
+    "dated_snapshot_counts": {
+      "before": {"KLAPS50": 74, "Cloud-BAL": 78, "total": 152},
+      "after": {"KLAPS50": 76, "Cloud-BAL": 80, "total": 156}
+    },
+    "all_prior_dated_snapshot_members_match_baseline": true,
+    "two_new_named_and_raw_snapshots_per_corpus_match_stage": true,
+    "protected_content_and_maintained_source_pins_match": true,
+    "selected_source_and_hash_only_pins_match": {"selected": 2, "hash_only": 21},
+    "pinned_helper_hashes_match": 3,
+    "active_root_go_pins": 250,
+    "inherited_immutable_pins": 197,
+    "non_target_dirty_status_preserved": true,
+    "expected_extra_status_entries": [
+      "Cloud-BAL: ?? graphify-out/2026-10-27-precip-hourly-scores-graphify-raw/",
+      "Cloud-BAL: ?? graphify-out/2026-10-27-precip-hourly-scores/"
+    ],
+    "source_worktree_clean": true
+  },
+  "graph_deltas": {
+    "KLAPS50": {"nodes": 41284, "edges": 85788, "communities": 3345, "added_nodes": 43, "added_edges": 109, "removed_nodes": 0, "integrity_errors": 0},
+    "Cloud-BAL": {"nodes": 15456, "edges": 27331, "communities": 1367, "added_nodes": 43, "added_edges": 109, "removed_nodes": 0, "integrity_errors": 0}
+  },
+  "protected_content_verification": {
+    "method": "publisher.verify_protected_content(plan), invoked read-only independently after apply",
+    "status": "PASS"
+  },
+  "limitations": [
+    "Graphify AST extraction selected the precipitation scorer and focused tests; the report and evidence were hash-bound only.",
+    "Fortran cross-file CALL extraction remains partial.",
+    "Graph freshness does not establish runtime or scientific validation."
+  ],
+  "independent_review_script_sha256": "dabf2b2413ddb912b8ec7ed2617dc8f8e91afbbdbd1fd755bb1c10a52c29b787"
+}

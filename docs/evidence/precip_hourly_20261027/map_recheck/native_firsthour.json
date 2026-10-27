@@ -1,0 +1,430 @@
+{
+  "case_definition": "CP02 12:00 initial to 13:00 UTC first-hour native accumulated precipitation; hourly = 13h minus 12h; RAINC+RAINNC; RAINSH separately required and checked zero; common fixed mask and original curvilinear mapping",
+  "reference_arrays": "Original RN1 raw files for 14-18 UTC absent; this diagnostic only assesses model rainfall quantities and geometry, no CSI.",
+  "reference_paths": {
+    "inventory": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/inventory.json",
+    "mask_receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/mask_receipt.json",
+    "mask": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/south_korea_land_mask_149x253_uint8_fortran.bin",
+    "analysis_coordinates": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/DFSD/20260816/klps_lc05_anal_20260816_1300",
+    "run_contract": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/run_contract.md",
+    "one_hour_reproduction": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/ONE_HOUR_REPRODUCTION.json"
+  },
+  "cases": {
+    "off": {
+      "source_files": {
+        "12": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfout_d01_2026-08-16_12:00:00",
+        "13": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfout_d01_2026-08-16_13:00:00"
+      },
+      "units": "mm (validated WRF variable units)",
+      "Times_UTC": [
+        "2026-08-16_12:00:00",
+        "2026-08-16_13:00:00"
+      ],
+      "native_shape": [
+        282,
+        234
+      ],
+      "initial_accumulators": {
+        "RAINC": {
+          "min": 0.0,
+          "max": 0.0,
+          "nonzero": 0,
+          "valid": 65988
+        },
+        "RAINNC": {
+          "min": 0.0,
+          "max": 0.0,
+          "nonzero": 0,
+          "valid": 65988
+        }
+      },
+      "native_hourly_reset_check_13_18": {
+        "RAINC": {
+          "negative_increment_cells_13_18": 0,
+          "minimum_hourly_increment_mm": 0.0
+        },
+        "RAINNC": {
+          "negative_increment_cells_13_18": 0,
+          "minimum_hourly_increment_mm": 0.0
+        }
+      },
+      "native_hour1_total": {
+        "count": 65988,
+        "min": 0.0,
+        "mean": 0.7465969444592938,
+        "max": 83.75953558413312,
+        "quantiles_min_p50_p90_p95_p99_max": [
+          0.0,
+          7.273715241229439e-10,
+          1.6658385333605124,
+          4.353248270694166,
+          12.778487487956873,
+          83.75953558413312
+        ],
+        "sum_point_mm": 49266.43917097988,
+        "wet_counts": {
+          "0.1": 14445,
+          "0.5": 10717,
+          "1": 8556,
+          "2.5": 5147,
+          "5": 2886,
+          "10": 1014
+        }
+      },
+      "native_hour1_total_max_native_grid_location_yx": [
+        67,
+        159
+      ],
+      "native_hour1_total_max_native_grid_location_latlon": [
+        34.59212875366211,
+        128.3624267578125
+      ],
+      "mapped_hour1_common_mask": {
+        "count": 3688,
+        "min": 0.0,
+        "mean": 0.8831614846203677,
+        "max": 56.498450891338436,
+        "quantiles_min_p50_p90_p95_p99_max": [
+          0.0,
+          2.035799407230743e-05,
+          1.0503241708079847,
+          5.227848393721472,
+          19.62857705041309,
+          56.498450891338436
+        ],
+        "sum_point_mm": 3257.099555279916,
+        "wet_counts": {
+          "0.1": 696,
+          "0.5": 467,
+          "1": 374,
+          "2.5": 268,
+          "5": 189,
+          "10": 90
+        }
+      },
+      "mapped_max_target_yx": [
+        67,
+        75
+      ],
+      "mapped_max_target_latlon": [
+        34.85578918457031,
+        127.84124755859375
+      ],
+      "mapped_components_point_sum_contributions": {
+        "RAINC": {
+          "mapped_sum_point_mm": 2.2983051161657517,
+          "fraction_total": 0.000705629372746709,
+          "mapped_max_mm": 0.05033449153612498,
+          "native_sum_full_grid_mm": 202.1843699470096,
+          "native_max_mm": 0.14460286498069763
+        },
+        "RAINNC": {
+          "mapped_sum_point_mm": 3254.80125016375,
+          "fraction_total": 0.9992943706272532,
+          "mapped_max_mm": 56.498450891338436,
+          "native_sum_full_grid_mm": 49064.254801032876,
+          "native_max_mm": 83.75390625
+        }
+      },
+      "mapping_residual_max_deg": 2.842170943040401e-14,
+      "mapped_point_count": 3688,
+      "target_mask_count": 3688
+    },
+    "hydro": {
+      "source_files": {
+        "12": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_12:00:00",
+        "13": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_13:00:00"
+      },
+      "units": "mm (validated WRF variable units)",
+      "Times_UTC": [
+        "2026-08-16_12:00:00",
+        "2026-08-16_13:00:00"
+      ],
+      "native_shape": [
+        282,
+        234
+      ],
+      "initial_accumulators": {
+        "RAINC": {
+          "min": 0.0,
+          "max": 0.0,
+          "nonzero": 0,
+          "valid": 65988
+        },
+        "RAINNC": {
+          "min": 0.0,
+          "max": 0.0,
+          "nonzero": 0,
+          "valid": 65988
+        }
+      },
+      "native_hourly_reset_check_13_18": {
+        "RAINC": {
+          "negative_increment_cells_13_18": 0,
+          "minimum_hourly_increment_mm": 0.0
+        },
+        "RAINNC": {
+          "negative_increment_cells_13_18": 0,
+          "minimum_hourly_increment_mm": 0.0
+        }
+      },
+      "native_hour1_total": {
+        "count": 65988,
+        "min": 0.0,
+        "mean": 0.6969540471885226,
+        "max": 84.51486637443304,
+        "quantiles_min_p50_p90_p95_p99_max": [
+          0.0,
+          1.4568993833563582e-07,
+          1.5570892930030824,
+          4.003998730774034,
+          11.836396499387893,
+          84.51486637443304
+        ],
+        "sum_point_mm": 45990.60366587623,
+        "wet_counts": {
+          "0.1": 14194,
+          "0.5": 10415,
+          "1": 8256,
+          "2.5": 4887,
+          "5": 2619,
+          "10": 875
+        }
+      },
+      "native_hour1_total_max_native_grid_location_yx": [
+        67,
+        159
+      ],
+      "native_hour1_total_max_native_grid_location_latlon": [
+        34.59212875366211,
+        128.3624267578125
+      ],
+      "mapped_hour1_common_mask": {
+        "count": 3688,
+        "min": 0.0,
+        "mean": 0.8116813050798075,
+        "max": 55.535461294308064,
+        "quantiles_min_p50_p90_p95_p99_max": [
+          0.0,
+          1.4798934202959057e-05,
+          0.7801451021169591,
+          4.246349377641918,
+          19.828775335785952,
+          55.535461294308064
+        ],
+        "sum_point_mm": 2993.48065313433,
+        "wet_counts": {
+          "0.1": 669,
+          "0.5": 419,
+          "1": 337,
+          "2.5": 250,
+          "5": 158,
+          "10": 85
+        }
+      },
+      "mapped_max_target_yx": [
+        67,
+        75
+      ],
+      "mapped_max_target_latlon": [
+        34.85578918457031,
+        127.84124755859375
+      ],
+      "mapped_components_point_sum_contributions": {
+        "RAINC": {
+          "mapped_sum_point_mm": 2.3053127169265473,
+          "fraction_total": 0.000770111112798663,
+          "mapped_max_mm": 0.0508356560525961,
+          "native_sum_full_grid_mm": 199.4969624682462,
+          "native_max_mm": 0.14295612275600433
+        },
+        "RAINNC": {
+          "mapped_sum_point_mm": 2991.1753404174033,
+          "fraction_total": 0.9992298888872012,
+          "mapped_max_mm": 55.535461294308064,
+          "native_sum_full_grid_mm": 45791.10670340799,
+          "native_max_mm": 84.50819396972656
+        }
+      },
+      "mapping_residual_max_deg": 2.842170943040401e-14,
+      "mapped_point_count": 3688,
+      "target_mask_count": 3688
+    },
+    "liquid": {
+      "source_files": {
+        "12": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfout_d01_2026-08-16_12:00:00",
+        "13": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfout_d01_2026-08-16_13:00:00"
+      },
+      "units": "mm (validated WRF variable units)",
+      "Times_UTC": [
+        "2026-08-16_12:00:00",
+        "2026-08-16_13:00:00"
+      ],
+      "native_shape": [
+        282,
+        234
+      ],
+      "initial_accumulators": {
+        "RAINC": {
+          "min": 0.0,
+          "max": 0.0,
+          "nonzero": 0,
+          "valid": 65988
+        },
+        "RAINNC": {
+          "min": 0.0,
+          "max": 0.0,
+          "nonzero": 0,
+          "valid": 65988
+        }
+      },
+      "native_hourly_reset_check_13_18": {
+        "RAINC": {
+          "negative_increment_cells_13_18": 0,
+          "minimum_hourly_increment_mm": 0.0
+        },
+        "RAINNC": {
+          "negative_increment_cells_13_18": 0,
+          "minimum_hourly_increment_mm": 0.0
+        }
+      },
+      "native_hour1_total": {
+        "count": 65988,
+        "min": 0.0,
+        "mean": 0.6921699224810552,
+        "max": 84.47120149154216,
+        "quantiles_min_p50_p90_p95_p99_max": [
+          0.0,
+          1.157660172168562e-07,
+          1.54087542295456,
+          3.9851659945212297,
+          11.870835111268367,
+          84.47120149154216
+        ],
+        "sum_point_mm": 45674.90884467987,
+        "wet_counts": {
+          "0.1": 14246,
+          "0.5": 10432,
+          "1": 8268,
+          "2.5": 4809,
+          "5": 2590,
+          "10": 863
+        }
+      },
+      "native_hour1_total_max_native_grid_location_yx": [
+        67,
+        159
+      ],
+      "native_hour1_total_max_native_grid_location_latlon": [
+        34.59212875366211,
+        128.3624267578125
+      ],
+      "mapped_hour1_common_mask": {
+        "count": 3688,
+        "min": 0.0,
+        "mean": 0.804600035249954,
+        "max": 55.21106633195154,
+        "quantiles_min_p50_p90_p95_p99_max": [
+          0.0,
+          2.2805373488037724e-05,
+          0.829990220853574,
+          4.125891707675728,
+          19.576685798389203,
+          55.21106633195154
+        ],
+        "sum_point_mm": 2967.3649300018305,
+        "wet_counts": {
+          "0.1": 666,
+          "0.5": 419,
+          "1": 347,
+          "2.5": 248,
+          "5": 154,
+          "10": 85
+        }
+      },
+      "mapped_max_target_yx": [
+        67,
+        75
+      ],
+      "mapped_max_target_latlon": [
+        34.85578918457031,
+        127.84124755859375
+      ],
+      "mapped_components_point_sum_contributions": {
+        "RAINC": {
+          "mapped_sum_point_mm": 2.302482740698927,
+          "fraction_total": 0.0007759351461694017,
+          "mapped_max_mm": 0.05176339155919066,
+          "native_sum_full_grid_mm": 196.76320721266995,
+          "native_max_mm": 0.13803862035274506
+        },
+        "RAINNC": {
+          "mapped_sum_point_mm": 2965.062447261131,
+          "fraction_total": 0.9992240648538304,
+          "mapped_max_mm": 55.21106633195154,
+          "native_sum_full_grid_mm": 45478.1456374672,
+          "native_max_mm": 84.4645767211914
+        }
+      },
+      "mapping_residual_max_deg": 2.842170943040401e-14,
+      "mapped_point_count": 3688,
+      "target_mask_count": 3688
+    }
+  },
+  "reproducibility": {
+    "audit_script": "/var/tmp/precip_map_checks/native_firsthour_audit.py",
+    "helper": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/compare_six_hour_csi.py",
+    "helper_sha256": "1cfa4965155ec273e8e1ca9f963bd79a5ece3bc47beb4ae3db4e8b8f5e21b2c0",
+    "history_file_hashes": {
+      "off": {
+        "12": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfout_d01_2026-08-16_12:00:00",
+          "sha256": "e25ccaa70e78b4d4d4d71d6f840286905b88cfae74cd0e638591d4b110310f61",
+          "matches_archived_RESULT": true
+        },
+        "13": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfout_d01_2026-08-16_13:00:00",
+          "sha256": "f6eeb5a7107ac273140f075b2595ac89f718001a2f092b6723b52b80495b5e0e",
+          "matches_archived_RESULT": true
+        }
+      },
+      "hydro": {
+        "12": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_12:00:00",
+          "sha256": "203edd6d035b74a53d1e81cda11a58be22b18f056624f613ae3e0485e4a24388",
+          "matches_archived_RESULT": true
+        },
+        "13": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_13:00:00",
+          "sha256": "108ed8a27a73eae8f6aa1e9fc8993efbcc880c3fbc8e998a4cf91e7ea254de77",
+          "matches_archived_RESULT": true
+        }
+      },
+      "liquid": {
+        "12": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfout_d01_2026-08-16_12:00:00",
+          "sha256": "354041bc46ba3e746ca20695ebd2a17a7926f00b411848da1234608cbc7764a3",
+          "matches_archived_RESULT": true
+        },
+        "13": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfout_d01_2026-08-16_13:00:00",
+          "sha256": "447546d38fb6d4af1c326b9b03340ad8238b40b9070eb113ea08d5a23dcc86af",
+          "matches_archived_RESULT": true
+        }
+      }
+    },
+    "first_hour_pairs_npz": "/var/tmp/cloudbal-precip-validation/docs/evidence/precip_hourly_20261027/first_hour_pairs.npz",
+    "first_hour_pairs_npz_sha256": "296d67585c0a97408da052cfc4b4987295373b204dbd4557e7bb09345ae59c5d",
+    "pair_receipt_sha256": "7236756636e6771ecef9284b940d5ed22e51f4389b0aa7248bb2047b396d5a73",
+    "npz_bridge_check": "/var/tmp/precip_map_checks/bridge_check.py",
+    "npz_bridge_result": "/var/tmp/precip_map_checks/npz_bridge.json",
+    "original_RN1_paths_missing_UTC_hours": [
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ]
+  }
+}

@@ -1,0 +1,26 @@
+{
+  "runner": "/var/tmp/rn1-rescore-final-20261027/run_rescore.py",
+  "source_script": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/compare_six_hour_csi.py",
+  "source_script_sha256": "1cfa4965155ec273e8e1ca9f963bd79a5ece3bc47beb4ae3db4e8b8f5e21b2c0",
+  "runtime_threshold_override_mm": [
+    0.1,
+    0.5,
+    1.0,
+    2.5,
+    5.0,
+    10.0
+  ],
+  "output_json": "/var/tmp/rn1-rescore-final-20261027/RESULT_CSI_108.json",
+  "output_csv": "/var/tmp/rn1-rescore-final-20261027/hourly_csi_108.csv",
+  "array_npz": [
+    "/var/tmp/rn1-rescore-final-20261027/hour_13_arrays.npz",
+    "/var/tmp/rn1-rescore-final-20261027/hour_14_arrays.npz",
+    "/var/tmp/rn1-rescore-final-20261027/hour_15_arrays.npz",
+    "/var/tmp/rn1-rescore-final-20261027/hour_16_arrays.npz",
+    "/var/tmp/rn1-rescore-final-20261027/hour_17_arrays.npz",
+    "/var/tmp/rn1-rescore-final-20261027/hour_18_arrays.npz"
+  ],
+  "mode": "import archived module, change only module.THRESHOLDS_MM and threshold_counts capture hook, invoke unchanged main()",
+  "first_attempt_note": "The preliminary unhooked output in this scratch directory was superseded by this hooked run; only this final runner, result, and input-pin pair are retained as validation evidence.",
+  "array_capture": "forecast/reference/valid passed to unchanged threshold_counts at threshold 0.1; NPZ stores common selected cells only"
+}

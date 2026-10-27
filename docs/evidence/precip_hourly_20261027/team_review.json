@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "review": "Final read-only review of scorer, hourly evidence, corrected map rendering, native first-hour audit, report, and manifest",
+  "worktree": "/var/tmp/cloudbal-precip-validation",
+  "scope": {
+    "thresholds_mm_per_hour": [0.1, 0.5, 1.0, 2.5, 5.0, 10.0],
+    "windows_utc": ["12:00–13:00", "13:00–14:00", "14:00–15:00", "15:00–16:00", "16:00–17:00", "17:00–18:00"],
+    "evaluated_rows": 78,
+    "not_evaluated_rows": 30,
+    "tests_reported_passed": 14
+  },
+  "findings": [
+    "Hourly results use adjacent cumulative RAINC+RAINNC increments; no six-hour total or pooled contingency score is presented.",
+    "The two new thresholds 0.5 and 2.5 mm/hour are scored for 12–13 UTC only; lead 2–6 are explicitly not evaluated, with null values/gaps rather than zeros.",
+    "The corrected lon/lat map aspect is 1/cos(latitude), regression-tested; point markers are smaller and coverage uncertainty is stated in its legend.",
+    "Retained first-hour arrays match native remapping within 1.14e-12 mm and coordinates exactly. Times, mm units, zero initial accumulators, no negative resets, and separate RAINSH zero checking are evidenced.",
+    "The report's rainfall plausibility discussion is bounded to one hourly case comparison and explicitly does not call it climatologically normal, independently validated, or proof of coverage. Raw RN1 replay remains unavailable.",
+    "All source-manifest hashes for scorer/test, validation, figures, score outputs, and native/NPZ bridge receipts match current files."
+  ],
+  "sha256": {
+    "tools/plot_hourly_precip_scores.py": "db8dcbb13a8e6c337499f6e97e13a336ad7ddbd4e44ac29c5850fe84d9048a8b",
+    "tests/test_hourly_precip_scores.py": "1b4309eabbc874d7127e35561c5c44a2e43d6d0a6700d8a24711f32602eeea56",
+    "docs/PRECIP_HOURLY_VERIFICATION_20261027.md": "28fb2a7056a40f7e701f631c83a3ed7e734cd7466cb9f7d011d191623e3c3f20",
+    "docs/evidence/precip_hourly_20261027/source_manifest.json": "a501f98f81dbfe7393a6a4ed6b4f6bc2e2f651435fcaa617f06124c3c79f12ba",
+    "docs/evidence/precip_hourly_20261027/validation.json": "005fe42452374c38a9fbe10889d9794ce556442d2c6dd3cc2fee7396d7ffbc90",
+    "docs/evidence/precip_hourly_20261027/derived/first_hour_precipitation.png": "f29d2ea88341d8046b3b160bb55ec5a499d91a5f46ac3be558d97504f7027460",
+    "docs/evidence/precip_hourly_20261027/map_recheck/native_firsthour.json": "7a3bcd8a920b87b1c78f68781f668264b5fb3cb2f4ae7efaf5178723b958a1ff",
+    "docs/evidence/precip_hourly_20261027/map_recheck/npz_bridge.json": "118845d754f2495e7735858d4e69d47febe30aa8020a9a3bacb8afa604c2f47a"
+  },
+  "detail_review": "/var/tmp/precip_map_checks/plot_review_after_fix.json"
+}

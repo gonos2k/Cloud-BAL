@@ -1,0 +1,175 @@
+{
+  "scope": "hourly CSI source artifacts copied for plotted and extended score presentation; no raw-RN1 replay",
+  "source_checkout": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50",
+  "archive": "Cloud-BAL/scratch/cp02_six_hour_20260914",
+  "copied_input": {
+    "path": "input_hourly_csi.csv",
+    "source_path": "Cloud-BAL/scratch/cp02_six_hour_20260914/hourly_csi.csv",
+    "sha256": "bf478797d99807ffe037d2cca2eb93e945c89288123b41fbe40931338a2f92cf",
+    "byte_identical_to_source": true,
+    "rows": 72,
+    "thresholds_mm_per_hour": [
+      0.1,
+      1.0,
+      5.0,
+      10.0
+    ]
+  },
+  "archive_receipts": {
+    "RESULT.json": {
+      "path": "Cloud-BAL/scratch/cp02_six_hour_20260914/RESULT.json",
+      "sha256": "ec1afcfcd20c63710409c08ee177e3c8efdf60ef8f3df9abb8152af8a5492f01"
+    },
+    "RUN_RESULT.json": {
+      "path": "Cloud-BAL/scratch/cp02_six_hour_20260914/RUN_RESULT.json",
+      "sha256": "97e1dd6a1c14eddf60968d289b1df0e4cb1fb8acee4d9d8f5e669e52942c3d22"
+    },
+    "FINAL_ARTIFACTS.json": {
+      "path": "Cloud-BAL/scratch/cp02_six_hour_20260914/FINAL_ARTIFACTS.json",
+      "sha256": "f9ee453bd41241b28fa2ce91301bb6ad10dbb44eb54a16401f4e13a2217ecc93"
+    }
+  },
+  "scoring_utility": {
+    "path": "tools/plot_hourly_precip_scores.py",
+    "sha256": "db8dcbb13a8e6c337499f6e97e13a336ad7ddbd4e44ac29c5850fe84d9048a8b",
+    "test_path": "tests/test_hourly_precip_scores.py",
+    "test_sha256": "1b4309eabbc874d7127e35561c5c44a2e43d6d0a6700d8a24711f32602eeea56",
+    "reproduction_command": "python3 tools/plot_hourly_precip_scores.py docs/evidence/precip_hourly_20261027/input_hourly_csi.csv --first-hour-pairs docs/evidence/precip_hourly_20261027/first_hour_pairs.npz --start-time 2026-08-16T12:00:00Z --output-dir /tmp/precip-hourly-reproduction"
+  },
+  "derived_outputs": {
+    "hourly_scores.csv": "6adc387407ad0ce3e0432a46da7cef8878feb40014fb13e9983e59b3cd5a5337",
+    "scores.json": "8443fa8e00e6c2b7db227e4dc9714f34219fb0ea498d62ed8505993ce6cb9fe1",
+    "hourly_csi.png": "bb58cfb11405a4c1ffeed6cd0f99a546b79b556aec6fd02200fcef12f64df9bb",
+    "hourly_csi.pdf": "fbb3d6a1c88c39bf7d654b344befb2014773ad2e5159039c1d9856852a5e2786",
+    "hourly_csi_delta_vs_off.png": "b0ba228a9512d8f5483c4756046d303992c94735522646398cadb3ca45e6f883",
+    "hourly_csi_delta_vs_off.pdf": "a03e04a2df1373f19a2307db92702568fb7f767e48d45c8bd6cb749b9475bd00",
+    "first_hour_precipitation.png": "f29d2ea88341d8046b3b160bb55ec5a499d91a5f46ac3be558d97504f7027460",
+    "first_hour_precipitation.pdf": "69d00a939969782aa6062033eaea556248abcebdd7fbdcac6f19be988fa72b74"
+  },
+  "verification_scope": {
+    "initial_time_utc": "2026-08-16T12:00:00Z",
+    "hourly_windows_utc": [
+      [
+        "2026-08-16T12:00:00Z",
+        "2026-08-16T13:00:00Z"
+      ],
+      [
+        "2026-08-16T13:00:00Z",
+        "2026-08-16T14:00:00Z"
+      ],
+      [
+        "2026-08-16T14:00:00Z",
+        "2026-08-16T15:00:00Z"
+      ],
+      [
+        "2026-08-16T15:00:00Z",
+        "2026-08-16T16:00:00Z"
+      ],
+      [
+        "2026-08-16T16:00:00Z",
+        "2026-08-16T17:00:00Z"
+      ],
+      [
+        "2026-08-16T17:00:00Z",
+        "2026-08-16T18:00:00Z"
+      ]
+    ],
+    "cases": [
+      "OFF",
+      "HYDRO",
+      "LIQUID"
+    ],
+    "thresholds_mm_per_hour": [
+      0.1,
+      0.5,
+      1.0,
+      2.5,
+      5.0,
+      10.0
+    ],
+    "archived_full_window_thresholds_mm_per_hour": [
+      0.1,
+      1.0,
+      5.0,
+      10.0
+    ],
+    "retained_first_hour_only_thresholds_mm_per_hour": [
+      0.5,
+      2.5
+    ],
+    "first_hour_pairs": {
+      "path": "first_hour_pairs.npz",
+      "receipt_path": "first_hour_pairs_receipt.json",
+      "derived_from": "Cloud-BAL/scratch/cp02_odam_13utc_20260914/aligned_fields.npz",
+      "source_sha256": "948358f077b9ff151f3d76adac5cc826ed31142cf36798b0d859c71e049e38d0",
+      "npz_sha256": "296d67585c0a97408da052cfc4b4987295373b204dbd4557e7bb09345ae59c5d",
+      "receipt_sha256": "7236756636e6771ecef9284b940d5ed22e51f4389b0aa7248bb2047b396d5a73"
+    },
+    "fixed_mask_points": 3688,
+    "model_amount": "Adjacent-hour differences of cumulative RAINC + RAINNC; not initial-to-lead totals.",
+    "table_verification": "Arithmetic verification of archived 72 contingency tables; this does not reproduce scores from raw RN1 arrays."
+  },
+  "limitations": [
+    "The six raw RN1 files for valid hours 13:00 through 18:00 UTC are unavailable at their recorded source path; full raw-data read, interpolation, and scoring replay is incomplete.",
+    "An alternate locally found candidate failed the retained raw-file hash and parsed-statistics identity checks; it was not substituted.",
+    "Thresholds 0.5 and 2.5 mm/hour are scored only for 12:00–13:00 UTC from a retained parsed/aligned NPZ; their lead 2–6 values remain not evaluated.",
+    "The 3,688-point mask is geographic eligibility, not a radar coverage or quality mask. Nominal RN1 zeros are not proof of observed dry conditions.",
+    "RN1 is a processed radar/AWS analysis product; these comparisons do not establish independent observational skill.",
+    "The archive records a single-case initialization sensitivity comparison. U, V, temperature, and moisture also differ among cases; results do not isolate omega."
+  ],
+  "derived_table_counts": {
+    "rows_total": 108,
+    "rows_evaluated": 78,
+    "rows_not_evaluated": 30,
+    "not_evaluated_combinations": "0.5 and 2.5 mm/hour at lead 2-6, all three cases"
+  },
+  "validation": {
+    "path": "validation.json",
+    "sha256": "005fe42452374c38a9fbe10889d9794ce556442d2c6dd3cc2fee7396d7ffbc90",
+    "status": "PASS_SCOPED",
+    "unit_tests": 14,
+    "fresh_render_byte_match": [
+      "hourly_scores.csv",
+      "scores.json",
+      "hourly_csi.png",
+      "hourly_csi_delta_vs_off.png",
+      "first_hour_precipitation.png"
+    ],
+    "pdf_byte_reproducibility": "not_asserted",
+    "full_portable_suite_rerun": false,
+    "raw_RN1_replay": false,
+    "new_forecast": false,
+    "map_display_correction": "cos(latitude) to 1/cos(latitude), marker size reduced; score outputs unchanged",
+    "environment": {
+      "python": "3.12.3",
+      "numpy": "1.26.4",
+      "matplotlib": "3.10.8"
+    }
+  },
+  "map_recheck": {
+    "native_firsthour.json": {
+      "path": "map_recheck/native_firsthour.json",
+      "sha256": "7a3bcd8a920b87b1c78f68781f668264b5fb3cb2f4ae7efaf5178723b958a1ff"
+    },
+    "npz_bridge.json": {
+      "path": "map_recheck/npz_bridge.json",
+      "sha256": "118845d754f2495e7735858d4e69d47febe30aa8020a9a3bacb8afa604c2f47a"
+    },
+    "native_firsthour_audit.py": {
+      "path": "map_recheck/native_firsthour_audit.py",
+      "sha256": "a5f7be59577e28a447757c9a12ba017db5caece83e085018e4f8a3564e631911"
+    },
+    "bridge_check.py": {
+      "path": "map_recheck/bridge_check.py",
+      "sha256": "d4d239fdbf4b681c1ee8b4c08289e7ef8c378bfa8379e151066c5714b95600a9"
+    },
+    "plot_review_before_fix.json": {
+      "path": "map_recheck/plot_review_before_fix.json",
+      "sha256": "1b229be788068266d56e5ab325f27010c4baafd22e5a6d8b8cb78f2467901798"
+    },
+    "plot_review_after_fix.json": {
+      "path": "map_recheck/plot_review_after_fix.json",
+      "sha256": "afb1e44097b9f6b07a54918fba6740efadc811c9a759d301e06021532239fc5b"
+    }
+  }
+}

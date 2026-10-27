@@ -1,0 +1,30 @@
+{
+  "status": "DERIVED_RETAINED_INTERMEDIATE",
+  "window_start_utc": "2026-08-16T12:00:00Z",
+  "window_end_utc": "2026-08-16T13:00:00Z",
+  "units": "mm under supplied RN1 one-hour product convention",
+  "cells": 3688,
+  "source_npz": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_odam_13utc_20260914/aligned_fields.npz",
+    "sha256": "948358f077b9ff151f3d76adac5cc826ed31142cf36798b0d859c71e049e38d0"
+  },
+  "fixed_mask": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/south_korea_land_mask_149x253_uint8_fortran.bin",
+    "sha256": "25a43d7e2981b6551cb753362f9d52ce11037a6e2d61a4750c1e21d152742b46",
+    "shape_yx": [
+      253,
+      149
+    ],
+    "selection": "Fortran uint8(149,253).T >0; C-order flat indices"
+  },
+  "derived_npz": {
+    "path": "first_hour_pairs.npz",
+    "sha256": "296d67585c0a97408da052cfc4b4987295373b204dbd4557e7bb09345ae59c5d"
+  },
+  "raw_RN1_reingested": false,
+  "limits": [
+    "Original raw RN1 absent; retained parsed/aligned intermediate only.",
+    "No coverage/QC mask; nominal RN1 zeros are retained.",
+    "New thresholds 0.5 and2.5 can be computed only for this first hour."
+  ]
+}

@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "rows": 108,
+  "archived_rows": 72,
+  "archived_count_mismatches": 0,
+  "thresholds_mm": [
+    0.1,
+    0.5,
+    1.0,
+    2.5,
+    5.0,
+    10.0
+  ],
+  "cases": [
+    "OFF",
+    "HYDRO",
+    "LIQUID"
+  ],
+  "valid_hours_utc": [
+    "2026-08-16T13:00:00Z",
+    "2026-08-16T14:00:00Z",
+    "2026-08-16T15:00:00Z",
+    "2026-08-16T16:00:00Z",
+    "2026-08-16T17:00:00Z",
+    "2026-08-16T18:00:00Z"
+  ],
+  "valid_cells_per_case_hour_threshold": [
+    3688
+  ],
+  "all_input_pins_equal_before_after": true,
+  "input_pin_count": 34,
+  "archived_script_sha256": "1cfa4965155ec273e8e1ca9f963bd79a5ece3bc47beb4ae3db4e8b8f5e21b2c0",
+  "rainsh_unit_bucketing_reset_guards": "passed by unchanged archived scoring runner",
+  "component_reset_check": "zero negative cumulative differences for RAINC, RAINNC, and RAINSH across all three cases",
+  "npz_dtypes": "float64 for reference and model forecasts; int32 flat row-major indices over (y,x)",
+  "npz_contingency_counts_match_json": true,
+  "npz_reference_matches_raw_RN1_exactly": true,
+  "firsthour_bridge": "lead 1 / 2026-08-16T13:00:00Z is included in all score rows and NPZ arrays; raw RN1 values match source exactly at selected grid indices",
+  "npz_files": [
+    "/var/tmp/rn1-rescore-final-20261027/hour_13_arrays.npz",
+    "/var/tmp/rn1-rescore-final-20261027/hour_14_arrays.npz",
+    "/var/tmp/rn1-rescore-final-20261027/hour_15_arrays.npz",
+    "/var/tmp/rn1-rescore-final-20261027/hour_16_arrays.npz",
+    "/var/tmp/rn1-rescore-final-20261027/hour_17_arrays.npz",
+    "/var/tmp/rn1-rescore-final-20261027/hour_18_arrays.npz"
+  ],
+  "supersedes_exploratory_attempt": "Preliminary unhooked run at /var/tmp/rn1-rescore-20261027 was overwritten during exploratory array-hook iteration; final evidence is retained independently in this fresh directory."
+}

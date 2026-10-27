@@ -1,0 +1,134 @@
+{
+  "status": "SCORED_HOURLY_COUNTS_WITH_EXPLICIT_COVERAGE",
+  "scope": {
+    "input": "docs/evidence/precip_hourly_20261027/input_hourly_csi.csv",
+    "input_sha256": "bf478797d99807ffe037d2cca2eb93e945c89288123b41fbe40931338a2f92cf",
+    "first_hour_pairs_npz": "docs/evidence/precip_hourly_20261027/first_hour_pairs.npz",
+    "first_hour_pairs_npz_sha256": "296d67585c0a97408da052cfc4b4987295373b204dbd4557e7bb09345ae59c5d",
+    "initial_time_utc": "2026-08-16T12:00:00Z",
+    "cases": [
+      "OFF",
+      "HYDRO",
+      "LIQUID"
+    ],
+    "leads_hours": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "valid_times_utc": [
+      "2026-08-16T13:00:00Z",
+      "2026-08-16T14:00:00Z",
+      "2026-08-16T15:00:00Z",
+      "2026-08-16T16:00:00Z",
+      "2026-08-16T17:00:00Z",
+      "2026-08-16T18:00:00Z"
+    ],
+    "thresholds_mm": [
+      0.1,
+      0.5,
+      1.0,
+      2.5,
+      5.0,
+      10.0
+    ],
+    "archived_thresholds_mm": [
+      0.1,
+      1.0,
+      5.0,
+      10.0
+    ],
+    "evaluated_rows": 78,
+    "not_evaluated_rows": 30,
+    "threshold_coverage": {
+      "0.1": {
+        "evaluated_leads": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "not_evaluated_leads": []
+      },
+      "0.5": {
+        "evaluated_leads": [
+          1
+        ],
+        "not_evaluated_leads": [
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "1.0": {
+        "evaluated_leads": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "not_evaluated_leads": []
+      },
+      "2.5": {
+        "evaluated_leads": [
+          1
+        ],
+        "not_evaluated_leads": [
+          2,
+          3,
+          4,
+          5,
+          6
+        ]
+      },
+      "5.0": {
+        "evaluated_leads": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "not_evaluated_leads": []
+      },
+      "10.0": {
+        "evaluated_leads": [
+          1,
+          2,
+          3,
+          4,
+          5,
+          6
+        ],
+        "not_evaluated_leads": []
+      }
+    },
+    "fixed_geographic_mask_cells": 3688,
+    "score_population": "hourly events only; each score is based on one case, lead, threshold, and fixed point set",
+    "observation_product": "ODAM RN1 analysis product under supplied one-hour/mm convention",
+    "input_evidence": "archived contingency-count CSV plus optional retained aligned first-hour NPZ; no raw RN1 or model-grid ingestion"
+  },
+  "definitions": {
+    "wet_event": "amount >= threshold_mm",
+    "CSI": "H / (H + M + F); null if denominator is zero or event is not evaluated",
+    "POD": "H / (H + M); null if denominator is zero",
+    "FAR": "F / (H + F); null if denominator is zero",
+    "frequency_bias": "(H + F) / (H + M); null if denominator is zero"
+  },
+  "limitations": [
+    "RN1 is a processed radar/AWS analysis; a separate radar-coverage validity mask is not archived.",
+    "The result scores archived contingency counts and is not a raw-observation reanalysis or new forecast validation.",
+    "One case and one six-hour period do not establish statistical generality or an isolated physical mechanism.",
+    "Thresholds 0.5 and 2.5 mm are evaluated for lead 1 only from retained aligned intermediate arrays; later leads are NOT_EVALUATED."
+  ]
+}
