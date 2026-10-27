@@ -51,9 +51,9 @@ compile() {
   if [[ "$source" == /* ]]; then
     source_path="$source"
   fi
-  if ! "$CLOUD_BAL_FC" -c "$@" \
+  if ! (cd "$output_build" && "$CLOUD_BAL_FC" -c "$@" \
       -module "$output_build" -I "$output_build" "${nf_fflags[@]}" \
-      "$source_path" -o "$output_build/$object" \
+      "$source_path" -o "$output_build/$object") \
       >"$output_build/$object.log" 2>&1; then
     cat "$output_build/$object.log" >&2
     exit 1
@@ -63,9 +63,10 @@ compile() {
 link() {
   local output_build=$1
   shift
-  if ! "$CLOUD_BAL_FC" "$@" \
+  if ! (cd "$output_build" && "$CLOUD_BAL_FC" "$@" \
       "$output_build/lapsprep.o" "$output_build/wps.o" "$output_build/setup.o" \
       "$output_build/contracts.o" "$output_build/moisture.o" "$output_build/stubs.o" \
+      "$output_build/static.o" \
       "$output_build/date_pack.o" \
       "$output_build/cloud_bal_wps_adapter.o" \
       "$output_build/cloud_bal_pressure_analysis.o" \
@@ -78,7 +79,7 @@ link() {
       "$output_build/cloud_bal_column_physics.o" \
       "$output_build/cloud_bal_grid_geometry.o" \
       "$output_build/cloud_bal_state.o" \
-      "${nf_flibs[@]}" -o "$output_build/lapsprep.exe" \
+      "${nf_flibs[@]}" -o "$output_build/lapsprep.exe") \
       >"$output_build/link.log" 2>&1; then
     cat "$output_build/link.log" >&2
     exit 1
@@ -105,6 +106,7 @@ build_executable() {
   compile "$output_build" src/common/cloud_bal_pressure_analysis.f90 cloud_bal_pressure_analysis.o "$@"
   compile "$output_build" src/common/cloud_bal_wps_adapter.f90 cloud_bal_wps_adapter.o "$@"
   compile "$output_build" src/lapsprep/module_setup.f90 setup.o "$@"
+  compile "$output_build" src/lapsprep/module_laps_static.f90 static.o "$@"
   compile "$output_build" src/lapsprep/module_lapsprep_wps.f90 wps.o "$@"
   compile "$output_build" src/lapsprep/lapsprep.f90 lapsprep.o "$@"
   link "$output_build" "$@"
@@ -117,6 +119,7 @@ build_executable "$build_o2" "${CLOUD_BAL_REPRO_FLAGS[@]}"
 make_fixture() {
   local root=$1 case_name=$2
   python3 "$repo_root/tests/lapsprep_vapor_fixture.py" "$root" "$case_name"
+  python3 "$repo_root/tests/lapsprep_static_fixture.py" "$root"
 }
 
 run_success() {
@@ -264,6 +267,20 @@ make_fixture "$default_root" default
 default_output="$default_root/lapsprd/lapsprep/wps/LAPS:2026-01-01_03:00"
 run_success "$default_root" "$default_output" no "$test_tmp/default.log"
 python3 "$repo_root/tests/test_lapsprep_vapor.py" default "$default_output"
+python3 "$repo_root/tests/verify_lapsprep_static_wps.py" "$default_output"
+default_o2_output="$test_tmp/default-o2.wps"
+run_success "$default_root" "$default_o2_output" yes "$test_tmp/default-o2.log" "$build_o2/lapsprep.exe"
+python3 "$repo_root/tests/verify_lapsprep_static_wps.py" "$default_o2_output"
+
+marker_root="$test_tmp/static-lat-nan-marker"
+make_fixture "$marker_root" default
+python3 "$repo_root/tests/lapsprep_static_fixture.py" "$marker_root" lat_nan_marker
+marker_output="$marker_root/lapsprd/lapsprep/wps/LAPS:2026-01-01_03:00"
+run_success "$marker_root" "$marker_output" no "$test_tmp/static-lat-nan-marker.log"
+python3 "$repo_root/tests/verify_lapsprep_static_wps.py" "$marker_output"
+marker_o2_output="$test_tmp/static-lat-nan-marker-o2.wps"
+run_success "$marker_root" "$marker_o2_output" yes "$test_tmp/static-lat-nan-marker-o2.log" "$build_o2/lapsprep.exe"
+python3 "$repo_root/tests/verify_lapsprep_static_wps.py" "$marker_o2_output"
 
 resolved_root="$test_tmp/resolved"
 make_fixture "$resolved_root" strict-vapor
@@ -352,6 +369,33 @@ make_fixture "$root" bad-hydrometeor-mode
 run_rejected "$root" "$root/rejected-output.wps" "$test_tmp/bad-hydrometeor-mode.log" \
   'Unsupported HYDRO_MODE'
 printf '%s\n' 'lapsprep hydrometeor failure passed: unsupported mode'
+
+# Static geometry is read by the real caller before it opens any WPS output.
+for case_name in dx_unwritten dx_fill_5000 dx_missing_value_5000 latin1_nan \
+  swlat_200 lat_array_missing lat_array_nonfinite lon_400 avg_array_missing \
+  lov_nan lov_400 latin2_91; do
+  root="$test_tmp/static-$case_name"
+  make_fixture "$root" default
+  python3 "$repo_root/tests/lapsprep_static_fixture.py" "$root" "$case_name"
+  case_name_pattern=''
+  case "$case_name" in
+    dx_unwritten) case_name_pattern='Dx contains default fill values' ;;
+    dx_fill_5000) case_name_pattern='Dx contains declared _FillValue sentinel' ;;
+    dx_missing_value_5000) case_name_pattern='Dx contains declared missing_value sentinel' ;;
+    latin1_nan) case_name_pattern='Latin1 contains nonfinite values' ;;
+    swlat_200) case_name_pattern='latitude coordinate outside \[-90,90\]' ;;
+    lat_array_missing) case_name_pattern='lat contains declared missing_value sentinel' ;;
+    lat_array_nonfinite) case_name_pattern='lat contains nonfinite values' ;;
+    lon_400) case_name_pattern='longitude coordinate outside \[-180,360\]' ;;
+    avg_array_missing) case_name_pattern='avg contains declared missing_value sentinel' ;;
+    lov_nan) case_name_pattern='LoV contains nonfinite values' ;;
+    lov_400) case_name_pattern='LoV must be a longitude in \[-180,360\]' ;;
+    latin2_91) case_name_pattern='Latin2 must be a latitude in \[-90,90\]' ;;
+  esac
+  run_rejected "$root" "$root/rejected-output.wps" "$test_tmp/static-$case_name.log" \
+    "$case_name_pattern"
+  printf 'lapsprep static-grid rejection passed: %s\n' "$case_name"
+done
 
 for case_name in make-sfc-uv ascending-make-sfc-uv; do
   root="$test_tmp/$case_name"
