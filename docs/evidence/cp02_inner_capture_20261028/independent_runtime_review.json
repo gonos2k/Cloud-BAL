@@ -1,0 +1,651 @@
+{
+  "hydro_final": {
+    "counts": {
+      "derive_entries": 2,
+      "derive_returns": 2,
+      "pipeline_entries": 2,
+      "pipeline_returns": 2,
+      "saturation_adjust_pressure_state_entries": 0,
+      "saturation_adjust_pressure_state_returns": 0,
+      "saturation_adjust_pressure_state_gate": "balanced_zero_or_more_calls",
+      "refresh_dry_air_mass_measure_entries": 1,
+      "refresh_dry_air_mass_measure_returns": 1,
+      "refresh_dry_air_mass_measure_gate": "balanced_zero_or_more_calls",
+      "derive_preprologue_abi_entries": 2,
+      "candidate_boundary_counts": {
+        "diagnose_radar_cells": {
+          "entries": 1,
+          "returns": 1
+        },
+        "transport_precipitation_flux": {
+          "entries": 1,
+          "returns": 1
+        },
+        "publish_hydrometeor_candidate": {
+          "entries": 1,
+          "returns": 1
+        }
+      },
+      "saturation_adjust_pressure_state_entries_interpretation": "Observed on first-HYDRO-gated helper instrumentation; zero entries and zero returns are valid for this arm."
+    },
+    "point_csv_sha256": "bc765f17fef5b02c4b75d58bd503114259f779cfeffe51ed9e82c6672d37f0ca",
+    "bounds": [
+      [
+        1,
+        235
+      ],
+      [
+        1,
+        283
+      ],
+      [
+        1,
+        22
+      ]
+    ],
+    "arrays": {
+      "rain_diagnose": {
+        "sample_n": 440,
+        "changed_bytes_values": 154,
+        "missing_or_unmatched": 0
+      },
+      "rain_diagnose_post_vs_transport_pre": {
+        "sample_n": 440,
+        "changed_bytes_values": 0,
+        "missing_or_unmatched": 0
+      },
+      "rain_transport": {
+        "sample_n": 440,
+        "changed_bytes_values": 0,
+        "missing_or_unmatched": 0
+      },
+      "rain_transport_post_vs_publish_pre": {
+        "sample_n": 440,
+        "changed_bytes_values": 0,
+        "missing_or_unmatched": 0
+      },
+      "snow_diagnose": {
+        "sample_n": 440,
+        "changed_bytes_values": 36,
+        "missing_or_unmatched": 0
+      },
+      "snow_diagnose_post_vs_transport_pre": {
+        "sample_n": 440,
+        "changed_bytes_values": 0,
+        "missing_or_unmatched": 0
+      },
+      "snow_transport": {
+        "sample_n": 440,
+        "changed_bytes_values": 0,
+        "missing_or_unmatched": 0
+      },
+      "snow_transport_post_vs_publish_pre": {
+        "sample_n": 440,
+        "changed_bytes_values": 0,
+        "missing_or_unmatched": 0
+      },
+      "graupel_diagnose": {
+        "sample_n": 440,
+        "changed_bytes_values": 0,
+        "missing_or_unmatched": 0
+      },
+      "graupel_diagnose_post_vs_transport_pre": {
+        "sample_n": 440,
+        "changed_bytes_values": 0,
+        "missing_or_unmatched": 0
+      },
+      "graupel_transport": {
+        "sample_n": 440,
+        "changed_bytes_values": 0,
+        "missing_or_unmatched": 0
+      },
+      "graupel_transport_post_vs_publish_pre": {
+        "sample_n": 440,
+        "changed_bytes_values": 0,
+        "missing_or_unmatched": 0
+      }
+    },
+    "publish_pre_vs_derive_entry": {
+      "sample_n": 3520,
+      "changed": 0,
+      "unmatched": 0
+    },
+    "publish_post_rounding": {
+      "rain": {
+        "sample_n": 440,
+        "float64_to_float32_mismatch": 0
+      },
+      "snow": {
+        "sample_n": 440,
+        "float64_to_float32_mismatch": 0
+      },
+      "graupel": {
+        "sample_n": 440,
+        "float64_to_float32_mismatch": 0
+      }
+    },
+    "refresh_state": {
+      "n": 3520,
+      "changed": 0,
+      "unmatched": 0
+    },
+    "refresh_metrics": {
+      "pressure_mass_measure": {
+        "n": 440,
+        "changed": 0,
+        "unmatched": 0
+      },
+      "dry_air_mass_measure": {
+        "n": 440,
+        "changed": 190,
+        "unmatched": 0
+      }
+    },
+    "records_sequence": [
+      "pipeline_entry_state_in",
+      "derive_preprologue_abi_pointers",
+      "derive_entry_state_in",
+      "derive_arguments",
+      "diagnose_radar_cells_pre",
+      "diagnose_radar_cells_post",
+      "transport_precipitation_flux_pre",
+      "transport_precipitation_flux_post",
+      "publish_hydrometeor_candidate_pre",
+      "refresh_dry_air_mass_measure_entry",
+      "refresh_dry_air_mass_measure_return",
+      "publish_hydrometeor_candidate_post",
+      "derive_return_state_out",
+      "pipeline_return_candidate_out",
+      "pipeline_entry_state_in",
+      "derive_preprologue_abi_pointers",
+      "derive_entry_state_in",
+      "derive_arguments",
+      "derive_return_state_out",
+      "pipeline_return_candidate_out"
+    ],
+    "abi": [
+      {
+        "stage": "derive_preprologue_abi_pointers",
+        "r8_thermo_active_pointer": {
+          "pointer_value": "0x0",
+          "slot_value": "null"
+        },
+        "r9_thermo_surface_pointer": {
+          "pointer_value": "0x0",
+          "slot_value": "null"
+        },
+        "stack_pointer_words": {
+          "target_rh_arg7": {
+            "slot_address": "0x7fff70e68350",
+            "raw_bytes_le_hex": "0000000000000000",
+            "pointer_value": "0x0",
+            "slot_value": "null"
+          },
+          "thermo_budget_arg8": {
+            "slot_address": "0x7fff70e68358",
+            "raw_bytes_le_hex": "5053ea70ff7f0000",
+            "pointer_value": "0x7fff70ea5350",
+            "slot_value": "nonzero"
+          },
+          "analysis_budget_arg9": {
+            "slot_address": "0x7fff70e68360",
+            "raw_bytes_le_hex": "5071e870ff7f0000",
+            "pointer_value": "0x7fff70e87150",
+            "slot_value": "nonzero"
+          },
+          "evaluation_state_arg10": {
+            "slot_address": "0x7fff70e68368",
+            "raw_bytes_le_hex": "0000000000000000",
+            "pointer_value": "0x0",
+            "slot_value": "null"
+          }
+        },
+        "interpretation": "Raw call ABI pointer slots only; nonzero does not establish semantic optionality."
+      },
+      {
+        "stage": "derive_preprologue_abi_pointers",
+        "r8_thermo_active_pointer": {
+          "pointer_value": "0x0",
+          "slot_value": "null"
+        },
+        "r9_thermo_surface_pointer": {
+          "pointer_value": "0x0",
+          "slot_value": "null"
+        },
+        "stack_pointer_words": {
+          "target_rh_arg7": {
+            "slot_address": "0x7fff70e5a0f0",
+            "raw_bytes_le_hex": "0000000000000000",
+            "pointer_value": "0x0",
+            "slot_value": "null"
+          },
+          "thermo_budget_arg8": {
+            "slot_address": "0x7fff70e5a0f8",
+            "raw_bytes_le_hex": "6043e870ff7f0000",
+            "pointer_value": "0x7fff70e84360",
+            "slot_value": "nonzero"
+          },
+          "analysis_budget_arg9": {
+            "slot_address": "0x7fff70e5a100",
+            "raw_bytes_le_hex": "f08ee770ff7f0000",
+            "pointer_value": "0x7fff70e78ef0",
+            "slot_value": "nonzero"
+          },
+          "evaluation_state_arg10": {
+            "slot_address": "0x7fff70e5a108",
+            "raw_bytes_le_hex": "0000000000000000",
+            "pointer_value": "0x0",
+            "slot_value": "null"
+          }
+        },
+        "interpretation": "Raw call ABI pointer slots only; nonzero does not establish semantic optionality."
+      }
+    ],
+    "capture_sha256": "24a83b0486a1da2acb92e5ec86f70b361af473de65a78fc3fd63b76671311bd1",
+    "outputs": {
+      "HYDRO.wps.shadow.nc": "c1f5d039ac73c90cb6b21dd619ebc5774f3b6c7387c9b9701af4360fb635f2cb",
+      "HYDRO.wps": "d7d8adfd3589cce46a4cee82b0f125a31e8232b3102d271959bcdefeed4dae0e"
+    },
+    "interpretive_limits": {
+      "refresh_metric_change": "dry_air_mass_measure changed at 190/440 selected cells while pressure_mass_measure did not change and all eight captured cloud state fields were byte-identical across refresh entry/return. This confirms metric recalculation/updates in the sampled cells but does not establish the physical cause of any earlier discrepancy.",
+      "density": "density is not stored in cloud_bal_state_type; no captured density field to attribute cause.",
+      "temporal_scope": "selected 20 points \u00d7 22 levels and instrumented boundaries only; exact comparisons are limited to captured points."
+    },
+    "binary_sha256": "dbea173ec059afba40ae2d46193e5f5f33a63c18d02d4fd5db5ac23b504e2e65",
+    "capture_path": "/var/tmp/cp02-inner-20261028/hydro_final/capture.json"
+  },
+  "liquid_final": {
+    "counts": {
+      "derive_entries": 6,
+      "derive_returns": 6,
+      "pipeline_entries": 2,
+      "pipeline_returns": 2,
+      "saturation_adjust_pressure_state_entries": 0,
+      "saturation_adjust_pressure_state_returns": 0,
+      "saturation_adjust_pressure_state_gate": "balanced_zero_or_more_calls",
+      "refresh_dry_air_mass_measure_entries": 0,
+      "refresh_dry_air_mass_measure_returns": 0,
+      "refresh_dry_air_mass_measure_gate": "balanced_zero_or_more_calls",
+      "derive_preprologue_abi_entries": 6,
+      "candidate_boundary_counts": {},
+      "saturation_adjust_pressure_state_entries_interpretation": "Not instrumented: saturation helper breakpoints were gated to first HYDRO only. The stored zero counters do not establish zero LIQUID calls."
+    },
+    "point_csv_sha256": "bc765f17fef5b02c4b75d58bd503114259f779cfeffe51ed9e82c6672d37f0ca",
+    "bounds": [
+      [
+        1,
+        235
+      ],
+      [
+        1,
+        283
+      ],
+      [
+        1,
+        22
+      ]
+    ],
+    "records_sequence": [
+      "pipeline_entry_state_in",
+      "derive_preprologue_abi_pointers",
+      "derive_entry_state_in",
+      "derive_arguments",
+      "derive_return_state_out",
+      "derive_preprologue_abi_pointers",
+      "derive_entry_state_in",
+      "derive_arguments",
+      "derive_return_state_out",
+      "derive_preprologue_abi_pointers",
+      "derive_entry_state_in",
+      "derive_arguments",
+      "derive_return_state_out",
+      "pipeline_return_candidate_out",
+      "pipeline_entry_state_in",
+      "derive_preprologue_abi_pointers",
+      "derive_entry_state_in",
+      "derive_arguments",
+      "derive_return_state_out",
+      "derive_preprologue_abi_pointers",
+      "derive_entry_state_in",
+      "derive_arguments",
+      "derive_return_state_out",
+      "derive_preprologue_abi_pointers",
+      "derive_entry_state_in",
+      "derive_arguments",
+      "derive_return_state_out",
+      "pipeline_return_candidate_out"
+    ],
+    "abi": [
+      {
+        "stage": "derive_preprologue_abi_pointers",
+        "r8_thermo_active_pointer": {
+          "pointer_value": "0x7ffe23110da8",
+          "slot_value": "nonzero"
+        },
+        "r9_thermo_surface_pointer": {
+          "pointer_value": "0x7ffe23110d30",
+          "slot_value": "nonzero"
+        },
+        "stack_pointer_words": {
+          "target_rh_arg7": {
+            "slot_address": "0x7ffe230f1640",
+            "raw_bytes_le_hex": "8086910000000000",
+            "pointer_value": "0x918680",
+            "slot_value": "nonzero"
+          },
+          "thermo_budget_arg8": {
+            "slot_address": "0x7ffe230f1648",
+            "raw_bytes_le_hex": "40e61223fe7f0000",
+            "pointer_value": "0x7ffe2312e640",
+            "slot_value": "nonzero"
+          },
+          "analysis_budget_arg9": {
+            "slot_address": "0x7ffe230f1650",
+            "raw_bytes_le_hex": "40041123fe7f0000",
+            "pointer_value": "0x7ffe23110440",
+            "slot_value": "nonzero"
+          },
+          "evaluation_state_arg10": {
+            "slot_address": "0x7ffe230f1658",
+            "raw_bytes_le_hex": "48201023fe7f0000",
+            "pointer_value": "0x7ffe23102048",
+            "slot_value": "nonzero"
+          }
+        },
+        "interpretation": "Raw call ABI pointer slots only; nonzero does not establish semantic optionality."
+      },
+      {
+        "stage": "derive_preprologue_abi_pointers",
+        "r8_thermo_active_pointer": {
+          "pointer_value": "0x7ffe23110da8",
+          "slot_value": "nonzero"
+        },
+        "r9_thermo_surface_pointer": {
+          "pointer_value": "0x7ffe23110d30",
+          "slot_value": "nonzero"
+        },
+        "stack_pointer_words": {
+          "target_rh_arg7": {
+            "slot_address": "0x7ffe230f1640",
+            "raw_bytes_le_hex": "8086910000000000",
+            "pointer_value": "0x918680",
+            "slot_value": "nonzero"
+          },
+          "thermo_budget_arg8": {
+            "slot_address": "0x7ffe230f1648",
+            "raw_bytes_le_hex": "40e61223fe7f0000",
+            "pointer_value": "0x7ffe2312e640",
+            "slot_value": "nonzero"
+          },
+          "analysis_budget_arg9": {
+            "slot_address": "0x7ffe230f1650",
+            "raw_bytes_le_hex": "40041123fe7f0000",
+            "pointer_value": "0x7ffe23110440",
+            "slot_value": "nonzero"
+          },
+          "evaluation_state_arg10": {
+            "slot_address": "0x7ffe230f1658",
+            "raw_bytes_le_hex": "48201023fe7f0000",
+            "pointer_value": "0x7ffe23102048",
+            "slot_value": "nonzero"
+          }
+        },
+        "interpretation": "Raw call ABI pointer slots only; nonzero does not establish semantic optionality."
+      },
+      {
+        "stage": "derive_preprologue_abi_pointers",
+        "r8_thermo_active_pointer": {
+          "pointer_value": "0x7ffe23110da8",
+          "slot_value": "nonzero"
+        },
+        "r9_thermo_surface_pointer": {
+          "pointer_value": "0x7ffe23110d30",
+          "slot_value": "nonzero"
+        },
+        "stack_pointer_words": {
+          "target_rh_arg7": {
+            "slot_address": "0x7ffe230f1640",
+            "raw_bytes_le_hex": "8086910000000000",
+            "pointer_value": "0x918680",
+            "slot_value": "nonzero"
+          },
+          "thermo_budget_arg8": {
+            "slot_address": "0x7ffe230f1648",
+            "raw_bytes_le_hex": "40e61223fe7f0000",
+            "pointer_value": "0x7ffe2312e640",
+            "slot_value": "nonzero"
+          },
+          "analysis_budget_arg9": {
+            "slot_address": "0x7ffe230f1650",
+            "raw_bytes_le_hex": "40041123fe7f0000",
+            "pointer_value": "0x7ffe23110440",
+            "slot_value": "nonzero"
+          },
+          "evaluation_state_arg10": {
+            "slot_address": "0x7ffe230f1658",
+            "raw_bytes_le_hex": "48201023fe7f0000",
+            "pointer_value": "0x7ffe23102048",
+            "slot_value": "nonzero"
+          }
+        },
+        "interpretation": "Raw call ABI pointer slots only; nonzero does not establish semantic optionality."
+      },
+      {
+        "stage": "derive_preprologue_abi_pointers",
+        "r8_thermo_active_pointer": {
+          "pointer_value": "0x7ffe23102e90",
+          "slot_value": "nonzero"
+        },
+        "r9_thermo_surface_pointer": {
+          "pointer_value": "0x7ffe23102e18",
+          "slot_value": "nonzero"
+        },
+        "stack_pointer_words": {
+          "target_rh_arg7": {
+            "slot_address": "0x7ffe230e33d0",
+            "raw_bytes_le_hex": "80ea1223fe7f0000",
+            "pointer_value": "0x7ffe2312ea80",
+            "slot_value": "nonzero"
+          },
+          "thermo_budget_arg8": {
+            "slot_address": "0x7ffe230e33d8",
+            "raw_bytes_le_hex": "40d61023fe7f0000",
+            "pointer_value": "0x7ffe2310d640",
+            "slot_value": "nonzero"
+          },
+          "analysis_budget_arg9": {
+            "slot_address": "0x7ffe230e33e0",
+            "raw_bytes_le_hex": "d0211023fe7f0000",
+            "pointer_value": "0x7ffe231021d0",
+            "slot_value": "nonzero"
+          },
+          "evaluation_state_arg10": {
+            "slot_address": "0x7ffe230e33e8",
+            "raw_bytes_le_hex": "d83d0f23fe7f0000",
+            "pointer_value": "0x7ffe230f3dd8",
+            "slot_value": "nonzero"
+          }
+        },
+        "interpretation": "Raw call ABI pointer slots only; nonzero does not establish semantic optionality."
+      },
+      {
+        "stage": "derive_preprologue_abi_pointers",
+        "r8_thermo_active_pointer": {
+          "pointer_value": "0x7ffe23102e90",
+          "slot_value": "nonzero"
+        },
+        "r9_thermo_surface_pointer": {
+          "pointer_value": "0x7ffe23102e18",
+          "slot_value": "nonzero"
+        },
+        "stack_pointer_words": {
+          "target_rh_arg7": {
+            "slot_address": "0x7ffe230e33d0",
+            "raw_bytes_le_hex": "80ea1223fe7f0000",
+            "pointer_value": "0x7ffe2312ea80",
+            "slot_value": "nonzero"
+          },
+          "thermo_budget_arg8": {
+            "slot_address": "0x7ffe230e33d8",
+            "raw_bytes_le_hex": "40d61023fe7f0000",
+            "pointer_value": "0x7ffe2310d640",
+            "slot_value": "nonzero"
+          },
+          "analysis_budget_arg9": {
+            "slot_address": "0x7ffe230e33e0",
+            "raw_bytes_le_hex": "d0211023fe7f0000",
+            "pointer_value": "0x7ffe231021d0",
+            "slot_value": "nonzero"
+          },
+          "evaluation_state_arg10": {
+            "slot_address": "0x7ffe230e33e8",
+            "raw_bytes_le_hex": "d83d0f23fe7f0000",
+            "pointer_value": "0x7ffe230f3dd8",
+            "slot_value": "nonzero"
+          }
+        },
+        "interpretation": "Raw call ABI pointer slots only; nonzero does not establish semantic optionality."
+      },
+      {
+        "stage": "derive_preprologue_abi_pointers",
+        "r8_thermo_active_pointer": {
+          "pointer_value": "0x7ffe23102e90",
+          "slot_value": "nonzero"
+        },
+        "r9_thermo_surface_pointer": {
+          "pointer_value": "0x7ffe23102e18",
+          "slot_value": "nonzero"
+        },
+        "stack_pointer_words": {
+          "target_rh_arg7": {
+            "slot_address": "0x7ffe230e33d0",
+            "raw_bytes_le_hex": "80ea1223fe7f0000",
+            "pointer_value": "0x7ffe2312ea80",
+            "slot_value": "nonzero"
+          },
+          "thermo_budget_arg8": {
+            "slot_address": "0x7ffe230e33d8",
+            "raw_bytes_le_hex": "40d61023fe7f0000",
+            "pointer_value": "0x7ffe2310d640",
+            "slot_value": "nonzero"
+          },
+          "analysis_budget_arg9": {
+            "slot_address": "0x7ffe230e33e0",
+            "raw_bytes_le_hex": "d0211023fe7f0000",
+            "pointer_value": "0x7ffe231021d0",
+            "slot_value": "nonzero"
+          },
+          "evaluation_state_arg10": {
+            "slot_address": "0x7ffe230e33e8",
+            "raw_bytes_le_hex": "d83d0f23fe7f0000",
+            "pointer_value": "0x7ffe230f3dd8",
+            "slot_value": "nonzero"
+          }
+        },
+        "interpretation": "Raw call ABI pointer slots only; nonzero does not establish semantic optionality."
+      }
+    ],
+    "capture_sha256": "4f0dd66cb2ad21d610c2e7a63c0ece33163e38daa2f239546c2033c230705660",
+    "outputs": {
+      "LIQUID_RADAR_RH1.wps.shadow.nc": "12a9cbc7b895bf5dd7020a85b4590f2f1ef334f74c0505865a961be30ab57bac",
+      "LIQUID_RADAR_RH1.wps": "748c0fffc5ab809fc08ccc72e954f024a63d0287e67ef624dda8caf58ce2ef9b"
+    },
+    "evaluation_state_comparisons": [
+      {
+        "call_pair": [
+          1,
+          2
+        ],
+        "fields": {
+          "vapor": {
+            "n": 440,
+            "changed": 153
+          },
+          "cloud_water": {
+            "n": 440,
+            "changed": 0
+          },
+          "cloud_ice": {
+            "n": 440,
+            "changed": 0
+          },
+          "rain": {
+            "n": 440,
+            "changed": 0
+          },
+          "snow": {
+            "n": 440,
+            "changed": 0
+          },
+          "graupel": {
+            "n": 440,
+            "changed": 0
+          },
+          "temperature": {
+            "n": 440,
+            "changed": 153
+          },
+          "pressure": {
+            "n": 440,
+            "changed": 0
+          }
+        },
+        "changed_fields": [
+          "vapor",
+          "temperature"
+        ]
+      },
+      {
+        "call_pair": [
+          1,
+          3
+        ],
+        "fields": {
+          "vapor": {
+            "n": 440,
+            "changed": 153
+          },
+          "cloud_water": {
+            "n": 440,
+            "changed": 0
+          },
+          "cloud_ice": {
+            "n": 440,
+            "changed": 0
+          },
+          "rain": {
+            "n": 440,
+            "changed": 0
+          },
+          "snow": {
+            "n": 440,
+            "changed": 0
+          },
+          "graupel": {
+            "n": 440,
+            "changed": 0
+          },
+          "temperature": {
+            "n": 440,
+            "changed": 153
+          },
+          "pressure": {
+            "n": 440,
+            "changed": 0
+          }
+        },
+        "changed_fields": [
+          "vapor",
+          "temperature"
+        ]
+      }
+    ],
+    "binary_sha256": "dbea173ec059afba40ae2d46193e5f5f33a63c18d02d4fd5db5ac23b504e2e65",
+    "capture_path": "/var/tmp/cp02-inner-20261028/liquid_final/capture.json",
+    "instrumentation_scope_correction": "derive ABI and named derive snapshots cover LIQUID calls, but internal helper breakpoints (saturation/refresh/diagnose/transport/publish) were armed only for first HYDRO. Treat their LIQUID counts as not observed, not zero actual calls."
+  },
+  "cross_arm_claims": {
+    "hydro_saturation": "first HYDRO: observed zero calls at the instrumented saturation boundary",
+    "liquid_saturation": "unknown/not instrumented by this capture; do not claim zero LIQUID calls"
+  }
+}

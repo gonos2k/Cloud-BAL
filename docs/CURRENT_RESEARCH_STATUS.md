@@ -59,5 +59,10 @@ PR108에서는 [입력·실행 실패 계약](PR108_INPUT_EXECUTION_CONTRACTS_20
 [보관 실행파일 호출 경계 재생](CP02_CALL_BOUNDARY_20261028.md)에서 HYDRO·LIQUID의
 20점 × 22층 QR·QS 차이가 `derive_column_physics` 반환 시 이미 나타남을 확인했다.
 일반·계측 재생의 WPS와 shadow는 당시 보관본과 바이트 동일하다. 마지막 derive 반환과
-pipeline 후보도 포착한 8개 필드에서 같다. 내부 최초 연산, 선택적 evaluation 인자,
-전체 물수지와 강수 개선의 인과관계는 아직 미확정이다. CP02 결과는 위 C2 T39 완료와 별개다.
+pipeline 후보도 포착한 8개 필드에서 같다.
+[내부 경계·평가 입력 재생](CP02_INNER_SPECIES_20261028.md)은 첫 HYDRO의 선택 표본에서
+레이더 진단 작업 배열이 수송 호출 전후에 유지되고, `publish_hydrometeor_candidate`
+호출에서 배경 QR·QS가 이 작업 배열의 REAL32 값으로 바뀜을 확인한다.
+HYDRO의 evaluation 인자는 null이며, LIQUID의 실제 평가 상태·설정·반환 budget을 포착했다.
+레이더 진단 입력과 배경 대체 조건의 물리적 타당성, 전체 물수지와 강수 개선의
+인과관계는 아직 미확정이다. CP02 결과는 위 C2 T39 완료와 별개다.

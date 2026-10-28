@@ -1,0 +1,327 @@
+{
+  "binary": "/var/tmp/cp02-binary-boundary-20261028/klps_anal_prep.exe",
+  "sha256": "dbea173ec059afba40ae2d46193e5f5f33a63c18d02d4fd5db5ac23b504e2e65",
+  "method": "readelf --debug-dump=info, nm, objdump only; no model run or binary writes",
+  "derive": {
+    "entry": "0x5f4970",
+    "size": "0x1972e",
+    "locals": {
+      "candidate": {
+        "fbreg": -39608,
+        "type": "cloud_bal_state_type"
+      },
+      "thermo_candidate": {
+        "fbreg": -59480,
+        "type": "cloud_bal_state_type"
+      },
+      "rain": {
+        "fbreg": -60280,
+        "type": "REAL*8 rank-3 descriptor array"
+      },
+      "snow": {
+        "fbreg": -60160,
+        "type": "REAL*8 rank-3 descriptor array"
+      },
+      "thermo_requested": {
+        "fbreg": -412,
+        "type": "LOGICAL*4"
+      }
+    },
+    "entry_abi_pre_prologue": {
+      "arg5_thermo_active": "R8 (rank-3 LOGICAL*4 descriptor pointer)",
+      "arg6_thermo_surface": "R9 (rank-3 INTEGER*4 descriptor pointer)",
+      "arg7_target_rh": "uint64 at [RSP+8]",
+      "arg8_thermo_budget": "uint64 at [RSP+16]",
+      "arg9_analysis_budget": "uint64 at [RSP+24]",
+      "arg10_evaluation_state": "uint64 at [RSP+32]"
+    },
+    "caller_sites": [
+      {
+        "pc": "0x4cbe60",
+        "note": "pre-call arg10 slot [RSP+24] explicitly set to 0"
+      },
+      {
+        "pc": "0x4cbf48",
+        "note": "pre-call arg10 slot loaded from %rax, where preceding instruction LEAs [caller RBP-0xe7d8]"
+      }
+    ]
+  },
+  "call_intervals": [
+    {
+      "call": "0x600808",
+      "return_pc": "0x60080d",
+      "callee": "refresh_dry_air_mass_measure",
+      "entry": "0x5ab1e0"
+    },
+    {
+      "call": "0x60876f",
+      "return_pc": "0x608774",
+      "callee": "transport_precipitation_flux",
+      "entry": "0x637830",
+      "relevant": "rank-3 REAL*8 rain/snow descriptor args are derive locals at RBP-0xeb78/-0xeb00, passed on call stack slots +0x30/+0x38 pre-call"
+    },
+    {
+      "call": "0x608905",
+      "return_pc": "0x60890a",
+      "callee": "diagnose_radar_cells",
+      "entry": "0x635a00",
+      "relevant": "rank-3 REAL*8 rain/snow output descriptor args"
+    },
+    {
+      "call": "0x60a301",
+      "return_pc": "0x60a306",
+      "callee": "publish_hydrometeor_candidate",
+      "entry": "0x646090",
+      "relevant": "candidate local RBP-0x9ab8; rank-3 REAL*8 rain/snow/graupel locals passed"
+    },
+    {
+      "call": "0x60a3ae",
+      "return_pc": "0x60a3b3",
+      "callee": "account_pressure_analysis",
+      "entry": "0x60e0a0"
+    },
+    {
+      "call": "0x60a486",
+      "return_pc": "0x60a48b",
+      "callee": "saturation_adjust_pressure_state",
+      "entry": "0x670080",
+      "gate": "call lies only on branch where local thermo_requested (RBP-0x19c) is zero; actual HYDRO capture reports no entry"
+    },
+    {
+      "call": "0x60ac75",
+      "return_pc": "0x60ac7a",
+      "callee": "build_cloud_targets",
+      "entry": "0x634360"
+    },
+    {
+      "call": "0x60c090",
+      "callee": "add_loading_downdraft",
+      "entry": "0x644a10",
+      "return_pc": "0x60c095"
+    },
+    {
+      "call": "0x60c139",
+      "callee": "publish_column_diagnostics",
+      "entry": "0x64e6b0",
+      "return_pc": "0x60c13e"
+    }
+  ],
+  "formals": {
+    "transport_precipitation_flux": {
+      "entry": "0x637830",
+      "size": "0x6ce8",
+      "args": [
+        {
+          "name": "grid",
+          "type": "grid_spec"
+        },
+        {
+          "name": "pressure",
+          "type": "REAL*4 rank-3"
+        },
+        {
+          "name": "temperature",
+          "type": "REAL*4 rank-3"
+        },
+        {
+          "name": "vapor",
+          "type": "REAL*4 rank-3"
+        },
+        {
+          "name": "u",
+          "type": "REAL*4 rank-3"
+        },
+        {
+          "name": "v",
+          "type": "REAL*4 rank-3"
+        },
+        {
+          "name": "w",
+          "type": "REAL*4 rank-3"
+        },
+        {
+          "name": "w_valid",
+          "type": "LOGICAL*4 rank-3"
+        },
+        {
+          "name": "domain",
+          "type": "LOGICAL*4 rank-3"
+        },
+        {
+          "name": "observed",
+          "type": "LOGICAL*4 rank-3"
+        },
+        {
+          "name": "phase",
+          "type": "INTEGER*4 rank-3"
+        },
+        {
+          "name": "zlinear",
+          "type": "REAL*8 rank-3"
+        },
+        {
+          "name": "rain",
+          "type": "REAL*8 rank-3"
+        },
+        {
+          "name": "snow",
+          "type": "REAL*8 rank-3"
+        },
+        {
+          "name": "graupel",
+          "type": "REAL*8 rank-3"
+        },
+        {
+          "name": "cfg",
+          "type": "column_physics_config"
+        },
+        {
+          "name": "ledger",
+          "type": "precipitation_flux_ledger"
+        },
+        {
+          "name": "status",
+          "type": "INTEGER*4"
+        },
+        {
+          "name": "no_echo",
+          "type": "LOGICAL*4"
+        }
+      ]
+    },
+    "diagnose_radar_cells": {
+      "entry": "0x635a00",
+      "size": "0x1e26",
+      "args": [
+        {
+          "name": "state",
+          "type": "cloud_bal_state_type"
+        },
+        {
+          "name": "cfg",
+          "type": "column_physics_config"
+        },
+        {
+          "name": "observed",
+          "type": "LOGICAL*4 rank-3"
+        },
+        {
+          "name": "phase",
+          "type": "INTEGER*4 rank-3"
+        },
+        {
+          "name": "zlinear",
+          "type": "REAL*8 rank-3"
+        },
+        {
+          "name": "rain",
+          "type": "REAL*8 rank-3"
+        },
+        {
+          "name": "snow",
+          "type": "REAL*8 rank-3"
+        },
+        {
+          "name": "graupel",
+          "type": "REAL*8 rank-3"
+        },
+        {
+          "name": "phase_uncertain",
+          "type": "LOGICAL*4 rank-3"
+        },
+        {
+          "name": "status",
+          "type": "INTEGER*4"
+        }
+      ]
+    },
+    "publish_hydrometeor_candidate": {
+      "entry": "0x646090",
+      "size": "0x8617",
+      "args": [
+        {
+          "name": "input",
+          "type": "cloud_bal_state_type"
+        },
+        {
+          "name": "candidate",
+          "type": "cloud_bal_state_type"
+        },
+        {
+          "name": "cfg",
+          "type": "column_physics_config"
+        },
+        {
+          "name": "observed",
+          "type": "LOGICAL*4 rank-3"
+        },
+        {
+          "name": "radar_derived",
+          "type": "LOGICAL*4 rank-3"
+        },
+        {
+          "name": "phase_uncertain",
+          "type": "LOGICAL*4 rank-3"
+        },
+        {
+          "name": "phase",
+          "type": "INTEGER*4 rank-3"
+        },
+        {
+          "name": "rain",
+          "type": "REAL*8 rank-3"
+        },
+        {
+          "name": "snow",
+          "type": "REAL*8 rank-3"
+        },
+        {
+          "name": "graupel",
+          "type": "REAL*8 rank-3"
+        },
+        {
+          "name": "status",
+          "type": "INTEGER*4"
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "No dynamic value capture for thermo_active/thermo_surface raw pointers was performed here.",
+    "A 0x0 argument pointer or an unavailable GDB value is recorded as raw ABI data only; no optional semantics inferred from DW_AT_optional absence.",
+    "Disassembly and DWARF identify potential mutation boundaries and arguments, not executed branch values or numerical changes.",
+    "The actual HYDRO capture reports saturation entries=0; transport and publish hooks are the static fallback points for candidate rain/snow arrays."
+  ],
+  "safe_named_frame_pcs": {
+    "derive_column_physics": {
+      "entry_symbol": "0x5f4970",
+      "safe_pc": "0x5f4af7",
+      "reason": "after stack/register args saved and both assumed-shape descriptor setup/null paths complete; RBP-backed DIE reads now valid"
+    },
+    "saturation_adjust_pressure_state": {
+      "entry_symbol": "0x670080",
+      "safe_pc": "0x6701c2",
+      "reason": "after active/surface descriptor setup/null paths complete"
+    },
+    "refresh_dry_air_mass_measure": {
+      "entry_symbol": "0x5ab1e0",
+      "safe_pc": "0x5ab212",
+      "reason": "after state/status arguments stored in frame"
+    },
+    "derive_caller_frame_pairs": {
+      "transport_precipitation_flux": [
+        "0x60876f",
+        "0x608774"
+      ],
+      "diagnose_radar_cells": [
+        "0x608905",
+        "0x60890a"
+      ],
+      "publish_hydrometeor_candidate": [
+        "0x60a301",
+        "0x60a306"
+      ],
+      "reason": "caller derive frame is active at both call and return instruction PCs; read caller-owned locals through that frame."
+    }
+  }
+}

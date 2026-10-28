@@ -1,0 +1,25 @@
+# Source: objdump -d -C --no-show-raw-insn, SHA256 dbea173ec059afba40ae2d46193e5f5f33a63c18d02d4fd5db5ac23b504e2e65
+# derive_column_physics range 0x5f4970..0x60e69e
+# Relevant call/return PCs and gate excerpt:
+  600808: call 5ab1e0 <cloud_bal_state_mp_refresh_dry_air_mass_measure_>
+  60080d: ...
+  60876f: call 637830 <cloud_bal_column_physics_mp_transport_precipitation_flux_>
+  608774: ...
+  608905: call 635a00 <cloud_bal_column_physics_mp_diagnose_radar_cells_>
+  60890a: ...
+  60a301: call 646090 <cloud_bal_column_physics_mp_publish_hydrometeor_candidate_>
+  60a306: ...
+  60a3ae: call 60e0a0 <cloud_bal_column_physics_mp_account_pressure_analysis_>
+  60a3b3: ...
+  60a40b: mov -0x19c(%rbp),%eax       # DWARF local thermo_requested, fbreg -412
+  60a424: jne 60a52c                 # nonzero route bypasses saturation
+  60a42a: jmp 60a543                 # zero route enters saturation setup below
+  60a486: call 670080 <cloud_bal_column_physics_mp_saturation_adjust_pressure_state_>
+  60a48b: ...
+  60ac75: call 634360 <cloud_bal_column_physics_mp_build_cloud_targets_>
+  60ac7a: ...
+  60c090: call 644a10 <cloud_bal_column_physics_mp_add_loading_downdraft_>
+  60c139: call 64e6b0 <cloud_bal_column_physics_mp_publish_column_diagnostics_>
+# derive caller at pipeline:
+  4cbe60: call 5f4970 <cloud_bal_column_physics_mp_derive_column_physics_>
+  4cbf48: call 5f4970 <cloud_bal_column_physics_mp_derive_column_physics_>

@@ -1,0 +1,37 @@
+stage,call_number,role,representation,species,sample_count,unweighted_mean_kg_per_kg,unweighted_mean_g_per_kg,changed_count
+derive_entry_state_in,1,primary,REAL*4 state,rain,440,7.810485589371554e-05,0.07810485589371555,
+derive_entry_state_in,1,primary,REAL*4 state,snow,440,5.150467818153133e-05,0.05150467818153133,
+derive_entry_state_in,1,primary,REAL*4 state,graupel,440,0.0,0.0,
+derive_entry_state_in,2,writer,REAL*4 state,rain,440,7.810485589371554e-05,0.07810485589371555,
+derive_entry_state_in,2,writer,REAL*4 state,snow,440,5.150467818153133e-05,0.05150467818153133,
+derive_entry_state_in,2,writer,REAL*4 state,graupel,440,0.0,0.0,
+diagnose_radar_cells_pre,1,primary,REAL*8 raw workarray,rain,440,0.0,0.0,
+diagnose_radar_cells_pre,1,primary,REAL*8 raw workarray,snow,440,0.0,0.0,
+diagnose_radar_cells_pre,1,primary,REAL*8 raw workarray,graupel,440,0.0,0.0,
+diagnose_radar_cells_post,1,primary,REAL*8 raw workarray,rain,440,5.3394824299644476e-05,0.053394824299644476,154
+diagnose_radar_cells_post,1,primary,REAL*8 raw workarray,snow,440,6.995739219420789e-06,0.006995739219420789,36
+diagnose_radar_cells_post,1,primary,REAL*8 raw workarray,graupel,440,0.0,0.0,0
+transport_precipitation_flux_pre,1,primary,REAL*8 raw workarray,rain,440,5.3394824299644476e-05,0.053394824299644476,
+transport_precipitation_flux_pre,1,primary,REAL*8 raw workarray,snow,440,6.995739219420789e-06,0.006995739219420789,
+transport_precipitation_flux_pre,1,primary,REAL*8 raw workarray,graupel,440,0.0,0.0,
+transport_precipitation_flux_post,1,primary,REAL*8 raw workarray,rain,440,5.3394824299644476e-05,0.053394824299644476,0
+transport_precipitation_flux_post,1,primary,REAL*8 raw workarray,snow,440,6.995739219420789e-06,0.006995739219420789,0
+transport_precipitation_flux_post,1,primary,REAL*8 raw workarray,graupel,440,0.0,0.0,0
+publish_hydrometeor_candidate_pre,1,primary,REAL*8 raw workarray,rain,440,5.3394824299644476e-05,0.053394824299644476,
+publish_hydrometeor_candidate_pre,1,primary,REAL*8 raw workarray,snow,440,6.995739219420789e-06,0.006995739219420789,
+publish_hydrometeor_candidate_pre,1,primary,REAL*8 raw workarray,graupel,440,0.0,0.0,
+publish_hydrometeor_candidate_post,1,primary,REAL*8 raw workarray,rain,440,5.3394824299644476e-05,0.053394824299644476,0
+publish_hydrometeor_candidate_post,1,primary,REAL*8 raw workarray,snow,440,6.995739219420789e-06,0.006995739219420789,0
+publish_hydrometeor_candidate_post,1,primary,REAL*8 raw workarray,graupel,440,0.0,0.0,0
+derive_return_state_out,1,primary,REAL*4 state,rain,440,5.339482442898522e-05,0.05339482442898522,
+derive_return_state_out,1,primary,REAL*4 state,snow,440,6.995739206352234e-06,0.006995739206352235,
+derive_return_state_out,1,primary,REAL*4 state,graupel,440,0.0,0.0,
+derive_return_state_out,2,writer,REAL*4 state,rain,440,5.339482442898522e-05,0.05339482442898522,
+derive_return_state_out,2,writer,REAL*4 state,snow,440,6.995739206352234e-06,0.006995739206352235,
+derive_return_state_out,2,writer,REAL*4 state,graupel,440,0.0,0.0,
+publish_candidate_state_pre,1,primary,REAL*4 state,rain,440,7.810485589371554e-05,0.07810485589371555,
+publish_candidate_state_pre,1,primary,REAL*4 state,snow,440,5.150467818153133e-05,0.05150467818153133,
+publish_candidate_state_pre,1,primary,REAL*4 state,graupel,440,0.0,0.0,
+publish_candidate_state_post,1,primary,REAL*4 state,rain,440,5.339482442898522e-05,0.05339482442898522,154
+publish_candidate_state_post,1,primary,REAL*4 state,snow,440,6.995739206352234e-06,0.006995739206352235,36
+publish_candidate_state_post,1,primary,REAL*4 state,graupel,440,0.0,0.0,0
