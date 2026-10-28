@@ -1,0 +1,156 @@
+{
+  "inspection_date": "2026-10-28",
+  "mode": "read_only_no_model_launch",
+  "binary": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/upstream_lapsprep_build.HjBepF/klps_anal_prep.exe",
+  "binary_sha256": "dbea173ec059afba40ae2d46193e5f5f33a63c18d02d4fd5db5ac23b504e2e65",
+  "dwarf": {
+    "debug_info_present": true,
+    "evidence": "readelf --debug-dump=info excerpt for derive subprogram DIE at 0x296dc through formal parameter DIE at 0x2976f; evaluation_state is the tenth formal parameter",
+    "derive_symbol": "cloud_bal_column_physics::derive_column_physics",
+    "derive_entry_address": "0x5f4970",
+    "derive_end_from_next_symbol": "0x60e0a0",
+    "derive_signature": "void (Type cloud_bal_state_type, Type cloud_bal_state_type, Type stage_result, Type column_physics_config, LOGICAL*4 (:,:,:), INTEGER*4 (:,:,:), REAL*8, Type water_phase_budget, Type pressure_analysis_budget, Type cloud_bal_state_type)",
+    "captured_variable_names": [
+      "state_in",
+      "state_out"
+    ],
+    "evaluation_state_formal_parameter": true,
+    "evaluation_state_parameter": {
+      "die": "<0x2976f>",
+      "die_tag": "DW_TAG_formal_parameter",
+      "name": "evaluation_state",
+      "decl_line": 138,
+      "type_reference": "<0x2c54a> (cloud_bal_state_type, same type reference as state_in/state_out)",
+      "location": "DW_OP_fbreg: 40; DW_OP_deref",
+      "optional_attribute": "no DW_AT_optional present on this DIE; optional/presence semantics are unresolved from this DIE alone"
+    },
+    "derive_formal_parameters": [
+      "state_in",
+      "state_out",
+      "result",
+      "config",
+      "thermo_active",
+      "thermo_surface",
+      "target_rh",
+      "thermo_budget",
+      "analysis_budget",
+      "evaluation_state"
+    ]
+  },
+  "replay_configuration": {
+    "argv": [
+      "262281200"
+    ],
+    "time": "2026-08-16_12:00:00.0000",
+    "namelist_excerpt": {
+      "HOTSTART": "F",
+      "BALANCE": "F",
+      "HYDRO_MODE": "CONSERVATIVE",
+      "GRID_SCALE": "NONE",
+      "CAP_POLICY": "TRANSFER",
+      "ENFORCE_FIELD_CONTRACTS": "T"
+    },
+    "existing_hydro_counts": {
+      "derive_entries": 2,
+      "derive_returns": 2,
+      "pipeline_entries": 2,
+      "pipeline_returns": 2
+    },
+    "domain": "20 post-selected points x 22 stored levels; shadow replay, not WRF forecast",
+    "available_capture_budget": {
+      "free_on_var_tmp_filesystem_at_inspection": "150 GiB",
+      "filesystem_size": "1.6 TiB",
+      "existing_hydro_capture_uncompressed": "7.9 MiB",
+      "existing_hydro_wps": "60 MiB",
+      "estimate_for_one_new_full_replay": "at least 70 MiB headroom plus logs and temp files; free space is sufficient now",
+      "process_memory_budget": "not recorded in available preflight/receipt; do not infer from disk availability"
+    }
+  },
+  "observed_existing_capture": {
+    "entry_return_records": [
+      {
+        "stage": "pipeline_entry_state_in",
+        "call_number": 1,
+        "caller": null
+      },
+      {
+        "stage": "derive_entry_state_in",
+        "call_number": 1,
+        "caller": null
+      },
+      {
+        "stage": "derive_return_state_out",
+        "call_number": 1,
+        "caller": "column_candidate"
+      },
+      {
+        "stage": "pipeline_return_candidate_out",
+        "call_number": 1,
+        "caller": "candidate"
+      },
+      {
+        "stage": "pipeline_entry_state_in",
+        "call_number": 2,
+        "caller": null
+      },
+      {
+        "stage": "derive_entry_state_in",
+        "call_number": 2,
+        "caller": null
+      },
+      {
+        "stage": "derive_return_state_out",
+        "call_number": 2,
+        "caller": "column_candidate"
+      },
+      {
+        "stage": "pipeline_return_candidate_out",
+        "call_number": 2,
+        "caller": "replay"
+      }
+    ],
+    "input_state_fields": [
+      "vapor",
+      "cloud_water",
+      "cloud_ice",
+      "rain",
+      "snow",
+      "graupel",
+      "temperature",
+      "pressure",
+      "above_ground"
+    ],
+    "density": "not a cloud_bal_state_type member; unavailable through this captured state"
+  },
+  "binary_internal_call_evidence": {
+    "method": "static disassembly of derive address range 0x5f4970..0x60e0a0; no execution",
+    "direct_subcalls_relevant_candidates": [
+      {
+        "symbol": "cloud_bal_column_physics::saturation_adjust_pressure_state",
+        "address": "0x670080",
+        "reason": "pressure/thermodynamic intermediate boundary; signature carries cloud_bal_state_type input/output and stage/budget context"
+      },
+      {
+        "symbol": "cloud_bal_state::refresh_dry_air_mass_measure",
+        "address": "0x5ab1e0",
+        "reason": "mass-measure refresh, direct callee visible in derive; state/budget interpretation requires GDB argument inspection"
+      }
+    ],
+    "immediately_following_address_symbol": {
+      "symbol": "cloud_bal_column_physics::account_pressure_analysis",
+      "address": "0x60e0a0",
+      "relationship": "next symbol by address after derive, not a proven direct callee or caller"
+    }
+  },
+  "next_capture_plan": {
+    "candidate": "First inspect evaluation_state at derive entry (no model launch until approved by parent); then, if it is readable and the internal thermodynamic boundary remains useful, capture saturation_adjust_pressure_state entry/return only during first HYDRO derive invocation for the same 20 points x 22 levels.",
+    "why_small": "single direct internal routine with state input/output; two outer HYDRO derive invocations are already observed, so first invocation bounded at two internal boundary records if callee is reached once.",
+    "gdb_symbols": [
+      "cloud_bal_column_physics::saturation_adjust_pressure_state",
+      "cloud_bal_column_physics::derive_column_physics"
+    ],
+    "preflight": "Use existing pinned binary and archived replay input tree; argv 262281200; preserve isolated output and compare no-GDB baseline before/after; cap/record observed callee hit count before choosing return breakpoint behavior.",
+    "limits": "This is a thermodynamic pressure-state boundary, not proof of the historical scientific equations; exact source remains unrecovered. Do not call it an evaluation_state capture. Hydrostatic named increment helpers are not direct derive callees in this executable. No new model was launched.",
+    "evaluation_state_correction": "The argument is present in DWARF as a tenth formal parameter (cloud_bal_state_type); its optional/presence semantics are unresolved because this DIE has no DW_AT_optional attribute. The existing capture did not read it. A new capture should inspect frame.read_var(\"evaluation_state\") at derive entry and resolve whether it is absent/unavailable or points to a readable state before planning extra boundaries."
+  }
+}
