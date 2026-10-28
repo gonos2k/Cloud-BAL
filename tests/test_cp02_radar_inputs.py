@@ -1,7 +1,11 @@
 import copy
+import csv
 import importlib.util
 from pathlib import Path
+import subprocess
 import struct
+import sys
+from decimal import Decimal
 
 import pytest
 
@@ -12,6 +16,9 @@ SPEC = importlib.util.spec_from_file_location("analyze_radar_inputs", SCRIPT)
 analyzer = importlib.util.module_from_spec(SPEC)
 SPEC.loader.exec_module(analyzer)
 INNER_EVIDENCE = ROOT / "docs/evidence/cp02_inner_capture_20261028/hydro_capture.json.gz"
+RADAR_EVIDENCE = SCRIPT.parent / "hydro_capture.json.gz"
+PRIOR_OUTER = ROOT / "docs/evidence/cp02_call_boundary_20261028/hydro_capture.json.gz"
+BACKGROUND_CSV = analyzer.BACKGROUND_CSV
 
 
 def scalar(width, type_name, raw):
@@ -238,3 +245,52 @@ def test_actual_observation_state_raw_types_and_profiles_are_validated():
     del pre["actual_observation_state"]["radar_reflectivity"]["valid"]
     with pytest.raises(ValueError, match="missing valid"):
         analyzer.validate_radar(capture, fake_background())
+
+
+def run_analyzer_cli(background_csv, output_dir):
+    summary = output_dir / "summary.json"
+    profiles = output_dir / "profiles.csv"
+    command = [sys.executable, str(SCRIPT), str(RADAR_EVIDENCE),
+               "--background-csv", str(background_csv),
+               "--prior-outer", str(PRIOR_OUTER),
+               "--output", str(summary), "--profiles", str(profiles)]
+    result = subprocess.run(command, capture_output=True, text=True, check=False)
+    return result, summary, profiles
+
+
+def test_cli_rejects_background_csv_that_differs_from_capture_hash(tmp_path):
+    copied_csv = tmp_path / "background.csv"
+    copied_csv.write_bytes(BACKGROUND_CSV.read_bytes())
+    with copied_csv.open(newline="", encoding="utf-8") as stream:
+        reader = csv.DictReader(stream)
+        fieldnames = reader.fieldnames
+        rows = list(reader)
+    changed = 0
+    for row in rows:
+        if (row["arm"] == "HYDRO" and row["shadow_i"] == "163" and
+                row["shadow_j"] == "73" and row["z_index"] == "3"):
+            row["background_rain"] = str(Decimal(row["background_rain"]) + Decimal("0.001"))
+            changed += 1
+    assert changed == 1
+    with copied_csv.open("w", newline="", encoding="utf-8") as stream:
+        writer = csv.DictWriter(stream, fieldnames=fieldnames)
+        writer.writeheader()
+        writer.writerows(rows)
+
+    result, summary, profiles = run_analyzer_cli(copied_csv, tmp_path)
+
+    assert result.returncode != 0
+    assert "background CSV SHA-256 does not match capture points_csv_sha256" in result.stderr
+    assert not summary.exists()
+    assert not profiles.exists()
+
+
+def test_cli_accepts_canonical_background_csv_copy(tmp_path):
+    copied_csv = tmp_path / "background.csv"
+    copied_csv.write_bytes(BACKGROUND_CSV.read_bytes())
+
+    result, summary, profiles = run_analyzer_cli(copied_csv, tmp_path)
+
+    assert result.returncode == 0, result.stderr
+    assert summary.exists()
+    assert profiles.exists()
