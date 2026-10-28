@@ -1,0 +1,419 @@
+{
+  "binary": "/var/tmp/cp02-binary-boundary-20261028/klps_anal_prep.exe",
+  "sha256": "dbea173ec059afba40ae2d46193e5f5f33a63c18d02d4fd5db5ac23b504e2e65",
+  "evidence": "readelf --debug-dump=info --wide and nm -C; exact binary confirmed; no source interpretation",
+  "functions": {
+    "saturation_adjust_pressure_state": {
+      "address": "0x670080",
+      "size": "0x2d54",
+      "linkage": "cloud_bal_column_physics_mp_saturation_adjust_pressure_state_",
+      "formals": [
+        {
+          "name": "state_in",
+          "type": "cloud_bal_state_type",
+          "location": "DW_OP_fbreg -72; dereference"
+        },
+        {
+          "name": "state_out",
+          "type": "cloud_bal_state_type",
+          "location": "DW_OP_fbreg -80; dereference"
+        },
+        {
+          "name": "result",
+          "type": "stage_result",
+          "location": "DW_OP_fbreg -88; dereference"
+        },
+        {
+          "name": "active",
+          "type": "LOGICAL*4 rank-3 descriptor array",
+          "location": "DW_OP_fbreg -104; dereference",
+          "dimensions": "3 dynamic subranges expressed via descriptor",
+          "note": "DW_TAG_array_type with 3 subranges; rank definitive, bounds dynamic"
+        },
+        {
+          "name": "target_rh",
+          "type": "REAL*8",
+          "location": "DW_OP_fbreg -232; dereference"
+        },
+        {
+          "name": "budget",
+          "type": "water_phase_budget",
+          "location": "DW_OP_fbreg -240; dereference"
+        },
+        {
+          "name": "surface",
+          "type": "INTEGER*4 rank-3 descriptor array",
+          "location": "DW_OP_fbreg -248; dereference",
+          "dimensions": "3 dynamic subranges expressed via descriptor",
+          "note": "DW_TAG_array_type with 3 subranges; rank definitive, bounds dynamic"
+        }
+      ],
+      "return": "subroutine (no DW_AT_type return DIE)",
+      "locals_observed": "No local QR/QS variables evident in this function DIE before next subprogram; do not infer absent execution stages."
+    },
+    "refresh_dry_air_mass_measure": {
+      "address": "0x5ab1e0",
+      "size": "0x190c",
+      "linkage": "cloud_bal_state_mp_refresh_dry_air_mass_measure_",
+      "formals": [
+        {
+          "name": "state",
+          "type": "cloud_bal_state_type",
+          "location": "DW_OP_fbreg -112; dereference"
+        },
+        {
+          "name": "status",
+          "type": "INTEGER*4",
+          "location": "DW_OP_fbreg -120; dereference"
+        }
+      ],
+      "return": "subroutine (no DW_AT_type return DIE)",
+      "locals": [
+        {
+          "name": "total_water",
+          "type": "REAL*8",
+          "location": "DW_OP_fbreg -128"
+        },
+        {
+          "name": "allocation_status",
+          "type": "INTEGER*4",
+          "location": "DW_OP_fbreg -132"
+        },
+        {
+          "name": "k",
+          "type": "INTEGER*4",
+          "location": "DW_OP_fbreg -136"
+        },
+        {
+          "name": "j",
+          "type": "INTEGER*4",
+          "location": "DW_OP_fbreg -140"
+        },
+        {
+          "name": "i",
+          "type": "INTEGER*4",
+          "location": "DW_OP_fbreg -144"
+        },
+        {
+          "name": "dry_air_mass_work",
+          "type": "REAL*8",
+          "location": "DW_OP_fbreg -264"
+        }
+      ]
+    },
+    "derive_column_physics": {
+      "address": "0x5f4970",
+      "size": "0x1972e",
+      "formals": [
+        {
+          "name": "state_in",
+          "type": "cloud_bal_state_type"
+        },
+        {
+          "name": "state_out",
+          "type": "cloud_bal_state_type"
+        },
+        {
+          "name": "result",
+          "type": "stage_result"
+        },
+        {
+          "name": "config",
+          "type": "column_physics_config"
+        },
+        {
+          "name": "thermo_active",
+          "type": "LOGICAL*4 rank-3 descriptor array"
+        },
+        {
+          "name": "thermo_surface",
+          "type": "INTEGER*4 rank-3 descriptor array"
+        },
+        {
+          "name": "target_rh",
+          "type": "REAL*8 scalar"
+        },
+        {
+          "name": "thermo_budget",
+          "type": "water_phase_budget"
+        },
+        {
+          "name": "analysis_budget",
+          "type": "pressure_analysis_budget"
+        },
+        {
+          "name": "evaluation_state",
+          "type": "cloud_bal_state_type",
+          "location": "DW_OP_fbreg +40; dereference",
+          "optional_semantics": "unresolved; absence of DW_AT_optional not used to decide presence"
+        }
+      ],
+      "candidate_related_DIE_locals": [
+        "candidate_result: stage_result",
+        "candidate: cloud_bal_state_type",
+        "thermo_result: stage_result",
+        "thermo_candidate: cloud_bal_state_type",
+        "input_water: REAL*8",
+        "output_water: REAL*8",
+        "thermo_requested: LOGICAL*4",
+        "terrain_intercept (nested routine local)",
+        "rain/snow and new_rain/new_snow observed in nested routine DIEs"
+      ],
+      "scope_note": "DWARF names locals/subprograms but does not itself establish runtime order, conditions, or whether QR/QS values are read/written. No such inference made."
+    }
+  },
+  "structures": {
+    "water_phase_budget": {
+      "byte_size": 80,
+      "fields": [
+        {
+          "name": "species_change_kg",
+          "type": "REAL*8[6]",
+          "offset": 0,
+          "dimensions": [
+            {
+              "count": 6
+            }
+          ],
+          "note": "species slots; scalar fields follow at offset 48"
+        },
+        {
+          "name": "sensible_change_j",
+          "type": "REAL*8",
+          "offset": 48
+        },
+        {
+          "name": "phase_change_j",
+          "type": "REAL*8",
+          "offset": 56
+        },
+        {
+          "name": "water_error_kg",
+          "type": "REAL*8",
+          "offset": 64
+        },
+        {
+          "name": "enthalpy_error_j",
+          "type": "REAL*8",
+          "offset": 72
+        }
+      ]
+    },
+    "pressure_analysis_budget": {
+      "byte_size": 224,
+      "fields": [
+        {
+          "name": "species_change_kg",
+          "type": "REAL*8[6]",
+          "offset": 0,
+          "dimensions": [
+            {
+              "count": 6
+            }
+          ]
+        },
+        {
+          "name": "mixing_ratio_change_kg",
+          "type": "REAL*8[6]",
+          "offset": 48,
+          "dimensions": [
+            {
+              "count": 6
+            }
+          ]
+        },
+        {
+          "name": "dry_mass_redistribution_kg",
+          "type": "REAL*8[6]",
+          "offset": 96,
+          "dimensions": [
+            {
+              "count": 6
+            }
+          ]
+        },
+        {
+          "name": "dry_air_change_kg",
+          "type": "REAL*8",
+          "offset": 144
+        },
+        {
+          "name": "enthalpy_change_j",
+          "type": "REAL*8",
+          "offset": 152
+        },
+        {
+          "name": "geometry_mass_change_kg",
+          "type": "REAL*8",
+          "offset": 160
+        },
+        {
+          "name": "enthalpy_composition_change_j",
+          "type": "REAL*8",
+          "offset": 168
+        },
+        {
+          "name": "enthalpy_mass_metric_change_j",
+          "type": "REAL*8",
+          "offset": 176
+        },
+        {
+          "name": "total_mass_error_kg",
+          "type": "REAL*8",
+          "offset": 184
+        },
+        {
+          "name": "max_cell_mass_error_kg",
+          "type": "REAL*8",
+          "offset": 192
+        },
+        {
+          "name": "accounted_cells",
+          "type": "INTEGER*8",
+          "offset": 200
+        },
+        {
+          "name": "incomplete_background_cells",
+          "type": "INTEGER*8",
+          "offset": 208
+        },
+        {
+          "name": "incomplete_candidate_cells",
+          "type": "INTEGER*8",
+          "offset": 216
+        }
+      ]
+    },
+    "column_physics_config": {
+      "byte_size": 104,
+      "fields": [
+        {
+          "name": "cloud_fraction_threshold",
+          "type": "REAL*8",
+          "offset": 0
+        },
+        {
+          "name": "radar_wavelength_m",
+          "type": "REAL*8",
+          "offset": 8
+        },
+        {
+          "name": "minimum_dbz",
+          "type": "REAL*8",
+          "offset": 16
+        },
+        {
+          "name": "maximum_dbz",
+          "type": "REAL*8",
+          "offset": 24
+        },
+        {
+          "name": "reference_mass_concentration",
+          "type": "REAL*8",
+          "offset": 32
+        },
+        {
+          "name": "minimum_relative_fall_speed",
+          "type": "REAL*8",
+          "offset": 40
+        },
+        {
+          "name": "maximum_horizontal_substep",
+          "type": "REAL*8",
+          "offset": 48
+        },
+        {
+          "name": "maximum_transport_substeps",
+          "type": "INTEGER*4",
+          "offset": 56
+        },
+        {
+          "name": "precipitation_loading_efficiency",
+          "type": "REAL*8",
+          "offset": 64
+        },
+        {
+          "name": "maximum_downdraft_ms",
+          "type": "REAL*8",
+          "offset": 72
+        },
+        {
+          "name": "maximum_downdraft_innovation_ms",
+          "type": "REAL*8",
+          "offset": 80
+        },
+        {
+          "name": "ledger_relative_tolerance",
+          "type": "REAL*8",
+          "offset": 88
+        },
+        {
+          "name": "ledger_absolute_tolerance",
+          "type": "REAL*8",
+          "offset": 96
+        }
+      ]
+    },
+    "cloud_bal_state_type": {
+      "members": [
+        {
+          "name": "grid",
+          "offset": 8
+        },
+        {
+          "name": "pressure",
+          "offset": 880
+        },
+        {
+          "name": "temperature",
+          "offset": 1384
+        },
+        {
+          "name": "vapor",
+          "offset": 1888
+        },
+        {
+          "name": "cloud_water",
+          "offset": 7984
+        },
+        {
+          "name": "cloud_ice",
+          "offset": 8488
+        },
+        {
+          "name": "rain",
+          "offset": 8992
+        },
+        {
+          "name": "snow",
+          "offset": 9496
+        },
+        {
+          "name": "graupel",
+          "offset": 10000
+        }
+      ],
+      "note": "Relevant state metrics are stored under these exact member names; field rank/shapes are structure-member types not expanded here."
+    },
+    "grid_spec_metrics": {
+      "nested_under": "state.grid (state offset 8)",
+      "members": [
+        {
+          "name": "pressure_mass_measure",
+          "offset_within_grid": 632,
+          "type": "REAL*8 rank-3 descriptor field"
+        },
+        {
+          "name": "dry_air_mass_measure",
+          "offset_within_grid": 752,
+          "type": "REAL*8 rank-3 descriptor field"
+        }
+      ]
+    }
+  },
+  "limitations": [
+    "Exact source was not recovered; captures are DWARF metadata only.",
+    "DW_AT_optional absence is not used to infer optional-argument presence.",
+    "derive DIE exposes candidate/thermo candidate and nested rain/snow target locals; metadata does not establish execution order or runtime QR/QS writes."
+  ]
+}

@@ -1,0 +1,4813 @@
+{
+  "schema": "cp02-inner-analysis-v1",
+  "arm": "LIQUID_RADAR_RH1",
+  "status": "SCOPED_PASS",
+  "scope": "Selected 20 points x 22 stored levels. Observed debugger values only; no mass conservation, domainwide budget, or forecast-cause conclusion.",
+  "events": {
+    "derive_entries": 6,
+    "derive_returns": 6,
+    "pipeline_entries": 2,
+    "pipeline_returns": 2,
+    "saturation_adjust_pressure_state_entries": 0,
+    "saturation_adjust_pressure_state_returns": 0,
+    "saturation_adjust_pressure_state_gate": "balanced_zero_or_more_calls",
+    "refresh_dry_air_mass_measure_entries": 0,
+    "refresh_dry_air_mass_measure_returns": 0,
+    "refresh_dry_air_mass_measure_gate": "balanced_zero_or_more_calls",
+    "derive_preprologue_abi_entries": 6,
+    "candidate_boundary_counts": {}
+  },
+  "inner_boundary_coverage": "not instrumented for LIQUID; empty event set is not evidence of zero calls",
+  "optional_inner_call_coverage": "not instrumented for LIQUID; empty event set is not evidence of zero calls",
+  "primary_writer_outer_state8_raw32_bitwise_differences": {
+    "vapor": 0,
+    "cloud_water": 0,
+    "cloud_ice": 0,
+    "rain": 0,
+    "snow": 0,
+    "graupel": 0,
+    "temperature": 0,
+    "pressure": 0
+  },
+  "primary_entry_vs_writer_entry_state8_raw32_bitwise_differences": {
+    "vapor": 0,
+    "cloud_water": 0,
+    "cloud_ice": 0,
+    "rain": 0,
+    "snow": 0,
+    "graupel": 0,
+    "temperature": 0,
+    "pressure": 0
+  },
+  "stages": {},
+  "species_profiles": [
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 1,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "rain",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 7.810485589371554e-05,
+      "unweighted_mean_g_per_kg": 0.07810485589371555,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 1,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "snow",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 5.150467818153133e-05,
+      "unweighted_mean_g_per_kg": 0.05150467818153133,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 1,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "graupel",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 0.0,
+      "unweighted_mean_g_per_kg": 0.0,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 2,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "rain",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 7.810485589371554e-05,
+      "unweighted_mean_g_per_kg": 0.07810485589371555,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 2,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "snow",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 5.150467818153133e-05,
+      "unweighted_mean_g_per_kg": 0.05150467818153133,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 2,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "graupel",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 0.0,
+      "unweighted_mean_g_per_kg": 0.0,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 3,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "rain",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 7.810485589371554e-05,
+      "unweighted_mean_g_per_kg": 0.07810485589371555,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 3,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "snow",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 5.150467818153133e-05,
+      "unweighted_mean_g_per_kg": 0.05150467818153133,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 3,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "graupel",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 0.0,
+      "unweighted_mean_g_per_kg": 0.0,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 4,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "rain",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 7.810485589371554e-05,
+      "unweighted_mean_g_per_kg": 0.07810485589371555,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 4,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "snow",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 5.150467818153133e-05,
+      "unweighted_mean_g_per_kg": 0.05150467818153133,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 4,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "graupel",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 0.0,
+      "unweighted_mean_g_per_kg": 0.0,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 5,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "rain",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 7.810485589371554e-05,
+      "unweighted_mean_g_per_kg": 0.07810485589371555,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 5,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "snow",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 5.150467818153133e-05,
+      "unweighted_mean_g_per_kg": 0.05150467818153133,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 5,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "graupel",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 0.0,
+      "unweighted_mean_g_per_kg": 0.0,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 6,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "rain",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 7.810485589371554e-05,
+      "unweighted_mean_g_per_kg": 0.07810485589371555,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 6,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "snow",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 5.150467818153133e-05,
+      "unweighted_mean_g_per_kg": 0.05150467818153133,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 6,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "graupel",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 0.0,
+      "unweighted_mean_g_per_kg": 0.0,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 1,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "rain",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 5.339482442898522e-05,
+      "unweighted_mean_g_per_kg": 0.05339482442898522,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 1,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "snow",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 6.995739206352234e-06,
+      "unweighted_mean_g_per_kg": 0.006995739206352235,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 1,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "graupel",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 0.0,
+      "unweighted_mean_g_per_kg": 0.0,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 2,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "rain",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 5.33548116229874e-05,
+      "unweighted_mean_g_per_kg": 0.0533548116229874,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 2,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "snow",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 6.9943029839950295e-06,
+      "unweighted_mean_g_per_kg": 0.0069943029839950295,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 2,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "graupel",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 0.0,
+      "unweighted_mean_g_per_kg": 0.0,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 3,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "rain",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 5.33548116229874e-05,
+      "unweighted_mean_g_per_kg": 0.0533548116229874,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 3,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "snow",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 6.9943029839950295e-06,
+      "unweighted_mean_g_per_kg": 0.0069943029839950295,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 3,
+      "role": "primary",
+      "representation": "REAL*4 state",
+      "species": "graupel",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 0.0,
+      "unweighted_mean_g_per_kg": 0.0,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 4,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "rain",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 5.339482442898522e-05,
+      "unweighted_mean_g_per_kg": 0.05339482442898522,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 4,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "snow",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 6.995739206352234e-06,
+      "unweighted_mean_g_per_kg": 0.006995739206352235,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 4,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "graupel",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 0.0,
+      "unweighted_mean_g_per_kg": 0.0,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 5,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "rain",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 5.33548116229874e-05,
+      "unweighted_mean_g_per_kg": 0.0533548116229874,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 5,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "snow",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 6.9943029839950295e-06,
+      "unweighted_mean_g_per_kg": 0.0069943029839950295,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 5,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "graupel",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 0.0,
+      "unweighted_mean_g_per_kg": 0.0,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 6,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "rain",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 5.33548116229874e-05,
+      "unweighted_mean_g_per_kg": 0.0533548116229874,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 6,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "snow",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 6.9943029839950295e-06,
+      "unweighted_mean_g_per_kg": 0.0069943029839950295,
+      "changed_count": null
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 6,
+      "role": "writer",
+      "representation": "REAL*4 state",
+      "species": "graupel",
+      "sample_count": 440,
+      "unweighted_mean_kg_per_kg": 0.0,
+      "unweighted_mean_g_per_kg": 0.0,
+      "changed_count": null
+    }
+  ],
+  "state_capture_metadata": [
+    {
+      "stage": "pipeline_entry_state_in",
+      "call_number": 1,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 1,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 1,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 2,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 2,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 3,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 3,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "pipeline_return_candidate_out",
+      "call_number": 1,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "pipeline_entry_state_in",
+      "call_number": 2,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 4,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 4,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 5,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 5,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "derive_entry_state_in",
+      "call_number": 6,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "derive_return_state_out",
+      "call_number": 6,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    },
+    {
+      "stage": "pipeline_return_candidate_out",
+      "call_number": 2,
+      "missing_fields": {
+        "density": "not stored on cloud_bal_state_type"
+      },
+      "grid_mass_metrics": {
+        "pressure_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        },
+        "dry_air_mass_measure": {
+          "status": "readable",
+          "type": "REAL*8, allocatable (235,283,22)",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ]
+        }
+      },
+      "field_shapes": {
+        "vapor": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_water": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "cloud_ice": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "rain": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "snow": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "graupel": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "temperature": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        },
+        "pressure": {
+          "fortran_bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "shape_i_j_k": [
+            235,
+            283,
+            22
+          ]
+        }
+      }
+    }
+  ],
+  "abi": [
+    {
+      "call_number": 1,
+      "role": "primary",
+      "arguments": {
+        "r8_thermo_active": {
+          "slot_address": null,
+          "raw_bytes_le_hex": null,
+          "pointer_value": "0x7ffe23110da8",
+          "slot_value": "nonzero"
+        },
+        "r9_thermo_surface": {
+          "slot_address": null,
+          "raw_bytes_le_hex": null,
+          "pointer_value": "0x7ffe23110d30",
+          "slot_value": "nonzero"
+        },
+        "target_rh_arg7": {
+          "slot_address": "0x7ffe230f1640",
+          "raw_bytes_le_hex": "8086910000000000",
+          "pointer_value": "0x918680",
+          "slot_value": "nonzero"
+        },
+        "thermo_budget_arg8": {
+          "slot_address": "0x7ffe230f1648",
+          "raw_bytes_le_hex": "40e61223fe7f0000",
+          "pointer_value": "0x7ffe2312e640",
+          "slot_value": "nonzero"
+        },
+        "analysis_budget_arg9": {
+          "slot_address": "0x7ffe230f1650",
+          "raw_bytes_le_hex": "40041123fe7f0000",
+          "pointer_value": "0x7ffe23110440",
+          "slot_value": "nonzero"
+        },
+        "evaluation_state_arg10": {
+          "slot_address": "0x7ffe230f1658",
+          "raw_bytes_le_hex": "48201023fe7f0000",
+          "pointer_value": "0x7ffe23102048",
+          "slot_value": "nonzero"
+        }
+      }
+    },
+    {
+      "call_number": 2,
+      "role": "primary",
+      "arguments": {
+        "r8_thermo_active": {
+          "slot_address": null,
+          "raw_bytes_le_hex": null,
+          "pointer_value": "0x7ffe23110da8",
+          "slot_value": "nonzero"
+        },
+        "r9_thermo_surface": {
+          "slot_address": null,
+          "raw_bytes_le_hex": null,
+          "pointer_value": "0x7ffe23110d30",
+          "slot_value": "nonzero"
+        },
+        "target_rh_arg7": {
+          "slot_address": "0x7ffe230f1640",
+          "raw_bytes_le_hex": "8086910000000000",
+          "pointer_value": "0x918680",
+          "slot_value": "nonzero"
+        },
+        "thermo_budget_arg8": {
+          "slot_address": "0x7ffe230f1648",
+          "raw_bytes_le_hex": "40e61223fe7f0000",
+          "pointer_value": "0x7ffe2312e640",
+          "slot_value": "nonzero"
+        },
+        "analysis_budget_arg9": {
+          "slot_address": "0x7ffe230f1650",
+          "raw_bytes_le_hex": "40041123fe7f0000",
+          "pointer_value": "0x7ffe23110440",
+          "slot_value": "nonzero"
+        },
+        "evaluation_state_arg10": {
+          "slot_address": "0x7ffe230f1658",
+          "raw_bytes_le_hex": "48201023fe7f0000",
+          "pointer_value": "0x7ffe23102048",
+          "slot_value": "nonzero"
+        }
+      }
+    },
+    {
+      "call_number": 3,
+      "role": "primary",
+      "arguments": {
+        "r8_thermo_active": {
+          "slot_address": null,
+          "raw_bytes_le_hex": null,
+          "pointer_value": "0x7ffe23110da8",
+          "slot_value": "nonzero"
+        },
+        "r9_thermo_surface": {
+          "slot_address": null,
+          "raw_bytes_le_hex": null,
+          "pointer_value": "0x7ffe23110d30",
+          "slot_value": "nonzero"
+        },
+        "target_rh_arg7": {
+          "slot_address": "0x7ffe230f1640",
+          "raw_bytes_le_hex": "8086910000000000",
+          "pointer_value": "0x918680",
+          "slot_value": "nonzero"
+        },
+        "thermo_budget_arg8": {
+          "slot_address": "0x7ffe230f1648",
+          "raw_bytes_le_hex": "40e61223fe7f0000",
+          "pointer_value": "0x7ffe2312e640",
+          "slot_value": "nonzero"
+        },
+        "analysis_budget_arg9": {
+          "slot_address": "0x7ffe230f1650",
+          "raw_bytes_le_hex": "40041123fe7f0000",
+          "pointer_value": "0x7ffe23110440",
+          "slot_value": "nonzero"
+        },
+        "evaluation_state_arg10": {
+          "slot_address": "0x7ffe230f1658",
+          "raw_bytes_le_hex": "48201023fe7f0000",
+          "pointer_value": "0x7ffe23102048",
+          "slot_value": "nonzero"
+        }
+      }
+    },
+    {
+      "call_number": 4,
+      "role": "writer",
+      "arguments": {
+        "r8_thermo_active": {
+          "slot_address": null,
+          "raw_bytes_le_hex": null,
+          "pointer_value": "0x7ffe23102e90",
+          "slot_value": "nonzero"
+        },
+        "r9_thermo_surface": {
+          "slot_address": null,
+          "raw_bytes_le_hex": null,
+          "pointer_value": "0x7ffe23102e18",
+          "slot_value": "nonzero"
+        },
+        "target_rh_arg7": {
+          "slot_address": "0x7ffe230e33d0",
+          "raw_bytes_le_hex": "80ea1223fe7f0000",
+          "pointer_value": "0x7ffe2312ea80",
+          "slot_value": "nonzero"
+        },
+        "thermo_budget_arg8": {
+          "slot_address": "0x7ffe230e33d8",
+          "raw_bytes_le_hex": "40d61023fe7f0000",
+          "pointer_value": "0x7ffe2310d640",
+          "slot_value": "nonzero"
+        },
+        "analysis_budget_arg9": {
+          "slot_address": "0x7ffe230e33e0",
+          "raw_bytes_le_hex": "d0211023fe7f0000",
+          "pointer_value": "0x7ffe231021d0",
+          "slot_value": "nonzero"
+        },
+        "evaluation_state_arg10": {
+          "slot_address": "0x7ffe230e33e8",
+          "raw_bytes_le_hex": "d83d0f23fe7f0000",
+          "pointer_value": "0x7ffe230f3dd8",
+          "slot_value": "nonzero"
+        }
+      }
+    },
+    {
+      "call_number": 5,
+      "role": "writer",
+      "arguments": {
+        "r8_thermo_active": {
+          "slot_address": null,
+          "raw_bytes_le_hex": null,
+          "pointer_value": "0x7ffe23102e90",
+          "slot_value": "nonzero"
+        },
+        "r9_thermo_surface": {
+          "slot_address": null,
+          "raw_bytes_le_hex": null,
+          "pointer_value": "0x7ffe23102e18",
+          "slot_value": "nonzero"
+        },
+        "target_rh_arg7": {
+          "slot_address": "0x7ffe230e33d0",
+          "raw_bytes_le_hex": "80ea1223fe7f0000",
+          "pointer_value": "0x7ffe2312ea80",
+          "slot_value": "nonzero"
+        },
+        "thermo_budget_arg8": {
+          "slot_address": "0x7ffe230e33d8",
+          "raw_bytes_le_hex": "40d61023fe7f0000",
+          "pointer_value": "0x7ffe2310d640",
+          "slot_value": "nonzero"
+        },
+        "analysis_budget_arg9": {
+          "slot_address": "0x7ffe230e33e0",
+          "raw_bytes_le_hex": "d0211023fe7f0000",
+          "pointer_value": "0x7ffe231021d0",
+          "slot_value": "nonzero"
+        },
+        "evaluation_state_arg10": {
+          "slot_address": "0x7ffe230e33e8",
+          "raw_bytes_le_hex": "d83d0f23fe7f0000",
+          "pointer_value": "0x7ffe230f3dd8",
+          "slot_value": "nonzero"
+        }
+      }
+    },
+    {
+      "call_number": 6,
+      "role": "writer",
+      "arguments": {
+        "r8_thermo_active": {
+          "slot_address": null,
+          "raw_bytes_le_hex": null,
+          "pointer_value": "0x7ffe23102e90",
+          "slot_value": "nonzero"
+        },
+        "r9_thermo_surface": {
+          "slot_address": null,
+          "raw_bytes_le_hex": null,
+          "pointer_value": "0x7ffe23102e18",
+          "slot_value": "nonzero"
+        },
+        "target_rh_arg7": {
+          "slot_address": "0x7ffe230e33d0",
+          "raw_bytes_le_hex": "80ea1223fe7f0000",
+          "pointer_value": "0x7ffe2312ea80",
+          "slot_value": "nonzero"
+        },
+        "thermo_budget_arg8": {
+          "slot_address": "0x7ffe230e33d8",
+          "raw_bytes_le_hex": "40d61023fe7f0000",
+          "pointer_value": "0x7ffe2310d640",
+          "slot_value": "nonzero"
+        },
+        "analysis_budget_arg9": {
+          "slot_address": "0x7ffe230e33e0",
+          "raw_bytes_le_hex": "d0211023fe7f0000",
+          "pointer_value": "0x7ffe231021d0",
+          "slot_value": "nonzero"
+        },
+        "evaluation_state_arg10": {
+          "slot_address": "0x7ffe230e33e8",
+          "raw_bytes_le_hex": "d83d0f23fe7f0000",
+          "pointer_value": "0x7ffe230f3dd8",
+          "slot_value": "nonzero"
+        }
+      }
+    }
+  ],
+  "optional_calls": {
+    "saturation_adjust_pressure_state": [],
+    "refresh_dry_air_mass_measure": []
+  },
+  "derive_arguments": [
+    {
+      "call_number": 1,
+      "role": "primary",
+      "config_raw_bytes": {
+        "cloud_fraction_threshold": "7b14ae47e17a843f",
+        "radar_wavelength_m": "9a9999999999b93f",
+        "minimum_dbz": "0000000000000000",
+        "maximum_dbz": "0000000000005440",
+        "reference_mass_concentration": "2d431cebe2361a3f",
+        "minimum_relative_fall_speed": "333333333333d33f",
+        "maximum_horizontal_substep": "000000000000e83f",
+        "maximum_transport_substeps": "40000000",
+        "precipitation_loading_efficiency": "7b14ae47e17ab43f",
+        "maximum_downdraft_ms": "0000000000000840",
+        "maximum_downdraft_innovation_ms": "0000000000000040",
+        "ledger_relative_tolerance": "956479e17ffda53d",
+        "ledger_absolute_tolerance": "82764968c2253c3d"
+      },
+      "selected_arguments": {
+        "thermo_active": {
+          "status": "readable",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "sample_count": 440,
+          "address": "0x8c9464e0",
+          "raw_bytes_le_hex": null
+        },
+        "thermo_surface": {
+          "status": "readable",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "sample_count": 440,
+          "address": "0x8cedb240",
+          "raw_bytes_le_hex": null
+        },
+        "target_rh": {
+          "status": "readable",
+          "bounds_i_j_k": null,
+          "sample_count": 1,
+          "address": "0x918680",
+          "raw_bytes_le_hex": "000000000000f03f"
+        }
+      },
+      "config_field_changed_vs_previous_same_role_call": {},
+      "selected_argument_raw_differences_vs_previous_same_role_call": {},
+      "evaluation_state": {
+        "presence": "DWARF_value_available",
+        "readability": "readable",
+        "reason": null,
+        "address": "0x7ffe23102048"
+      }
+    },
+    {
+      "call_number": 2,
+      "role": "primary",
+      "config_raw_bytes": {
+        "cloud_fraction_threshold": "7b14ae47e17a843f",
+        "radar_wavelength_m": "9a9999999999b93f",
+        "minimum_dbz": "0000000000000000",
+        "maximum_dbz": "0000000000005440",
+        "reference_mass_concentration": "2d431cebe2361a3f",
+        "minimum_relative_fall_speed": "333333333333d33f",
+        "maximum_horizontal_substep": "000000000000e83f",
+        "maximum_transport_substeps": "40000000",
+        "precipitation_loading_efficiency": "7b14ae47e17ab43f",
+        "maximum_downdraft_ms": "0000000000000840",
+        "maximum_downdraft_innovation_ms": "0000000000000040",
+        "ledger_relative_tolerance": "956479e17ffda53d",
+        "ledger_absolute_tolerance": "82764968c2253c3d"
+      },
+      "selected_arguments": {
+        "thermo_active": {
+          "status": "readable",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "sample_count": 440,
+          "address": "0x8c9464e0",
+          "raw_bytes_le_hex": null
+        },
+        "thermo_surface": {
+          "status": "readable",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "sample_count": 440,
+          "address": "0x8cedb240",
+          "raw_bytes_le_hex": null
+        },
+        "target_rh": {
+          "status": "readable",
+          "bounds_i_j_k": null,
+          "sample_count": 1,
+          "address": "0x918680",
+          "raw_bytes_le_hex": "000000000000f03f"
+        }
+      },
+      "config_field_changed_vs_previous_same_role_call": {
+        "cloud_fraction_threshold": false,
+        "radar_wavelength_m": false,
+        "minimum_dbz": false,
+        "maximum_dbz": false,
+        "reference_mass_concentration": false,
+        "minimum_relative_fall_speed": false,
+        "maximum_horizontal_substep": false,
+        "maximum_transport_substeps": false,
+        "precipitation_loading_efficiency": false,
+        "maximum_downdraft_ms": false,
+        "maximum_downdraft_innovation_ms": false,
+        "ledger_relative_tolerance": false,
+        "ledger_absolute_tolerance": false
+      },
+      "selected_argument_raw_differences_vs_previous_same_role_call": {
+        "thermo_active": {
+          "compared_samples": 440,
+          "raw_byte_mismatches": 0
+        },
+        "thermo_surface": {
+          "compared_samples": 440,
+          "raw_byte_mismatches": 0
+        },
+        "target_rh": {
+          "compared_samples": 1,
+          "raw_byte_mismatches": 0
+        }
+      },
+      "evaluation_state": {
+        "presence": "DWARF_value_available",
+        "readability": "readable",
+        "reason": null,
+        "address": "0x7ffe23102048"
+      }
+    },
+    {
+      "call_number": 3,
+      "role": "primary",
+      "config_raw_bytes": {
+        "cloud_fraction_threshold": "7b14ae47e17a843f",
+        "radar_wavelength_m": "9a9999999999b93f",
+        "minimum_dbz": "0000000000000000",
+        "maximum_dbz": "0000000000005440",
+        "reference_mass_concentration": "2d431cebe2361a3f",
+        "minimum_relative_fall_speed": "333333333333d33f",
+        "maximum_horizontal_substep": "000000000000e83f",
+        "maximum_transport_substeps": "40000000",
+        "precipitation_loading_efficiency": "7b14ae47e17ab43f",
+        "maximum_downdraft_ms": "0000000000000840",
+        "maximum_downdraft_innovation_ms": "0000000000000040",
+        "ledger_relative_tolerance": "956479e17ffda53d",
+        "ledger_absolute_tolerance": "82764968c2253c3d"
+      },
+      "selected_arguments": {
+        "thermo_active": {
+          "status": "readable",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "sample_count": 440,
+          "address": "0x8c9464e0",
+          "raw_bytes_le_hex": null
+        },
+        "thermo_surface": {
+          "status": "readable",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "sample_count": 440,
+          "address": "0x8cedb240",
+          "raw_bytes_le_hex": null
+        },
+        "target_rh": {
+          "status": "readable",
+          "bounds_i_j_k": null,
+          "sample_count": 1,
+          "address": "0x918680",
+          "raw_bytes_le_hex": "000000000000f03f"
+        }
+      },
+      "config_field_changed_vs_previous_same_role_call": {
+        "cloud_fraction_threshold": false,
+        "radar_wavelength_m": false,
+        "minimum_dbz": false,
+        "maximum_dbz": false,
+        "reference_mass_concentration": false,
+        "minimum_relative_fall_speed": false,
+        "maximum_horizontal_substep": false,
+        "maximum_transport_substeps": false,
+        "precipitation_loading_efficiency": false,
+        "maximum_downdraft_ms": false,
+        "maximum_downdraft_innovation_ms": false,
+        "ledger_relative_tolerance": false,
+        "ledger_absolute_tolerance": false
+      },
+      "selected_argument_raw_differences_vs_previous_same_role_call": {
+        "thermo_active": {
+          "compared_samples": 440,
+          "raw_byte_mismatches": 0
+        },
+        "thermo_surface": {
+          "compared_samples": 440,
+          "raw_byte_mismatches": 0
+        },
+        "target_rh": {
+          "compared_samples": 1,
+          "raw_byte_mismatches": 0
+        }
+      },
+      "evaluation_state": {
+        "presence": "DWARF_value_available",
+        "readability": "readable",
+        "reason": null,
+        "address": "0x7ffe23102048"
+      }
+    },
+    {
+      "call_number": 4,
+      "role": "writer",
+      "config_raw_bytes": {
+        "cloud_fraction_threshold": "7b14ae47e17a843f",
+        "radar_wavelength_m": "9a9999999999b93f",
+        "minimum_dbz": "0000000000000000",
+        "maximum_dbz": "0000000000005440",
+        "reference_mass_concentration": "2d431cebe2361a3f",
+        "minimum_relative_fall_speed": "333333333333d33f",
+        "maximum_horizontal_substep": "000000000000e83f",
+        "maximum_transport_substeps": "40000000",
+        "precipitation_loading_efficiency": "7b14ae47e17ab43f",
+        "maximum_downdraft_ms": "0000000000000840",
+        "maximum_downdraft_innovation_ms": "0000000000000040",
+        "ledger_relative_tolerance": "956479e17ffda53d",
+        "ledger_absolute_tolerance": "82764968c2253c3d"
+      },
+      "selected_arguments": {
+        "thermo_active": {
+          "status": "readable",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "sample_count": 440,
+          "address": "0xd4c1d540",
+          "raw_bytes_le_hex": null
+        },
+        "thermo_surface": {
+          "status": "readable",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "sample_count": 440,
+          "address": "0xd51b22a0",
+          "raw_bytes_le_hex": null
+        },
+        "target_rh": {
+          "status": "readable",
+          "bounds_i_j_k": null,
+          "sample_count": 1,
+          "address": "0x7ffe2312ea80",
+          "raw_bytes_le_hex": "000000000000f03f"
+        }
+      },
+      "config_field_changed_vs_previous_same_role_call": {},
+      "selected_argument_raw_differences_vs_previous_same_role_call": {},
+      "evaluation_state": {
+        "presence": "DWARF_value_available",
+        "readability": "readable",
+        "reason": null,
+        "address": "0x7ffe230f3dd8"
+      }
+    },
+    {
+      "call_number": 5,
+      "role": "writer",
+      "config_raw_bytes": {
+        "cloud_fraction_threshold": "7b14ae47e17a843f",
+        "radar_wavelength_m": "9a9999999999b93f",
+        "minimum_dbz": "0000000000000000",
+        "maximum_dbz": "0000000000005440",
+        "reference_mass_concentration": "2d431cebe2361a3f",
+        "minimum_relative_fall_speed": "333333333333d33f",
+        "maximum_horizontal_substep": "000000000000e83f",
+        "maximum_transport_substeps": "40000000",
+        "precipitation_loading_efficiency": "7b14ae47e17ab43f",
+        "maximum_downdraft_ms": "0000000000000840",
+        "maximum_downdraft_innovation_ms": "0000000000000040",
+        "ledger_relative_tolerance": "956479e17ffda53d",
+        "ledger_absolute_tolerance": "82764968c2253c3d"
+      },
+      "selected_arguments": {
+        "thermo_active": {
+          "status": "readable",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "sample_count": 440,
+          "address": "0xd4c1d540",
+          "raw_bytes_le_hex": null
+        },
+        "thermo_surface": {
+          "status": "readable",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "sample_count": 440,
+          "address": "0xd51b22a0",
+          "raw_bytes_le_hex": null
+        },
+        "target_rh": {
+          "status": "readable",
+          "bounds_i_j_k": null,
+          "sample_count": 1,
+          "address": "0x7ffe2312ea80",
+          "raw_bytes_le_hex": "000000000000f03f"
+        }
+      },
+      "config_field_changed_vs_previous_same_role_call": {
+        "cloud_fraction_threshold": false,
+        "radar_wavelength_m": false,
+        "minimum_dbz": false,
+        "maximum_dbz": false,
+        "reference_mass_concentration": false,
+        "minimum_relative_fall_speed": false,
+        "maximum_horizontal_substep": false,
+        "maximum_transport_substeps": false,
+        "precipitation_loading_efficiency": false,
+        "maximum_downdraft_ms": false,
+        "maximum_downdraft_innovation_ms": false,
+        "ledger_relative_tolerance": false,
+        "ledger_absolute_tolerance": false
+      },
+      "selected_argument_raw_differences_vs_previous_same_role_call": {
+        "thermo_active": {
+          "compared_samples": 440,
+          "raw_byte_mismatches": 0
+        },
+        "thermo_surface": {
+          "compared_samples": 440,
+          "raw_byte_mismatches": 0
+        },
+        "target_rh": {
+          "compared_samples": 1,
+          "raw_byte_mismatches": 0
+        }
+      },
+      "evaluation_state": {
+        "presence": "DWARF_value_available",
+        "readability": "readable",
+        "reason": null,
+        "address": "0x7ffe230f3dd8"
+      }
+    },
+    {
+      "call_number": 6,
+      "role": "writer",
+      "config_raw_bytes": {
+        "cloud_fraction_threshold": "7b14ae47e17a843f",
+        "radar_wavelength_m": "9a9999999999b93f",
+        "minimum_dbz": "0000000000000000",
+        "maximum_dbz": "0000000000005440",
+        "reference_mass_concentration": "2d431cebe2361a3f",
+        "minimum_relative_fall_speed": "333333333333d33f",
+        "maximum_horizontal_substep": "000000000000e83f",
+        "maximum_transport_substeps": "40000000",
+        "precipitation_loading_efficiency": "7b14ae47e17ab43f",
+        "maximum_downdraft_ms": "0000000000000840",
+        "maximum_downdraft_innovation_ms": "0000000000000040",
+        "ledger_relative_tolerance": "956479e17ffda53d",
+        "ledger_absolute_tolerance": "82764968c2253c3d"
+      },
+      "selected_arguments": {
+        "thermo_active": {
+          "status": "readable",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "sample_count": 440,
+          "address": "0xd4c1d540",
+          "raw_bytes_le_hex": null
+        },
+        "thermo_surface": {
+          "status": "readable",
+          "bounds_i_j_k": [
+            [
+              1,
+              235
+            ],
+            [
+              1,
+              283
+            ],
+            [
+              1,
+              22
+            ]
+          ],
+          "sample_count": 440,
+          "address": "0xd51b22a0",
+          "raw_bytes_le_hex": null
+        },
+        "target_rh": {
+          "status": "readable",
+          "bounds_i_j_k": null,
+          "sample_count": 1,
+          "address": "0x7ffe2312ea80",
+          "raw_bytes_le_hex": "000000000000f03f"
+        }
+      },
+      "config_field_changed_vs_previous_same_role_call": {
+        "cloud_fraction_threshold": false,
+        "radar_wavelength_m": false,
+        "minimum_dbz": false,
+        "maximum_dbz": false,
+        "reference_mass_concentration": false,
+        "minimum_relative_fall_speed": false,
+        "maximum_horizontal_substep": false,
+        "maximum_transport_substeps": false,
+        "precipitation_loading_efficiency": false,
+        "maximum_downdraft_ms": false,
+        "maximum_downdraft_innovation_ms": false,
+        "ledger_relative_tolerance": false,
+        "ledger_absolute_tolerance": false
+      },
+      "selected_argument_raw_differences_vs_previous_same_role_call": {
+        "thermo_active": {
+          "compared_samples": 440,
+          "raw_byte_mismatches": 0
+        },
+        "thermo_surface": {
+          "compared_samples": 440,
+          "raw_byte_mismatches": 0
+        },
+        "target_rh": {
+          "compared_samples": 1,
+          "raw_byte_mismatches": 0
+        }
+      },
+      "evaluation_state": {
+        "presence": "DWARF_value_available",
+        "readability": "readable",
+        "reason": null,
+        "address": "0x7ffe230f3dd8"
+      }
+    }
+  ],
+  "evaluation_state_differences": {
+    "eval2_vs_eval1": {
+      "vapor": 153,
+      "cloud_water": 0,
+      "cloud_ice": 0,
+      "rain": 0,
+      "snow": 0,
+      "graupel": 0,
+      "temperature": 153,
+      "pressure": 0
+    },
+    "eval3_vs_eval1": {
+      "vapor": 153,
+      "cloud_water": 0,
+      "cloud_ice": 0,
+      "rain": 0,
+      "snow": 0,
+      "graupel": 0,
+      "temperature": 153,
+      "pressure": 0
+    },
+    "eval3_vs_eval2": {
+      "vapor": 8,
+      "cloud_water": 0,
+      "cloud_ice": 0,
+      "rain": 0,
+      "snow": 0,
+      "graupel": 0,
+      "temperature": 0,
+      "pressure": 0
+    },
+    "eval1_vs_derive_entry1": {
+      "vapor": 0,
+      "cloud_water": 0,
+      "cloud_ice": 0,
+      "rain": 0,
+      "snow": 0,
+      "graupel": 0,
+      "temperature": 0,
+      "pressure": 0
+    },
+    "eval2_vs_derive_return1": {
+      "vapor": 0,
+      "cloud_water": 153,
+      "cloud_ice": 0,
+      "rain": 154,
+      "snow": 36,
+      "graupel": 0,
+      "temperature": 0,
+      "pressure": 0
+    },
+    "eval3_vs_derive_return2": {
+      "vapor": 0,
+      "cloud_water": 153,
+      "cloud_ice": 0,
+      "rain": 154,
+      "snow": 36,
+      "graupel": 0,
+      "temperature": 0,
+      "pressure": 0
+    }
+  },
+  "state_endpoints": {
+    "derive_entry_to_return": {
+      "vapor": 153,
+      "cloud_water": 153,
+      "cloud_ice": 0,
+      "rain": 154,
+      "snow": 36,
+      "graupel": 0,
+      "temperature": 153,
+      "pressure": 0
+    },
+    "primary_to_writer_return": {
+      "vapor": 0,
+      "cloud_water": 0,
+      "cloud_ice": 0,
+      "rain": 0,
+      "snow": 0,
+      "graupel": 0,
+      "temperature": 0,
+      "pressure": 0
+    }
+  },
+  "outer_capture_comparison": {
+    "pipeline_entry_state_in": {
+      "vapor": 0,
+      "cloud_water": 0,
+      "cloud_ice": 0,
+      "rain": 0,
+      "snow": 0,
+      "graupel": 0,
+      "temperature": 0,
+      "pressure": 0
+    },
+    "pipeline_return_candidate_out": {
+      "vapor": 0,
+      "cloud_water": 0,
+      "cloud_ice": 0,
+      "rain": 0,
+      "snow": 0,
+      "graupel": 0,
+      "temperature": 0,
+      "pressure": 0
+    }
+  }
+}

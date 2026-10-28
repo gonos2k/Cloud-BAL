@@ -1,0 +1,155 @@
+{
+  "status": "PASS_SCOPED_REPLAY_AND_ANALYSIS",
+  "base_commit": "0ad6367d5c3b6e26f2443f1ed1bf414e55f26341",
+  "production_fortran_changed": false,
+  "forecast_run": false,
+  "native_rebuilt": false,
+  "tests": {
+    "focused": {
+      "passed": 51,
+      "failed": 0,
+      "scope": "12 new inner-capture + 8 boundary-event + 3 WPS + 11 transitions + 17 scores"
+    },
+    "maintained_file_runner": {
+      "passed": 12,
+      "skipped": 0
+    },
+    "portable_registration": {
+      "registered_python_modules": 316,
+      "selected_portable_python_modules": 214,
+      "new_test_registered": true
+    },
+    "full_portable_run": false
+  },
+  "runtime": {
+    "arms": [
+      "HYDRO",
+      "LIQUID_RADAR_RH1"
+    ],
+    "model_exit_codes": [
+      0,
+      0
+    ],
+    "byte_identical_wps_and_shadow_outputs": 4,
+    "unchanged_input_files": 114,
+    "pinned_runtime_files": 41,
+    "profile": "tests/intel_toolchain.sh"
+  },
+  "analysis": {
+    "final_summaries_and_csv_reproduced": true,
+    "inner_scope": "first HYDRO derive only",
+    "liquid_inner_calls": "NOT_INSTRUMENTED",
+    "sample_points": 20,
+    "stored_levels": 22,
+    "mass_budget_validation": "OPEN",
+    "forecast_improvement": "NOT_EVALUATED"
+  },
+  "review": {
+    "independent_raw_capture": "independent_runtime_review.json",
+    "code_review": "team_code_review.md",
+    "remaining_blockers": []
+  },
+  "whitespace_check": "PASS with cr-at-eol for standard CSV CRLF; other whitespace checks retained",
+  "files": {
+    "docs/CP02_INNER_SPECIES_20261028.md": {
+      "sha256": "50d96f909fa9fb42068f40fdef851c25815b19b4d7b590e04af4e66c5bcfd5da",
+      "size_bytes": 8385
+    },
+    "docs/CURRENT_RESEARCH_STATUS.md": {
+      "sha256": "46b432d417da109216f755532cab9270cc0e77c3a662145b05b70606e3c1f8c8",
+      "size_bytes": 5117
+    },
+    "docs/evidence/cp02_inner_capture_20261028/analysis/hydro_profiles.csv": {
+      "sha256": "70c42bd3c83b9488759f43565918a0ebf08078dcb4ceb13dc1e9b040e97012cb",
+      "size_bytes": 3603
+    },
+    "docs/evidence/cp02_inner_capture_20261028/analysis/hydro_summary.json": {
+      "sha256": "5fcba82d365308de2fcaa88777f0af1de5f25a1d16e8a390dc56b2e5c7b6f266",
+      "size_bytes": 64318
+    },
+    "docs/evidence/cp02_inner_capture_20261028/analysis/liquid_profiles.csv": {
+      "sha256": "787a722505948d56bf584576cded17f929b7bd2f53a35289d496af12bc60af79",
+      "size_bytes": 3305
+    },
+    "docs/evidence/cp02_inner_capture_20261028/analysis/liquid_summary.json": {
+      "sha256": "03907c357767f1d73a2681bf5bb88454e80b68d01109fc73aa705a43f692cbce",
+      "size_bytes": 101453
+    },
+    "docs/evidence/cp02_inner_capture_20261028/analyze_inner.py": {
+      "sha256": "cb6f13aa0fb4d5d694ddf239683f0f9cadd06dc3da64cbdbafbd59c058cd3e83",
+      "size_bytes": 34483
+    },
+    "docs/evidence/cp02_inner_capture_20261028/binary_intervals.asm.txt": {
+      "sha256": "637badef1ab09aacdd8d4eee99b8a637e61c2bf27b501eeb233b4408d05bf1a9",
+      "size_bytes": 1426
+    },
+    "docs/evidence/cp02_inner_capture_20261028/binary_intervals.json": {
+      "sha256": "d8f88f21cb7ed366288eb6fcd3402f7157fea5066f3b7405042dbc2baaec9a0f",
+      "size_bytes": 8618
+    },
+    "docs/evidence/cp02_inner_capture_20261028/capture_inner.py": {
+      "sha256": "2b348436d6f413ca9dd8aa490baca1510eeda20dfb2938701b3ddaf3d9c9b5e9",
+      "size_bytes": 44905
+    },
+    "docs/evidence/cp02_inner_capture_20261028/dwarf_formals.json": {
+      "sha256": "91582082276d3f1a2c9676438105e490f908ce5a5ec5a85d0dc68f73a8e2f0ad",
+      "size_bytes": 11159
+    },
+    "docs/evidence/cp02_inner_capture_20261028/focused_tests.txt": {
+      "sha256": "d7c7970b13ad47682d71b46cfd5accbae18eb4103bc3164f27e4fe85cf5bd64b",
+      "size_bytes": 113
+    },
+    "docs/evidence/cp02_inner_capture_20261028/hydro_capture.json.gz": {
+      "sha256": "fab88e15fbd80c2f442e033298d4eca6fbb0bcf9f41a7bff3740e75696832a11",
+      "size_bytes": 508420
+    },
+    "docs/evidence/cp02_inner_capture_20261028/hydro_gdb.log.gz": {
+      "sha256": "bbe8ed921da2772bf02e81ff02aa3f6b3ca84ccfd166f165b6e92b2aeae83e74",
+      "size_bytes": 3207
+    },
+    "docs/evidence/cp02_inner_capture_20261028/independent_runtime_review.json": {
+      "sha256": "89d61a3a85880906e81051fd1b13fc1a4ce317856769e734d0db98cea98749fb",
+      "size_bytes": 21453
+    },
+    "docs/evidence/cp02_inner_capture_20261028/kg/apply_readback_receipt.json": {
+      "sha256": "d74411fb9b28bb4a7aaadc167c6fa8c3b3349ecf2725214a46223b6ad6e517b4",
+      "size_bytes": 3551
+    },
+    "docs/evidence/cp02_inner_capture_20261028/kg/apply_receipt.json": {
+      "sha256": "96e24b64253a0e22a6653dbc518161b889aa5da25698edc45657b1203a8b3cf0",
+      "size_bytes": 1677
+    },
+    "docs/evidence/cp02_inner_capture_20261028/kg/root_go_receipt.json": {
+      "sha256": "4da48e848a429f1214794343035c64115031cfc619e0a76a2fa504187da00769",
+      "size_bytes": 381
+    },
+    "docs/evidence/cp02_inner_capture_20261028/kg/stage_receipt.json": {
+      "sha256": "d1d9bebe6d6e845d22380db96389fc1659bf4db164d65a4f73d1aa8430002f2b",
+      "size_bytes": 14339
+    },
+    "docs/evidence/cp02_inner_capture_20261028/liquid_capture.json.gz": {
+      "sha256": "33a80872e199b9fe2e0a912ce420db65b8619f009234aabfa26a63ed1dab860d",
+      "size_bytes": 871790
+    },
+    "docs/evidence/cp02_inner_capture_20261028/liquid_gdb.log.gz": {
+      "sha256": "59a51ac3a881142b34cd48ef198467c58ab9c65da61aa41f1351eccde7a84f50",
+      "size_bytes": 3251
+    },
+    "docs/evidence/cp02_inner_capture_20261028/replay_receipt.json": {
+      "sha256": "93bd68a5b57793a754c6c4e9c762ee8f21ffe2dc1777fc449d27777d429ea3e1",
+      "size_bytes": 20703
+    },
+    "docs/evidence/cp02_inner_capture_20261028/team_code_review.md": {
+      "sha256": "4834bb50aad1077dcacc1a00b377cf6e159ffffd8fa026d39272af279687326c",
+      "size_bytes": 2632
+    },
+    "docs/evidence/cp02_inner_capture_20261028/tier_test.txt": {
+      "sha256": "7582389a1da994035067ec5735fcbd976a9e1f0e328aed34d4bd90d16001e78c",
+      "size_bytes": 172
+    },
+    "tests/test_cp02_inner_capture.py": {
+      "sha256": "1949050ad19b95bcef8a13b9c7d3682f4060a10a0acef4b955f3e7d6fc7f2b83",
+      "size_bytes": 6633
+    }
+  }
+}
