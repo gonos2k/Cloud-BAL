@@ -1,0 +1,60 @@
+{
+  "search_date": "2026-10-28",
+  "target_sha256": "f7d640bbee19a128af6556f16e346e9574d1845997d77eab48e844109f14e17d",
+  "result": "not_recovered",
+  "match_path": null,
+  "search_scope": [
+    {
+      "scope": "Exact-name source files",
+      "paths": [
+        "Cloud-BAL/scratch",
+        "klaps-v5.0_",
+        "cloudbal-cp06a-pr-work"
+      ],
+      "method": "Recursive file-name match for columnphysics, column_physics, or column-physics, then SHA256 over file bytes",
+      "candidate_count": 1117,
+      "exact_matches": 0
+    },
+    {
+      "scope": "Renamed Fortran/source backups in plausible CP01/CP02/upstream build directories",
+      "path": "Cloud-BAL/scratch",
+      "depth_limit": 7,
+      "directory_filter": "path component beginning cp01, cp02, or upstream*build",
+      "extensions": [".f90", ".f", ".for", ".f95", ".f90.orig", ".f90.original", ".f90.bak", ".f90.old", ".source"],
+      "candidate_count": 27468,
+      "exact_matches": 0
+    },
+    {
+      "scope": "Compressed files and archives under the same bounded CP01/CP02/upstream build paths",
+      "path": "Cloud-BAL/scratch",
+      "depth_limit": 7,
+      "candidate_count": 63,
+      "findings": "The archive set consists of WRF host/test bundles plus two CP02 source.tar snapshots. Listing both source.tar archives found no Cloud-BAL or column-physics paths. No source archive member was extracted.",
+      "exact_matches": 0
+    },
+    {
+      "scope": "Cloud-BAL Git history for src/common/cloud_bal_column_physics.f90",
+      "method": "SHA256 of the file at every commit returned by git log --all",
+      "historical_versions": 17,
+      "exact_matches": 0
+    },
+    {
+      "scope": "Cloud-BAL unreachable Git objects",
+      "method": "Read-only git fsck --full --no-reflogs --unreachable, then SHA256 of each unreachable blob",
+      "unreachable_blobs": 183,
+      "exact_matches": 0,
+      "repository_mutation": false
+    }
+  ],
+  "reference_evidence": {
+    "path": "Cloud-BAL/scratch/cp02_cloud_omega_baseline_20260911/RED_REVIEW.md",
+    "observation": "It records f7d640... as the then-current source hash (in a provenance comparison), not as a retained source copy.",
+    "supporting_file": "Cloud-BAL/scratch/cp02_cloud_omega_baseline_20260911/SOURCE_DRIFT.json"
+  },
+  "current_source_sha256": "7c91c3edf35bd05a32e862f7268405e21f9324132ba2756a33f034722b7148f8",
+  "limitations": [
+    "No general full-filesystem sweep was performed.",
+    "The compressed/archive pass was restricted to the bounded CP01/CP02/upstream build paths; only the two named source.tar archives were inspected for Cloud-BAL source paths.",
+    "No exact source bytes were found, so /var/tmp/cp02-recovered-column.f90 was not created."
+  ]
+}

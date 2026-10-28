@@ -1,0 +1,36 @@
+{
+  "schema": "cp02-analyzer-negative-checks-v1",
+  "changed_primary_candidate_float_and_raw_bytes": {
+    "exit_code": 1,
+    "stdout": "{\"status\": \"ENDPOINT_MISMATCH\", \"profiles\": 4224, \"summary\": \"/var/tmp/cp02-boundary-analyzer-checks-20261028/changed_endpoint_output/summary.json\"}",
+    "stderr_tail": [],
+    "reported_status": "ENDPOINT_MISMATCH",
+    "rejected_endpoint_mismatch": true
+  },
+  "wrong_arm": {
+    "exit_code": 1,
+    "stdout": "",
+    "stderr_tail": [
+      "ValueError: HYDRO: capture arm is 'NOT_HYDRO'"
+    ],
+    "rejected": true
+  },
+  "wrong_derive_count": {
+    "exit_code": 1,
+    "stdout": "",
+    "stderr_tail": [
+      "ValueError: HYDRO: expected 2 balanced derive calls"
+    ],
+    "rejected": true
+  },
+  "existing_output_directory": {
+    "exit_code": 1,
+    "stdout": "",
+    "stderr_tail": [
+      "FileExistsError: output directory already exists: /var/tmp/cp02-boundary-analyzer-checks-20261028/existing_output"
+    ],
+    "sentinel_unchanged": true,
+    "rejected": true
+  },
+  "all_checks_passed": true
+}

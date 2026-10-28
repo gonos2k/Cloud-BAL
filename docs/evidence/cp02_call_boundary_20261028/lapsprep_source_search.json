@@ -1,0 +1,72 @@
+{
+  "date": "2026-10-28",
+  "target": {
+    "path": "src/lapsprep/lapsprep.f90",
+    "sha256": "f69735e8a4e006db92930e3119b594fb8a9d5d7fbf41673a5e60ab73ae749579"
+  },
+  "result": "NO_EXACT_SOURCE_RECOVERED_IN_BOUNDED_SEARCH",
+  "source_recovered_path": null,
+  "search_roots": [
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/klaps-v5.0_"
+  ],
+  "prior_evidence": {
+    "lineage": "/var/tmp/cloudbal-cp02-call-boundary/docs/evidence/cp02_initial_species_20261027/historical_lineage.json",
+    "search": "/var/tmp/cloudbal-cp02-call-boundary/docs/evidence/wps_off_readback_20261028/source_search.json",
+    "prior_exact_basename_candidates": 61,
+    "prior_current_git_file_revisions": 8,
+    "prior_exact_matches": 0
+  },
+  "additional_searches": [
+    {
+      "method": "walk and SHA-256 every Fortran source-extension candidate, including arbitrary basenames",
+      "extensions": [".f", ".for", ".f90", ".f95", ".f03", ".f08"],
+      "candidate_counts": {
+        "Cloud-BAL/scratch": 42854,
+        "klaps-v5.0_": 1132
+      },
+      "exact_matches": 0,
+      "read_errors": 0
+    },
+    {
+      "method": "walk and SHA-256 likely named source backup/text candidates in a source-sized range",
+      "filename_suffixes": [".bak", ".old", ".orig", ".save", ".backup", ".rej", ".swp", ".swo", ".copy", ".source", ".src", ".f90~", ".f~", ".for~", ".txt"],
+      "size_bytes_inclusive": [15000, 180000],
+      "candidate_count": 559,
+      "exact_matches": 0,
+      "read_errors": 0
+    },
+    {
+      "method": "list archive members and hash uncompressed members whose path contains lapsprep.f90",
+      "archive_types": [".tar", ".tar.gz", ".tgz", ".zip", ".tar.bz2", ".tar.xz"],
+      "archive_count": 108,
+      "matching_member_paths": 0,
+      "exact_matches": 0,
+      "archive_errors": 0
+    },
+    {
+      "method": "inspect manifests and build/copy references around upstream LAPSPREP builds",
+      "observations": [
+        "Pinned input manifest exists at Cloud-BAL/scratch/upstream_lapsprep_build.HjBepF/inputs.sha256, but source file is absent from that build tree.",
+        "Source references found in build scripts/manifests did not expose a retained source backup whose bytes match the target digest."
+      ],
+      "exact_matches": 0
+    }
+  ],
+  "source_copy_and_debug_note": "The 108 archive scan was bounded to member paths containing lapsprep.f90. No matching source-named archive member was present. No attempt was made to infer source bytes from object/executable debug sections; debug metadata can identify source paths/lines but is not itself the source file.",
+  "limitations": [
+    "Roots are limited to Cloud-BAL/scratch and klaps-v5.0_; no unrestricted filesystem sweep.",
+    "The archive-member check filters member names containing lapsprep.f90 and would miss a renamed source inside an archive.",
+    "The backup-extension pass is bounded by the listed suffixes and file size; arbitrarily renamed copies with unrelated suffixes or source hidden in archives under unrelated member names can remain undiscovered.",
+    "Prior exact-basename search found 61 candidates; this pass adds 43,986 Fortran-source files and 559 named backup/text candidates, with possible overlap between passes.",
+    "This negative result does not establish that the source never existed or that the pinned executable was built from the current maintained source."
+  ],
+  "reproduction": {
+    "fortran_hash_scan": "Python os.walk over both roots; SHA-256 each regular file with the listed Fortran suffixes; target digest compared byte-for-byte.",
+    "backup_scan": "Python os.walk over both roots; listed backup/text filename suffixes and inclusive 15,000–180,000 byte size bound; SHA-256 each candidate.",
+    "archive_scan": "Python tarfile/zipfile walks 108 tar/zip archives; hashes uncompressed regular members with member path containing lapsprep.f90.",
+    "fortran_scan_counts": {"Cloud-BAL/scratch": 42854, "klaps-v5.0_": 1132},
+    "backup_scan_count": 559,
+    "archive_count": 108
+  }
+}
