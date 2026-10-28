@@ -1,0 +1,47 @@
+{
+  "bad_stage": {
+    "command": [
+      "/var/tmp/pr108_portable_env_20261026/bin/python",
+      "/var/tmp/cloudbal-cp02-event-contract/docs/evidence/cp02_call_boundary_20261028/analyze_boundaries.py",
+      "--hydro-capture",
+      "/var/tmp/cp02-events-validation-20261028/bad_stage.json",
+      "--liquid-capture",
+      "/var/tmp/cloudbal-cp02-event-contract/docs/evidence/cp02_call_boundary_20261028/liquid_capture.json.gz",
+      "--points-csv",
+      "/var/tmp/cloudbal-cp02-event-contract/docs/evidence/cp02_initial_species_20261027/final/shadow/shadow_species_profiles.csv",
+      "--output-dir",
+      "/var/tmp/cp02-events-validation-20261028/fixed_bad_stage"
+    ],
+    "exit_code": 1,
+    "stdout": "",
+    "stderr": "analysis failed closed: HYDRO: expected exactly four known event stages\nTraceback (most recent call last):\n  File \"/var/tmp/cloudbal-cp02-event-contract/docs/evidence/cp02_call_boundary_20261028/analyze_boundaries.py\", line 553, in <module>\n    sys.exit(main())\n             ^^^^^^\n  File \"/var/tmp/cloudbal-cp02-event-contract/docs/evidence/cp02_call_boundary_20261028/analyze_boundaries.py\", line 417, in main\n    capture = validate_capture(capture_path, arm)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/tmp/cloudbal-cp02-event-contract/docs/evidence/cp02_call_boundary_20261028/analyze_boundaries.py\", line 144, in validate_capture\n    raise ValueError(f\"{expected_arm}: expected exactly four known event stages\")\nValueError: HYDRO: expected exactly four known event stages\n",
+    "summary_exists": false,
+    "profiles_exists": false
+  },
+  "normal": {
+    "command": [
+      "/var/tmp/pr108_portable_env_20261026/bin/python",
+      "/var/tmp/cloudbal-cp02-event-contract/docs/evidence/cp02_call_boundary_20261028/analyze_boundaries.py",
+      "--hydro-capture",
+      "/var/tmp/cloudbal-cp02-event-contract/docs/evidence/cp02_call_boundary_20261028/hydro_capture.json.gz",
+      "--liquid-capture",
+      "/var/tmp/cloudbal-cp02-event-contract/docs/evidence/cp02_call_boundary_20261028/liquid_capture.json.gz",
+      "--points-csv",
+      "/var/tmp/cloudbal-cp02-event-contract/docs/evidence/cp02_initial_species_20261027/final/shadow/shadow_species_profiles.csv",
+      "--output-dir",
+      "/var/tmp/cp02-events-validation-20261028/fixed_normal"
+    ],
+    "exit_code": 0,
+    "stdout": "{\"status\": \"PASS_SCOPED_AVAILABLE_ENDPOINTS\", \"profiles\": 4224, \"summary\": \"/var/tmp/cp02-events-validation-20261028/fixed_normal/summary.json\"}\n",
+    "stderr": "",
+    "summary_exists": true,
+    "profiles_exists": true,
+    "profiles_byte_equal": true,
+    "summary_equal_except_input_identity_and_profile_path": true,
+    "profile_rows": 4224,
+    "status": "PASS_SCOPED_AVAILABLE_ENDPOINTS"
+  },
+  "analyzer_sha256": "83e77fb4981884eb4f85274b8e31c18cfd36c4cf443ee88d4efdc49536b26b3f",
+  "actual_archive_netcdf_used": true,
+  "expected_hashes_modified": false
+}

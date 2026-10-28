@@ -9,7 +9,7 @@ import json
 import math
 import struct
 import sys
-from collections import defaultdict
+from collections import Counter, defaultdict
 from pathlib import Path
 
 import netCDF4
@@ -47,6 +47,20 @@ FIELDS = (
 )
 MIXING_RATIO_FIELDS = {"vapor", "cloud_water", "cloud_ice", "rain", "snow", "graupel"}
 CANONICAL_POINTS = {}
+PIPELINE_CALLS = {("primary", 1), ("replay", 2)}
+DERIVE_CALLS = {
+    "HYDRO": {("primary", 1), ("replay", 2)},
+    "LIQUID_RADAR_RH1": {
+        ("primary", 1), ("primary", 2), ("primary", 3),
+        ("replay", 4), ("replay", 5), ("replay", 6),
+    },
+}
+STAGES = {
+    "pipeline_entry_state_in",
+    "pipeline_return_candidate_out",
+    "derive_entry_state_in",
+    "derive_return_state_out",
+}
 
 
 def sha256(path):
@@ -125,6 +139,17 @@ def validate_capture(path, expected_arm):
     expected_derives = 2 if expected_arm == "HYDRO" else 6
     if counts["derive_entries"] != expected_derives or counts["derive_returns"] != expected_derives:
         raise ValueError(f"{expected_arm}: expected {expected_derives} balanced derive calls")
+    stage_counts = Counter(record.get("stage") for record in capture.get("records", []))
+    if set(stage_counts) != STAGES:
+        raise ValueError(f"{expected_arm}: expected exactly four known event stages")
+    declared_counts = {
+        "pipeline_entry_state_in": counts["pipeline_entries"],
+        "pipeline_return_candidate_out": counts["pipeline_returns"],
+        "derive_entry_state_in": counts["derive_entries"],
+        "derive_return_state_out": counts["derive_returns"],
+    }
+    if any(stage_counts[stage] != count for stage, count in declared_counts.items()):
+        raise ValueError(f"{expected_arm}: observed stage counts differ from declared counts")
     if capture.get("levels_captured") != 22 or len(capture.get("records", [])) != (
         counts["pipeline_entries"] * 2 + counts["derive_entries"] * 2
     ):
@@ -139,22 +164,44 @@ def classify_record(record):
 
 
 def index_records(capture):
+    """Index events after checking keys and their chronological call order."""
     indexed = defaultdict(dict)
+    observed_order = []
     for record in capture["records"]:
         stage = record["stage"]
         role = classify_record(record)
-        call = int(record["call_number"])
+        call = record["call_number"]
+        if type(call) is not int:
+            raise ValueError(f"{stage}: call number must be an integer")
         key = (role, call)
         if key in indexed[stage]:
             raise ValueError(f"duplicate event {stage} {key}")
         indexed[stage][key] = record
-    pipeline_entries = indexed["pipeline_entry_state_in"]
-    pipeline_returns = indexed["pipeline_return_candidate_out"]
-    for role in ("primary", "replay"):
-        if len([k for k in pipeline_entries if k[0] == role]) != 1:
-            raise ValueError(f"expected one {role} pipeline entry, found malformed stacks")
-        if len([k for k in pipeline_returns if k[0] == role]) != 1:
-            raise ValueError(f"expected one {role} pipeline return, found malformed stacks")
+        observed_order.append((stage, role, call))
+    if set(indexed) != STAGES:
+        raise ValueError("capture must contain exactly four known event stages")
+    arm = capture.get("arm")
+    expected = {
+        "pipeline_entry_state_in": PIPELINE_CALLS,
+        "pipeline_return_candidate_out": PIPELINE_CALLS,
+        "derive_entry_state_in": DERIVE_CALLS.get(arm, set()),
+        "derive_return_state_out": DERIVE_CALLS.get(arm, set()),
+    }
+    for stage, keys in expected.items():
+        if set(indexed[stage]) != keys:
+            raise ValueError(f"{arm}: {stage} role/call keys differ from expected capture")
+    expected_order = []
+    for role, pipeline_call in (("primary", 1), ("replay", 2)):
+        expected_order.append(("pipeline_entry_state_in", role, pipeline_call))
+        for derive_role, derive_call in sorted(DERIVE_CALLS[arm], key=lambda item: item[1]):
+            if derive_role == role:
+                expected_order.extend((
+                    ("derive_entry_state_in", role, derive_call),
+                    ("derive_return_state_out", role, derive_call),
+                ))
+        expected_order.append(("pipeline_return_candidate_out", role, pipeline_call))
+    if observed_order != expected_order:
+        raise ValueError(f"{arm}: event order differs from expected call chronology")
     if not any("pipeline_result_replays" in f for r in capture["records"] for f in r.get("stack", [])):
         raise ValueError("second pipeline call lacks pipeline_result_replays stack evidence")
     return indexed

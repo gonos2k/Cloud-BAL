@@ -1,0 +1,24 @@
+{
+  "classification": "REPRODUCED_OLD_EVENT_VALIDATION_DEFECT",
+  "source_commit": "f308ebcb0378ab367951656f75598b1ec9267e33",
+  "analyzer_sha256": "5754e159db6be3ff8c8f1f1b453a48c4c4043309ed5e6ae318dcd92076343d1e",
+  "mutation": "HYDRO primary derive call 1 entry stage renamed to unrecognized_derive_entry_state_in; all values, other records, counts and record length unchanged",
+  "mutant_sha256": "dffa503915f0ac0d95ccda5490a228238cee41e2a35d5ec5f48297feb123c100",
+  "actual_archive_netcdf_used": true,
+  "expected_hashes_modified": false,
+  "exit_code": 0,
+  "reported_status": "PASS_SCOPED_AVAILABLE_ENDPOINTS",
+  "declared_counts": {
+    "derive_entries": 2,
+    "derive_returns": 2,
+    "pipeline_entries": 2,
+    "pipeline_returns": 2
+  },
+  "actual_derive_chain": [
+    [
+      "replay",
+      2
+    ]
+  ],
+  "profile_rows": 4224
+}

@@ -1,0 +1,73 @@
+{
+  "status": "PASS_SCOPED_EVENT_CONTRACT",
+  "base_commit": "f308ebcb0378ab367951656f75598b1ec9267e33",
+  "validation": [
+    "Original CLI with actual pinned host NetCDF accepts renamed stage incorrectly; fixed CLI rejects same mutant, no summary/profiles",
+    "Original captures pass fixed CLI; profiles byte-identical, summary equal excluding input identities/profile path",
+    "39 focused tests pass, including8 new portable cases; maintained wrapper8pass0skip",
+    "315 test modules registered; new module selected portable",
+    "Only README and analyzer modified among previouslytrackedfiles; all historical capture/results/receipts unchanged",
+    "git diff --check clean"
+  ],
+  "scope": [
+    "No new GDB/model execution, Fortran build, WRF forecast, or full portable suite",
+    "Readonly DWARF/disassembly establishes parameter/callee candidates only, not runtime argument presence or causal physics"
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "68a3d4d26372b8d9e4eadccd07997f9db9e0c4b047b69d34a19fc099b1967122",
+      "bytes": 8996
+    },
+    {
+      "path": "docs/CP02_EVENT_CONTRACT_20261028.md",
+      "sha256": "a8c40ea44824282f92b2de786da9aa0af8b115ec064de40976556fef05806a07",
+      "bytes": 5142
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/analyze_boundaries.py",
+      "sha256": "83e77fb4981884eb4f85274b8e31c18cfd36c4cf443ee88d4efdc49536b26b3f",
+      "bytes": 25291
+    },
+    {
+      "path": "tests/test_cp02_boundary_events.py",
+      "sha256": "34a3b72fb94774788844651eef87ac691e2ac2ee049cbce403bf8468163f4fc7",
+      "bytes": 4569
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/hydro_capture.json.gz",
+      "sha256": "a2b24dce7a7a85a838cb44e4465acdd442cf126e766241d4b786a45ec4f2e6fe",
+      "bytes": 229203
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/liquid_capture.json.gz",
+      "sha256": "c16c82debec94a65963d78382b36325e2722a769e4555b21e93c6337577deca2",
+      "bytes": 455504
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/analysis/profiles.csv",
+      "sha256": "4739f34113db1765672711429a23fe80f6403138802375fc02316ac73637891d",
+      "bytes": 465042
+    },
+    {
+      "path": "docs/evidence/cp02_event_contract_20261028/after_fix.json",
+      "sha256": "20c38e5a141bc998c49d1fb20a3eb9629362917e3a2113118ba9013ced6706d5",
+      "bytes": 2944
+    },
+    {
+      "path": "docs/evidence/cp02_event_contract_20261028/before_fix.json",
+      "sha256": "cfedc0209704bc1644cf8dfa2aec5d498a29c0a73cf8eae09acb000107240228",
+      "bytes": 842
+    },
+    {
+      "path": "docs/evidence/cp02_event_contract_20261028/focused_tests.json",
+      "sha256": "abd43705eb04811e1d1db76d3281781a8715155001470ec8d92a2acb89d8bd43",
+      "bytes": 588
+    },
+    {
+      "path": "docs/evidence/cp02_event_contract_20261028/inner_probe.json",
+      "sha256": "339e01d4a33d669ab70996375737e1a96c3e497f3732c318cb5542fa481b256b",
+      "bytes": 6777
+    }
+  ]
+}

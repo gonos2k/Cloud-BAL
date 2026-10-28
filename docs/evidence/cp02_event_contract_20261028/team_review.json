@@ -1,0 +1,35 @@
+{
+  "schema": "cp02-event-contract-final-document-review-v1",
+  "review_status": "GO",
+  "findings": [],
+  "previous_finding_resolution": {
+    "finding": "The report linked a missing validation.json.",
+    "resolution": "validation.json now exists at the linked path and validates as JSON; all relative links in the report resolve.",
+    "validation_sha256": "ccb31869bda021a64c87cab6bf683cc38989b8ddd4278bba59e648c988ea97ba"
+  },
+  "reviewed_hashes_sha256": {
+    "README.md": "68a3d4d26372b8d9e4eadccd07997f9db9e0c4b047b69d34a19fc099b1967122",
+    "docs/CP02_EVENT_CONTRACT_20261028.md": "a8c40ea44824282f92b2de786da9aa0af8b115ec064de40976556fef05806a07",
+    "docs/evidence/cp02_call_boundary_20261028/analyze_boundaries.py": "83e77fb4981884eb4f85274b8e31c18cfd36c4cf443ee88d4efdc49536b26b3f",
+    "tests/test_cp02_boundary_events.py": "34a3b72fb94774788844651eef87ac691e2ac2ee049cbce403bf8468163f4fc7",
+    "docs/evidence/cp02_call_boundary_20261028/hydro_capture.json.gz": "a2b24dce7a7a85a838cb44e4465acdd442cf126e766241d4b786a45ec4f2e6fe",
+    "docs/evidence/cp02_call_boundary_20261028/liquid_capture.json.gz": "c16c82debec94a65963d78382b36325e2722a769e4555b21e93c6337577deca2",
+    "docs/evidence/cp02_call_boundary_20261028/analysis/profiles.csv": "4739f34113db1765672711429a23fe80f6403138802375fc02316ac73637891d",
+    "docs/evidence/cp02_event_contract_20261028/after_fix.json": "20c38e5a141bc998c49d1fb20a3eb9629362917e3a2113118ba9013ced6706d5",
+    "docs/evidence/cp02_event_contract_20261028/before_fix.json": "cfedc0209704bc1644cf8dfa2aec5d498a29c0a73cf8eae09acb000107240228",
+    "docs/evidence/cp02_event_contract_20261028/focused_tests.json": "abd43705eb04811e1d1db76d3281781a8715155001470ec8d92a2acb89d8bd43",
+    "docs/evidence/cp02_event_contract_20261028/inner_probe.json": "339e01d4a33d669ab70996375737e1a96c3e497f3732c318cb5542fa481b256b",
+    "docs/evidence/cp02_event_contract_20261028/validation.json": "ccb31869bda021a64c87cab6bf683cc38989b8ddd4278bba59e648c988ea97ba"
+  },
+  "checks": {
+    "report_evidence_links": "All Markdown links in docs/CP02_EVENT_CONTRACT_20261028.md resolve to existing local files.",
+    "validation_receipt": "PASS_SCOPED_EVENT_CONTRACT; receipt pins 11 artifacts and excludes team_review.json to avoid a self-hash cycle.",
+    "before_fix_reproduction": "Consistent: counts and record length remain unchanged; old analyzer reports PASS while omitting primary HYDRO derive call 1.",
+    "after_fix_cli": "Consistent: same mutant exits 1 without summary/profiles; normal archives exit 0 and report PASS_SCOPED_AVAILABLE_ENDPOINTS.",
+    "positive_cli_profiles": "4,224 profile rows; byte-identical with historical profiles.",
+    "positive_cli_summary": "Equal to historical summary except input identities and profile path.",
+    "focused_tests": "39 passed (8 event-contract tests and 31 existing focused tests); 196 deprecation warnings recorded, no failures.",
+    "inner_probe_limits": "DWARF formal-parameter presence is distinguished from runtime value/presence; static direct-call candidates are not presented as executed branches or scientific causes.",
+    "remaining_scope": "No new GDB/model run, Fortran build, WRF forecast, or full portable suite; open scientific/operational questions remain explicit."
+  }
+}
