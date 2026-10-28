@@ -154,6 +154,7 @@ The first-hour lost-hit region is diagnostic, not a replacement scoring mask;
 these older CP02 results do not validate the separate C2 H/A/N forecasts.
 The [initial QR/QS trace](docs/CP02_INITIAL_SPECIES_TRACE_20261027.md) follows the archived preprocessing and native states;
 [empty-loss handling](docs/PRECIP_EMPTY_LOSS_20261027.md) keeps valid no-loss and all-dry analyses complete.
+The [OFF readback guard](docs/WPS_OFF_READBACK_20261028.md) rejects a mismatched actual control before issuing a PASS receipt and records the partial historical source recovery.
 The [conditional proofs](docs/CP02_MULTI_RADAR_MATHEMATICAL_PROOFS_20260914.md)
 state the assumptions behind identifiability, conservation, and wave-energy bounds.
 The [September 14 corrections](docs/CLOUD_BAL_DESIGN_REVIEW_20260907.md)

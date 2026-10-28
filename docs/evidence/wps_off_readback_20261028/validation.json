@@ -1,0 +1,68 @@
+{
+  "base_commit": "723e7f4036300523e529d0cbd9fbe696c78f01a1",
+  "status": "PASS_SCOPED_OFF_READBACK_GUARD",
+  "tests": {
+    "command": "python -m pytest -q tests/test_trace_wps_species.py",
+    "passed": 3,
+    "base_off_negative": "FAIL_EXPECTED_DID_NOT_RAISE",
+    "real_fixture_io": "production read_wps and compare; synthetic binary WPS and NetCDF; single QR cell mismatch",
+    "registry_count": 314,
+    "full_portable_run": false
+  },
+  "actual_archive_readback": {
+    "comparisons": 120,
+    "all_exact": true,
+    "vs_pr116": "Identical except reader checkout path; original inputs and historical receipt unchanged"
+  },
+  "team_review": {
+    "reviewer": "off_guard_review",
+    "decision": "GO",
+    "blocking_findings": 0,
+    "root_review": "source, tests, 120 actual slabs,14 recovered source copies and compile manifest rehashed"
+  },
+  "source_recovery": {
+    "compile_manifest": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/upstream_lapsprep_build.HjBepF/compile_inputs.sha256",
+      "sha256": "de58792924a8ea5d2142f1876dfaaac0dcb948eddbb9be53d080b9e943655e78",
+      "bytes": 54625
+    },
+    "pipeline": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp01_actual_bounds.vm5je21c/src/common/cloud_bal_pipeline.f90",
+      "sha256": "188a2e1b9f467c6fa28e8f317e493975ddaf8dfbf5100398867666bbb6f2b478",
+      "bytes": 30120
+    },
+    "calls": "derive_column_physics at266-272, candidate_out=column_candidate at282, then optional pressure and balance paths",
+    "first_qr_qs_operation": "OPEN"
+  },
+  "limitations": [
+    "No new forecast or Fortran compile",
+    "Column physics and LAPSPREP exact source not recovered in bounded basename search",
+    "RN1 freshness/coverage and C2 T39/1-hour completion remain open"
+  ],
+  "files": {
+    "docs/evidence/cp02_initial_species_20261027/trace_wps_species.py": {
+      "sha256": "0da770c0bf57e2d8c7e914ef418b3b144b3a8c6c1fa07f2cbc126b4c2d0a2189",
+      "bytes": 4609
+    },
+    "tests/test_trace_wps_species.py": {
+      "sha256": "e7d3e4ab57d2c02f4330973286188ba39cb79eef6df3509bb973a0e5ea6f6b8a",
+      "bytes": 5092
+    },
+    "docs/WPS_OFF_READBACK_20261028.md": {
+      "sha256": "59a900cbb2e6208fb19efca0bcd0c920c33563be92bddefa0117a738b63d14c5",
+      "bytes": 4139
+    },
+    "README.md": {
+      "sha256": "ea5c5eda1fbcfba2ebc791052d513c6e4f4b709e39f36e31c9a7567b2edf78d6",
+      "bytes": 8586
+    },
+    "docs/evidence/wps_off_readback_20261028/source_search.json": {
+      "sha256": "d3bc9beecdd3b4fc6602695eecf1612e93d2375b4571cc4a8ee2bc4f910bc9b3",
+      "bytes": 7654
+    },
+    "docs/evidence/wps_off_readback_20261028/readback.json": {
+      "sha256": "39293064121b34a9546ae6d711625f00f9fcceacf8c625449bed83265154c175",
+      "bytes": 34651
+    }
+  }
+}
