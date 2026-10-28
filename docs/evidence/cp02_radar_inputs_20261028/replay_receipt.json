@@ -1,0 +1,141 @@
+{
+  "status": "PASS_SCOPED_ARCHIVED_HYDRO_REPLAY",
+  "base_commit": "f648805ec060fbdcd94bc7259011784de80bf853",
+  "run_directory": "/var/tmp/cp02-radar-20261028/hydro_final_v2",
+  "binary": {
+    "path": "/var/tmp/cp02-binary-boundary-20261028/klps_anal_prep.exe",
+    "sha256": "dbea173ec059afba40ae2d46193e5f5f33a63c18d02d4fd5db5ac23b504e2e65",
+    "size_bytes": 9811744
+  },
+  "capture_script": {
+    "path": "docs/evidence/cp02_inner_capture_20261028/capture_inner.py",
+    "sha256": "04e94cacb5aec8b12d05900b1b026928c9ba3cfc1eeac04939eed5009c83405d",
+    "size_bytes": 50020
+  },
+  "profile": {
+    "path": "tests/intel_toolchain.sh",
+    "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "size_bytes": 3470
+  },
+  "runtime_manifest": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/upstream_lapsprep_build.HjBepF/runtime.sha256",
+    "sha256": "13c3d9cb13e238c908ea9296a72f98f76ae5a948a07400e93ead7b6a4c081732",
+    "size_bytes": 4291
+  },
+  "runtime_checked_before_after": 41,
+  "runtime_postcheck": [
+    "/lib64/ld-linux-x86-64.so.2: OK",
+    "/lib/x86_64-linux-gnu/libaec.so.0: OK",
+    "/lib/x86_64-linux-gnu/libbrotlicommon.so.1: OK",
+    "/lib/x86_64-linux-gnu/libbrotlidec.so.1: OK",
+    "/lib/x86_64-linux-gnu/libbz2.so.1.0: OK",
+    "/lib/x86_64-linux-gnu/libcom_err.so.2: OK",
+    "/lib/x86_64-linux-gnu/libcrypto.so.3: OK",
+    "/lib/x86_64-linux-gnu/libc.so.6: OK",
+    "/lib/x86_64-linux-gnu/libcurl.so.4: OK",
+    "/lib/x86_64-linux-gnu/libffi.so.8: OK",
+    "/lib/x86_64-linux-gnu/libgcc_s.so.1: OK",
+    "/lib/x86_64-linux-gnu/libgmp.so.10: OK",
+    "/lib/x86_64-linux-gnu/libgnutls.so.30: OK",
+    "/lib/x86_64-linux-gnu/libgssapi_krb5.so.2: OK",
+    "/lib/x86_64-linux-gnu/libhdf5_serial_hl.so.100: OK",
+    "/lib/x86_64-linux-gnu/libhdf5_serial.so.103: OK",
+    "/lib/x86_64-linux-gnu/libhogweed.so.6: OK",
+    "/lib/x86_64-linux-gnu/libidn2.so.0: OK",
+    "/lib/x86_64-linux-gnu/libk5crypto.so.3: OK",
+    "/lib/x86_64-linux-gnu/libkeyutils.so.1: OK",
+    "/lib/x86_64-linux-gnu/libkrb5.so.3: OK",
+    "/lib/x86_64-linux-gnu/libkrb5support.so.0: OK",
+    "/lib/x86_64-linux-gnu/liblber.so.2: OK",
+    "/lib/x86_64-linux-gnu/libldap.so.2: OK",
+    "/lib/x86_64-linux-gnu/libm.so.6: OK",
+    "/lib/x86_64-linux-gnu/libnettle.so.8: OK",
+    "/lib/x86_64-linux-gnu/libnghttp2.so.14: OK",
+    "/lib/x86_64-linux-gnu/libp11-kit.so.0: OK",
+    "/lib/x86_64-linux-gnu/libpsl.so.5: OK",
+    "/lib/x86_64-linux-gnu/libresolv.so.2: OK",
+    "/lib/x86_64-linux-gnu/librtmp.so.1: OK",
+    "/lib/x86_64-linux-gnu/libsasl2.so.2: OK",
+    "/lib/x86_64-linux-gnu/libssh.so.4: OK",
+    "/lib/x86_64-linux-gnu/libssl.so.3: OK",
+    "/lib/x86_64-linux-gnu/libsz.so.2: OK",
+    "/lib/x86_64-linux-gnu/libtasn1.so.6: OK",
+    "/lib/x86_64-linux-gnu/libunistring.so.5: OK",
+    "/lib/x86_64-linux-gnu/libz.so.1: OK",
+    "/lib/x86_64-linux-gnu/libzstd.so.1: OK",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so: OK",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libintlc.so.5: OK"
+  ],
+  "input_original_and_copy_count_before_after": 114,
+  "inputs_manifest": "preflight.json",
+  "raw_capture": {
+    "path": "/var/tmp/cp02-radar-20261028/hydro_final_v2/capture.json",
+    "sha256": "cb1565e44655b15aa153aa7fc67f093188b4f7b5c979fda0fe635cc00efcf751",
+    "size_bytes": 24228948
+  },
+  "compressed_capture": {
+    "path": "docs/evidence/cp02_radar_inputs_20261028/hydro_capture.json.gz",
+    "sha256": "b41181187c3a3eacb1edd567cedfb029cd9bdc2cde1c247d9a556167eb01b4bf",
+    "size_bytes": 683729
+  },
+  "inferior_exit_code": 0,
+  "capture_counts": {
+    "derive_entries": 2,
+    "derive_returns": 2,
+    "pipeline_entries": 2,
+    "pipeline_returns": 2,
+    "saturation_adjust_pressure_state_entries": 0,
+    "saturation_adjust_pressure_state_returns": 0,
+    "saturation_adjust_pressure_state_gate": "balanced_zero_or_more_calls",
+    "refresh_dry_air_mass_measure_entries": 1,
+    "refresh_dry_air_mass_measure_returns": 1,
+    "refresh_dry_air_mass_measure_gate": "balanced_zero_or_more_calls",
+    "derive_preprologue_abi_entries": 2,
+    "candidate_boundary_counts": {
+      "diagnose_radar_cells": {
+        "entries": 1,
+        "returns": 1
+      },
+      "transport_precipitation_flux": {
+        "entries": 1,
+        "returns": 1
+      },
+      "publish_hydrometeor_candidate": {
+        "entries": 1,
+        "returns": 1
+      }
+    }
+  },
+  "local_records": 760,
+  "outputs": {
+    "HYDRO.wps": {
+      "new": {
+        "path": "/var/tmp/cp02-radar-20261028/hydro_final_v2/HYDRO.wps",
+        "sha256": "d7d8adfd3589cce46a4cee82b0f125a31e8232b3102d271959bcdefeed4dae0e",
+        "size_bytes": 62572040
+      },
+      "reference": {
+        "path": "/var/tmp/cp02-inner-20261028/hydro_final/HYDRO.wps",
+        "sha256": "d7d8adfd3589cce46a4cee82b0f125a31e8232b3102d271959bcdefeed4dae0e",
+        "size_bytes": 62572040
+      },
+      "byte_identical": true
+    },
+    "HYDRO.wps.shadow.nc": {
+      "new": {
+        "path": "/var/tmp/cp02-radar-20261028/hydro_final_v2/HYDRO.wps.shadow.nc",
+        "sha256": "c1f5d039ac73c90cb6b21dd619ebc5774f3b6c7387c9b9701af4360fb635f2cb",
+        "size_bytes": 99003376
+      },
+      "reference": {
+        "path": "/var/tmp/cp02-inner-20261028/hydro_final/HYDRO.wps.shadow.nc",
+        "sha256": "c1f5d039ac73c90cb6b21dd619ebc5774f3b6c7387c9b9701af4360fb635f2cb",
+        "size_bytes": 99003376
+      },
+      "byte_identical": true
+    }
+  },
+  "native_rebuilt": false,
+  "forecast_run": false,
+  "scope": "Read-only GDB, first HYDRO derive, 20 post-selected points x22 stored levels. Final v2 completed; preliminary probe not accepted."
+}

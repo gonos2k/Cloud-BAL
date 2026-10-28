@@ -1,0 +1,110 @@
+{
+  "schema": "cp02_radar_inputs_team_review_v1",
+  "result": "GO",
+  "blockers": [],
+  "review_scope": [
+    "radar analyzer and focused tests",
+    "final-v2 capture and derived analysis",
+    "capture_inner.py radar_boundary, RadarLocal, and read_storage changes",
+    "P2 refresh-state validation"
+  ],
+  "review_findings": [],
+  "artifacts": {
+    "capture_script": {
+      "path": "docs/evidence/cp02_inner_capture_20261028/capture_inner.py",
+      "sha256": "04e94cacb5aec8b12d05900b1b026928c9ba3cfc1eeac04939eed5009c83405d"
+    },
+    "inner_analyzer": {
+      "path": "docs/evidence/cp02_inner_capture_20261028/analyze_inner.py",
+      "sha256": "17909bd097b369a72a9f4579269c6cff39ecdc71b201904e7bd21fff363261c6"
+    },
+    "inner_refresh_tests": {
+      "path": "tests/test_cp02_inner_capture.py",
+      "sha256": "4f2682e3b4747bf08d6c199c84b20b9b62d148ecdb79b1fc25863080e70decea"
+    },
+    "storage_tests": {
+      "path": "tests/test_cp02_capture_storage.py",
+      "sha256": "ee936d5a41dc635b68800e42775fdd3cc98e9c94c2600806fcaa9a769d25b8d2"
+    },
+    "radar_analyzer": {
+      "path": "docs/evidence/cp02_radar_inputs_20261028/analyze_radar_inputs.py",
+      "sha256": "5e4d141cede069fc3f9602fa7dde1468c7ab154895531aed9952ec6207bc69e5"
+    },
+    "radar_tests": {
+      "path": "tests/test_cp02_radar_inputs.py",
+      "sha256": "42af345d639fa5f630ef4caff7cb64e12735ee4abd3b16656ec91a45ad454c3b"
+    },
+    "final_capture": {
+      "path": "docs/evidence/cp02_radar_inputs_20261028/hydro_capture.json.gz",
+      "sha256": "b41181187c3a3eacb1edd567cedfb029cd9bdc2cde1c247d9a556167eb01b4bf"
+    },
+    "summary": {
+      "path": "docs/evidence/cp02_radar_inputs_20261028/analysis/summary.json",
+      "sha256": "10483d76ed79e2907637f28c637262f4a019533306e817e3f4a2cee225a1d34b"
+    },
+    "profiles": {
+      "path": "docs/evidence/cp02_radar_inputs_20261028/analysis/profiles.csv",
+      "sha256": "bde38238efde0dd811b25a35e620791d5264474b900e331b744020820b86e116"
+    },
+    "replay_receipt": {
+      "path": "docs/evidence/cp02_radar_inputs_20261028/replay_receipt.json",
+      "sha256": "fe8e52fb5b8e25ace0eba538729957f703c6959e21ee33fe02b99b0276090952"
+    },
+    "independent_raw_review": {
+      "path": "docs/evidence/cp02_radar_inputs_20261028/independent_raw_review.json",
+      "sha256": "c6f29fc964e38604b1473c0a43b484b2f385895817185ee7b17e6cb77a91ca96"
+    }
+  },
+  "validation": {
+    "command": "/var/tmp/pr108_portable_env_20261026/bin/python -m pytest tests/test_cp02_radar_inputs.py -q",
+    "result": "10 passed",
+    "summary_and_profiles_reproduction": "byte-identical when rerun with archived HYDRO capture and prior outer capture",
+    "diff_check": "PASS",
+    "capture_status": "CAPTURE_COMPLETE",
+    "inferior_exit_code": 0,
+    "runtime_replay": "archived HYDRO replay receipt records successful completion; native rebuild=false; forecast_run=false"
+  },
+  "reviewed_capture_facts": {
+    "scope": "First HYDRO derive, 20 selected points x 22 levels (440 slots)",
+    "observed_radar_hits": 190,
+    "local_capture_counts": {
+      "density_entry": 190,
+      "density_return": 190,
+      "phase_allocation_return": 190,
+      "store_after": 190
+    },
+    "diagnose_status": 20,
+    "publish_status": 20,
+    "radar_reflectivity_valid_count": 190,
+    "domainwide_conservation_or_forecast_cause_claim": false
+  },
+  "prior_p2_validation": {
+    "command": "/var/tmp/pr108_portable_env_20261026/bin/python -m pytest tests/test_cp02_capture_storage.py tests/test_cp02_inner_capture.py -q",
+    "result": "28 passed",
+    "normal_hydro_summary": {
+      "path": "docs/evidence/cp02_inner_capture_20261028/analysis/hydro_summary.json",
+      "sha256": "5fcba82d365308de2fcaa88777f0af1de5f25a1d16e8a390dc56b2e5c7b6f266",
+      "rerun_byte_identical": true
+    },
+    "normal_hydro_profiles": {
+      "path": "docs/evidence/cp02_inner_capture_20261028/analysis/hydro_profiles.csv",
+      "sha256": "70c42bd3c83b9488759f43565918a0ebf08078dcb4ceb13dc1e9b040e97012cb",
+      "rerun_byte_identical": true
+    },
+    "normal_liquid_summary": {
+      "path": "docs/evidence/cp02_inner_capture_20261028/analysis/liquid_summary.json",
+      "sha256": "03907c357767f1d73a2681bf5bb88454e80b68d01109fc73aa705a43f692cbce",
+      "rerun_byte_identical": true
+    },
+    "normal_liquid_profiles": {
+      "path": "docs/evidence/cp02_inner_capture_20261028/analysis/liquid_profiles.csv",
+      "sha256": "787a722505948d56bf584576cded17f929b7bd2f53a35289d496af12bc60af79",
+      "rerun_byte_identical": true
+    }
+  },
+  "limitations": [
+    "Results describe captured samples and debugger values only.",
+    "Unvisited branches are explicitly not inferred.",
+    "No full-domain mass-conservation or forecast-cause conclusion is established."
+  ]
+}

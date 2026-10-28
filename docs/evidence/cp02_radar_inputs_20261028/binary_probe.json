@@ -1,0 +1,404 @@
+{
+  "binary": {
+    "path": "/var/tmp/cp02-binary-boundary-20261028/klps_anal_prep.exe",
+    "sha256": "dbea173ec059afba40ae2d46193e5f5f33a63c18d02d4fd5db5ac23b504e2e65",
+    "elf": "x86_64",
+    "build_id": "9d3aecf5a168c6c4c0aa0ef87bcaadcaaf949dce"
+  },
+  "evidence_basis": [
+    "ELF DWARF DIEs from readelf --debug-dump=info --wide",
+    "objdump disassembly of exact hash-pinned binary",
+    "existing capture evidence only for hook frame/cadence"
+  ],
+  "diagnose_call": {
+    "caller": "derive_column_physics",
+    "call_pc": "0x608905",
+    "return_pc": "0x60890a",
+    "recommendation": "Use the existing caller-frame pre/post breakpoint pair. At each PC read caller locals in derive_column_physics; both are stable derive-frame PCs. Preserve first HYDRO derive filtering and point/level selection.",
+    "args": [
+      {
+        "name": "state",
+        "type": "cloud_bal_state_type",
+        "dwarf": "fbreg -112; deref"
+      },
+      {
+        "name": "cfg",
+        "type": "column_physics_config",
+        "dwarf": "fbreg -120; deref"
+      },
+      {
+        "name": "observed",
+        "type": "LOGICAL*4 rank-3",
+        "dwarf": "fbreg -136; deref"
+      },
+      {
+        "name": "phase",
+        "type": "INTEGER*4 rank-3",
+        "dwarf": "fbreg -272; deref"
+      },
+      {
+        "name": "zlinear",
+        "type": "REAL*8 rank-3",
+        "dwarf": "fbreg -408; deref"
+      },
+      {
+        "name": "rain",
+        "type": "REAL*8 rank-3",
+        "dwarf": "fbreg -544; deref"
+      },
+      {
+        "name": "snow",
+        "type": "REAL*8 rank-3",
+        "dwarf": "fbreg -672; deref"
+      },
+      {
+        "name": "graupel",
+        "type": "REAL*8 rank-3",
+        "dwarf": "fbreg -800; deref"
+      },
+      {
+        "name": "phase_uncertain",
+        "type": "LOGICAL*4 rank-3",
+        "dwarf": "fbreg -928; deref"
+      },
+      {
+        "name": "status",
+        "type": "INTEGER*4 scalar (subroutine output status, not function return)",
+        "dwarf": "fbreg +40; deref"
+      }
+    ],
+    "selected_derive_caller_locals": [
+      {
+        "name": "radar_observed (passed as diagnose observed)",
+        "type": "LOGICAL*4 allocatable rank-3",
+        "dwarf": "fbreg -60880"
+      },
+      {
+        "name": "phase",
+        "type": "INTEGER*4 allocatable rank-3",
+        "dwarf": "fbreg -60400"
+      },
+      {
+        "name": "zlinear",
+        "type": "REAL*8 allocatable rank-3",
+        "dwarf": "fbreg -59920"
+      },
+      {
+        "name": "rain",
+        "type": "REAL*8 allocatable rank-3",
+        "dwarf": "fbreg -60280"
+      },
+      {
+        "name": "snow",
+        "type": "REAL*8 allocatable rank-3",
+        "dwarf": "fbreg -60160"
+      },
+      {
+        "name": "graupel",
+        "type": "REAL*8 allocatable rank-3",
+        "dwarf": "fbreg -60040"
+      },
+      {
+        "name": "phase_uncertain",
+        "type": "LOGICAL*4 allocatable rank-3",
+        "dwarf": "fbreg -60520"
+      },
+      {
+        "name": "radar_derived",
+        "type": "LOGICAL*4 allocatable rank-3",
+        "dwarf": "fbreg -60640"
+      },
+      {
+        "name": "status",
+        "type": "INTEGER*4 scalar",
+        "dwarf": "fbreg -59796"
+      }
+    ],
+    "recommend_capture": [
+      "At each pre/post hook read radar_observed (the caller actual passed as diagnose argument observed), phase, zlinear and phase_uncertain, plus status. Capture radar_derived at both points too; it is not a diagnose argument but is needed to see incoming state at publish. Include rain/snow/graupel for cross-stage context if needed. Capture selected 20 points x all 22 k levels, type/bounds/value address, and exact raw bytes per scalar. For logicals decode int32 only as a convenience and retain raw bytes."
+    ],
+    "write_conditions": {
+      "radar_observed": {
+        "writes": [
+          "observed(i,j,k) is written at 0x63669a (post-store 0x63669d).",
+          "The generated mask combines cell_is_usable on state%radar_reflectivity valid/quality/source, ieee_is_finite_k4 on state%radar_reflectivity%value, and comparisons against cfg%minimum_dbz and cfg%maximum_dbz."
+        ],
+        "later_use": "The later loop loads observed at 0x636e04; true proceeds to DBZ conversion and phase handling, false skips to 0x63778a."
+      },
+      "zlinear": {
+        "writes": [
+          "For a true observed cell, REAL*4 state%radar_reflectivity%value(i,j,k) is converted with pow(10,0.1*DBZ) and stored to REAL*8 zlinear at 0x636f3d; safe post-store PC 0x636f42."
+        ],
+        "gates": "observed true and finite/usable/DBZ-range mask from prior pass."
+      },
+      "phase": {
+        "writes": [
+          "For a true observed cell, if state%precipitation_phase cell_is_usable then copy integer state%precipitation_phase%value(i,j,k) to phase (store 0x63712f); otherwise write 0 (store 0x637240)."
+        ],
+        "join_pc": "0x637290 is after both branches."
+      },
+      "phase_uncertain": {
+        "writes": [
+          "On usable phase path, set from (state%precipitation_phase%quality(i,j,k) & 0x30) != 0 and store at 0x6371e8. On unusable phase path, write logical true (-1) at 0x637289."
+        ],
+        "join_pc": "0x637290 is after both branches."
+      },
+      "rain_snow_graupel": {
+        "writes": [
+          "Only after allocate_precipitation_phase returns with local allocation_status==20 (0x14); stores 0x6376dc, 0x63772b, 0x63777a."
+        ],
+        "skip": "Nonpositive rho_d branch or allocation_status!=20 exits before those species stores."
+      },
+      "status": {
+        "writes": [
+          "Initializes output status to -10 at 0x636d81; successful full-loop completion writes 20 at 0x63780e. Early exits to 0x637814 bypass final success status assignment."
+        ]
+      },
+      "interpretation_limit": "Static control/data flow from the exact pinned ELF, not proof that a path executed."
+    }
+  },
+  "publish_call": {
+    "caller": "derive_column_physics",
+    "call_pc": "0x60a301",
+    "return_pc": "0x60a306",
+    "args": [
+      {
+        "name": "input",
+        "type": "cloud_bal_state_type"
+      },
+      {
+        "name": "candidate",
+        "type": "cloud_bal_state_type"
+      },
+      {
+        "name": "cfg",
+        "type": "column_physics_config"
+      },
+      {
+        "name": "observed",
+        "type": "LOGICAL*4 rank-3"
+      },
+      {
+        "name": "radar_derived",
+        "type": "LOGICAL*4 rank-3"
+      },
+      {
+        "name": "phase_uncertain",
+        "type": "LOGICAL*4 rank-3"
+      },
+      {
+        "name": "phase",
+        "type": "INTEGER*4 rank-3"
+      },
+      {
+        "name": "rain",
+        "type": "REAL*8 rank-3"
+      },
+      {
+        "name": "snow",
+        "type": "REAL*8 rank-3"
+      },
+      {
+        "name": "graupel",
+        "type": "REAL*8 rank-3"
+      },
+      {
+        "name": "status",
+        "type": "INTEGER*4 scalar (subroutine output status)"
+      }
+    ],
+    "recommendation": "At the same caller PCs capture arrays and status pre/post. Also capture candidate state fields at both boundaries if a before/after publication attribution is needed. Existing publication hook already has candidate state handling; it currently samples only rain/snow/graupel arrays.",
+    "publish_flags_note": "Callsite register/stack setup at 0x60a298..0x60a301 maps observed to caller local radar_observed (rbp-0xedd0), radar_derived to rbp-0xece0, phase_uncertain to rbp-0xec68, phase to rbp-0xebf0, and status to rbp-0xe994. Capture those plus status before/after publish. DWARF caller locals confirm the logical/integer array types."
+  },
+  "target_selection": {
+    "points": 20,
+    "shape_expected_i_j_k": [
+      [
+        1,
+        235
+      ],
+      [
+        1,
+        283
+      ],
+      [
+        1,
+        22
+      ]
+    ],
+    "levels_per_point": 22,
+    "scalar_records": 440,
+    "raw_width_bytes": {
+      "REAL*8": 8,
+      "INTEGER*4": 4,
+      "LOGICAL*4": 4
+    }
+  },
+  "density_helper": {
+    "name": "cloud_bal_state_mp_dry_air_density_",
+    "address": "0x59e960",
+    "size": "0x21d",
+    "dwarf_formals": [
+      {
+        "name": "pressure",
+        "type": "REAL*8",
+        "dwarf": "fbreg -80; deref"
+      },
+      {
+        "name": "temperature",
+        "type": "REAL*8",
+        "dwarf": "fbreg -88; deref"
+      },
+      {
+        "name": "vapor",
+        "type": "REAL*8",
+        "dwarf": "fbreg -96; deref"
+      }
+    ],
+    "return": "REAL*8 in xmm0",
+    "callsite": "0x6373e1; return 0x6373e6 in diagnose_radar_cells",
+    "cell_indices": "At callsite the loop indices are i at fbreg -1104 / -0x450, j at -1100 / -0x44c, k at -1096 / -0x448; confirmed by DWARF names and matching sign-extended loads.",
+    "capture": "Optional selected-cell density probe: break at 0x6373e1, filter i,j,k against selected point and 1..22; read scalar addresses from RDI, RSI, RDX (REAL*8 values), resume to 0x6373e6 to record returned XMM0 as raw 8 bytes. Function formal names establish order; callsite asm establishes these are addresses. This captures actual inputs and return without inferring them from source."
+  },
+  "write_condition_static_evidence": {
+    "note": "Disassembly shows diagnose loops over cells, calls cell_is_usable and ieee_is_finite_k4, calls dry_air_density then pow and allocate_precipitation_phase; static evidence is only potential control/data flow. No dynamic branch execution or write-condition conclusion was captured in this read-only investigation. Use the paired caller pre/post array snapshots to establish observed mutations for sampled elements.",
+    "helper_calls": [
+      "0x5a10b0 cell_is_usable",
+      "0x8d40b0 ieee_arithmetic_mp_for_ieee_is_finite_k4_",
+      "0x59e960 dry_air_density",
+      "0x40c6a0 pow",
+      "0x654be0 allocate_precipitation_phase"
+    ]
+  },
+  "limits": [
+    "No modelrun executed.",
+    "No repository files changed.",
+    "This probe describes proposed capture, not observed runtime values or scientific causation."
+  ],
+  "dynamic_local_probe_points": {
+    "density_helper_input": {
+      "break_pc": "0x59e995",
+      "meaning": "dry_air_density prologue has saved all three ABI pointer arguments; this PC stops before its first finite check",
+      "frame": "dry_air_density frame; DWARF-named REAL*8 formals pressure (-80; deref), temperature (-88; deref), vapor (-96; deref). For cell filter, inspect older diagnose_radar_cells frame locals i/j/k at fbreg -1104/-1100/-1096. Caller argument state is cloud_bal_state_type `state` (diagnose formal fbreg -112; deref), cfg is column_physics_config.",
+      "post_density_rho_d": "0x6373ee in diagnose frame (call returned at 0x6373e6 and store at 0x6373e6 executed); DIE local rho_d REAL*8 at fbreg -1056 (-0x420). i/j/k still current, before loop changes."
+    },
+    "phase_allocator": {
+      "callee": "allocate_precipitation_phase",
+      "entry": "0x654be0",
+      "safe_callee_pc": "0x654c54 (all six argument pointers and stack status pointer saved; DIE names are readable)",
+      "callee_formals": [
+        {
+          "name": "total",
+          "type": "REAL*8",
+          "dwarf": "fbreg -72; deref"
+        },
+        {
+          "name": "temperature",
+          "type": "REAL*8",
+          "dwarf": "fbreg -80; deref"
+        },
+        {
+          "name": "phase",
+          "type": "INTEGER*4 scalar",
+          "dwarf": "fbreg -88; deref"
+        },
+        {
+          "name": "rain",
+          "type": "REAL*8 output",
+          "dwarf": "fbreg -96; deref"
+        },
+        {
+          "name": "snow",
+          "type": "REAL*8 output",
+          "dwarf": "fbreg -104; deref"
+        },
+        {
+          "name": "graupel",
+          "type": "REAL*8 output",
+          "dwarf": "fbreg -112; deref"
+        },
+        {
+          "name": "status",
+          "type": "INTEGER*4 output",
+          "dwarf": "fbreg +16; deref"
+        }
+      ],
+      "caller_call": "0x63764e; return 0x637653",
+      "post_call_pc": "0x637653 (call returned; before comparison of allocation_status against 20)",
+      "diagnose_frame_locals_at_post_call": [
+        {
+          "name": "i",
+          "type": "INTEGER*4",
+          "dwarf": "fbreg -1104"
+        },
+        {
+          "name": "j",
+          "type": "INTEGER*4",
+          "dwarf": "fbreg -1100"
+        },
+        {
+          "name": "k",
+          "type": "INTEGER*4",
+          "dwarf": "fbreg -1096"
+        },
+        {
+          "name": "rho_d",
+          "type": "REAL*8",
+          "dwarf": "fbreg -1056"
+        },
+        {
+          "name": "total",
+          "type": "REAL*8",
+          "dwarf": "fbreg -1088"
+        },
+        {
+          "name": "new_rain",
+          "type": "REAL*8",
+          "dwarf": "fbreg -1080"
+        },
+        {
+          "name": "new_snow",
+          "type": "REAL*8",
+          "dwarf": "fbreg -1072"
+        },
+        {
+          "name": "new_graupel",
+          "type": "REAL*8",
+          "dwarf": "fbreg -1064"
+        },
+        {
+          "name": "allocation_status",
+          "type": "INTEGER*4",
+          "dwarf": "fbreg -1092"
+        },
+        {
+          "name": "cfg",
+          "type": "column_physics_config",
+          "dwarf": "fbreg -120; deref"
+        },
+        {
+          "name": "phase",
+          "type": "INTEGER*4 rank-3 formal",
+          "dwarf": "fbreg -272; deref"
+        }
+      ],
+      "after_species_array_writes": "0x63777f (all three stores at 0x6376dc/0x63772b/0x63777a completed, before loop index increment); capture rain/snow/graupel(i,j,k) and locals i/j/k here if exact post-write confirmation is needed."
+    },
+    "diagnose_formal_snapshot": {
+      "safe_pc_after_all_descriptor_and_config_setup": "0x63630c",
+      "earlier_formal_descriptor_setup_complete": "0x635d8c",
+      "reason": "All seven assumed-shape array formal descriptor setup/null paths complete by 0x635d8c. State member descriptors, config min/max DBZ reads, and loop initialization complete by 0x63630c. Read named diagnose formals directly here."
+    },
+    "observed_mask_per_cell": {
+      "store_pc": "0x63669a",
+      "post_store_pc": "0x63669d",
+      "loop_index_note": "The first mask-generation loop uses compiler-generated index slots without named i/j/k DIEs; for 20-point capture use caller/state arrays or later named-index loop at 0x636e04."
+    },
+    "reflectivity_phase_members": {
+      "radar_reflectivity_state_offset": 5920,
+      "radar_reflectivity": "field3d; value REAL*4 +0, valid LOGICAL*4 +120, quality INTEGER*4 +240, source INTEGER*4 +360",
+      "precipitation_phase_state_offset": 6944,
+      "precipitation_phase": "integer_field3d; value INTEGER*4 +0, valid LOGICAL*4 +120, quality INTEGER*4 +240, source INTEGER*4 +360"
+    }
+  }
+}

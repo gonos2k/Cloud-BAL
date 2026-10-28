@@ -1,0 +1,207 @@
+{
+  "status": "PASS_SCOPED_RADAR_INPUTS_AND_REFRESH_CONTRACTS",
+  "base_commit": "f648805ec060fbdcd94bc7259011784de80bf853",
+  "production_fortran_changed": false,
+  "native_rebuilt": false,
+  "forecast_run": false,
+  "tests": {
+    "focused_passed": 77,
+    "focused_failed": 0,
+    "maintained_radar_file_passed": 10,
+    "maintained_radar_file_skipped": 0,
+    "maintained_is_subset_of_focused": true,
+    "registered_modules": 318,
+    "portable_selected_modules": 216,
+    "full_portable_run": false
+  },
+  "replay": {
+    "arm": "HYDRO",
+    "inferior_exit_code": 0,
+    "unchanged_inputs_original_and_copy": 114,
+    "pinned_runtime_files_before_after": 41,
+    "byte_identical_outputs": 2,
+    "preliminary_probe": "INCOMPLETE_NOT_ACCEPTED"
+  },
+  "analysis": {
+    "canonical_points": 20,
+    "stored_levels": 22,
+    "rows": 440,
+    "observed_local_chains": 190,
+    "unvisited_samples": 250,
+    "unvisited_numeric_values": "NOT_CAPTURED",
+    "diagnose_status": 20,
+    "publish_status": 20,
+    "refresh_status": 20,
+    "old_H_L_summaries_profiles_byte_identical": 4
+  },
+  "reviews": {
+    "team": "GO",
+    "docs": "PASS",
+    "independent_raw": "independent_raw_review.json",
+    "blockers": []
+  },
+  "kg": {
+    "snapshot": "2026-10-28-cp02-radar-inputs",
+    "corpora": {
+      "Cloud-BAL": {
+        "communities": 1386,
+        "edges": 28072,
+        "graph_sha256": "b13384c55afd6099132e27fa9435da2c4106886beb2d1cc1c5b567a28b557f70",
+        "new_snapshot": "2026-10-28-cp02-radar-inputs",
+        "new_snapshot_files": {
+          "GRAPH_REPORT.md": "f50279cb71b452063980f35593b27cbc66f0ca4cb58738724c8f7f2a93ce2355",
+          "graph.json": "b13384c55afd6099132e27fa9435da2c4106886beb2d1cc1c5b567a28b557f70",
+          "manifest.json": "c0a5f13f94c18f6af16b2776f92e02c6bdfc71f7b36db25709b9c8930ec67dc5"
+        },
+        "nodes": 15784,
+        "prior_snapshots_preserved": 93
+      },
+      "KLAPS50": {
+        "communities": 3391,
+        "edges": 86530,
+        "graph_sha256": "3d376f6551e815ce8add21dfe72be62380009f27f4cb23e7d18a8b29faaaf1c0",
+        "new_snapshot": "2026-10-28-cp02-radar-inputs",
+        "new_snapshot_files": {
+          "GRAPH_REPORT.md": "05327b31284265d6d7d28d9e045fb2e095d9e170ae528866e7ca243ec350dd45",
+          "graph.json": "3d376f6551e815ce8add21dfe72be62380009f27f4cb23e7d18a8b29faaaf1c0",
+          "manifest.json": "8c2413a4ea6b3aa5b4a1bb23988df302c0fe7fd54f48453857a4eb36b95c7ff2"
+        },
+        "nodes": 41612,
+        "prior_snapshots_preserved": 89
+      }
+    },
+    "preserved_prior_snapshots": 182,
+    "extraction_limits": "Six Python paths only; artifact hashes are not runtime or physical validation. Fortran extraction is partial."
+  },
+  "open": [
+    "Historical source-complete rebuild",
+    "Radar quality-bit interpretation and phase-uncertainty propagation",
+    "Full water/energy budgets",
+    "Forecast improvement causality",
+    "RN1 upstream time and coverage",
+    "C2 T39 fix and H/A/N one-hour completion"
+  ],
+  "historical_evidence_policy": "Older captures, outputs, and validation files remain untouched; their old code hashes identify historical versions. This validation pins current fixes. KG receipts and this validation are post-stage audit artifacts, not additional structural extraction.",
+  "files": {
+    "docs/CP02_RADAR_INPUTS_20261028.md": {
+      "sha256": "a0ea76da9100fba68f2924f72c2159f3bef952376afc56fd11cd73b2076de609",
+      "size_bytes": 8146
+    },
+    "docs/CURRENT_RESEARCH_STATUS.md": {
+      "sha256": "e441a7ba3259d3aee01b4315f97df659011bcfab999baae261f84ba04fe3fdcc",
+      "size_bytes": 5436
+    },
+    "docs/evidence/cp02_inner_capture_20261028/analyze_inner.py": {
+      "sha256": "17909bd097b369a72a9f4579269c6cff39ecdc71b201904e7bd21fff363261c6",
+      "size_bytes": 35377
+    },
+    "docs/evidence/cp02_inner_capture_20261028/capture_inner.py": {
+      "sha256": "04e94cacb5aec8b12d05900b1b026928c9ba3cfc1eeac04939eed5009c83405d",
+      "size_bytes": 50020
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/analysis/profiles.csv": {
+      "sha256": "bde38238efde0dd811b25a35e620791d5264474b900e331b744020820b86e116",
+      "size_bytes": 295615
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/analysis/summary.json": {
+      "sha256": "10483d76ed79e2907637f28c637262f4a019533306e817e3f4a2cee225a1d34b",
+      "size_bytes": 82014
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/analyze_radar_inputs.py": {
+      "sha256": "5e4d141cede069fc3f9602fa7dde1468c7ab154895531aed9952ec6207bc69e5",
+      "size_bytes": 23606
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/binary_probe.asm.txt": {
+      "sha256": "a4539dab744ad463ac17e5abe340656888f0953eaf8cbc82fb0adb1d5aabc906",
+      "size_bytes": 100487
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/binary_probe.json": {
+      "sha256": "328115a42f4b8d62b8f53068c64a3a3df22dfedc44adb10ff79dc42196cec436",
+      "size_bytes": 14738
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/docs_review.json": {
+      "sha256": "efd9e6e5bd594da79343f77a72626a7eab4c69ea807843a31d7d1bfa442a605d",
+      "size_bytes": 2412
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/focused_tests.txt": {
+      "sha256": "a97cacfcbf133391f0da2d4c7ecfed36df30265555022117988a07a9cfc877b6",
+      "size_bytes": 194
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/hydro_capture.json.gz": {
+      "sha256": "b41181187c3a3eacb1edd567cedfb029cd9bdc2cde1c247d9a556167eb01b4bf",
+      "size_bytes": 683729
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/hydro_gdb.log.gz": {
+      "sha256": "a218d20b9de6b6343e75f72f54d0a1ea0399f0d8db2fc9ca1ca51044fdd862b0",
+      "size_bytes": 3207
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/independent_raw_review.json": {
+      "sha256": "c6f29fc964e38604b1473c0a43b484b2f385895817185ee7b17e6cb77a91ca96",
+      "size_bytes": 7109
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/kg/apply_readback_receipt.json": {
+      "sha256": "14fd3c860153e866d0ac34a62f74cefebaf540c4fa687b453ec6c4d451046dfe",
+      "size_bytes": 4935
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/kg/baseline_serialization_correction.json": {
+      "sha256": "855cf14f3e9d185241ae270344756460d5a389ad9d5f11caeffa39e55caf356d",
+      "size_bytes": 1903
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/kg/root_go.json": {
+      "sha256": "c75ebcf7a2480b8220ffe56433911493d970cca48608863837fb5484b3b0006d",
+      "size_bytes": 370
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/kg/stage_receipt.json": {
+      "sha256": "9175a5a512b11ae3a302358cf18a82e928e443daf5d88fff1e99cb67e165e64c",
+      "size_bytes": 15601
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/kg/stage_validation.json": {
+      "sha256": "9044ad283d09c3f176ae9d4c35b5ec01fbf45e0fb28f7cc0eaf114f7c20d45ab",
+      "size_bytes": 20166
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/old_analysis_preservation.json": {
+      "sha256": "23360f6aae8c061a1a5e77fc82534376ea7c695d211ab005030923c308303da4",
+      "size_bytes": 1256
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/preflight.json": {
+      "sha256": "62fed1739704e1cf8815d59c2a6c7d3fc8528a6ab87cbcb6fc01533fc0580df0",
+      "size_bytes": 13658
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/preliminary_probe.json": {
+      "sha256": "f74004991e532b56b749b0937919f47e6e56983d0b38f725ee62143367ef1b06",
+      "size_bytes": 399
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/refresh_reproducer.json": {
+      "sha256": "3345af78ea3d611c876937f6c6ba12919d82663a5b52ba98a373a10ac507a26e",
+      "size_bytes": 1658
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/replay_receipt.json": {
+      "sha256": "fe8e52fb5b8e25ace0eba538729957f703c6959e21ee33fe02b99b0276090952",
+      "size_bytes": 5721
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/team_review.json": {
+      "sha256": "2e512c7d0b840ed83e9a9283c0ff1c2ad7bf436e34823f048835ec4253821e38",
+      "size_bytes": 4771
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/team_review.md": {
+      "sha256": "a8ab68634546615e6c52c586cfaddc35f72f5bbf51847b90cd05823130d3435b",
+      "size_bytes": 1950
+    },
+    "docs/evidence/cp02_radar_inputs_20261028/tier_test.txt": {
+      "sha256": "ccd1405923e93ede2605980d060e17650e91ec086543817150367d31813e2935",
+      "size_bytes": 172
+    },
+    "tests/test_cp02_capture_storage.py": {
+      "sha256": "ee936d5a41dc635b68800e42775fdd3cc98e9c94c2600806fcaa9a769d25b8d2",
+      "size_bytes": 4571
+    },
+    "tests/test_cp02_inner_capture.py": {
+      "sha256": "4f2682e3b4747bf08d6c199c84b20b9b62d148ecdb79b1fc25863080e70decea",
+      "size_bytes": 8651
+    },
+    "tests/test_cp02_radar_inputs.py": {
+      "sha256": "42af345d639fa5f630ef4caff7cb64e12735ee4abd3b16656ec91a45ad454c3b",
+      "size_bytes": 12276
+    }
+  }
+}

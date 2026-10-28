@@ -1,0 +1,95 @@
+{
+  "applied_at_utc": "2026-10-28T09:40:09.874131+00:00",
+  "corpora": {
+    "Cloud-BAL": {
+      "communities": 1386,
+      "edges": 28072,
+      "graph_sha256": "b13384c55afd6099132e27fa9435da2c4106886beb2d1cc1c5b567a28b557f70",
+      "new_snapshot": "2026-10-28-cp02-radar-inputs",
+      "new_snapshot_files": {
+        "GRAPH_REPORT.md": "f50279cb71b452063980f35593b27cbc66f0ca4cb58738724c8f7f2a93ce2355",
+        "graph.json": "b13384c55afd6099132e27fa9435da2c4106886beb2d1cc1c5b567a28b557f70",
+        "manifest.json": "c0a5f13f94c18f6af16b2776f92e02c6bdfc71f7b36db25709b9c8930ec67dc5"
+      },
+      "nodes": 15784,
+      "prior_snapshots_preserved": 93
+    },
+    "KLAPS50": {
+      "communities": 3391,
+      "edges": 86530,
+      "graph_sha256": "3d376f6551e815ce8add21dfe72be62380009f27f4cb23e7d18a8b29faaaf1c0",
+      "new_snapshot": "2026-10-28-cp02-radar-inputs",
+      "new_snapshot_files": {
+        "GRAPH_REPORT.md": "05327b31284265d6d7d28d9e045fb2e095d9e170ae528866e7ca243ec350dd45",
+        "graph.json": "3d376f6551e815ce8add21dfe72be62380009f27f4cb23e7d18a8b29faaaf1c0",
+        "manifest.json": "8c2413a4ea6b3aa5b4a1bb23988df302c0fe7fd54f48453857a4eb36b95c7ff2"
+      },
+      "nodes": 41612,
+      "prior_snapshots_preserved": 89
+    }
+  },
+  "diagnostics": {
+    "Cloud-BAL": {
+      "dangling_endpoint_edges": 0,
+      "exact_duplicate_edges": 0,
+      "missing_endpoint_edges": 0,
+      "same_endpoint_group_count": 0,
+      "self_loop_edges": 0
+    },
+    "KLAPS50": {
+      "dangling_endpoint_edges": 0,
+      "exact_duplicate_edges": 0,
+      "missing_endpoint_edges": 0,
+      "same_endpoint_group_count": 0,
+      "self_loop_edges": 0
+    }
+  },
+  "frozen_lock_id": "cp02-radar-inputs-20261028-reviewed-v2",
+  "hash_only_changed_paths": [
+    "docs/CP02_RADAR_INPUTS_20261028.md",
+    "docs/CURRENT_RESEARCH_STATUS.md",
+    "docs/evidence/cp02_radar_inputs_20261028/analysis/profiles.csv",
+    "docs/evidence/cp02_radar_inputs_20261028/analysis/summary.json",
+    "docs/evidence/cp02_radar_inputs_20261028/binary_probe.asm.txt",
+    "docs/evidence/cp02_radar_inputs_20261028/binary_probe.json",
+    "docs/evidence/cp02_radar_inputs_20261028/focused_tests.txt",
+    "docs/evidence/cp02_radar_inputs_20261028/hydro_capture.json.gz",
+    "docs/evidence/cp02_radar_inputs_20261028/hydro_gdb.log.gz",
+    "docs/evidence/cp02_radar_inputs_20261028/independent_raw_review.json",
+    "docs/evidence/cp02_radar_inputs_20261028/old_analysis_preservation.json",
+    "docs/evidence/cp02_radar_inputs_20261028/preflight.json",
+    "docs/evidence/cp02_radar_inputs_20261028/preliminary_probe.json",
+    "docs/evidence/cp02_radar_inputs_20261028/refresh_reproducer.json",
+    "docs/evidence/cp02_radar_inputs_20261028/replay_receipt.json",
+    "docs/evidence/cp02_radar_inputs_20261028/team_review.json",
+    "docs/evidence/cp02_radar_inputs_20261028/team_review.md",
+    "docs/evidence/cp02_radar_inputs_20261028/tier_test.txt"
+  ],
+  "preservation": {
+    "Cloud-BAL_prior_snapshots_preserved": 93,
+    "KLAPS50_prior_snapshots_preserved": 89,
+    "prior_dated_snapshots_total": 182,
+    "unrelated_dirty_state": "preserved; Cloud-BAL status may additionally show scoped graph files and new snapshot"
+  },
+  "root_go": "GO",
+  "root_go_stage_receipt_sha256": "9175a5a512b11ae3a302358cf18a82e928e443daf5d88fff1e99cb67e165e64c",
+  "snapshot": "2026-10-28-cp02-radar-inputs",
+  "source_selected_hashes": {
+    "docs/evidence/cp02_inner_capture_20261028/analyze_inner.py": "17909bd097b369a72a9f4579269c6cff39ecdc71b201904e7bd21fff363261c6",
+    "docs/evidence/cp02_inner_capture_20261028/capture_inner.py": "04e94cacb5aec8b12d05900b1b026928c9ba3cfc1eeac04939eed5009c83405d",
+    "docs/evidence/cp02_radar_inputs_20261028/analyze_radar_inputs.py": "5e4d141cede069fc3f9602fa7dde1468c7ab154895531aed9952ec6207bc69e5",
+    "tests/test_cp02_capture_storage.py": "ee936d5a41dc635b68800e42775fdd3cc98e9c94c2600806fcaa9a769d25b8d2",
+    "tests/test_cp02_inner_capture.py": "4f2682e3b4747bf08d6c199c84b20b9b62d148ecdb79b1fc25863080e70decea",
+    "tests/test_cp02_radar_inputs.py": "42af345d639fa5f630ef4caff7cb64e12735ee4abd3b16656ec91a45ad454c3b"
+  },
+  "stage_receipt_sha256": "9175a5a512b11ae3a302358cf18a82e928e443daf5d88fff1e99cb67e165e64c",
+  "status": "PUBLISHED_AND_READBACK_PASSED",
+  "validation_scope": "first HYDRO invocation, selected 440 samples; graph freshness is not runtime, forecast, physical approval, or scientific validation",
+  "wiki_files": {
+    "graph-report-cloud-bal.md": "f50279cb71b452063980f35593b27cbc66f0ca4cb58738724c8f7f2a93ce2355",
+    "graph-report-klaps50.md": "05327b31284265d6d7d28d9e045fb2e095d9e170ae528866e7ca243ec350dd45",
+    "graph-report.md": "8be0db9d7851010e9d2258df6bcd13a09b46b34d3c6e36f7c7a22d14e542003c",
+    "index.md": "f5bbda05636b57a179dd3f75c1769fc2497750789f3ecae6aedf1c761ad00130",
+    "log.md": "aaa2323eed80fdafa25b414bcaa9be2e2adf554cddb6708d0028f9abc63faddd"
+  }
+}
