@@ -82,14 +82,15 @@ def main():
         shadow = PAIR / f"{arm}_vapor2.wps.shadow.nc"
         sources.extend((pin(path), pin(shadow)))
         rows = compare(read_wps(path), shadow, "candidate")
-        if not all(row["exact_equal"] for row in rows):
-            raise ValueError(f"{arm} WPS differs from shadow candidate")
         checks[arm] = rows
     original = ARCHIVE / "cp02_native_12_15.B4Lwmh/metgrid/LAPS:2026-08-16_12:00"
     sources.append(pin(original))
     checks["ACTUAL_OFF_WPS_VS_HYDRO_SHADOW_BACKGROUND"] = compare(
         read_wps(original), PAIR / "HYDRO_vapor2.wps.shadow.nc", "background"
     )
+    for label, rows in checks.items():
+        if not all(row["exact_equal"] for row in rows):
+            raise ValueError(f"{label} WPS differs from shadow")
     geometries = {row["projection_record_sha256"] for rows in checks.values() for row in rows}
     if len(geometries) != 1:
         raise ValueError("WPS projection records differ across compared inputs")
