@@ -1,0 +1,131 @@
+{
+  "status": "PASS_SCOPED_CALL_BOUNDARY_REPLAY",
+  "base_commit": "f79bc2a190de78ac9209109766f4d0e2ddec0a2b",
+  "team_review": "GO, no unresolved blockers",
+  "validation": [
+    "Both archived Intel executable arms complete with and without GDB; WPS/shadow byte-identical to archives",
+    "114 original and private input files unchanged",
+    "Available selected shadow endpoint fields match; HYDRO vapor/temperature endpoints explicitly unavailable",
+    "Four analyzer rejection checks and capture overwrite preservation pass",
+    "31 existing focused pytest cases pass; 196 deprecation warnings",
+    "git diff --check passes; all report local links resolve"
+  ],
+  "limits": [
+    "No Fortran compilation or full source recovery",
+    "No full portable suite or WRF forecast",
+    "No optional evaluation argument, first internal arithmetic operation, or process budget",
+    "20 postselected points and 22 stored levels, not independent skill or water mass"
+  ],
+  "files": [
+    {
+      "path": "README.md",
+      "sha256": "efb629707f75d404545a7ea496908d1596376a7000b04477cf0b1e19beaa6c40",
+      "bytes": 8835
+    },
+    {
+      "path": "docs/CURRENT_RESEARCH_STATUS.md",
+      "sha256": "fb7e764926ba09991c8797dc8628750d641847b0b1baf740475c010054fef243",
+      "bytes": 4681
+    },
+    {
+      "path": "docs/CP02_CALL_BOUNDARY_20261028.md",
+      "sha256": "31f1b69bc71dcf85caa2cb6b8813a3feadf5bbb136faefe697b160a991dbea64",
+      "bytes": 8007
+    },
+    {
+      "path": "tests/intel_toolchain.sh",
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "bytes": 3470
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/analysis/profiles.csv",
+      "sha256": "4739f34113db1765672711429a23fe80f6403138802375fc02316ac73637891d",
+      "bytes": 465042
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/analysis/summary.json",
+      "sha256": "a93d3ba20caedfbc61bcc21221e9b2d477b5e28d7bd23320a1a0837f3a6f9228",
+      "bytes": 20775
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/analyze_boundaries.py",
+      "sha256": "5754e159db6be3ff8c8f1f1b453a48c4c4043309ed5e6ae318dcd92076343d1e",
+      "bytes": 23161
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/analyzer_negative_checks.json",
+      "sha256": "a2e6f50a8272e9e795ec1ea96f8f7b6e83a43e9bc8ef3c511500f7ed8a717961",
+      "bytes": 1060
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/capture_boundaries.py",
+      "sha256": "89beb46dc16e7faa85bb2fa4c04d573c4656471fe975a2e52492c01fa3e16601",
+      "bytes": 19449
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/column_source_search.json",
+      "sha256": "555b36995ba2c6483495cb2c68f2ad47a855cbb8a112b93335fcb535152c8b89",
+      "bytes": 2722
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/focused_tests.json",
+      "sha256": "ecfbb20fa740c81bf6b1b384a65a95286dc591cf57db2592ab13dcae265a4625",
+      "bytes": 498
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/hydro_baseline.log",
+      "sha256": "15855da15ff76eb27368e426e3be530cbcd285b29ed3763ea912d0e8383bb2f2",
+      "bytes": 17923
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/hydro_capture.json.gz",
+      "sha256": "a2b24dce7a7a85a838cb44e4465acdd442cf126e766241d4b786a45ec4f2e6fe",
+      "bytes": 229203
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/hydro_gdb.log",
+      "sha256": "4154d2d9a8f5aa3fb31c5b4a4bb6739c4bde058110e0c09ab3104b3fd56fe066",
+      "bytes": 18581
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/lapsprep_source_search.json",
+      "sha256": "588ab6911928f5534ba153d5b917842377ac3f14ae1c0c0fda820d280c279bd8",
+      "bytes": 4093
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/liquid_baseline.log",
+      "sha256": "b8a1aac6a179a255ad7ecfde764edc61609a445f5c8324c9903774b4422b4ddb",
+      "bytes": 17995
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/liquid_capture.json.gz",
+      "sha256": "c16c82debec94a65963d78382b36325e2722a769e4555b21e93c6337577deca2",
+      "bytes": 455504
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/liquid_gdb.log",
+      "sha256": "0488add45199385d3775ff4819827822344d026da4dfce1fa8d6939211561d31",
+      "bytes": 18653
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/overwrite_check.json",
+      "sha256": "58dae0dbe881c0913b694bd942821a914c5e908a2bf78f3e6906bfd975c05971",
+      "bytes": 566
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/preflight.json",
+      "sha256": "d6831c0f64131a1c08a9f71f398ccb78fc4f007faa20e0de935542338c31104e",
+      "bytes": 13489
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/run_receipt.json",
+      "sha256": "11b838aed22ed4e3ab1501bc21e994976639cf76bef529db36e6d12616639cc8",
+      "bytes": 7342
+    },
+    {
+      "path": "docs/evidence/cp02_call_boundary_20261028/team_review.json",
+      "sha256": "f63ddf28c5a9e1dd358e22b12586cd7f74e4a394b261169b8c23552e3f2184f4",
+      "bytes": 12803
+    }
+  ]
+}

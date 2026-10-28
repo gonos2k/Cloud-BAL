@@ -1,0 +1,667 @@
+{
+  "schema": "cp02-call-boundary-analysis-v1",
+  "status": "PASS_SCOPED_AVAILABLE_ENDPOINTS",
+  "scope": "20 selected points x 22 stored shadow levels x 8 captured state fields; observed debugger values only. evaluation_state and other pipeline arguments were not captured; no domainwide budget or causal attribution is made.",
+  "density": "not stored in cloud_bal_state_type; no density or water-budget inference",
+  "pressure_reference": "archive pressure(z) is compared at each selected x/y point without vertical remapping",
+  "inputs": {
+    "points_csv": {
+      "path": "/var/tmp/cloudbal-cp02-call-boundary/docs/evidence/cp02_initial_species_20261027/final/shadow/shadow_species_profiles.csv",
+      "sha256": "bc765f17fef5b02c4b75d58bd503114259f779cfeffe51ed9e82c6672d37f0ca"
+    },
+    "captures": {
+      "HYDRO": {
+        "path": "/var/tmp/cloudbal-cp02-call-boundary/docs/evidence/cp02_call_boundary_20261028/hydro_capture.json.gz",
+        "sha256": "a2b24dce7a7a85a838cb44e4465acdd442cf126e766241d4b786a45ec4f2e6fe"
+      },
+      "LIQUID_RADAR_RH1": {
+        "path": "/var/tmp/cloudbal-cp02-call-boundary/docs/evidence/cp02_call_boundary_20261028/liquid_capture.json.gz",
+        "sha256": "c16c82debec94a65963d78382b36325e2722a769e4555b21e93c6337577deca2"
+      }
+    },
+    "shadow_netcdf": {
+      "HYDRO": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/HYDRO_vapor2.wps.shadow.nc",
+        "sha256": "c1f5d039ac73c90cb6b21dd619ebc5774f3b6c7387c9b9701af4360fb635f2cb"
+      },
+      "LIQUID_RADAR_RH1": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/LIQUID_RADAR_RH1_vapor2.wps.shadow.nc",
+        "sha256": "12a9cbc7b895bf5dd7020a85b4590f2f1ef334f74c0505865a961be30ab57bac"
+      }
+    }
+  },
+  "arms": {
+    "HYDRO": {
+      "capture_status": "CAPTURE_COMPLETE",
+      "capture_counts": {
+        "derive_entries": 2,
+        "derive_returns": 2,
+        "pipeline_entries": 2,
+        "pipeline_returns": 2
+      },
+      "pipeline_roles_from_stack": {
+        "primary": [
+          [
+            "cloud_bal_pipeline::run_cloud_bal_pipeline",
+            "cloud_bal_pressure_analysis::run_pressure_analysis_shadow",
+            "lapsprep::prepare_shadow_wps",
+            "lapsprep"
+          ]
+        ],
+        "replay": [
+          [
+            "cloud_bal_pipeline::run_cloud_bal_pipeline",
+            "cloud_bal_real_netcdf::pipeline_result_replays",
+            "cloud_bal_real_netcdf::validate_shadow_write_contract",
+            "cloud_bal_real_netcdf::write_shadow_diagnostics",
+            "lapsprep::prepare_shadow_wps",
+            "lapsprep"
+          ]
+        ]
+      },
+      "shadow_csv_crosscheck_rain_snow": {
+        "rain": 0,
+        "snow": 0,
+        "background_rain": 0,
+        "candidate_rain": 0,
+        "background_snow": 0,
+        "candidate_snow": 0
+      },
+      "endpoints": {
+        "background": {
+          "endpoint": "background",
+          "compared_samples_per_field": 440,
+          "bitwise_mismatch_count": {
+            "cloud_water": 0,
+            "cloud_ice": 0,
+            "rain": 0,
+            "snow": 0,
+            "graupel": 0,
+            "pressure": 0
+          },
+          "unavailable_fields": [
+            "vapor",
+            "temperature"
+          ],
+          "exact_for_available_fields": true,
+          "role": "primary_pipeline_entry_vs_shadow_background"
+        },
+        "candidate": {
+          "endpoint": "candidate",
+          "compared_samples_per_field": 440,
+          "bitwise_mismatch_count": {
+            "cloud_water": 0,
+            "cloud_ice": 0,
+            "rain": 0,
+            "snow": 0,
+            "graupel": 0,
+            "pressure": 0
+          },
+          "unavailable_fields": [
+            "vapor",
+            "temperature"
+          ],
+          "exact_for_available_fields": true,
+          "role": "primary_pipeline_return_vs_shadow_candidate"
+        }
+      },
+      "pipeline_replay_vs_primary": {
+        "replay_entry_vs_primary_entry": {
+          "compared_samples_per_field": 440,
+          "bitwise_mismatch_count": {
+            "vapor": 0,
+            "cloud_water": 0,
+            "cloud_ice": 0,
+            "rain": 0,
+            "snow": 0,
+            "graupel": 0,
+            "temperature": 0,
+            "pressure": 0
+          }
+        },
+        "replay_return_vs_primary_candidate": {
+          "compared_samples_per_field": 440,
+          "bitwise_mismatch_count": {
+            "vapor": 0,
+            "cloud_water": 0,
+            "cloud_ice": 0,
+            "rain": 0,
+            "snow": 0,
+            "graupel": 0,
+            "temperature": 0,
+            "pressure": 0
+          }
+        }
+      },
+      "derive_chain": [
+        {
+          "pipeline_role": "primary",
+          "derive_call": 1,
+          "entry_vs_shadow_immutable_background": {
+            "endpoint": "background",
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "cloud_water": 0,
+              "cloud_ice": 0,
+              "rain": 0,
+              "snow": 0,
+              "graupel": 0,
+              "pressure": 0
+            },
+            "unavailable_fields": [
+              "vapor",
+              "temperature"
+            ],
+            "exact_for_available_fields": true
+          },
+          "entry_vs_return": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 0,
+              "cloud_water": 0,
+              "cloud_ice": 0,
+              "rain": 154,
+              "snow": 36,
+              "graupel": 0,
+              "temperature": 0,
+              "pressure": 0
+            }
+          },
+          "return_vs_next_derive_entry_or_pipeline_output": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 0,
+              "cloud_water": 0,
+              "cloud_ice": 0,
+              "rain": 0,
+              "snow": 0,
+              "graupel": 0,
+              "temperature": 0,
+              "pressure": 0
+            }
+          },
+          "next_boundary": "pipeline_return"
+        },
+        {
+          "pipeline_role": "replay",
+          "derive_call": 2,
+          "entry_vs_shadow_immutable_background": {
+            "endpoint": "background",
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "cloud_water": 0,
+              "cloud_ice": 0,
+              "rain": 0,
+              "snow": 0,
+              "graupel": 0,
+              "pressure": 0
+            },
+            "unavailable_fields": [
+              "vapor",
+              "temperature"
+            ],
+            "exact_for_available_fields": true
+          },
+          "entry_vs_return": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 0,
+              "cloud_water": 0,
+              "cloud_ice": 0,
+              "rain": 154,
+              "snow": 36,
+              "graupel": 0,
+              "temperature": 0,
+              "pressure": 0
+            }
+          },
+          "return_vs_next_derive_entry_or_pipeline_output": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 0,
+              "cloud_water": 0,
+              "cloud_ice": 0,
+              "rain": 0,
+              "snow": 0,
+              "graupel": 0,
+              "temperature": 0,
+              "pressure": 0
+            }
+          },
+          "next_boundary": "pipeline_return"
+        }
+      ],
+      "primary_candidate_change_from_shadow_background": {
+        "bitwise_changed_sample_count": {
+          "rain": 154,
+          "snow": 36
+        },
+        "mean_g_per_kg": {
+          "rain": 0.05339482442898522,
+          "snow": 0.006995739206352234
+        }
+      }
+    },
+    "LIQUID_RADAR_RH1": {
+      "capture_status": "CAPTURE_COMPLETE",
+      "capture_counts": {
+        "derive_entries": 6,
+        "derive_returns": 6,
+        "pipeline_entries": 2,
+        "pipeline_returns": 2
+      },
+      "pipeline_roles_from_stack": {
+        "primary": [
+          [
+            "cloud_bal_pipeline::run_cloud_bal_pipeline",
+            "cloud_bal_pressure_analysis::run_pressure_analysis_shadow",
+            "lapsprep::prepare_shadow_wps",
+            "lapsprep"
+          ]
+        ],
+        "replay": [
+          [
+            "cloud_bal_pipeline::run_cloud_bal_pipeline",
+            "cloud_bal_real_netcdf::pipeline_result_replays",
+            "cloud_bal_real_netcdf::validate_shadow_write_contract",
+            "cloud_bal_real_netcdf::write_shadow_diagnostics",
+            "lapsprep::prepare_shadow_wps",
+            "lapsprep"
+          ]
+        ]
+      },
+      "shadow_csv_crosscheck_rain_snow": {
+        "rain": 0,
+        "snow": 0,
+        "background_rain": 0,
+        "candidate_rain": 0,
+        "background_snow": 0,
+        "candidate_snow": 0
+      },
+      "endpoints": {
+        "background": {
+          "endpoint": "background",
+          "compared_samples_per_field": 440,
+          "bitwise_mismatch_count": {
+            "vapor": 0,
+            "cloud_water": 0,
+            "cloud_ice": 0,
+            "rain": 0,
+            "snow": 0,
+            "graupel": 0,
+            "temperature": 0,
+            "pressure": 0
+          },
+          "unavailable_fields": [],
+          "exact_for_available_fields": true,
+          "role": "primary_pipeline_entry_vs_shadow_background"
+        },
+        "candidate": {
+          "endpoint": "candidate",
+          "compared_samples_per_field": 440,
+          "bitwise_mismatch_count": {
+            "vapor": 0,
+            "cloud_water": 0,
+            "cloud_ice": 0,
+            "rain": 0,
+            "snow": 0,
+            "graupel": 0,
+            "temperature": 0,
+            "pressure": 0
+          },
+          "unavailable_fields": [],
+          "exact_for_available_fields": true,
+          "role": "primary_pipeline_return_vs_shadow_candidate"
+        }
+      },
+      "pipeline_replay_vs_primary": {
+        "replay_entry_vs_primary_entry": {
+          "compared_samples_per_field": 440,
+          "bitwise_mismatch_count": {
+            "vapor": 0,
+            "cloud_water": 0,
+            "cloud_ice": 0,
+            "rain": 0,
+            "snow": 0,
+            "graupel": 0,
+            "temperature": 0,
+            "pressure": 0
+          }
+        },
+        "replay_return_vs_primary_candidate": {
+          "compared_samples_per_field": 440,
+          "bitwise_mismatch_count": {
+            "vapor": 0,
+            "cloud_water": 0,
+            "cloud_ice": 0,
+            "rain": 0,
+            "snow": 0,
+            "graupel": 0,
+            "temperature": 0,
+            "pressure": 0
+          }
+        }
+      },
+      "derive_chain": [
+        {
+          "pipeline_role": "primary",
+          "derive_call": 1,
+          "entry_vs_shadow_immutable_background": {
+            "endpoint": "background",
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 0,
+              "cloud_water": 0,
+              "cloud_ice": 0,
+              "rain": 0,
+              "snow": 0,
+              "graupel": 0,
+              "temperature": 0,
+              "pressure": 0
+            },
+            "unavailable_fields": [],
+            "exact_for_available_fields": true
+          },
+          "entry_vs_return": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 153,
+              "cloud_water": 153,
+              "cloud_ice": 0,
+              "rain": 154,
+              "snow": 36,
+              "graupel": 0,
+              "temperature": 153,
+              "pressure": 0
+            }
+          },
+          "return_vs_next_derive_entry_or_pipeline_output": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 153,
+              "cloud_water": 153,
+              "cloud_ice": 0,
+              "rain": 154,
+              "snow": 36,
+              "graupel": 0,
+              "temperature": 153,
+              "pressure": 0
+            }
+          },
+          "next_boundary": "next_derive_entry"
+        },
+        {
+          "pipeline_role": "primary",
+          "derive_call": 2,
+          "entry_vs_shadow_immutable_background": {
+            "endpoint": "background",
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 0,
+              "cloud_water": 0,
+              "cloud_ice": 0,
+              "rain": 0,
+              "snow": 0,
+              "graupel": 0,
+              "temperature": 0,
+              "pressure": 0
+            },
+            "unavailable_fields": [],
+            "exact_for_available_fields": true
+          },
+          "entry_vs_return": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 153,
+              "cloud_water": 153,
+              "cloud_ice": 0,
+              "rain": 154,
+              "snow": 36,
+              "graupel": 0,
+              "temperature": 153,
+              "pressure": 0
+            }
+          },
+          "return_vs_next_derive_entry_or_pipeline_output": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 153,
+              "cloud_water": 153,
+              "cloud_ice": 0,
+              "rain": 154,
+              "snow": 36,
+              "graupel": 0,
+              "temperature": 153,
+              "pressure": 0
+            }
+          },
+          "next_boundary": "next_derive_entry"
+        },
+        {
+          "pipeline_role": "primary",
+          "derive_call": 3,
+          "entry_vs_shadow_immutable_background": {
+            "endpoint": "background",
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 0,
+              "cloud_water": 0,
+              "cloud_ice": 0,
+              "rain": 0,
+              "snow": 0,
+              "graupel": 0,
+              "temperature": 0,
+              "pressure": 0
+            },
+            "unavailable_fields": [],
+            "exact_for_available_fields": true
+          },
+          "entry_vs_return": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 153,
+              "cloud_water": 153,
+              "cloud_ice": 0,
+              "rain": 154,
+              "snow": 36,
+              "graupel": 0,
+              "temperature": 153,
+              "pressure": 0
+            }
+          },
+          "return_vs_next_derive_entry_or_pipeline_output": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 0,
+              "cloud_water": 0,
+              "cloud_ice": 0,
+              "rain": 0,
+              "snow": 0,
+              "graupel": 0,
+              "temperature": 0,
+              "pressure": 0
+            }
+          },
+          "next_boundary": "pipeline_return"
+        },
+        {
+          "pipeline_role": "replay",
+          "derive_call": 4,
+          "entry_vs_shadow_immutable_background": {
+            "endpoint": "background",
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 0,
+              "cloud_water": 0,
+              "cloud_ice": 0,
+              "rain": 0,
+              "snow": 0,
+              "graupel": 0,
+              "temperature": 0,
+              "pressure": 0
+            },
+            "unavailable_fields": [],
+            "exact_for_available_fields": true
+          },
+          "entry_vs_return": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 153,
+              "cloud_water": 153,
+              "cloud_ice": 0,
+              "rain": 154,
+              "snow": 36,
+              "graupel": 0,
+              "temperature": 153,
+              "pressure": 0
+            }
+          },
+          "return_vs_next_derive_entry_or_pipeline_output": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 153,
+              "cloud_water": 153,
+              "cloud_ice": 0,
+              "rain": 154,
+              "snow": 36,
+              "graupel": 0,
+              "temperature": 153,
+              "pressure": 0
+            }
+          },
+          "next_boundary": "next_derive_entry"
+        },
+        {
+          "pipeline_role": "replay",
+          "derive_call": 5,
+          "entry_vs_shadow_immutable_background": {
+            "endpoint": "background",
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 0,
+              "cloud_water": 0,
+              "cloud_ice": 0,
+              "rain": 0,
+              "snow": 0,
+              "graupel": 0,
+              "temperature": 0,
+              "pressure": 0
+            },
+            "unavailable_fields": [],
+            "exact_for_available_fields": true
+          },
+          "entry_vs_return": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 153,
+              "cloud_water": 153,
+              "cloud_ice": 0,
+              "rain": 154,
+              "snow": 36,
+              "graupel": 0,
+              "temperature": 153,
+              "pressure": 0
+            }
+          },
+          "return_vs_next_derive_entry_or_pipeline_output": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 153,
+              "cloud_water": 153,
+              "cloud_ice": 0,
+              "rain": 154,
+              "snow": 36,
+              "graupel": 0,
+              "temperature": 153,
+              "pressure": 0
+            }
+          },
+          "next_boundary": "next_derive_entry"
+        },
+        {
+          "pipeline_role": "replay",
+          "derive_call": 6,
+          "entry_vs_shadow_immutable_background": {
+            "endpoint": "background",
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 0,
+              "cloud_water": 0,
+              "cloud_ice": 0,
+              "rain": 0,
+              "snow": 0,
+              "graupel": 0,
+              "temperature": 0,
+              "pressure": 0
+            },
+            "unavailable_fields": [],
+            "exact_for_available_fields": true
+          },
+          "entry_vs_return": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 153,
+              "cloud_water": 153,
+              "cloud_ice": 0,
+              "rain": 154,
+              "snow": 36,
+              "graupel": 0,
+              "temperature": 153,
+              "pressure": 0
+            }
+          },
+          "return_vs_next_derive_entry_or_pipeline_output": {
+            "compared_samples_per_field": 440,
+            "bitwise_mismatch_count": {
+              "vapor": 0,
+              "cloud_water": 0,
+              "cloud_ice": 0,
+              "rain": 0,
+              "snow": 0,
+              "graupel": 0,
+              "temperature": 0,
+              "pressure": 0
+            }
+          },
+          "next_boundary": "pipeline_return"
+        }
+      ],
+      "primary_candidate_change_from_shadow_background": {
+        "bitwise_changed_sample_count": {
+          "rain": 154,
+          "snow": 36
+        },
+        "mean_g_per_kg": {
+          "rain": 0.05335481162298741,
+          "snow": 0.0069943029839950295
+        }
+      }
+    }
+  },
+  "cross_arm_primary_entry_state": {
+    "compared_samples_per_field": 440,
+    "bitwise_mismatch_count": {
+      "vapor": 0,
+      "cloud_water": 0,
+      "cloud_ice": 0,
+      "rain": 0,
+      "snow": 0,
+      "graupel": 0,
+      "temperature": 0,
+      "pressure": 0
+    }
+  },
+  "profile_csv": {
+    "path": "/var/tmp/cloudbal-cp02-call-boundary/docs/evidence/cp02_call_boundary_20261028/analysis/profiles.csv",
+    "sha256": "4739f34113db1765672711429a23fe80f6403138802375fc02316ac73637891d",
+    "rows": 4224
+  },
+  "endpoint_mismatches": [],
+  "endpoint_unavailable_references": [
+    "HYDRO:primary_pipeline_entry_vs_shadow_background:vapor",
+    "HYDRO:primary_pipeline_entry_vs_shadow_background:temperature",
+    "HYDRO:primary_pipeline_return_vs_shadow_candidate:vapor",
+    "HYDRO:primary_pipeline_return_vs_shadow_candidate:temperature"
+  ],
+  "inputs_unchanged_after_read": true
+}

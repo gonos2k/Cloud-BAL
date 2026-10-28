@@ -1,0 +1,31 @@
+{
+  "status": "PASS_RELEASE_CHECKS",
+  "staged_whitespace_check": {
+    "command": "git -c core.whitespace=cr-at-eol diff --cached --check",
+    "exit_code": 0,
+    "note": "The earlier unstaged git diff --check did not include new files. The ordinary staged check flags CSV CRLF record terminators; the explicit cr-at-eol check passes. CSV bytes are preserved as emitted by csv.DictWriter and as validated by the analyzer."
+  },
+  "root_independent_readback": "Live and new dated graph/report/manifest hashes verified for both corpora; all 2 selected and 16 hash-only path pins match.",
+  "files": {
+    "validation.json": {
+      "sha256": "5479a5effa1d4ed4fa877a29081a88a268bf512427576e2e14ffa75a664ad8bc",
+      "bytes": 5184
+    },
+    "team_review.json": {
+      "sha256": "f63ddf28c5a9e1dd358e22b12586cd7f74e4a394b261169b8c23552e3f2184f4",
+      "bytes": 12803
+    },
+    "kg/kg_receipt.json": {
+      "sha256": "d1895eab92d075c33b89fa6400b0adb9c0035ec47d6b97dddd0b2f55589fa0ca",
+      "bytes": 9653
+    },
+    "analysis/profiles.csv": {
+      "sha256": "4739f34113db1765672711429a23fe80f6403138802375fc02316ac73637891d",
+      "bytes": 465042
+    },
+    "analysis/summary.json": {
+      "sha256": "a93d3ba20caedfbc61bcc21221e9b2d477b5e28d7bd23320a1a0837f3a6f9228",
+      "bytes": 20775
+    }
+  }
+}

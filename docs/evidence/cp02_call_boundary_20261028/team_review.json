@@ -1,0 +1,226 @@
+{
+  "status": "PASS_SCOPED_WITH_LIMITS",
+  "reviewer_scope": "Independent read-only validation of final HYDRO and LIQUID GDB captures against their final shadow NetCDF outputs, selected source boundary relationships, and exact archive/baseline artifact identities.",
+  "hashes": {
+    "archived_binary_sha256": "dbea173ec059afba40ae2d46193e5f5f33a63c18d02d4fd5db5ac23b504e2e65",
+    "build_input_manifest_sha256": "de58792924a8ea5d2142f1876dfaaac0dcb948eddbb9be53d080b9e943655e78",
+    "runtime_manifest_sha256": "13c3d9cb13e238c908ea9296a72f98f76ae5a948a07400e93ead7b6a4c081732",
+    "pipeline_source_sha256": "188a2e1b9f467c6fa28e8f317e493975ddaf8dfbf5100398867666bbb6f2b478",
+    "column_physics_compiled_source_pin_sha256": "f7d640bbee19a128af6556f16e346e9574d1845997d77eab48e844109f14e17d",
+    "column_physics_source_recovery": "Exact source bytes for the compiled source pin were not recovered in the bounded search. The CP01 snapshot and current maintained source hashes differ from the compiled source pin; do not equate their line-level arithmetic with the archived binary without qualification.",
+    "capture_script_sha256": "89beb46dc16e7faa85bb2fa4c04d573c4656471fe975a2e52492c01fa3e16601",
+    "points_csv_sha256": "bc765f17fef5b02c4b75d58bd503114259f779cfeffe51ed9e82c6672d37f0ca",
+    "input_copy_preflight_sha256": "d6831c0f64131a1c08a9f71f398ccb78fc4f007faa20e0de935542338c31104e",
+    "run_receipt_sha256": "11b838aed22ed4e3ab1501bc21e994976639cf76bef529db36e6d12616639cc8",
+    "captures": {
+      "HYDRO": {
+        "path": "/var/tmp/cp02-binary-boundary-20261028/hydro_final/capture.json",
+        "sha256": "3cbf4fb8f4cd03567f95f6b980c2736967b8784a3b0137f5c035110313fe519a",
+        "bytes": 8225149,
+        "status": "CAPTURE_COMPLETE",
+        "counts": {
+          "derive_entries": 2,
+          "derive_returns": 2,
+          "pipeline_entries": 2,
+          "pipeline_returns": 2
+        },
+        "gdb_exit_code": 0,
+        "inferior_exit_code": 0
+      },
+      "LIQUID_RADAR_RH1": {
+        "path": "/var/tmp/cp02-binary-boundary-20261028/liquid_final/capture.json",
+        "sha256": "62032c8edffd67d219cfc2736e3e5a428d615c9ba172d8787b77a6dcb8cf7385",
+        "bytes": 16446840,
+        "status": "CAPTURE_COMPLETE",
+        "counts": {
+          "derive_entries": 6,
+          "derive_returns": 6,
+          "pipeline_entries": 2,
+          "pipeline_returns": 2
+        },
+        "gdb_exit_code": 0,
+        "inferior_exit_code": 0
+      }
+    },
+    "final_run_outputs": {
+      "HYDRO_WPS": {
+        "sha256": "d7d8adfd3589cce46a4cee82b0f125a31e8232b3102d271959bcdefeed4dae0e",
+        "bytes": 62572040,
+        "archive_and_plain_baseline_byte_equal": true
+      },
+      "HYDRO_shadow": {
+        "sha256": "c1f5d039ac73c90cb6b21dd619ebc5774f3b6c7387c9b9701af4360fb635f2cb",
+        "bytes": 99003376,
+        "archive_and_plain_baseline_byte_equal": true
+      },
+      "LIQUID_WPS": {
+        "sha256": "748c0fffc5ab809fc08ccc72e954f024a63d0287e67ef624dda8caf58ce2ef9b",
+        "bytes": 62572040,
+        "archive_byte_equal": true
+      },
+      "LIQUID_shadow": {
+        "sha256": "12a9cbc7b895bf5dd7020a85b4590f2f1ef334f74c0505865a961be30ab57bac",
+        "bytes": 120907599,
+        "archive_byte_equal": true
+      }
+    }
+  },
+  "independent_checks": {
+    "sample_domain": "20 selected locations × all 22 stored levels; zero-based CSV i/j mapped to one-based Fortran i/j, and Fortran k 1..22 mapped to NetCDF z 0..21.",
+    "entry_against_shadow_background": {
+      "HYDRO": "Exact REAL*4 bytes for five hydrometeor fields at 440 samples per field; pressure at all 440 samples matched pressure[z].",
+      "LIQUID_RADAR_RH1": "Exact REAL*4 bytes for seven available fields (five hydrometeors, vapor, temperature) at 440 samples per field; pressure at all 440 samples matched pressure[z].",
+      "mismatches": 0
+    },
+    "primary_pipeline_return_against_shadow_candidate": {
+      "HYDRO": "Exact REAL*4 bytes for five hydrometeor fields at 440 samples per field; pressure at all 440 samples matched pressure[z].",
+      "LIQUID_RADAR_RH1": "Exact REAL*4 bytes for seven available fields at 440 samples per field; pressure at all 440 samples matched pressure[z].",
+      "mismatches": 0
+    },
+    "masks": {
+      "above_ground": "Semantic bool comparison matched all sampled points and levels for both arms.",
+      "LIQUID_valid_masks": "Semantic bool comparison matched all seven available captured field masks at entry and return.",
+      "HYDRO_valid_masks": "No corresponding hydrometeor valid-mask variables are present in the HYDRO shadow; no mask cross-check claimed.",
+      "encoding_note": "Fortran LOGICAL true is raw 0xffffffff in this capture while NetCDF int masks encode true as 1; comparisons used decoded boolean meaning."
+    },
+    "call_stack_and_output_binding": {
+      "primary_pipeline_caller": "cloud_bal_pressure_analysis::run_pressure_analysis_shadow",
+      "writer_replay_caller": "cloud_bal_real_netcdf::pipeline_result_replays",
+      "derive_return_binding": "The saved output argument address equals the caller local column_candidate for each derive return.",
+      "primary_pipeline_return_binding": "The output address equals caller local candidate.",
+      "writer_replay_return_binding": "The output address equals caller local replay."
+    },
+    "state_relationships": {
+      "primary_pipeline_entry_equals_first_derive_entry": "All eight captured fields match for each arm.",
+      "LIQUID_primary_derive_entry_repeats": "Derive calls 1–3 have identical sampled state_in values.",
+      "replay_entry_equals_replay_derive_entry": "All eight captured fields match; primary and replay pipeline entries also match.",
+      "last_primary_derive_return_equals_primary_pipeline_return": "All eight fields match, 440 samples per field, both arms.",
+      "primary_and_writer_replay_pipeline_returns": "All eight fields match, 440 samples per field, both arms.",
+      "LIQUID_primary_and_replay_derive_returns": "Calls 1↔4, 2↔5, and 3↔6 match for all eight fields at 440 samples per field."
+    },
+    "derive_call_boundary_deltas": {
+      "HYDRO_call_1_entry_to_return": "At selected profiles, 154 rain and 36 snow values change; no other captured field changes.",
+      "LIQUID_each_call_entry_to_return": "At selected profiles, 153 vapor, 153 cloud-water, 153 temperature, 154 rain, and 36 snow values change; cloud ice, graupel, and pressure do not change.",
+      "LIQUID_primary_iteration_outputs": "Call 1→2 differs at 8 vapor, 55 cloud-water, 139 rain, and 14 snow samples; call 2→3 is equal over these samples."
+    }
+  },
+  "claims_supported": [
+    "The captured selected-point state changes occur across the derive_column_physics call boundary for the reported fields.",
+    "The primary pipeline return matches its final derive return and the archived candidate arrays at the selected points; writer replay is a separate call path and reproduces the primary output at those points.",
+    "The sample point/level indexing is consistent with the available archived shadow arrays and pressure levels."
+  ],
+  "limits_and_nonclaims": [
+    "No first arithmetic operation or internal source statement that changes QR/QS is identified; entry/return snapshots bound changes to a subroutine call only.",
+    "The optional evaluation_state argument is not captured. For LIQUID, it can differ across outer iterations, so iteration output changes are observed but not attributed to the evaluation argument or any internal operation.",
+    "Coverage is 20 selected profiles, not the full grid; the report cannot make grid-wide claims from these captures.",
+    "HYDRO shadow has no background/candidate vapor or temperature arrays, so those fields cannot be cross-checked against HYDRO NetCDF endpoints.",
+    "The compiled cloud_bal_column_physics source pin is not recovered as exact source bytes. The current/CP01 source copies must not be treated as exact compiled source for first-operation attribution.",
+    "No full-grid process-budget, forecast, scientific-acceptance, or native-state claim is made."
+  ],
+  "review_status_note": "Independent review completed against the frozen report, analyzer, final analysis summary, profiles, captures, run receipt, and focused-test receipt. GO; no scientific or measurement blocker remains.",
+  "final_review": {
+    "verdict": "GO",
+    "blockers": [],
+    "reviewed_artifacts": {
+      "report": {
+        "path": "docs/CP02_CALL_BOUNDARY_20261028.md",
+        "sha256": "31f1b69bc71dcf85caa2cb6b8813a3feadf5bbb136faefe697b160a991dbea64"
+      },
+      "analyzer": {
+        "path": "docs/evidence/cp02_call_boundary_20261028/analyze_boundaries.py",
+        "sha256": "5754e159db6be3ff8c8f1f1b453a48c4c4043309ed5e6ae318dcd92076343d1e"
+      },
+      "analysis_summary": {
+        "path": "docs/evidence/cp02_call_boundary_20261028/analysis/summary.json",
+        "sha256": "a93d3ba20caedfbc61bcc21221e9b2d477b5e28d7bd23320a1a0837f3a6f9228"
+      },
+      "profiles": {
+        "path": "docs/evidence/cp02_call_boundary_20261028/analysis/profiles.csv",
+        "sha256": "4739f34113db1765672711429a23fe80f6403138802375fc02316ac73637891d"
+      },
+      "focused_tests": {
+        "path": "docs/evidence/cp02_call_boundary_20261028/focused_tests.json",
+        "sha256": "ecfbb20fa740c81bf6b1b384a65a95286dc591cf57db2592ab13dcae265a4625"
+      },
+      "run_receipt": {
+        "path": "docs/evidence/cp02_call_boundary_20261028/run_receipt.json",
+        "sha256": "11b838aed22ed4e3ab1501bc21e994976639cf76bef529db36e6d12616639cc8"
+      },
+      "capture_script": {
+        "path": "docs/evidence/cp02_call_boundary_20261028/capture_boundaries.py",
+        "sha256": "89beb46dc16e7faa85bb2fa4c04d573c4656471fe975a2e52492c01fa3e16601"
+      },
+      "compressed_captures": {
+        "HYDRO": {
+          "path": "docs/evidence/cp02_call_boundary_20261028/hydro_capture.json.gz",
+          "sha256": "a2b24dce7a7a85a838cb44e4465acdd442cf126e766241d4b786a45ec4f2e6fe"
+        },
+        "LIQUID_RADAR_RH1": {
+          "path": "docs/evidence/cp02_call_boundary_20261028/liquid_capture.json.gz",
+          "sha256": "c16c82debec94a65963d78382b36325e2722a769e4555b21e93c6337577deca2"
+        }
+      }
+    },
+    "report_review": {
+      "relative_analysis_links_resolve": true,
+      "scope_and_claims_match_analyzer": true,
+      "first_internal_arithmetic_or_causal_claim": false,
+      "full_grid_or_water_budget_claim": false,
+      "forecast_or_native_C2_validation_claim": false,
+      "limits": "The report marks source/quality, density, process budgets, and evaluation_state as unobserved; H vapor/temperature endpoint references are unavailable; sampled profiles do not support domain-wide conclusions."
+    },
+    "analyzer_review": {
+      "status": "PASS_SCOPED_AVAILABLE_ENDPOINTS",
+      "endpoint_mismatches": [],
+      "endpoint_unavailable_references": [
+        "HYDRO:primary_pipeline_entry_vs_shadow_background:vapor",
+        "HYDRO:primary_pipeline_entry_vs_shadow_background:temperature",
+        "HYDRO:primary_pipeline_return_vs_shadow_candidate:vapor",
+        "HYDRO:primary_pipeline_return_vs_shadow_candidate:temperature"
+      ],
+      "inputs_unchanged_after_read": true,
+      "available_endpoints_bitwise_match": true,
+      "rain_snow_CSV_vs_shadow_mismatches": 0,
+      "primary_vs_writer_replay_all_8_fields_match_at_440_samples_each": true,
+      "derive_deltas": {
+        "HYDRO": {
+          "entry_to_return": {
+            "rain": 154,
+            "snow": 36
+          },
+          "last_derive_return_equals_primary_pipeline_return": true
+        },
+        "LIQUID_RADAR_RH1": {
+          "each_entry_to_return": {
+            "vapor": 153,
+            "cloud_water": 153,
+            "temperature": 153,
+            "rain": 154,
+            "snow": 36
+          },
+          "return_1_to_2": {
+            "vapor": 8,
+            "cloud_water": 55,
+            "rain": 139,
+            "snow": 14
+          },
+          "return_2_to_3_equal_at_sampled_profiles": true,
+          "last_derive_return_equals_primary_pipeline_return": true
+        }
+      },
+      "shadow_availability": "HYDRO T/QV background/candidate variables are absent; analyzer reports them unavailable. No claim from those endpoints."
+    },
+    "focused_test_review": {
+      "exit_code": 0,
+      "passed": 31,
+      "warnings": 196,
+      "warning_scope": "Matplotlib/pyparsing deprecations",
+      "scope": "Existing readback, precipitation-transition and score tests, not the full suite or capture runtime validation."
+    },
+    "nonblocking_metadata_note": {
+      "summary_profile_path_is_resolved": true,
+      "summary_profile_sha_matches_linked_file": true,
+      "stale_staging_path_issue_resolved": true
+    }
+  }
+}

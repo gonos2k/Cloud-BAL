@@ -1,0 +1,163 @@
+{
+  "status": "PASS_SCOPED_ARCHIVED_BINARY_BOUNDARIES",
+  "source_base": "f79bc2a190de78ac9209109766f4d0e2ddec0a2b",
+  "binary": {
+    "path": "/var/tmp/cp02-binary-boundary-20261028/klps_anal_prep.exe",
+    "sha256": "dbea173ec059afba40ae2d46193e5f5f33a63c18d02d4fd5db5ac23b504e2e65",
+    "bytes": 9811744
+  },
+  "build_input_manifest": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/upstream_lapsprep_build.HjBepF/compile_inputs.sha256",
+    "sha256": "de58792924a8ea5d2142f1876dfaaac0dcb948eddbb9be53d080b9e943655e78",
+    "bytes": 54625
+  },
+  "runtime_manifest": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/upstream_lapsprep_build.HjBepF/runtime.sha256",
+    "sha256": "13c3d9cb13e238c908ea9296a72f98f76ae5a948a07400e93ead7b6a4c081732",
+    "bytes": 4291
+  },
+  "input_files_unchanged_after_all_runs": 114,
+  "original_and_private_inputs_checked": true,
+  "arms": {
+    "HYDRO": {
+      "inferior_exit_code": 0,
+      "gdb_exit_code": 0,
+      "capture_counts": {
+        "derive_entries": 2,
+        "derive_returns": 2,
+        "pipeline_entries": 2,
+        "pipeline_returns": 2
+      },
+      "capture_uncompressed": {
+        "path": "/var/tmp/cp02-binary-boundary-20261028/hydro_final/capture.json",
+        "sha256": "3cbf4fb8f4cd03567f95f6b980c2736967b8784a3b0137f5c035110313fe519a",
+        "bytes": 8225149
+      },
+      "outputs": {
+        ".wps": {
+          "archive": {
+            "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/HYDRO_vapor2.wps",
+            "sha256": "d7d8adfd3589cce46a4cee82b0f125a31e8232b3102d271959bcdefeed4dae0e",
+            "bytes": 62572040
+          },
+          "plain_rerun": {
+            "path": "/var/tmp/cp02-binary-boundary-20261028/hydro_baseline_unlimited/HYDRO.wps",
+            "sha256": "d7d8adfd3589cce46a4cee82b0f125a31e8232b3102d271959bcdefeed4dae0e",
+            "bytes": 62572040
+          },
+          "debugger_rerun": {
+            "path": "/var/tmp/cp02-binary-boundary-20261028/hydro_final/HYDRO.wps",
+            "sha256": "d7d8adfd3589cce46a4cee82b0f125a31e8232b3102d271959bcdefeed4dae0e",
+            "bytes": 62572040
+          },
+          "all_bytes_equal": true
+        },
+        ".wps.shadow.nc": {
+          "archive": {
+            "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/HYDRO_vapor2.wps.shadow.nc",
+            "sha256": "c1f5d039ac73c90cb6b21dd619ebc5774f3b6c7387c9b9701af4360fb635f2cb",
+            "bytes": 99003376
+          },
+          "plain_rerun": {
+            "path": "/var/tmp/cp02-binary-boundary-20261028/hydro_baseline_unlimited/HYDRO.wps.shadow.nc",
+            "sha256": "c1f5d039ac73c90cb6b21dd619ebc5774f3b6c7387c9b9701af4360fb635f2cb",
+            "bytes": 99003376
+          },
+          "debugger_rerun": {
+            "path": "/var/tmp/cp02-binary-boundary-20261028/hydro_final/HYDRO.wps.shadow.nc",
+            "sha256": "c1f5d039ac73c90cb6b21dd619ebc5774f3b6c7387c9b9701af4360fb635f2cb",
+            "bytes": 99003376
+          },
+          "all_bytes_equal": true
+        }
+      }
+    },
+    "LIQUID": {
+      "inferior_exit_code": 0,
+      "gdb_exit_code": 0,
+      "capture_counts": {
+        "derive_entries": 6,
+        "derive_returns": 6,
+        "pipeline_entries": 2,
+        "pipeline_returns": 2
+      },
+      "capture_uncompressed": {
+        "path": "/var/tmp/cp02-binary-boundary-20261028/liquid_final/capture.json",
+        "sha256": "62032c8edffd67d219cfc2736e3e5a428d615c9ba172d8787b77a6dcb8cf7385",
+        "bytes": 16446840
+      },
+      "outputs": {
+        ".wps": {
+          "archive": {
+            "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/LIQUID_RADAR_RH1_vapor2.wps",
+            "sha256": "748c0fffc5ab809fc08ccc72e954f024a63d0287e67ef624dda8caf58ce2ef9b",
+            "bytes": 62572040
+          },
+          "plain_rerun": {
+            "path": "/var/tmp/cp02-binary-boundary-20261028/liquid_baseline/LIQUID.wps",
+            "sha256": "748c0fffc5ab809fc08ccc72e954f024a63d0287e67ef624dda8caf58ce2ef9b",
+            "bytes": 62572040
+          },
+          "debugger_rerun": {
+            "path": "/var/tmp/cp02-binary-boundary-20261028/liquid_final/LIQUID.wps",
+            "sha256": "748c0fffc5ab809fc08ccc72e954f024a63d0287e67ef624dda8caf58ce2ef9b",
+            "bytes": 62572040
+          },
+          "all_bytes_equal": true
+        },
+        ".wps.shadow.nc": {
+          "archive": {
+            "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/LIQUID_RADAR_RH1_vapor2.wps.shadow.nc",
+            "sha256": "12a9cbc7b895bf5dd7020a85b4590f2f1ef334f74c0505865a961be30ab57bac",
+            "bytes": 120907599
+          },
+          "plain_rerun": {
+            "path": "/var/tmp/cp02-binary-boundary-20261028/liquid_baseline/LIQUID.wps.shadow.nc",
+            "sha256": "12a9cbc7b895bf5dd7020a85b4590f2f1ef334f74c0505865a961be30ab57bac",
+            "bytes": 120907599
+          },
+          "debugger_rerun": {
+            "path": "/var/tmp/cp02-binary-boundary-20261028/liquid_final/LIQUID.wps.shadow.nc",
+            "sha256": "12a9cbc7b895bf5dd7020a85b4590f2f1ef334f74c0505865a961be30ab57bac",
+            "bytes": 120907599
+          },
+          "all_bytes_equal": true
+        }
+      }
+    }
+  },
+  "environment": {
+    "toolchain_profile": {
+      "path": "/var/tmp/cloudbal-cp02-call-boundary/tests/intel_toolchain.sh",
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "bytes": 3470
+    },
+    "stack_limit": "unlimited",
+    "OMP_NUM_THREADS": "1",
+    "LAPS_DATA_ROOT": "/var/tmp/cp02-binary-boundary-20261028/input",
+    "argv": [
+      "262281200"
+    ],
+    "gdb_command": [
+      "gdb",
+      "-q",
+      "-batch",
+      "/var/tmp/cp02-binary-boundary-20261028/klps_anal_prep.exe",
+      "-x",
+      "/var/tmp/cloudbal-cp02-call-boundary/docs/evidence/cp02_call_boundary_20261028/capture_boundaries.py"
+    ],
+    "capture_environment": [
+      "CP02_CAPTURE_OUTPUT=<fresh run>/capture.json",
+      "CLOUD_BAL_WPS_OUTPUT=<fresh run>/<arm>.wps",
+      "CLOUD_BAL_SHADOW_EXPERIMENT=HYDRO or LIQUID_RADAR_RH1"
+    ],
+    "startup_with_shell": false,
+    "disable_randomization": false
+  },
+  "scope": "Archived pinned Intel executable rerun; no Fortran recompilation, full source recovery, WRF forecast, first internal arithmetic attribution, or water budget. Unmodified source-verifying historical launcher was not used because exact historical source is incomplete. Executable/runtime/input identities and output noninterference are checked separately.",
+  "exploratory_runs": {
+    "default_stack_baseline": "8192KB stack run exited 174 in NetCDF writer; unlimited stack rerun completed with archive-identical outputs. Not classified as a new model defect.",
+    "capture_development": "Earlier probes failed on GDB startup, array/type handling or caller-variable lookup; these are not successful model validations. Final captures use argument-address matching and both primary/replay calls.",
+    "superseded_complete_capture": "hydro_capture_v5 was complete but final captures use the final capture script."
+  }
+}
