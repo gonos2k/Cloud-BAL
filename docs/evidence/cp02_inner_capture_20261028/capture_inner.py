@@ -58,6 +58,10 @@ refresh_returns = 0
 derive_abi_entries = 0
 candidate_boundary_counts = {}
 first_hydro_derive_active = False
+radar_probe_enabled = os.environ.get("CP02_CAPTURE_RADAR_INPUTS") == "1"
+radar_local_records = []
+radar_status_addresses = {}
+radar_local_breakpoints = []
 
 
 def write_report(status):
@@ -101,6 +105,9 @@ def write_report(status):
         "errors": errors,
         "records": records,
     }
+    if radar_probe_enabled:
+        payload["radar_probe_scope"] = "First HYDRO derive, canonical 20 points x 22 levels; no inferred values for unvisited branches"
+        payload["radar_local_records"] = radar_local_records
     temp_path = output_path.with_suffix(output_path.suffix + ".tmp")
     with temp_path.open("x", encoding="utf-8") as stream:
         stream.write(json.dumps(payload, indent=2, allow_nan=False) + "\n")
@@ -335,6 +342,8 @@ def read_storage(address, value_type, label):
         return {"status": "unreadable", "reason": label + " has no readable storage address", "type": str(value_type)}
     try:
         value = gdb.Value(address).cast(value_type.pointer()).dereference()
+        if value.type.code in (gdb.TYPE_CODE_INT, gdb.TYPE_CODE_FLT, gdb.TYPE_CODE_BOOL, gdb.TYPE_CODE_ENUM):
+            return scalar_record(value, label)
         return immediate_scalar_members(value, label)
     except Exception as exc:
         return {"status": "unreadable", "reason": str(exc), "address": hex(address), "type": str(value_type)}
@@ -501,27 +510,26 @@ def extract_state(stage, state_value, call_number):
     return result
 
 
+def sampled_array(value, name):
+    bounds = array_bounds(value, name)
+    if bounds != EXPECTED_ARRAY_BOUNDS:
+        raise RuntimeError(f"{name}: invalid descriptor bounds {bounds}")
+    items = []
+    for point in points:
+        i, j = point["fortran_i"], point["fortran_j"]
+        levels = [{"fortran_k": k, **scalar_record(array_element(value, i, j, k, name), f"{name}({i},{j},{k})")}
+                  for k in range(1, EXPECTED_LEVEL_COUNT + 1)]
+        items.append({"point_id": point["point_id"], "fortran_i": i, "fortran_j": j, "levels": levels})
+    return {"status": "readable", "type": str(value.type),
+            "value_address": hex(int(value.address)) if value.address is not None else None,
+            "bounds_i_j_k": bounds, "points": items}
+
+
 def selected_field(frame, name):
     try:
         value = read_var(frame, name)
         if value.type.code == gdb.TYPE_CODE_ARRAY:
-            bounds = array_bounds(value, name)
-            if bounds != EXPECTED_ARRAY_BOUNDS:
-                return {"status": "invalid_descriptor", "type": str(value.type), "bounds_i_j_k": bounds, "expected_bounds_i_j_k": EXPECTED_ARRAY_BOUNDS}
-            try:
-                value_address = hex(int(value.address)) if value.address is not None else None
-            except Exception:
-                value_address = None
-            items = []
-            for point in points:
-                i, j = point["fortran_i"], point["fortran_j"]
-                levels = []
-                for k in range(1, EXPECTED_LEVEL_COUNT + 1):
-                    element = array_element(value, i, j, k, name)
-                    levels.append({"fortran_k": k, **scalar_record(element, f"{name}({i},{j},{k})")})
-                items.append({"point_id": point["point_id"], "fortran_i": i, "fortran_j": j, "levels": levels})
-            return {"status": "readable", "type": str(value.type), "value_address": value_address,
-                    "bounds_i_j_k": bounds, "points": items}
+            return sampled_array(value, name)
         return scalar_record(value, name)
     except Exception as exc:
         return {"status": "unreadable", "reason": str(exc)}
@@ -804,6 +812,79 @@ class RefreshMassFinish(gdb.FinishBreakpoint):
             return fail(traceback.format_exc())
 
 
+def radar_boundary(frame, label, phase):
+    names = ("radar_observed", "phase", "phase_uncertain", "zlinear", "radar_derived")
+    result = {"inputs": {name: selected_field(frame, name) for name in names}}
+    if phase == "pre":
+        state_pointer = int(frame.read_register("rdi"))
+        cfg_pointer = int(frame.read_register("rsi" if label == "diagnose_radar_cells" else "rdx"))
+        state = state_from_address(state_pointer, read_var(frame, "state_in").type)
+        cfg = state_from_address(cfg_pointer, read_var(frame, "config").type)
+        result["actual_input_state"] = extract_state(label + "_actual_input", state, derive_entries)
+        result["actual_input_state"]["address"] = hex(state_pointer)
+        result["cfg"] = immediate_scalar_members(cfg, "actual_cfg")
+        if label == "diagnose_radar_cells":
+            result["actual_observation_state"] = {}
+            for name in ("radar_reflectivity", "precipitation_phase"):
+                field = state[name]
+                result["actual_observation_state"][name] = {
+                    member: sampled_array(field[member], name + "%" + member)
+                    for member in ("value", "valid", "quality", "source")
+                }
+        offset = 24 if label == "diagnose_radar_cells" else 32
+        slot = raw_pointer_slot(gdb.selected_inferior(), int(frame.read_register("rsp")) + offset, "status")
+        address = int(slot["pointer_value"], 16)
+        if not address:
+            raise RuntimeError(label + " has null status storage")
+        radar_status_addresses[label] = address
+        result["status_storage"] = slot
+    else:
+        address = radar_status_addresses[label]
+        raw = bytes(gdb.selected_inferior().read_memory(address, 4))
+        result["status_return"] = {"status": "readable", "type": "INTEGER*4", "address": hex(address),
+                                   "raw_bytes_le_hex": raw.hex(), "value": struct.unpack("<i", raw)[0]}
+    return result
+
+
+class RadarLocal(gdb.Breakpoint):
+    """Sample actual density/phase operands only at selected diagnose loop cells."""
+    def __init__(self, stage, address):
+        super().__init__("*" + hex(address), internal=True)
+        self.stage = stage
+        self.enabled = False
+        radar_local_breakpoints.append(self)
+
+    def stop(self):
+        try:
+            if not first_hydro_derive_active:
+                return False
+            frame = gdb.newest_frame()
+            loop_frame = frame.older() if self.stage == "density_entry" else frame
+            if loop_frame.name().split("::")[-1] != "diagnose_radar_cells":
+                return False
+            i, j, k = (int(read_var(loop_frame, name)) for name in ("i", "j", "k"))
+            if (i, j) not in {(p["fortran_i"], p["fortran_j"]) for p in points} or not 1 <= k <= EXPECTED_LEVEL_COUNT:
+                return False
+            record = {"stage": self.stage, "fortran_i": i, "fortran_j": j, "fortran_k": k,
+                      "parent_derive_call": derive_entries, "actual_pc": hex(int(frame.pc())),
+                      "diagnose_frame_address": hex(int(loop_frame.read_register("rbp"))), "values": {}}
+            names = {"density_entry": ("pressure", "temperature", "vapor"),
+                     "density_return": ("rho_d",),
+                     "phase_allocation_return": ("rho_d", "total", "new_rain", "new_snow", "new_graupel", "allocation_status")}
+            if self.stage == "store_after":
+                for name in ("rain", "snow", "graupel"):
+                    record["values"][name] = scalar_record(array_element(read_var(frame, name), i, j, k, name), name)
+            else:
+                for name in names[self.stage]:
+                    record["values"][name] = scalar_record(read_var(frame, name), name)
+            if any(v.get("status") != "readable" for v in record["values"].values()):
+                raise RuntimeError("unreadable selected radar operand: " + str(record))
+            radar_local_records.append(record)
+            return False
+        except Exception:
+            return fail(traceback.format_exc())
+
+
 class CallerBoundary(gdb.Breakpoint):
     """Sample caller-owned arrays immediately before/after their helper call."""
     def __init__(self, label, address, phase, arrays, candidate_state=False):
@@ -834,6 +915,11 @@ class CallerBoundary(gdb.Breakpoint):
                       "parent": {"role": "first_hydro_derive", "derive_call_number": derive_entries},
                       "call_number": call_number, "stack": stack,
                       "arrays": arrays_record}
+            if radar_probe_enabled and self.label in ("diagnose_radar_cells", "publish_hydrometeor_candidate"):
+                record["radar"] = radar_boundary(frame, self.label, self.phase)
+                if self.label == "diagnose_radar_cells":
+                    for breakpoint in radar_local_breakpoints:
+                        breakpoint.enabled = self.phase == "pre"
             if self.candidate_state:
                 try:
                     candidate = read_var(frame, "candidate")
@@ -971,6 +1057,13 @@ def main():
         CallerBoundary(name, before_pc, "pre", sample_arrays, candidate_state)
         CallerBoundary(name, after_pc, "post", sample_arrays, candidate_state)
     DeriveAbiEntry()
+    if radar_probe_enabled:
+        if os.environ.get("CLOUD_BAL_SHADOW_EXPERIMENT") != "HYDRO":
+            raise RuntimeError("radar input probe is scoped to HYDRO")
+        RadarLocal("density_entry", 0x59e995)
+        RadarLocal("density_return", 0x6373ee)
+        RadarLocal("phase_allocation_return", 0x637653)
+        RadarLocal("store_after", 0x63777f)
     args = shlex.split(os.environ.get("CP02_CAPTURE_ARGS", "262281200"))
     command = "run" + (" " + " ".join(shlex.quote(arg) for arg in args) if args else "")
     gdb.execute(command)

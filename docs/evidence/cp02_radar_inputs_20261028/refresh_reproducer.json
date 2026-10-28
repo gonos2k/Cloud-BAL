@@ -1,0 +1,16 @@
+{
+  "before": {
+    "returncode": 0,
+    "stdout": "HYDRO: SCOPED_PASS -> /var/tmp/cp02-radar-20261028/before_summary.json\n",
+    "stderr": "",
+    "summary_exists": true,
+    "profiles_exists": true
+  },
+  "after": {
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"/var/tmp/cloudbal-cp02-radar-inputs/docs/evidence/cp02_inner_capture_20261028/analyze_inner.py\", line 519, in <module>\n    main()\n  File \"/var/tmp/cloudbal-cp02-radar-inputs/docs/evidence/cp02_inner_capture_20261028/analyze_inner.py\", line 507, in main\n    report = analyze(args.capture, args.arm, args.prior_outer)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/tmp/cloudbal-cp02-radar-inputs/docs/evidence/cp02_inner_capture_20261028/analyze_inner.py\", line 407, in analyze\n    indexed = record_index(capture, arm)\n              ^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/tmp/cloudbal-cp02-radar-inputs/docs/evidence/cp02_inner_capture_20261028/analyze_inner.py\", line 125, in record_index\n    validate_state_record(state, arm)\n  File \"/var/tmp/cloudbal-cp02-radar-inputs/docs/evidence/cp02_inner_capture_20261028/analyze_inner.py\", line 225, in validate_state_record\n    require(len(record.get(\"points\", [])) == POINTS, f\"{arm}:{record['stage']}: expected 20 state points\")\n  File \"/var/tmp/cloudbal-cp02-radar-inputs/docs/evidence/cp02_inner_capture_20261028/analyze_inner.py\", line 30, in require\n    raise ValueError(message)\nValueError: HYDRO:refresh_dry_air_mass_measure_entry_state: expected 20 state points\n",
+    "summary_exists": false,
+    "profiles_exists": false
+  }
+}

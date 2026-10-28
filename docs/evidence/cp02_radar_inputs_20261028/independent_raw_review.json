@@ -1,0 +1,298 @@
+{
+  "allocator": {
+    "allocation_status_integer_value_frequencies": {
+      "20": 190
+    },
+    "allocator_record_count": 190,
+    "config_fields": {
+      "cloud_fraction_threshold": 0.01,
+      "ledger_absolute_tolerance": 1e-13,
+      "ledger_relative_tolerance": 1e-11,
+      "maximum_dbz": 80.0,
+      "maximum_downdraft_innovation_ms": 2.0,
+      "maximum_downdraft_ms": 3.0,
+      "maximum_horizontal_substep": 0.75,
+      "maximum_transport_substeps": 64,
+      "minimum_dbz": 0.0,
+      "minimum_relative_fall_speed": 0.3,
+      "precipitation_loading_efficiency": 0.08,
+      "radar_wavelength_m": 0.1,
+      "reference_mass_concentration": 0.0001
+    },
+    "paired_store_count": 190,
+    "post_species_store_equal_to_return_species_count": 190,
+    "rho_d_range": [
+      0.31046910100141256,
+      1.141737649775326
+    ],
+    "species_total_sum_max_abs_difference": 0.0,
+    "total_range": [
+      7.266770892312402e-06,
+      0.0003918246079808515
+    ]
+  },
+  "density_inputs": {
+    "comparisons": {
+      "pressure": {
+        "exact_after_widening_count": 190,
+        "helper_range": [
+          20000.0,
+          100000.0
+        ],
+        "max_abs_difference": 0.0,
+        "max_difference_cell": [
+          174,
+          91,
+          16
+        ],
+        "max_signed_difference_at_max_abs": 0.0,
+        "paired_count": 190
+      },
+      "temperature": {
+        "exact_after_widening_count": 190,
+        "helper_range": [
+          224.3779754638672,
+          297.321533203125
+        ],
+        "max_abs_difference": 0.0,
+        "max_difference_cell": [
+          174,
+          91,
+          16
+        ],
+        "max_signed_difference_at_max_abs": 0.0,
+        "paired_count": 190
+      },
+      "vapor": {
+        "exact_after_widening_count": 190,
+        "helper_range": [
+          0.00010575638589216396,
+          0.0191522017121315
+        ],
+        "max_abs_difference": 0.0,
+        "max_difference_cell": [
+          174,
+          91,
+          16
+        ],
+        "max_signed_difference_at_max_abs": 0.0,
+        "paired_count": 190
+      }
+    },
+    "meaning": "captured REAL*8 helper arguments compared with corresponding captured REAL*4 state members widened to REAL*8"
+  },
+  "limits": [
+    "Only the selected 20 points \u00d7 22 levels are summarized; this is not a full-grid result.",
+    "Density and allocator local samples exist only at cells where the captured helper/allocator hooks executed.",
+    "LOGICAL*4 is interpreted as true when the raw signed INTEGER*4 representation is nonzero.",
+    "Quality/source and status fields are reported as captured integer values/bit patterns; no historical quality labels are assigned.",
+    "Statistics describe the captured binary execution and do not establish a physical cause, full-domain conservation, or forecast impact."
+  ],
+  "observation": {
+    "captured_radar_observed_post_count": 190,
+    "captured_radar_reflectivity_valid_count": 190,
+    "changed_cells_first_20": [
+      [
+        164,
+        74,
+        4
+      ],
+      [
+        164,
+        74,
+        5
+      ],
+      [
+        164,
+        74,
+        6
+      ],
+      [
+        164,
+        74,
+        7
+      ],
+      [
+        164,
+        74,
+        8
+      ],
+      [
+        164,
+        74,
+        9
+      ],
+      [
+        164,
+        74,
+        10
+      ],
+      [
+        164,
+        74,
+        11
+      ],
+      [
+        164,
+        74,
+        12
+      ],
+      [
+        164,
+        74,
+        15
+      ],
+      [
+        165,
+        75,
+        4
+      ],
+      [
+        165,
+        75,
+        5
+      ],
+      [
+        165,
+        75,
+        6
+      ],
+      [
+        165,
+        75,
+        7
+      ],
+      [
+        165,
+        75,
+        8
+      ],
+      [
+        165,
+        75,
+        9
+      ],
+      [
+        165,
+        75,
+        10
+      ],
+      [
+        165,
+        75,
+        11
+      ],
+      [
+        165,
+        75,
+        14
+      ],
+      [
+        165,
+        75,
+        19
+      ]
+    ],
+    "observed_cells_quality_integer_value_frequencies": {
+      "0": 75,
+      "32": 115
+    },
+    "observed_cells_source_integer_value_frequencies": {
+      "8": 190
+    },
+    "observed_changed_pre_to_post_count": 190,
+    "observed_only_count": 0,
+    "observed_pre_count": 0,
+    "radar_derived_post_true_count": 0,
+    "radar_quality_bit_0x20_nonzero_count": 115,
+    "radar_quality_integer_value_frequencies": {
+      "0": 267,
+      "1": 58,
+      "32": 115
+    },
+    "radar_source_integer_value_frequencies": {
+      "0": 58,
+      "8": 382
+    },
+    "radar_state_valid_integer_value_frequencies": {
+      "-1": 190,
+      "0": 250
+    },
+    "valid_equals_observed_count": 190,
+    "valid_only_count": 0
+  },
+  "phase": {
+    "phase_quality_by_above_ground": {
+      "above_ground": {
+        "count": 382,
+        "phase_quality_integer_frequencies": {
+          "0": 382
+        }
+      },
+      "not_above_ground": {
+        "count": 58,
+        "phase_quality_integer_frequencies": {
+          "1": 58
+        }
+      }
+    },
+    "phase_uncertain_post_true_count": 0,
+    "post_phase_integer_value_frequencies": {
+      "0": 250,
+      "1": 154,
+      "2": 36
+    },
+    "post_phase_vs_valid_state_value_mismatch_count": 0,
+    "post_phase_vs_valid_state_value_mismatch_first_20": [],
+    "state_phase_quality_integer_value_frequencies": {
+      "0": 382,
+      "1": 58
+    },
+    "state_phase_quality_nonzero_count": 58,
+    "state_phase_valid_integer_value_frequencies": {
+      "-1": 382,
+      "0": 58
+    },
+    "state_phase_value_integer_frequencies": {
+      "0": 250,
+      "1": 154,
+      "2": 36
+    }
+  },
+  "provenance": {
+    "analysis_method": "standalone raw JSON decoding and IEEE little-endian unpacking; no capture analyzer reused",
+    "binary": "/var/tmp/cp02-binary-boundary-20261028/klps_anal_prep.exe",
+    "binary_sha256_expected": "dbea173ec059afba40ae2d46193e5f5f33a63c18d02d4fd5db5ac23b504e2e65",
+    "capture_path": "/var/tmp/cp02-radar-20261028/hydro_final_v2/capture.json",
+    "capture_sha256": "cb1565e44655b15aa153aa7fc67f093188b4f7b5c979fda0fe635cc00efcf751",
+    "capture_status": "CAPTURE_COMPLETE",
+    "errors": [],
+    "inferior_exit_code": 0
+  },
+  "reflectivity_conversion": {
+    "formula_checked": "10**(0.1 * captured radar_reflectivity value)",
+    "max_absolute_error": 2.2737367544323206e-13,
+    "max_error_actual_zlinear": 1302.970369933448,
+    "max_error_cell": [
+      170,
+      90,
+      8
+    ],
+    "max_error_expected": 1302.9703699334482,
+    "max_relative_error": 1.7450410284835997e-16,
+    "observed_cells_compared": 190
+  },
+  "schema": "cp02_radar_independent_review_v1",
+  "scope": {
+    "actual_observation_fields": "radar_reflectivity and precipitation_phase four members each (value/valid/quality/source)",
+    "levels_per_point": 22,
+    "local_density_and_allocator_records": {
+      "density_entry": 190,
+      "density_return": 190,
+      "phase_allocation_return": 190,
+      "store_after": 190
+    },
+    "selected_point_level_slots": 440,
+    "selected_points": 20
+  }
+}

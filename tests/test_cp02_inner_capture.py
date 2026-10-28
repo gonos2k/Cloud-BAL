@@ -141,3 +141,46 @@ def test_cli_does_not_write_pass_outputs_for_prior_mismatch(tmp_path):
     assert result.returncode != 0
     assert "SCOPED_PASS" not in result.stdout
     assert not report_path.exists() and not profiles_path.exists()
+
+
+@pytest.mark.parametrize("stage", [
+    "refresh_dry_air_mass_measure_entry",
+    "refresh_dry_air_mass_measure_return",
+    "both_refresh_states",
+])
+@pytest.mark.parametrize("defect", ["empty", "partial", "missing_layer", "different_keys"])
+def test_cli_rejects_invalid_refresh_state_before_outputs(tmp_path, hydro_receipt, stage, defect):
+    capture = copy.deepcopy(hydro_receipt)
+    stages = ("refresh_dry_air_mass_measure_entry", "refresh_dry_air_mass_measure_return") if stage == "both_refresh_states" else (stage,)
+    for target_stage in stages:
+        event = next(record for record in capture["records"] if record["stage"] == target_stage)
+        state = event["state"]
+        if defect == "empty":
+            state["points"] = []
+        elif defect == "partial":
+            state["points"] = state["points"][:19]
+        elif defect == "missing_layer":
+            del state["points"][0]["levels"][0]["pressure"]
+        else:
+            used = {(point["fortran_i"], point["fortran_j"]) for point in state["points"]}
+            point = state["points"][0]
+            point["fortran_i"], point["fortran_j"] = next(
+                (i, j) for i in range(1, 236) for j in range(1, 284)
+                if (i, j) not in used
+            )
+            point["shadow_i_zero_based"] = point["fortran_i"] - 1
+            point["shadow_j_zero_based"] = point["fortran_j"] - 1
+
+    capture_path = tmp_path / "mutated_hydro.json.gz"
+    with gzip.open(capture_path, "wt", encoding="utf-8") as stream:
+        json.dump(capture, stream)
+    report_path, profiles_path = tmp_path / "report.json", tmp_path / "profiles.csv"
+    result = subprocess.run(
+        [sys.executable, str(SCRIPT), str(capture_path), "--arm", "HYDRO",
+         "--output", str(report_path), "--profiles", str(profiles_path)],
+        capture_output=True, text=True, check=False,
+    )
+
+    assert result.returncode != 0
+    assert "SCOPED_PASS" not in result.stdout
+    assert not report_path.exists() and not profiles_path.exists()

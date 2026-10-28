@@ -121,6 +121,19 @@ def record_index(capture, arm):
         for stage in ("refresh_dry_air_mass_measure_entry", "refresh_dry_air_mass_measure_return"):
             event = get_stage(records, stage)
             require(event.get("call_number") == 1 and event.get("parent", {}).get("role") == "first_hydro_derive" and event.get("parent", {}).get("derive_call_number") == 1, f"{arm}: orphan refresh event {stage}")
+            state = event.get("state", {})
+            validate_state_record(state, arm)
+            require(point_signature(state) == point_signature(indexed[("pipeline_entry_state_in", 1)]),
+                    f"{arm}:{stage}: sample keys differ from canonical outer state")
+        refresh_entry_event = get_stage(records, "refresh_dry_air_mass_measure_entry")
+        refresh_return = get_stage(records, "refresh_dry_air_mass_measure_return")["state"]
+        binding = refresh_return.get("output_binding")
+        if binding is not None:
+            entry_address = refresh_entry_event.get("state_address")
+            require(valid_address(entry_address)
+                    and binding.get("argument_address") == entry_address
+                    and binding.get("caller_address") == entry_address,
+                    f"{arm}: refresh return state binding differs from entry address")
         pre = get_stage(records, "publish_hydrometeor_candidate_pre").get("candidate_state_pre", {})
         require(pre.get("points") and pre.get("field_shapes"), f"{arm}: publish pre candidate state unavailable")
         validate_state_record(pre, arm)

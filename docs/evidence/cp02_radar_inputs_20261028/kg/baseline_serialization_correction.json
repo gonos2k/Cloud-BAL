@@ -1,0 +1,43 @@
+{
+  "changed_json_leaf_paths": [
+    {
+      "after": " M README.md",
+      "before": "M README.md",
+      "json_path": "maintained_roots.Cloud-BAL.git_status_exact[0]"
+    },
+    {
+      "after": "1ce735a959ad48b9c0a0473f9479c6b3cdb0e6ec3f274bf2c08c5cf904581b5e",
+      "before": "2b7dc8b0b8a9b57833625582964058d3bf870256d4c302eabaa64ea524798394",
+      "json_path": "maintained_roots.Cloud-BAL.git_status_sha256"
+    },
+    {
+      "after": " D ../../greetings.py",
+      "before": "D ../../greetings.py",
+      "json_path": "maintained_roots.KLAPS50.git_status_exact[0]"
+    },
+    {
+      "after": "a201ec777ae51fe29ba643fd48a5edd8eb6bec6ee15211254ab16cf0ebdd388e",
+      "before": "6f1f60e6ba845231439a3c8a4154c8f2ce0e06f43420511dff57ea4d4b9ae626",
+      "json_path": "maintained_roots.KLAPS50.git_status_sha256"
+    },
+    {
+      "after": " M docs/evidence/cp02_inner_capture_20261028/analyze_inner.py",
+      "before": "M docs/evidence/cp02_inner_capture_20261028/analyze_inner.py",
+      "json_path": "source.status[0]"
+    }
+  ],
+  "corrected_sha256": "13c61b2cbc23c937ec1cc1ec0e8588ecb6e73be10b1b6b0c2028d097dce23b5c",
+  "dated_snapshot_counts": {
+    "Cloud-BAL": 93,
+    "KLAPS50": 89
+  },
+  "dated_snapshot_total": 182,
+  "graph_and_dated_inventory_hashes_unchanged": true,
+  "maintained_graph_hashes": {
+    "Cloud-BAL": "a8ff5f6bf4c476b5ff4e722f6740705c8c7658e7f8fa4538e5d63602912ceed6",
+    "KLAPS50": "2aa24a3f214b6707f326d28b2a1224ca53d42c6819cef26a4a0f682e88da84e3"
+  },
+  "original_sha256": "9f200e78cc029818020597043059a657794121d8badf89fc0acb7884a9f2ad2d",
+  "reason": "Initial baseline capture used stdout.strip() on git status, removing the first status-column space. Corrected only the first status row for each maintained root and the source status, then recomputed the affected status-list digests.",
+  "schema": "cp02_radar_inputs_kg_baseline_serialization_correction_v1"
+}

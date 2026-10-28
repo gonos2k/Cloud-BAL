@@ -1,0 +1,53 @@
+{
+  "schema": "cp02_radar_docs_review_v1",
+  "result": "PASS",
+  "findings": [],
+  "reviewed_documents": {
+    "path": "docs/CP02_RADAR_INPUTS_20261028.md",
+    "sha256": "a0ea76da9100fba68f2924f72c2159f3bef952376afc56fd11cd73b2076de609"
+  },
+  "current_status": {
+    "path": "docs/CURRENT_RESEARCH_STATUS.md",
+    "sha256": "e441a7ba3259d3aee01b4315f97df659011bcfab999baae261f84ba04fe3fdcc"
+  },
+  "checked_evidence": {
+    "focused_tests": {
+      "path": "docs/evidence/cp02_radar_inputs_20261028/focused_tests.txt",
+      "sha256": "a97cacfcbf133391f0da2d4c7ecfed36df30265555022117988a07a9cfc877b6",
+      "claim": "77 passed, 196 warnings"
+    },
+    "radar_tier_test": {
+      "path": "docs/evidence/cp02_radar_inputs_20261028/tier_test.txt",
+      "sha256": "ccd1405923e93ede2605980d060e17650e91ec086543817150367d31813e2935",
+      "claim": "10 passed, 0 skipped"
+    },
+    "independent_raw_review": {
+      "path": "docs/evidence/cp02_radar_inputs_20261028/independent_raw_review.json",
+      "sha256": "c6f29fc964e38604b1473c0a43b484b2f385895817185ee7b17e6cb77a91ca96"
+    },
+    "replay_receipt": {
+      "path": "docs/evidence/cp02_radar_inputs_20261028/replay_receipt.json",
+      "sha256": "fe8e52fb5b8e25ace0eba538729957f703c6959e21ee33fe02b99b0276090952"
+    }
+  },
+  "portable_registration": {
+    "command": "/var/tmp/pr108_portable_env_20261026/bin/python tests/check_test_tiers.py --tier portable --list",
+    "registered_python_tests": 318,
+    "test_cp02_radar_inputs.py_registered": true
+  },
+  "factual_checks": {
+    "radar_quality_0x20_observed_cells": 115,
+    "publish_phase_uncertain_true_count": 0,
+    "physical_interpretation_or_approval_claimed": false,
+    "observed_radar_hits": 190,
+    "local_samples_per_stage": 190,
+    "runtime_receipt_native_rebuild": false,
+    "runtime_receipt_forecast_run": false,
+    "remaining_mass_balance_and_forecast_causality": "open"
+  },
+  "notes": [
+    "The documented 0x20 quality value and phase_uncertain flag are separate captured fields. The document reports their observed combination but explicitly defers interpretation pending historical QC and phase-uncertainty policy evidence.",
+    "The 77-test total is recorded in focused_tests.txt; the new radar tier test is separately logged as 10 passed, 0 skipped and was included in the aggregate per the document.",
+    "No edits were made to repository documents or evidence."
+  ]
+}
