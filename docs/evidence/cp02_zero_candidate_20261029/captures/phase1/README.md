@@ -1,0 +1,1 @@
+Phase 1 is a completed three-arm diagnostic capture using the corrected row-relative effective-address guard. It lacks the later B writer operand probes and is retained as intermediate evidence; the final analysis uses the separately archived OFF, HYDRO and LIQUID captures only. These diagnostic runs intentionally stop at first outer return and do not complete a forecast.

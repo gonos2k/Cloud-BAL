@@ -1,0 +1,72 @@
+{
+  "executable": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe",
+  "executable_sha256_before": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+  "executable_sha256_after": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+  "disassembly_command": [
+    "objdump",
+    "-d",
+    "-Mintel",
+    "--start-address=0x25ef866",
+    "--stop-address=0x25ef9d5",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe"
+  ],
+  "disassembly_sha256": "ab74f29185536b150a940541f832c355095921d7a01abaa3cf4584e79d941c2a",
+  "binary_has_debug_sections": false,
+  "files": {
+    "phys/module_mp_kdm6.F": "49cf8b0e3905a8d584073fdf3345ddfa64a0b0bac178676584505f7c4d7187ca",
+    "phys/module_mp_kdm6.f90": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b",
+    "phys/module_mp_kdm6.o": "64aa9ba9d65c501993f0bb425492e288f4869f22412a6b97cb0e82cbc10937b7"
+  },
+  "archive_member_sha256": "64aa9ba9d65c501993f0bb425492e288f4869f22412a6b97cb0e82cbc10937b7",
+  "co_located_object_matches_archive_member": true,
+  "symbol_executable": "0x25e2490 size 0x15ed5",
+  "symbol_object": "0x2e20 size 0x15ed5",
+  "commands": [
+    {
+      "command": [
+        "readelf",
+        "-S",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe"
+      ],
+      "stdout_sha256": "93bbf700237d2226a5deb2d88fabbe59184816cf3b9f63ff7c2479c7dd8dab5d",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "readelf",
+        "-n",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe"
+      ],
+      "stdout_sha256": "b64870a731b8a8452eb21124e5488f80e5312a3f880e20ffc4c87db8bf359c87",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "nm",
+        "-S",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe"
+      ],
+      "stdout_sha256": "7d77412bd0ee722df08e2baffc096dceb8b11822935338a7c4b33679d2b34f70",
+      "returncode": 0
+    },
+    {
+      "command": [
+        "nm",
+        "-S",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/phys/module_mp_kdm6.o"
+      ],
+      "stdout_sha256": "69bef46f6f17db8f27ca769d1b8e0484bec0cdef2709953b5469681d5860aead",
+      "returncode": 0
+    }
+  ],
+  "scope": "Object/archive agreement and timestamps do not prove executable link or source inputs; no source build manifest located in the bounded inspection.",
+  "b_store_disassembly_command": [
+    "objdump",
+    "-d",
+    "-Mintel",
+    "--start-address=0x25e5bd3",
+    "--stop-address=0x25e5c90",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe"
+  ],
+  "b_store_disassembly_sha256": "3a0aeb8e3e335a1f8cf7801711326169541327d2a237cbe05b4487fd930ef1fa"
+}

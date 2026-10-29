@@ -1,0 +1,7 @@
+# Native capture helper independent review
+
+Reviewed `capture_plan/capture_source.gdb` SHA-256 `c67847358611e171849f366468ff2875dee4d545dfd4f54a778a1d2f753e6661` against the pinned executable and archived captures. The initial review identified the selected-call ID versus actual-call distinction, capture-list initialization and watchpoint count. Subsequent code inspection verified explicit active-target/address guards and two write watches plus two access watches. `selected_inner_id` identifies selected records; `callback_ordinal` counts all breakpoint callbacks and is not an actual inner-call ordinal.
+
+An initial OFF attempt established that the candidate register index is row-relative, not the full tile offset. The revised guard compares the computed B effective address to the selected B watch address. Disassembly confirms the R15-indexed candidate operands and the B writer's byte-indexed effective address and four min/divide/floor/store probe locations. Raw double register bits and MXCSR are captured. The earlier OFF attempt is preserved separately.
+
+The final OFF, HYDRO and LIQUID receipts each bind the reviewed helper and report eight ranks settled with intentional launcher exit 255. Inspection of archived rank 1 and 3 captures found ten candidate events and eleven B events per target in each arm, including the four B-writer roles at a consistent watched address. This is a scoped capture-helper review, not independent scientific validation or a forecast-completion claim; the raw event analysis and input provenance require their own review.

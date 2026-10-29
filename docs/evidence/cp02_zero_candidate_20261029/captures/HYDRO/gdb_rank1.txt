@@ -1,0 +1,15 @@
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+ starting wrf task            1  of            8
+THERMO_OUTER_ENTRY rank=1 arm=HYDRO step=1 dt=20.0 selected=624
+Hardware watchpoint 1: *(unsigned int *)0x7ffff98fa0e4
+Hardware watchpoint 2: *(unsigned int *)0x1552ed1e4368
+THERMO_WATCH_ARMED rank=1 target=P05_00 fields=qrs,q
+Hardware access (read/write) watchpoint 3: *(unsigned int *)0x7ffff95cafe4
+Hardware access (read/write) watchpoint 4: *(unsigned int *)0x7ffff97b9f84

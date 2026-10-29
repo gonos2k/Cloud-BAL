@@ -1,0 +1,83 @@
+{
+  "status": "PASS",
+  "checkout": "/tmp/cp02-zero-candidate-clean-qauluel_/checkout",
+  "tree": "edbe3ec38c3cfd65246ecd708cfe13261bfefec5",
+  "commands": [
+    [
+      "/usr/bin/python",
+      "tools/cp02_zero_candidate.py",
+      "--output",
+      "/tmp/cp02-zero-reproduce-fghx_hfr/analysis"
+    ],
+    [
+      "/usr/bin/python",
+      "docs/evidence/cp02_zero_candidate_20261029/review/independent_raw.py",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/OFF/raw_off_first_inner_rank0_pid402118.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/OFF/raw_off_first_inner_rank1_pid402109.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/OFF/raw_off_first_inner_rank2_pid402100.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/OFF/raw_off_first_inner_rank3_pid402103.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/OFF/raw_off_first_inner_rank4_pid402108.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/OFF/raw_off_first_inner_rank5_pid402106.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/OFF/raw_off_first_inner_rank6_pid402110.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/OFF/raw_off_first_inner_rank7_pid402113.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/HYDRO/raw_hydro_first_inner_rank0_pid402061.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/HYDRO/raw_hydro_first_inner_rank1_pid402065.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/HYDRO/raw_hydro_first_inner_rank2_pid402072.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/HYDRO/raw_hydro_first_inner_rank3_pid402068.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/HYDRO/raw_hydro_first_inner_rank4_pid402056.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/HYDRO/raw_hydro_first_inner_rank5_pid402059.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/HYDRO/raw_hydro_first_inner_rank6_pid402069.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/HYDRO/raw_hydro_first_inner_rank7_pid402077.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/LIQUID/raw_liquid_first_inner_rank0_pid402087.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/LIQUID/raw_liquid_first_inner_rank1_pid402081.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/LIQUID/raw_liquid_first_inner_rank2_pid402089.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/LIQUID/raw_liquid_first_inner_rank3_pid402091.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/LIQUID/raw_liquid_first_inner_rank4_pid402085.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/LIQUID/raw_liquid_first_inner_rank5_pid402080.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/LIQUID/raw_liquid_first_inner_rank6_pid402098.json.gz",
+      "docs/evidence/cp02_zero_candidate_20261029/captures/LIQUID/raw_liquid_first_inner_rank7_pid402104.json.gz"
+    ],
+    [
+      "/usr/bin/python",
+      "docs/evidence/cp02_zero_candidate_20261029/review/outer_compare.py"
+    ]
+  ],
+  "artifact_count": 7,
+  "artifacts": [
+    {
+      "path": "docs/evidence/cp02_zero_candidate_20261029/analysis/artifact_manifest.json",
+      "sha256": "0a89e5edd2886b0e66ff5fea084c973470aa2d3d27254a92dba71dcc40a558d4",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_zero_candidate_20261029/analysis/candidate.csv",
+      "sha256": "bf33bd4b38241e2f880171a4e73588924758822c4f88f5bd449e76410c69dbda",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_zero_candidate_20261029/analysis/candidates.png",
+      "sha256": "4dea3f69a9f6de8654d8c73945226fe31127f0f9d38c91de1f3a780edfdd38c3",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_zero_candidate_20261029/analysis/counterfactual.csv",
+      "sha256": "bc6d6becaff7a07d471c7e7a23896fe1843487acc5e2caaff3f35d1e69456a70",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_zero_candidate_20261029/analysis/summary.json",
+      "sha256": "12690f7fa774324a88babfdcd715e7cd2fbad9b9e0811d4151cd97b3283daba4",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_zero_candidate_20261029/review/independent_raw.json",
+      "sha256": "80437478e601cf8e5478ae6473a9ab1a1150ca34e76cbe6c50f9d0837d904b7a",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_zero_candidate_20261029/validation/outer_scope.json",
+      "sha256": "043af41545ff7ef3056e8ecaf9dd8028d8fb53fe15ca7a0e6a09db084ef143af",
+      "byte_identical": true
+    }
+  ]
+}
