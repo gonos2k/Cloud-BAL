@@ -1,0 +1,45 @@
+{
+  "tree": "b55ca6c35e67a502713fce7da14eb164824448a5",
+  "export": "/var/tmp/cp02-pr126-clean-4vdlrww_/checkout",
+  "command": [
+    "/usr/bin/python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_trace_wps_species.py",
+    "tests/test_precipitation_transitions.py",
+    "tests/test_hourly_precip_scores.py",
+    "tests/test_cp02_boundary_events.py",
+    "tests/test_cp02_inner_capture.py",
+    "tests/test_cp02_capture_storage.py",
+    "tests/test_cp02_radar_inputs.py",
+    "tests/test_cp02_density_comparison.py",
+    "tests/test_cp02_precip_control_mapping.py",
+    "tests/test_cp02_control_capture_analysis.py",
+    "tests/test_cp02_control_density_comparison.py",
+    "tests/test_cp02_density_evidence.py",
+    "tests/test_cp02_wrf_first_call.py",
+    "tests/test_cp02_kdm6_controls.py",
+    "tests/test_cp02_kdm6_capture_gate.py"
+  ],
+  "exit_code": 0,
+  "cli_command": [
+    "/usr/bin/python",
+    "tools/cp02_kdm6_controls.py",
+    "--capture-dir",
+    "docs/evidence/cp02_kdm6_controls_20261029/captures",
+    "--output-dir",
+    "/var/tmp/cp02-pr126-clean-4vdlrww_/analysis"
+  ],
+  "cli_exit_code": 0,
+  "analysis_byte_identical": {
+    "summary.json": true,
+    "per_arm_call.csv": true,
+    "field_deltas.csv": true,
+    "mass_aux_ratios.csv": true,
+    "selected_profiles.csv": true
+  },
+  "file_runner_exit_code": 0,
+  "portable_registration": true,
+  "full_portable_suite": false
+}

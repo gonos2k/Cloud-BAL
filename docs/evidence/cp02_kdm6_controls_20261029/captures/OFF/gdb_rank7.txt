@@ -1,0 +1,20 @@
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+ starting wrf task            7  of            8
+CP02_KDM6_ENTRY rank=7 pid=4085526 call=1 observed_itimestep=1 observed_dt=20.0 args=77 bounds=[111, 240, 206, 288, 1, 40] tile=[118, 233, 213, 281, 1, 39] points=624
+CP02_CAPTURE_FILE=/var/tmp/cp02-kdm6-controls-20261029-1_qjx_p3/OFF/capture/capture_rank7_pid4085526.json
+CP02_KDM6_RETURN rank=7 pid=4085526 call=1 pc=0x20c3722
+CP02_KDM6_ENTRY rank=7 pid=4085526 call=2 observed_itimestep=2 observed_dt=20.0 args=77 bounds=[111, 240, 206, 288, 1, 40] tile=[118, 233, 213, 281, 1, 39] points=624
+CP02_CAPTURE_FILE=/var/tmp/cp02-kdm6-controls-20261029-1_qjx_p3/OFF/capture/capture_rank7_pid4085526.json
+CP02_KDM6_RETURN rank=7 pid=4085526 call=2 pc=0x20c3722
+CP02_KDM6_PEERS_SETTLED ranks=8 calls_per_rank=2
+CP02_KDM6_RETURN rank=7 pid=4085526 call=2 pc=0x20c3722
+CP02_KDM6_PEERS_SETTLED ranks=8 calls_per_rank=2
+
+Temporary breakpoint -14, 0x00000000020c3722 in module_microphysics_driver_mp_microphysics_driver_ ()

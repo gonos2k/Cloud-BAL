@@ -1,0 +1,120 @@
+{
+  "baseline_sha256": "03160ef055b624a64dff4cc4975de25ed6fc378e1f9e1cce0bc52d15d3a07faf",
+  "corpora": {
+    "Cloud-BAL": {
+      "after": {
+        "communities": 1422,
+        "edges": 28430,
+        "nodes": 15959
+      },
+      "before": {
+        "communities": 1423,
+        "edges": 28329,
+        "nodes": 15913
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "prior_node_ids_preserved": 15913,
+      "selected_manifest_keys": [
+        "tests/test_cp02_kdm6_capture_gate.py",
+        "tests/test_cp02_kdm6_controls.py",
+        "tests/test_cp02_wrf_first_call.py",
+        "tools/cp02_kdm6_controls.py",
+        "tools/cp02_wrf_first_call.py"
+      ],
+      "selected_source_sha256": {
+        "tests/test_cp02_kdm6_capture_gate.py": "1768f63f02fe81e5f54b3fa9946c54b335fb86263ff7165f2fba0653e88695c8",
+        "tests/test_cp02_kdm6_controls.py": "cad5edf3029ed025653f60e7f46bf32880ea7cec89a3fade8fbbc83ae47f973f",
+        "tests/test_cp02_wrf_first_call.py": "de90b38ddceff35c7730e089fb9e1065147ef3a4e8d65114064a460ae8c5fd74",
+        "tools/cp02_kdm6_controls.py": "c3ad5ec1f5ce9ebd4e31c567e5438b5964e20c0e2080da742f494ee44b341526",
+        "tools/cp02_wrf_first_call.py": "ae933f257659a952ed8ef60bbf588b1fce4617f41df9b520895cf7b18dcac222"
+      },
+      "snapshot_file_sha256": {
+        "GRAPH_REPORT.md": "b4dcd03d0ac1e7ebe00646fc3a41b9082eb0459d9e1f6b979df226ee5364e274",
+        "graph.json": "049628cb91b338dc8aec202205d747d725114ce6daa968f39bdac81e714c5761",
+        "manifest.json": "2aa58ac640446818f94a3d4dbd33d7b01dc4bd7d0ddf4ea3dcfc2a9e269b35b5"
+      }
+    },
+    "KLAPS50": {
+      "after": {
+        "communities": 3389,
+        "edges": 86888,
+        "nodes": 41787
+      },
+      "before": {
+        "communities": 3418,
+        "edges": 86787,
+        "nodes": 41741
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "prior_node_ids_preserved": 41741,
+      "selected_manifest_keys": [
+        "Cloud-BAL/tests/test_cp02_kdm6_capture_gate.py",
+        "Cloud-BAL/tests/test_cp02_kdm6_controls.py",
+        "Cloud-BAL/tests/test_cp02_wrf_first_call.py",
+        "Cloud-BAL/tools/cp02_kdm6_controls.py",
+        "Cloud-BAL/tools/cp02_wrf_first_call.py"
+      ],
+      "selected_source_sha256": {
+        "tests/test_cp02_kdm6_capture_gate.py": "1768f63f02fe81e5f54b3fa9946c54b335fb86263ff7165f2fba0653e88695c8",
+        "tests/test_cp02_kdm6_controls.py": "cad5edf3029ed025653f60e7f46bf32880ea7cec89a3fade8fbbc83ae47f973f",
+        "tests/test_cp02_wrf_first_call.py": "de90b38ddceff35c7730e089fb9e1065147ef3a4e8d65114064a460ae8c5fd74",
+        "tools/cp02_kdm6_controls.py": "c3ad5ec1f5ce9ebd4e31c567e5438b5964e20c0e2080da742f494ee44b341526",
+        "tools/cp02_wrf_first_call.py": "ae933f257659a952ed8ef60bbf588b1fce4617f41df9b520895cf7b18dcac222"
+      },
+      "snapshot_file_sha256": {
+        "GRAPH_REPORT.md": "95f1f970aa5e8fd2101431ad1b0ea2122130e190dad22c61bef0fb13d7456de5",
+        "graph.json": "3a3cef2c2b4445aa75d66f23c476bdf3fe8fda75d63f0ff134a21d2d8b1bbe80",
+        "manifest.json": "1c2e9cfc94d9f17b1b256bb2d4a10fa2a154c6ed4b09dddf7e3ede1e17ef7c29"
+      }
+    }
+  },
+  "created_at_utc": "2026-10-29T07:48:22.771069+00:00",
+  "dated_snapshots_preserved": 192,
+  "extraction_limits": [
+    "Only the three new frozen Python source paths are structurally extracted.",
+    "Two PR125 paths already present as graph nodes receive manifest-row repair only.",
+    "Capture GDB scripts, evidence plots, and extraction scripts are hash-bound only.",
+    "Graph freshness does not establish runtime behavior, physical assumptions, or scientific approval.",
+    "Fortran cross-file CALL extraction is partial."
+  ],
+  "hash_only_sha256": {
+    "docs/evidence/cp02_kdm6_controls_20261029/archive_capture.py": "e91195a63a737415d3b0bd85baf296f2a85743ad6633f548d0da35a443de9a82",
+    "docs/evidence/cp02_kdm6_controls_20261029/capture_kdm6.gdb": "e71414d285a0b4ca0d891eb772a16d8796e064f59ca3de7f52462c0a1172c4b0",
+    "docs/evidence/cp02_kdm6_controls_20261029/inputs/extract_inputs.py": "cdbd2ce9fd2351b8502776c88c1bbeeed5c62c52741901bc1c57bcc6097f6a1f",
+    "docs/evidence/cp02_kdm6_controls_20261029/prepare_capture.py": "50465b4df672d1364753b32d336cfa1b1f28674b669c571b8344091b18e8a0b3"
+  },
+  "manifest_update_scope": [
+    "tests/test_cp02_kdm6_capture_gate.py",
+    "tests/test_cp02_kdm6_controls.py",
+    "tests/test_cp02_wrf_first_call.py",
+    "tools/cp02_kdm6_controls.py",
+    "tools/cp02_wrf_first_call.py"
+  ],
+  "selection_lock_sha256": "4a54338509884acd8fd7800efb0f9ff8308b9bf7e6f0fb83a65bd30ffd21ee9f",
+  "source_extraction_scope": [
+    "tests/test_cp02_kdm6_capture_gate.py",
+    "tests/test_cp02_kdm6_controls.py",
+    "tools/cp02_kdm6_controls.py"
+  ],
+  "stage": "/var/tmp/cp02_kdm6_controls_kg_20261029/stage-validated-sources-v1",
+  "staged_wiki_sha256": {
+    "graph-report-cloud-bal.md": "b4dcd03d0ac1e7ebe00646fc3a41b9082eb0459d9e1f6b979df226ee5364e274",
+    "graph-report-klaps50.md": "95f1f970aa5e8fd2101431ad1b0ea2122130e190dad22c61bef0fb13d7456de5",
+    "graph-report.md": "8a8a2a955e6326c84454d1785e57d65c5c282ade247970362fa5567af73b5170",
+    "index.md": "3c19f0bf07d7662b1f6003418a73f4a6cf472eef91d4e530404650f639449ebd",
+    "log.md": "ab88e33c177dc8847f6f95c5306b2cc5b2d9ac58cea2d6a68986cb656650c57c"
+  },
+  "status": "STAGED_ONLY_NO_MAINTAINED_WRITES"
+}
