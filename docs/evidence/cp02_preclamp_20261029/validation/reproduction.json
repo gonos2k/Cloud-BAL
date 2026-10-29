@@ -1,0 +1,50 @@
+{
+  "status": "PASS",
+  "clean_checkout": "/tmp/cp02-preclamp-clean-8s96pink/checkout",
+  "commands": [
+    [
+      "/usr/bin/python",
+      "tools/cp02_preclamp_response.py",
+      "--capture-root",
+      "docs/evidence/cp02_preclamp_20261029/captures",
+      "--output",
+      "/tmp/cp02-preclamp-repro-7d8z_9wz/analysis"
+    ],
+    [
+      "/usr/bin/python",
+      "docs/evidence/cp02_preclamp_20261029/science/independent_check.py"
+    ]
+  ],
+  "comparisons": [
+    {
+      "path": "docs/evidence/cp02_preclamp_20261029/analysis/P01_00.png",
+      "sha256": "403d0449886e3b27e3a56dbe98a362267655a4b55bd87bac4c9d3e9d85947d73",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_preclamp_20261029/analysis/P05_00.png",
+      "sha256": "52aa97f53d50b7cc557866d6667957a82afd7a1fff0d437b7fd92476e94c400d",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_preclamp_20261029/analysis/artifact_manifest.json",
+      "sha256": "961a01a1c2093d42b932921207bc3b8998a982028dddd71295b33d4e85ce5852",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_preclamp_20261029/analysis/preclamp.csv",
+      "sha256": "b8c781585fc7d1df696ec43531912b230695ceaf9c2b7380c32d92e03a350638",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_preclamp_20261029/analysis/summary.json",
+      "sha256": "95af5ee1d930a5cb8e7397492c1fcbcd55829221ca312ba534004976cfc4231b",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_preclamp_20261029/science/independent_check.json",
+      "sha256": "62e8c5b891d81fdea2e372a0346c21d6a1262bd922dbb96b21f1d20eac826feb",
+      "byte_identical": true
+    }
+  ]
+}
