@@ -1,0 +1,82 @@
+
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000025ef866 <module_mp_kdm6_mp_kdm62d_+0xd3d6>:
+ 25ef866:	45 0f 2f e2          	comiss xmm12,xmm10
+ 25ef86a:	0f 86 4f fa ff ff    	jbe    25ef2bf <module_mp_kdm6_mp_kdm62d_+0xce2f>
+ 25ef870:	44 0f 29 63 50       	movaps XMMWORD PTR [rbx+0x50],xmm12
+ 25ef875:	48 8b 83 f0 00 00 00 	mov    rax,QWORD PTR [rbx+0xf0]
+ 25ef87c:	f3 42 0f 10 04 b8    	movss  xmm0,DWORD PTR [rax+r15*4]
+ 25ef882:	f3 0f 11 43 70       	movss  DWORD PTR [rbx+0x70],xmm0
+ 25ef887:	48 8b 83 50 01 00 00 	mov    rax,QWORD PTR [rbx+0x150]
+ 25ef88e:	f3 42 0f 10 04 b8    	movss  xmm0,DWORD PTR [rax+r15*4]
+ 25ef894:	48 8b 83 88 01 00 00 	mov    rax,QWORD PTR [rbx+0x188]
+ 25ef89b:	f3 42 0f 59 04 b8    	mulss  xmm0,DWORD PTR [rax+r15*4]
+ 25ef8a1:	e8 da 7c e1 fd       	call   407580 <__bwr_sqrtf@plt>
+ 25ef8a6:	0f 57 ed             	xorps  xmm5,xmm5
+ 25ef8a9:	f3 0f 10 5b 70       	movss  xmm3,DWORD PTR [rbx+0x70]
+ 25ef8ae:	f3 0f 59 c3          	mulss  xmm0,xmm3
+ 25ef8b2:	f3 0f 5a c0          	cvtss2sd xmm0,xmm0
+ 25ef8b6:	48 8b 83 e0 02 00 00 	mov    rax,QWORD PTR [rbx+0x2e0]
+ 25ef8bd:	f2 42 0f 10 0c f8    	movsd  xmm1,QWORD PTR [rax+r15*8]
+ 25ef8c3:	48 8b 83 b8 01 00 00 	mov    rax,QWORD PTR [rbx+0x1b8]
+ 25ef8ca:	f3 42 0f 10 14 b8    	movss  xmm2,DWORD PTR [rax+r15*4]
+ 25ef8d0:	f3 0f 10 35 50 97 ec 	movss  xmm6,DWORD PTR [rip+0xec9750]        # 34b9028 <__unnamed_1>
+ 25ef8d7:	00 
+ 25ef8d8:	f3 0f 5c d6          	subss  xmm2,xmm6
+ 25ef8dc:	f3 0f 5a d2          	cvtss2sd xmm2,xmm2
+ 25ef8e0:	48 8b 83 e8 00 00 00 	mov    rax,QWORD PTR [rbx+0xe8]
+ 25ef8e7:	f2 42 0f 59 14 f8    	mulsd  xmm2,QWORD PTR [rax+r15*8]
+ 25ef8ed:	48 c7 c0 48 bd cd 30 	mov    rax,0x30cdbd48
+ 25ef8f4:	f3 0f 59 18          	mulss  xmm3,DWORD PTR [rax]
+ 25ef8f8:	f2 0f 59 c1          	mulsd  xmm0,xmm1
+ 25ef8fc:	f3 0f 5a db          	cvtss2sd xmm3,xmm3
+ 25ef900:	48 c7 c0 b0 bc cd 30 	mov    rax,0x30cdbcb0
+ 25ef907:	f3 0f 10 20          	movss  xmm4,DWORD PTR [rax]
+ 25ef90b:	48 8b 83 c8 01 00 00 	mov    rax,QWORD PTR [rbx+0x1c8]
+ 25ef912:	f3 42 0f 59 24 b8    	mulss  xmm4,DWORD PTR [rax+r15*4]
+ 25ef918:	f3 0f 5a e4          	cvtss2sd xmm4,xmm4
+ 25ef91c:	f2 0f 59 d9          	mulsd  xmm3,xmm1
+ 25ef920:	f2 0f 59 e0          	mulsd  xmm4,xmm0
+ 25ef924:	f2 0f 58 e3          	addsd  xmm4,xmm3
+ 25ef928:	f2 0f 59 e2          	mulsd  xmm4,xmm2
+ 25ef92c:	48 8b 83 60 01 00 00 	mov    rax,QWORD PTR [rbx+0x160]
+ 25ef933:	f2 42 0f 5e 24 f8    	divsd  xmm4,QWORD PTR [rax+r15*8]
+ 25ef939:	0f 57 c0             	xorps  xmm0,xmm0
+ 25ef93c:	f2 0f 5a c4          	cvtsd2ss xmm0,xmm4
+ 25ef940:	f3 0f 59 c6          	mulss  xmm0,xmm6
+ 25ef944:	0f 2f e8             	comiss xmm5,xmm0
+ 25ef947:	0f 86 43 f9 ff ff    	jbe    25ef290 <module_mp_kdm6_mp_kdm62d_+0xce00>
+ 25ef94d:	0f 28 63 50          	movaps xmm4,XMMWORD PTR [rbx+0x50]
+ 25ef951:	0f 28 cc             	movaps xmm1,xmm4
+ 25ef954:	0f 28 9b 40 01 00 00 	movaps xmm3,XMMWORD PTR [rbx+0x140]
+ 25ef95b:	f3 0f 5e cb          	divss  xmm1,xmm3
+ 25ef95f:	0f 28 15 aa 5b ed 00 	movaps xmm2,XMMWORD PTR [rip+0xed5baa]        # 34c5510 <strlit.115+0x270>
+ 25ef966:	0f 57 ca             	xorps  xmm1,xmm2
+ 25ef969:	f3 0f 5f c1          	maxss  xmm0,xmm1
+ 25ef96d:	f3 0f 10 4b 18       	movss  xmm1,DWORD PTR [rbx+0x18]
+ 25ef972:	f3 0f 5e 0d 7a c1 ec 	divss  xmm1,DWORD PTR [rip+0xecc17a]        # 34bbaf4 <__unnamed_13>
+ 25ef979:	00 
+ 25ef97a:	f3 0f 5f c1          	maxss  xmm0,xmm1
+ 25ef97e:	f3 0f 5e e3          	divss  xmm4,xmm3
+ 25ef982:	0f 57 e2             	xorps  xmm4,xmm2
+ 25ef985:	0f 2f c4             	comiss xmm0,xmm4
+ 25ef988:	48 8b 83 80 01 00 00 	mov    rax,QWORD PTR [rbx+0x180]
+ 25ef98f:	f3 42 0f 11 04 b8    	movss  DWORD PTR [rax+r15*4],xmm0
+ 25ef995:	0f 9b c0             	setnp  al
+ 25ef998:	0f 94 c1             	sete   cl
+ 25ef99b:	84 c1                	test   cl,al
+ 25ef99d:	f3 44 0f 10 8b d0 01 	movss  xmm9,DWORD PTR [rbx+0x1d0]
+ 25ef9a4:	00 00 
+ 25ef9a6:	f3 0f 10 25 82 c1 ec 	movss  xmm4,DWORD PTR [rip+0xecc182]        # 34bbb30 <__unnamed_1+0x10>
+ 25ef9ad:	00 
+ 25ef9ae:	0f 84 0b f9 ff ff    	je     25ef2bf <module_mp_kdm6_mp_kdm62d_+0xce2f>
+ 25ef9b4:	48 8b 83 70 03 00 00 	mov    rax,QWORD PTR [rbx+0x370]
+ 25ef9bb:	f3 42 0f 10 04 b8    	movss  xmm0,DWORD PTR [rax+r15*4]
+ 25ef9c1:	f3 43 0f 58 04 be    	addss  xmm0,DWORD PTR [r14+r15*4]
+ 25ef9c7:	f3 42 0f 11 04 b8    	movss  DWORD PTR [rax+r15*4],xmm0
+ 25ef9cd:	43 c7 04 be 00 00 00 	mov    DWORD PTR [r14+r15*4],0x0
+ 25ef9d4:	00 

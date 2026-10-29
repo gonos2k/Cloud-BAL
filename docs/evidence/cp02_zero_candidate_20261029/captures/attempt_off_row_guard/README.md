@@ -1,0 +1,1 @@
+OFF diagnostic attempt reached all ranks settled, but candidate probes did not capture target events: the helper compared row-relative r15 against a full-tile offset. This attempt is retained as failed capture evidence and excluded from the final candidate analysis. No model memory was modified.
