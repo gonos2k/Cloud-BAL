@@ -1,0 +1,19 @@
+{
+  "decision": "GO",
+  "scope": "Scoped independent raw arithmetic and access-watch evidence review; report authored by reviewer excluded.",
+  "findings_addressed": [
+    "Analyzer now verifies hardware read/write access-watch creation label and exact address in each target rank GDB log and hashes log bytes in summary."
+  ],
+  "checks": [
+    "Six raw captures independently decoded; signed zero raw bytes, per-operation REAL32 frame/bound, address Q alias, two access PCs through load.",
+    "All six CSV rows agree for source operands, REAL32 difference, min bound, loaded value and writer PC.",
+    "pytest -q tests/test_cp02_source_write.py: 3 passed in 10.12s."
+  ],
+  "sha256": {
+    "tools/cp02_source_write.py": "9f3dc5ac0e392214d633f17448022b1f9bf651232a7342fcc2064a1957b90f7e",
+    "tests/test_cp02_source_write.py": "b761771468ae0e404b905e8bd47217998ee8c2a68b7be3e7906c80a346f608ce",
+    "docs/evidence/cp02_source_write_20261029/analysis/source.csv": "ea6cf59cfd29be1c41db242663fccba89bb1bc4eda013119722c257d749db378",
+    "docs/evidence/cp02_source_write_20261029/analysis/summary.json": "ea4724743a7b3b3a50f6032d921b3e062905dc4ca1412d1a813acbb7f4b4b8ee",
+    "docs/evidence/cp02_source_write_20261029/review/independent_raw.py": "2b34a9fd1d4a65d287c280b6ea9e232298a305f23325589d0fee7381e48b9651"
+  }
+}

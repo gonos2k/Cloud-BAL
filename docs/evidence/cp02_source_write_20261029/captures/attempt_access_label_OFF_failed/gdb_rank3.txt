@@ -1,0 +1,18 @@
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+ starting wrf task            3  of            8
+THERMO_OUTER_ENTRY rank=3 arm=OFF step=1 dt=20.0 selected=624
+Hardware watchpoint 1: *(unsigned int *)0x7ffff97bdf84
+Hardware watchpoint 2: *(unsigned int *)0x1552ecf9b228
+Hardware watchpoint 3: *(unsigned int *)0x7ffff9796324
+THERMO_WATCH_ARMED rank=3 target=P01_00 fields=qrs,q,t
+Hardware access (read/write) watchpoint 4: *(unsigned int *)0x7ffff967de24
+THERMO_CAPTURE_FAILED rank=3 stage=source_arm file=/var/tmp/cp02-thermo-response-20261029-rjz0189p/OFF/capture/failed_off_first_inner_rank3_pid307776.json
+
+Breakpoint -17, 0x00000000025ef187 in module_mp_kdm6_mp_kdm62d_ ()

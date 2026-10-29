@@ -1,0 +1,41 @@
+{
+  "bindings": {
+    "docs/CP02_SOURCE_WRITE_20261029.md": "7f11f1ae8d063b79b67a4233403e22bc7f7d79cc32b451e934a916973fc96a0a",
+    "docs/evidence/cp02_source_write_20261029/analysis/artifact_manifest.json": "0c3f40139f3b3632f83b3e3e5bd623b7d9e7d76840645e4262d4906c40099558",
+    "docs/evidence/cp02_source_write_20261029/analysis/source.csv": "ea6cf59cfd29be1c41db242663fccba89bb1bc4eda013119722c257d749db378",
+    "docs/evidence/cp02_source_write_20261029/analysis/summary.json": "ea4724743a7b3b3a50f6032d921b3e062905dc4ca1412d1a813acbb7f4b4b8ee",
+    "docs/evidence/cp02_source_write_20261029/binary/analysis.md": "12dcbb043eb21eb9e935f95b437f3a9226d16bc334cfff2d30251a32fa26e502",
+    "docs/evidence/cp02_source_write_20261029/binary/extraction_receipt.json": "69eacc8c0d796901c2039fe2edaee4cf04166d110b2fa237be3df1037b3f29c4",
+    "docs/evidence/cp02_source_write_20261029/capture_plan/README.md": "dc14aacd5c669ae39f77e72f6b0317798eb45f37ce9e508d351b8080c98ae65a",
+    "docs/evidence/cp02_source_write_20261029/capture_plan/capture_source.gdb": "cc732171bf108da5a4f2788787dde3b30f07edeb2b6c7199582378e4583c7f34",
+    "docs/evidence/cp02_source_write_20261029/captures/HYDRO/receipt.json": "a322939fafca73982b0da7f2df8ce577dfe4e58278f2b74019e574fdc6d78954",
+    "docs/evidence/cp02_source_write_20261029/captures/LIQUID/receipt.json": "fe2a36addc6b8bec14b4093ac198124787d331e55c901ae6c600ac088c8d0803",
+    "docs/evidence/cp02_source_write_20261029/captures/OFF/receipt.json": "ff0a10f41595b0acdc71e014e178cebe6455311e4a90b6a48b4a53921d0ebff8",
+    "docs/evidence/cp02_source_write_20261029/review/analyzer_review.json": "3b3eb971259583a45b33fcb2304dfce5c65ebd5681e811fa9b5072097bbdd3cf",
+    "docs/evidence/cp02_source_write_20261029/review/independent_source.json": "dc8aa4eaa555b51960b2989ff17f4a19caacb77ff4ee50db1eee9da709cb3f6c",
+    "docs/evidence/cp02_source_write_20261029/review/kg_helper_review.json": "e8eafd628dcc74ae1fc1d03b7a46a59858c1e942dfdd4a4d5b0db1d872f5cb3f",
+    "docs/evidence/cp02_source_write_20261029/review/native_helper_review.json": "03fcfbf2fb78d6b9e2492b333db32d8bd7b25c486e20d9b547bc3f8b17c2dced",
+    "docs/evidence/cp02_source_write_20261029/review/science_review.json": "c0d122d010dd4ef9edf95d74dd69f0301312aa576b6846cefac882ef2cbe70e1",
+    "docs/evidence/cp02_source_write_20261029/validation/clean_export.json": "f9b33e5792e3f2e3114b7e7140022610c47b042a2e5a2fa8a7b4b95924c3654e",
+    "docs/evidence/cp02_source_write_20261029/validation/clean_tests.txt": "a004575f51a07050710e5df6f9203e259362c39c1841b977a1575c22c783480f",
+    "docs/evidence/cp02_source_write_20261029/validation/historical_evidence.json": "eaa235986fa7351b81ad582ff6b697816b51dc59585126d8c21cb13233b6e1bb",
+    "docs/evidence/cp02_source_write_20261029/validation/independent_raw.json": "3a90179fb3f725ce29cf6333823656f975bdf4684dd5ed529b667079acf44287",
+    "docs/evidence/cp02_source_write_20261029/validation/outer_scope.json": "1fa9ff8a28e56b3dbecfa8aa8f853ec5700ea36a9c0c027c14c0afcc6df43079",
+    "docs/evidence/cp02_source_write_20261029/validation/reproduction.json": "f04d830480b10cd2f241fc055869c639038d047c5019cb1183f678286382223b",
+    "tests/test_cp02_source_write.py": "b761771468ae0e404b905e8bd47217998ee8c2a68b7be3e7906c80a346f608ce",
+    "tools/cp02_source_write.py": "9f3dc5ac0e392214d633f17448022b1f9bf651232a7342fcc2064a1957b90f7e"
+  },
+  "checks": [
+    "Reviewed final report against six selected source observations, unresolved B identity, first-call and access-watch scope, and intentional diagnostic stop.",
+    "Reviewed independent analyzer, native-helper and science review receipts; all final analyzer and science bindings and native-helper SHA checked against working files.",
+    "Confirmed 24 rank records and source/producer/preclamp/write event totals 58/38/24/43 directly from archives.",
+    "Confirmed targeted tracked-only clean export passed 188 tests; no native rebuild or full portable suite claimed.",
+    "Confirmed clean reproduction reports eight byte-identical artifacts and rehashed each against current files.",
+    "Confirmed independent selected outer-sample comparison reports 93,600 equal core values and optional differences separately.",
+    "Analyzer review verified ten malformed test cases and source creation logs; source watch does not cover prior initialization."
+  ],
+  "decision": "GO",
+  "excluded_future_artifacts": "KG publication and final validation manifest are intentionally excluded and require their own post-publication verification.",
+  "findings": "No unresolved team-review blockers within this scope.",
+  "scope": "Team review of selected first-call native source-writer evidence and analysis. Does not approve forecast completion, full-domain noninterference, physical process identification, or scientific validation."
+}

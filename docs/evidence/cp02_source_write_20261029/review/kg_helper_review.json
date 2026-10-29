@@ -1,0 +1,19 @@
+{
+  "status": "GO",
+  "reviewer": "root",
+  "scope": "Source review of scoped Graphify staging and guarded publisher; final stage contents and publication require separate validation.",
+  "findings": [],
+  "checks": [
+    "Exact frozen selection and current source hashes required",
+    "Fresh graph/wiki/dirty-state/200 dated snapshot baseline checked before mutation",
+    "Explicit staged manifest path with scan_corpus=None preserves unrelated manifest entries",
+    "Derived wiki report/index/audit only; completed validation and open items must enter frozen staged log",
+    "Target hashes and selected-source hashes guarded; backup and rollback on mutation/readback failure",
+    "No maintained graph/wiki publication performed by this review"
+  ],
+  "sha256": {
+    "kg/stage_kg.py": "4a0a59062d44507ff3fe00fc96a35beb87827e191a4114a06e6dce465adba511",
+    "kg/publish_kg.py": "0e035c9670ae8e90f8f2baeec2ec39f9b76b40b680142a977cd2f3b29a05b8f4",
+    "kg/baseline.json": "001ee9489d686b77db8e9696d5c63b97094a43ba833ca45c7f3cdabe2601cc4b"
+  }
+}

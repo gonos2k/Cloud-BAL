@@ -1,0 +1,79 @@
+{
+  "status": "PASS",
+  "clean_checkout": "/tmp/cp02-source-write-clean-vpxeufkx/checkout",
+  "commands": [
+    {
+      "command": [
+        "python",
+        "tools/cp02_source_write.py",
+        "--output",
+        "/tmp/cp02-source-repro-eyp_un02/analysis"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "docs/evidence/cp02_source_write_20261029/review/independent_raw.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "docs/evidence/cp02_source_write_20261029/review/outer_compare.py"
+      ],
+      "exit_code": 0
+    },
+    {
+      "command": [
+        "python",
+        "docs/evidence/cp02_source_write_20261029/review/independent_source.py"
+      ],
+      "exit_code": 0
+    }
+  ],
+  "artifact_count": 8,
+  "artifacts": [
+    {
+      "path": "docs/evidence/cp02_source_write_20261029/analysis/P01_00.png",
+      "byte_equal": true,
+      "sha256": "01dce8225edcf8f5b4be7681568f83100b9536c7ede0b17daf9e758d46efdbc9"
+    },
+    {
+      "path": "docs/evidence/cp02_source_write_20261029/analysis/P05_00.png",
+      "byte_equal": true,
+      "sha256": "c4b74b80307b0e2a35c01a4060a13b805f0639b95b30009a78250fbfe436f0b9"
+    },
+    {
+      "path": "docs/evidence/cp02_source_write_20261029/analysis/artifact_manifest.json",
+      "byte_equal": true,
+      "sha256": "0c3f40139f3b3632f83b3e3e5bd623b7d9e7d76840645e4262d4906c40099558"
+    },
+    {
+      "path": "docs/evidence/cp02_source_write_20261029/analysis/source.csv",
+      "byte_equal": true,
+      "sha256": "ea6cf59cfd29be1c41db242663fccba89bb1bc4eda013119722c257d749db378"
+    },
+    {
+      "path": "docs/evidence/cp02_source_write_20261029/analysis/summary.json",
+      "byte_equal": true,
+      "sha256": "ea4724743a7b3b3a50f6032d921b3e062905dc4ca1412d1a813acbb7f4b4b8ee"
+    },
+    {
+      "path": "docs/evidence/cp02_source_write_20261029/validation/outer_scope.json",
+      "byte_equal": true,
+      "sha256": "1fa9ff8a28e56b3dbecfa8aa8f853ec5700ea36a9c0c027c14c0afcc6df43079"
+    },
+    {
+      "path": "docs/evidence/cp02_source_write_20261029/review/independent_source.json",
+      "byte_equal": true,
+      "sha256": "dc8aa4eaa555b51960b2989ff17f4a19caacb77ff4ee50db1eee9da709cb3f6c"
+    },
+    {
+      "path": "docs/evidence/cp02_source_write_20261029/validation/independent_raw.json",
+      "byte_equal": true,
+      "sha256": "3a90179fb3f725ce29cf6333823656f975bdf4684dd5ed529b667079acf44287"
+    }
+  ]
+}

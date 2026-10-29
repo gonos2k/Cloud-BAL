@@ -1,0 +1,14 @@
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+ starting wrf task            7  of            8
+THERMO_OUTER_ENTRY rank=7 arm=OFF step=1 dt=20.0 selected=624
+THERMO_CAPTURE_FAILED rank=7 stage=peer_failure file=/var/tmp/cp02-thermo-response-20261029-ekmt7h39/OFF/capture/failed_off_first_inner_rank7_pid304074.json
+THERMO_OUTER_RETURN rank=7 arm=OFF status=failed
+
+Temporary breakpoint -16, 0x00000000020c3722 in module_microphysics_driver_mp_microphysics_driver_ ()
