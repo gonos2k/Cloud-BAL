@@ -1,0 +1,182 @@
+  2528	             IF ( PRESENT( QV_CURR ) .AND. PRESENT ( QC_CURR ) .AND.  &
+  2529	                  PRESENT( QR_CURR ) .AND. PRESENT ( QI_CURR ) .AND.  &
+  2530	                  PRESENT( QS_CURR ) .AND. PRESENT ( QG_CURR ) .AND.  &
+  2531	                  PRESENT( QNN_CURR ) .AND. PRESENT ( QNC_CURR ) .AND.&
+  2532	                  PRESENT( QNI_CURR ).AND.  PRESENT( QNR_CURR ).AND.  &
+  2533	                  PRESENT( QIB_CURR).AND.PRESENT( RHOPO3D).AND.       &
+  2534	                  PRESENT( RAINNC  ) .AND. PRESENT ( RAINNCV )  ) THEN
+  2535	             CALL kdm6(                                             & 
+  2536	                  TH=th                                             &    
+  2537	                 ,Q=qv_curr                                         &    
+  2538	                 ,QC=qc_curr                                        &    
+  2539	                 ,QR=qr_curr                                        &    
+  2540	                 ,QI=qi_curr                                        &
+  2541	                 ,QS=qs_curr                                        & 
+  2542	                 ,QG=qg_curr                                        &
+  2543	                 ,NN=qnn_curr                                       &
+  2544	                 ,NC=qnc_curr                                       &
+  2545	                 ,NI=qni_curr                                       & 
+  2546	                 ,NR=qnr_curr                                       &
+  2547	                 ,BG=qib_curr                                       &
+  2548	                 ,diag_rhog=rhopo3d                                 &
+  2549	                 ,DEN=rho,PII=pi_phy,P=p,DELZ=dz8w                  &
+  2550	                 ,DELT=dt,G=g,CPD=cp,CPV=cpv,CCN0=ccn_conc          & ! RAS
+  2551	                 ,RD=r_d,RV=r_v,T0C=svpt0                           &
+  2552	                 ,EP1=ep_1, EP2=ep_2, QMIN=epsilon                  &
+  2553	                 ,XLS=xls, XLV0=xlv, XLF0=xlf                       &
+  2554	                 ,DEN0=rhoair0, DENR=rhowater                       &
+  2555	                 ,scale_h=scale_h                                   & ! yhlee
+   310	!
+   311	   do j = jts,jte
+   312	     do k = kts,kte
+   313	       do i = its,ite
+   314	         t(i,k) = th(i,k,j)*pii(i,k,j)
+   315	         qci(i,k,1) = qc(i,k,j)
+   316	         qci(i,k,2) = qi(i,k,j)
+   317	         qrs(i,k,1) = qr(i,k,j)
+   318	         qrs(i,k,2) = qs(i,k,j)
+   319	         qrs(i,k,3) = qg(i,k,j)
+   320	         ! Public number scalars are #/kg; internal moments use #/m3.
+   321	         nci(i,k,1) = nc(i,k,j)*den(i,k,j)
+   322	         nci(i,k,2) = ni(i,k,j)*den(i,k,j)
+   323	         nrs(i,k,1) = nr(i,k,j)*den(i,k,j)
+   324	         nci(i,k,3) = nn(i,k,j)*den(i,k,j)
+   325	         nrs(i,k,2) = 0. 
+   326	         nrs(i,k,3) = 0. 
+   327	         brs(i,k) = bg(i,k,j)
+   328	       enddo
+   329	     enddo   
+   330	     ! 
+   331	     !  Sending array starting locations of optional variables may cause
+   332	     !  troubles, so we explicitly change the call.
+   333	     !
+   334	     call kdm62D(t, q(ims,kms,j), qci, qrs, nci, nrs, brs, rhox, cmg  &
+   335	                ,den(ims,kms,j)                               &
+   336	                ,p(ims,kms,j), delz(ims,kms,j)                &
+   337	                ,delt,g, cpd, cpv, ccn0, rd, rv, t0c          &
+   338	                ,ep1, ep2, qmin                               &
+   339	                ,xls, xlv0, xlf0, den0, denr                  &
+   340	                ,cliq,cice,psat                               &
+   341	                ,j                                            &
+   342	                ,xland(ims,j)                                 &
+   343	                ,ncmin_land, ncmin_sea                        & !yhlee
+   344	                ,rain(ims,j),rainncv(ims,j)                   &
+   345	                ,sr(ims,j)                                    &
+   346	                ,ids,ide, jds,jde, kds,kde                    &
+   347	                ,ims,ime, jms,jme, kms,kme                    &
+   348	                ,its,ite, jts,jte, kts,kte,n0so,n0go          &
+   349	                ,snow(ims,j),snowncv(ims,j)                &
+   350	                ,graupel(ims,j),graupelncv(ims,j)          &
+   351	                )
+   352	!
+   353	     do k = kts,kte
+   354	       do i = its,ite
+   355	         th(i,k,j) = t(i,k)/pii(i,k,j)
+   356	         qc(i,k,j) = qci(i,k,1)
+   357	         qi(i,k,j) = qci(i,k,2)
+   358	         qr(i,k,j) = qrs(i,k,1)
+   359	         qs(i,k,j) = qrs(i,k,2)
+   360	         qg(i,k,j) = qrs(i,k,3)
+   361	         ! Return number scalars on their public #/kg basis.
+   362	         nr(i,k,j) = nrs(i,k,1)/den(i,k,j)
+   363	         nc(i,k,j) = nci(i,k,1)/den(i,k,j)
+   364	         ni(i,k,j) = nci(i,k,2)/den(i,k,j)
+   365	         nn(i,k,j) = nci(i,k,3)/den(i,k,j)
+  1714	              nrcol(i,k) = (0.)
+  1715	            endif
+  1716	          endif
+  1717	!---------------------------------------------------------------
+  1718	! prevp: evaporation/condensation rate of rain   [HL A41]  
+  1719	!        (QV->QR or QR->QV)
+  1720	!---------------------------------------------------------------
+  1721	          if(qrs(i,k,1).gt.0.) then
+  1722	            coeres = (rslope2(i,k,1))*sqrt(rslope(i,k,1)*rslopeb(i,k,1))&
+  1723	                     *rslopemu(i,k,1)
+  1724	            prevp(i,k) = ((rh(i,k,1)-1.))*n0r(i,k)*(precr1*rslope2(i,k,1)&
+  1725	                        *rslopemu(i,k,1)+(precr2)*work2(i,k)*coeres)/work1(i,k,1)
+  1726	! 20250116 yhlee
+  1727	            prevp(i,k) = fac_evap*prevp(i,k) ! added evaporation tunning parameter
+  1728	!
+  1729	            if(prevp(i,k).lt.0.) then
+  1730	              prevp(i,k) = max(prevp(i,k),-(qrs(i,k,1))/dtcld)
+  1731	              prevp(i,k) = max(prevp(i,k),(satdt)/2)
+  1732	!----------------------------------------------------------------
+  1733	! Nrevp: evaporation/condensation rate of rain   [LH A14] 
+  1734	!        (NR->NCCN) 
+  1735	!----------------------------------------------------------------
+  1736	              if(prevp(i,k).eq.-qrs(i,k,1)/dtcld) then
+  1737	                nci(i,k,3) = nci(i,k,3)+nrs(i,k,1)
+  2819	! for raindrop distribution
+  2820	!-----------------------------------------------------------------
+  2821	          avedia(i,k,2) = rslope(i,k,1)*((g4pmr/g1pmr)**(.3333333))
+  2822	!----------------------------------------------------------------
+  2823	! Nrevp_s: evaporation/condensation rate of rain   [LH A14]
+  2824	!        (NR->NC)
+  2825	!----------------------------------------------------------------
+  2826	          if(avedia(i,k,2).le.di82) then
+  2827	            nci(i,k,1) = nci(i,k,1)+nrs(i,k,1)
+  2828	            nrs(i,k,1) = 0.
+  2829	!----------------------------------------------------------------
+  2830	! Prevp_s: evaporation/condensation rate of rain [LH A15] [KK 23]
+  2831	!        (QR->QC)
+  2832	!----------------------------------------------------------------
+  2833	            qci(i,k,1) = qci(i,k,1)+qrs(i,k,1)
+  2834	            qrs(i,k,1) = 0.
+  2835	          endif
+  2836	        enddo
+  2837	      enddo
+  2838	!
+  2839	      do k = kts, kte
+  2840	        do i = its, ite
+  2841	!---------------------------------------------------------------
+  2842	! rate of change of cloud drop concentration due to CCN activation
+  2843	! pcact: QV -> QC                                 [LH 8]  [KK 14]
+  2844	! ncact: NCCN -> NC                               [LH A2] [KK 12]
+  2845	!---------------------------------------------------------------
+  2846	           if(sw(i,k).gt.0.) then
+  2847	! RH -> Si (Lei at al. 2020)
+  2848	            ncact(i,k) = max(0.,((nci(i,k,3)+nci(i,k,1))                       &
+  2849	                       *min(1.,(sw(i,k)/0.48)**actk) - nci(i,k,1)))/dtcld
+  2850	            ncact(i,k) =min(ncact(i,k),max(nci(i,k,3),0.)/dtcld)
+  2851	            pcact(i,k) = min(4.*pi*denr*(actr*1.E-6)**3*ncact(i,k)/            &
+  2852	                         (3.*den(i,k)),max(q(i,k),0.)/dtcld)
+  2853	            q(i,k) = max(q(i,k)-pcact(i,k)*dtcld,0.)
+  2854	            qci(i,k,1) = max(qci(i,k,1)+pcact(i,k)*dtcld,0.)
+  2855	            nci(i,k,3) = max(nci(i,k,3)-ncact(i,k)*dtcld,0.)
+  2856	            nci(i,k,1) = max(nci(i,k,1)+ncact(i,k)*dtcld,0.)
+  2857	            t(i,k) = t(i,k)+pcact(i,k)*xl(i,k)/cpm(i,k)*dtcld
+  2858	          endif  
+  2859	!---------------------------------------------------------------
+  2860	!  pcond:condensational/evaporational rate of cloud water [HL A46] [RH83 A6]
+  2861	!     if there exists additional water vapor condensated/if
+  2862	!     evaporation of cloud water is not enough to remove subsaturation
+  2863	!  (QV->QC or QC->QV)     
+  2864	!---------------------------------------------------------------
+  2865	          tr=ttp/t(i,k)
+  2866	          qs(i,k,1)=psat*exp(log(tr)*(xa))*exp(xb*(1.-tr))
+  2867	          qs(i,k,1) = min(qs(i,k,1),0.99*p(i,k))
+  2868	          qs(i,k,1) = ep2 * qs(i,k,1) / (p(i,k) - qs(i,k,1))
+  2869	          qs(i,k,1) = max(qs(i,k,1),qmin)
+  2870	          work1(i,k,1) = conden(t(i,k),q(i,k),qs(i,k,1),xl(i,k),cpm(i,k))
+  2871	          work2(i,k) = qci(i,k,1)+work1(i,k,1)
+  2872	          pcond(i,k) = min(max(work1(i,k,1)/dtcld,0.),max(q(i,k),0.)/dtcld)
+  2873	          if(qci(i,k,1).gt.0. .and. work1(i,k,1).lt.0.)                        & 
+  2874	            pcond(i,k) = max(work1(i,k,1),-qci(i,k,1))/dtcld
+  2875	!----------------------------------------------------------------
+  2876	! ncevp: evpration of Cloud number concentration  [LH A3] 
+  2877	! (NC->NCCN) 
+  2878	!----------------------------------------------------------------
+  2879	          if(pcond(i,k).eq.-qci(i,k,1)/dtcld) then
+  2880	            nci(i,k,3) = nci(i,k,3)+nci(i,k,1)
+  2881	            nci(i,k,1) = 0.
+  2882	          endif
+  2883	!
+  2884	          q(i,k) = q(i,k)-pcond(i,k)*dtcld
+  2885	          qci(i,k,1) = max(qci(i,k,1)+pcond(i,k)*dtcld,0.)
+  2886	          t(i,k) = t(i,k)+pcond(i,k)*xl(i,k)/cpm(i,k)*dtcld
+  2887	        enddo
+  2888	      enddo
+  2889	!----------------------------------------------------------------
+  2890	!     padding for small values
+  2891	!
+  2892	      do k = kts, kte

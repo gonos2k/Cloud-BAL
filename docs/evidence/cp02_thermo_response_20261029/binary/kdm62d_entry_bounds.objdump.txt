@@ -1,0 +1,120 @@
+
+/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe:     file format elf64-x86-64
+
+
+Disassembly of section .text:
+
+00000000025e2490 <module_mp_kdm6_mp_kdm62d_>:
+ 25e2490:	55                   	push   rbp
+ 25e2491:	48 89 e5             	mov    rbp,rsp
+ 25e2494:	41 57                	push   r15
+ 25e2496:	41 56                	push   r14
+ 25e2498:	41 55                	push   r13
+ 25e249a:	41 54                	push   r12
+ 25e249c:	53                   	push   rbx
+ 25e249d:	48 83 e4 e0          	and    rsp,0xffffffffffffffe0
+ 25e24a1:	48 81 ec 60 10 00 00 	sub    rsp,0x1060
+ 25e24a8:	48 89 e3             	mov    rbx,rsp
+ 25e24ab:	4c 89 8b 20 02 00 00 	mov    QWORD PTR [rbx+0x220],r9
+ 25e24b2:	4c 89 83 88 03 00 00 	mov    QWORD PTR [rbx+0x388],r8
+ 25e24b9:	48 89 8b f0 01 00 00 	mov    QWORD PTR [rbx+0x1f0],rcx
+ 25e24c0:	48 89 93 10 04 00 00 	mov    QWORD PTR [rbx+0x410],rdx
+ 25e24c7:	48 89 b3 f8 07 00 00 	mov    QWORD PTR [rbx+0x7f8],rsi
+ 25e24ce:	48 89 bb 48 02 00 00 	mov    QWORD PTR [rbx+0x248],rdi
+ 25e24d5:	48 8b 85 48 01 00 00 	mov    rax,QWORD PTR [rbp+0x148]
+ 25e24dc:	48 8b 8d 40 01 00 00 	mov    rcx,QWORD PTR [rbp+0x140]
+ 25e24e3:	48 8b 95 78 01 00 00 	mov    rdx,QWORD PTR [rbp+0x178]
+ 25e24ea:	48 8b b5 70 01 00 00 	mov    rsi,QWORD PTR [rbp+0x170]
+ 25e24f1:	48 63 36             	movsxd rsi,DWORD PTR [rsi]
+ 25e24f4:	48 63 12             	movsxd rdx,DWORD PTR [rdx]
+ 25e24f7:	4c 63 09             	movsxd r9,DWORD PTR [rcx]
+ 25e24fa:	44 8b 28             	mov    r13d,DWORD PTR [rax]
+ 25e24fd:	48 89 93 38 01 00 00 	mov    QWORD PTR [rbx+0x138],rdx
+ 25e2504:	41 89 d2             	mov    r10d,edx
+ 25e2507:	48 89 b3 00 01 00 00 	mov    QWORD PTR [rbx+0x100],rsi
+ 25e250e:	41 29 f2             	sub    r10d,esi
+ 25e2511:	41 8d 42 01          	lea    eax,[r10+0x1]
+ 25e2515:	89 83 78 07 00 00    	mov    DWORD PTR [rbx+0x778],eax
+ 25e251b:	4c 63 e0             	movsxd r12,eax
+ 25e251e:	31 d2                	xor    edx,edx
+ 25e2520:	4d 85 e4             	test   r12,r12
+ 25e2523:	be 00 00 00 00       	mov    esi,0x0
+ 25e2528:	49 0f 4f f4          	cmovg  rsi,r12
+ 25e252c:	48 8b 85 60 01 00 00 	mov    rax,QWORD PTR [rbp+0x160]
+ 25e2533:	48 63 00             	movsxd rax,DWORD PTR [rax]
+ 25e2536:	48 89 83 f8 04 00 00 	mov    QWORD PTR [rbx+0x4f8],rax
+ 25e253d:	48 8b 85 98 01 00 00 	mov    rax,QWORD PTR [rbp+0x198]
+ 25e2544:	48 8b 8d 90 01 00 00 	mov    rcx,QWORD PTR [rbp+0x190]
+ 25e254b:	4c 63 19             	movsxd r11,DWORD PTR [rcx]
+ 25e254e:	4c 63 30             	movsxd r14,DWORD PTR [rax]
+ 25e2551:	44 89 f0             	mov    eax,r14d
+ 25e2554:	44 29 d8             	sub    eax,r11d
+ 25e2557:	ff c0                	inc    eax
+ 25e2559:	4c 63 f8             	movsxd r15,eax
+ 25e255c:	4d 85 ff             	test   r15,r15
+ 25e255f:	49 0f 4f d7          	cmovg  rdx,r15
+ 25e2563:	48 8d 0c b5 00 00 00 	lea    rcx,[rsi*4+0x0]
+ 25e256a:	00 
+ 25e256b:	48 0f af ca          	imul   rcx,rdx
+ 25e256f:	48 8d 41 0f          	lea    rax,[rcx+0xf]
+ 25e2573:	48 83 e0 f0          	and    rax,0xfffffffffffffff0
+ 25e2577:	48 89 e7             	mov    rdi,rsp
+ 25e257a:	48 29 c7             	sub    rdi,rax
+ 25e257d:	48 83 e7 e0          	and    rdi,0xffffffffffffffe0
+ 25e2581:	48 89 bb b8 0d 00 00 	mov    QWORD PTR [rbx+0xdb8],rdi
+ 25e2588:	48 89 fc             	mov    rsp,rdi
+ 25e258b:	4c 8d 04 b5 0f 00 00 	lea    r8,[rsi*4+0xf]
+ 25e2592:	00 
+ 25e2593:	48 bf f0 ff ff ff 03 	movabs rdi,0x3fffffff0
+ 25e259a:	00 00 00 
+ 25e259d:	4c 21 c7             	and    rdi,r8
+ 25e25a0:	49 89 e0             	mov    r8,rsp
+ 25e25a3:	49 29 f8             	sub    r8,rdi
+ 25e25a6:	49 83 e0 e0          	and    r8,0xffffffffffffffe0
+ 25e25aa:	4c 89 83 40 06 00 00 	mov    QWORD PTR [rbx+0x640],r8
+ 25e25b1:	4c 89 c4             	mov    rsp,r8
+ 25e25b4:	49 89 e0             	mov    r8,rsp
+ 25e25b7:	49 29 f8             	sub    r8,rdi
+ 25e25ba:	49 83 e0 e0          	and    r8,0xffffffffffffffe0
+ 25e25be:	4c 89 83 a8 06 00 00 	mov    QWORD PTR [rbx+0x6a8],r8
+ 25e25c5:	4c 89 c4             	mov    rsp,r8
+ 25e25c8:	49 89 e0             	mov    r8,rsp
+ 25e25cb:	49 29 f8             	sub    r8,rdi
+ 25e25ce:	49 83 e0 e0          	and    r8,0xffffffffffffffe0
+ 25e25d2:	4c 89 83 38 0d 00 00 	mov    QWORD PTR [rbx+0xd38],r8
+ 25e25d9:	4c 89 c4             	mov    rsp,r8
+ 25e25dc:	49 89 e0             	mov    r8,rsp
+ 25e25df:	49 29 f8             	sub    r8,rdi
+ 25e25e2:	49 83 e0 e0          	and    r8,0xffffffffffffffe0
+ 25e25e6:	4c 89 83 80 04 00 00 	mov    QWORD PTR [rbx+0x480],r8
+ 25e25ed:	4c 89 c4             	mov    rsp,r8
+ 25e25f0:	49 89 e0             	mov    r8,rsp
+ 25e25f3:	49 29 f8             	sub    r8,rdi
+ 25e25f6:	49 83 e0 e0          	and    r8,0xffffffffffffffe0
+ 25e25fa:	4c 89 83 78 04 00 00 	mov    QWORD PTR [rbx+0x478],r8
+ 25e2601:	4c 89 c4             	mov    rsp,r8
+ 25e2604:	48 89 e7             	mov    rdi,rsp
+ 25e2607:	48 29 c7             	sub    rdi,rax
+ 25e260a:	48 83 e7 e0          	and    rdi,0xffffffffffffffe0
+ 25e260e:	48 89 bb b0 0d 00 00 	mov    QWORD PTR [rbx+0xdb0],rdi
+ 25e2615:	48 89 fc             	mov    rsp,rdi
+ 25e2618:	48 89 e7             	mov    rdi,rsp
+ 25e261b:	48 29 c7             	sub    rdi,rax
+ 25e261e:	48 83 e7 e0          	and    rdi,0xffffffffffffffe0
+ 25e2622:	48 89 bb 28 0c 00 00 	mov    QWORD PTR [rbx+0xc28],rdi
+ 25e2629:	48 89 fc             	mov    rsp,rdi
+ 25e262c:	48 89 e7             	mov    rdi,rsp
+ 25e262f:	48 29 c7             	sub    rdi,rax
+ 25e2632:	48 83 e7 e0          	and    rdi,0xffffffffffffffe0
+ 25e2636:	48 89 bb d8 03 00 00 	mov    QWORD PTR [rbx+0x3d8],rdi
+ 25e263d:	48 89 fc             	mov    rsp,rdi
+ 25e2640:	48 89 e7             	mov    rdi,rsp
+ 25e2643:	48 29 c7             	sub    rdi,rax
+ 25e2646:	48 83 e7 e0          	and    rdi,0xffffffffffffffe0
+ 25e264a:	48 89 bb 78 06 00 00 	mov    QWORD PTR [rbx+0x678],rdi
+ 25e2651:	48 89 fc             	mov    rsp,rdi
+ 25e2654:	48 89 e7             	mov    rdi,rsp
+ 25e2657:	48 29 c7             	sub    rdi,rax
+ 25e265a:	48 83 e7 e0          	and    rdi,0xffffffffffffffe0
+ 25e265e:	48                   	rex.W
+ 25e265f:	89                   	.byte 0x89

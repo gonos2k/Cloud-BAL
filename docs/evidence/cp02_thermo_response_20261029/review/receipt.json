@@ -1,0 +1,32 @@
+{
+  "artifact_sha256": {
+    "docs/evidence/cp02_thermo_response_20261029/analysis/plot_cp02_thermo_response.py": "bd89a5b36aeab50509967badaa764c7fbcb61ecd37b25f12f8a0da42f32d24c4",
+    "docs/evidence/cp02_thermo_response_20261029/analysis/thermo_response/plots.metadata.json": "3cc2e909d918f6a9270624b2acc8726549a2c4d4106364b1d5b7c304e378c061",
+    "docs/evidence/cp02_thermo_response_20261029/analysis/thermo_response/profiles.csv": "349992a6258d54fd29b78c5e778563e6351e991b204d5124256818f36d86ae88",
+    "docs/evidence/cp02_thermo_response_20261029/analysis/thermo_response/qr_response_profiles.png": "606e9ddec49695221d824b31c2695a5d47f646c3b7879fa374dff0fac324faef",
+    "docs/evidence/cp02_thermo_response_20261029/analysis/thermo_response/summary.json": "ac8a845ee7c2ada0e0dface70d74896b6642abf333b6fcbd2b5c6429d5931c21",
+    "docs/evidence/cp02_thermo_response_20261029/analysis/thermo_response/thermodynamic_state_profiles.png": "946b6b53823c178f570a351cab21e28c390f8da405ae8ebf9f45f8b085039f07",
+    "docs/evidence/cp02_thermo_response_20261029/binary/initial_thermo.csv": "789b1e2e0701ececc607631c05edb77e7b60c0eb09b11b117cb2bc49bc59be57",
+    "docs/evidence/cp02_thermo_response_20261029/binary/initial_thermo_receipt.json": "07af1b08b46f8d397f9a06d742c1b4e1df13d1bc861445182ddca34097af804b",
+    "tests/test_cp02_thermo_response.py": "5c915980e5748fd646df335d8f34e6ce31683db045d35a3ab49c54c17b9c9288",
+    "tools/cp02_thermo_response.py": "70f728e802a915028d3b126dd1f5144a715a9036ef7a75466097ee1b93f61b4e"
+  },
+  "base_commit": "8fc7269",
+  "checks": {
+    "capture_provenance": "strict validator status is PASS_SCOPED_CAPTURE_COMPLETE; its output summary and selected-profile hashes match retained canonical artifacts",
+    "focused_tests": "7 passed: pytest -q tests/test_cp02_thermo_response.py",
+    "graphify": "maintained graph snapshot was stale for new files; isolated three-file graph extracted 30 nodes / 61 edges and supported scoped navigation; no maintained graph was edited",
+    "input_provenance": "binary initial CSV/receipt hashes match analyzer pins; receipt binds the extractor, copy manifest and three wrfinput hashes; selected key counts, coordinates, weights and P01/P05 QVAPOR/QCLOUD/QRAIN matches are guarded",
+    "intercall_sample_guard": "transition_summary now requires exactly the expected per-arm 624 selected-key count; synthetic test uses explicit expected_samples=4 and passes",
+    "output_safety": "atomic staged directory output; pre-existing regular paths and dangling symlinks are rejected without replacement",
+    "physical_scope": "captured values remain unit-unassigned candidates; initial T, THM, P and PB remain separate labels; no transformation, process cause, closure or threshold claim",
+    "plot_bindings": "plot metadata hashes match both PNGs and the summary/profile/initial/selection inputs; profiles hash matches summary",
+    "runtime": "no model launched",
+    "syntax": "py_compile passed for analyzer, tests, plotter",
+    "whitespace": "git diff --check passed"
+  },
+  "decision": "GO",
+  "findings": [],
+  "reviewer": "independent staged review",
+  "schema": "cp02-thermo-response-review-v1"
+}

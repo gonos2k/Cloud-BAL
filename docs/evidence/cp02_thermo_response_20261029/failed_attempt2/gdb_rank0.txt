@@ -1,0 +1,13 @@
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+ starting wrf task            0  of            8
+THERMO_OUTER_ENTRY rank=0 arm=HYDRO step=1 dt=20.0 selected=624
+THERMO_CAPTURE_FAILED rank=0 stage=inner_entry file=/var/tmp/cp02-thermo-response-20261029-1xnf2120/HYDRO/capture/failed_hydro_first_inner_rank0_pid3329.json
+
+Breakpoint -2, 0x00000000025e2490 in module_mp_kdm6_mp_kdm62d_ ()

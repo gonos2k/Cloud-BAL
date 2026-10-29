@@ -1,0 +1,121 @@
+Running 171 items in this shard
+........................................................................ [ 42%]
+........................................................................ [ 84%]
+.....................F..FFF                                              [100%]
+=================================== FAILURES ===================================
+_______ InnerResponseTests.test_missing_rank_is_rejected_without_output ________
+ValueError: capture does not bind the pinned Intel profile
+
+During handling of the above exception, another exception occurred:
+
+self = <test_cp02_kdm6_inner_response.InnerResponseTests testMethod=test_missing_rank_is_rejected_without_output>
+
+    @unittest.skipUnless(REAL_CAPTURE_READY, "final three-arm raw captures are not archived yet")
+    def test_missing_rank_is_rejected_without_output(self):
+        with tempfile.TemporaryDirectory(prefix="cp02-inner-missing-rank-") as temp:
+            temp = Path(temp)
+            copied = temp / "HYDRO"
+            shutil.copytree(CAPTURE_ROOT / "HYDRO", copied)
+            item = inner.load_json(copied / "receipt.json")["captures"][0]
+            (copied / Path(item["path"]).name).unlink()
+            output = temp / "must_not_exist"
+>           with self.assertRaisesRegex(ValueError, "raw capture file inventory"):
+E           AssertionError: "raw capture file inventory" does not match "capture does not bind the pinned Intel profile"
+
+tests/test_cp02_kdm6_inner_response.py:137: AssertionError
+______ InnerResponseTests.test_real_three_arm_capture_and_atomic_outputs _______
+
+self = <test_cp02_kdm6_inner_response.InnerResponseTests testMethod=test_real_three_arm_capture_and_atomic_outputs>
+
+    @unittest.skipUnless(REAL_CAPTURE_READY, "final three-arm raw captures are not archived yet")
+    def test_real_three_arm_capture_and_atomic_outputs(self):
+        with tempfile.TemporaryDirectory(prefix="cp02-inner-real-") as temp:
+            for arm in ARMS:
+                output = Path(temp) / arm
+>               summary, samples, events = inner.analyze(
+                    CAPTURE_ROOT / arm, PRIOR_ROOT / arm, SELECTION, PREPARE, arm)
+
+tests/test_cp02_kdm6_inner_response.py:91: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tools/cp02_kdm6_inner_response.py:860: in analyze
+    return summarize(capture_dir, prior_dir, selection_path, prepare_path, arm)
+tools/cp02_kdm6_inner_response.py:773: in summarize
+    receipt, context, records = read_new_stage(capture_dir, arm, Path(prepare_path))
+tools/cp02_kdm6_inner_response.py:525: in read_new_stage
+    require(profile.get("path") == str(profile_path) and
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+condition = False, message = 'capture does not bind the pinned Intel profile'
+
+    def require(condition, message):
+        if not condition:
+>           raise ValueError(message)
+E           ValueError: capture does not bind the pinned Intel profile
+
+tools/cp02_kdm6_inner_response.py:53: ValueError
+_____ InnerResponseTests.test_tampered_raw_hash_is_rejected_without_output _____
+ValueError: capture does not bind the pinned Intel profile
+
+During handling of the above exception, another exception occurred:
+
+self = <test_cp02_kdm6_inner_response.InnerResponseTests testMethod=test_tampered_raw_hash_is_rejected_without_output>
+
+    @unittest.skipUnless(REAL_CAPTURE_READY, "final three-arm raw captures are not archived yet")
+    def test_tampered_raw_hash_is_rejected_without_output(self):
+        with tempfile.TemporaryDirectory(prefix="cp02-inner-hash-") as temp:
+            temp = Path(temp)
+            copied = temp / "HYDRO"
+            shutil.copytree(CAPTURE_ROOT / "HYDRO", copied)
+            item = inner.load_json(copied / "receipt.json")["captures"][0]
+            capture_path = copied / Path(item["path"]).name
+            capture_path.write_bytes(capture_path.read_bytes() + b"x")
+            output = temp / "must_not_exist"
+>           with self.assertRaisesRegex(ValueError, "compressed hash mismatch"):
+E           AssertionError: "compressed hash mismatch" does not match "capture does not bind the pinned Intel profile"
+
+tests/test_cp02_kdm6_inner_response.py:122: AssertionError
+_ InnerResponseTests.test_wrong_inner_return_sequence_is_rejected_without_output _
+ValueError: capture does not bind the pinned Intel profile
+
+During handling of the above exception, another exception occurred:
+
+self = <test_cp02_kdm6_inner_response.InnerResponseTests testMethod=test_wrong_inner_return_sequence_is_rejected_without_output>
+
+    @unittest.skipUnless(REAL_CAPTURE_READY, "final three-arm raw captures are not archived yet")
+    def test_wrong_inner_return_sequence_is_rejected_without_output(self):
+        with tempfile.TemporaryDirectory(prefix="cp02-inner-sequence-") as temp:
+            temp = Path(temp)
+            copied = temp / "HYDRO"
+            shutil.copytree(CAPTURE_ROOT / "HYDRO", copied)
+            receipt = inner.load_json(copied / "receipt.json")
+            target = None
+            for item in receipt["captures"]:
+                path = copied / Path(item["path"]).name
+                raw = gzip.decompress(path.read_bytes())
+                record = json.loads(raw)
+                if record.get("inner"):
+                    target = (item, path, record)
+                    break
+            self.assertIsNotNone(target, "capture has no selected inner records")
+            item, path, record = target
+            record["inner"][0]["return"]["pc"] = "0xdead"
+            raw = (json.dumps(record, sort_keys=True, allow_nan=False) + "\n").encode()
+            packed = gzip.compress(raw, mtime=0)
+            path.write_bytes(packed)
+            item["sha256"] = hashlib.sha256(packed).hexdigest()
+            item["size_bytes"] = len(packed)
+            item["uncompressed_sha256"] = hashlib.sha256(raw).hexdigest()
+            item["uncompressed_size_bytes"] = len(raw)
+            (copied / "receipt.json").write_text(json.dumps(receipt, indent=2) + "\n",
+                                                  encoding="utf-8")
+            output = temp / "must_not_exist"
+>           with self.assertRaisesRegex(ValueError, "missing inner return record"):
+E           AssertionError: "missing inner return record" does not match "capture does not bind the pinned Intel profile"
+
+tests/test_cp02_kdm6_inner_response.py:171: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_cp02_kdm6_inner_response.py::InnerResponseTests::test_missing_rank_is_rejected_without_output
+FAILED tests/test_cp02_kdm6_inner_response.py::InnerResponseTests::test_real_three_arm_capture_and_atomic_outputs
+FAILED tests/test_cp02_kdm6_inner_response.py::InnerResponseTests::test_tampered_raw_hash_is_rejected_without_output
+FAILED tests/test_cp02_kdm6_inner_response.py::InnerResponseTests::test_wrong_inner_return_sequence_is_rejected_without_output
+4 failed, 167 passed in 43.87s

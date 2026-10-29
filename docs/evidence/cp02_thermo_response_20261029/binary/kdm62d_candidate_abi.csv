@@ -1,0 +1,63 @@
+position,candidate_name,category,entry_location,evidence_note
+1,t,array,rdi,Co-located source signature only
+2,q,array,rsi,Co-located source signature only; points at current-j column slice
+3,qci,array,rdx,Co-located source signature only; local cloud/ice mass buffer
+4,qrs,array,rcx,Co-located source signature only; local rain/snow/graupel mass buffer
+5,nci,array,r8,Co-located source signature only
+6,nrs,array,r9,Co-located source signature only
+7,brs,array,stack+8,At callee entry; caller pre-call stack+0
+8,rhox,array,stack+16,At callee entry; caller pre-call stack+8
+9,cmg,array,stack+24,At callee entry; caller pre-call stack+16
+10,den,array,stack+32,At callee entry; caller pre-call stack+24
+11,p,array,stack+40,At callee entry; caller pre-call stack+32
+12,delz,array,stack+48,At callee entry; caller pre-call stack+40
+13,delt,scalar,stack+56,REAL by reference
+14,g,scalar,stack+64,REAL by reference
+15,cpd,scalar,stack+72,REAL by reference
+16,cpv,scalar,stack+80,REAL by reference
+17,ccn0,scalar,stack+88,REAL by reference
+18,rd,scalar,stack+96,REAL by reference
+19,rv,scalar,stack+104,REAL by reference
+20,t0c,scalar,stack+112,REAL by reference
+21,ep1,scalar,stack+120,REAL by reference
+22,ep2,scalar,stack+128,REAL by reference
+23,qmin,scalar,stack+136,REAL by reference
+24,xls,scalar,stack+144,REAL by reference
+25,xlv0,scalar,stack+152,REAL by reference
+26,xlf0,scalar,stack+160,REAL by reference
+27,den0,scalar,stack+168,REAL by reference
+28,denr,scalar,stack+176,REAL by reference
+29,cliq,scalar,stack+184,REAL by reference
+30,cice,scalar,stack+192,REAL by reference
+31,psat,scalar,stack+200,REAL by reference
+32,lat,scalar,stack+208,INTEGER by reference; candidate call passes j
+33,slmsk,array,stack+216,One-dimensional memory slice
+34,ncmin_land,scalar,stack+224,REAL by reference
+35,ncmin_sea,scalar,stack+232,REAL by reference
+36,rain,array,stack+240,Two-dimensional field sliced at current j
+37,rainncv,array,stack+248,Two-dimensional field sliced at current j
+38,sr,array,stack+256,Two-dimensional field sliced at current j
+39,ids,scalar,stack+264,INTEGER by reference; domain bounds
+40,ide,scalar,stack+272,INTEGER by reference; domain bounds
+41,jds,scalar,stack+280,INTEGER by reference; domain bounds
+42,jde,scalar,stack+288,INTEGER by reference; domain bounds
+43,kds,scalar,stack+296,INTEGER by reference; domain bounds
+44,kde,scalar,stack+304,INTEGER by reference; domain bounds
+45,ims,scalar,stack+312,INTEGER by reference; memory bounds
+46,ime,scalar,stack+320,INTEGER by reference; memory bounds
+47,jms,scalar,stack+328,INTEGER by reference; memory bounds
+48,jme,scalar,stack+336,INTEGER by reference; memory bounds
+49,kms,scalar,stack+344,INTEGER by reference; memory bounds
+50,kme,scalar,stack+352,INTEGER by reference; memory bounds
+51,its,scalar,stack+360,INTEGER by reference; tile bounds
+52,ite,scalar,stack+368,INTEGER by reference; tile bounds
+53,jts,scalar,stack+376,INTEGER by reference; tile bounds
+54,jte,scalar,stack+384,INTEGER by reference; tile bounds
+55,kts,scalar,stack+392,INTEGER by reference; tile bounds
+56,kte,scalar,stack+400,INTEGER by reference; tile bounds
+57,n0so,array,stack+408,Two-dimensional local field
+58,n0go,array,stack+416,Two-dimensional local field
+59,snow,array,stack+424,Optional; column slice
+60,snowncv,array,stack+432,Optional; column slice
+61,graupel,array,stack+440,Optional; column slice
+62,graupelncv,array,stack+448,Optional; column slice

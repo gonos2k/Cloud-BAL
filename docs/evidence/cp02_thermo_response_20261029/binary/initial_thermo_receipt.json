@@ -1,0 +1,61 @@
+{
+  "extraction": {
+    "T00_K": {
+      "HYDRO": 290.0,
+      "LIQUID": 290.0,
+      "OFF": 290.0
+    },
+    "T00_use": "Recorded metadata/context only; not added to T or THM.",
+    "fields": [
+      "QVAPOR",
+      "QCLOUD",
+      "QRAIN",
+      "T",
+      "THM",
+      "P",
+      "PB"
+    ],
+    "output": "/var/tmp/cloudbal-cp02-thermo-response/docs/evidence/cp02_thermo_response_20261029/binary/initial_thermo.csv",
+    "output_sha256": "789b1e2e0701ececc607631c05edb77e7b60c0eb09b11b117cb2bc49bc59be57",
+    "row_count": 1872,
+    "rows_per_arm": {
+      "HYDRO": 624,
+      "LIQUID": 624,
+      "OFF": 624
+    }
+  },
+  "extractor": {
+    "path": "/var/tmp/cloudbal-cp02-thermo-response/docs/evidence/cp02_thermo_response_20261029/binary/extract_initial_thermo.py",
+    "sha256": "feeaded9b0b7ea8adf4bae56ed1b3acbb598547b948a20c125682be1f69c3ab9"
+  },
+  "method": {
+    "coordinate_basis": "selected_initial_fields.csv zero-based native indices converted to 1-based WRF coordinates",
+    "meaning_limit": "Initial input arrays only; does not prove driver/KDM6 consumed them unchanged.",
+    "netCDF4": "1.7.4"
+  },
+  "purpose": "Read-only selected initial fields for historical CP02 thermodynamic trace",
+  "source_evidence": {
+    "copy_manifest": {
+      "path": "/var/tmp/cloudbal-cp02-thermo-response/docs/evidence/cp02_kdm6_controls_20261029/inputs/copy_manifest.json",
+      "sha256": "01e00d732b1f983f55247e3ce97568a536a3aa6465059c864a0f292b93ca2f7e"
+    },
+    "selected_initial_fields": {
+      "path": "/var/tmp/cloudbal-cp02-thermo-response/docs/evidence/cp02_kdm6_controls_20261029/inputs/selected_initial_fields.csv",
+      "sha256": "522fc8600eb32e7c96baed296f57342fbfb51c5c5bad40e81dbd11aae2147c32"
+    },
+    "wrfinput_files_before_after": {
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfinput_d01": {
+        "sha256": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126",
+        "size_bytes": 376278396
+      },
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/liquid/run/wrfinput_d01": {
+        "sha256": "1dae2480a9ff4c4a386abf9ff5210f36ad3162330e2dc579d870d64b37be4470",
+        "size_bytes": 376278396
+      },
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/off/run/wrfinput_d01": {
+        "sha256": "5d6b2bdce4121642dea994f3e953cca690ad7c9f52f6f8feb01bb6c2f0b9b6bc",
+        "size_bytes": 376278396
+      }
+    }
+  }
+}

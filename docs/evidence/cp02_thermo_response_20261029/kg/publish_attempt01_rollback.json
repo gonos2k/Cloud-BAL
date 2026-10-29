@@ -1,0 +1,15 @@
+{
+  "attempt": 1,
+  "failure": "NameError: snapshot_name was local to main() but referenced in publish().",
+  "maintained_baseline_recheck": "PASS",
+  "maintained_files_left_changed": false,
+  "new_dated_snapshots_present": false,
+  "publish_helper_before_fix_sha256": null,
+  "recorded_at_utc": "2026-10-29T09:08:55.662747+00:00",
+  "repair": "publish() now receives the snapshot name explicitly; retry uses a separate backup directory and reruns all guards.",
+  "rollback_backup": "/var/tmp/cp02_thermo_response_kg_20261029/publish-backup",
+  "schema": "cp02_thermo_response_publish_attempt_v1",
+  "stage_receipt_sha256": "71bfdb988f31e553b207cba2e81e9359d922106429b8288d3011460664ae77a0",
+  "stage_validation_sha256": "512e13c7e50c81736915354b56a05c84936a51b57d557525894c9a0da52d7969",
+  "status": "ROLLED_BACK_READBACK_GUARD_ERROR"
+}

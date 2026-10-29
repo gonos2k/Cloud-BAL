@@ -1,0 +1,28 @@
+# Read-only static inspection; no model or debugger inferior was run.
+sha256sum /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/phys/module_microphysics_driver.F /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/phys/module_mp_kdm6.F
+file /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe
+readelf -n /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe | rg 'Build ID'
+readelf -h /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe | rg 'Class:|Machine:'
+readelf -h /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe
+readelf -S /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe | rg -i 'debug|symtab'
+nm -an /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe | rg 'module_(microphysics_driver_mp_microphysics_driver_|mp_kdm6_mp_kdm6_|mp_kdm6_mp_kdm62d_|mp_kdm6_mp_slope_kdm6_|mp_kdm6_mp_slope_rain_|mp_kdm6_mp_nislfv_rain_plmr_)'
+objdump -d -Mintel --start-address=0x20c356d --stop-address=0x20c3729 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe
+objdump -d -Mintel --start-address=0x25e0fbd --stop-address=0x25e1015 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe
+objdump -d -Mintel --start-address=0x25e2490 --stop-address=0x25e24d0 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe
+sha256sum /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/phys/module_microphysics_driver.F /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/phys/module_mp_kdm6.F
+nl -ba /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/phys/module_microphysics_driver.F | sed -n '2528,2555p'
+nl -ba /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/phys/module_mp_kdm6.F | sed -n '310,365p'
+nl -ba /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/phys/module_mp_kdm6.F | sed -n '1714,1737p'
+nl -ba /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/phys/module_mp_kdm6.F | sed -n '2819,2892p'
+python docs/evidence/cp02_thermo_response_20261029/binary/extract_initial_thermo.py
+python docs/evidence/cp02_thermo_response_20261029/binary/extract_firstcall_p05_k8.py
+graphify query "Trace historical CP02 QVAPOR QCLOUD and temperature from initial inputs through microphysics_driver into KDM6 first call, and locate KDM6 internal boundaries and P05 k8 divergent QR behavior" --budget 1600
+graphify --version
+objdump -d -Mintel --start-address=0x25e0d10 --stop-address=0x25e1008 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe
+objdump -d -Mintel --start-address=0x25e2490 --stop-address=0x25e2660 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe
+objdump -d -Mintel --start-address=0x25e8fe0 --stop-address=0x25e9180 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe
+objdump -d -Mintel --start-address=0x25f43e0 --stop-address=0x25f4680 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe
+objdump -d -Mintel --start-address=0x25f49f0 --stop-address=0x25f4ed0 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe
+objdump -d -Mintel --start-address=0x25f4260 --stop-address=0x25f42b0 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe
+objdump -d -Mintel --start-address=0x25f7248 --stop-address=0x25f7280 /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe
+python docs/evidence/cp02_thermo_response_20261029/binary/compare_write_events.py

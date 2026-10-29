@@ -1,0 +1,216 @@
+{
+  "status": "PASS",
+  "clean_export": "/var/tmp/cp02-pr127-final-export-u4oh1ka8/checkout",
+  "commands": [
+    {
+      "command": [
+        "/usr/bin/python",
+        "tools/cp02_kdm6_inner_response.py",
+        "--capture-dir",
+        "docs/evidence/cp02_thermo_response_20261029/captures/OFF",
+        "--arm",
+        "OFF",
+        "--output-dir",
+        "/var/tmp/cp02-pr127-reproduce-nwjwqqb4/OFF"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"arm\": \"OFF\", \"output\": \"/var/tmp/cp02-pr127-reproduce-nwjwqqb4/OFF\", \"samples\": 16, \"status\": \"PASS_SCOPED_CAPTURE_CONTINUITY\", \"write_events\": 18}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python",
+        "tools/cp02_kdm6_inner_response.py",
+        "--capture-dir",
+        "docs/evidence/cp02_thermo_response_20261029/captures/HYDRO",
+        "--arm",
+        "HYDRO",
+        "--output-dir",
+        "/var/tmp/cp02-pr127-reproduce-nwjwqqb4/HYDRO"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"arm\": \"HYDRO\", \"output\": \"/var/tmp/cp02-pr127-reproduce-nwjwqqb4/HYDRO\", \"samples\": 16, \"status\": \"PASS_SCOPED_CAPTURE_CONTINUITY\", \"write_events\": 14}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python",
+        "tools/cp02_kdm6_inner_response.py",
+        "--capture-dir",
+        "docs/evidence/cp02_thermo_response_20261029/captures/LIQUID",
+        "--arm",
+        "LIQUID",
+        "--output-dir",
+        "/var/tmp/cp02-pr127-reproduce-nwjwqqb4/LIQUID"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"arm\": \"LIQUID\", \"output\": \"/var/tmp/cp02-pr127-reproduce-nwjwqqb4/LIQUID\", \"samples\": 16, \"status\": \"PASS_SCOPED_CAPTURE_CONTINUITY\", \"write_events\": 20}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python",
+        "tools/cp02_thermo_response.py",
+        "--output-dir",
+        "/var/tmp/cp02-pr127-reproduce-nwjwqqb4/thermo"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"output_dir\": \"/var/tmp/cp02-pr127-reproduce-nwjwqqb4/thermo\", \"status\": \"PASS_SCOPED_CAPTURE_AND_INITIAL_SELECTION\"}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python",
+        "docs/evidence/cp02_thermo_response_20261029/analysis/plot_cp02_thermo_response.py",
+        "--analysis-dir",
+        "/var/tmp/cp02-pr127-reproduce-nwjwqqb4/thermo"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"status\": \"PLOTS_WRITTEN\", \"plots\": [\"/var/tmp/cp02-pr127-reproduce-nwjwqqb4/thermo/thermodynamic_state_profiles.png\", \"/var/tmp/cp02-pr127-reproduce-nwjwqqb4/thermo/qr_response_profiles.png\"]}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python",
+        "docs/evidence/cp02_thermo_response_20261029/analysis/plot_inner_write_events.py",
+        "--output-dir",
+        "/var/tmp/cp02-pr127-reproduce-nwjwqqb4/inner_plot"
+      ],
+      "exit_code": 0,
+      "stdout": "{\"figures\": [\"qrs_inner_write_events.png\", \"qci_inner_write_events.png\", \"q_inner_write_events.png\", \"t_inner_write_events.png\"], \"output_dir\": \"/var/tmp/cp02-pr127-reproduce-nwjwqqb4/inner_plot\", \"status\": \"PASS_VERIFIED_SELECTED_CAPTURE_WRITES\"}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "/usr/bin/python",
+        "docs/evidence/cp02_thermo_response_20261029/binary/compare_write_events.py"
+      ],
+      "exit_code": 0,
+      "stdout": "/var/tmp/cp02-pr127-final-export-u4oh1ka8/checkout/docs/evidence/cp02_thermo_response_20261029/binary/arm_qrs_branch_comparison.json\n/var/tmp/cp02-pr127-final-export-u4oh1ka8/checkout/docs/evidence/cp02_thermo_response_20261029/binary/arm_qrs_branch_comparison.csv\n943006253c811b441b568ef52c19466cc5000b361a3868a2f2c6d3e60539bcca\n",
+      "stderr": ""
+    }
+  ],
+  "comparisons": [
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/OFF/summary.json",
+      "byte_identical": true,
+      "sha256": "f8f04db2aac4abf35e31e4519a85daa3811f07291d635ff2ec43e432cb68f58d"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/OFF/inner_samples.csv",
+      "byte_identical": true,
+      "sha256": "10aab2c0eb4df6a34adb544895aa924893afcbc1ef3ab3ef8273f94b7bff2370"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/OFF/write_events.csv",
+      "byte_identical": true,
+      "sha256": "71b2d49a8459142e52331fcfa8fdd3d20e36633025f85a9edbfa3094d0a41144"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/OFF/artifact_manifest.json",
+      "byte_identical": true,
+      "sha256": "5e38ed82165bf97b89e647d22ed3cc2e24bce03795e18d9ba31a8274122432fd"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/HYDRO/summary.json",
+      "byte_identical": true,
+      "sha256": "4619ac093b6dd816391c147be324d876fecaebec618e5f1405b9ca0af2e6f100"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/HYDRO/inner_samples.csv",
+      "byte_identical": true,
+      "sha256": "3b8429a17cb9e658d63cb422aa751e7edebe5bf098e953a53869c8837a3d098b"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/HYDRO/write_events.csv",
+      "byte_identical": true,
+      "sha256": "8ec7d0e68862110e3f48b4f39a548251fcaf8e4bb5c85b499b66369a6d240ee1"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/HYDRO/artifact_manifest.json",
+      "byte_identical": true,
+      "sha256": "974d829d86d056cc05426e01b9e44dee20f33be704aae02d6bcb3fde9fe3493f"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/LIQUID/summary.json",
+      "byte_identical": true,
+      "sha256": "87087ba926cfd0101f93ddf9c084c40176e13b6b651fefea1db8a145244e1227"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/LIQUID/inner_samples.csv",
+      "byte_identical": true,
+      "sha256": "5260c9be8ef256c39f348c5640c92eaa59c4378bffbf89dad31d9911cd607548"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/LIQUID/write_events.csv",
+      "byte_identical": true,
+      "sha256": "935d0c70c7879ec9a355c57fe4a76a79b1189f349f5bd51ab031b9026016b1a2"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/LIQUID/artifact_manifest.json",
+      "byte_identical": true,
+      "sha256": "8a92b03bec506c315ac2e1ff285386c368d0c71c90d6fd543208abb102556e96"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/thermo_response/profiles.csv",
+      "byte_identical": true,
+      "sha256": "349992a6258d54fd29b78c5e778563e6351e991b204d5124256818f36d86ae88"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/thermo_response/summary.json",
+      "byte_identical": true,
+      "sha256": "ac8a845ee7c2ada0e0dface70d74896b6642abf333b6fcbd2b5c6429d5931c21"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/thermo_response/thermodynamic_state_profiles.png",
+      "byte_identical": true,
+      "sha256": "946b6b53823c178f570a351cab21e28c390f8da405ae8ebf9f45f8b085039f07"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/thermo_response/qr_response_profiles.png",
+      "byte_identical": true,
+      "sha256": "606e9ddec49695221d824b31c2695a5d47f646c3b7879fa374dff0fac324faef"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/thermo_response/plots.metadata.json",
+      "byte_identical": true,
+      "sha256": "3cc2e909d918f6a9270624b2acc8726549a2c4d4106364b1d5b7c304e378c061"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner_write_events/qrs_inner_write_events.png",
+      "byte_identical": true,
+      "sha256": "12ecadd2b436a9f98cc48f368003a9094c164421419e892287b7e64d273d8391"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner_write_events/qci_inner_write_events.png",
+      "byte_identical": true,
+      "sha256": "013c63ee1c2af03f159a5d4b2a380b57a0b32decd0dc8d4df661cdca4fd18dac"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner_write_events/q_inner_write_events.png",
+      "byte_identical": true,
+      "sha256": "276f9561735da2e4d95e4c47eae73ce4f4e22c36635c31885a1518f860a20b07"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner_write_events/t_inner_write_events.png",
+      "byte_identical": true,
+      "sha256": "3d01c0e1e55b8f6327dfcbbcf680fe311ef1a3c33271bc4a483470ee92b5ae2b"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner_write_events/metadata.json",
+      "byte_identical": true,
+      "sha256": "74c325ac12b766dba42a9a918c9a3757d1b2c4b155a4a25daedaf86fcf79d5e9"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/binary/arm_qrs_branch_comparison.json",
+      "byte_identical": true,
+      "sha256": "041a0617d32bb5496ea13e157abe36897eaa91e7b398d12dc34fc4d66bda0f2c"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/binary/arm_qrs_branch_comparison.csv",
+      "byte_identical": true,
+      "sha256": "943006253c811b441b568ef52c19466cc5000b361a3868a2f2c6d3e60539bcca"
+    }
+  ],
+  "all_byte_identical": true
+}
