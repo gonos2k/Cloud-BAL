@@ -1,0 +1,60 @@
+{
+  "baseline_sha256": "03160ef055b624a64dff4cc4975de25ed6fc378e1f9e1cce0bc52d15d3a07faf",
+  "corpora": {
+    "Cloud-BAL": {
+      "graph_stats": {
+        "communities": 1423,
+        "edges": 28329,
+        "nodes": 15913
+      },
+      "manifest_sha256": "54c7069d74a72070124a6636463e5a9c23ad54fa1783e1663fd2387d90f7e6b2",
+      "snapshot_count": 98
+    },
+    "KLAPS50": {
+      "graph_stats": {
+        "communities": 3418,
+        "edges": 86787,
+        "nodes": 41741
+      },
+      "manifest_sha256": "55767d41476f950be2e64de3b4e5b1859cbfbffed63ff53071e60ff7d4a34a45",
+      "snapshot_count": 94
+    }
+  },
+  "extraction": "blocked until two PR126 source paths are frozen and root review is GO",
+  "pr125_manifest_repair": {
+    "missing_keys": {
+      "Cloud-BAL": {
+        "tests/test_cp02_wrf_first_call.py": true,
+        "tools/cp02_wrf_first_call.py": true
+      },
+      "KLAPS50": {
+        "Cloud-BAL/tests/test_cp02_wrf_first_call.py": true,
+        "Cloud-BAL/tools/cp02_wrf_first_call.py": true
+      }
+    },
+    "source_sha256": {
+      "tests/test_cp02_wrf_first_call.py": "de90b38ddceff35c7730e089fb9e1065147ef3a4e8d65114064a460ae8c5fd74",
+      "tools/cp02_wrf_first_call.py": "ae933f257659a952ed8ef60bbf588b1fce4617f41df9b520895cf7b18dcac222"
+    }
+  },
+  "pr126_selected_paths": {
+    "paths": [
+      "tools/cp02_kdm6_controls.py",
+      "tests/test_cp02_kdm6_controls.py",
+      "tests/test_cp02_kdm6_capture_gate.py"
+    ],
+    "sha256": null,
+    "status": "PENDING_FREEZE"
+  },
+  "preserved_dated_snapshots": 192,
+  "publication": "not authorized by this staging proposal",
+  "schema": "cp02_kdm6_controls_kg_proposal_v1",
+  "snapshot": "2026-10-29-cp02-kdm6-controls",
+  "source_commit": "41fd4876428bb0fc88df5eb03550e775fed80183",
+  "stage_root": "/var/tmp/cp02_kdm6_controls_kg_20261029",
+  "status": "STAGING_PREPARED_NO_EXTRACTION_NO_APPLY",
+  "validation_limits": [
+    "Graphify structural relationships do not establish runtime or scientific validity.",
+    "Fortran cross-file CALL extraction is partial."
+  ]
+}

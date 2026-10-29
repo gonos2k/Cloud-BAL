@@ -1,0 +1,7 @@
+{
+  "source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/phys/module_mp_kdm6.F",
+  "sha256": "49cf8b0e3905a8d584073fdf3345ddfa64a0b0bac178676584505f7c4d7187ca",
+  "line": 372,
+  "excerpt": "     enddo\n!\n     if ( present (diagflag) ) then\n       if (diagflag .and. do_radar_ref == 1) then\n         do i = its,ite\n           do k = kts,kte\n             t1d(k)  = th(i,k,j)*pii(i,k,j)\n             p1d(k)  = p(i,k,j)\n             qv1d(k) = q(i,k,j)\n             qr1d(k) = qr(i,k,j)\n             nr1d(k) = nr(i,k,j)\n             qs1d(k) = qs(i,k,j)\n             n0so1d(k) = n0so(i,k)",
+  "scope": "Co-located candidate source only, not established exact compiled input; reflectivity is not interpreted as active when do_radar_ref is zero."
+}
