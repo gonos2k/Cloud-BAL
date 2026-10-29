@@ -1,0 +1,283 @@
+{
+  "3688_first_hour_score_transitions": {
+    "counts": {
+      "hydro_kept_hit": 55,
+      "hydro_lost_hit": 19,
+      "hydro_removed_false_alarm": 13,
+      "liquid_kept_hit": 55,
+      "liquid_lost_hit": 19,
+      "liquid_removed_false_alarm": 16
+    },
+    "native_source_crosswalk": "not performed: full 3,688-point WRF bilinear stencils are not preserved in this bundle; the 20-point lost-hit stencil is only a subset",
+    "scope": "existing archived 13 UTC array NPZ; threshold 5 mm; no forecast rerun"
+  },
+  "allocator_formula_fit": {
+    "all_residuals_exact_float64_zero": true,
+    "captured_config_reference_mass_concentration": 0.0001,
+    "captured_rho_d_min_max_kg_m3": [
+      0.31046910100141256,
+      1.141737649775326
+    ],
+    "interpretation": "numerical identity over archived 190 allocator calls; coefficient is a captured binary runtime config value. Exponent and /1000 form are empirically supported by outputs, not source-level historical proof.",
+    "max_absolute_residual": 0.0,
+    "n": 190,
+    "tested_relation": "captured_total == reference_mass_concentration * (captured_zlinear/1000)**0.55 / captured_rho_d"
+  },
+  "background_generation_evidence": {
+    "background_conversion_coefficients_density": "the retained lineage names hydrometeor_scale and division by dry-air density, but the exact old LAPSPREP source is absent and the archived payload begins at kg/kg; no exact conversion coefficient or source expression is established from these files.",
+    "historical_lineage_claim": "archived lineage says LAPSPREP read radar 3-D hydrometeor concentration in kg m-3, applied validity/negative clipping and hydrometeor_scale, then divided by dry-air rho to form mixing ratio; options record CAP_POLICY=TRANSFER, rain/snow fraction=1, GRID_SCALE=NONE",
+    "payload_to_shadow_background_rain_snow_exact_full_array_equality": true,
+    "source_exactness": "build pins: LAPSPREP f69735e8\u2026749579, column physics f7d640bb\u2026f14e17d, pipeline 188a2e1b\u20266f2b478. Bounded searches found no exact LAPSPREP or column-physics source; 14 exact-content pipeline copies exist, but no copy is bound to the CP02 link step. Pipeline has no matching git revision among 23 checked. Do not substitute current source for missing historical source.",
+    "units": {
+      "payload_rain_snow": [
+        "kg kg-1 dryair"
+      ],
+      "shadow_background_rain_snow": [
+        "kg kg-1 dryair"
+      ]
+    }
+  },
+  "candidate_real32_vs_work_array": {
+    "cells": 440,
+    "max_abs_species_rounding_delta_kg_kg": 1.3342398420910367e-11,
+    "scope": "REAL*32 final shadow storage minus captured REAL*64 publish work array"
+  },
+  "capture": {
+    "arm": "HYDRO",
+    "candidate_decoding": "REAL*8 little-endian work arrays at publish_hydrometeor_candidate_post; final candidate values separately read as REAL*32 from shadow NetCDF",
+    "local_records": 760,
+    "observed_true_false_equal_payload_reflectivity_valid_all_440": true,
+    "records": 20,
+    "schema": "cp02-gdb-inner-capture-v1",
+    "status": "CAPTURE_COMPLETE"
+  },
+  "csv_crosscheck": {
+    "raw_capture_and_netcdf_vs_preserved_csv_differences": {},
+    "rows": 440
+  },
+  "full_grid_radar_invalid_positive_background": {
+    "by_species": {
+      "rain": {
+        "all_grid_positive_background_cells": 79939,
+        "radar_invalid_overlap_cells_where_candidate_equals_background": 27762,
+        "radar_invalid_positive_background_above_ground_cells": 27762,
+        "radar_invalid_positive_background_cells": 27762,
+        "radar_invalid_positive_candidate_cells": 27762
+      },
+      "snow": {
+        "all_grid_positive_background_cells": 74442,
+        "radar_invalid_overlap_cells_where_candidate_equals_background": 60425,
+        "radar_invalid_positive_background_above_ground_cells": 60425,
+        "radar_invalid_positive_background_cells": 60425,
+        "radar_invalid_positive_candidate_cells": 60425
+      }
+    },
+    "grid_cells": 1463110,
+    "radar_invalid_cells": 1393027,
+    "radar_valid_cells": 70083,
+    "scope": "22x283x235 native payload/shadow cells; this is a reflectivity validity mask (radar_reflectivity_valid=0), not a certified actual_observed=false reconstruction; positive means archived payload/background species >0",
+    "shortlist": [
+      {
+        "above_ground": true,
+        "background_kg_kg_dryair": 4.313386853027623e-06,
+        "candidate_kg_kg_dryair": 4.313386853027623e-06,
+        "latitude": 36.57293701171875,
+        "longitude": 120.78347778320312,
+        "reflectivity_valid": false,
+        "species": "rain",
+        "x_index_0based": 26,
+        "y_index_0based": 113,
+        "z_index_0based": 2
+      },
+      {
+        "above_ground": true,
+        "background_kg_kg_dryair": 3.761985908568022e-06,
+        "candidate_kg_kg_dryair": 3.761985908568022e-06,
+        "latitude": 36.575923919677734,
+        "longitude": 120.84064483642578,
+        "reflectivity_valid": false,
+        "species": "rain",
+        "x_index_0based": 27,
+        "y_index_0based": 113,
+        "z_index_0based": 2
+      },
+      {
+        "above_ground": true,
+        "background_kg_kg_dryair": 4.255743988323957e-05,
+        "candidate_kg_kg_dryair": 4.255743988323957e-05,
+        "latitude": 36.61885070800781,
+        "longitude": 120.77974700927734,
+        "reflectivity_valid": false,
+        "species": "rain",
+        "x_index_0based": 26,
+        "y_index_0based": 114,
+        "z_index_0based": 2
+      },
+      {
+        "above_ground": true,
+        "background_kg_kg_dryair": 4.166748112766072e-05,
+        "candidate_kg_kg_dryair": 4.166748112766072e-05,
+        "latitude": 36.621826171875,
+        "longitude": 120.83695220947266,
+        "reflectivity_valid": false,
+        "species": "rain",
+        "x_index_0based": 27,
+        "y_index_0based": 114,
+        "z_index_0based": 2
+      },
+      {
+        "above_ground": true,
+        "background_kg_kg_dryair": 1.3310012946021743e-05,
+        "candidate_kg_kg_dryair": 1.3310012946021743e-05,
+        "latitude": 38.692996978759766,
+        "longitude": 120.66519927978516,
+        "reflectivity_valid": false,
+        "species": "snow",
+        "x_index_0based": 27,
+        "y_index_0based": 159,
+        "z_index_0based": 9
+      },
+      {
+        "above_ground": true,
+        "background_kg_kg_dryair": 1.3234384823590517e-05,
+        "candidate_kg_kg_dryair": 1.3234384823590517e-05,
+        "latitude": 38.69606018066406,
+        "longitude": 120.72430419921875,
+        "reflectivity_valid": false,
+        "species": "snow",
+        "x_index_0based": 28,
+        "y_index_0based": 159,
+        "z_index_0based": 9
+      },
+      {
+        "above_ground": true,
+        "background_kg_kg_dryair": 1.5443294614669867e-05,
+        "candidate_kg_kg_dryair": 1.5443294614669867e-05,
+        "latitude": 38.73912048339844,
+        "longitude": 120.6612548828125,
+        "reflectivity_valid": false,
+        "species": "snow",
+        "x_index_0based": 27,
+        "y_index_0based": 160,
+        "z_index_0based": 9
+      },
+      {
+        "above_ground": true,
+        "background_kg_kg_dryair": 1.4169350833981298e-05,
+        "candidate_kg_kg_dryair": 1.4169350833981298e-05,
+        "latitude": 38.742191314697266,
+        "longitude": 120.72039794921875,
+        "reflectivity_valid": false,
+        "species": "snow",
+        "x_index_0based": 28,
+        "y_index_0based": 160,
+        "z_index_0based": 9
+      }
+    ]
+  },
+  "limitations": [
+    "The 250 observed-false selected profile rows all have zero background and candidate rain/snow; they cannot test preservation.",
+    "Full-domain invalid-mask cells with positive background are inventoried, and the existing 3,688-point arrays provide hit/false-alarm transition counts. A full native-source footprint crosswalk is unavailable because the 3,688-point WRF bilinear stencils are not preserved; no overlap is claimed.",
+    "The lineage identifies candidate source operations and units but does not prove the first differing operation or exact historical source equation. Exact LAPSPREP and column-physics source bytes remain unresolved; pipeline content has 14 archived exact-hash copies but no copy-to-binary binding.",
+    "This is an artifact-level numerical audit, not physical validation, whole-column water budget, or forecast-causality test."
+  ],
+  "method": "standalone gzip/JSON raw-byte decoding plus NetCDF4/CSV/NPZ reads; no capture analyzer, replay, forecast, source rebuild, or file mutation",
+  "provenance": {
+    "/var/tmp/cloudbal-cp02-background-contract/docs/evidence/cp02_call_boundary_20261028/column_source_search.json": {
+      "bytes": 2722,
+      "sha256": "555b36995ba2c6483495cb2c68f2ad47a855cbb8a112b93335fcb535152c8b89"
+    },
+    "/var/tmp/cloudbal-cp02-background-contract/docs/evidence/cp02_call_boundary_20261028/lapsprep_source_search.json": {
+      "bytes": 4093,
+      "sha256": "588ab6911928f5534ba153d5b917842377ac3f14ae1c0c0fda820d280c279bd8"
+    },
+    "/var/tmp/cloudbal-cp02-background-contract/docs/evidence/cp02_initial_species_20261027/final/shadow/shadow_species_profiles.csv": {
+      "bytes": 89281,
+      "sha256": "bc765f17fef5b02c4b75d58bd503114259f779cfeffe51ed9e82c6672d37f0ca"
+    },
+    "/var/tmp/cloudbal-cp02-background-contract/docs/evidence/cp02_initial_species_20261027/historical_lineage.json": {
+      "bytes": 9506,
+      "sha256": "bd63c453bae73e58658f2befa542471ccc7249f62816146bc07a8658ceaa32b7"
+    },
+    "/var/tmp/cloudbal-cp02-background-contract/docs/evidence/cp02_radar_inputs_20261028/analysis/profiles.csv": {
+      "bytes": 295615,
+      "sha256": "bde38238efde0dd811b25a35e620791d5264474b900e331b744020820b86e116"
+    },
+    "/var/tmp/cloudbal-cp02-background-contract/docs/evidence/cp02_radar_inputs_20261028/hydro_capture.json.gz": {
+      "bytes": 683729,
+      "sha256": "b41181187c3a3eacb1edd567cedfb029cd9bdc2cde1c247d9a556167eb01b4bf"
+    },
+    "/var/tmp/cloudbal-cp02-background-contract/docs/evidence/wps_off_readback_20261028/source_search.json": {
+      "bytes": 7654,
+      "sha256": "d3bc9beecdd3b4fc6602695eecf1612e93d2375b4571cc4a8ee2bc4f910bc9b3"
+    },
+    "/var/tmp/cp02-background-science-20261028/recompute.py": {
+      "bytes": 17288,
+      "sha256": "899b22753e8ff7cbf5198821bd2dd65cea760daaa55cb093a89b6c897225466d"
+    },
+    "/var/tmp/cp02-binary-boundary-20261028/hydro_baseline_unlimited/HYDRO.wps.shadow.nc": {
+      "bytes": 99003376,
+      "sha256": "c1f5d039ac73c90cb6b21dd619ebc5774f3b6c7387c9b9701af4360fb635f2cb"
+    },
+    "/var/tmp/cp02-binary-boundary-20261028/input/payload.nc": {
+      "bytes": 605830796,
+      "sha256": "03f6bb5da1986fa62972256483fb245ca4132d1dade3e056b3c3f435cd6e0097"
+    },
+    "/var/tmp/rn1-rescore-final-20261027/hour_13_arrays.npz": {
+      "bytes": 98121,
+      "sha256": "4290d0d2955ffde8555c2fa6c8d7655825f6e982cd2b3b7a2604d8149eea00fa"
+    }
+  },
+  "quality_phase_candidate_background": {
+    "scope": "190 actual valid reflectivity cells; phase is the archived binary diagnose output code; q is archived payload reflectivity-quality integer; ratio = sum(candidate species)/sum(background species)",
+    "strata": [
+      {
+        "candidate_background_sum_ratio_real32_shadow": 0.6852603724633062,
+        "candidate_background_sum_ratio_real64_work": 0.685260372258428,
+        "count": 43,
+        "quality": 0,
+        "species": "rain",
+        "sum_background": 0.009562365854435484,
+        "sum_candidate_real32_shadow": 0.006552710387040861,
+        "sum_candidate_real64_work": 0.006552710385081741
+      },
+      {
+        "candidate_background_sum_ratio_real32_shadow": 0.6830014895764465,
+        "candidate_background_sum_ratio_real64_work": 0.6830014873610251,
+        "count": 111,
+        "quality": 32,
+        "species": "rain",
+        "sum_background": 0.024803770738799358,
+        "sum_candidate_real32_shadow": 0.016941012361712637,
+        "sum_candidate_real64_work": 0.016941012306761833
+      },
+      {
+        "candidate_background_sum_ratio_real32_shadow": 0.13642168697060772,
+        "candidate_background_sum_ratio_real64_work": 0.13642168667388385,
+        "count": 32,
+        "quality": 0,
+        "species": "snow",
+        "sum_background": 0.018777874633087777,
+        "sum_candidate_real32_shadow": 0.002561709335168416,
+        "sum_candidate_real64_work": 0.0025617093295965724
+      },
+      {
+        "candidate_background_sum_ratio_real32_shadow": 0.13295352296214302,
+        "candidate_background_sum_ratio_real64_work": 0.1329535258770434,
+        "count": 4,
+        "quality": 32,
+        "species": "snow",
+        "sum_background": 0.003884183766786009,
+        "sum_candidate_real32_shadow": 0.0005164159156265669,
+        "sum_candidate_real64_work": 0.0005164159269485755
+      }
+    ]
+  },
+  "schema": "cp02_background_science_audit_v1",
+  "status": "PASS_SCOPED_ARCHIVED_ARTIFACTS",
+  "unobserved_selected_sample": {
+    "all_background_rain_snow_and_candidate_rain_snow_zero": true,
+    "count": 250,
+    "interpretation": "preservation is untested at these 250 cells because both endpoints are zero"
+  }
+}

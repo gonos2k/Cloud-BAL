@@ -375,6 +375,9 @@ def validate_radar(capture, background):
 
 def analyze(capture_path, background_path=BACKGROUND_CSV, prior_outer=None):
     capture = INNER.read_capture(capture_path)
+    background_sha256 = hashlib.sha256(Path(background_path).read_bytes()).hexdigest()
+    require(capture.get("points_csv_sha256") == background_sha256,
+            "background CSV SHA-256 does not match capture points_csv_sha256")
     # Reuse the original full-capture checks and analysis before inspecting new radar fields.
     inner_report = INNER.analyze(capture_path, "HYDRO", prior_outer)
     radar_report = validate_radar(capture, background_samples(background_path))
@@ -383,7 +386,7 @@ def analyze(capture_path, background_path=BACKGROUND_CSV, prior_outer=None):
             "capture_path": str(capture_path),
             "capture_sha256": hashlib.sha256(Path(capture_path).read_bytes()).hexdigest(),
             "background_csv_path": str(background_path),
-            "background_csv_sha256": hashlib.sha256(Path(background_path).read_bytes()).hexdigest(),
+            "background_csv_sha256": background_sha256,
             **{key: value for key, value in radar_report.items() if key not in ("schema", "status", "scope", "profiles")},
             "profiles": radar_report["profiles"]}
 

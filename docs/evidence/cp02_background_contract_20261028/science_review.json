@@ -1,0 +1,51 @@
+{
+  "checks": {
+    "current_research_status_addition": "Its quality-0, 250 selected-row, noncausal interpretation and next-investigation statements are consistent with the compared results and contract document.",
+    "full_grid_proxy": {
+      "candidate_equals_background_counts": {
+        "rain": 27762,
+        "snow": 60425
+      },
+      "document_values": {
+        "grid": "22x283x235",
+        "rain": 27762,
+        "snow": 60425
+      },
+      "match": true,
+      "observations": "The document labels this as radar-reflectivity-valid false plus positive archived background, explicitly says it does not reconstruct actual observed=false, and treats it as a candidate shortlist rather than policy validation. This matches recompute.py/results.json. It does not join the full-grid proxy to the 3,688-cell transition categories and separately disclaims the WRF bilinear stencil.",
+      "result_values": {
+        "rain": 27762,
+        "snow": 60425
+      },
+      "scope_matches": true
+    },
+    "real32_ratio_table": {
+      "document_values_rounded_8dp": {
+        "rain_q0": 0.68526037,
+        "rain_q32": 0.68300149,
+        "snow_q0": 0.13642169,
+        "snow_q32": 0.13295352
+      },
+      "match": true,
+      "observations": "The prose correctly calls these selected-sample sum ratios rather than mass-weighted or causal effects; the q32 snow stratum is correctly identified as n=4. The stated approximate declines (about 31% rain and 86% snow for q0) agree with 1-ratio.",
+      "result_values": {
+        "rain_q0": 0.6852603724633062,
+        "rain_q32": 0.6830014895764465,
+        "snow_q0": 0.13642168697060772,
+        "snow_q32": 0.13295352296214302
+      },
+      "scope_matches": true,
+      "source": "results.quality_phase_candidate_background.strata.candidate_background_sum_ratio_real32_shadow; recompute.py accumulates final candidate values read from shadow NetCDF and divides their stratum sum by background sum."
+    }
+  },
+  "decision": "GO",
+  "findings": [],
+  "scope": "Factual review of docs/CP02_BACKGROUND_CONTRACT_20261028.md and its CURRENT_RESEARCH_STATUS.md addition against the supplied archived-artifact results.json and recompute.py, focused on final REAL32 quality/phase ratios and full-grid invalid-mask proxy counts/scope.",
+  "scope_note": "This receipt and recompute.py do not independently substantiate every other claim in the contract document (for example phase_uncertain wiring); this focused review found no contradiction in the assigned ratio/proxy claims.",
+  "sha256": {
+    "contract_doc": "66a52c589aea3d6ba1f1f61c88c17f6ca771934b800ca7c476acdaad2c8b2aa9",
+    "recompute_py": "899b22753e8ff7cbf5198821bd2dd65cea760daaa55cb093a89b6c897225466d",
+    "research_status": "65cbd7876855fd72781760fc1d31ba7c8a128c49dddf5c62b77ad4465889ce2e",
+    "results_json": "933e783949eae09071994df569e649e35024ecbd54c60cb13585b6a418a5db22"
+  }
+}

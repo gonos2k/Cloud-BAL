@@ -1,0 +1,31 @@
+{
+  "base_commit": "28671ac5929c0f28aa667db27e769bcbefbaf4ec",
+  "mutation": {
+    "key": [
+      164,
+      74,
+      4
+    ],
+    "before_kgkg": 2.520597990951501e-05,
+    "after_kgkg": 0.001025205979909515
+  },
+  "changed_csv_lines": 1,
+  "original_csv_sha256": "bc765f17fef5b02c4b75d58bd503114259f779cfeffe51ed9e82c6672d37f0ca",
+  "changed_csv_sha256": "b346a9ce57b114731cd5f47530262d9412fedc9de517b0bff52cb3e92be0634f",
+  "before_analyzer_sha256": "5e4d141cede069fc3f9602fa7dde1468c7ab154895531aed9952ec6207bc69e5",
+  "before": {
+    "returncode": 0,
+    "stdout": "HYDRO: SCOPED_PASS -> /var/tmp/cp02-background-contract-20261028/before_summary.json\n",
+    "stderr": "",
+    "summary_created": true,
+    "profiles_created": true
+  },
+  "after_analyzer_sha256": "6d61469b7ba89497200b840541552e44b3abc20f733357a4ca45ff5b7233c0b2",
+  "after": {
+    "returncode": 1,
+    "stdout": "",
+    "stderr": "Traceback (most recent call last):\n  File \"/var/tmp/cloudbal-cp02-background-contract/docs/evidence/cp02_radar_inputs_20261028/analyze_radar_inputs.py\", line 416, in <module>\n    main()\n  File \"/var/tmp/cloudbal-cp02-background-contract/docs/evidence/cp02_radar_inputs_20261028/analyze_radar_inputs.py\", line 404, in main\n    report = analyze(args.capture, args.background_csv, args.prior_outer)\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/tmp/cloudbal-cp02-background-contract/docs/evidence/cp02_radar_inputs_20261028/analyze_radar_inputs.py\", line 379, in analyze\n    require(capture.get(\"points_csv_sha256\") == background_sha256,\n  File \"/var/tmp/cloudbal-cp02-background-contract/docs/evidence/cp02_radar_inputs_20261028/analyze_radar_inputs.py\", line 47, in require\n    raise ValueError(message)\nValueError: background CSV SHA-256 does not match capture points_csv_sha256\n",
+    "summary_created": false,
+    "profiles_created": false
+  }
+}
