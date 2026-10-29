@@ -1,0 +1,35 @@
+{
+  "checks": [
+    "Six selected files and 106 hash-only files match the frozen selection.",
+    "All 17 published targets independently read back; wiki log is a separately bound 635-byte append to the published staged prefix.",
+    "All 198 prior dated snapshot inventories remain byte-identical; exactly one new snapshot per corpus yields 200 total.",
+    "Unrelated git dirty status lines match baseline; helper protects allowed targets, pre-publication baseline, staged hashes and rollback on failure.",
+    "Graph freshness is not runtime or scientific validation; structural extraction is limited to six Python paths and partial Fortran CALL extraction."
+  ],
+  "final_wiki_log_sha256": "0b8ced0034f33e69e22b33ba3feada55c4626530f881931d86d2ca2e3f47b323",
+  "findings": [],
+  "scope": "Read-only independent KG helper and receipt review; status equality checks do not establish byte identity of unrelated dirty files.",
+  "sha256": {
+    "docs/evidence/cp02_xmm6_producer_20261029/kg/baseline.json": "42766cdd22a9276d5267fc3cae88985e119bd00dcc40c0314b641eccdb95ad9d",
+    "docs/evidence/cp02_xmm6_producer_20261029/kg/postpublish_readback.json": "5701d2c9b84bed162a4590efe7fe10d1c50828305425c86a1b4065020f23cce2",
+    "docs/evidence/cp02_xmm6_producer_20261029/kg/publish_go.json": "0142c18860fcf11e12d7ebf4dd45a2feb8d59281bc19fe29e90090a2944011ac",
+    "docs/evidence/cp02_xmm6_producer_20261029/kg/publish_kg.py": "a5b8c2231c1f5e84dd66b0a8935df0f1ab33c1f3add2c95f9d760ee05bd482ba",
+    "docs/evidence/cp02_xmm6_producer_20261029/kg/publish_receipt.json": "72b6f271462ed1b2b71b2783d68e4c62456b8448cbcde4cb91e079e57ed203b3",
+    "docs/evidence/cp02_xmm6_producer_20261029/kg/root_go.json": "098b31a3bbaa05d62b790534a0028c7f09a30e1b5c2cee5ff44efa70346ebf3e",
+    "docs/evidence/cp02_xmm6_producer_20261029/kg/selection_lock.json": "cfa1dee8678c7f7c0a30c8952109a96c2bdc64743790ea19c6c007c4caa5849a",
+    "docs/evidence/cp02_xmm6_producer_20261029/kg/stage_kg.py": "5fdbda8c4bc1c505cc2dd56b0fa4371375b05f1ff1f25a49125776e8d3c1c935",
+    "docs/evidence/cp02_xmm6_producer_20261029/kg/stage_receipt.json": "a9ffe18b7a8d02863e6b56938e324483ed5bb022e8729df435fd4f02f3d1b30d",
+    "docs/evidence/cp02_xmm6_producer_20261029/kg/stage_validation.json": "aa77146b15f3575e567770f0ff7c0f3269a817083936f9996fbe955ac1271f01"
+  },
+  "snapshot_counts": {
+    "Cloud-BAL": {
+      "current": 102,
+      "prior": 101
+    },
+    "KLAPS50": {
+      "current": 98,
+      "prior": 97
+    }
+  },
+  "status": "GO"
+}

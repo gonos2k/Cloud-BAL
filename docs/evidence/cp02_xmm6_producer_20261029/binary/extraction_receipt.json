@@ -1,0 +1,65 @@
+{
+  "binary": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe",
+  "binary_sha256_after": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+  "binary_sha256_before": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+  "build_id_after": {
+    "argv": [
+      "readelf",
+      "-n",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe"
+    ],
+    "build_id": "8baf18e56c6a582ccc7a27fb4d1653ad18fb8810",
+    "exit_code": 0
+  },
+  "build_id_before": {
+    "argv": [
+      "readelf",
+      "-n",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe"
+    ],
+    "build_id": "8baf18e56c6a582ccc7a27fb4d1653ad18fb8810",
+    "exit_code": 0
+  },
+  "extractions": [
+    {
+      "argv": [
+        "objdump",
+        "-d",
+        "-Mintel",
+        "--start-address=0x25f42ee",
+        "--stop-address=0x25f4e60",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe"
+      ],
+      "exit_code": 0,
+      "matches_repeat_stdout": true,
+      "output": "disassembly_25f4300_25f4e60.txt",
+      "sha256": "c30fa2f00ca1e16078be1b48a3e7ed186012e28f91e4c4230a4f52a01ba801ee",
+      "size_bytes": 32764
+    },
+    {
+      "argv": [
+        "objdump",
+        "-d",
+        "-Mintel",
+        "--start-address=0x25f4fb0",
+        "--stop-address=0x25f4fc7",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe"
+      ],
+      "exit_code": 0,
+      "matches_repeat_stdout": true,
+      "output": "disassembly_25f4fb0_25f4fc7.txt",
+      "sha256": "e5718ba7fd03c936cbcb429ae33da3f4fdd9fc26deb4aeb883fcc4d7603efb65",
+      "size_bytes": 508
+    }
+  ],
+  "note": "Repeat read-only extraction stdout exactly matches the preserved listings; no source binary modification or rebuild.",
+  "objdump_version": {
+    "argv": [
+      "objdump",
+      "--version"
+    ],
+    "exit_code": 0,
+    "stdout": "GNU objdump (GNU Binutils for Ubuntu) 2.42\nCopyright (C) 2024 Free Software Foundation, Inc.\nThis program is free software; you may redistribute it under the terms of\nthe GNU General Public License version 3 or (at your option) any later version.\nThis program has absolutely no warranty.\n"
+  },
+  "size_bytes": 71834200
+}

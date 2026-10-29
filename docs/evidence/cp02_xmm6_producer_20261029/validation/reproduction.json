@@ -1,0 +1,48 @@
+{
+  "status": "PASS",
+  "clean_checkout": "/tmp/cp02-xmm6-clean-eabog5nj/checkout",
+  "commands": [
+    [
+      "/usr/bin/python",
+      "tools/cp02_xmm6_producer.py",
+      "--output",
+      "/tmp/cp02-xmm6-repro-cst62akt/analysis"
+    ],
+    [
+      "/usr/bin/python",
+      "docs/evidence/cp02_xmm6_producer_20261029/review/independent_raw.py"
+    ]
+  ],
+  "comparisons": [
+    {
+      "path": "docs/evidence/cp02_xmm6_producer_20261029/analysis/P01_00.png",
+      "sha256": "1906a56935190e4fb70c5319361c1e4467e98a17d093ff9380b301847c0578d5",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_xmm6_producer_20261029/analysis/P05_00.png",
+      "sha256": "99293506fdde2f2535bbe1e1cc01b89bad54ee2b7e624482c57dba190861678f",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_xmm6_producer_20261029/analysis/artifact_manifest.json",
+      "sha256": "9daa68a87a927ea19efbf5382cd5fd49e92dc6bc020e76d91c3de290f5967b7b",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_xmm6_producer_20261029/analysis/producer.csv",
+      "sha256": "9c7883a884f523647cb9327417cb1c1d8f861841fee5ac38f15dbde278af7979",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_xmm6_producer_20261029/analysis/summary.json",
+      "sha256": "e9dc8bda1e9fb585f7240f50e7fefce452a435de8a655d9044a33503c692a582",
+      "byte_identical": true
+    },
+    {
+      "path": "docs/evidence/cp02_xmm6_producer_20261029/validation/independent_raw.json",
+      "sha256": "9b6867305dd5d9d8d198dafa9acc3f250949a039c0157677afc480a4bde1333b",
+      "byte_identical": true
+    }
+  ]
+}

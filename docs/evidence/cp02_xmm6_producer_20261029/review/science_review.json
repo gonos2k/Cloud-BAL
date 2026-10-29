@@ -1,0 +1,102 @@
+{
+  "checks": [
+    "Independent raw decoder passed for all six frame-derived source and qrs addresses, source load, rounded comparison, branch, rounded factor/product, and before-sum value.",
+    "Reviewed manifest inventory, raw file hash and filename, helper, selection, rank/PID, process map, profile, inner-call and frame constraints.",
+    "python3 -m unittest discover -s tests -p test_cp02_xmm6_producer.py -v: 3 passed on final tool.",
+    "No physical-source identity, forecast completion, or global first-cause claim established.",
+    "Final report additions match 185-pass clean test log, six byte-identical reproduction hashes, and selected outer-scope counts; final five canonical artifacts match their manifest."
+  ],
+  "findings": [],
+  "observations": [
+    {
+      "arm": "HYDRO",
+      "branch": "multiply",
+      "compare_xmm3": 0.00028232281329110265,
+      "compare_xmm4": 0.0007441667839884758,
+      "rank": "1",
+      "source": -3.720833774423227e-05,
+      "xmm6": -1.4116139936959371e-05
+    },
+    {
+      "arm": "HYDRO",
+      "branch": "multiply",
+      "compare_xmm3": 7.645221921848133e-05,
+      "compare_xmm4": 0.0004804697819054127,
+      "rank": "3",
+      "source": -2.4023489459068514e-05,
+      "xmm6": -3.822611233772477e-06
+    },
+    {
+      "arm": "LIQUID",
+      "branch": "skip",
+      "compare_xmm3": 0.00028162202215753496,
+      "compare_xmm4": 8.508563041687012e-06,
+      "rank": "1",
+      "source": -4.254281407156668e-07,
+      "xmm6": -4.254281407156668e-07
+    },
+    {
+      "arm": "LIQUID",
+      "branch": "skip",
+      "compare_xmm3": 7.630418986082077e-05,
+      "compare_xmm4": 7.130298763513565e-05,
+      "rank": "3",
+      "source": -3.5651494272315176e-06,
+      "xmm6": -3.5651494272315176e-06
+    },
+    {
+      "arm": "OFF",
+      "branch": "multiply",
+      "compare_xmm3": 0.00045700452756136656,
+      "compare_xmm4": 0.0007536234334111214,
+      "rank": "1",
+      "source": -3.768117312574759e-05,
+      "xmm6": -2.2850228560855612e-05
+    },
+    {
+      "arm": "OFF",
+      "branch": "multiply",
+      "compare_xmm3": 0.0001040993956848979,
+      "compare_xmm4": 0.00048286188393831253,
+      "rank": "3",
+      "source": -2.4143093469319865e-05,
+      "xmm6": -5.2049695113964844e-06
+    }
+  ],
+  "resolved_findings": [
+    "Process-map basename was not bound to stage, rank and PID; analyzer now enforces the expected basename and mutation test covers it."
+  ],
+  "review": "independent analyzer and raw scientific arithmetic review",
+  "scope": "Analyzed actual six saved captures, binary control-flow listing, source tool, input/stage binding, and report. Raw producer and preclamp event lists have no shared sequence; continuity is supported by recorded context, address, value and binary control flow, not a shared timestamp. Review author also authored the report; report is not independently authored.",
+  "sha256": {
+    "docs/CP02_XMM6_PRODUCER_20261029.md": "7cda7bc2d81a7abdcce86ef72581848625ba6154402074398721e782bdcfd736",
+    "docs/evidence/cp02_xmm6_producer_20261029/analysis/P01_00.png": "1906a56935190e4fb70c5319361c1e4467e98a17d093ff9380b301847c0578d5",
+    "docs/evidence/cp02_xmm6_producer_20261029/analysis/P05_00.png": "99293506fdde2f2535bbe1e1cc01b89bad54ee2b7e624482c57dba190861678f",
+    "docs/evidence/cp02_xmm6_producer_20261029/analysis/artifact_manifest.json": "9daa68a87a927ea19efbf5382cd5fd49e92dc6bc020e76d91c3de290f5967b7b",
+    "docs/evidence/cp02_xmm6_producer_20261029/analysis/producer.csv": "9c7883a884f523647cb9327417cb1c1d8f861841fee5ac38f15dbde278af7979",
+    "docs/evidence/cp02_xmm6_producer_20261029/analysis/summary.json": "e9dc8bda1e9fb585f7240f50e7fefce452a435de8a655d9044a33503c692a582",
+    "docs/evidence/cp02_xmm6_producer_20261029/binary/analysis.md": "194b4fe449b7bad814a05962b0bcd6df4782fc6cfd98d19385e1be46a90d395d",
+    "docs/evidence/cp02_xmm6_producer_20261029/binary/extraction_receipt.json": "0cbd1a3b0ed35c4785b0516f7c06a60875905aaed6368d5439d619f5baba9f6d",
+    "docs/evidence/cp02_xmm6_producer_20261029/capture_plan/capture_producer.gdb": "72c0c447e74e7f8e87bf490e496a1c3b5317aacaef6047d37c22989ac6a16b59",
+    "docs/evidence/cp02_xmm6_producer_20261029/captures/HYDRO/raw_hydro_first_inner_rank1_pid238862.json.gz": "d241068b33549d1fcac6f21b97f30632f7c00d1d4c8329def41b661294867c00",
+    "docs/evidence/cp02_xmm6_producer_20261029/captures/HYDRO/raw_hydro_first_inner_rank3_pid238869.json.gz": "1b1b73849841e4cf5c480771c54ffec77b11a6f341d37bc55c2d28152a70cfa7",
+    "docs/evidence/cp02_xmm6_producer_20261029/captures/HYDRO/receipt.json": "4ef4883a7f3d32660e70dcb71342668a8df6c3c7a8721a2bda0067da26872330",
+    "docs/evidence/cp02_xmm6_producer_20261029/captures/LIQUID/raw_liquid_first_inner_rank1_pid238891.json.gz": "ce8c20885e0cd5ae5d3de5ae637fbd73c0c82663fc0aca728a0c5e8c842b08f3",
+    "docs/evidence/cp02_xmm6_producer_20261029/captures/LIQUID/raw_liquid_first_inner_rank3_pid238873.json.gz": "3f72d6ed508a184bda0ba55309f9b03a9188107f087152d20b2a9b09c5534b24",
+    "docs/evidence/cp02_xmm6_producer_20261029/captures/LIQUID/receipt.json": "ce9afffe95ec64ce7c56d834b4b1bbffcd1675034fe2967484a08b3da06310fe",
+    "docs/evidence/cp02_xmm6_producer_20261029/captures/OFF/raw_off_first_inner_rank1_pid234391.json.gz": "bf972d46e953a256598d596c42e65fdf0e63ea7f03c219085d5226d30b245544",
+    "docs/evidence/cp02_xmm6_producer_20261029/captures/OFF/raw_off_first_inner_rank3_pid234384.json.gz": "503a8b218d4ef68c974124dfc9dca42c1ca6787cde41a242254682932c125282",
+    "docs/evidence/cp02_xmm6_producer_20261029/captures/OFF/receipt.json": "a4a309cd1950c705c02545c6d013215f2f1c0ebec06e49efc279312a4a975944",
+    "docs/evidence/cp02_xmm6_producer_20261029/review/independent_raw.py": "68681f952b1afab0f98c978402c969105a7cd22af1f63cb8a2d0f3e5e5ab0eed",
+    "docs/evidence/cp02_xmm6_producer_20261029/runtime/prepare.json": "97b0d57bffac63a73d0bc7f3d9b54b653284700c5fabb5cc87ddbb41608a3eb4",
+    "docs/evidence/cp02_xmm6_producer_20261029/validation/clean_export.json": "608fbfb1c3b3c0a39e9861d5326c24d60f0ca80507280c35e0220e44a09b86eb",
+    "docs/evidence/cp02_xmm6_producer_20261029/validation/clean_tests.txt": "16051c6eea08e913c3518cc74e3395c1b4a4e661ed6f481a0a3ccbe7b16ba871",
+    "docs/evidence/cp02_xmm6_producer_20261029/validation/historical_evidence.json": "6c41d87efecbb6ecc6852f87dc753a976f057d1780c6333fb3f1cdb08c3e03e8",
+    "docs/evidence/cp02_xmm6_producer_20261029/validation/independent_raw.json": "9b6867305dd5d9d8d198dafa9acc3f250949a039c0157677afc480a4bde1333b",
+    "docs/evidence/cp02_xmm6_producer_20261029/validation/outer_scope.json": "5e072fe5049bdef5f46ce192e42cb894e452b7dac1a15972518ff85253cad5d0",
+    "docs/evidence/cp02_xmm6_producer_20261029/validation/reproduction.json": "8b5fd1c8c28c25687923185f9cc204f2500ecd3399cf1c961b6d3502353b3567",
+    "tests/test_cp02_xmm6_producer.py": "6fff835af2d0c07c60accd98e91b3b655708666dedc9dc219788517a68848b33",
+    "tools/cp02_xmm6_producer.py": "baad208300ab5f1420aff407dba6f17166a2d5bf17e9c63ac2cb4594539cb467"
+  },
+  "status": "GO"
+}

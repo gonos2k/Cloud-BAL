@@ -1,0 +1,13 @@
+# CP02 XMM6 producer KG preflight
+
+Graphify 0.9.53 baseline binds the maintained KLAPS50 and Cloud-BAL graph, manifest, report, wiki files, exact dirty statuses and 198 prior separately dated snapshots (97 KLAPS50 and 101 Cloud-BAL). Read-only verification passed. Guarded stage and publish helpers are adapted from the preceding preclamp update; At preflight the extraction scope was empty pending final reviewed selection and root GO; no extraction or maintained graph/wiki write had occurred. The final update below supersedes this preflight state.
+
+Both graphs identify the preclamp analyzer, tests, reconstruct, event and register verification, stage reader, analyze and publish functions, and the neighboring KDM6 inner response analyzer. This structural context does not prove the XMM6 producer or runtime behavior. The existing hot/overview pages are historical; current evidence and unresolved scientific acceptance must be assessed separately. Selected-path structural extraction does not refresh document semantics. Fortran cross-file CALL extraction is partial. Graph freshness does not establish runtime, physical or scientific validation.
+
+## Final staged update and publication
+
+Root authorized the frozen six-file structural update and guarded publication. Graphify 0.9.53 extracted the analyzer, tests, three runtime scripts, and independent raw replay; 106 stable capture, analysis, helper, binary and report files were hash-bound. Validation, review receipts and KG artifacts were excluded to avoid mutable cycles. The manifest update was selected-path-only, with no corpus scan or prune; document semantics were not refreshed.
+
+KLAPS50: 41,918 → 41,949 nodes (+31), 87,177 → 87,221 edges (+44), 3,395 → 3,399 communities. Cloud-BAL: 16,090 → 16,121 nodes (+31), 28,714 → 28,757 edges (+43), 1,427 → 1,428 communities. All prior node IDs and untouched manifest rows were preserved; integrity counters were zero. Separate dated snapshots and derived wiki reports, index and audit log were published. Independent readback verified 17 files, all 198 prior snapshots, 200 total snapshots, unchanged unrelated dirty status, and all selected and hash-only bindings. The wiki log was then append-only updated to record the separately reported clean 185-test pass and six-output byte-identical reproduction, with its final hash recorded in `postpublish_readback.json` superseding the publication receipt's earlier log hash.
+
+Graph freshness does not establish runtime, physical or scientific validity; Fortran cross-file CALL extraction is partial. The upstream source-array producer and physical identity remain unresolved. `stage_receipt.json`, `stage_validation.json`, `publish_receipt.json`, and `postpublish_readback.json` record the checks.
