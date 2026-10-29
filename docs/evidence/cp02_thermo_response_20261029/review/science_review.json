@@ -1,0 +1,187 @@
+{
+  "schema": "cp02-thermo-response-science-review-v1",
+  "reviewed_on": "2026-10-29",
+  "decision": "GO",
+  "scope": "Independent scientific and numerical review of the report's initial-state table, inter-call QR summaries, accepted first-inner-call captures, and KDM62D QR-write instruction comparison. This is not a forecast-skill, whole-column conservation, or physical-process validation.",
+  "report": {
+    "path": "docs/CP02_THERMO_RESPONSE_20261029.md",
+    "sha256": "2286aed2c183f760fe7ed67dee503748610ed81b9d6a9a0a2cf7b0edfdee2887"
+  },
+  "reviewed_artifacts": [
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/thermo_response/summary.json",
+      "sha256": "ac8a845ee7c2ada0e0dface70d74896b6642abf333b6fcbd2b5c6429d5931c21"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/thermo_response/profiles.csv",
+      "sha256": "349992a6258d54fd29b78c5e778563e6351e991b204d5124256818f36d86ae88"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/binary/initial_thermo.csv",
+      "sha256": "789b1e2e0701ececc607631c05edb77e7b60c0eb09b11b117cb2bc49bc59be57"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/binary/compare_write_events.py",
+      "sha256": "ccf3438973645f63fe48bfdaa3a4ccc142db360b7889e683aaa753f8b2bf3f21"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/binary/arm_qrs_branch_comparison.json",
+      "sha256": "041a0617d32bb5496ea13e157abe36897eaa91e7b398d12dc34fc4d66bda0f2c"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/binary/arm_qrs_branch_comparison.csv",
+      "sha256": "943006253c811b441b568ef52c19466cc5000b361a3868a2f2c6d3e60539bcca"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/binary/arm_qrs_branch_comparison.md",
+      "sha256": "291af48c2eba68b9c26b8d57221c597ed7ff024667774476c8514ee24d653a27"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/binary/qrs_write_instruction_map.md",
+      "sha256": "c823399383e09e57e2cd6bc9c4bdd606ee105519bf857381d973a2fd0d938f3c"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/binary/kdm62d_qrs_write_context.objdump.txt",
+      "sha256": "b32b53aae7befff632d98c9c30e9b6e1754c7a650eb7dd47011c9d3faac0754d"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/captures/OFF/receipt.json",
+      "sha256": "2ffac722f061478385edf436be9a3180c34f6bc81d0138db0342e759d970528b"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/captures/HYDRO/receipt.json",
+      "sha256": "055d9bcaef006b496cfb737207a4dd21cb524185b2af47b3979f7707f1ffa39d"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/captures/LIQUID/receipt.json",
+      "sha256": "9c1cb2b693651a20f16615516ab196ea824684de07ef580e363775892ca06223"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/OFF/summary.json",
+      "sha256": "f8f04db2aac4abf35e31e4519a85daa3811f07291d635ff2ec43e432cb68f58d"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/HYDRO/summary.json",
+      "sha256": "4619ac093b6dd816391c147be324d876fecaebec618e5f1405b9ca0af2e6f100"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/analysis/inner/LIQUID/summary.json",
+      "sha256": "87087ba926cfd0101f93ddf9c084c40176e13b6b651fefea1db8a145244e1227"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/clean_export.json",
+      "sha256": "fec0ece9e7e06529d64992a0025176f213844064edf9c0da814c0cd0ef5a5d5d"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/clean_reproduction.json",
+      "sha256": "936093eefdf5b5464740fbe0c2633a5d16fa07db9cea051296925b875edd7141"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/historical_evidence_check.json",
+      "sha256": "6d4693523977824ba0ae66c998be80eeca3d049a863525f2fc65132987338571"
+    },
+    {
+      "path": "docs/evidence/cp02_thermo_response_20261029/clean_tests.txt",
+      "sha256": "b40bbda7e247be03616e3436a2da7265eed2c4d0a77c5d2ce1dc7cc68a1dccdd"
+    }
+  ],
+  "capture_record_sha256": {
+    "OFF_P05_00_rank1_gzip": "edef45811030ea45efecfe7fdc8008f7f5ec0f89e1d96ed7e06afaa5c6f5319f",
+    "OFF_P01_00_rank3_gzip": "ed4a83bc0fcb3ec1d7b826872b3dc4b72094fc2d59bcb2ef958725f4362dbfcf",
+    "HYDRO_P05_00_rank1_gzip": "3ed97a67219678070776352c65cb6029e2df566cca3380a5e95902e46d8d6c85",
+    "HYDRO_P01_00_rank3_gzip": "474c8dc204c3d2a95b8a84643529cff8a3170d02b8a54ae80d94bdd9bdd8e637",
+    "LIQUID_P05_00_rank1_gzip": "7db8bab378cb4f9a898efd3e653945d1c330b3f3d21f6b732965a19ced679330",
+    "LIQUID_P01_00_rank3_gzip": "0a7f941a3e9a1c92026bcbfb4741e204d6fd39d27b09b1c2120901ee38338e47"
+  },
+  "reproduction": {
+    "command": "python docs/evidence/cp02_thermo_response_20261029/binary/compare_write_events.py",
+    "result": "REPRODUCED_ACCEPTED_SELECTED_WRITE_EVENTS",
+    "capture_validation": "The comparison script checks pinned compressed-capture hashes, all-ranks-settled status, rank/arm, binary/helper/selection hashes, and selected coordinate presence before decoding raw REAL32 write bytes. The regenerated CSV SHA-256 matched 943006253c811b441b568ef52c19466cc5000b361a3868a2f2c6d3e60539bcca.",
+    "python": "3.12.3"
+  },
+  "review_checks": [
+    {
+      "claim": "The weighted P05 k=8 first KDM6 entry/return values and QR endpoint table agree with the strict PR126 capture summary.",
+      "result": "PASS"
+    },
+    {
+      "claim": "The 624-key inter-call definition, per-arm counts, medians, and maxima agree with the response summary; LIQUID call-2 entry and return nr-zero counts remain separately scoped.",
+      "result": "PASS"
+    },
+    {
+      "claim": "The initial-input table preserves QVAPOR/QCLOUD/QRAIN and T/THM/P/PB as separate raw fields; no T00 addition or direct initial-to-driver equivalence is claimed.",
+      "result": "PASS"
+    },
+    {
+      "claim": "Accepted OFF/HYDRO/LIQUID captures show qrs events #1 and #3 at the reported PCs and before/after REAL32 values for P05_00 and P01_00.",
+      "result": "PASS"
+    },
+    {
+      "claim": "The qrs store at 0x25f4e58 is shared across arms; the reported post-clamp values differ, with positive LIQUID remainders and OFF P01_00 later reaching zero at a separate store.",
+      "result": "PASS"
+    },
+    {
+      "claim": "The 0x25f4ae3 branch to 0x25f4dc0 is consistent with ordered xmm15 == 0; the register source is traced only to compiler-managed local scratch storage, not a physical process name.",
+      "result": "PASS"
+    },
+    {
+      "claim": "Later P05_00 HYDRO Q/QC/t buffer changes and the different OFF/LIQUID directions are described as captured storage changes, without a water/energy budget or forecast-cause conclusion.",
+      "result": "PASS"
+    },
+    {
+      "claim": "Runtime write-event PC values are identified as PCs after the watched write; exact store addresses are separately supported by disassembly.",
+      "result": "PASS"
+    },
+    {
+      "claim": "All three internal postprocessing summaries report PASS_SCOPED_CAPTURE_CONTINUITY; each has zero byte differences across 624 selected points, entry/return, and 25 core fields (31,200 comparisons).",
+      "result": "PASS"
+    },
+    {
+      "claim": "Optional refl_10cm entry/return byte differences are OFF 2/2, HYDRO 4/4, LIQUID 4/4; re_cloud, re_ice, and re_snow each compare byte-equal at 624/624 points for both endpoints.",
+      "result": "PASS"
+    },
+    {
+      "claim": "Each arm has 8 inner target points and 16 endpoint rows; watched hardware value-change event totals are OFF 18, HYDRO 14, LIQUID 20.",
+      "result": "PASS"
+    },
+    {
+      "claim": "The LIQUID first-call PRE qr value (2.710022856e-4) is close to HYDRO (2.718877195e-4), a relative difference of about 0.326%; table labeling and caveats keep these as candidate first-PRE buffer values rather than claiming initial NetCDF QRAIN or physical process attribution.",
+      "result": "PASS"
+    },
+    {
+      "claim": "The report describes selected diagnostic stops as not forecast-completed and makes no physical-process or water/energy budget attribution.",
+      "result": "PASS"
+    },
+    {
+      "claim": "Final clean-export pytest shard passed 172 tests with exit code 0; report correctly states this was not the full portable suite and no native build was run.",
+      "result": "PASS"
+    },
+    {
+      "claim": "Clean reproduction compares 24 regenerated artifacts byte-identically; historical evidence check confirms 50, 28, 108, and 184 artifacts with matching hashes and sizes.",
+      "result": "PASS"
+    },
+    {
+      "claim": "Final report edits add testing/reproduction evidence, plots, and a validation link; the scientific tables and limits previously reviewed are unchanged. “초기 QR” is clarified as “첫 호출 PRE QR.”",
+      "result": "PASS"
+    },
+    {
+      "claim": "Final portability-fix regeneration keeps the scoped scientific results: all three inner summaries remain PASS_SCOPED_CAPTURE_CONTINUITY with 31,200 core byte comparisons, the same optional-field difference counts, 16 inner rows, and hardware-event counts 18/14/20; clean reproduction is PASS with 24/24 byte-identical outputs.",
+      "result": "PASS"
+    }
+  ],
+  "findings": [],
+  "scope_limits": [
+    "The linked executable has no DWARF; candidate source names are not proof of exact compiled source identity.",
+    "The captured REAL32 q/qrs/qci/t changes are selected storage deltas, not a column mass or energy closure.",
+    "No source-level evaporation, condensation, phase-change, or other process attribution is established.",
+    "The diagnostic launches intentionally stopped after the first KDM6 call and do not establish forecast completion, precipitation skill, or model-process budget.",
+    "Inner postprocessing continuity is scoped to 624 selected keys, 25 core fields, and entry/return; optional-array differences and sampled internal write transitions are reported separately."
+  ],
+  "report_refresh_note": "This review binds the current report hash. If the root changes the report after the final link check, update only the report SHA-256 after rechecking that the scientific claims are unchanged.",
+  "metadata_refresh": {
+    "reason": "Final inner summaries were regenerated after the analyzer portability fix; clean_reproduction.json was finalized after plot layout changes.",
+    "previous_inner_analysis_tool_sha256": "2f21fee1686e068bf429a0178b98891d09cc139b0a04678345d2f802eadce705",
+    "current_inner_analysis_tool_sha256": "550aa38b08c304f4d518b570a9ba02415b1631e3339faf069e70532eb5a164f5",
+    "interpretation": "Scientific status, comparison counts, optional-array differences, and observed write-event totals verified unchanged; refreshed artifact hashes bind the final files."
+  }
+}

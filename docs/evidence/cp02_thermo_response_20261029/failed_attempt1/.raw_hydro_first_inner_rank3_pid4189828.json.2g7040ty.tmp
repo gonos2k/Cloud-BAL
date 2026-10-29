@@ -1,0 +1,854 @@
+{
+  "arm": "HYDRO",
+  "binary_sha256": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+  "build_id": "8baf18e56c6a582ccc7a27fb4d1653ad18fb8810",
+  "expected_ranks": 8,
+  "failure": {
+    "error": "RuntimeError('inner_null_or_wrong_argument_count')",
+    "stage": "inner_entry"
+  },
+  "gdb_version": "GNU gdb (Ubuntu 15.0.50.20240403-0ubuntu1) 15.0.50.20240403-git",
+  "helper_sha256": "c654e8243fa45f3e035e99134d0b53b9fe3e28bd88062360a0fd7b5b745c7129",
+  "inner": [],
+  "intel_profile": {
+    "path": "/var/tmp/cloudbal-cp02-thermo-response/tests/intel_toolchain.sh",
+    "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "outer": {
+    "entry": {
+      "argument_count": 77,
+      "arguments": [
+        {
+          "candidate_name": "th",
+          "index": 1,
+          "location": "register:rdi",
+          "pointer_hex": "0x7ffffc38ade0"
+        },
+        {
+          "candidate_name": "q",
+          "index": 2,
+          "location": "register:rsi",
+          "pointer_hex": "0x1552ecef0920"
+        },
+        {
+          "candidate_name": "qc",
+          "index": 3,
+          "location": "register:rdx",
+          "pointer_hex": "0x1552ed09b220"
+        },
+        {
+          "candidate_name": "qr",
+          "index": 4,
+          "location": "register:rcx",
+          "pointer_hex": "0x1552ed245b20"
+        },
+        {
+          "candidate_name": "qi",
+          "index": 5,
+          "location": "register:r8",
+          "pointer_hex": "0x1552ed3f0420"
+        },
+        {
+          "candidate_name": "qs",
+          "index": 6,
+          "location": "register:r9",
+          "pointer_hex": "0x1552ed59ad20"
+        },
+        {
+          "candidate_name": "qg",
+          "index": 7,
+          "location": "stack:+8",
+          "pointer_hex": "0x1552ed745620"
+        },
+        {
+          "candidate_name": "nn",
+          "index": 8,
+          "location": "stack:+16",
+          "pointer_hex": "0x1552eb7aa920"
+        },
+        {
+          "candidate_name": "nc",
+          "index": 9,
+          "location": "stack:+24",
+          "pointer_hex": "0x1552eb955220"
+        },
+        {
+          "candidate_name": "ni",
+          "index": 10,
+          "location": "stack:+32",
+          "pointer_hex": "0x1552ebaffb20"
+        },
+        {
+          "candidate_name": "nr",
+          "index": 11,
+          "location": "stack:+40",
+          "pointer_hex": "0x1552ebe54d20"
+        },
+        {
+          "candidate_name": "bg",
+          "index": 12,
+          "location": "stack:+48",
+          "pointer_hex": "0x1552ebcaa420"
+        },
+        {
+          "candidate_name": "diag_rhog",
+          "index": 13,
+          "location": "stack:+56",
+          "pointer_hex": "0x1552e3c2a020"
+        },
+        {
+          "candidate_name": "den",
+          "index": 14,
+          "location": "stack:+64",
+          "pointer_hex": "0x1552edf9c020"
+        },
+        {
+          "candidate_name": "pii",
+          "index": 15,
+          "location": "stack:+72",
+          "pointer_hex": "0x7ffffc5356e0"
+        },
+        {
+          "candidate_name": "p",
+          "index": 16,
+          "location": "stack:+80",
+          "pointer_hex": "0x7ffffc6dffe0"
+        },
+        {
+          "candidate_name": "delz",
+          "index": 17,
+          "location": "stack:+88",
+          "pointer_hex": "0x7ffffc88a8e0"
+        },
+        {
+          "candidate_name": "delt",
+          "index": 18,
+          "location": "stack:+96",
+          "pointer_hex": "0x7ffffff9d0ec"
+        },
+        {
+          "candidate_name": "g",
+          "index": 19,
+          "location": "stack:+104",
+          "pointer_hex": "0x34bbe58"
+        },
+        {
+          "candidate_name": "cpd",
+          "index": 20,
+          "location": "stack:+112",
+          "pointer_hex": "0x34bbe50"
+        },
+        {
+          "candidate_name": "cpv",
+          "index": 21,
+          "location": "stack:+120",
+          "pointer_hex": "0x34c140c"
+        },
+        {
+          "candidate_name": "ccn0",
+          "index": 22,
+          "location": "stack:+128",
+          "pointer_hex": "0x155554e56374"
+        },
+        {
+          "candidate_name": "rd",
+          "index": 23,
+          "location": "stack:+136",
+          "pointer_hex": "0x34bbe4c"
+        },
+        {
+          "candidate_name": "rv",
+          "index": 24,
+          "location": "stack:+144",
+          "pointer_hex": "0x34c0c14"
+        },
+        {
+          "candidate_name": "t0c",
+          "index": 25,
+          "location": "stack:+152",
+          "pointer_hex": "0x34c0c48"
+        },
+        {
+          "candidate_name": "ep1",
+          "index": 26,
+          "location": "stack:+160",
+          "pointer_hex": "0x34c1410"
+        },
+        {
+          "candidate_name": "ep2",
+          "index": 27,
+          "location": "stack:+168",
+          "pointer_hex": "0x34c1414"
+        },
+        {
+          "candidate_name": "qmin",
+          "index": 28,
+          "location": "stack:+176",
+          "pointer_hex": "0x34c1418"
+        },
+        {
+          "candidate_name": "xls",
+          "index": 29,
+          "location": "stack:+184",
+          "pointer_hex": "0x34c141c"
+        },
+        {
+          "candidate_name": "xlv0",
+          "index": 30,
+          "location": "stack:+192",
+          "pointer_hex": "0x34c1420"
+        },
+        {
+          "candidate_name": "xlf0",
+          "index": 31,
+          "location": "stack:+200",
+          "pointer_hex": "0x34c1424"
+        },
+        {
+          "candidate_name": "den0",
+          "index": 32,
+          "location": "stack:+208",
+          "pointer_hex": "0x34c1428"
+        },
+        {
+          "candidate_name": "denr",
+          "index": 33,
+          "location": "stack:+216",
+          "pointer_hex": "0x34bba14"
+        },
+        {
+          "candidate_name": "scale_h",
+          "index": 34,
+          "location": "stack:+224",
+          "pointer_hex": "0x155554e56378"
+        },
+        {
+          "candidate_name": "qnn_land_mult",
+          "index": 35,
+          "location": "stack:+232",
+          "pointer_hex": "0x155554e5637c"
+        },
+        {
+          "candidate_name": "qnn_sea_mult",
+          "index": 36,
+          "location": "stack:+240",
+          "pointer_hex": "0x155554e56380"
+        },
+        {
+          "candidate_name": "ncmin_land",
+          "index": 37,
+          "location": "stack:+248",
+          "pointer_hex": "0x155554e55f94"
+        },
+        {
+          "candidate_name": "ncmin_sea",
+          "index": 38,
+          "location": "stack:+256",
+          "pointer_hex": "0x155554e55f98"
+        },
+        {
+          "candidate_name": "cliq",
+          "index": 39,
+          "location": "stack:+264",
+          "pointer_hex": "0x34c142c"
+        },
+        {
+          "candidate_name": "cice",
+          "index": 40,
+          "location": "stack:+272",
+          "pointer_hex": "0x34c1430"
+        },
+        {
+          "candidate_name": "psat",
+          "index": 41,
+          "location": "stack:+280",
+          "pointer_hex": "0x34c0f7c"
+        },
+        {
+          "candidate_name": "xland",
+          "index": 42,
+          "location": "stack:+288",
+          "pointer_hex": "0x332d7080"
+        },
+        {
+          "candidate_name": "rain",
+          "index": 43,
+          "location": "stack:+296",
+          "pointer_hex": "0x32d5cbc0"
+        },
+        {
+          "candidate_name": "rainncv",
+          "index": 44,
+          "location": "stack:+304",
+          "pointer_hex": "0x32d97e40"
+        },
+        {
+          "candidate_name": "snow",
+          "index": 45,
+          "location": "stack:+312",
+          "pointer_hex": "0x32daf8a0"
+        },
+        {
+          "candidate_name": "snowncv",
+          "index": 46,
+          "location": "stack:+320",
+          "pointer_hex": "0x32dd3020"
+        },
+        {
+          "candidate_name": "sr",
+          "index": 47,
+          "location": "stack:+328",
+          "pointer_hex": "0x334f7060"
+        },
+        {
+          "candidate_name": "refl_10cm",
+          "index": 48,
+          "location": "stack:+336",
+          "pointer_hex": "0x32df67c0"
+        },
+        {
+          "candidate_name": "diagflag",
+          "index": 49,
+          "location": "stack:+344",
+          "pointer_hex": "0x34b9014"
+        },
+        {
+          "candidate_name": "do_radar_ref",
+          "index": 50,
+          "location": "stack:+352",
+          "pointer_hex": "0x40ac9d8"
+        },
+        {
+          "candidate_name": "graupel",
+          "index": 51,
+          "location": "stack:+360",
+          "pointer_hex": "0x32dbb5c0"
+        },
+        {
+          "candidate_name": "graupelncv",
+          "index": 52,
+          "location": "stack:+368",
+          "pointer_hex": "0x32dded60"
+        },
+        {
+          "candidate_name": "itimestep",
+          "index": 53,
+          "location": "stack:+376",
+          "pointer_hex": "0x155554e550b4"
+        },
+        {
+          "candidate_name": "has_reqc",
+          "index": 54,
+          "location": "stack:+384",
+          "pointer_hex": "0x155554e550e0"
+        },
+        {
+          "candidate_name": "has_reqi",
+          "index": 55,
+          "location": "stack:+392",
+          "pointer_hex": "0x155554e550e4"
+        },
+        {
+          "candidate_name": "has_reqs",
+          "index": 56,
+          "location": "stack:+400",
+          "pointer_hex": "0x155554e550e8"
+        },
+        {
+          "candidate_name": "re_cloud",
+          "index": 57,
+          "location": "stack:+408",
+          "pointer_hex": "0x1552ec424020"
+        },
+        {
+          "candidate_name": "re_ice",
+          "index": 58,
+          "location": "stack:+416",
+          "pointer_hex": "0x1552ec279020"
+        },
+        {
+          "candidate_name": "re_snow",
+          "index": 59,
+          "location": "stack:+424",
+          "pointer_hex": "0x1552ec0ce020"
+        },
+        {
+          "candidate_name": "ids",
+          "index": 60,
+          "location": "stack:+432",
+          "pointer_hex": "0x7ffffff9c748"
+        },
+        {
+          "candidate_name": "ide",
+          "index": 61,
+          "location": "stack:+440",
+          "pointer_hex": "0x7ffffff9c750"
+        },
+        {
+          "candidate_name": "jds",
+          "index": 62,
+          "location": "stack:+448",
+          "pointer_hex": "0x7ffffff9c754"
+        },
+        {
+          "candidate_name": "jde",
+          "index": 63,
+          "location": "stack:+456",
+          "pointer_hex": "0x7ffffff9c74c"
+        },
+        {
+          "candidate_name": "kds",
+          "index": 64,
+          "location": "stack:+464",
+          "pointer_hex": "0x7ffffff9c768"
+        },
+        {
+          "candidate_name": "kde",
+          "index": 65,
+          "location": "stack:+472",
+          "pointer_hex": "0x7ffffff9c760"
+        },
+        {
+          "candidate_name": "ims",
+          "index": 66,
+          "location": "stack:+480",
+          "pointer_hex": "0x7ffffff9c734"
+        },
+        {
+          "candidate_name": "ime",
+          "index": 67,
+          "location": "stack:+488",
+          "pointer_hex": "0x7ffffff9c758"
+        },
+        {
+          "candidate_name": "jms",
+          "index": 68,
+          "location": "stack:+496",
+          "pointer_hex": "0x7ffffff9c738"
+        },
+        {
+          "candidate_name": "jme",
+          "index": 69,
+          "location": "stack:+504",
+          "pointer_hex": "0x7ffffff9c75c"
+        },
+        {
+          "candidate_name": "kms",
+          "index": 70,
+          "location": "stack:+512",
+          "pointer_hex": "0x7ffffff9c73c"
+        },
+        {
+          "candidate_name": "kme",
+          "index": 71,
+          "location": "stack:+520",
+          "pointer_hex": "0x7ffffff9c764"
+        },
+        {
+          "candidate_name": "its",
+          "index": 72,
+          "location": "stack:+528",
+          "pointer_hex": "0x7ffff97e225c"
+        },
+        {
+          "candidate_name": "ite",
+          "index": 73,
+          "location": "stack:+536",
+          "pointer_hex": "0x7ffff97e2258"
+        },
+        {
+          "candidate_name": "jts",
+          "index": 74,
+          "location": "stack:+544",
+          "pointer_hex": "0x7ffff97e2264"
+        },
+        {
+          "candidate_name": "jte",
+          "index": 75,
+          "location": "stack:+552",
+          "pointer_hex": "0x7ffff97e2260"
+        },
+        {
+          "candidate_name": "kts",
+          "index": 76,
+          "location": "stack:+560",
+          "pointer_hex": "0x7ffffff9c7c4"
+        },
+        {
+          "candidate_name": "kte",
+          "index": 77,
+          "location": "stack:+568",
+          "pointer_hex": "0x7ffffff9dbc8"
+        }
+      ],
+      "backtrace": "#0  0x00000000025df680 in module_mp_kdm6_mp_kdm6_ ()\n#1  0x00000000020c3722 in module_microphysics_driver_mp_microphysics_driver_ ()\n#2  0x00000000013fddf5 in solve_em_ ()\n#3  0x0000000001201efc in solve_interface_ ()\n#4  0x0000000000585112 in module_integrate_mp_integrate_ ()\n#5  0x000000000040a406 in module_wrf_top_mp_wrf_run_ ()\n#6  0x0000000000409e59 in MAIN__ ()\n",
+      "domain_bounds": {
+        "ide": 235,
+        "ids": 1,
+        "jde": 283,
+        "jds": 1,
+        "kde": 40,
+        "kds": 1
+      },
+      "memory_bounds": {
+        "ime": 240,
+        "ims": 111,
+        "jme": 148,
+        "jms": 65,
+        "kme": 40,
+        "kms": 1
+      },
+      "observed_delt": 20.0,
+      "observed_itimestep": 1,
+      "pc": "0x25df680",
+      "registers_hex": {
+        "r8": "0x1552ed3f0420",
+        "r9": "0x1552ed59ad20",
+        "rcx": "0x1552ed245b20",
+        "rdi": "0x7ffffc38ade0",
+        "rdx": "0x1552ed09b220",
+        "rsi": "0x1552ecef0920"
+      },
+      "return_pc": "0x20c3722",
+      "rsp_hex": "0x7ffff97e19b8",
+      "samples": [
+        {
+          "i": 163,
+          "j": 73,
+          "k": 1,
+          "label": "P01_00",
+          "status": "owned_tile",
+          "values": {
+            "bg": {
+              "address_hex": "0x1552ebcd2ef0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "delz": {
+              "address_hex": "0x7ffffc8b33b0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "62b85042",
+              "value_f32": 52.18006134033203
+            },
+            "den": {
+              "address_hex": "0x1552edfc4af0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "278f913f",
+              "value_f32": 1.1371811628341675
+            },
+            "diag_rhog": {
+              "address_hex": "0x1552e3c52af0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "graupel": {
+              "address_hex": "0x32dbc6d0",
+              "finite": true,
+              "offset_f32": 1092,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "graupelncv": {
+              "address_hex": "0x32ddfe70",
+              "finite": true,
+              "offset_f32": 1092,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "nc": {
+              "address_hex": "0x1552eb97dcf0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "ni": {
+              "address_hex": "0x1552ebb285f0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "nn": {
+              "address_hex": "0x1552eb7d33f0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "007e754f",
+              "value_f32": 4118675456.0
+            },
+            "nr": {
+              "address_hex": "0x1552ebe7d7f0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "p": {
+              "address_hex": "0x7ffffc708ab0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "a8abc247",
+              "value_f32": 99671.3125
+            },
+            "pii": {
+              "address_hex": "0x7ffffc55e1b0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "62c27f3f",
+              "value_f32": 0.999059796333313
+            },
+            "q": {
+              "address_hex": "0x1552ecf193f0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "2e01963c",
+              "value_f32": 0.018311109393835068
+            },
+            "qc": {
+              "address_hex": "0x1552ed0c3cf0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "00cfe137",
+              "value_f32": 2.6918482035398483e-05
+            },
+            "qg": {
+              "address_hex": "0x1552ed76e0f0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "qi": {
+              "address_hex": "0x1552ed418ef0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "40010000",
+              "value_f32": 4.484155085839415e-43
+            },
+            "qr": {
+              "address_hex": "0x1552ed26e5f0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "88f6b436",
+              "value_f32": 5.393118044594303e-06
+            },
+            "qs": {
+              "address_hex": "0x1552ed5c37f0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "rain": {
+              "address_hex": "0x32d5dcd0",
+              "finite": true,
+              "offset_f32": 1092,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "rainncv": {
+              "address_hex": "0x32d98f50",
+              "finite": true,
+              "offset_f32": 1092,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "re_cloud": {
+              "address_hex": "0x1552ec44caf0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "e0192736",
+              "value_f32": 2.4900000425986946e-06
+            },
+            "re_ice": {
+              "address_hex": "0x1552ec2a1af0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "c66fa736",
+              "value_f32": 4.9899999794433825e-06
+            },
+            "re_snow": {
+              "address_hex": "0x1552ec0f6af0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "b99a2737",
+              "value_f32": 9.989999853132758e-06
+            },
+            "refl_10cm": {
+              "address_hex": "0x32e1f290",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "snow": {
+              "address_hex": "0x32db09b0",
+              "finite": true,
+              "offset_f32": 1092,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "snowncv": {
+              "address_hex": "0x32dd4130",
+              "finite": true,
+              "offset_f32": 1092,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "sr": {
+              "address_hex": "0x334f8170",
+              "finite": true,
+              "offset_f32": 1092,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "th": {
+              "address_hex": "0x7ffffc3b38b0",
+              "finite": true,
+              "offset_f32": 41652,
+              "raw_hex": "b1779443",
+              "value_f32": 296.9350891113281
+            },
+            "xland": {
+              "address_hex": "0x332d8190",
+              "finite": true,
+              "offset_f32": 1092,
+              "raw_hex": "0000803f",
+              "value_f32": 1.0
+            }
+          }
+        },
+        {
+          "i": 163,
+          "j": 73,
+          "k": 2,
+          "label": "P01_00",
+          "status": "owned_tile",
+          "values": {
+            "bg": {
+              "address_hex": "0x1552ebcd30f8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "delz": {
+              "address_hex": "0x7ffffc8b35b8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "87798542",
+              "value_f32": 66.73735809326172
+            },
+            "den": {
+              "address_hex": "0x1552edfc4cf8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "10a8903f",
+              "value_f32": 1.1301288604736328
+            },
+            "diag_rhog": {
+              "address_hex": "0x1552e3c52cf8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "graupel": {
+              "address_hex": "0x32dbc6d0",
+              "finite": true,
+              "offset_f32": 1092,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "graupelncv": {
+              "address_hex": "0x32ddfe70",
+              "finite": true,
+              "offset_f32": 1092,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "nc": {
+              "address_hex": "0x1552eb97def8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "ni": {
+              "address_hex": "0x1552ebb287f8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "nn": {
+              "address_hex": "0x1552eb7d35f8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "1e3c624f",
+              "value_f32": 3795590656.0
+            },
+            "nr": {
+              "address_hex": "0x1552ebe7d9f8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "p": {
+              "address_hex": "0x7ffffc708cb8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "ce5ac147",
+              "value_f32": 98997.609375
+            },
+            "pii": {
+              "address_hex": "0x7ffffc55e3b8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "a2437f3f",
+              "value_f32": 0.9971257448196411
+            },
+            "q": {
+              "address_hex": "0x1552ecf195f8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "7e73953c",
+              "value_f32": 0.018243547528982162
+            },
+            "qc": {
+              "address_hex": "0x1552ed0c3ef8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "57548b38",
+              "value_f32": 6.643746019108221e-05
+            },
+            "qg": {
+              "address_hex": "0x1552ed76e2f8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "00000000",
+              "value_f32": 0.0
+            },
+            "qi": {
+              "address_hex": "0x1552ed4190f8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "147e0000",
+              "value_f32": 4.5228309234547796e-41
+            },
+            "qr": {
+              "address_hex": "0x1552ed26e7f8",
+              "finite": true,
+              "offset_f32": 41782,
+              "raw_hex": "0a8e6137",
+              "value_f32": 1.3444116120808758e-05
+            },
+            "qs": {
+              "address_hex": "0x1552ed5c39f8"

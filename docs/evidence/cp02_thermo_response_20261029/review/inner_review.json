@@ -1,0 +1,151 @@
+{
+  "arms": {
+    "HYDRO": {
+      "core_byte_differences": 0,
+      "core_outer_byte_comparisons": 31200,
+      "core_outer_fields": 25,
+      "hardware_write_events": 14,
+      "inner_endpoint_rows": 16,
+      "inner_target_points": 8,
+      "optional_arrays": {
+        "re_cloud": {
+          "entry_different": 0,
+          "entry_equal": 624,
+          "return_different": 0,
+          "return_equal": 624
+        },
+        "re_ice": {
+          "entry_different": 0,
+          "entry_equal": 624,
+          "return_different": 0,
+          "return_equal": 624
+        },
+        "re_snow": {
+          "entry_different": 0,
+          "entry_equal": 624,
+          "return_different": 0,
+          "return_equal": 624
+        },
+        "refl_10cm": {
+          "entry_different": 4,
+          "entry_equal": 620,
+          "return_different": 4,
+          "return_equal": 620
+        }
+      },
+      "status": "PASS_SCOPED_CAPTURE_CONTINUITY"
+    },
+    "LIQUID": {
+      "core_byte_differences": 0,
+      "core_outer_byte_comparisons": 31200,
+      "core_outer_fields": 25,
+      "hardware_write_events": 20,
+      "inner_endpoint_rows": 16,
+      "inner_target_points": 8,
+      "optional_arrays": {
+        "re_cloud": {
+          "entry_different": 0,
+          "entry_equal": 624,
+          "return_different": 0,
+          "return_equal": 624
+        },
+        "re_ice": {
+          "entry_different": 0,
+          "entry_equal": 624,
+          "return_different": 0,
+          "return_equal": 624
+        },
+        "re_snow": {
+          "entry_different": 0,
+          "entry_equal": 624,
+          "return_different": 0,
+          "return_equal": 624
+        },
+        "refl_10cm": {
+          "entry_different": 4,
+          "entry_equal": 620,
+          "return_different": 4,
+          "return_equal": 620
+        }
+      },
+      "status": "PASS_SCOPED_CAPTURE_CONTINUITY"
+    },
+    "OFF": {
+      "core_byte_differences": 0,
+      "core_outer_byte_comparisons": 31200,
+      "core_outer_fields": 25,
+      "hardware_write_events": 18,
+      "inner_endpoint_rows": 16,
+      "inner_target_points": 8,
+      "optional_arrays": {
+        "re_cloud": {
+          "entry_different": 0,
+          "entry_equal": 624,
+          "return_different": 0,
+          "return_equal": 624
+        },
+        "re_ice": {
+          "entry_different": 0,
+          "entry_equal": 624,
+          "return_different": 0,
+          "return_equal": 624
+        },
+        "re_snow": {
+          "entry_different": 0,
+          "entry_equal": 624,
+          "return_different": 0,
+          "return_equal": 624
+        },
+        "refl_10cm": {
+          "entry_different": 2,
+          "entry_equal": 622,
+          "return_different": 2,
+          "return_equal": 622
+        }
+      },
+      "status": "PASS_SCOPED_CAPTURE_CONTINUITY"
+    }
+  },
+  "artifacts_sha256": {
+    "docs/evidence/cp02_thermo_response_20261029/capture_plan/capture_thermo_response.gdb": "e6b9f5395a847fb3c475e9dd9d5b648cce0b224c5bd76562278df3e23f91c38b",
+    "docs/evidence/cp02_thermo_response_20261029/captures/HYDRO/receipt.json": "055d9bcaef006b496cfb737207a4dd21cb524185b2af47b3979f7707f1ffa39d",
+    "docs/evidence/cp02_thermo_response_20261029/captures/LIQUID/receipt.json": "9c1cb2b693651a20f16615516ab196ea824684de07ef580e363775892ca06223",
+    "docs/evidence/cp02_thermo_response_20261029/captures/OFF/receipt.json": "2ffac722f061478385edf436be9a3180c34f6bc81d0138db0342e759d970528b",
+    "docs/evidence/cp02_thermo_response_20261029/runtime/prepare_v6.json": "4031b6be4f6cf8731380f5d8fff7b843124c967faffab42fe803a15d73898cf2",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/test_cp02_kdm6_inner_response.py": "2c571297576dbaad973641fcf5c8a217350174c6ce83c3b80e5b325336760be9",
+    "tools/cp02_kdm6_inner_response.py": "550aa38b08c304f4d518b570a9ba02415b1631e3339faf069e70532eb5a164f5"
+  },
+  "decision": "GO",
+  "findings": [],
+  "prior_capture_receipts_sha256": {
+    "HYDRO": "5fde3b3114b453252c8ca7992e9468db22929994d763326035065d6906fdef41",
+    "LIQUID": "653d0ad09bb9bd8d618e239b1f3b1baf6022a58999b089c3a31d0512d92a4b76",
+    "OFF": "bc17a9ad1335f468d46b9044867af01649a85eaf0fd2e9b01e412adf81af077c"
+  },
+  "reviewer": "independent analyzer audit",
+  "schema": "cp02-kdm6-inner-response-independent-review-v1",
+  "scope_limits": [
+    "Review validates sampled debugger state, ABI/pointer/index relationships, captured write-event chains, and receipt integrity. It does not establish compiled-source identity, physical units, process attribution, conservation, or forecast skill. Optional outer arrays are separately counted and do not gate the scoped pass."
+  ],
+  "validation": {
+    "analysis_method": "Read-only in-memory calls to analyze() for each archived arm; no analysis outputs written by reviewer.",
+    "focused_tests": {
+      "command": "pytest -q tests/test_cp02_kdm6_inner_response.py",
+      "result": "10 passed"
+    },
+    "portability_delta": {
+      "behavior": "Captured profile path must be nonempty metadata; acceptance is based on its recorded SHA-256 matching the current pinned Intel profile bytes, regardless of checkout path.",
+      "decision": "GO",
+      "regression": "Relocated identical profile bytes accepted; modified profile bytes rejected."
+    },
+    "syntax": {
+      "command": "python -m py_compile tools/cp02_kdm6_inner_response.py",
+      "result": "passed"
+    },
+    "whitespace": {
+      "command": "git diff --check",
+      "result": "passed"
+    }
+  }
+}

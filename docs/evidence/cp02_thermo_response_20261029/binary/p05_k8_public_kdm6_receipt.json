@@ -1,0 +1,112 @@
+{
+  "extractor": {
+    "path": "/var/tmp/cloudbal-cp02-thermo-response/docs/evidence/cp02_thermo_response_20261029/binary/extract_firstcall_p05_k8.py",
+    "sha256": "cd0303d2550698eaf41068e402d6c69742038f312324cd6da5adb54318766788"
+  },
+  "meaning_limit": "Whole public KDM6 call PRE/POST values; not inner KDM62D state or process rates.",
+  "output": {
+    "path": "/var/tmp/cloudbal-cp02-thermo-response/docs/evidence/cp02_thermo_response_20261029/binary/p05_k8_public_kdm6.csv",
+    "row_count": 12,
+    "sha256": "94c363323b1db0098ba9861ff14ee60360f97584d8f04860d7e65c2999130fcf"
+  },
+  "purpose": "Hash-bound subset of the PR126 selected public KDM6 endpoint values",
+  "selection": {
+    "arms": [
+      "OFF",
+      "HYDRO",
+      "LIQUID"
+    ],
+    "call_ordinals": [
+      1,
+      2
+    ],
+    "coordinates_wrf_1based": {
+      "i": 164,
+      "j": 71,
+      "k": 8
+    },
+    "endpoints": [
+      "entry",
+      "return"
+    ],
+    "point": "P05_11",
+    "public_call_metadata": [
+      {
+        "arm": "OFF",
+        "call_ordinal": "1",
+        "diagflag": "-1",
+        "do_radar_ref": "0",
+        "has_reqc": "1",
+        "has_reqi": "1",
+        "has_reqs": "1",
+        "observed_dt": "20.0",
+        "observed_itimestep": "1"
+      },
+      {
+        "arm": "OFF",
+        "call_ordinal": "2",
+        "diagflag": "-1",
+        "do_radar_ref": "0",
+        "has_reqc": "1",
+        "has_reqi": "1",
+        "has_reqs": "1",
+        "observed_dt": "20.0",
+        "observed_itimestep": "2"
+      },
+      {
+        "arm": "HYDRO",
+        "call_ordinal": "1",
+        "diagflag": "-1",
+        "do_radar_ref": "0",
+        "has_reqc": "1",
+        "has_reqi": "1",
+        "has_reqs": "1",
+        "observed_dt": "20.0",
+        "observed_itimestep": "1"
+      },
+      {
+        "arm": "HYDRO",
+        "call_ordinal": "2",
+        "diagflag": "-1",
+        "do_radar_ref": "0",
+        "has_reqc": "1",
+        "has_reqi": "1",
+        "has_reqs": "1",
+        "observed_dt": "20.0",
+        "observed_itimestep": "2"
+      },
+      {
+        "arm": "LIQUID",
+        "call_ordinal": "1",
+        "diagflag": "-1",
+        "do_radar_ref": "0",
+        "has_reqc": "1",
+        "has_reqi": "1",
+        "has_reqs": "1",
+        "observed_dt": "20.0",
+        "observed_itimestep": "1"
+      },
+      {
+        "arm": "LIQUID",
+        "call_ordinal": "2",
+        "diagflag": "-1",
+        "do_radar_ref": "0",
+        "has_reqc": "1",
+        "has_reqi": "1",
+        "has_reqs": "1",
+        "observed_dt": "20.0",
+        "observed_itimestep": "2"
+      }
+    ]
+  },
+  "source_files": {
+    "/var/tmp/cloudbal-cp02-thermo-response/docs/evidence/cp02_kdm6_controls_20261029/analysis/per_arm_call.csv": {
+      "sha256": "313f6b84e75810639ee561900bcf47e496f9e7b62fde33c339363db096908544",
+      "size_bytes": 1799
+    },
+    "/var/tmp/cloudbal-cp02-thermo-response/docs/evidence/cp02_kdm6_controls_20261029/analysis/selected_profiles.csv": {
+      "sha256": "d07ccf07dddcccd285bddb9cd77d475deb5c8773142a4edaa466c6e9d184860d",
+      "size_bytes": 5717706
+    }
+  }
+}

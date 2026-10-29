@@ -1,0 +1,45 @@
+{
+  "checked_at_utc": "2026-10-29T09:00:16.624488+00:00",
+  "hash_only_mismatches": [
+    {
+      "current_sha256": "2286aed2c183f760fe7ed67dee503748610ed81b9d6a9a0a2cf7b0edfdee2887",
+      "frozen_sha256": "9f47bef71dfa1cbbb84d072dc82a50108191c18c482578406285d590eecf8d26",
+      "path": "docs/CP02_THERMO_RESPONSE_20261029.md"
+    }
+  ],
+  "maintained_graphs_or_wiki_written": false,
+  "note": "The isolated Graphify stage completed and its receipt recorded a staged-only status. A subsequent post-stage source audit found one hash-only file changed after the selection lock: the staged graph is not publishable until the changed nonselected source is re-frozen and the selection lock/GO are renewed, followed by a fresh stage.",
+  "publishable": false,
+  "schema": "cp02_thermo_response_stage_postcheck_v1",
+  "selected_source_hashes_still_match": true,
+  "selected_sources": {
+    "docs/evidence/cp02_thermo_response_20261029/analysis/plot_cp02_thermo_response.py": {
+      "current_sha256": "bd89a5b36aeab50509967badaa764c7fbcb61ecd37b25f12f8a0da42f32d24c4",
+      "frozen_sha256": "bd89a5b36aeab50509967badaa764c7fbcb61ecd37b25f12f8a0da42f32d24c4"
+    },
+    "docs/evidence/cp02_thermo_response_20261029/analysis/plot_inner_write_events.py": {
+      "current_sha256": "56f2d3630560582887c4c1458c445f3cee3a2e49847773f8b699064b49eb1b90",
+      "frozen_sha256": "56f2d3630560582887c4c1458c445f3cee3a2e49847773f8b699064b49eb1b90"
+    },
+    "tests/test_cp02_kdm6_inner_response.py": {
+      "current_sha256": "2c571297576dbaad973641fcf5c8a217350174c6ce83c3b80e5b325336760be9",
+      "frozen_sha256": "2c571297576dbaad973641fcf5c8a217350174c6ce83c3b80e5b325336760be9"
+    },
+    "tests/test_cp02_thermo_response.py": {
+      "current_sha256": "5c915980e5748fd646df335d8f34e6ce31683db045d35a3ab49c54c17b9c9288",
+      "frozen_sha256": "5c915980e5748fd646df335d8f34e6ce31683db045d35a3ab49c54c17b9c9288"
+    },
+    "tools/cp02_kdm6_inner_response.py": {
+      "current_sha256": "550aa38b08c304f4d518b570a9ba02415b1631e3339faf069e70532eb5a164f5",
+      "frozen_sha256": "550aa38b08c304f4d518b570a9ba02415b1631e3339faf069e70532eb5a164f5"
+    },
+    "tools/cp02_thermo_response.py": {
+      "current_sha256": "70f728e802a915028d3b126dd1f5144a715a9036ef7a75466097ee1b93f61b4e",
+      "frozen_sha256": "70f728e802a915028d3b126dd1f5144a715a9036ef7a75466097ee1b93f61b4e"
+    }
+  },
+  "selection_lock_sha256": "2de6648d52ecdef69b62ad2eb41e09287cb18a204bfe6a4c14dc5752cbba1a6e",
+  "stage_path": "/var/tmp/cp02_thermo_response_kg_20261029/retry-graphify-uv/stage-cp02-thermo-response-sixpath-stage-go-20261029",
+  "stage_receipt_sha256": "707327aa421f17274f5bdcc65cd721f1f319f0c0e27bd8d12be405139a0a8254",
+  "status": "STALE_HASH_ONLY_SOURCE_AFTER_STAGE"
+}
