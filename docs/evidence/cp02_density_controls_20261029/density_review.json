@@ -1,0 +1,38 @@
+{
+  "review": "PASS_SCOPED_INDEPENDENT_CODE_AND_SCIENCE_REVIEW",
+  "reviewed_at": "2026-10-29",
+  "checkout": "/var/tmp/cloudbal-cp02-density-controls",
+  "base_commit": "a0413424f79787a9055210f72756a3e44868eda2",
+  "reviewed_files": {
+    "tools/cp02_density_comparison.py": "38a796ed0bc5c471b82f7c723af917e562c50a2c01373380e0df9abb007d51fe",
+    "tests/test_cp02_density_comparison.py": "113a1673acc79e9e04b79892a5bd8e8b13780e655d7b6c6e47d75e70f5f54a27",
+    "docs/evidence/cp02_radar_inputs_20261028/analyze_radar_inputs.py": "6d61469b7ba89497200b840541552e44b3abc20f733357a4ca45ff5b7233c0b2",
+    "docs/evidence/cp02_radar_inputs_20261028/hydro_capture.json.gz": "b41181187c3a3eacb1edd567cedfb029cd9bdc2cde1c247d9a556167eb01b4bf",
+    "docs/evidence/cp02_initial_species_20261027/final/shadow/shadow_species_profiles.csv": "bc765f17fef5b02c4b75d58bd503114259f779cfeffe51ed9e82c6672d37f0ca",
+    "docs/evidence/cp02_density_controls_20261029/density/density_comparison.csv": "0350cda6c87dd776c804f74b6aebb61e29026326eb2d74aaa5d80f69b9b690d8",
+    "docs/evidence/cp02_density_controls_20261029/density/density_comparison.json": "e84038b1cbe6ce38771bbbaccbb969318f9a59a7defe863092afc3bed2476a07",
+    "docs/evidence/cp02_density_controls_20261029/density/density_comparison.png": "6099c1de3aa038da7d6048e425d856ce70c273ff5f1f9f505b96b440062034ec",
+    "docs/evidence/cp02_density_controls_20261029/pr122_review_version_reconciliation.json": "d08bfc8581408f0f7f4bb264c0342f77e639fa9af7dc8574048be80fee7ef437",
+    "docs/evidence/cp02_density_controls_20261029/pr122_review_version_delta.patch": "d113eac4a97764ee20b2c04349bb8fc42545f50627557dd0328f325ac6d87128"
+  },
+  "validation": {
+    "focused_tests": "/var/tmp/pr108_portable_env_20261026/bin/python -m pytest -q tests/test_cp02_density_comparison.py",
+    "focused_tests_result": "12 passed; matplotlib/pyparsing deprecation warnings only",
+    "existing_focused_suite": "79 passed; 196 warnings, from docs/evidence/cp02_density_controls_20261029/existing_focused_tests.txt",
+    "independent_raw_capture_recalculation": {
+      "method": "Directly decoded hydro_capture.json.gz REAL64 density/local diagnostic bytes and REAL32 final-state bytes; joined 440 canonical HYDRO background CSV rows by Fortran (i,j,k); independently recomputed Cdiag=rho_d*qdiag, Cbg_eq=rho_d*qbg and Cfinal=rho_d*qfinal.",
+      "result": "190 observed keys exactly match CSV; all formula values exactly match serialized CSV values; background CSV values round-trip exactly to REAL32; density_return and phase_allocation_return density match for all output samples."
+    },
+    "bad_input_output_behavior": "Injected a SCOPED_PASS analyzer result with zero profiles; run rejected before output directory creation.",
+    "existing_output_behavior": "write_outputs rejected an existing evidence CSV and preserved its contents without creating sibling outputs.",
+    "csv_and_json": "CSV has 190 keyed rows; JSON provenance hashes match source/capture/background and the CSV grouping totals 190.",
+    "figure": "PNG opens; labels distinguish same-captured-density Cdiag using REAL64 diagnostic q from Cbg_eq; right panel says positive-background cells and uses per-cell Cdiag/Cbg_eq. Caption states archived observed n=190.",
+    "pr122_reconciliation": "Recovered reviewed report hash matches the old science_review.json target (66a52c589aea3d6ba1f1f61c88c17f6ca771934b800ca7c476acdaad2c8b2aa9); final report hash matches reconciliation target; direct diff and supplied patch show exactly one added binary_probe.json source link, with no numerical or interpretation changes. Original review receipt remains preserved.",
+    "graphify": "Queried existing graph for data-flow context. Existing graph snapshot is stale (GRAPH_REPORT built at 66a63bd7; files under review are not represented), so graph result was not treated as evidence. Source/raw capture and tests were authoritative."
+  },
+  "findings": [],
+  "scope_limits": [
+    "This validates a scoped archived-sample concentration comparison, not reconstruction of historical original concentration, forecast causality, conservation, or new runtime behavior.",
+    "No source files were edited."
+  ]
+}

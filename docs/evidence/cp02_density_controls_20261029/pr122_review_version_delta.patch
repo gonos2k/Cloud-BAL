@@ -1,0 +1,10 @@
+--- reviewed_report
++++ merged_pr122_report
+@@ -54,6 +54,7 @@
+ 배경을 유지하는 처리와 0으로 대체하는 처리를 구별할 수 없다. 따라서 기존 결과로
+ 비관측 양의 배경 수종 보존을 승인하지 않는다.
+ 
++[기존 바이너리 조사](evidence/cp02_radar_inputs_20261028/binary_probe.json)에 따르면
+ `phase_uncertain`은 포착된 usable-phase 경로에서
+ `precipitation_phase%quality & 0x30`에 연결된다. 관측 190개 위치의 phase quality는
+ 모두 0이므로, 반사도 quality가 32인 위치에서도 이 플래그가 거짓인 것은 해당 경로와
