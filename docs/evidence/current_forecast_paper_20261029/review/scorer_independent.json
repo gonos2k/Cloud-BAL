@@ -1,0 +1,28 @@
+{
+  "status": "PASS_SCOPED",
+  "reviewer": "independent scorer reviewer (non-author)",
+  "scope": "Scorer and tests; historical host CLI regression only. No fresh forecast or scientific performance claim.",
+  "reviewed_sha256": {
+    "docs/evidence/current_forecast_paper_20261029/score_forecasts.py": "73d4ddd8d6b8c4c6eb7903eff000c2c1e1330a2d50a6692ee7e0eaf77d51d539",
+    "tests/test_current_forecast_scores.py": "998a7e0dd394a3c6fb7e848e4b99e04774f2a9a16e0e387c007897741ee81295",
+    "docs/evidence/precip_hourly_20261027/rn1_recovery/archived_compare_six_hour_csi.py": "1cfa4965155ec273e8e1ca9f963bd79a5ece3bc47beb4ae3db4e8b8f5e21b2c0"
+  },
+  "finding_fixed": "Reference inputs were previously hashed only after loading. Inputs and archived evaluator now have pre/post identity checks; regression covers mutation.",
+  "checks": [
+    "Seven tests pass, including secondary baseline, undefined denominators, paired transitions, missing hour, mutation, and dangling output symlink.",
+    "Historical host CLI read seven WRF times per case, canonical RN1 hashes, fixed mask, grid, bucket/RAINSH and reset checks.",
+    "Independently keyed all 108 historical rows: hit, miss, false alarm, correct dry and CSI exact, every row 3688 cells.",
+    "Independent array recounts: OFF lead 1 threshold 0.1 = [642,951,54,2041]; HYDRO lead 4 threshold 2.5 = [158,433,323,2774]; LIQUID lead 6 threshold 10 = [58,66,151,3413].",
+    "Independent paired changes [hit gains, hit losses, false-alarm gains, false-alarm losses]: HYDRO lead 1 threshold 0.1 [8,37,5,3]; LIQUID lead 6 threshold 1 [21,29,63,82].",
+    "Reran independent host CLI with OFF primary and HYDRO secondary baseline: 108 transition rows, unchanged categorical CSV, independently recounted HYDRO-to-LIQUID at leads 1 and 6."
+  ],
+  "historical_output": "/var/tmp/independent-current-forecast-score-historical-final-20261029",
+  "historical_csv_sha256": "c044fdd4bc6ccd069d326e25fcb80fe382a6ba52d1c47ab6508257d6fdeed8cf",
+  "limits": [
+    "Processed RN1 lacks observation coverage/freshness bitmap.",
+    "Hash checks detect persistent input changes around reads; they do not establish physical validity or prove absence of transient changes.",
+    "Fresh forecast results and paper require separate review."
+  ],
+  "secondary_baseline_cli_output": "/var/tmp/independent-current-forecast-score-secondary-20261029",
+  "secondary_transitions_sha256": "a633257663ae7fff18677c485694ce3b09953419cfcada8d26db1ecdd887c862"
+}

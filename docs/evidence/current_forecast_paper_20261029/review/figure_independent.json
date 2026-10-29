@@ -1,0 +1,14 @@
+{
+  "status": "PASS_SCOPED",
+  "plotter_sha256": "a83493139551896c9c401629795d498eabb48ef0710215c7390ec9128fd3ab73",
+  "output_dir": "/var/tmp/independent-current-forecast-plot-review-20261029",
+  "figure_manifest_sha256": "4c380a54c81af90d46763b603a3db99f8cb3d2974a6dc2342cbb73f64d91fff7",
+  "scope": "Synthetic historical-array smoke test only; synthetic case labels do not represent current forecasts.",
+  "checks": [
+    "Independent CLI succeeded; 6 input and 12 output manifest hashes verified.",
+    "Visual inspection: paired 3688-point maps, shared axes and color bins legible; spatial +1 and +6 only.",
+    "RN1 explicitly identified as analysis; first and last point coordinates checked; plot rejects negative and non-finite precipitation.",
+    "Output generated in temporary directory and inputs rehashed prior to publication."
+  ],
+  "remaining": "Fresh forecast figures require independent comparison with fresh scores and inputs."
+}

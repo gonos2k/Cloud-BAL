@@ -1,0 +1,440 @@
+{
+  "scope": "Paired point values only; one historical case. CURRENT_OFF is deliberately not compared with historical OFF because its initialization differs.",
+  "fields": [
+    "reference",
+    "latitude",
+    "longitude",
+    "flat_index_yx"
+  ],
+  "forecast_pairs": [
+    [
+      "ORIGINAL",
+      "OFF"
+    ],
+    [
+      "CURRENT_HYDRO",
+      "HYDRO"
+    ],
+    [
+      "CURRENT_LIQUID",
+      "LIQUID"
+    ]
+  ],
+  "inputs": [
+    {
+      "path": "/var/tmp/cloudbal-current-forecast-paper/docs/evidence/current_forecast_paper_20261029/scores/hour_13_arrays.npz",
+      "sha256": "0df6e55167373751a2a9e50f10325c6d6d1e02603f1225e448c8e766184da9e4",
+      "size": 118830
+    },
+    {
+      "path": "/var/tmp/cloudbal-current-forecast-paper/docs/evidence/precip_hourly_20261027/rn1_recovery/hour_13_arrays.npz",
+      "sha256": "4290d0d2955ffde8555c2fa6c8d7655825f6e982cd2b3b7a2604d8149eea00fa",
+      "size": 98121
+    },
+    {
+      "path": "/var/tmp/cloudbal-current-forecast-paper/docs/evidence/current_forecast_paper_20261029/scores/hour_14_arrays.npz",
+      "sha256": "1228ba4d4106c151c79bcf01fb2f3a609e91a81bce4833f611da6f726283bf49",
+      "size": 123854
+    },
+    {
+      "path": "/var/tmp/cloudbal-current-forecast-paper/docs/evidence/precip_hourly_20261027/rn1_recovery/hour_14_arrays.npz",
+      "sha256": "0d956ae398d823a2042112f9132b7c3e7f1eab0cc37a3c4c8da28e2a109142f8",
+      "size": 100634
+    },
+    {
+      "path": "/var/tmp/cloudbal-current-forecast-paper/docs/evidence/current_forecast_paper_20261029/scores/hour_15_arrays.npz",
+      "sha256": "2495bb333cb7b5b47b6b494e9d7b9ac39d48e224228b1bad06960d448c283711",
+      "size": 137195
+    },
+    {
+      "path": "/var/tmp/cloudbal-current-forecast-paper/docs/evidence/precip_hourly_20261027/rn1_recovery/hour_15_arrays.npz",
+      "sha256": "eea92b8ea040c0e7a6bc76007d22d73f5dc3a90673728f69fe965be1720973bd",
+      "size": 110908
+    },
+    {
+      "path": "/var/tmp/cloudbal-current-forecast-paper/docs/evidence/current_forecast_paper_20261029/scores/hour_16_arrays.npz",
+      "sha256": "18da1d6c0e061849477030911091cee2c32d4ff7543e3684b11a991260b4c8e4",
+      "size": 136874
+    },
+    {
+      "path": "/var/tmp/cloudbal-current-forecast-paper/docs/evidence/precip_hourly_20261027/rn1_recovery/hour_16_arrays.npz",
+      "sha256": "f7837ca8e51525f47bd13dabc1790510513f1d89b9bc8a2d41416c9ac35a5dd8",
+      "size": 110818
+    },
+    {
+      "path": "/var/tmp/cloudbal-current-forecast-paper/docs/evidence/current_forecast_paper_20261029/scores/hour_17_arrays.npz",
+      "sha256": "4bf01eb3aecf5e6c7f35188b8110d42ee34c50eb670230b44b77852dc851103b",
+      "size": 130545
+    },
+    {
+      "path": "/var/tmp/cloudbal-current-forecast-paper/docs/evidence/precip_hourly_20261027/rn1_recovery/hour_17_arrays.npz",
+      "sha256": "b0ba89bbe4604808dde6d1b19d75b3874ae55eb8cc1996b679b704b33fe1b80f",
+      "size": 106430
+    },
+    {
+      "path": "/var/tmp/cloudbal-current-forecast-paper/docs/evidence/current_forecast_paper_20261029/scores/hour_18_arrays.npz",
+      "sha256": "28d298166ce100d0135ee1ce1061372602fe964606768587350d998fa22486d2",
+      "size": 138444
+    },
+    {
+      "path": "/var/tmp/cloudbal-current-forecast-paper/docs/evidence/precip_hourly_20261027/rn1_recovery/hour_18_arrays.npz",
+      "sha256": "1235b76f494e01b47db3ab5ade598e80f89bbe5fc5445e14819133b41d7abcfb",
+      "size": 111001
+    }
+  ],
+  "script": {
+    "path": "/var/tmp/cloudbal-current-forecast-paper/docs/evidence/current_forecast_paper_20261029/compare_archived_arrays.py",
+    "sha256": "6900b6b05358874781e2cd6b30812a119194febb502213c5271a33fc67e3a134",
+    "size": 3146
+  },
+  "hourly": {
+    "1": {
+      "reference": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "latitude": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "longitude": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "flat_index_yx": {
+        "fresh_dtype": "int64",
+        "archived_dtype": "int32",
+        "exact_values_equal": true,
+        "bitwise_equal": false,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "ORIGINAL_vs_OFF": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "CURRENT_HYDRO_vs_HYDRO": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "CURRENT_LIQUID_vs_LIQUID": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      }
+    },
+    "2": {
+      "reference": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "latitude": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "longitude": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "flat_index_yx": {
+        "fresh_dtype": "int64",
+        "archived_dtype": "int32",
+        "exact_values_equal": true,
+        "bitwise_equal": false,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "ORIGINAL_vs_OFF": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "CURRENT_HYDRO_vs_HYDRO": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "CURRENT_LIQUID_vs_LIQUID": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      }
+    },
+    "3": {
+      "reference": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "latitude": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "longitude": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "flat_index_yx": {
+        "fresh_dtype": "int64",
+        "archived_dtype": "int32",
+        "exact_values_equal": true,
+        "bitwise_equal": false,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "ORIGINAL_vs_OFF": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "CURRENT_HYDRO_vs_HYDRO": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "CURRENT_LIQUID_vs_LIQUID": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      }
+    },
+    "4": {
+      "reference": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "latitude": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "longitude": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "flat_index_yx": {
+        "fresh_dtype": "int64",
+        "archived_dtype": "int32",
+        "exact_values_equal": true,
+        "bitwise_equal": false,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "ORIGINAL_vs_OFF": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "CURRENT_HYDRO_vs_HYDRO": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "CURRENT_LIQUID_vs_LIQUID": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      }
+    },
+    "5": {
+      "reference": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "latitude": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "longitude": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "flat_index_yx": {
+        "fresh_dtype": "int64",
+        "archived_dtype": "int32",
+        "exact_values_equal": true,
+        "bitwise_equal": false,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "ORIGINAL_vs_OFF": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "CURRENT_HYDRO_vs_HYDRO": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "CURRENT_LIQUID_vs_LIQUID": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      }
+    },
+    "6": {
+      "reference": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "latitude": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "longitude": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "flat_index_yx": {
+        "fresh_dtype": "int64",
+        "archived_dtype": "int32",
+        "exact_values_equal": true,
+        "bitwise_equal": false,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "ORIGINAL_vs_OFF": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "CURRENT_HYDRO_vs_HYDRO": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      },
+      "CURRENT_LIQUID_vs_LIQUID": {
+        "fresh_dtype": "float64",
+        "archived_dtype": "float64",
+        "exact_values_equal": true,
+        "bitwise_equal": true,
+        "changed_count": 0,
+        "max_absolute_difference": 0.0
+      }
+    }
+  }
+}

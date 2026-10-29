@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "command": [
+    "python",
+    "docs/evidence/current_forecast_paper_20261029/plot_forecast_scores.py",
+    "--scores-dir",
+    "docs/evidence/current_forecast_paper_20261029/scores",
+    "--output-dir",
+    "/tmp/forecast-figure-repro-6lasj0h2/figures"
+  ],
+  "png_checks": [
+    {
+      "name": "hour_13_paired_precipitation.png",
+      "sha256": "9f54aa7561000065ef82d3fb362b3b2faf21ab666166e288ac200d4123e8e2d7",
+      "byte_identical": true
+    },
+    {
+      "name": "hour_18_paired_precipitation.png",
+      "sha256": "c3bbf72b49d93e00d17526f92affd813483a38ed9faf067ca5a0d7d2c06529e7",
+      "byte_identical": true
+    },
+    {
+      "name": "hourly_continuous.png",
+      "sha256": "6e9c78a22be3fccaed692e6d7ae21dc87b257a2caeca6dace2cb57446da68932",
+      "byte_identical": true
+    },
+    {
+      "name": "hourly_csi.png",
+      "sha256": "597709d1a6e3022014dd17e70df5ff1b8ba7c6a45f23b765a361b95520259013",
+      "byte_identical": true
+    },
+    {
+      "name": "hourly_ets.png",
+      "sha256": "e4eaa61a2032009b983cdf0e7077a925c43ed777356ccf50e310fa70f51defb5",
+      "byte_identical": true
+    },
+    {
+      "name": "hourly_transitions_ge5.png",
+      "sha256": "b3df6014c7a9608837990e4de701fb90ded0a5da47088800e26ea5f8ab6c2460",
+      "byte_identical": true
+    }
+  ],
+  "script_sha256": "101ae6745b07239e2bba5eba7c2c8b5f4606474c19fcde3d56389af866e877ed",
+  "pdf_note": "PDF files were generated but not required to be byte-identical because creation metadata varies."
+}

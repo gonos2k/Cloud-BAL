@@ -1,0 +1,33 @@
+{
+  "status": "GO_SCOPED",
+  "scope": "Runtime and preprocessing provenance and completed cohort; no scientific or operational approval.",
+  "sha256": {
+    "docs/evidence/current_forecast_paper_20261029/runtime/README.md": "e6207c184dbb38f460368483cbbb4a988ec46d1430aa7ff281d0b4559ca6d184",
+    "docs/evidence/current_forecast_paper_20261029/runtime/recorded_files.sha256": "d36ee0d7517d64f167ef5d85d3c8e3d4782d275953bbc1f04b1bcbbe15cb0c8f",
+    "docs/evidence/current_forecast_paper_20261029/runtime/preprocessing_receipt.json": "aa9630e721c700d05bcb7df8347873e252e39e31b97dd61a65f9654019348061",
+    "docs/evidence/current_forecast_paper_20261029/runtime/cohort_receipt.json": "e0d8c1b76098d18ec1d950b42892cc7ccfcfb79dcaf9ef7893dd4a1af3e3e429",
+    "docs/evidence/current_forecast_paper_20261029/runtime/failed_OFF_receipt.json": "ccd1ccd901c5e19b30535c77b0464ba9d07b86bbf7448920bac2688f3cbf3c60",
+    "docs/evidence/current_forecast_paper_20261029/runtime/collect_run_receipts.py": "b5c50d47850c20f7d9a0cc8ed93d9e78ff38d323daebcd23fe016f19b4476f9f",
+    "docs/evidence/current_forecast_paper_20261029/runtime/compile_inputs.sha256": "261bfe548b30f05712b7f681636fb2085b8058490917c59b018d701c5bbed147",
+    "docs/evidence/current_forecast_paper_20261029/runtime/link_inputs.sha256": "a2da3f40269e28499012c2580c57094f3950cad8bcda3df7d463d4f32f416247",
+    "docs/evidence/current_forecast_paper_20261029/runtime/executable.sha256": "cd558b17047ebc719c28cbb0154a246cfdcf0633707ed112fb930c9823e7abb6",
+    "docs/evidence/current_forecast_paper_20261029/runtime/wrf_executable.sha256": "a30e71215aa576aad5b8f5e6875df33ce659878c27663fd8fe859d647dc7b8b9",
+    "docs/evidence/current_forecast_paper_20261029/compare_initial_states.py": "992cd6b7ee08a90991bf51bb4b68cc6a1db36f9d267dd2a8eb14c1e6d2a2eed4",
+    "docs/evidence/current_forecast_paper_20261029/initial_original_vs_current_off.json": "0606b1673ec15b591bb1901fee201da97350142568b0171c82d4abdb83df43b0"
+  },
+  "independent_checks": [
+    "111 runtime record files matched recorded_files.sha256.",
+    "Re-ran cohort collector independently and reproduced cohort_receipt.json byte-for-byte: four arms exit 0, WRF success markers, seven exact UTC history records per arm, finite selected fields and two passes over each applicable input inventory.",
+    "OFF exclusively uses the independently re-run OFF_RETRY histories; failed original OFF wrapper has exit 2 and uncaptured WRF exit, preserved separately.",
+    "Pinned Intel ifx O2 build commands and compile/link/runtime/executable manifests inspected and present-day hash checks passed; source before and after manifests match.",
+    "Read actual candidate shadow NetCDF attributes: DIAGNOSTIC_PROPOSAL_ONLY, pipeline status 20, acceptance failures 0, physical continuity assessed 0. Independently rehashed mode WPS, metgrid and real artifacts.",
+    "Original and current OFF initial files differ and their comparison is source-bound; original and paired current input chains include different WPS and real executable."
+  ],
+  "limits": [
+    "Initial LAPSPREP pre/post input inventory covers static/ and lapsprd/ only; excluded copied inputs lack a prelaunch seal.",
+    "Original forecast non-core runtime inventory was captured during the run, not pre-launch.",
+    "The first OFF wrapper did not record WRF exit; its outputs are excluded from cohort.",
+    "Results use a historical WRF executable and a single dated case; source identity checks are not scientific or operational acceptance.",
+    "Graph freshness is not runtime or scientific validation."
+  ]
+}

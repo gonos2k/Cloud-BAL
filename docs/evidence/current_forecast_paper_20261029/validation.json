@@ -1,0 +1,1055 @@
+{
+  "status": "PASS_SCOPED_FRESH_FORECAST_AND_REPORT",
+  "source_commit": "a63a8029fc134e1bab77f0a96757e3b369b8e93d",
+  "scope": "Four fresh six-hour hindcasts with current Cloud-BAL initialization and archived CP02 WRF; hourly paired scoring and conference-format manuscript. No model physics change.",
+  "validation": {
+    "completed_forecasts": [
+      "ORIGINAL",
+      "CURRENT_OFF_RETRY",
+      "CURRENT_HYDRO",
+      "CURRENT_LIQUID"
+    ],
+    "history_files": 28,
+    "lead_hours": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "points_per_hour": 3688,
+    "thresholds_mm": [
+      0.1,
+      0.5,
+      1,
+      2.5,
+      5,
+      10
+    ],
+    "clean_focused_tests_passed": 35,
+    "independent_score_rows": {
+      "categorical": 144,
+      "continuous": 24,
+      "transitions": 180
+    },
+    "publication_png_byte_reproductions": 6,
+    "report_pages": 8,
+    "historical_equal_forecast_values": 66384,
+    "prior_kg_snapshots_preserved": 204,
+    "total_kg_snapshots": 206
+  },
+  "limitations": [
+    "Single 2026-08-16 hindcast case; no general skill claim.",
+    "Original-to-current comparison includes different preprocessing paths and real.exe.",
+    "Archived CP02 WRF host, not latest C2 completion or T39 fix.",
+    "RN1 upstream time/coverage and model full process water/energy budgets unresolved.",
+    "LAPSPREP input pre/post seal covers static/lapsprd only; other copied inputs post-hoc.",
+    "Original full WRF runtime inventory collected in-flight; core inputs pinned before launch.",
+    "Full portable suite not run. PDF/DOCX metadata can vary on rerender."
+  ],
+  "artifact_count": 200,
+  "artifacts": [
+    {
+      "path": "docs/CURRENT_FORECAST_CONFERENCE_PAPER_20261029.md",
+      "size": 23926,
+      "sha256": "c8c3aad3b0b38d55042c3c04f0f4be37afecab4aece717784adbb8825dc40792"
+    },
+    {
+      "path": "docs/build_current_forecast_paper.py",
+      "size": 5262,
+      "sha256": "a856c6b1e6afb7280aaf1e45f4c2298f8ef1eb8a61baac8323320e7faef21d3c"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/README.md",
+      "size": 3522,
+      "sha256": "e3b81bfe13c636d06ef0a148d0e360c53dc5ce4dc61f8b0fd612482c8ba2e3f2"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/compare_archived_arrays.py",
+      "size": 3146,
+      "sha256": "6900b6b05358874781e2cd6b30812a119194febb502213c5271a33fc67e3a134"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/compare_initial_states.py",
+      "size": 3217,
+      "sha256": "992cd6b7ee08a90991bf51bb4b68cc6a1db36f9d267dd2a8eb14c1e6d2a2eed4"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures/figure_manifest.json",
+      "size": 3690,
+      "sha256": "ee117b2f19b73eba23f985d8257b2d2f135252e5a71d9d71d974117c50128b2e"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures/hour_13_paired_precipitation.pdf",
+      "size": 145584,
+      "sha256": "1346224fc07885c379efcd666dc192ad7e12293297b84d5f642a07327e37df0c"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures/hour_13_paired_precipitation.png",
+      "size": 97986,
+      "sha256": "446cccb562e2b1035d3d9568c0b050b210c288da047a273c05a03352102734bd"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures/hour_18_paired_precipitation.pdf",
+      "size": 155158,
+      "sha256": "9aace27e4e4580ab892b25a0b276f7b8b63e80644f7e2775238a948e25c71855"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures/hour_18_paired_precipitation.png",
+      "size": 109229,
+      "sha256": "a04644cecde0eccfa7746564cf0a93e08fcfb47ee14d63a8147d82aca66fff1c"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures/hourly_continuous.pdf",
+      "size": 22568,
+      "sha256": "1d9e0630045763b455413f9f99498913408ec1c66dc3232b3360b54e582232f9"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures/hourly_continuous.png",
+      "size": 211076,
+      "sha256": "512a86d38c30b675d880f14965e418e30dbca40469c1e95244acac362e2bdab4"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures/hourly_csi.pdf",
+      "size": 26653,
+      "sha256": "4d5beb6ecd13b4e4c8f06022331c37e225e5bbfda76d7ebe6b5c6b682e0d771f"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures/hourly_csi.png",
+      "size": 315745,
+      "sha256": "446aafb58a6dd10c270a80d5d56bb9344d6beac0ce8dcd05ada37b3d22071690"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures/hourly_ets.pdf",
+      "size": 26889,
+      "sha256": "f2e3deffb0a02f14a8e4fb7220e88627957d2717866f09249c969f4ec7cfd5d2"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures/hourly_ets.png",
+      "size": 343396,
+      "sha256": "d6136b49c3a96fa7147d8b02b7746ed5d6c29927964087d0b57b7751f31ef86f"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures/hourly_transitions_ge5.pdf",
+      "size": 21466,
+      "sha256": "ed3c3d32ef102a91caafbd262547882ca43a8849714c27b0176beb644888b002"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures/hourly_transitions_ge5.png",
+      "size": 168947,
+      "sha256": "f5d9e0a15ce9aecafe801242d4d1241bf4196c20138824373dc2c07f488c2268"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures_publication/figure_manifest.json",
+      "size": 3691,
+      "sha256": "4a8bd18f160c80874098b2572d6632dc0d68ead740de366c0bc789301b8484e3"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures_publication/hour_13_paired_precipitation.pdf",
+      "size": 146385,
+      "sha256": "a4b92de3ac766b8cf34abfa48af82a7f8cad3a166a443541d09b040a71279266"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures_publication/hour_13_paired_precipitation.png",
+      "size": 157593,
+      "sha256": "9f54aa7561000065ef82d3fb362b3b2faf21ab666166e288ac200d4123e8e2d7"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures_publication/hour_18_paired_precipitation.pdf",
+      "size": 156182,
+      "sha256": "4093bdfe92b5b89e8149cbbbcd28e44451c2fa393a207f276980a6deb9a00008"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures_publication/hour_18_paired_precipitation.png",
+      "size": 173495,
+      "sha256": "c3bbf72b49d93e00d17526f92affd813483a38ed9faf067ca5a0d7d2c06529e7"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures_publication/hourly_continuous.pdf",
+      "size": 22612,
+      "sha256": "f866ca4cc8f88153fe87b116a04d749aae1aa746d63f4e8c82b903d5ca01574e"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures_publication/hourly_continuous.png",
+      "size": 212333,
+      "sha256": "6e9c78a22be3fccaed692e6d7ae21dc87b257a2caeca6dace2cb57446da68932"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures_publication/hourly_csi.pdf",
+      "size": 26634,
+      "sha256": "2bf2a43c14f1a47878d89400759266b485a3d0f17f2e08a37c263e1b7820d7d4"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures_publication/hourly_csi.png",
+      "size": 317967,
+      "sha256": "597709d1a6e3022014dd17e70df5ff1b8ba7c6a45f23b765a361b95520259013"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures_publication/hourly_ets.pdf",
+      "size": 26899,
+      "sha256": "98618a6f451833394bb982f8f18e54922854c01bb76b33c62c267f2e424a5477"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures_publication/hourly_ets.png",
+      "size": 349351,
+      "sha256": "e4eaa61a2032009b983cdf0e7077a925c43ed777356ccf50e310fa70f51defb5"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures_publication/hourly_transitions_ge5.pdf",
+      "size": 21530,
+      "sha256": "3c32031d1530b246e344be28dc1f1372e5070dc184105a06151a2b0244907b05"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/figures_publication/hourly_transitions_ge5.png",
+      "size": 173943,
+      "sha256": "b3df6014c7a9608837990e4de701fb90ded0a5da47088800e26ea5f8ab6c2460"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/historical_regression_receipt.json",
+      "size": 863,
+      "sha256": "d04f3010ea8b14c3cb039fd29ca4a2124e728e9d384d1d3c4bad0452cec4eb98"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/initial_original_vs_current_off.json",
+      "size": 102436,
+      "sha256": "0606b1673ec15b591bb1901fee201da97350142568b0171c82d4abdb83df43b0"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/initial_original_vs_current_off_first_read.json",
+      "size": 44972,
+      "sha256": "8a1a42e665d13ce5be79ca8f024557eca3d2a8dea5d69823fdc37e7e8f49f35c"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/initial_original_vs_current_off_second_read.json",
+      "size": 45395,
+      "sha256": "a88796c7b234a5166d1044e3520d265a9e26e70c0a0aaed1910292a8e2039b1f"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/kg/baseline.json",
+      "size": 134997,
+      "sha256": "df61518fbd4c24161e256c9a6f20c3a4c6b74ba4122bbdfba203951c8bf5e664"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/kg/postpublish_readback.json",
+      "size": 899,
+      "sha256": "3bf39a65e20c3dd7f61ce8c60b930a1417737776cc84408089e238e2e9138ecd"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/kg/publish_go.json",
+      "size": 573,
+      "sha256": "673731b3cb04272c53aaddec2555c6c91aa5ccb0dbab018bd153aa915b4cbfbc"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/kg/publish_kg.py",
+      "size": 10768,
+      "sha256": "87e517d5187cbc5a639089fc6905b676c73c7c878d5bfa05196cd2c1d74ee6ce"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/kg/publish_receipt.json",
+      "size": 3989,
+      "sha256": "03d75535659ce0a9f5ff5b2304a3fd68968e5a38b2b4d1645efcce9f526f5b98"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/kg/root_readback_review.json",
+      "size": 426,
+      "sha256": "4a7fbbb3d944c829929ffedfdcdc7baae68aee09595dcb93c38d099b72e24834"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/kg/selection_lock.json",
+      "size": 28763,
+      "sha256": "05e0fb8b1046136aa1b1c5338041ef466f1bdae3337085713edc9d5409cea521"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/kg/source_lock.json",
+      "size": 1469,
+      "sha256": "be28928593b83bd73c99c642cb72d7677250c25f393a08a2274cfec76261b5ca"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/kg/stage_kg.py",
+      "size": 21578,
+      "sha256": "5493f17ddb594ff8b10378d09149534ea07edded9d15995e882105fc9bcea99c"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/kg/stage_receipt.json",
+      "size": 34868,
+      "sha256": "ee962ae75a4bfefff194859fcd097a6a185030f677ab49aa526b1964bd632b23"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/kg/stage_validation.json",
+      "size": 553,
+      "sha256": "d0616a0229a6477d7d6335bd476124580ed0d6698b4bf32e16218a1725fa88bc"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/paper/CURRENT_FORECAST_CONFERENCE_PAPER_20261029.docx",
+      "size": 600900,
+      "sha256": "0178797aadebe237c55b5543707ef493362195ca01674478a7017b07ec100528"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/paper/CURRENT_FORECAST_CONFERENCE_PAPER_20261029.pdf",
+      "size": 1134306,
+      "sha256": "ac34f6747317ff135084ac8c65f85852915112f175c5d9daaa4afd2e97206b9c"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/paper/build_receipt.json",
+      "size": 1387,
+      "sha256": "e9fd957d413054704f7524a6409c4ecb76f04bb41a3de020acf5354f204fc385"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/plot_forecast_scores.py",
+      "size": 10729,
+      "sha256": "101ae6745b07239e2bba5eba7c2c8b5f4606474c19fcde3d56389af866e877ed"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/prior_versions/plot_forecast_scores_initial.py",
+      "size": 10450,
+      "sha256": "a83493139551896c9c401629795d498eabb48ef0710215c7390ec9128fd3ab73"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/prior_versions/reconciliation.json",
+      "size": 596,
+      "sha256": "f5ef9b48b0ede748a1b08b44966fd25ff441c0fe2869cf35177903e63db9e761"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/review/figure_independent.json",
+      "size": 949,
+      "sha256": "f9f4374d519efe88c1b0973bb80a8f705f70f639663d0b9067e67a80bc0259c8"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/review/final_science_review.json",
+      "size": 4164,
+      "sha256": "c80c2fb75809962725542b5d75a3785fa7d5db3a5db9c004dc542913a1bc0e0c"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/review/preliminary_science_review.json",
+      "size": 1889,
+      "sha256": "c8180fd8d190f84b5078146d6416c120bcb697dc8422292898de40b943b8322b"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/review/runtime_independent.json",
+      "size": 3573,
+      "sha256": "4cafb23fcd0bdc26fee005b81c32f28dd5654d656d23c667c8bc1cc2130ac31a"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/review/score_verifier_paper_builder_review.json",
+      "size": 1365,
+      "sha256": "09ec8aaf08a705de9575b1fcf642ea8c278fdfb2c245a644cf25c9213b68bd2c"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/review/scorer_independent.json",
+      "size": 2475,
+      "sha256": "2ec5b3055b1bc11099576b5e9009681003cfac40f5ca9f61d7f4397efec0bd73"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/review/team_review.json",
+      "size": 8717,
+      "sha256": "d0fd59572a6b5b037191dfd05f68d9aae5e0feb5a958ae7ffba5366e0ec92f24"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/review/visual_review.json",
+      "size": 1605,
+      "sha256": "6aae73591d49dc6af7047c57c63cc544c6dbde980b8c9d10359eda7471f8ded6"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO.all_inputs.sha256",
+      "size": 7778,
+      "sha256": "185ad718af12e5e6c558e29da7baff3e211c87dd15a394c72861abb38bd902d1"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO.inputs.sha256",
+      "size": 324,
+      "sha256": "480718d5b89c506c0484f7b116a6b8346b787a4de5f7ca54af264d4bce318a4b"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO.run_metadata.txt",
+      "size": 67,
+      "sha256": "45ab782471180912742433830c9c0da89d3a5526527d2081e4d71063a5b21054"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_all_postcheck.txt",
+      "size": 2260,
+      "sha256": "ab859502e32c34bb352a732bc0cc01ed7004f09164fd394511aa228f1b56c33f"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_core_postcheck.txt",
+      "size": 76,
+      "sha256": "3092495ae675a5b02e44b379694a9a97a22c28b1735acdb56e0b83fdd0afae49"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_excluded_files_posthoc.sha256",
+      "size": 2511,
+      "sha256": "706a1410dad749e1b7ef8aca8a50d2da7b87341d08cd67461cb953c04e260349"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_fixed_check.txt",
+      "size": 155,
+      "sha256": "71ab8854dc11a2641edef05c8d83c23e848ee163daf1f2e4effd9e53cc831930"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_initial_outputs.sha256",
+      "size": 585,
+      "sha256": "4ca1f71c67865e6f77ae6cec886fe3bf1797dc0fa0091aba59888f86088f182e"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_inputs_after.sha256",
+      "size": 7591,
+      "sha256": "869a187fa83819cd3f7bc98393fc7d79fb2323737dbf4c1754b2dc96d611151a"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_inputs_before.sha256",
+      "size": 7591,
+      "sha256": "869a187fa83819cd3f7bc98393fc7d79fb2323737dbf4c1754b2dc96d611151a"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_lapsprep.txt",
+      "size": 56501,
+      "sha256": "573fb8343883b20215702af04242a1093c7fb9d9a83ceeb4d3b7c77a185ad8b7"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_metgrid.txt",
+      "size": 239,
+      "sha256": "0b61b7a3c94fdcb11b664c1e80902f202bfc456c8bce24c3fe3d1a0ac33b1f15"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_metgrid_inputs.sha256",
+      "size": 841,
+      "sha256": "46cf03f65edbeb2153730518e2f3a5e886e0aa7d950f80ec21b13e5fa32e5a3b"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_metgrid_postcheck.txt",
+      "size": 221,
+      "sha256": "1f20b4a968c9a1b1b55b1426c81c1ae081ae454c9d211f3eb6a5c68184eafc60"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_native_outputs.sha256",
+      "size": 416,
+      "sha256": "ba6e1c2fb64aac1a8641c05e7988b420d1022e3686b6e501b65df7bcf28bffc0"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_real.txt",
+      "size": 10073,
+      "sha256": "78691839d43fde6f88ef3e00f0847639df79bdec5db78bd57128a76c4b3a0c77"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_real_inputs.sha256",
+      "size": 8132,
+      "sha256": "7f910a4203fccd9c9b63c7f8784d5cb1451b78aae8f39e61be9fd96cade67282"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/HYDRO_real_postcheck.txt",
+      "size": 2366,
+      "sha256": "1dea9748b4d8622d80df554dea349f4cc52b778ffac5777471d30a222782356d"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1.all_inputs.sha256",
+      "size": 7778,
+      "sha256": "e0c07f9ee6ed824ed2d683a9b63af8095b69cc0cb93f510e718435452e62aac2"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1.inputs.sha256",
+      "size": 324,
+      "sha256": "70d65f80951b3eb19707b6d2a178249f373f43bfa082b018beabba6e9d366127"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1.run_metadata.txt",
+      "size": 67,
+      "sha256": "89062edc6af8e21b2f156fb746167c49bcb1e5f48cd916d3d5a9862b8e3dd90e"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_all_postcheck.txt",
+      "size": 2260,
+      "sha256": "ab859502e32c34bb352a732bc0cc01ed7004f09164fd394511aa228f1b56c33f"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_core_postcheck.txt",
+      "size": 76,
+      "sha256": "3092495ae675a5b02e44b379694a9a97a22c28b1735acdb56e0b83fdd0afae49"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_excluded_files_posthoc.sha256",
+      "size": 2511,
+      "sha256": "706a1410dad749e1b7ef8aca8a50d2da7b87341d08cd67461cb953c04e260349"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_fixed_check.txt",
+      "size": 155,
+      "sha256": "71ab8854dc11a2641edef05c8d83c23e848ee163daf1f2e4effd9e53cc831930"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_initial_outputs.sha256",
+      "size": 618,
+      "sha256": "d56c4c21728b2612b1f9532a28ae21ebc90a9767bb368286abd6f5d3e2281973"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_inputs_after.sha256",
+      "size": 7591,
+      "sha256": "869a187fa83819cd3f7bc98393fc7d79fb2323737dbf4c1754b2dc96d611151a"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_inputs_before.sha256",
+      "size": 7591,
+      "sha256": "869a187fa83819cd3f7bc98393fc7d79fb2323737dbf4c1754b2dc96d611151a"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_lapsprep.txt",
+      "size": 56573,
+      "sha256": "8afd0ebf59817f4ae8cf5985a380398b317ba7b562b884695fa8d44ba521fd7e"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_metgrid.txt",
+      "size": 239,
+      "sha256": "0b61b7a3c94fdcb11b664c1e80902f202bfc456c8bce24c3fe3d1a0ac33b1f15"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_metgrid_inputs.sha256",
+      "size": 841,
+      "sha256": "3a31ca8fc01ca30c16753e981f01bd9cd79e8739066d5b8bc288f92bd8571f44"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_metgrid_postcheck.txt",
+      "size": 221,
+      "sha256": "1f20b4a968c9a1b1b55b1426c81c1ae081ae454c9d211f3eb6a5c68184eafc60"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_native_outputs.sha256",
+      "size": 438,
+      "sha256": "e3fd67693873ab0e74d464a55a17788e7972da0f7963d3cbf0f085aba6d4085b"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_real.txt",
+      "size": 10073,
+      "sha256": "777cf44722e749b8814c1a21561be17464b16e21f42b76b4af1631f0edeccb7f"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_real_inputs.sha256",
+      "size": 8132,
+      "sha256": "e5dc9be0317da5e4de346224329fd3de2b1aa7ddd172fe7b3b0d047baa0f12fd"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/LIQUID_RADAR_RH1_real_postcheck.txt",
+      "size": 2366,
+      "sha256": "1dea9748b4d8622d80df554dea349f4cc52b778ffac5777471d30a222782356d"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF.inputs.sha256",
+      "size": 324,
+      "sha256": "72ff99618907ab7d40d5700d056ab714f479ca4949e9945d43f820249b560d1d"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_RETRY.all_inputs.sha256",
+      "size": 7778,
+      "sha256": "f23bccb4d624c1ef4c13847d2935f75c24bd0d6f9040cfea4c2e70e7ac1bf042"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_RETRY.inputs.sha256",
+      "size": 324,
+      "sha256": "72ff99618907ab7d40d5700d056ab714f479ca4949e9945d43f820249b560d1d"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_RETRY.run_metadata.txt",
+      "size": 67,
+      "sha256": "3519d5e44970a626778d445842ae0ff98684e38bb45a4ea3553dd17304cc3373"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_RETRY_all_postcheck.txt",
+      "size": 2260,
+      "sha256": "ab859502e32c34bb352a732bc0cc01ed7004f09164fd394511aa228f1b56c33f"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_RETRY_core_postcheck.txt",
+      "size": 76,
+      "sha256": "3092495ae675a5b02e44b379694a9a97a22c28b1735acdb56e0b83fdd0afae49"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_RETRY_fixed_check.txt",
+      "size": 155,
+      "sha256": "71ab8854dc11a2641edef05c8d83c23e848ee163daf1f2e4effd9e53cc831930"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_excluded_files_posthoc.sha256",
+      "size": 2511,
+      "sha256": "706a1410dad749e1b7ef8aca8a50d2da7b87341d08cd67461cb953c04e260349"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_initial_outputs.sha256",
+      "size": 384,
+      "sha256": "27b135c6f674b16454831dd56b84208a8bb8a5826a7f16cdb4721cd351f9e9bd"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_inputs_after.sha256",
+      "size": 7591,
+      "sha256": "869a187fa83819cd3f7bc98393fc7d79fb2323737dbf4c1754b2dc96d611151a"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_inputs_before.sha256",
+      "size": 7591,
+      "sha256": "869a187fa83819cd3f7bc98393fc7d79fb2323737dbf4c1754b2dc96d611151a"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_lapsprep.txt",
+      "size": 50238,
+      "sha256": "e9965af182588ec7c44169ee32b9d8610adbb6c4a6f646088176a8187877f8bd"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_metgrid.txt",
+      "size": 239,
+      "sha256": "0b61b7a3c94fdcb11b664c1e80902f202bfc456c8bce24c3fe3d1a0ac33b1f15"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_metgrid_inputs.sha256",
+      "size": 841,
+      "sha256": "14c18cc4ad90a4fa6c3cc0593a3bbce97006cde52f81b1e1a1188cbee625b86f"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_metgrid_postcheck.txt",
+      "size": 221,
+      "sha256": "1f20b4a968c9a1b1b55b1426c81c1ae081ae454c9d211f3eb6a5c68184eafc60"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_native_outputs.sha256",
+      "size": 412,
+      "sha256": "49407b6fa3f4d71fd6d0f8c1be0402f9e51374f54145608a23ba6fc262b27bb1"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_real.txt",
+      "size": 10073,
+      "sha256": "406a7036cf610579d8571ebed291742150ac065c0356306ad3e07fa8fab0d4ba"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_real_inputs.sha256",
+      "size": 8132,
+      "sha256": "2619dd41c2c4232792fbd9c5c53af071ee116e933e2029132a8d1a0fe38cef36"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/OFF_real_postcheck.txt",
+      "size": 2366,
+      "sha256": "1dea9748b4d8622d80df554dea349f4cc52b778ffac5777471d30a222782356d"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/ORIGINAL_core_postcheck.txt",
+      "size": 76,
+      "sha256": "3092495ae675a5b02e44b379694a9a97a22c28b1735acdb56e0b83fdd0afae49"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/ORIGINAL_inflight_postcheck.txt",
+      "size": 2260,
+      "sha256": "ab859502e32c34bb352a732bc0cc01ed7004f09164fd394511aa228f1b56c33f"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/ORIGINAL_run_metadata.txt",
+      "size": 67,
+      "sha256": "829d4f199ea281037ba88b8feb381adb6733b4f8fdaaec63d64fb8a049eea55c"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/README.md",
+      "size": 4485,
+      "sha256": "e6207c184dbb38f460368483cbbb4a988ec46d1430aa7ff281d0b4559ca6d184"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/build.txt",
+      "size": 558693,
+      "sha256": "bad347f6c39b6849ea884f891fdab89b1f9a55a70dfe2db92c1e86917428ead3"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/build_console.txt",
+      "size": 40,
+      "sha256": "00f19c7e8ad1d6f601b18f7367ff34663634be453ccb283d8168019c4ab58371"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/cohort_receipt.json",
+      "size": 26336,
+      "sha256": "e0d8c1b76098d18ec1d950b42892cc7ccfcfb79dcaf9ef7893dd4a1af3e3e429"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/collect_preprocessing_receipt.py",
+      "size": 4983,
+      "sha256": "76e2905a39d7115a6fc3714d9b513f1ed06b253f43800081e78c7813680483f9"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/collect_run_receipts.py",
+      "size": 3933,
+      "sha256": "b5c50d47850c20f7d9a0cc8ed93d9e78ff38d323daebcd23fe016f19b4476f9f"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/compile_inputs.sha256",
+      "size": 54183,
+      "sha256": "261bfe548b30f05712b7f681636fb2085b8058490917c59b018d701c5bbed147"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/copy_after.sha256",
+      "size": 7591,
+      "sha256": "502d3bb0ce268a51ab28fbd82ad7860463c6bfc645b09b4941d22ab34c421a10"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/copy_before.sha256",
+      "size": 7591,
+      "sha256": "502d3bb0ce268a51ab28fbd82ad7860463c6bfc645b09b4941d22ab34c421a10"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/current_forecast_modes.sh",
+      "size": 1953,
+      "sha256": "7645d2c49910ec68ce192c75f321fdca1d69fc7d6181e724bba4742a0b7573a7"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/current_forecast_native.sh",
+      "size": 2071,
+      "sha256": "30106268f7e014612a96d776689cfdd501699d758aea6c74eb4c88117cf67f74"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/current_forecast_prepare_off.sh",
+      "size": 1907,
+      "sha256": "5bf9a110bce3225e6ac59819d84208005b4107b659e33c81c8a3a0de87fc4d7d"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/current_forecast_queue.sh",
+      "size": 962,
+      "sha256": "709ee8066179699087a083803200bc2b3895a1b2723761d01238d937a6306016"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/current_forecast_wrf.sh",
+      "size": 1649,
+      "sha256": "f0c8025022887442a5943071e44171aad607e4eaf4aad5c19893f77e9d0e5243"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/current_forecast_wrf_off_actual.sh",
+      "size": 1470,
+      "sha256": "cef5c01f291146705fa8cc270706944ee7e30b3acdc9cbf6a7840b74251fee34"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/current_forecast_wrf_v2.sh",
+      "size": 1690,
+      "sha256": "bbcb8628be4f96326727b2235fcb25e8670d7a8164b3445249361b5139098125"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/excluded_files_posthoc_time.txt",
+      "size": 21,
+      "sha256": "9e68dba5fc54ef133d53f3ae8337a42877b2c1da224a70ccc799fc453239deb2"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/executable.sha256",
+      "size": 125,
+      "sha256": "cd558b17047ebc719c28cbb0154a246cfdcf0633707ed112fb930c9823e7abb6"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/failed_OFF_histories.sha256",
+      "size": 1463,
+      "sha256": "f82e2805a166b5ecf890c36b6735542d49206befd63f37b3a0238bb245dead09"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/failed_OFF_inflight_postcheck.txt",
+      "size": 2336,
+      "sha256": "0fe49a0cf8e61053e2274e180b9d629fbd4b745f582d36b078542838b9c24caf"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/failed_OFF_launcher.txt",
+      "size": 392,
+      "sha256": "b9fbb522bfb3712228a65f8bf8010bef0740e56cd0744e5e6d0cdd983b0dd61d"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/failed_OFF_metadata.txt",
+      "size": 31,
+      "sha256": "ff311f6125999204e09798c1926910d289c7a6ab9a8419a5faa9d1ca7d4d1cd8"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/failed_OFF_receipt.json",
+      "size": 1058,
+      "sha256": "ccd1ccd901c5e19b30535c77b0464ba9d07b86bbf7448920bac2688f3cbf3c60"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/failed_OFF_rsl.txt",
+      "size": 99009,
+      "sha256": "3b251bc698a5376f76382c8ea1b58b58cc5334f3d09b5318e2969929717199c4"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/failed_OFF_wrapper.txt",
+      "size": 166,
+      "sha256": "47c9cb341ccea634215383ccc25c4d45ed2090aa626e83e007999ec1f23c3819"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/forecast_OFF.inflight_inputs.sha256",
+      "size": 7778,
+      "sha256": "f23bccb4d624c1ef4c13847d2935f75c24bd0d6f9040cfea4c2e70e7ac1bf042"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/initial_source_after.sha256",
+      "size": 7591,
+      "sha256": "502d3bb0ce268a51ab28fbd82ad7860463c6bfc645b09b4941d22ab34c421a10"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/initial_source_before.sha256",
+      "size": 7591,
+      "sha256": "502d3bb0ce268a51ab28fbd82ad7860463c6bfc645b09b4941d22ab34c421a10"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/inputs.sha256",
+      "size": 58769,
+      "sha256": "8219a457892f04000fc237362077c28178ec8eb29bc9fed176d38936c64da0b0"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/legacy_off_lapsprep.txt",
+      "size": 50128,
+      "sha256": "80f15d148ad25aac6008ef7977e86259e35bafe087af5ea576b5d6a9aeffade7"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/link_inputs.sha256",
+      "size": 4586,
+      "sha256": "a2da3f40269e28499012c2580c57094f3950cad8bcda3df7d463d4f32f416247"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/live_script_hashes.txt",
+      "size": 302,
+      "sha256": "5042e501aab35172ea47f4528771f21b4722e14d68ccc5eb96dd9649bfeeaf58"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/off_retry_completed_receipt.json",
+      "size": 5937,
+      "sha256": "80e33bd10b9b03b16fd5a415b7f0e1ca623c3a4cbe7e870a591f5f7cf0603e28"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/original.inflight_inputs.sha256",
+      "size": 7778,
+      "sha256": "67f5d5e21f00f0aba3df28bb06038e9cc3dc62b42fa44d6621f821907ecb5302"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/original_hydro_completed_receipt.json",
+      "size": 12415,
+      "sha256": "47a86615f00adb8c96257573c0df3b639308e5d306b22efc12657e2126204365"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/original_inputs.sha256",
+      "size": 324,
+      "sha256": "8a85d7714585e4344b38b3d61c1dc4cb3cb79bf237dc80b5244273d6f1f1c54e"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/preprocessing_receipt.json",
+      "size": 3621,
+      "sha256": "aa9630e721c700d05bcb7df8347873e252e39e31b97dd61a65f9654019348061"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/preprocessing_receipt_first.json",
+      "size": 3273,
+      "sha256": "9ebc84487e0a36ef4ca89c0e3f91f4754ef6fd1ed1d892f35c1cfc47e4e4b3ab"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/preprocessing_receipt_fourth.json",
+      "size": 3386,
+      "sha256": "5b67d6e401596024596783395702a66defbee390c91f0e1003552307210a5bac"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/preprocessing_receipt_second.json",
+      "size": 3273,
+      "sha256": "9ebc84487e0a36ef4ca89c0e3f91f4754ef6fd1ed1d892f35c1cfc47e4e4b3ab"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/preprocessing_receipt_third.json",
+      "size": 3273,
+      "sha256": "9ebc84487e0a36ef4ca89c0e3f91f4754ef6fd1ed1d892f35c1cfc47e4e4b3ab"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/recorded_files.sha256",
+      "size": 16297,
+      "sha256": "d36ee0d7517d64f167ef5d85d3c8e3d4782d275953bbc1f04b1bcbbe15cb0c8f"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/results.sha256",
+      "size": 678,
+      "sha256": "f54ecc57bc881a05b84bb20ae6baf8d0ff2e1eaac89493f98e38037574469a7b"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/runtime.sha256",
+      "size": 4291,
+      "sha256": "1dd6859bc4ff84c3b81eab834b156cfafadaab83978feb0c22e989c605ce2014"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/source_after.sha256",
+      "size": 7591,
+      "sha256": "502d3bb0ce268a51ab28fbd82ad7860463c6bfc645b09b4941d22ab34c421a10"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/source_before.sha256",
+      "size": 7591,
+      "sha256": "502d3bb0ce268a51ab28fbd82ad7860463c6bfc645b09b4941d22ab34c421a10"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/source_excluded_files_posthoc.sha256",
+      "size": 2511,
+      "sha256": "706a1410dad749e1b7ef8aca8a50d2da7b87341d08cd67461cb953c04e260349"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/wrf_executable.sha256",
+      "size": 183,
+      "sha256": "a30e71215aa576aad5b8f5e6875df33ce659878c27663fd8fe859d647dc7b8b9"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/wrf_executable_final_postcheck.txt",
+      "size": 121,
+      "sha256": "91f2a63554ca5767ed34c901fc8d4f51d32be69f9ac5ae98910ae925696e3f8f"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/wrf_executable_postcheck.txt",
+      "size": 121,
+      "sha256": "91f2a63554ca5767ed34c901fc8d4f51d32be69f9ac5ae98910ae925696e3f8f"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/wrf_ldd.txt",
+      "size": 899,
+      "sha256": "8cdf01306641622a9666bec849827967a622060efafa042b25c76347910212a0"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/wrf_runtime_final_postcheck.txt",
+      "size": 544,
+      "sha256": "637c653f28ca87fd60d642d9bfac086c9e119d5d8ea8976be5d0054c760702bb"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/wrf_runtime_inflight.sha256",
+      "size": 1164,
+      "sha256": "73d952b167e3eaab700eb7d7f228c1ed7d5e38bcb5f78040013b49f54f660a02"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/runtime/wrf_runtime_postcheck.txt",
+      "size": 544,
+      "sha256": "637c653f28ca87fd60d642d9bfac086c9e119d5d8ea8976be5d0054c760702bb"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/score_forecasts.py",
+      "size": 12403,
+      "sha256": "73d4ddd8d6b8c4c6eb7903eff000c2c1e1330a2d50a6692ee7e0eaf77d51d539"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/scores/categorical_scores.csv",
+      "size": 19844,
+      "sha256": "f746eb6b55bc6ba6510ba27660d6086c4c7a774bcf4ddcc4caec0ccaf8daec77"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/scores/continuous_scores.csv",
+      "size": 2842,
+      "sha256": "38c7c3fc0bbfafa10d341e816d42159c845f3e2088aefeb083866705007f36bb"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/scores/hour_13_arrays.npz",
+      "size": 118830,
+      "sha256": "0df6e55167373751a2a9e50f10325c6d6d1e02603f1225e448c8e766184da9e4"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/scores/hour_14_arrays.npz",
+      "size": 123854,
+      "sha256": "1228ba4d4106c151c79bcf01fb2f3a609e91a81bce4833f611da6f726283bf49"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/scores/hour_15_arrays.npz",
+      "size": 137195,
+      "sha256": "2495bb333cb7b5b47b6b494e9d7b9ac39d48e224228b1bad06960d448c283711"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/scores/hour_16_arrays.npz",
+      "size": 136874,
+      "sha256": "18da1d6c0e061849477030911091cee2c32d4ff7543e3684b11a991260b4c8e4"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/scores/hour_17_arrays.npz",
+      "size": 130545,
+      "sha256": "4bf01eb3aecf5e6c7f35188b8110d42ee34c50eb670230b44b77852dc851103b"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/scores/hour_18_arrays.npz",
+      "size": 138444,
+      "sha256": "28d298166ce100d0135ee1ce1061372602fe964606768587350d998fa22486d2"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/scores/receipt.json",
+      "size": 14594,
+      "sha256": "4d6c52bb31d3a8c80732008e3d6eab0599399b7c27f2ce7dff06ae0352a9a961"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/scores/transitions.csv",
+      "size": 7916,
+      "sha256": "3f2a29459f3fa7fa92b3212e7a7b174e141b056f272a1cc0e03c41bbfbc020c4"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/analysis_commands.json",
+      "size": 1037,
+      "sha256": "bb09625f4cf310a7ede9acc4a092e64e822180c9bc6a47a80a29bd1e68296245"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/analysis_step_1.txt",
+      "size": 73,
+      "sha256": "25f42e52119c242c31dbfe8d171baa38eb79b2e720262a64fa91325e1807860f"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/analysis_step_2.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/analysis_step_3.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/clean_export.json",
+      "size": 483,
+      "sha256": "390704b45db0f446ffe62ef2682feeb362267bb5ee9449dc0d02af22250bc508"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/clean_test_source_identity.json",
+      "size": 1604,
+      "sha256": "9044ed8a19bc4be02c48872b6641fec9f4fc140b832eee772c60bf08e4f5cefd"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/clean_tests.txt",
+      "size": 130,
+      "sha256": "cb064f48f26fcc400f56e748f4b17a2cc6ec188b6a5cc38073347ef6f0289684"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/forecast_score_binding.json",
+      "size": 502,
+      "sha256": "0fbb691b088fe24c090a5e6899362c95fab4b8069bcbcd80e28c21c0f6fff7b7"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/fresh_scoring.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/fresh_scoring_run.json",
+      "size": 1562,
+      "sha256": "186ae6e39918da058a7d5b315f33688a5daa2c929149021fcc9c92d7df96f021"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/fresh_vs_archived.json",
+      "size": 13837,
+      "sha256": "42f271984a4a22eb2f52d27a8e928cc2b5eede7a16a13fc12844549e6d87afa1"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/independent_scores.json",
+      "size": 1853,
+      "sha256": "fb7d064d8c93e67f71865a544e8a5ba346dd3153005bab12ab8230da56a3b113"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/publication_figure_reproduction.json",
+      "size": 1510,
+      "sha256": "6383471758bffe58996459c6d9b85b983af6788ba01199da1f57575055336fcb"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/python_environment.json",
+      "size": 434,
+      "sha256": "758f6383cec2163b6280c7b4d3e18e624e8ae80bdab879a90d6145271f751075"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/validation/whitespace_review.json",
+      "size": 2866,
+      "sha256": "d7959602a3d78a7b3c094e2381cbdd57f1a094a2ac5ea24262ce5b6fcd4697f0"
+    },
+    {
+      "path": "docs/evidence/current_forecast_paper_20261029/verify_scores_independently.py",
+      "size": 6016,
+      "sha256": "a8da16dbe77c82063cf440e95787c3c86866d0012adc8f76f95c5e7e265722d9"
+    },
+    {
+      "path": "tests/test_current_forecast_scores.py",
+      "size": 4879,
+      "sha256": "998a7e0dd394a3c6fb7e848e4b99e04774f2a9a16e0e387c007897741ee81295"
+    }
+  ],
+  "self_excluded": true
+}

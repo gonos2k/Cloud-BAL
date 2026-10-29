@@ -1,0 +1,321 @@
+{
+  "initial_time_utc": "2026-08-16T12:00:00Z",
+  "cases": [
+    "ORIGINAL",
+    "CURRENT_OFF",
+    "CURRENT_HYDRO",
+    "CURRENT_LIQUID"
+  ],
+  "baseline": "ORIGINAL",
+  "additional_baselines": [
+    "CURRENT_OFF"
+  ],
+  "hours_utc": [
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "points_per_hour": 3688,
+  "thresholds_mm": [
+    0.1,
+    0.5,
+    1.0,
+    2.5,
+    5.0,
+    10.0
+  ],
+  "mapping_residual_max_deg": 2.842170943040401e-14,
+  "model": "hourly difference of RAINC + RAINNC; RAINSH checked zero",
+  "rainsh_and_bucket_contract_note": "Historical reference contract is used only as a checker; new history attributes and fields must independently satisfy it.",
+  "reference_limitation": "RN1 is a processed analysis with no coverage bitmap; per-hour underlying input freshness is not proven and may use previous-hour fallback.",
+  "sources": {
+    "archived_evaluator": {
+      "path": "/var/tmp/cloudbal-current-forecast-paper/docs/evidence/precip_hourly_20261027/rn1_recovery/archived_compare_six_hour_csi.py",
+      "sha256": "1cfa4965155ec273e8e1ca9f963bd79a5ece3bc47beb4ae3db4e8b8f5e21b2c0",
+      "size": 29031
+    },
+    "reference": {
+      "inventory": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/inventory.json",
+        "sha256": "fc65b7ff026d2813ede107d3c60e58f702f6d6286ae8c0940196ff7283d3f460",
+        "size": 16533
+      },
+      "mask_receipt": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/mask_receipt.json",
+        "sha256": "b179bf6b1902c0decdbd7a3cf667cbeda9a359874f7151a3bbc05809dba7bec7",
+        "size": 1625
+      },
+      "mask": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/south_korea_land_mask_149x253_uint8_fortran.bin",
+        "sha256": "25a43d7e2981b6551cb753362f9d52ce11037a6e2d61a4750c1e21d152742b46",
+        "size": 37697
+      },
+      "analysis_coordinates": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/DFSD/20260816/klps_lc05_anal_20260816_1300",
+        "sha256": "bfa8e9d050244166ee53973be9593cdcad0e322d9b69209084c8dd19d159b23e",
+        "size": 94462752
+      },
+      "run_contract": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/run_contract.md",
+        "sha256": "10e671b307d1936aec5602bf1897120cbbc0796a4c56d217649ef4f5ad1b12f1",
+        "size": 8684
+      },
+      "one_hour_reproduction": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/ONE_HOUR_REPRODUCTION.json",
+        "sha256": "aeb248edfe39df069e014ce360fcbc77e54157ec72fa6764aa98ed464a767c66",
+        "size": 1659
+      }
+    },
+    "rn1": [
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161300",
+        "sha256": "5f435e9e7845860636b8ac6d4a982563f1d709f4340dadb7828df2f2cda8e9a1",
+        "size": 267686
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161400",
+        "sha256": "54ba0fe609630eec8366b9f4a21fddd29baabbd1ad89e8a2ac4e769900887497",
+        "size": 267686
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161500",
+        "sha256": "00219ebc741da5bbdc79b408a1363e4a920d4f58d41118978234d2cbe089f346",
+        "size": 267686
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161600",
+        "sha256": "74f2b96af4e0686b15dc1c8a75e337f964a9e25841540a61b3d3546e22187af6",
+        "size": 267686
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161700",
+        "sha256": "77145a0b095203e452cc029cf56a97f1ff10a5485b69f76ab1d21219c15fa2d5",
+        "size": 267686
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161800",
+        "sha256": "f0b6834a27449904efb7f6242e47a6246d75ad1403d6eb24ce82c689f00557bc",
+        "size": 267686
+      }
+    ],
+    "wrfout": {
+      "ORIGINAL": [
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/original/wrfout_d01_2026-08-16_12:00:00",
+          "sha256": "e25ccaa70e78b4d4d4d71d6f840286905b88cfae74cd0e638591d4b110310f61",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/original/wrfout_d01_2026-08-16_13:00:00",
+          "sha256": "f6eeb5a7107ac273140f075b2595ac89f718001a2f092b6723b52b80495b5e0e",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/original/wrfout_d01_2026-08-16_14:00:00",
+          "sha256": "3ebde42b3854410a81fef1d9b14531fb08d39d086cf7329d49d8dc69e97c8bb2",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/original/wrfout_d01_2026-08-16_15:00:00",
+          "sha256": "9c558db169c16f1fa643f4e9238c668002109c201ca3bd9fbc4be1d19755e2b0",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/original/wrfout_d01_2026-08-16_16:00:00",
+          "sha256": "e251b3c6cb28643f8b306f722faad8c04bf256b0421efde299c5f08e6d61b803",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/original/wrfout_d01_2026-08-16_17:00:00",
+          "sha256": "14791f6f03389edf4389a25234591ac019fc5161db58bcf857a56e95d3eff41e",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/original/wrfout_d01_2026-08-16_18:00:00",
+          "sha256": "4d25d672bb5b2339f61ed7ba7d439b9da854f1d200d1b1431283c40e61fa5d1b",
+          "size": 328253340
+        }
+      ],
+      "CURRENT_OFF": [
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_OFF_RETRY/wrfout_d01_2026-08-16_12:00:00",
+          "sha256": "af9aa5fc10f89ca9b1c6ce3d068d88a48067dc442217d87719430ed3c6fd9396",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_OFF_RETRY/wrfout_d01_2026-08-16_13:00:00",
+          "sha256": "1823953173c3d54a8136e054b16d220628e4c3606e11f5ead33ff3c7187b2fd8",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_OFF_RETRY/wrfout_d01_2026-08-16_14:00:00",
+          "sha256": "5b1db932874e7f0f993ba6b8b8b8f14f5d4cffeb82ab0cccb554e9cb42fa480f",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_OFF_RETRY/wrfout_d01_2026-08-16_15:00:00",
+          "sha256": "fd6716baa5fcac2f276c56017b8fe5f9bf2e944aee349c8de635afab24ec6684",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_OFF_RETRY/wrfout_d01_2026-08-16_16:00:00",
+          "sha256": "715b9f7f8859b8b20fd8caed3d7dd91460f11efc1c81196a4bec3008bd9d939e",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_OFF_RETRY/wrfout_d01_2026-08-16_17:00:00",
+          "sha256": "d14eb000369a56c307d5f04560715d5b1fa8e4433e912ccdd9606211dc8769ce",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_OFF_RETRY/wrfout_d01_2026-08-16_18:00:00",
+          "sha256": "839483ca1b4c33cfefbcb4a2aab8ba8474e729fba96378fd26bd58f6f3366edb",
+          "size": 328253340
+        }
+      ],
+      "CURRENT_HYDRO": [
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_HYDRO/wrfout_d01_2026-08-16_12:00:00",
+          "sha256": "203edd6d035b74a53d1e81cda11a58be22b18f056624f613ae3e0485e4a24388",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_HYDRO/wrfout_d01_2026-08-16_13:00:00",
+          "sha256": "108ed8a27a73eae8f6aa1e9fc8993efbcc880c3fbc8e998a4cf91e7ea254de77",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_HYDRO/wrfout_d01_2026-08-16_14:00:00",
+          "sha256": "f941af9fd2830eca147d4bdb23142c4f7843808eeba2822c7b64a4a2e245584d",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_HYDRO/wrfout_d01_2026-08-16_15:00:00",
+          "sha256": "14e07084369a15f8ca765dca127561cfecb897b545dd201368ba17b75abc4325",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_HYDRO/wrfout_d01_2026-08-16_16:00:00",
+          "sha256": "a1cda63613593bfe1e91ee3906f91c57d942f7c20c74fc44748df5a5b91917d8",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_HYDRO/wrfout_d01_2026-08-16_17:00:00",
+          "sha256": "8893514dd834d7922850e2ebc2b6d220445eca8f003c42f91a02b8ea28f7ab16",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_HYDRO/wrfout_d01_2026-08-16_18:00:00",
+          "sha256": "ed63ebacddb8dac720ac6f91b6627626e03688ebb07aa4967949b5b52228e234",
+          "size": 328253340
+        }
+      ],
+      "CURRENT_LIQUID": [
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_LIQUID_RADAR_RH1/wrfout_d01_2026-08-16_12:00:00",
+          "sha256": "354041bc46ba3e746ca20695ebd2a17a7926f00b411848da1234608cbc7764a3",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_LIQUID_RADAR_RH1/wrfout_d01_2026-08-16_13:00:00",
+          "sha256": "447546d38fb6d4af1c326b9b03340ad8238b40b9070eb113ea08d5a23dcc86af",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_LIQUID_RADAR_RH1/wrfout_d01_2026-08-16_14:00:00",
+          "sha256": "e8f2e7a7b0e7679f4cb0a2015f79df05c9dcf0a4299969918ccee505a7118ac2",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_LIQUID_RADAR_RH1/wrfout_d01_2026-08-16_15:00:00",
+          "sha256": "d803caf1971f86dfa78a00d72716db23221e0f241ae5b4e15b3ef49d535ee84a",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_LIQUID_RADAR_RH1/wrfout_d01_2026-08-16_16:00:00",
+          "sha256": "d8f9856bfe62212880311cd9ab6b32cc9f09304bdf5ba495d7dd8371ac93bba0",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_LIQUID_RADAR_RH1/wrfout_d01_2026-08-16_17:00:00",
+          "sha256": "3b31d6586de153bc7aa4d568867107fd4094c911a43429bdf6d1a6644cec704f",
+          "size": 328253340
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_LIQUID_RADAR_RH1/wrfout_d01_2026-08-16_18:00:00",
+          "sha256": "1b64593ce42540edc7b5fdcb0278a4eaf9737e46d14c4cc84708b1ea84cc7024",
+          "size": 328253340
+        }
+      ]
+    }
+  },
+  "reset_checks": {
+    "ORIGINAL": {
+      "components": {
+        "RAINC": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        },
+        "RAINNC": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        },
+        "RAINSH": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        }
+      }
+    },
+    "CURRENT_OFF": {
+      "components": {
+        "RAINC": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        },
+        "RAINNC": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        },
+        "RAINSH": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        }
+      }
+    },
+    "CURRENT_HYDRO": {
+      "components": {
+        "RAINC": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        },
+        "RAINNC": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        },
+        "RAINSH": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        }
+      }
+    },
+    "CURRENT_LIQUID": {
+      "components": {
+        "RAINC": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        },
+        "RAINNC": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        },
+        "RAINSH": {
+          "negative_large_differences": 0,
+          "minimum_common_difference_mm": 0.0
+        }
+      }
+    }
+  }
+}

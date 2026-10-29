@@ -1,0 +1,38 @@
+{
+  "status": "PASS_SCOPED",
+  "scope": "Scientific manuscript and derived paired-point result review; runtime completion and file identity read from cohort receipt, not an independent execution audit.",
+  "sha256": {
+    "docs/CURRENT_FORECAST_CONFERENCE_PAPER_20261029.md": "c8c3aad3b0b38d55042c3c04f0f4be37afecab4aece717784adbb8825dc40792",
+    "docs/evidence/current_forecast_paper_20261029/scores/categorical_scores.csv": "f746eb6b55bc6ba6510ba27660d6086c4c7a774bcf4ddcc4caec0ccaf8daec77",
+    "docs/evidence/current_forecast_paper_20261029/scores/continuous_scores.csv": "38c7c3fc0bbfafa10d341e816d42159c845f3e2088aefeb083866705007f36bb",
+    "docs/evidence/current_forecast_paper_20261029/scores/transitions.csv": "3f2a29459f3fa7fa92b3212e7a7b174e141b056f272a1cc0e03c41bbfbc020c4",
+    "docs/evidence/current_forecast_paper_20261029/scores/receipt.json": "4d6c52bb31d3a8c80732008e3d6eab0599399b7c27f2ce7dff06ae0352a9a961",
+    "docs/evidence/current_forecast_paper_20261029/runtime/cohort_receipt.json": "e0d8c1b76098d18ec1d950b42892cc7ccfcfb79dcaf9ef7893dd4a1af3e3e429",
+    "docs/evidence/current_forecast_paper_20261029/validation/fresh_vs_archived.json": "42f271984a4a22eb2f52d27a8e928cc2b5eede7a16a13fc12844549e6d87afa1",
+    "docs/evidence/current_forecast_paper_20261029/scores/hour_13_arrays.npz": "0df6e55167373751a2a9e50f10325c6d6d1e02603f1225e448c8e766184da9e4",
+    "docs/evidence/current_forecast_paper_20261029/scores/hour_14_arrays.npz": "1228ba4d4106c151c79bcf01fb2f3a609e91a81bce4833f611da6f726283bf49",
+    "docs/evidence/current_forecast_paper_20261029/scores/hour_15_arrays.npz": "2495bb333cb7b5b47b6b494e9d7b9ac39d48e224228b1bad06960d448c283711",
+    "docs/evidence/current_forecast_paper_20261029/scores/hour_16_arrays.npz": "18da1d6c0e061849477030911091cee2c32d4ff7543e3684b11a991260b4c8e4",
+    "docs/evidence/current_forecast_paper_20261029/scores/hour_17_arrays.npz": "4bf01eb3aecf5e6c7f35188b8110d42ee34c50eb670230b44b77852dc851103b",
+    "docs/evidence/current_forecast_paper_20261029/scores/hour_18_arrays.npz": "28d298166ce100d0135ee1ce1061372602fe964606768587350d998fa22486d2",
+    "docs/evidence/current_forecast_paper_20261029/paper/build_receipt.json": "e9fd957d413054704f7524a6409c4ecb76f04bb41a3de020acf5354f204fc385",
+    "docs/evidence/current_forecast_paper_20261029/figures_publication/hour_13_paired_precipitation.png": "9f54aa7561000065ef82d3fb362b3b2faf21ab666166e288ac200d4123e8e2d7",
+    "docs/evidence/current_forecast_paper_20261029/figures_publication/hour_18_paired_precipitation.png": "c3bbf72b49d93e00d17526f92affd813483a38ed9faf067ca5a0d7d2c06529e7",
+    "docs/evidence/current_forecast_paper_20261029/figures_publication/hourly_csi.png": "597709d1a6e3022014dd17e70df5ff1b8ba7c6a45f23b765a361b95520259013"
+  },
+  "checks": [
+    "All 28 score-receipt history path/hash identities match COMPLETE cohort records under explicit case-name mapping.",
+    "Recounted 12 contingency and 12 paired transition rows directly from NPZ for selected leads and thresholds.",
+    "All 24 table 2 CSI entries and 48 table 3 MAE/RMSE entries match CSV rounding.",
+    "First-hour 5 mm transition numbers and baseline-specific claims verified; current candidates improve against CURRENT_OFF and decrease against ORIGINAL.",
+    "Three forecast pairs across six hours each bitwise identical to archived paired values according to comparison receipt: 66,384 paired-point values.",
+    "Formulae, units, original/current initialization confounding, RN1 limitations, single-case scope and candidate binary field caveats reviewed.",
+    "Rechecked all numerical table entries after abbreviated table headers; CURRENT arm meanings remain explicit in captions.",
+    "Final manuscript references +1 and +6 publication maps and CSI image; build receipt matches final source, images, and 8-page PDF/DOCX hashes. All table values rechecked."
+  ],
+  "limitations": [
+    "No independent rerun of host model, preprocessors or source archive.",
+    "Review does not establish forecast skill beyond one case, input coverage, or causality.",
+    "Final rendered DOCX/PDF and figure appearances must receive separate visual review."
+  ]
+}

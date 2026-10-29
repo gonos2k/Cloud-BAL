@@ -1,0 +1,35 @@
+[
+  {
+    "command": [
+      "python",
+      "docs/evidence/current_forecast_paper_20261029/verify_scores_independently.py",
+      "docs/evidence/current_forecast_paper_20261029/scores",
+      "docs/evidence/current_forecast_paper_20261029/validation/independent_scores.json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "python",
+      "docs/evidence/current_forecast_paper_20261029/compare_archived_arrays.py",
+      "--fresh",
+      "docs/evidence/current_forecast_paper_20261029/scores",
+      "--archived",
+      "docs/evidence/precip_hourly_20261027/rn1_recovery",
+      "--output",
+      "docs/evidence/current_forecast_paper_20261029/validation/fresh_vs_archived.json"
+    ],
+    "exit_code": 0
+  },
+  {
+    "command": [
+      "python",
+      "docs/evidence/current_forecast_paper_20261029/plot_forecast_scores.py",
+      "--scores-dir",
+      "docs/evidence/current_forecast_paper_20261029/scores",
+      "--output-dir",
+      "docs/evidence/current_forecast_paper_20261029/figures"
+    ],
+    "exit_code": 0
+  }
+]
