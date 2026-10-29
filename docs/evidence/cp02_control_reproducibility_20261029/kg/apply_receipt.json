@@ -1,0 +1,92 @@
+{
+  "applied_at_utc": "2026-10-29T04:06:35.101246+00:00",
+  "corpora": {
+    "Cloud-BAL": {
+      "communities": 1417,
+      "edges": 28247,
+      "graph_sha256": "61fabfa9a305992c704fc17075e4ccbce268c3653088f8b334a5fe75e9fe6de7",
+      "new_snapshot": "2026-10-29-cp02-reproducibility",
+      "new_snapshot_files": {
+        "GRAPH_REPORT.md": "1fa622e5f16fe1799606c2f3dc8e87c30b4e6089bd7db44491cce0ebb374ad49",
+        "graph.json": "61fabfa9a305992c704fc17075e4ccbce268c3653088f8b334a5fe75e9fe6de7",
+        "manifest.json": "54c7069d74a72070124a6636463e5a9c23ad54fa1783e1663fd2387d90f7e6b2"
+      },
+      "nodes": 15878,
+      "prior_snapshots_preserved": 96
+    },
+    "KLAPS50": {
+      "communities": 3394,
+      "edges": 86705,
+      "graph_sha256": "e5b8138870dd74243698c838fa468a0a524b99d9cfffbcf20e100e88ca20dced",
+      "new_snapshot": "2026-10-29-cp02-reproducibility",
+      "new_snapshot_files": {
+        "GRAPH_REPORT.md": "7a9f9e94092103a528ea02fa4e227eae9ae3e04eeaf355df5b1270d0b067d092",
+        "graph.json": "e5b8138870dd74243698c838fa468a0a524b99d9cfffbcf20e100e88ca20dced",
+        "manifest.json": "55767d41476f950be2e64de3b4e5b1859cbfbffed63ff53071e60ff7d4a34a45"
+      },
+      "nodes": 41706,
+      "prior_snapshots_preserved": 92
+    }
+  },
+  "diagnostics": {
+    "Cloud-BAL": {
+      "dangling_endpoint_edges": 0,
+      "exact_duplicate_edges": 0,
+      "missing_endpoint_edges": 0,
+      "same_endpoint_group_count": 0,
+      "self_loop_edges": 0
+    },
+    "KLAPS50": {
+      "dangling_endpoint_edges": 0,
+      "exact_duplicate_edges": 0,
+      "missing_endpoint_edges": 0,
+      "same_endpoint_group_count": 0,
+      "self_loop_edges": 0
+    }
+  },
+  "frozen_lock_id": "cp02-reproducibility-20261029-final",
+  "hash_only_changed_paths": [
+    ".gitignore",
+    "docs/CP02_CONTROL_REPRODUCIBILITY_20261029.md",
+    "docs/evidence/cp02_control_reproducibility_20261029/after_fix_cli.txt",
+    "docs/evidence/cp02_control_reproducibility_20261029/before_fix.txt",
+    "docs/evidence/cp02_control_reproducibility_20261029/clean_capture_cli.txt",
+    "docs/evidence/cp02_control_reproducibility_20261029/clean_density_tier.txt",
+    "docs/evidence/cp02_control_reproducibility_20261029/clean_evidence_tier.txt",
+    "docs/evidence/cp02_control_reproducibility_20261029/clean_export.json",
+    "docs/evidence/cp02_control_reproducibility_20261029/clean_focused_tests.txt",
+    "docs/evidence/cp02_control_reproducibility_20261029/clean_science_cli.txt",
+    "docs/evidence/cp02_control_reproducibility_20261029/science/README.md",
+    "docs/evidence/cp02_control_reproducibility_20261029/science/control_density_comparison.json",
+    "docs/evidence/cp02_control_reproducibility_20261029/science/control_density_comparison.png",
+    "docs/evidence/cp02_control_reproducibility_20261029/science/control_density_groups.csv",
+    "docs/evidence/cp02_control_reproducibility_20261029/science/control_density_samples.csv",
+    "docs/evidence/cp02_control_reproducibility_20261029/team_review.json",
+    "docs/evidence/cp02_control_reproducibility_20261029/wrf_probe/README.md",
+    "docs/evidence/cp02_density_controls_20261029/capture/standard_radar_analyzer_attempt.log"
+  ],
+  "preservation": {
+    "Cloud-BAL_prior_snapshots_preserved": 96,
+    "KLAPS50_prior_snapshots_preserved": 92,
+    "prior_dated_snapshots_total": 188,
+    "unrelated_dirty_state": "preserved; Cloud-BAL status may additionally show scoped graph files and new snapshot"
+  },
+  "root_go": "GO",
+  "root_go_stage_receipt_sha256": "d4de5924c4db73c5676adfa3c9466f923e88d927cd620d6f5c7c2d94dddc2946",
+  "snapshot": "2026-10-29-cp02-reproducibility",
+  "source_selected_hashes": {
+    "tests/test_cp02_control_density_comparison.py": "d141a2b16dd103035bd491a11d156aa68a652f51bc5410968a0c35c947e95afe",
+    "tests/test_cp02_density_evidence.py": "a329b47b3e1889dd879db903baa99424fb6d2dc24a4ca47af020158efa4d6fc1",
+    "tools/cp02_control_density_comparison.py": "13180bc609d3cfee729ddaeadec83dd00eaac902f3e7dfe4c4e97b85d6559dbf"
+  },
+  "stage_receipt_sha256": "d4de5924c4db73c5676adfa3c9466f923e88d927cd620d6f5c7c2d94dddc2946",
+  "status": "PUBLISHED_AND_READBACK_PASSED",
+  "validation_scope": "selected CP02 control density comparison tool and focused tests; graph freshness is not runtime, physical approval, or scientific validation",
+  "wiki_files": {
+    "graph-report-cloud-bal.md": "1fa622e5f16fe1799606c2f3dc8e87c30b4e6089bd7db44491cce0ebb374ad49",
+    "graph-report-klaps50.md": "7a9f9e94092103a528ea02fa4e227eae9ae3e04eeaf355df5b1270d0b067d092",
+    "graph-report.md": "c85314396d37ca0a92d89b6ea544a75af89effe0ac9f17c7063f34696d5b772a",
+    "index.md": "cca60076f9c34dea9b91eba216e6ed0f0f2a8a2df0ae47c2f4691458ef77bca1",
+    "log.md": "7e641f571f9b9963887502a4f0abd4a898f925a06ffeab5e9647fc842d75906b"
+  }
+}

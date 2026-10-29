@@ -1,0 +1,2205 @@
+{
+  "schema": "cp02_control_density_comparison_v1",
+  "status": "PASS_SCOPED_VALIDATED_CONTROL_SAMPLES",
+  "sample_count": 141,
+  "formula": {
+    "Cbg_eq": "captured density_return.rho_d \u00d7 canonical background species mixing ratio",
+    "Cdiag": "the same captured density_return.rho_d \u00d7 REAL64 diagnostic candidate mixing ratio",
+    "Cfinal": "the same captured density_return.rho_d \u00d7 final REAL32 mixing ratio",
+    "group_ratio": "ratio of concentration sums; density weighted and undefined when summed background concentration is zero",
+    "difference": "concentration sum minus same-density background-equivalent concentration sum"
+  },
+  "grouped_role_species_stats": [
+    {
+      "role": "RN1_positive_reference_all_forecasts_below5mm",
+      "species": "rain",
+      "phase": "rain",
+      "sample_count": 22,
+      "observed_control_count": 23,
+      "positive_background_count": 22,
+      "zero_background_count": 0,
+      "sum_qbg_rain_kg_kg": 0.0045056227427267,
+      "sum_qdiag_rain_kg_kg": 0.00294655242296482,
+      "sum_qfinal_rain_kg_kg": 0.00294655239849817,
+      "sum_Cbg_eq_rain_kg_m3": 0.004234987955086602,
+      "sum_Cdiag_rain_kg_m3": 0.0027680397983893806,
+      "sum_Cfinal_rain_kg_m3": 0.002768039773905493,
+      "sum_Cdiag_minus_Cbg_eq_rain_kg_m3": -0.0014669481566972212,
+      "sum_Cfinal_minus_Cbg_eq_rain_kg_m3": -0.0014669481811811088,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_rain": 0.6536122009661717,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_rain": 0.6536121951848359,
+      "dBZ_min": 11.693811416625977,
+      "dBZ_max": 43.355403900146484,
+      "temperature_K_min": 277.0206604003906,
+      "temperature_K_max": 300.39111328125,
+      "pressure_Pa_min": 60000.0,
+      "pressure_Pa_max": 100000.0,
+      "rho_d_kg_m3_min": 0.7448454486659698,
+      "rho_d_kg_m3_max": 1.1240303607735374
+    },
+    {
+      "role": "RN1_positive_reference_all_forecasts_below5mm",
+      "species": "snow",
+      "phase": "snow",
+      "sample_count": 1,
+      "observed_control_count": 23,
+      "positive_background_count": 1,
+      "zero_background_count": 0,
+      "sum_qbg_snow_kg_kg": 0.003257068805396557,
+      "sum_qdiag_snow_kg_kg": 0.0003762564369517316,
+      "sum_qfinal_snow_kg_kg": 0.00037625644472427666,
+      "sum_Cbg_eq_snow_kg_m3": 0.002258374667879424,
+      "sum_Cdiag_snow_kg_m3": 0.00026088733662318366,
+      "sum_Cfinal_snow_kg_m3": 0.00026088734201248307,
+      "sum_Cdiag_minus_Cbg_eq_snow_kg_m3": -0.0019974873312562404,
+      "sum_Cfinal_minus_Cbg_eq_snow_kg_m3": -0.001997487325866941,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_snow": 0.11551995350184852,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_snow": 0.11551995588821048,
+      "dBZ_min": 37.57187271118164,
+      "dBZ_max": 37.57187271118164,
+      "temperature_K_min": 273.3961181640625,
+      "temperature_K_max": 273.3961181640625,
+      "pressure_Pa_min": 55000.0,
+      "pressure_Pa_max": 55000.0,
+      "rho_d_kg_m3_min": 0.6933764076882806,
+      "rho_d_kg_m3_max": 0.6933764076882806
+    },
+    {
+      "role": "lost_hit",
+      "species": "rain",
+      "phase": "rain",
+      "sample_count": 33,
+      "observed_control_count": 36,
+      "positive_background_count": 33,
+      "zero_background_count": 0,
+      "sum_qbg_rain_kg_kg": 0.00444256471018889,
+      "sum_qdiag_rain_kg_kg": 0.0031858635806024807,
+      "sum_qfinal_rain_kg_kg": 0.003185863612088724,
+      "sum_Cbg_eq_rain_kg_m3": 0.004160867844188978,
+      "sum_Cdiag_rain_kg_m3": 0.0029743350146650637,
+      "sum_Cfinal_rain_kg_m3": 0.0029743350419805413,
+      "sum_Cdiag_minus_Cbg_eq_rain_kg_m3": -0.001186532829523914,
+      "sum_Cfinal_minus_Cbg_eq_rain_kg_m3": -0.0011865328022084365,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_rain": 0.714835252174372,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_rain": 0.714835258739223,
+      "dBZ_min": 18.54281997680664,
+      "dBZ_max": 37.05622863769531,
+      "temperature_K_min": 274.0364074707031,
+      "temperature_K_max": 297.321533203125,
+      "pressure_Pa_min": 55000.0,
+      "pressure_Pa_max": 100000.0,
+      "rho_d_kg_m3_min": 0.6912124221875886,
+      "rho_d_kg_m3_max": 1.1401716725174131
+    },
+    {
+      "role": "lost_hit",
+      "species": "snow",
+      "phase": "snow",
+      "sample_count": 3,
+      "observed_control_count": 36,
+      "positive_background_count": 3,
+      "zero_background_count": 0,
+      "sum_qbg_snow_kg_kg": 0.000955940929998178,
+      "sum_qdiag_snow_kg_kg": 0.00014857290206001818,
+      "sum_qfinal_snow_kg_kg": 0.00014857290079817176,
+      "sum_Cbg_eq_snow_kg_m3": 0.0005058422231402686,
+      "sum_Cdiag_snow_kg_m3": 7.776478285228062e-05,
+      "sum_Cfinal_snow_kg_m3": 7.776478191247079e-05,
+      "sum_Cdiag_minus_Cbg_eq_snow_kg_m3": -0.00042807744028798794,
+      "sum_Cfinal_minus_Cbg_eq_snow_kg_m3": -0.0004280774412277978,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_snow": 0.15373327748228854,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_snow": 0.15373327562437752,
+      "dBZ_min": 7.40605354309082,
+      "dBZ_max": 22.6614990234375,
+      "temperature_K_min": 224.3779754638672,
+      "temperature_K_max": 266.2781677246094,
+      "pressure_Pa_min": 20000.0,
+      "pressure_Pa_max": 45000.0,
+      "rho_d_kg_m3_min": 0.31046910100141256,
+      "rho_d_kg_m3_max": 0.5841830796761949
+    },
+    {
+      "role": "removed_false_alarm",
+      "species": "rain",
+      "phase": "rain",
+      "sample_count": 25,
+      "observed_control_count": 31,
+      "positive_background_count": 25,
+      "zero_background_count": 0,
+      "sum_qbg_rain_kg_kg": 0.0009575868298270507,
+      "sum_qdiag_rain_kg_kg": 0.0007477480985387281,
+      "sum_qfinal_rain_kg_kg": 0.0007477480980924156,
+      "sum_Cbg_eq_rain_kg_m3": 0.0009369765040640868,
+      "sum_Cdiag_rain_kg_m3": 0.0007258499783288254,
+      "sum_Cfinal_rain_kg_m3": 0.000725849977569135,
+      "sum_Cdiag_minus_Cbg_eq_rain_kg_m3": -0.00021112652573526138,
+      "sum_Cfinal_minus_Cbg_eq_rain_kg_m3": -0.00021112652649495176,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_rain": 0.7746725506781535,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_rain": 0.7746725498673643,
+      "dBZ_min": 6.26386833190918,
+      "dBZ_max": 32.275089263916016,
+      "temperature_K_min": 273.5895690917969,
+      "temperature_K_max": 295.5149230957031,
+      "pressure_Pa_min": 55000.0,
+      "pressure_Pa_max": 95000.0,
+      "rho_d_kg_m3_min": 0.692443387335993,
+      "rho_d_kg_m3_max": 1.090426882089066
+    },
+    {
+      "role": "removed_false_alarm",
+      "species": "snow",
+      "phase": "snow",
+      "sample_count": 6,
+      "observed_control_count": 31,
+      "positive_background_count": 6,
+      "zero_background_count": 0,
+      "sum_qbg_snow_kg_kg": 0.0006801454019296216,
+      "sum_qdiag_snow_kg_kg": 0.00011704181263982804,
+      "sum_qfinal_snow_kg_kg": 0.00011704181133609382,
+      "sum_Cbg_eq_snow_kg_m3": 0.000397333703511184,
+      "sum_Cdiag_snow_kg_m3": 6.802130140024145e-05,
+      "sum_Cfinal_snow_kg_m3": 6.802130051462633e-05,
+      "sum_Cdiag_minus_Cbg_eq_snow_kg_m3": -0.0003293124021109426,
+      "sum_Cfinal_minus_Cbg_eq_snow_kg_m3": -0.0003293124029965577,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_snow": 0.17119439100973927,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_snow": 0.17119438878084423,
+      "dBZ_min": 2.8087165355682373,
+      "dBZ_max": 18.623987197875977,
+      "temperature_K_min": 254.89727783203125,
+      "temperature_K_max": 274.0788269042969,
+      "pressure_Pa_min": 35000.0,
+      "pressure_Pa_max": 55000.0,
+      "rho_d_kg_m3_min": 0.47646536373517684,
+      "rho_d_kg_m3_max": 0.6908742565919309
+    },
+    {
+      "role": "retained_hit",
+      "species": "rain",
+      "phase": "rain",
+      "sample_count": 34,
+      "observed_control_count": 51,
+      "positive_background_count": 34,
+      "zero_background_count": 0,
+      "sum_qbg_rain_kg_kg": 0.008563229661376681,
+      "sum_qdiag_rain_kg_kg": 0.0057001746831736345,
+      "sum_qfinal_rain_kg_kg": 0.0057001747481990606,
+      "sum_Cbg_eq_rain_kg_m3": 0.008141016758666969,
+      "sum_Cdiag_rain_kg_m3": 0.005389381342637691,
+      "sum_Cfinal_rain_kg_m3": 0.0053893814075094935,
+      "sum_Cdiag_minus_Cbg_eq_rain_kg_m3": -0.0027516354160292775,
+      "sum_Cfinal_minus_Cbg_eq_rain_kg_m3": -0.002751635351157475,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_rain": 0.66200346988601,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_rain": 0.6620034778545235,
+      "dBZ_min": 26.594697952270508,
+      "dBZ_max": 44.376800537109375,
+      "temperature_K_min": 276.5326843261719,
+      "temperature_K_max": 297.3924865722656,
+      "pressure_Pa_min": 60000.0,
+      "pressure_Pa_max": 100000.0,
+      "rho_d_kg_m3_min": 0.7443760051068719,
+      "rho_d_kg_m3_max": 1.1381880967966467
+    },
+    {
+      "role": "retained_hit",
+      "species": "snow",
+      "phase": "snow",
+      "sample_count": 17,
+      "observed_control_count": 51,
+      "positive_background_count": 17,
+      "zero_background_count": 0,
+      "sum_qbg_snow_kg_kg": 0.011210579687030986,
+      "sum_qdiag_snow_kg_kg": 0.0015406980920745768,
+      "sum_qfinal_snow_kg_kg": 0.0015406980674015358,
+      "sum_Cbg_eq_snow_kg_m3": 0.007017965394347918,
+      "sum_Cdiag_snow_kg_m3": 0.0009541110456404669,
+      "sum_Cfinal_snow_kg_m3": 0.000954111029334782,
+      "sum_Cdiag_minus_Cbg_eq_snow_kg_m3": -0.006063854348707451,
+      "sum_Cfinal_minus_Cbg_eq_snow_kg_m3": -0.0060638543650131365,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_snow": 0.13595265750510574,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_snow": 0.1359526551816852,
+      "dBZ_min": 15.253134727478027,
+      "dBZ_max": 36.374908447265625,
+      "temperature_K_min": 246.943603515625,
+      "temperature_K_max": 274.0157165527344,
+      "pressure_Pa_min": 30000.0,
+      "pressure_Pa_max": 55000.0,
+      "rho_d_kg_m3_min": 0.42232804062875834,
+      "rho_d_kg_m3_max": 0.6917860613653143
+    }
+  ],
+  "grouped_role_species_quality_stats": [
+    {
+      "role": "RN1_positive_reference_all_forecasts_below5mm",
+      "quality": 0,
+      "species": "rain",
+      "phase": "rain",
+      "sample_count": 22,
+      "observed_control_count": 23,
+      "positive_background_count": 22,
+      "zero_background_count": 0,
+      "sum_qbg_rain_kg_kg": 0.0045056227427267,
+      "sum_qdiag_rain_kg_kg": 0.00294655242296482,
+      "sum_qfinal_rain_kg_kg": 0.00294655239849817,
+      "sum_Cbg_eq_rain_kg_m3": 0.004234987955086602,
+      "sum_Cdiag_rain_kg_m3": 0.0027680397983893806,
+      "sum_Cfinal_rain_kg_m3": 0.002768039773905493,
+      "sum_Cdiag_minus_Cbg_eq_rain_kg_m3": -0.0014669481566972212,
+      "sum_Cfinal_minus_Cbg_eq_rain_kg_m3": -0.0014669481811811088,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_rain": 0.6536122009661717,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_rain": 0.6536121951848359,
+      "dBZ_min": 11.693811416625977,
+      "dBZ_max": 43.355403900146484,
+      "temperature_K_min": 277.0206604003906,
+      "temperature_K_max": 300.39111328125,
+      "pressure_Pa_min": 60000.0,
+      "pressure_Pa_max": 100000.0,
+      "rho_d_kg_m3_min": 0.7448454486659698,
+      "rho_d_kg_m3_max": 1.1240303607735374
+    },
+    {
+      "role": "RN1_positive_reference_all_forecasts_below5mm",
+      "quality": 0,
+      "species": "snow",
+      "phase": "snow",
+      "sample_count": 1,
+      "observed_control_count": 23,
+      "positive_background_count": 1,
+      "zero_background_count": 0,
+      "sum_qbg_snow_kg_kg": 0.003257068805396557,
+      "sum_qdiag_snow_kg_kg": 0.0003762564369517316,
+      "sum_qfinal_snow_kg_kg": 0.00037625644472427666,
+      "sum_Cbg_eq_snow_kg_m3": 0.002258374667879424,
+      "sum_Cdiag_snow_kg_m3": 0.00026088733662318366,
+      "sum_Cfinal_snow_kg_m3": 0.00026088734201248307,
+      "sum_Cdiag_minus_Cbg_eq_snow_kg_m3": -0.0019974873312562404,
+      "sum_Cfinal_minus_Cbg_eq_snow_kg_m3": -0.001997487325866941,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_snow": 0.11551995350184852,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_snow": 0.11551995588821048,
+      "dBZ_min": 37.57187271118164,
+      "dBZ_max": 37.57187271118164,
+      "temperature_K_min": 273.3961181640625,
+      "temperature_K_max": 273.3961181640625,
+      "pressure_Pa_min": 55000.0,
+      "pressure_Pa_max": 55000.0,
+      "rho_d_kg_m3_min": 0.6933764076882806,
+      "rho_d_kg_m3_max": 0.6933764076882806
+    },
+    {
+      "role": "lost_hit",
+      "quality": 0,
+      "species": "rain",
+      "phase": "rain",
+      "sample_count": 2,
+      "observed_control_count": 5,
+      "positive_background_count": 2,
+      "zero_background_count": 0,
+      "sum_qbg_rain_kg_kg": 0.0003096084765275009,
+      "sum_qdiag_rain_kg_kg": 0.0002293330443024926,
+      "sum_qfinal_rain_kg_kg": 0.00022933304717298597,
+      "sum_Cbg_eq_rain_kg_m3": 0.00022043184306854923,
+      "sum_Cdiag_rain_kg_m3": 0.00016338830854278587,
+      "sum_Cfinal_rain_kg_m3": 0.0001633883106249185,
+      "sum_Cdiag_minus_Cbg_eq_rain_kg_m3": -5.704353452576336e-05,
+      "sum_Cfinal_minus_Cbg_eq_rain_kg_m3": -5.7043532443630746e-05,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_rain": 0.7412191735473348,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_rain": 0.7412191829930328,
+      "dBZ_min": 27.013044357299805,
+      "dBZ_max": 29.5853328704834,
+      "temperature_K_min": 274.0364074707031,
+      "temperature_K_max": 277.17620849609375,
+      "pressure_Pa_min": 55000.0,
+      "pressure_Pa_max": 60000.0,
+      "rho_d_kg_m3_min": 0.6912124221875886,
+      "rho_d_kg_m3_max": 0.7441170616940723
+    },
+    {
+      "role": "lost_hit",
+      "quality": 0,
+      "species": "snow",
+      "phase": "snow",
+      "sample_count": 3,
+      "observed_control_count": 5,
+      "positive_background_count": 3,
+      "zero_background_count": 0,
+      "sum_qbg_snow_kg_kg": 0.000955940929998178,
+      "sum_qdiag_snow_kg_kg": 0.00014857290206001818,
+      "sum_qfinal_snow_kg_kg": 0.00014857290079817176,
+      "sum_Cbg_eq_snow_kg_m3": 0.0005058422231402686,
+      "sum_Cdiag_snow_kg_m3": 7.776478285228062e-05,
+      "sum_Cfinal_snow_kg_m3": 7.776478191247079e-05,
+      "sum_Cdiag_minus_Cbg_eq_snow_kg_m3": -0.00042807744028798794,
+      "sum_Cfinal_minus_Cbg_eq_snow_kg_m3": -0.0004280774412277978,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_snow": 0.15373327748228854,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_snow": 0.15373327562437752,
+      "dBZ_min": 7.40605354309082,
+      "dBZ_max": 22.6614990234375,
+      "temperature_K_min": 224.3779754638672,
+      "temperature_K_max": 266.2781677246094,
+      "pressure_Pa_min": 20000.0,
+      "pressure_Pa_max": 45000.0,
+      "rho_d_kg_m3_min": 0.31046910100141256,
+      "rho_d_kg_m3_max": 0.5841830796761949
+    },
+    {
+      "role": "lost_hit",
+      "quality": 32,
+      "species": "rain",
+      "phase": "rain",
+      "sample_count": 31,
+      "observed_control_count": 31,
+      "positive_background_count": 31,
+      "zero_background_count": 0,
+      "sum_qbg_rain_kg_kg": 0.004132956233661389,
+      "sum_qdiag_rain_kg_kg": 0.002956530536299988,
+      "sum_qfinal_rain_kg_kg": 0.002956530564915738,
+      "sum_Cbg_eq_rain_kg_m3": 0.003940436001120429,
+      "sum_Cdiag_rain_kg_m3": 0.0028109467061222778,
+      "sum_Cfinal_rain_kg_m3": 0.0028109467313556227,
+      "sum_Cdiag_minus_Cbg_eq_rain_kg_m3": -0.001129489294998151,
+      "sum_Cfinal_minus_Cbg_eq_rain_kg_m3": -0.001129489269764806,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_rain": 0.7133593098131804,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_rain": 0.7133593162168741,
+      "dBZ_min": 18.54281997680664,
+      "dBZ_max": 37.05622863769531,
+      "temperature_K_min": 276.9617919921875,
+      "temperature_K_max": 297.321533203125,
+      "pressure_Pa_min": 60000.0,
+      "pressure_Pa_max": 100000.0,
+      "rho_d_kg_m3_min": 0.74485278577282,
+      "rho_d_kg_m3_max": 1.1401716725174131
+    },
+    {
+      "role": "removed_false_alarm",
+      "quality": 0,
+      "species": "rain",
+      "phase": "rain",
+      "sample_count": 25,
+      "observed_control_count": 31,
+      "positive_background_count": 25,
+      "zero_background_count": 0,
+      "sum_qbg_rain_kg_kg": 0.0009575868298270507,
+      "sum_qdiag_rain_kg_kg": 0.0007477480985387281,
+      "sum_qfinal_rain_kg_kg": 0.0007477480980924156,
+      "sum_Cbg_eq_rain_kg_m3": 0.0009369765040640868,
+      "sum_Cdiag_rain_kg_m3": 0.0007258499783288254,
+      "sum_Cfinal_rain_kg_m3": 0.000725849977569135,
+      "sum_Cdiag_minus_Cbg_eq_rain_kg_m3": -0.00021112652573526138,
+      "sum_Cfinal_minus_Cbg_eq_rain_kg_m3": -0.00021112652649495176,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_rain": 0.7746725506781535,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_rain": 0.7746725498673643,
+      "dBZ_min": 6.26386833190918,
+      "dBZ_max": 32.275089263916016,
+      "temperature_K_min": 273.5895690917969,
+      "temperature_K_max": 295.5149230957031,
+      "pressure_Pa_min": 55000.0,
+      "pressure_Pa_max": 95000.0,
+      "rho_d_kg_m3_min": 0.692443387335993,
+      "rho_d_kg_m3_max": 1.090426882089066
+    },
+    {
+      "role": "removed_false_alarm",
+      "quality": 0,
+      "species": "snow",
+      "phase": "snow",
+      "sample_count": 6,
+      "observed_control_count": 31,
+      "positive_background_count": 6,
+      "zero_background_count": 0,
+      "sum_qbg_snow_kg_kg": 0.0006801454019296216,
+      "sum_qdiag_snow_kg_kg": 0.00011704181263982804,
+      "sum_qfinal_snow_kg_kg": 0.00011704181133609382,
+      "sum_Cbg_eq_snow_kg_m3": 0.000397333703511184,
+      "sum_Cdiag_snow_kg_m3": 6.802130140024145e-05,
+      "sum_Cfinal_snow_kg_m3": 6.802130051462633e-05,
+      "sum_Cdiag_minus_Cbg_eq_snow_kg_m3": -0.0003293124021109426,
+      "sum_Cfinal_minus_Cbg_eq_snow_kg_m3": -0.0003293124029965577,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_snow": 0.17119439100973927,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_snow": 0.17119438878084423,
+      "dBZ_min": 2.8087165355682373,
+      "dBZ_max": 18.623987197875977,
+      "temperature_K_min": 254.89727783203125,
+      "temperature_K_max": 274.0788269042969,
+      "pressure_Pa_min": 35000.0,
+      "pressure_Pa_max": 55000.0,
+      "rho_d_kg_m3_min": 0.47646536373517684,
+      "rho_d_kg_m3_max": 0.6908742565919309
+    },
+    {
+      "role": "retained_hit",
+      "quality": 0,
+      "species": "snow",
+      "phase": "snow",
+      "sample_count": 9,
+      "observed_control_count": 9,
+      "positive_background_count": 9,
+      "zero_background_count": 0,
+      "sum_qbg_snow_kg_kg": 0.003318985865917057,
+      "sum_qdiag_snow_kg_kg": 0.0005098876556173961,
+      "sum_qfinal_snow_kg_kg": 0.000509887653606711,
+      "sum_Cbg_eq_snow_kg_m3": 0.0017289682806089911,
+      "sum_Cdiag_snow_kg_m3": 0.00026418515120834343,
+      "sum_Cfinal_snow_kg_m3": 0.0002641851502549373,
+      "sum_Cdiag_minus_Cbg_eq_snow_kg_m3": -0.0014647831294006476,
+      "sum_Cfinal_minus_Cbg_eq_snow_kg_m3": -0.0014647831303540538,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_snow": 0.15279930474796796,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_snow": 0.1527993041965373,
+      "dBZ_min": 15.253134727478027,
+      "dBZ_max": 27.162742614746094,
+      "temperature_K_min": 246.943603515625,
+      "temperature_K_max": 266.3321533203125,
+      "pressure_Pa_min": 30000.0,
+      "pressure_Pa_max": 45000.0,
+      "rho_d_kg_m3_min": 0.42232804062875834,
+      "rho_d_kg_m3_max": 0.5841577441713082
+    },
+    {
+      "role": "retained_hit",
+      "quality": 32,
+      "species": "rain",
+      "phase": "rain",
+      "sample_count": 34,
+      "observed_control_count": 42,
+      "positive_background_count": 34,
+      "zero_background_count": 0,
+      "sum_qbg_rain_kg_kg": 0.008563229661376681,
+      "sum_qdiag_rain_kg_kg": 0.0057001746831736345,
+      "sum_qfinal_rain_kg_kg": 0.0057001747481990606,
+      "sum_Cbg_eq_rain_kg_m3": 0.008141016758666969,
+      "sum_Cdiag_rain_kg_m3": 0.005389381342637691,
+      "sum_Cfinal_rain_kg_m3": 0.0053893814075094935,
+      "sum_Cdiag_minus_Cbg_eq_rain_kg_m3": -0.0027516354160292775,
+      "sum_Cfinal_minus_Cbg_eq_rain_kg_m3": -0.002751635351157475,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_rain": 0.66200346988601,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_rain": 0.6620034778545235,
+      "dBZ_min": 26.594697952270508,
+      "dBZ_max": 44.376800537109375,
+      "temperature_K_min": 276.5326843261719,
+      "temperature_K_max": 297.3924865722656,
+      "pressure_Pa_min": 60000.0,
+      "pressure_Pa_max": 100000.0,
+      "rho_d_kg_m3_min": 0.7443760051068719,
+      "rho_d_kg_m3_max": 1.1381880967966467
+    },
+    {
+      "role": "retained_hit",
+      "quality": 32,
+      "species": "snow",
+      "phase": "snow",
+      "sample_count": 8,
+      "observed_control_count": 42,
+      "positive_background_count": 8,
+      "zero_background_count": 0,
+      "sum_qbg_snow_kg_kg": 0.00789159382111393,
+      "sum_qdiag_snow_kg_kg": 0.0010308104364571808,
+      "sum_qfinal_snow_kg_kg": 0.0010308104137948249,
+      "sum_Cbg_eq_snow_kg_m3": 0.005288997113738926,
+      "sum_Cdiag_snow_kg_m3": 0.0006899258944321235,
+      "sum_Cfinal_snow_kg_m3": 0.0006899258790798447,
+      "sum_Cdiag_minus_Cbg_eq_snow_kg_m3": -0.004599071219306803,
+      "sum_Cfinal_minus_Cbg_eq_snow_kg_m3": -0.004599071234659082,
+      "ratio_of_sums_Cdiag_over_Cbg_eq_snow": 0.13044550405216565,
+      "ratio_of_sums_Cfinal_over_Cbg_eq_snow": 0.13044550114948325,
+      "dBZ_min": 21.83305549621582,
+      "dBZ_max": 36.374908447265625,
+      "temperature_K_min": 270.58489990234375,
+      "temperature_K_max": 274.0157165527344,
+      "pressure_Pa_min": 50000.0,
+      "pressure_Pa_max": 55000.0,
+      "rho_d_kg_m3_min": 0.6372972817498891,
+      "rho_d_kg_m3_max": 0.6917860613653143
+    }
+  ],
+  "provenance": {
+    "capture_analysis_summary": {
+      "schema": "cp02-density-control-capture-analysis-v1",
+      "status": "PASS_SCOPED_AVAILABLE_ENDPOINTS",
+      "scope": "The frozen inner and radar structural validators pass for this 20-column x 22-level set. The radar profile is decoded by the unchanged radar validator; no prior outer equality capture is used.",
+      "analysis_tool": {
+        "path": "/var/tmp/cloudbal-cp02-capture-evidence/tools/cp02_control_capture_analysis.py",
+        "sha256": "769a9aac1c6c0da53d7cd215bda6bb4a6b8285c0236769fe45e8bce89c98fd71"
+      },
+      "test_file": {
+        "path": "/var/tmp/cloudbal-cp02-capture-evidence/tests/test_cp02_control_capture_analysis.py",
+        "sha256": "67060e8197c97cb49e09d59688b6fb97dd40370ebd3e4477b060e4bbeafb122d"
+      },
+      "capture": {
+        "path": "/var/tmp/cloudbal-cp02-capture-evidence/docs/evidence/cp02_density_controls_20261029/capture/hydro_capture.json.gz",
+        "sha256": "b3686b7a7b3294c90504e71f75d17a8210f670df7608bef64714a27f777a6321",
+        "status": "CAPTURE_COMPLETE",
+        "inferior_exit_code": 0
+      },
+      "point_csv_sha256": "0243e5cd8e29638b32edc501a68ab50f1f7de4415625b5301cf2b2b6f905bebd",
+      "selection_sha256": "5c842c51422cf144bce81ec2143258e3b54a0de7c85674d91a8194b826e14472",
+      "sample_count": 440,
+      "point_count": 20,
+      "role_counts": {
+        "lost_hit": 4,
+        "retained_hit": 4,
+        "removed_false_alarm": 4,
+        "RN1_positive_reference_all_forecasts_below5mm": 4,
+        "payload_positive_rain_reflectivity_invalid_proxy": 2,
+        "payload_positive_snow_reflectivity_invalid_proxy": 2
+      },
+      "radar_status": {
+        "diagnose_radar_cells": {
+          "value": 20,
+          "type": "INTEGER*4",
+          "raw_bytes_le_hex": "14000000",
+          "address": "0x7fff20839aec"
+        },
+        "publish_hydrometeor_candidate": {
+          "value": 20,
+          "type": "INTEGER*4",
+          "raw_bytes_le_hex": "14000000",
+          "address": "0x7fff20839aec"
+        }
+      },
+      "radar_observed_summary": {
+        "diagnose_radar_cells_pre": {
+          "radar_observed_true": 0,
+          "phase_counts": {
+            "0": 440
+          },
+          "phase_uncertain_true": 0,
+          "radar_derived_true": 0
+        },
+        "diagnose_radar_cells_post": {
+          "radar_observed_true": 141,
+          "phase_counts": {
+            "0": 299,
+            "1": 114,
+            "2": 27
+          },
+          "phase_uncertain_true": 0,
+          "radar_derived_true": 0
+        },
+        "publish_hydrometeor_candidate_pre": {
+          "radar_observed_true": 141,
+          "phase_counts": {
+            "0": 299,
+            "1": 114,
+            "2": 27
+          },
+          "phase_uncertain_true": 0,
+          "radar_derived_true": 141
+        },
+        "publish_hydrometeor_candidate_post": {
+          "radar_observed_true": 141,
+          "phase_counts": {
+            "0": 299,
+            "1": 114,
+            "2": 27
+          },
+          "phase_uncertain_true": 0,
+          "radar_derived_true": 141
+        }
+      },
+      "observation_validity_quality_source_counts": {
+        "radar_reflectivity": {
+          "valid_count": 141,
+          "value_counts": {
+            "-10.0": 242,
+            "0.0": 57,
+            "2.8087165355682373": 1,
+            "3.2243576049804688": 1,
+            "6.26386833190918": 1,
+            "7.40605354309082": 1,
+            "7.8333024978637695": 1,
+            "8.759993553161621": 1,
+            "8.771886825561523": 1,
+            "8.880069732666016": 1,
+            "8.89743709564209": 1,
+            "9.40273666381836": 1,
+            "9.503250122070312": 1,
+            "10.109064102172852": 1,
+            "10.973039627075195": 1,
+            "11.496271133422852": 1,
+            "11.693811416625977": 1,
+            "11.837016105651855": 1,
+            "12.378934860229492": 1,
+            "13.354369163513184": 1,
+            "13.766939163208008": 1,
+            "14.112471580505371": 1,
+            "14.39976692199707": 1,
+            "15.040542602539062": 1,
+            "15.192743301391602": 1,
+            "15.249378204345703": 1,
+            "15.253134727478027": 1,
+            "15.501461029052734": 1,
+            "16.008630752563477": 1,
+            "17.018131256103516": 1,
+            "17.282548904418945": 1,
+            "17.41917610168457": 1,
+            "17.433656692504883": 1,
+            "17.468381881713867": 1,
+            "17.599756240844727": 1,
+            "17.858827590942383": 1,
+            "17.961313247680664": 1,
+            "18.018234252929688": 1,
+            "18.54281997680664": 1,
+            "18.555891036987305": 1,
+            "18.623987197875977": 1,
+            "18.981678009033203": 1,
+            "19.217544555664062": 1,
+            "19.626115798950195": 1,
+            "19.667552947998047": 1,
+            "20.485504150390625": 1,
+            "20.903484344482422": 1,
+            "20.98468017578125": 1,
+            "21.1392765045166": 1,
+            "21.140960693359375": 1,
+            "21.46078872680664": 1,
+            "21.791078567504883": 1,
+            "21.83305549621582": 1,
+            "22.23859977722168": 1,
+            "22.302566528320312": 1,
+            "22.3734073638916": 1,
+            "22.385154724121094": 1,
+            "22.6614990234375": 1,
+            "22.91555404663086": 1,
+            "23.3448429107666": 1,
+            "23.485849380493164": 1,
+            "24.318525314331055": 1,
+            "24.396326065063477": 1,
+            "24.44075584411621": 1,
+            "24.606019973754883": 1,
+            "24.74571990966797": 1,
+            "24.836912155151367": 1,
+            "25.220060348510742": 1,
+            "25.234336853027344": 1,
+            "25.412778854370117": 1,
+            "25.4879150390625": 1,
+            "25.63771629333496": 1,
+            "25.862653732299805": 1,
+            "26.578168869018555": 1,
+            "26.594697952270508": 1,
+            "26.915225982666016": 1,
+            "27.013044357299805": 1,
+            "27.162742614746094": 1,
+            "27.20293426513672": 1,
+            "27.394094467163086": 1,
+            "27.8309326171875": 1,
+            "27.979141235351562": 1,
+            "28.067157745361328": 1,
+            "28.123126983642578": 1,
+            "28.415319442749023": 1,
+            "28.443675994873047": 1,
+            "28.451242446899414": 1,
+            "28.821870803833008": 2,
+            "29.068218231201172": 1,
+            "29.251171112060547": 1,
+            "29.434123992919922": 1,
+            "29.57559585571289": 1,
+            "29.5853328704834": 1,
+            "29.7415714263916": 1,
+            "29.790843963623047": 1,
+            "30.108654022216797": 2,
+            "30.246158599853516": 1,
+            "30.457582473754883": 1,
+            "30.470367431640625": 1,
+            "30.48950958251953": 1,
+            "30.57203483581543": 2,
+            "30.764549255371094": 1,
+            "30.827741622924805": 1,
+            "30.937889099121094": 1,
+            "31.502166748046875": 1,
+            "31.668846130371094": 1,
+            "31.7623348236084": 1,
+            "31.95207977294922": 1,
+            "31.97971534729004": 1,
+            "32.00604248046875": 1,
+            "32.19194793701172": 1,
+            "32.230648040771484": 1,
+            "32.275089263916016": 1,
+            "32.28489303588867": 1,
+            "32.496055603027344": 1,
+            "32.95153045654297": 1,
+            "33.01239776611328": 1,
+            "33.18054962158203": 1,
+            "33.96518325805664": 1,
+            "34.00666809082031": 1,
+            "34.177310943603516": 1,
+            "34.713645935058594": 1,
+            "35.13800048828125": 1,
+            "35.45648193359375": 1,
+            "35.564361572265625": 1,
+            "35.56840515136719": 1,
+            "36.31081771850586": 1,
+            "36.374908447265625": 1,
+            "37.05622863769531": 2,
+            "37.57187271118164": 1,
+            "38.182796478271484": 1,
+            "38.364463806152344": 1,
+            "38.42707061767578": 1,
+            "38.99660873413086": 1,
+            "41.78736877441406": 1,
+            "42.02290344238281": 1,
+            "43.355403900146484": 1,
+            "43.49583053588867": 1,
+            "44.376800537109375": 1
+          },
+          "quality_counts": {
+            "0": 310,
+            "1": 57,
+            "32": 73
+          },
+          "source_counts": {
+            "0": 57,
+            "8": 383
+          }
+        },
+        "precipitation_phase": {
+          "valid_count": 383,
+          "value_counts": {
+            "0": 261,
+            "1": 135,
+            "2": 44
+          },
+          "quality_counts": {
+            "0": 364,
+            "1": 57,
+            "16": 19
+          },
+          "source_counts": {
+            "0": 57,
+            "4": 383
+          }
+        }
+      },
+      "observed_counts_by_role": {
+        "lost_hit": {
+          "point_count": 4,
+          "observed_post_true_levels": 36,
+          "observed_post_false_levels": 52,
+          "reflectivity_valid_levels": 36,
+          "background_positive_rain_levels": 33,
+          "background_positive_snow_levels": 3,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 36,
+            "density_return": 36,
+            "phase_allocation_return": 36,
+            "store_after": 36
+          }
+        },
+        "retained_hit": {
+          "point_count": 4,
+          "observed_post_true_levels": 51,
+          "observed_post_false_levels": 37,
+          "reflectivity_valid_levels": 51,
+          "background_positive_rain_levels": 34,
+          "background_positive_snow_levels": 17,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 51,
+            "density_return": 51,
+            "phase_allocation_return": 51,
+            "store_after": 51
+          }
+        },
+        "removed_false_alarm": {
+          "point_count": 4,
+          "observed_post_true_levels": 31,
+          "observed_post_false_levels": 57,
+          "reflectivity_valid_levels": 31,
+          "background_positive_rain_levels": 25,
+          "background_positive_snow_levels": 6,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 31,
+            "density_return": 31,
+            "phase_allocation_return": 31,
+            "store_after": 31
+          }
+        },
+        "RN1_positive_reference_all_forecasts_below5mm": {
+          "point_count": 4,
+          "observed_post_true_levels": 23,
+          "observed_post_false_levels": 65,
+          "reflectivity_valid_levels": 23,
+          "background_positive_rain_levels": 22,
+          "background_positive_snow_levels": 1,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 23,
+            "density_return": 23,
+            "phase_allocation_return": 23,
+            "store_after": 23
+          }
+        },
+        "payload_positive_rain_reflectivity_invalid_proxy": {
+          "point_count": 2,
+          "observed_post_true_levels": 0,
+          "observed_post_false_levels": 44,
+          "reflectivity_valid_levels": 0,
+          "background_positive_rain_levels": 11,
+          "background_positive_snow_levels": 13,
+          "unobserved_positive_background_rain_levels": 11,
+          "unobserved_positive_background_snow_levels": 13,
+          "captured_local_levels": {
+            "density_entry": 0,
+            "density_return": 0,
+            "phase_allocation_return": 0,
+            "store_after": 0
+          }
+        },
+        "payload_positive_snow_reflectivity_invalid_proxy": {
+          "point_count": 2,
+          "observed_post_true_levels": 0,
+          "observed_post_false_levels": 44,
+          "reflectivity_valid_levels": 0,
+          "background_positive_rain_levels": 10,
+          "background_positive_snow_levels": 4,
+          "unobserved_positive_background_rain_levels": 10,
+          "unobserved_positive_background_snow_levels": 4,
+          "captured_local_levels": {
+            "density_entry": 0,
+            "density_return": 0,
+            "phase_allocation_return": 0,
+            "store_after": 0
+          }
+        }
+      },
+      "species_trends_by_role_vs_actual_input_to_main_final": {
+        "lost_hit": {
+          "vapor": {
+            "same": 88
+          },
+          "cloud_water": {
+            "same": 88
+          },
+          "cloud_ice": {
+            "same": 88
+          },
+          "rain": {
+            "same": 55,
+            "decrease": 33
+          },
+          "snow": {
+            "same": 85,
+            "decrease": 3
+          },
+          "graupel": {
+            "same": 88
+          }
+        },
+        "retained_hit": {
+          "vapor": {
+            "same": 88
+          },
+          "cloud_water": {
+            "same": 88
+          },
+          "cloud_ice": {
+            "same": 88
+          },
+          "rain": {
+            "same": 54,
+            "decrease": 34
+          },
+          "snow": {
+            "same": 71,
+            "decrease": 17
+          },
+          "graupel": {
+            "same": 88
+          }
+        },
+        "removed_false_alarm": {
+          "vapor": {
+            "same": 88
+          },
+          "cloud_water": {
+            "same": 88
+          },
+          "cloud_ice": {
+            "same": 88
+          },
+          "rain": {
+            "same": 63,
+            "decrease": 25
+          },
+          "snow": {
+            "same": 82,
+            "decrease": 6
+          },
+          "graupel": {
+            "same": 88
+          }
+        },
+        "RN1_positive_reference_all_forecasts_below5mm": {
+          "vapor": {
+            "same": 88
+          },
+          "cloud_water": {
+            "same": 88
+          },
+          "cloud_ice": {
+            "same": 88
+          },
+          "rain": {
+            "same": 66,
+            "decrease": 22
+          },
+          "snow": {
+            "same": 87,
+            "decrease": 1
+          },
+          "graupel": {
+            "same": 88
+          }
+        },
+        "payload_positive_rain_reflectivity_invalid_proxy": {
+          "vapor": {
+            "same": 44
+          },
+          "cloud_water": {
+            "same": 44
+          },
+          "cloud_ice": {
+            "same": 44
+          },
+          "rain": {
+            "same": 44
+          },
+          "snow": {
+            "same": 44
+          },
+          "graupel": {
+            "same": 44
+          }
+        },
+        "payload_positive_snow_reflectivity_invalid_proxy": {
+          "vapor": {
+            "same": 44
+          },
+          "cloud_water": {
+            "same": 44
+          },
+          "cloud_ice": {
+            "same": 44
+          },
+          "rain": {
+            "same": 44
+          },
+          "snow": {
+            "same": 44
+          },
+          "graupel": {
+            "same": 44
+          }
+        }
+      },
+      "main_writer_species_trends_by_role": {
+        "lost_hit": {
+          "main": {
+            "vapor": {
+              "same": 88
+            },
+            "cloud_water": {
+              "same": 88
+            },
+            "cloud_ice": {
+              "same": 88
+            },
+            "rain": {
+              "same": 55,
+              "decrease": 33
+            },
+            "snow": {
+              "same": 85,
+              "decrease": 3
+            },
+            "graupel": {
+              "same": 88
+            }
+          },
+          "writer": {
+            "vapor": {
+              "same": 88
+            },
+            "cloud_water": {
+              "same": 88
+            },
+            "cloud_ice": {
+              "same": 88
+            },
+            "rain": {
+              "same": 55,
+              "decrease": 33
+            },
+            "snow": {
+              "same": 85,
+              "decrease": 3
+            },
+            "graupel": {
+              "same": 88
+            }
+          }
+        },
+        "retained_hit": {
+          "main": {
+            "vapor": {
+              "same": 88
+            },
+            "cloud_water": {
+              "same": 88
+            },
+            "cloud_ice": {
+              "same": 88
+            },
+            "rain": {
+              "same": 54,
+              "decrease": 34
+            },
+            "snow": {
+              "same": 71,
+              "decrease": 17
+            },
+            "graupel": {
+              "same": 88
+            }
+          },
+          "writer": {
+            "vapor": {
+              "same": 88
+            },
+            "cloud_water": {
+              "same": 88
+            },
+            "cloud_ice": {
+              "same": 88
+            },
+            "rain": {
+              "same": 54,
+              "decrease": 34
+            },
+            "snow": {
+              "same": 71,
+              "decrease": 17
+            },
+            "graupel": {
+              "same": 88
+            }
+          }
+        },
+        "removed_false_alarm": {
+          "main": {
+            "vapor": {
+              "same": 88
+            },
+            "cloud_water": {
+              "same": 88
+            },
+            "cloud_ice": {
+              "same": 88
+            },
+            "rain": {
+              "same": 63,
+              "decrease": 25
+            },
+            "snow": {
+              "same": 82,
+              "decrease": 6
+            },
+            "graupel": {
+              "same": 88
+            }
+          },
+          "writer": {
+            "vapor": {
+              "same": 88
+            },
+            "cloud_water": {
+              "same": 88
+            },
+            "cloud_ice": {
+              "same": 88
+            },
+            "rain": {
+              "same": 63,
+              "decrease": 25
+            },
+            "snow": {
+              "same": 82,
+              "decrease": 6
+            },
+            "graupel": {
+              "same": 88
+            }
+          }
+        },
+        "RN1_positive_reference_all_forecasts_below5mm": {
+          "main": {
+            "vapor": {
+              "same": 88
+            },
+            "cloud_water": {
+              "same": 88
+            },
+            "cloud_ice": {
+              "same": 88
+            },
+            "rain": {
+              "same": 66,
+              "decrease": 22
+            },
+            "snow": {
+              "same": 87,
+              "decrease": 1
+            },
+            "graupel": {
+              "same": 88
+            }
+          },
+          "writer": {
+            "vapor": {
+              "same": 88
+            },
+            "cloud_water": {
+              "same": 88
+            },
+            "cloud_ice": {
+              "same": 88
+            },
+            "rain": {
+              "same": 66,
+              "decrease": 22
+            },
+            "snow": {
+              "same": 87,
+              "decrease": 1
+            },
+            "graupel": {
+              "same": 88
+            }
+          }
+        },
+        "payload_positive_rain_reflectivity_invalid_proxy": {
+          "main": {
+            "vapor": {
+              "same": 44
+            },
+            "cloud_water": {
+              "same": 44
+            },
+            "cloud_ice": {
+              "same": 44
+            },
+            "rain": {
+              "same": 44
+            },
+            "snow": {
+              "same": 44
+            },
+            "graupel": {
+              "same": 44
+            }
+          },
+          "writer": {
+            "vapor": {
+              "same": 44
+            },
+            "cloud_water": {
+              "same": 44
+            },
+            "cloud_ice": {
+              "same": 44
+            },
+            "rain": {
+              "same": 44
+            },
+            "snow": {
+              "same": 44
+            },
+            "graupel": {
+              "same": 44
+            }
+          }
+        },
+        "payload_positive_snow_reflectivity_invalid_proxy": {
+          "main": {
+            "vapor": {
+              "same": 44
+            },
+            "cloud_water": {
+              "same": 44
+            },
+            "cloud_ice": {
+              "same": 44
+            },
+            "rain": {
+              "same": 44
+            },
+            "snow": {
+              "same": 44
+            },
+            "graupel": {
+              "same": 44
+            }
+          },
+          "writer": {
+            "vapor": {
+              "same": 44
+            },
+            "cloud_water": {
+              "same": 44
+            },
+            "cloud_ice": {
+              "same": 44
+            },
+            "rain": {
+              "same": 44
+            },
+            "snow": {
+              "same": 44
+            },
+            "graupel": {
+              "same": 44
+            }
+          }
+        }
+      },
+      "workarray_real64_to_published_state_real32_mismatches": {
+        "rain": {
+          "count": 21,
+          "examples": [
+            {
+              "point_id": "P17",
+              "shadow_i": 134,
+              "shadow_j": 203,
+              "z_index": 5,
+              "workarray_real64": 0.0,
+              "published_real32": 0.000714141468051821
+            },
+            {
+              "point_id": "P17",
+              "shadow_i": 134,
+              "shadow_j": 203,
+              "z_index": 6,
+              "workarray_real64": 0.0,
+              "published_real32": 0.0009091912652365863
+            },
+            {
+              "point_id": "P17",
+              "shadow_i": 134,
+              "shadow_j": 203,
+              "z_index": 7,
+              "workarray_real64": 0.0,
+              "published_real32": 0.00119363225530833
+            },
+            {
+              "point_id": "P17",
+              "shadow_i": 134,
+              "shadow_j": 203,
+              "z_index": 8,
+              "workarray_real64": 0.0,
+              "published_real32": 0.001595665467903018
+            },
+            {
+              "point_id": "P17",
+              "shadow_i": 134,
+              "shadow_j": 203,
+              "z_index": 9,
+              "workarray_real64": 0.0,
+              "published_real32": 0.002072623698040843
+            },
+            {
+              "point_id": "P17",
+              "shadow_i": 134,
+              "shadow_j": 203,
+              "z_index": 10,
+              "workarray_real64": 0.0,
+              "published_real32": 0.003078275127336383
+            },
+            {
+              "point_id": "P18",
+              "shadow_i": 166,
+              "shadow_j": 223,
+              "z_index": 6,
+              "workarray_real64": 0.0,
+              "published_real32": 0.0012249849969521165
+            },
+            {
+              "point_id": "P18",
+              "shadow_i": 166,
+              "shadow_j": 223,
+              "z_index": 7,
+              "workarray_real64": 0.0,
+              "published_real32": 0.001561810844577849
+            },
+            {
+              "point_id": "P18",
+              "shadow_i": 166,
+              "shadow_j": 223,
+              "z_index": 8,
+              "workarray_real64": 0.0,
+              "published_real32": 0.001976944738999009
+            },
+            {
+              "point_id": "P18",
+              "shadow_i": 166,
+              "shadow_j": 223,
+              "z_index": 9,
+              "workarray_real64": 0.0,
+              "published_real32": 0.0023384897504001856
+            },
+            {
+              "point_id": "P18",
+              "shadow_i": 166,
+              "shadow_j": 223,
+              "z_index": 10,
+              "workarray_real64": 0.0,
+              "published_real32": 0.003066068748012185
+            },
+            {
+              "point_id": "P19",
+              "shadow_i": 28,
+              "shadow_j": 120,
+              "z_index": 3,
+              "workarray_real64": 0.0,
+              "published_real32": 0.00080395134864375
+            }
+          ]
+        },
+        "snow": {
+          "count": 17,
+          "examples": [
+            {
+              "point_id": "P17",
+              "shadow_i": 134,
+              "shadow_j": 203,
+              "z_index": 12,
+              "workarray_real64": 0.0,
+              "published_real32": 0.015243610367178917
+            },
+            {
+              "point_id": "P17",
+              "shadow_i": 134,
+              "shadow_j": 203,
+              "z_index": 13,
+              "workarray_real64": 0.0,
+              "published_real32": 0.008800216019153595
+            },
+            {
+              "point_id": "P17",
+              "shadow_i": 134,
+              "shadow_j": 203,
+              "z_index": 14,
+              "workarray_real64": 0.0,
+              "published_real32": 0.0034488558303564787
+            },
+            {
+              "point_id": "P17",
+              "shadow_i": 134,
+              "shadow_j": 203,
+              "z_index": 15,
+              "workarray_real64": 0.0,
+              "published_real32": 0.0018028956837952137
+            },
+            {
+              "point_id": "P17",
+              "shadow_i": 134,
+              "shadow_j": 203,
+              "z_index": 16,
+              "workarray_real64": 0.0,
+              "published_real32": 0.0010094782337546349
+            },
+            {
+              "point_id": "P17",
+              "shadow_i": 134,
+              "shadow_j": 203,
+              "z_index": 17,
+              "workarray_real64": 0.0,
+              "published_real32": 3.00935407722136e-05
+            },
+            {
+              "point_id": "P18",
+              "shadow_i": 166,
+              "shadow_j": 223,
+              "z_index": 11,
+              "workarray_real64": 0.0,
+              "published_real32": 0.016380874440073967
+            },
+            {
+              "point_id": "P18",
+              "shadow_i": 166,
+              "shadow_j": 223,
+              "z_index": 12,
+              "workarray_real64": 0.0,
+              "published_real32": 0.013352940790355206
+            },
+            {
+              "point_id": "P18",
+              "shadow_i": 166,
+              "shadow_j": 223,
+              "z_index": 13,
+              "workarray_real64": 0.0,
+              "published_real32": 0.013678258284926414
+            },
+            {
+              "point_id": "P18",
+              "shadow_i": 166,
+              "shadow_j": 223,
+              "z_index": 14,
+              "workarray_real64": 0.0,
+              "published_real32": 0.013151144608855247
+            },
+            {
+              "point_id": "P18",
+              "shadow_i": 166,
+              "shadow_j": 223,
+              "z_index": 15,
+              "workarray_real64": 0.0,
+              "published_real32": 0.010918186977505684
+            },
+            {
+              "point_id": "P18",
+              "shadow_i": 166,
+              "shadow_j": 223,
+              "z_index": 16,
+              "workarray_real64": 0.0,
+              "published_real32": 0.004452573601156473
+            }
+          ]
+        },
+        "graupel": {
+          "count": 19,
+          "examples": [
+            {
+              "point_id": "P17",
+              "shadow_i": 134,
+              "shadow_j": 203,
+              "z_index": 11,
+              "workarray_real64": 0.0,
+              "published_real32": 0.0021342935506254435
+            },
+            {
+              "point_id": "P19",
+              "shadow_i": 28,
+              "shadow_j": 120,
+              "z_index": 9,
+              "workarray_real64": 0.0,
+              "published_real32": 0.002297932282090187
+            },
+            {
+              "point_id": "P19",
+              "shadow_i": 28,
+              "shadow_j": 120,
+              "z_index": 10,
+              "workarray_real64": 0.0,
+              "published_real32": 0.0034658913500607014
+            },
+            {
+              "point_id": "P19",
+              "shadow_i": 28,
+              "shadow_j": 120,
+              "z_index": 11,
+              "workarray_real64": 0.0,
+              "published_real32": 0.0043948860839009285
+            },
+            {
+              "point_id": "P19",
+              "shadow_i": 28,
+              "shadow_j": 120,
+              "z_index": 12,
+              "workarray_real64": 0.0,
+              "published_real32": 0.004985406994819641
+            },
+            {
+              "point_id": "P19",
+              "shadow_i": 28,
+              "shadow_j": 120,
+              "z_index": 13,
+              "workarray_real64": 0.0,
+              "published_real32": 0.005490222480148077
+            },
+            {
+              "point_id": "P19",
+              "shadow_i": 28,
+              "shadow_j": 120,
+              "z_index": 14,
+              "workarray_real64": 0.0,
+              "published_real32": 0.005885405465960503
+            },
+            {
+              "point_id": "P19",
+              "shadow_i": 28,
+              "shadow_j": 120,
+              "z_index": 15,
+              "workarray_real64": 0.0,
+              "published_real32": 0.00586190028116107
+            },
+            {
+              "point_id": "P19",
+              "shadow_i": 28,
+              "shadow_j": 120,
+              "z_index": 16,
+              "workarray_real64": 0.0,
+              "published_real32": 0.005088054575026035
+            },
+            {
+              "point_id": "P20",
+              "shadow_i": 28,
+              "shadow_j": 119,
+              "z_index": 7,
+              "workarray_real64": 0.0,
+              "published_real32": 0.0017716282745823264
+            },
+            {
+              "point_id": "P20",
+              "shadow_i": 28,
+              "shadow_j": 119,
+              "z_index": 8,
+              "workarray_real64": 0.0,
+              "published_real32": 0.0024581896141171455
+            },
+            {
+              "point_id": "P20",
+              "shadow_i": 28,
+              "shadow_j": 119,
+              "z_index": 9,
+              "workarray_real64": 0.0,
+              "published_real32": 0.003834025701507926
+            }
+          ]
+        }
+      },
+      "standard_radar_analyzer_attempt": {
+        "path": "/var/tmp/cloudbal-cp02-capture-evidence/docs/evidence/cp02_density_controls_20261029/capture/standard_radar_analyzer_attempt.log",
+        "sha256": "7b38e3165cf733ba38a849042a5abe7083189d6ce90b05edcb8c70b302cda405",
+        "result": "FAILED_AT_EXISTING_ALL_SELECTED_SAMPLE_WORKARRAY_CONVERSION_GATE",
+        "reason": "The unchanged wrapper invokes INNER.analyze(), whose full sampled REAL64 workarray-to-REAL32 candidate-state equality gate does not hold at selected unaffected positive-background controls."
+      },
+      "point_summary": [
+        {
+          "point_id": "P01",
+          "role": "lost_hit",
+          "shadow_i": 163,
+          "shadow_j": 73,
+          "rn1_sample_index_zero_based": "282",
+          "target_flat_index_yx": "10071",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 10,
+          "reflectivity_valid_levels": 10,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 10,
+            "density_return": 10,
+            "phase_allocation_return": 10,
+            "store_after": 10
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 13,
+            "snow_same": 21,
+            "graupel_same": 22,
+            "rain_decrease": 9,
+            "snow_decrease": 1
+          }
+        },
+        {
+          "point_id": "P02",
+          "role": "lost_hit",
+          "shadow_i": 164,
+          "shadow_j": 74,
+          "rn1_sample_index_zero_based": "312",
+          "target_flat_index_yx": "10221",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 10,
+          "reflectivity_valid_levels": 10,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 10,
+            "density_return": 10,
+            "phase_allocation_return": 10,
+            "store_after": 10
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 14,
+            "snow_same": 20,
+            "graupel_same": 22,
+            "rain_decrease": 8,
+            "snow_decrease": 2
+          }
+        },
+        {
+          "point_id": "P03",
+          "role": "lost_hit",
+          "shadow_i": 170,
+          "shadow_j": 78,
+          "rn1_sample_index_zero_based": "459",
+          "target_flat_index_yx": "10823",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 8,
+          "reflectivity_valid_levels": 8,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 8,
+            "density_return": 8,
+            "phase_allocation_return": 8,
+            "store_after": 8
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 14,
+            "snow_same": 22,
+            "graupel_same": 22,
+            "rain_decrease": 8
+          }
+        },
+        {
+          "point_id": "P04",
+          "role": "lost_hit",
+          "shadow_i": 169,
+          "shadow_j": 79,
+          "rn1_sample_index_zero_based": "503",
+          "target_flat_index_yx": "10971",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 8,
+          "reflectivity_valid_levels": 8,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 8,
+            "density_return": 8,
+            "phase_allocation_return": 8,
+            "store_after": 8
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 14,
+            "snow_same": 22,
+            "graupel_same": 22,
+            "rain_decrease": 8
+          }
+        },
+        {
+          "point_id": "P05",
+          "role": "retained_hit",
+          "shadow_i": 163,
+          "shadow_j": 70,
+          "rn1_sample_index_zero_based": "202",
+          "target_flat_index_yx": "9624",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 13,
+          "reflectivity_valid_levels": 13,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 13,
+            "density_return": 13,
+            "phase_allocation_return": 13,
+            "store_after": 13
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 13,
+            "snow_same": 18,
+            "graupel_same": 22,
+            "rain_decrease": 9,
+            "snow_decrease": 4
+          }
+        },
+        {
+          "point_id": "P06",
+          "role": "retained_hit",
+          "shadow_i": 163,
+          "shadow_j": 71,
+          "rn1_sample_index_zero_based": "226",
+          "target_flat_index_yx": "9773",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 12,
+          "reflectivity_valid_levels": 12,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 12,
+            "density_return": 12,
+            "phase_allocation_return": 12,
+            "store_after": 12
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 13,
+            "snow_same": 19,
+            "graupel_same": 22,
+            "rain_decrease": 9,
+            "snow_decrease": 3
+          }
+        },
+        {
+          "point_id": "P07",
+          "role": "retained_hit",
+          "shadow_i": 164,
+          "shadow_j": 71,
+          "rn1_sample_index_zero_based": "227",
+          "target_flat_index_yx": "9774",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 13,
+          "reflectivity_valid_levels": 13,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 13,
+            "density_return": 13,
+            "phase_allocation_return": 13,
+            "store_after": 13
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 14,
+            "snow_same": 17,
+            "graupel_same": 22,
+            "rain_decrease": 8,
+            "snow_decrease": 5
+          }
+        },
+        {
+          "point_id": "P08",
+          "role": "retained_hit",
+          "shadow_i": 163,
+          "shadow_j": 72,
+          "rn1_sample_index_zero_based": "252",
+          "target_flat_index_yx": "9922",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 13,
+          "reflectivity_valid_levels": 13,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 13,
+            "density_return": 13,
+            "phase_allocation_return": 13,
+            "store_after": 13
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 14,
+            "snow_same": 17,
+            "graupel_same": 22,
+            "rain_decrease": 8,
+            "snow_decrease": 5
+          }
+        },
+        {
+          "point_id": "P09",
+          "role": "removed_false_alarm",
+          "shadow_i": 153,
+          "shadow_j": 71,
+          "rn1_sample_index_zero_based": "225",
+          "target_flat_index_yx": "9763",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 0,
+          "reflectivity_valid_levels": 0,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 0,
+            "density_return": 0,
+            "phase_allocation_return": 0,
+            "store_after": 0
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 22,
+            "snow_same": 22,
+            "graupel_same": 22
+          }
+        },
+        {
+          "point_id": "P10",
+          "role": "removed_false_alarm",
+          "shadow_i": 161,
+          "shadow_j": 73,
+          "rn1_sample_index_zero_based": "280",
+          "target_flat_index_yx": "10069",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 11,
+          "reflectivity_valid_levels": 11,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 11,
+            "density_return": 11,
+            "phase_allocation_return": 11,
+            "store_after": 11
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 14,
+            "snow_same": 19,
+            "graupel_same": 22,
+            "rain_decrease": 8,
+            "snow_decrease": 3
+          }
+        },
+        {
+          "point_id": "P11",
+          "role": "removed_false_alarm",
+          "shadow_i": 165,
+          "shadow_j": 79,
+          "rn1_sample_index_zero_based": "499",
+          "target_flat_index_yx": "10967",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 11,
+          "reflectivity_valid_levels": 11,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 11,
+            "density_return": 11,
+            "phase_allocation_return": 11,
+            "store_after": 11
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 13,
+            "snow_same": 20,
+            "graupel_same": 22,
+            "rain_decrease": 9,
+            "snow_decrease": 2
+          }
+        },
+        {
+          "point_id": "P12",
+          "role": "removed_false_alarm",
+          "shadow_i": 162,
+          "shadow_j": 80,
+          "rn1_sample_index_zero_based": "545",
+          "target_flat_index_yx": "11113",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 9,
+          "reflectivity_valid_levels": 9,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 9,
+            "density_return": 9,
+            "phase_allocation_return": 9,
+            "store_after": 9
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 14,
+            "snow_same": 21,
+            "graupel_same": 22,
+            "rain_decrease": 8,
+            "snow_decrease": 1
+          }
+        },
+        {
+          "point_id": "P13",
+          "role": "RN1_positive_reference_all_forecasts_below5mm",
+          "shadow_i": 122,
+          "shadow_j": 37,
+          "rn1_sample_index_zero_based": "1",
+          "target_flat_index_yx": "4666",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 4,
+          "reflectivity_valid_levels": 4,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 4,
+            "density_return": 4,
+            "phase_allocation_return": 4,
+            "store_after": 4
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 18,
+            "snow_same": 22,
+            "graupel_same": 22,
+            "rain_decrease": 4
+          }
+        },
+        {
+          "point_id": "P14",
+          "role": "RN1_positive_reference_all_forecasts_below5mm",
+          "shadow_i": 123,
+          "shadow_j": 37,
+          "rn1_sample_index_zero_based": "2",
+          "target_flat_index_yx": "4667",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 0,
+          "reflectivity_valid_levels": 0,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 0,
+            "density_return": 0,
+            "phase_allocation_return": 0,
+            "store_after": 0
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 22,
+            "snow_same": 22,
+            "graupel_same": 22
+          }
+        },
+        {
+          "point_id": "P15",
+          "role": "RN1_positive_reference_all_forecasts_below5mm",
+          "shadow_i": 125,
+          "shadow_j": 37,
+          "rn1_sample_index_zero_based": "4",
+          "target_flat_index_yx": "4669",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 9,
+          "reflectivity_valid_levels": 9,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 9,
+            "density_return": 9,
+            "phase_allocation_return": 9,
+            "store_after": 9
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 13,
+            "snow_same": 22,
+            "graupel_same": 22,
+            "rain_decrease": 9
+          }
+        },
+        {
+          "point_id": "P16",
+          "role": "RN1_positive_reference_all_forecasts_below5mm",
+          "shadow_i": 126,
+          "shadow_j": 37,
+          "rn1_sample_index_zero_based": "5",
+          "target_flat_index_yx": "4670",
+          "payload_radar_invalid_proxy": "not_in_3688point_comparison_NPZ",
+          "external_control_distance_to_rn1_sample_km": "",
+          "levels": 22,
+          "observed_post_true_levels": 10,
+          "reflectivity_valid_levels": 10,
+          "unobserved_positive_background_rain_levels": 0,
+          "unobserved_positive_background_snow_levels": 0,
+          "captured_local_levels": {
+            "density_entry": 10,
+            "density_return": 10,
+            "phase_allocation_return": 10,
+            "store_after": 10
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 13,
+            "snow_same": 21,
+            "graupel_same": 22,
+            "rain_decrease": 9,
+            "snow_decrease": 1
+          }
+        },
+        {
+          "point_id": "P17",
+          "role": "payload_positive_rain_reflectivity_invalid_proxy",
+          "shadow_i": 134,
+          "shadow_j": 203,
+          "rn1_sample_index_zero_based": "",
+          "target_flat_index_yx": "",
+          "payload_radar_invalid_proxy": "True",
+          "external_control_distance_to_rn1_sample_km": "283.3824841035594",
+          "levels": 22,
+          "observed_post_true_levels": 0,
+          "reflectivity_valid_levels": 0,
+          "unobserved_positive_background_rain_levels": 6,
+          "unobserved_positive_background_snow_levels": 6,
+          "captured_local_levels": {
+            "density_entry": 0,
+            "density_return": 0,
+            "phase_allocation_return": 0,
+            "store_after": 0
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 22,
+            "snow_same": 22,
+            "graupel_same": 22
+          }
+        },
+        {
+          "point_id": "P18",
+          "role": "payload_positive_rain_reflectivity_invalid_proxy",
+          "shadow_i": 166,
+          "shadow_j": 223,
+          "rn1_sample_index_zero_based": "",
+          "target_flat_index_yx": "",
+          "payload_radar_invalid_proxy": "True",
+          "external_control_distance_to_rn1_sample_km": "363.71895412756214",
+          "levels": 22,
+          "observed_post_true_levels": 0,
+          "reflectivity_valid_levels": 0,
+          "unobserved_positive_background_rain_levels": 5,
+          "unobserved_positive_background_snow_levels": 7,
+          "captured_local_levels": {
+            "density_entry": 0,
+            "density_return": 0,
+            "phase_allocation_return": 0,
+            "store_after": 0
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 22,
+            "snow_same": 22,
+            "graupel_same": 22
+          }
+        },
+        {
+          "point_id": "P19",
+          "role": "payload_positive_snow_reflectivity_invalid_proxy",
+          "shadow_i": 28,
+          "shadow_j": 120,
+          "rn1_sample_index_zero_based": "",
+          "target_flat_index_yx": "",
+          "payload_radar_invalid_proxy": "True",
+          "external_control_distance_to_rn1_sample_km": "466.85026527209385",
+          "levels": 22,
+          "observed_post_true_levels": 0,
+          "reflectivity_valid_levels": 0,
+          "unobserved_positive_background_rain_levels": 6,
+          "unobserved_positive_background_snow_levels": 2,
+          "captured_local_levels": {
+            "density_entry": 0,
+            "density_return": 0,
+            "phase_allocation_return": 0,
+            "store_after": 0
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 22,
+            "snow_same": 22,
+            "graupel_same": 22
+          }
+        },
+        {
+          "point_id": "P20",
+          "role": "payload_positive_snow_reflectivity_invalid_proxy",
+          "shadow_i": 28,
+          "shadow_j": 119,
+          "rn1_sample_index_zero_based": "",
+          "target_flat_index_yx": "",
+          "payload_radar_invalid_proxy": "True",
+          "external_control_distance_to_rn1_sample_km": "466.5140880332033",
+          "levels": 22,
+          "observed_post_true_levels": 0,
+          "reflectivity_valid_levels": 0,
+          "unobserved_positive_background_rain_levels": 4,
+          "unobserved_positive_background_snow_levels": 2,
+          "captured_local_levels": {
+            "density_entry": 0,
+            "density_return": 0,
+            "phase_allocation_return": 0,
+            "store_after": 0
+          },
+          "species_trends_vs_actual_input": {
+            "vapor_same": 22,
+            "cloud_water_same": 22,
+            "cloud_ice_same": 22,
+            "rain_same": 22,
+            "snow_same": 22,
+            "graupel_same": 22
+          }
+        }
+      ],
+      "limits": [
+        "The four external control reflectivity-invalid labels are payload/shadow proxies; captured reflectivity validity and radar_observed flags are reported independently.",
+        "The unchanged full radar analyzer gate also asserts equality between each selected REAL64 workarray sample and the published REAL32 state. That assertion is not applied here because the external controls include unaffected positive-background cells; mismatches are counted and shown.",
+        "The prior 20-point outer capture is not used as an equality reference for this changed point set.",
+        "This is sampled debugger state, not a mass-conservation or forecast-skill result."
+      ]
+    },
+    "limitations": [
+      "Only the frozen selected 20-column set is represented; observed rows are the valid reflectivity samples within those columns.",
+      "This is an equal-density comparison of archived captured operands, not historical density reconstruction, causal attribution, forecast skill, or a mass-conservation result.",
+      "Zero-background ratios are null; zero-background samples remain included in counts and concentration sums."
+    ],
+    "input_sha256": {
+      "docs/evidence/cp02_density_controls_20261029/capture/hydro_capture.json.gz": "b3686b7a7b3294c90504e71f75d17a8210f670df7608bef64714a27f777a6321",
+      "docs/evidence/cp02_density_controls_20261029/capture/shadow_points.csv": "0243e5cd8e29638b32edc501a68ab50f1f7de4415625b5301cf2b2b6f905bebd",
+      "docs/evidence/cp02_density_controls_20261029/controls/capture_points.csv": "5c842c51422cf144bce81ec2143258e3b54a0de7c85674d91a8194b826e14472",
+      "tools/cp02_control_capture_analysis.py": "769a9aac1c6c0da53d7cd215bda6bb4a6b8285c0236769fe45e8bce89c98fd71",
+      "tools/cp02_control_density_comparison.py": "13180bc609d3cfee729ddaeadec83dd00eaac902f3e7dfe4c4e97b85d6559dbf",
+      "tests/test_cp02_control_density_comparison.py": "d141a2b16dd103035bd491a11d156aa68a652f51bc5410968a0c35c947e95afe"
+    }
+  }
+}

@@ -1,0 +1,186 @@
+{
+  "status": "PASS_SCOPED_REPRODUCIBILITY",
+  "base_commit": "8c278b643c5fa2b663f32d2b68d0f59e0301a989",
+  "fixed_issue": "Exact required standard analyzer log restored and tracked with narrowly scoped ignore exception; no old analyzer/physics changes",
+  "old_manifest": {
+    "tracked_artifacts": 50,
+    "sizes_and_hashes_match": 50,
+    "old_manifest_unchanged": true
+  },
+  "tests": {
+    "existing_focused": 106,
+    "new_science": 8,
+    "new_evidence": 1,
+    "total_unique": 115,
+    "maintained_runners": [
+      8,
+      1
+    ],
+    "runners_included_in_total": true,
+    "clean_export": "clean_export.json",
+    "full_portable_suite": false
+  },
+  "science": {
+    "observed_samples": 141,
+    "phase_matched_group_rows": 18,
+    "historical_density_recovered": false,
+    "forecast_skill_established": false
+  },
+  "wrf_probe": {
+    "historical_executable_hash_verified": true,
+    "symbols_present": true,
+    "dwarf_present": false,
+    "compiled_source_identity_verified": false,
+    "new_runtime_capture": false,
+    "new_build_or_forecast": false
+  },
+  "limits": [
+    "Same captured density does not recover historical background generation.",
+    "Phase/QC stratification does not match temperature, height, storm and other causal conditions.",
+    "No new WRF first-call state capture or process budget; ABI argument/rank mapping remains needed.",
+    "RN1 timing/coverage, C2 T39/H/A/N and water/energy closure remain open.",
+    "Graph freshness is structural only."
+  ],
+  "artifacts": [
+    {
+      "path": ".gitignore",
+      "sha256": "f140f5b75fba28817c033f7f78da7a2dccee6fecbe1409332f517e1f072e230a",
+      "size_bytes": 549
+    },
+    {
+      "path": "docs/CP02_CONTROL_REPRODUCIBILITY_20261029.md",
+      "sha256": "8ce385c7c16601181e22442a0dd6cae3170ab4ee516422a2cc4b343376f22bc8",
+      "size_bytes": 5342
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/after_fix_cli.txt",
+      "sha256": "9f691b073f32eb4fd6d885744eb8473a3f79ef8ae6c213b96823ef1409e71abf",
+      "size_bytes": 450
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/before_fix.txt",
+      "sha256": "ccffe31f9b58816e8ecf61abf4a0178997e8d881a06e7399402dae28e212d263",
+      "size_bytes": 1595
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/clean_capture_cli.txt",
+      "sha256": "9f691b073f32eb4fd6d885744eb8473a3f79ef8ae6c213b96823ef1409e71abf",
+      "size_bytes": 450
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/clean_density_tier.txt",
+      "sha256": "7a0b03de4d2cbf5eb393d996b57dddc7e0ce0463ccee4f872656c0819cc225f1",
+      "size_bytes": 213
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/clean_evidence_tier.txt",
+      "sha256": "a50145a2497316def2a77484926bab728d9b9262549b596327684be0cf862d33",
+      "size_bytes": 203
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/clean_export.json",
+      "sha256": "b4167bc66e56ea11616a9e78ec48457e840a3bebbba0745d6a00ebc863bdc861",
+      "size_bytes": 937
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/clean_focused_tests.txt",
+      "sha256": "763ec7f2d174daef2418b82613875716d349fc4c9d2d04de5cec3910d3008d9b",
+      "size_bytes": 213
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/clean_science_cli.txt",
+      "sha256": "9a98ffd1d69bd4227c80c0696f1b6569f12063bb4844507c9f7ae9dfc0fff1be",
+      "size_bytes": 92
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/kg/apply_receipt.json",
+      "sha256": "3b3a01660dd6891a6de7f3b1ee3db3aa3151ddc465000eea75e09ec5562324c7",
+      "size_bytes": 4812
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/kg/baseline.json",
+      "sha256": "69a4679ac6bdadebe43c6b3a1aead7ab92f8776a2c02aa8dadb5181c440ca5ee",
+      "size_bytes": 129302
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/kg/publish_cp02_control_reproducibility.py",
+      "sha256": "cce5e343c00d1f8e829710a9157a41b5a9e84228948dbe4d02d74e047ad2b7e8",
+      "size_bytes": 11170
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/kg/root_go.json",
+      "sha256": "0346c1b83c19689ea0367ad495e7c422439fa29c575324c692a6cbe19503569a",
+      "size_bytes": 246
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/kg/selection_lock.json",
+      "sha256": "1c425e61c08fbadd4c6c93ec2726e53e4d2171fdc1526add31951f8617c9268e",
+      "size_bytes": 655
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/kg/stage_cp02_control_reproducibility.py",
+      "sha256": "05660bdb0c6ae698bb5e767b24babe0c94e5296df8db37a806d9cb3532502115",
+      "size_bytes": 13138
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/kg/stage_receipt.json",
+      "sha256": "d4de5924c4db73c5676adfa3c9466f923e88d927cd620d6f5c7c2d94dddc2946",
+      "size_bytes": 14551
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/science/README.md",
+      "sha256": "854ba72f62421dc04bcb51555223c7c7d92950c87d085ce9a932fcbe63d66a54",
+      "size_bytes": 2074
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/science/control_density_comparison.json",
+      "sha256": "1c00efb03d142259f34292f4b59a2b1a947add7a5275f4d2aa7e7393cb88f824",
+      "size_bytes": 76082
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/science/control_density_comparison.png",
+      "sha256": "38d3b5f541230bdb8e24b237bfc09abb6d2cc78d677725272f495b94c43aca06",
+      "size_bytes": 51745
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/science/control_density_groups.csv",
+      "sha256": "1706a3401e1dbb78e83cf8fcec410624e97e64a209e0c411057866bb95aca775",
+      "size_bytes": 7876
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/science/control_density_samples.csv",
+      "sha256": "7c7d1682b357e8e150b5e3f7a48d00b5f0720a45207e1829e18787137f859a80",
+      "size_bytes": 54014
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/team_review.json",
+      "sha256": "26ef6fe4ff10f99089006fc754458a2f09535f478fe1071adff6375711d49ed3",
+      "size_bytes": 3913
+    },
+    {
+      "path": "docs/evidence/cp02_control_reproducibility_20261029/wrf_probe/README.md",
+      "sha256": "371f623fc74aef842060a02b0cc53a24d23ef868cf26e97e9c8bd8d198e9cabb",
+      "size_bytes": 7459
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/capture/standard_radar_analyzer_attempt.log",
+      "sha256": "7b38e3165cf733ba38a849042a5abe7083189d6ce90b05edcb8c70b302cda405",
+      "size_bytes": 1265
+    },
+    {
+      "path": "tests/test_cp02_control_density_comparison.py",
+      "sha256": "d141a2b16dd103035bd491a11d156aa68a652f51bc5410968a0c35c947e95afe",
+      "size_bytes": 5546
+    },
+    {
+      "path": "tests/test_cp02_density_evidence.py",
+      "sha256": "a329b47b3e1889dd879db903baa99424fb6d2dc24a4ca47af020158efa4d6fc1",
+      "size_bytes": 1062
+    },
+    {
+      "path": "tools/cp02_control_density_comparison.py",
+      "sha256": "13180bc609d3cfee729ddaeadec83dd00eaac902f3e7dfe4c4e97b85d6559dbf",
+      "size_bytes": 15255
+    }
+  ]
+}
