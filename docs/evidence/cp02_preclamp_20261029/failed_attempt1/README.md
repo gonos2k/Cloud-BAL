@@ -1,0 +1,3 @@
+# Failed OFF capture attempt
+
+The first OFF diagnostic was intentionally terminated during the first outer KDM6 call. Its Python breakpoint callback recorded events despite a false GDB breakpoint condition, so the resulting partial data are invalid and excluded from analysis. The archived helper and rank 1 log preserve the attempted mechanism; the large incomplete raw records remain in scratch `/var/tmp/cp02-thermo-response-20261029-q6s9g46i/OFF/capture` and are not accepted evidence. The retry uses an explicit destination-address comparison inside the callback and a new scratch preparation (`runtime/prepare_v2.json`).

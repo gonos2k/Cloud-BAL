@@ -1,0 +1,36 @@
+{
+  "checks": {
+    "dated_snapshots": "all 196 prior snapshot inventories and bytes preserved; 96 to 97 KLAPS50, 100 to 101 Cloud-BAL",
+    "frozen_sources": "6 extracted Python sources and 108 hash-only files match selection lock",
+    "prior_team_review": "all 116 original bindings unchanged",
+    "published_readback": "13 targets, including six snapshot files, match publication receipt and stage hashes; five wiki files match stage hashes",
+    "stage_integrity": "five recorded diagnostic counters zero for each graph, prior node IDs preserved",
+    "unrelated_dirty_status": "unchanged in both corpora"
+  },
+  "decision": "GO",
+  "deltas": {
+    "Cloud-BAL": {
+      "communities": 15,
+      "edges": 73,
+      "nodes": 44
+    },
+    "KLAPS50": {
+      "communities": -13,
+      "edges": 74,
+      "nodes": 44
+    }
+  },
+  "kg_evidence_sha256": {
+    "audit.md": "0ec5b23e35dcd96be4191e0618afc080c3e34644aed0cdfc6d9d446be6f07b2a",
+    "baseline.json": "d4d502fae2b146327516f7d1aa671274b596e366c642298b180bec49801acdd4",
+    "publish_go.json": "4edd8375abf1418721bc8c2004ed6020dd64283a8aaa11bd58921d4113a0d963",
+    "publish_kg.py": "054367a500237df9718e32221d8bf65915c98bfe32e255c7813e5d3b13860bf7",
+    "publish_receipt.json": "437c481f8e5fe7542cd2ec2abb3d53f96443938feda61948e360674971b6937a",
+    "selection_lock.json": "94eb2e586a2bb96c75f8a60c6b49614b0a963d3ceb409b53b59051426169ea4c",
+    "stage_kg.py": "89e33703bebd9f13eb77657d470d4e71de996be363a338ab373bb1ea06deb6b2",
+    "stage_receipt.json": "9acc570c0bb9d7ce7f7e3d479c2453447f388eeaa598e1836b2516bef8c790ef",
+    "stage_validation.json": "f4ee6f442d6eadc78862c37d560d4212225691e9baf9430eb1fc87304c74f4fc"
+  },
+  "limitations": "Six Python files structurally extracted; 108 paths hash-bound only. Document semantics not refreshed and Fortran cross-file call extraction is partial. Graph freshness does not establish runtime or scientific validation.",
+  "team_review_sha256": "aaf7e401d7fa31587c43c9b9ef6cd3e16ac0ba7dd576a653f814e49b0213efee"
+}

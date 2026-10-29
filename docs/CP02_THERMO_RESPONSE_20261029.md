@@ -40,7 +40,7 @@ P05, native k=8의 네 모서리 가중값은 다음과 같다. P05는 적중 �
 
 같은 과거 실행파일 SHA-256 `de110a7f…c168`과 pinned Intel 환경을 사용해 새 scratch에서 세 실험을 실행했다. 각 실행은 첫 KDM6 반환 뒤 의도적으로 종료했으며 MPI 종료 코드 255는 예보 완료가 아니다. 각 arm의 원래 입력 88개와 복사본의 실행 후 해시, 초기 history와 보존 history의 바이트 동일성을 확인했다. [실행 준비](evidence/cp02_thermo_response_20261029/runtime/prepare_v6.json)와 [HYDRO](evidence/cp02_thermo_response_20261029/captures/HYDRO/receipt.json)·[OFF](evidence/cp02_thermo_response_20261029/captures/OFF/receipt.json)·[LIQUID](evidence/cp02_thermo_response_20261029/captures/LIQUID/receipt.json) receipt에 연결한다.
 
-내부 함수 진입은 `0x25e2490`, 호출자 반환은 `0x25e0fe9`이다. 선택 기둥의 작업 배열 QR/QC/Q는 바깥 인자의 원시 바이트와 대조했다. 내부 t는 REAL32(th×pii)와 1 ULP 이내인지 확인했다. 단위나 물리적 의미를 확정하는 검사는 아니다. 실제 null인 `lat` 인자는 사용하지 않고 Q 슬라이스 주소의 행 간격으로 j를 재계산해 바깥 격자 소유권과 대조했다. null인 내부 인자는 미확보로 보존했다.
+내부 함수 진입은 `0x25e2490`, 호출자 반환은 `0x25e0fe9`이다. 선택 기둥의 작업 배열 QR/QC/Q는 바깥 인자의 원시 바이트와 대조했다. 내부 t는 REAL32(th×pii)와 1 ULP 이내인지 확인했다. 단위나 물리적 의미를 확정하는 검사는 아니다. 선택된 성공 기록 12개에서 후보 `lat` 인자 32의 원시 슬롯은 `0x27`이다. 0이 아니지만 유효한 포인터로 검증된 값은 아니며 역참조하지 않았다. Q 슬라이스 주소의 행 간격으로 j를 재계산해 바깥 격자 소유권과 대조했다. 성공 기록에서 null인 슬롯은 39–44이며 미확보로 보존했다. 더 넓은 null 목록은 실패한 두 번째 계측 시도의 기록이다. [정정 근거](evidence/cp02_preclamp_20261029/science/independent_check.json)
 
 각 실험에서 P01/P05 네 모서리·k=8의 내부 진입/반환 8개 표본을 확보했다. 그중 P01_00 `(163,73,8)`, P05_00 `(163,70,8)`에서는 내부 qrs/qci/q/t 네 주소의 하드웨어 감시점을 사용했다. 감시 사건의 순번은 물리적 시간축이 아니며, 같은 값을 다시 저장한 명령을 모두 열거하는 것도 아니다.
 

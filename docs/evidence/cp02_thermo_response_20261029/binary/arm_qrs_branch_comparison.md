@@ -38,12 +38,15 @@ LIQUID stores a positive remainder. At P01_00, HYDRO stores zero, LIQUID stores
 a positive remainder, and OFF first stores `7.28e-12` then writes exact zero
 at the separate later PC `0x25f7270`.
 
-The `0x25f4dc0` block has one direct incoming branch in this range, the
-`je 0x25f4dc0` at `0x25f4ae3`. Its preceding ordered comparison and flag setup
-require `xmm15 == 0` for that branch. Since all arms record a qrs write at
-`0x25f4e58`, all followed this branch. The observable difference is the
-computed, clamped value stored by that shared path, not a distinct instruction
-path in these samples.
+The store alone does not identify the predecessor: the `je 0x25f4dc0`
+at `0x25f4ae3` and the nonzero path via `0x25f4ae9` both converge at
+`0x25f4dcd`. The comparison at `0x25f4ac8` and flag setup make the `je`
+taken for ordered `xmm15 == 0`. At the convergence, `movaps xmm10,xmm15`
+at `0x25f4dd1` retains that operand; the instructions through the watched
+store do not modify `xmm10`. All six target watchpoint records have zero in
+its low REAL32 lane. Together with that instruction sequence, this supports
+the zero comparison and taken `je` for these six samples. The original
+same-store-only inference was insufficient. [Independent check](../../cp02_preclamp_20261029/science/independent_check.json).
 
 The event #2 Q increment and event #3 qrs reduction are close in magnitude in
 these REAL32 words. For example at P05_00 in LIQUID both have magnitude
