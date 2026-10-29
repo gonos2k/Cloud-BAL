@@ -1,0 +1,37 @@
+{
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/gdb",
+        "--version"
+      ],
+      "exit_code": 0,
+      "stdout": "GNU gdb (Ubuntu 15.0.50.20240403-0ubuntu1) 15.0.50.20240403-git\nCopyright (C) 2024 Free Software Foundation, Inc.\nLicense GPLv3+: GNU GPL version 3 or later <http://gnu.org/licenses/gpl.html>\nThis is free software: you are free to change and redistribute it.\nThere is NO WARRANTY, to the extent permitted by law.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "mpirun",
+        "-version"
+      ],
+      "exit_code": 0,
+      "stdout": "Intel(R) MPI Library for Linux* OS, Version 2021.18.0 Build 20260327 (id: 821f207)\nCopyright 2003-2026, Intel Corporation.\n",
+      "stderr": ""
+    },
+    {
+      "argv": [
+        "ldd",
+        "/var/tmp/cp02-wrf-first-call-20261029-1lo2fl6b/wrf.exe"
+      ],
+      "exit_code": 0,
+      "stdout": "\tlinux-vdso.so.1 (0x00007ffc2e5f8000)\n\tlibmpifort.so.12 => /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib/libmpifort.so.12 (0x000070493c600000)\n\tlibmpi.so.12 => /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib/libmpi.so.12 (0x0000704932000000)\n\tlibimf.so => /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so (0x0000704931bb1000)\n\tlibm.so.6 => /lib/x86_64-linux-gnu/libm.so.6 (0x000070493c517000)\n\tlibc.so.6 => /lib/x86_64-linux-gnu/libc.so.6 (0x000070493199f000)\n\tlibgcc_s.so.1 => /lib/x86_64-linux-gnu/libgcc_s.so.1 (0x000070493c4e9000)\n\tlibrt.so.1 => /lib/x86_64-linux-gnu/librt.so.1 (0x000070493ca0c000)\n\tlibdl.so.2 => /lib/x86_64-linux-gnu/libdl.so.2 (0x000070493ca07000)\n\t/lib64/ld-linux-x86-64.so.2 (0x000070493ca30000)\n\tlibintlc.so.5 => /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libintlc.so.5 (0x000070493c486000)\n",
+      "stderr": ""
+    }
+  ],
+  "environment_selected": {
+    "I_MPI_ROOT": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18",
+    "LD_LIBRARY_PATH": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tcm/1.5/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/umf/1.1/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tcm/1.5/env/../lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/tbb/2023.0/env/../lib/intel64/gcc4.8:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/opt/mpi/libfabric/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/debugger/2026.0/opt/debugger/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/opt/compiler/lib:/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib",
+    "CLOUD_BAL_FC": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx"
+  },
+  "scope": "Version/link inspection under same pinned profile; runtime loaded files independently pinned from proc maps in receipt.json"
+}

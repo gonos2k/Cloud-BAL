@@ -1,0 +1,199 @@
+{
+  "captured_at_utc": "2026-10-29T05:35:46.987070+00:00",
+  "causality": {
+    "agent_report": "ABI agent reported invoking a full-worktree Graphify refresh; parent confirmed this was unsolicited and must be excluded from the selective WRF-first-call graph publication.",
+    "classification": "UNINTENDED_FULL_WORKTREE_GRAPHIFY_REFRESH",
+    "evidence_in_report": {
+      "built_from_commit": "89484dc0",
+      "estimated_words": 8254084,
+      "scan_root_corpus_files": 4380,
+      "title": "cloudbal-cp02-wrf-first-call"
+    },
+    "interpretation": "Graphify used the whole isolated Cloud-BAL worktree as corpus. This refresh includes docs, tests, tools, legacy source, and evidence (including JSON, Markdown, and other files), and predates the frozen selected-source path list. It is not a valid selective WRF-first-call update.",
+    "manifest_scope": {
+      "HEAD_entries": 124,
+      "added_by_top_level": {
+        "docs": 3504,
+        "patches": 1,
+        "src": 38,
+        "tests": 697,
+        "tools": 269
+      },
+      "added_entries": 4509,
+      "after_by_top_level": {
+        "README.md": 1,
+        "docs": 3519,
+        "patches": 1,
+        "src": 78,
+        "tests": 751,
+        "tools": 283
+      },
+      "after_entries": 4633,
+      "removed_entries": 0,
+      "scoped_Wrf_python_paths_present_during_refresh": {
+        "tests/test_cp02_wrf_first_call.py": false,
+        "tools/cp02_wrf_first_call.py": false
+      }
+    }
+  },
+  "diff_totals": {
+    "deletions": 30699,
+    "insertions": 807710
+  },
+  "disposition": "EXCLUDE all seven generated graphify-out tracked files from PR and selective update input; parent restored exactly these paths to HEAD after the audit was recorded. No maintained root was modified by this isolated refresh audit.",
+  "git_diff_numstat": {
+    "graphify-out/.graphify_labels.json": {
+      "deletions": 14,
+      "insertions": 1881
+    },
+    "graphify-out/.graphify_labels.json.sig": {
+      "deletions": 1,
+      "insertions": 1
+    },
+    "graphify-out/GRAPH_REPORT.md": {
+      "deletions": 138,
+      "insertions": 8054
+    },
+    "graphify-out/cache/stat-index.json": {
+      "deletions": 1,
+      "insertions": 1
+    },
+    "graphify-out/graph.html": {
+      "deletions": 4,
+      "insertions": 4
+    },
+    "graphify-out/graph.json": {
+      "deletions": 30213,
+      "insertions": 770387
+    },
+    "graphify-out/manifest.json": {
+      "deletions": 328,
+      "insertions": 27382
+    }
+  },
+  "graph_delta": {
+    "HEAD": {
+      "communities": 113,
+      "edges": 3094,
+      "nodes": 1499
+    },
+    "after": {
+      "communities": 1980,
+      "edges": 42263,
+      "nodes": 26466
+    },
+    "delta": {
+      "communities": 1867,
+      "edges": 39169,
+      "nodes": 24967
+    }
+  },
+  "graphify_version": "graphify 0.9.53",
+  "maintained_root_baseline": {
+    "Cloud-BAL": 97,
+    "KLAPS50": 93,
+    "baseline_path": "docs/evidence/cp02_wrf_first_call_20261029/kg/baseline.json",
+    "snapshot_count_total": 190
+  },
+  "restoration_verification": {
+    "ignored_full_refresh_dated_output": {
+      "directory": "graphify-out/2026-10-29",
+      "disposition": "Retained as ignored automatic pre-refresh backup; its five files match the prior HEAD Graphify artifacts. It is excluded from tracked diff, selective stage inputs, and publication.",
+      "files": {
+        "graphify-out/2026-10-29/.graphify_analysis.json": "ab2169b32ac986a9b12dbeec523d11b545547daf307d06a2deb0f024524364fd",
+        "graphify-out/2026-10-29/.graphify_labels.json": "cfced50655a31a6c84467e903072b98ed4c7410ca029fe6103d4bc77b6209d40",
+        "graphify-out/2026-10-29/GRAPH_REPORT.md": "26cbfc9116ddddabce652940cfbc1c25679f2662747eef6ee6e30d9069c3bd3c",
+        "graphify-out/2026-10-29/graph.json": "d830da780a5034f09d38f5de919da698b4ad995040c8ae14bd9c28293b81f2f6",
+        "graphify-out/2026-10-29/manifest.json": "d5637dae6cdbb559132b5b6676f88730b59baf96e284eadd628d8f76cafa2b8c"
+      },
+      "git_ignored": true,
+      "ignore_rules": [
+        {
+          "path": "graphify-out/2026-10-29/.graphify_analysis.json",
+          "rule": ".gitignore:22:graphify-out/20??-??-??/\tgraphify-out/2026-10-29/.graphify_analysis.json"
+        },
+        {
+          "path": "graphify-out/2026-10-29/.graphify_labels.json",
+          "rule": ".gitignore:22:graphify-out/20??-??-??/\tgraphify-out/2026-10-29/.graphify_labels.json"
+        },
+        {
+          "path": "graphify-out/2026-10-29/GRAPH_REPORT.md",
+          "rule": ".gitignore:22:graphify-out/20??-??-??/\tgraphify-out/2026-10-29/GRAPH_REPORT.md"
+        },
+        {
+          "path": "graphify-out/2026-10-29/graph.json",
+          "rule": ".gitignore:22:graphify-out/20??-??-??/\tgraphify-out/2026-10-29/graph.json"
+        },
+        {
+          "path": "graphify-out/2026-10-29/manifest.json",
+          "rule": ".gitignore:22:graphify-out/20??-??-??/\tgraphify-out/2026-10-29/manifest.json"
+        }
+      ]
+    },
+    "paths": {
+      "graphify-out/.graphify_labels.json": {
+        "matches_HEAD": true,
+        "sha256": "cfced50655a31a6c84467e903072b98ed4c7410ca029fe6103d4bc77b6209d40"
+      },
+      "graphify-out/.graphify_labels.json.sig": {
+        "matches_HEAD": true,
+        "sha256": "8aa26c686cfe1c09cfeee17cbca7c6b50225054de6344dc0abaea08b2ae7c34a"
+      },
+      "graphify-out/GRAPH_REPORT.md": {
+        "matches_HEAD": true,
+        "sha256": "26cbfc9116ddddabce652940cfbc1c25679f2662747eef6ee6e30d9069c3bd3c"
+      },
+      "graphify-out/cache/stat-index.json": {
+        "matches_HEAD": true,
+        "sha256": "2d40c2e0bbc8ece70e7e6f11120407722bcde2124008c26a8fb9c35c7e041253"
+      },
+      "graphify-out/graph.html": {
+        "matches_HEAD": true,
+        "sha256": "ffe029bcd98597a22eca99b9a09d76834b052c0e49c5009998306cdcc0099be7"
+      },
+      "graphify-out/graph.json": {
+        "matches_HEAD": true,
+        "sha256": "d830da780a5034f09d38f5de919da698b4ad995040c8ae14bd9c28293b81f2f6"
+      },
+      "graphify-out/manifest.json": {
+        "matches_HEAD": true,
+        "sha256": "d5637dae6cdbb559132b5b6676f88730b59baf96e284eadd628d8f76cafa2b8c"
+      }
+    },
+    "tracked_generated_paths_match_HEAD": true,
+    "untracked_dated_graphify_output_in_status": false
+  },
+  "schema": "cp02_wrf_first_call_unintended_graphify_refresh_audit_v1",
+  "source_head": "89484dc0fc3109a9158d05ef9da102e820c9720b",
+  "source_worktree": "/var/tmp/cloudbal-cp02-wrf-first-call",
+  "tracked_generated_paths": {
+    "graphify-out/.graphify_labels.json": {
+      "HEAD_sha256": "cfced50655a31a6c84467e903072b98ed4c7410ca029fe6103d4bc77b6209d40",
+      "after_sha256": "166de9f18a90e6727de3a7ace01f2939e415b66ea51c145f2767c68c854ed8d0"
+    },
+    "graphify-out/.graphify_labels.json.sig": {
+      "HEAD_sha256": "8aa26c686cfe1c09cfeee17cbca7c6b50225054de6344dc0abaea08b2ae7c34a",
+      "after_sha256": "a2d3709558e675f95ea3197619b58ed21dc8614527efb4ed4cf5bea6dc996bec"
+    },
+    "graphify-out/GRAPH_REPORT.md": {
+      "HEAD_sha256": "26cbfc9116ddddabce652940cfbc1c25679f2662747eef6ee6e30d9069c3bd3c",
+      "after_sha256": "e1e85facb103621f4bc1fa949232831b8151baf1a2cb2c899aa9b14d5b6f347d"
+    },
+    "graphify-out/cache/stat-index.json": {
+      "HEAD_sha256": "2d40c2e0bbc8ece70e7e6f11120407722bcde2124008c26a8fb9c35c7e041253",
+      "after_sha256": "e1ddafca3c7ea79973f70f246424eda9710c7d06b7e3de4c1041817c53d12195"
+    },
+    "graphify-out/graph.html": {
+      "HEAD_sha256": "ffe029bcd98597a22eca99b9a09d76834b052c0e49c5009998306cdcc0099be7",
+      "after_sha256": "186108fe8c8591244f8a7a898589acad51fdd52f381992da59f10fe09722ab46"
+    },
+    "graphify-out/graph.json": {
+      "HEAD_sha256": "d830da780a5034f09d38f5de919da698b4ad995040c8ae14bd9c28293b81f2f6",
+      "after_sha256": "68f95347d8f7561140c44661eca22346be89d71914227ddceed740055a62c5c8"
+    },
+    "graphify-out/manifest.json": {
+      "HEAD_sha256": "d5637dae6cdbb559132b5b6676f88730b59baf96e284eadd628d8f76cafa2b8c",
+      "after_sha256": "e774721884a4b08518c772267a6dd90547656e77bfabadc93d7943126e8c44cb"
+    }
+  }
+}

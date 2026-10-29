@@ -1,0 +1,607 @@
+{
+  "status": "PASS_SCOPED_FIRST_KDM6_CAPTURE",
+  "base_commit": "89484dc0fc3109a9158d05ef9da102e820c9720b",
+  "runtime": {
+    "arm": "historical CP02 HYDRO",
+    "same_archived_binary": true,
+    "ranks": 8,
+    "omp_threads": 1,
+    "entry_return_pairs": 8,
+    "unique_selected_keys": 624,
+    "unique_horizontal_columns": 16,
+    "itimestep": 1,
+    "delt_seconds": 20,
+    "launcher_exit": 255,
+    "termination": "intentional debugger stop after eight return captures",
+    "forecast_status": "NOT_COMPLETED",
+    "fortran_rebuild": false,
+    "initial_history_byte_identical": true,
+    "copied_and_original_inputs_unchanged": 88
+  },
+  "analysis": {
+    "profiles_rows": 13232,
+    "source_labels": "candidate co-located source; compiled source identity remains unverified",
+    "status": "PASS_SCOPED_CAPTURE_VALIDATION",
+    "new_regressions": 26,
+    "full_portable_suite": false
+  },
+  "tests": {
+    "clean_tracked_export_passed": 141,
+    "new_included": 26,
+    "maintained_file_runner_passed": 26,
+    "runner_included_in_total": true,
+    "analysis_three_files_byte_identical": true,
+    "plot_png_and_metadata_byte_identical": true,
+    "python": "3.12.3",
+    "numpy": "1.26.4",
+    "netCDF4": "1.7.4",
+    "pytest": "8.1.1",
+    "matplotlib": "3.10.8"
+  },
+  "old_evidence_preserved": {
+    "PR123_artifacts": 50,
+    "PR124_artifacts": 28
+  },
+  "kg": {
+    "status": "PUBLISHED_AND_READBACK_PASSED",
+    "snapshot": "2026-10-29-cp02-wrf-first-call",
+    "previous_snapshots_preserved": 190,
+    "current_snapshots": 192,
+    "selected_python_paths": 2,
+    "delta_each": {
+      "nodes": 35,
+      "edges": 82
+    },
+    "extraction_is_not_runtime_or_scientific_validation": true
+  },
+  "limits": [
+    "HYDRO only; no OFF/LIQUID first-call comparison or forecast skill claim.",
+    "Variable names are positional ABI candidates; no DWARF or full compiled-source identity.",
+    "No actual model-clock/RK ordinal capture; step/dt are live, 12:00:20 is derived.",
+    "No same-call MU/hybrid dry-mass ledger, process decomposition or water/energy closure.",
+    "RN1 upstream timing/coverage, C2 T39 and H/A/N forecast completion remain open.",
+    "Raw tool logs and CSV line endings are preserved; whitespace check applies to maintained code/test/report."
+  ],
+  "artifacts": [
+    {
+      "path": "docs/CP02_WRF_FIRST_CALL_20261029.md",
+      "sha256": "9e9a1640eafaa3313a5c4a82bb9b99ab09f91c3677b085bb46997cd452f03940",
+      "size_bytes": 8130
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/README.md",
+      "sha256": "5e458611ea1be935cd2cc2c3028911f6b2aafd998f7d135a424e21a4a13366bd",
+      "size_bytes": 7664
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/binary_identity.txt",
+      "sha256": "f036ef6ad67c5e5e83884a24e755cc5fd9c7d72d3418af8d8072042893aa30e6",
+      "size_bytes": 574
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/binary_sha256.txt",
+      "sha256": "4e108b426b49e1c720be9d86a190447160718dcab73076a72294858652b002dd",
+      "size_bytes": 121
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/call_setup.objdump.txt",
+      "sha256": "ec2a7678ceba97489ac3190908c83bbf81a7f63b52619772a2c472689996ecf8",
+      "size_bytes": 5066
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/capture_first_call.gdb",
+      "sha256": "ae836e8f94e505d2373e44dcf9fb1c78194203edf4d6d01b5b20d3e5a071eefd",
+      "size_bytes": 11483
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/commands.txt",
+      "sha256": "736e3c6008e2f691a054938b782d67defd8d2b54d0ea2969f9be09b5b752dfd6",
+      "size_bytes": 965
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/gdb_version.txt",
+      "sha256": "f7e37fff3414b9868c06354eee3f64d8041fa3bb1e9acc8dec3a25b2450bf69e",
+      "size_bytes": 313
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/hash_manifest.json",
+      "sha256": "4f331dcdba05df8707720cd8b15970672ce48715c3a480a2e7968eb0bc349b0e",
+      "size_bytes": 3603
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/metadata_commands.json",
+      "sha256": "f9bed955af3f6668b753b11307cbb5af85a81d5f4e9cd0565cca49b496d3f799",
+      "size_bytes": 1444
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/nm_relevant_symbols.txt",
+      "sha256": "e8f65b2d85c0a3512c75410acc694098ac35cd9f984a4b348d84e7b9c6ae6d77",
+      "size_bytes": 316
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/nm_version.txt",
+      "sha256": "cdd2926db3359fc64e866ce795b6ac786975191007611989da83d5c58e6821ca",
+      "size_bytes": 283
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/readelf_program_headers.txt",
+      "sha256": "162be81267c391aa6ca7721740157f4990f4fd67b81e96b73db56d3889646238",
+      "size_bytes": 2213
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/readelf_sections.txt",
+      "sha256": "c40b6e6b0b6f45f5689318349508369c239421a8e04e8003aae533cc7119bf73",
+      "size_bytes": 3483
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/readelf_version.txt",
+      "sha256": "6aca4321453ac381865f3d353ea7896b150c05026483cb9db0047eee6916723d",
+      "size_bytes": 288
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/solve_em_call_order.txt",
+      "sha256": "6318ffbabad3b00841d68c74bcf1f28fba60eb17bfd52e51af934b15d2715266",
+      "size_bytes": 445
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/source_candidates.txt",
+      "sha256": "cff9fc7bae91632db09fc1a893b098eb86b57bd2712d8606b8ee45a423a20ac5",
+      "size_bytes": 584
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/symbols.txt",
+      "sha256": "02b2872c4f0df50d4b82a5d2b869733060e367c760b8419026dd350fd2661e49",
+      "size_bytes": 271
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/abi/tool_versions.txt",
+      "sha256": "e29d0e43e26726e8fa4c3282d86de5d8bfaad38c3da7c5a4969cdd7d3275bcbf",
+      "size_bytes": 161
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/analysis/README.md",
+      "sha256": "9f8b6c6cd6e0c0eacdac610a06d46ff88a0272844def384f35faf2224f3bf459",
+      "size_bytes": 1956
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/analysis/final/manifest.json",
+      "sha256": "f944f55b39c72403cd04c8d55de26ac4a4427d3f65769934a9fcf55a53145657",
+      "size_bytes": 2006
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/analysis/final/profiles.csv",
+      "sha256": "69020c9c3eddb757879c2647a5605bd868f7d28095b4a37b252c76b4b75c88ef",
+      "size_bytes": 1053367
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/analysis/final/summary.json",
+      "sha256": "b701518df7eda4f5cde84a7ef5dd8e1fed6db3086b8e75a92a96af0c6c310b2e",
+      "size_bytes": 13775
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/attempts/startup_shell/capture_first_call.gdb",
+      "sha256": "57c374169ce7db66cfe520349c221b60ef6afd095e1a5c480a8e91107ab61d9a",
+      "size_bytes": 11429
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/attempts/startup_shell/gdb_rank0.txt",
+      "sha256": "bed36f9508774c8874f538cfdad0ff73d404509ff897d9cd030ce297babcebde",
+      "size_bytes": 485
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/attempts/startup_shell/gdb_rank1.txt",
+      "sha256": "bed36f9508774c8874f538cfdad0ff73d404509ff897d9cd030ce297babcebde",
+      "size_bytes": 485
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/attempts/startup_shell/gdb_rank2.txt",
+      "sha256": "bed36f9508774c8874f538cfdad0ff73d404509ff897d9cd030ce297babcebde",
+      "size_bytes": 485
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/attempts/startup_shell/gdb_rank3.txt",
+      "sha256": "bed36f9508774c8874f538cfdad0ff73d404509ff897d9cd030ce297babcebde",
+      "size_bytes": 485
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/attempts/startup_shell/gdb_rank4.txt",
+      "sha256": "bed36f9508774c8874f538cfdad0ff73d404509ff897d9cd030ce297babcebde",
+      "size_bytes": 485
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/attempts/startup_shell/gdb_rank5.txt",
+      "sha256": "bed36f9508774c8874f538cfdad0ff73d404509ff897d9cd030ce297babcebde",
+      "size_bytes": 485
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/attempts/startup_shell/gdb_rank6.txt",
+      "sha256": "bed36f9508774c8874f538cfdad0ff73d404509ff897d9cd030ce297babcebde",
+      "size_bytes": 485
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/attempts/startup_shell/gdb_rank7.txt",
+      "sha256": "bed36f9508774c8874f538cfdad0ff73d404509ff897d9cd030ce297babcebde",
+      "size_bytes": 485
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/attempts/startup_shell/launch.sh",
+      "sha256": "7854f277f5416b371ecb27aff87a55ee8f3279c3bef7ca9dc25f02e1ec6b55f0",
+      "size_bytes": 823
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/attempts/startup_shell/launcher.exit",
+      "sha256": "4355a46b19d348dc2f57c046f8ef63d4538ebb936000f3c9ee954a27460dd865",
+      "size_bytes": 2
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/attempts/startup_shell/launcher.txt",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/attempts/startup_shell/receipt.json",
+      "sha256": "562654f44e8ef035b7ff2e549ff04d5a090b9b9648a7572e0cef3a40a67dc522",
+      "size_bytes": 206
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/capture_rank0_pid3948768.json.gz",
+      "sha256": "4593ffe70749a04338a8fa027729e444f6a87cd35a4cfffd9e9cd4718daad650",
+      "size_bytes": 12324
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/capture_rank1_pid3948760.json.gz",
+      "sha256": "f3e6849243dc70a7a332f4c2b8c206f4443a886b5a223bcaa68e52b2d0ec8fc8",
+      "size_bytes": 197118
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/capture_rank2_pid3948766.json.gz",
+      "sha256": "3f8c338a1bc34c1f98a6ca2ab704086bbacae9e381ea8dfe7d3ccb68b64e48da",
+      "size_bytes": 12299
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/capture_rank3_pid3948758.json.gz",
+      "sha256": "2bb95f549e86787b9b8173b5a7b94329bef08697407d64cebad3630af63e15e4",
+      "size_bytes": 128784
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/capture_rank4_pid3948755.json.gz",
+      "sha256": "85c5dbd4c67fc29b358e216e7cb15f6a60fcb025259c6ff844f2affcc1fca626",
+      "size_bytes": 12305
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/capture_rank5_pid3948763.json.gz",
+      "sha256": "e4682030f70b78876f963f01254f9bd037b0207877359aed0993f655b0233098",
+      "size_bytes": 12296
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/capture_rank6_pid3948752.json.gz",
+      "sha256": "255bb85c3ac59f7473a03016c1124fae79643508ca1232b91dd41a41d7dddd27",
+      "size_bytes": 12304
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/capture_rank7_pid3948764.json.gz",
+      "sha256": "ed5da9471db6d63420eab7f425314091c64d1307e75a11a65d24c1f25ba5271b",
+      "size_bytes": 12303
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/environment.json",
+      "sha256": "26f19035a60bd74f572c28e7514f03272010afb617104e09c1380f9d9f12dec9",
+      "size_bytes": 2843
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/gdb_rank0.txt",
+      "sha256": "de0475dc8612fcc1408901f08e53f26e348c31f6a144a869b6219f43e37993b0",
+      "size_bytes": 781
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/gdb_rank1.txt",
+      "sha256": "2ae9a699b8d46012285dcd5d8e65f163c69968e93711003f78575d71d437aedf",
+      "size_bytes": 1071
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/gdb_rank2.txt",
+      "sha256": "6310287fe8fa09e38462b6e22101ef8b188bfc5854ebb7f1a582f0e224f16ae0",
+      "size_bytes": 784
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/gdb_rank3.txt",
+      "sha256": "5299ade421738c5023ef885d211f0145853367a6f47a19e66b40fa0b63b38028",
+      "size_bytes": 787
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/gdb_rank4.txt",
+      "sha256": "57fe5bd229b2a80f381c897c728aee7e156f26bb9233a954bcf4efdf962ec565",
+      "size_bytes": 786
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/gdb_rank5.txt",
+      "sha256": "9f582d854eebcebdf46b8d1b5fc01c7b55fa468fac06afb1a98ea3144b99fcc7",
+      "size_bytes": 789
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/gdb_rank6.txt",
+      "sha256": "28e364aa4f9c1b3f00981e535866efd0326e338277b5779e3dfab88fd3246c0f",
+      "size_bytes": 786
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/gdb_rank7.txt",
+      "sha256": "53d06cb145d14fe3a0bf2cf9d549d407a3ff0df6d0a2203bb9d7106f99b0b50c",
+      "size_bytes": 789
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/input_copy.json",
+      "sha256": "edbfcd82fe4c4b18693fd46575083bca28fedb5274a01f459a8211d368d4b313",
+      "size_bytes": 14249
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/launch.sh",
+      "sha256": "7854f277f5416b371ecb27aff87a55ee8f3279c3bef7ca9dc25f02e1ec6b55f0",
+      "size_bytes": 823
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/launcher.exit",
+      "sha256": "ce8bafb38615aeb5d44ebbabe78ec14ac35a5de87bdc5ad5ea82a72656024ce4",
+      "size_bytes": 4
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/launcher.txt",
+      "sha256": "f34af0dac44735ded4d055e8facf7a1849d63e31f4b8dc04060984afbc9b2566",
+      "size_bytes": 2142
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/maps_rank0_pid3948768.txt",
+      "sha256": "3c0a7a56996afeb384e9825f0ea24701d284dcf0a34f50218e25c0fa66c04bc2",
+      "size_bytes": 9195
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/maps_rank1_pid3948760.txt",
+      "sha256": "808d0e2539235031b807ca75378a0d09ee1ee3db9742f27feaea1d1894d7e2d2",
+      "size_bytes": 9195
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/maps_rank2_pid3948766.txt",
+      "sha256": "ec1e7c82971c107922567a1901cccfe8944bb60d120923cbf5350ff2a6b1d1a1",
+      "size_bytes": 9146
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/maps_rank3_pid3948758.txt",
+      "sha256": "c6db887349972dbb7b8dc297a911254a2c6d3ad97bb547bb28e358cef038f265",
+      "size_bytes": 9293
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/maps_rank4_pid3948755.txt",
+      "sha256": "073af7dec3decf758bd63b13edeabf166486a3d7b55f7996b3bc5085794fe587",
+      "size_bytes": 9097
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/maps_rank5_pid3948763.txt",
+      "sha256": "621ad1983ab451e5e0e9064d976234b77c1f7ddcd752736fa9c77f4fb5b6d2b4",
+      "size_bytes": 9195
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/maps_rank6_pid3948752.txt",
+      "sha256": "0f89025a350aa48a7d9051e625dd714e4cd2cbe280ef171e0f50937d46851f4f",
+      "size_bytes": 9146
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/maps_rank7_pid3948764.txt",
+      "sha256": "a6aaad8ad03b4c53211d8c9c6416204aa7235e7bf6c1a7b7deac0dfd007ef5cb",
+      "size_bytes": 9146
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rank_wrapper.sh",
+      "sha256": "838eb1a85e55ceb76dfdc630efda3da1e423d509d7e6aab05a6036b7f2f38c21",
+      "size_bytes": 176
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/receipt.json",
+      "sha256": "be5ee28110d63bca9e6eff8f28db84f55f2d5db82d2b785d188fd0a9aff15b8f",
+      "size_bytes": 12394
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.error.0000.txt",
+      "sha256": "489428ec0d2d8c724101450f6097ffca96ff1fee836c28a5b0514cf0c3fb04ba",
+      "size_bytes": 7572
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.error.0001.txt",
+      "sha256": "cc2a239b183ef9066954c4db73b71bf5646096faba9804ffed570dddc18e89f4",
+      "size_bytes": 14943
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.error.0002.txt",
+      "sha256": "6dfa83afcf0cffabd90776053b9baac1cb3c9966f1e04e03b5fddd2fccfd1301",
+      "size_bytes": 5855
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.error.0003.txt",
+      "sha256": "0e58d46bc087fc5a29c87ba187f5e66e7f22420a984c8e0a6dbff6f3140ca6d2",
+      "size_bytes": 19807
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.error.0004.txt",
+      "sha256": "0df4899db409e05abb789424d7be21bc56180b776dd074209bf76ad535df3750",
+      "size_bytes": 5544
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.error.0005.txt",
+      "sha256": "0db5d341896c55471eaa8627a466e4a27ba2f2109f54718a31804e699f4a3382",
+      "size_bytes": 3455
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.error.0006.txt",
+      "sha256": "96b1e46cf80e93d904a28033e1dea83975708a8abcc1d1cb4eeaeb5c5483b8d7",
+      "size_bytes": 4744
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.error.0007.txt",
+      "sha256": "9fcbccb540c7ec89fd9b79a7c699057ea83750b208c605bd5db67ddac4db031d",
+      "size_bytes": 3871
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.out.0000.txt",
+      "sha256": "20c072159a0c878faf3e0198738518b75ece257675e2b863ed52afac5e12a2e1",
+      "size_bytes": 7475
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.out.0001.txt",
+      "sha256": "e7703afe12f9404c5f4836a5b7af52c9732f38e844ec7ccd591a76a0f22f022d",
+      "size_bytes": 14846
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.out.0002.txt",
+      "sha256": "c4c556f2e4daaeaed088157d01bbd56e5d63faa7c0fcc63a184a20f5cdc3de53",
+      "size_bytes": 5758
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.out.0003.txt",
+      "sha256": "15ddf34fe7ffa6a588c1af407b12458534fac00bb040e422c6718e8e8d2a1da3",
+      "size_bytes": 19710
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.out.0004.txt",
+      "sha256": "df682d600682722192dd7a17a637b11fbd9c6a65f481732621b2d009300643cb",
+      "size_bytes": 5447
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.out.0005.txt",
+      "sha256": "b141cdfeefc5cd71f69c9c3519dc3fdc7260e9a486439043cce0a078afbe710f",
+      "size_bytes": 3358
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.out.0006.txt",
+      "sha256": "0c6d88db77ef2f67bb8b95b2e77cabdd2285e23700ec64403abbb7c0c56ed646",
+      "size_bytes": 4647
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/rsl.out.0007.txt",
+      "sha256": "0d9f032bb5b0d17142f31db6fbf645f335ea63cc1639293fb3b8b14f0f2457da",
+      "size_bytes": 3774
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/capture/selection.json",
+      "sha256": "38602c67768d0836c5f911c43ff4bcced57073f6f222f1c91a63499c16956c6e",
+      "size_bytes": 74562
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/clean_cli.txt",
+      "sha256": "e72552b371c775fb63c8c1c9e121100b8f66c7c6c20e55e40aa839af8ae917a1",
+      "size_bytes": 193
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/clean_export.json",
+      "sha256": "6248c1ce29ede6c678bad78600a4869a5e3d87559126e54f06486cab05a0dd78",
+      "size_bytes": 1305
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/clean_focused_tests.txt",
+      "sha256": "58e67c015e2de2033e540335244de5eb2706d5707fcfdf74beecfb55fa03644b",
+      "size_bytes": 213
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/clean_tier.txt",
+      "sha256": "8ed28fac1599c745217829573c383b9718744f96150be2bf80c2538da43013eb",
+      "size_bytes": 204
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/first_call_weighted_profiles.metadata.json",
+      "sha256": "ef5d712530c0c6255c73f961a8f18dfbba08e4cdeb359b8cef01b1228960a3aa",
+      "size_bytes": 2534
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/first_call_weighted_profiles.png",
+      "sha256": "489bfab992a1ee2edbfb79d12d2573b46b07c221b8c5efbde0e576a7b121ba0d",
+      "size_bytes": 266723
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/independent_capture_review.json",
+      "sha256": "5bdf9d7fcb06d2709f17be40ff6316077e896ba6fb5f23b6ae6d6d0d19cdd086",
+      "size_bytes": 23553
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/inputs/README.md",
+      "sha256": "7fb7a85c10e890a48fce4663280708d1122d3a693feff9e5c80c002fccf17f2b",
+      "size_bytes": 3436
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/inputs/extract_cp02_firstcall.py",
+      "sha256": "0b5c40e706c0c3ade61b7243677d919177ca87ae0b710cf807de0b37e309ca52",
+      "size_bytes": 5155
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/inputs/hybrid_coefficients.csv",
+      "sha256": "ec1164ad04777404819e38f289aaceca5f8ed1fc80e720debfe0fb57159b3ed0",
+      "size_bytes": 37844
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/inputs/manifest.json",
+      "sha256": "d57b7553b25ecb3bf38f0dea4cf92a1c74a7c53b8d5178e71c00bcf854b926b9",
+      "size_bytes": 18610
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/inputs/runtime_inventory.json",
+      "sha256": "60a3714f23feaed6650a5169f77408dbed343e6b43933291490406c38b405609",
+      "size_bytes": 14569
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/inputs/wrf_corner_profiles.csv",
+      "sha256": "bb9a9d50c5cb968bbddb9358cfeaf0ec988e4128c62d72da5e48f8992bec3f98",
+      "size_bytes": 249682
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/kg/apply_receipt.json",
+      "sha256": "10c4a2f78347805f77a8be07af2484e587f8b213c0287b3c84a27a0f373ed340",
+      "size_bytes": 3128
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/kg/baseline.json",
+      "sha256": "814401ed0ce1c3b81e5bb32e51f37e16542f7471d3740f047ee8be8ed95b2240",
+      "size_bytes": 149826
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/kg/graphify_full_update_audit.json",
+      "sha256": "fcabd0515b5e5a9356ac3f594a34f741f3089b9d5ddad552563dfcaac46813a2",
+      "size_bytes": 8030
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/kg/publish_kg.py",
+      "sha256": "6d2a6d685736713497ba0dbc9e7a65c412851fe053ead4fd3df4c30d28335b42",
+      "size_bytes": 18110
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/kg/root_go.json",
+      "sha256": "073cf5d13907ea4c2fe64803fb63650ec649917e792e82f4e25202637b2a5d93",
+      "size_bytes": 451
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/kg/selection_lock.json",
+      "sha256": "4eee0b9c62fb26dc86dbc258d4606d2687c8221953777b8091e01e0c89ac6f2b",
+      "size_bytes": 1333
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/kg/stage_kg.py",
+      "sha256": "dcd40094cb2722ab35ed0379fbe5161e2a754b2e0de11aec3a5936345b0024fe",
+      "size_bytes": 17303
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/kg/stage_receipt.json",
+      "sha256": "7dc25783a941574f8758d781a1cd5764b6df1cfa1f53688fdddac20e15cb21ca",
+      "size_bytes": 5065
+    },
+    {
+      "path": "docs/evidence/cp02_wrf_first_call_20261029/plot_first_call.py",
+      "sha256": "2683c3db37ebe9e470fc40b74d942da431d717142443b86c2cf2a9cafbdce727",
+      "size_bytes": 9347
+    },
+    {
+      "path": "tests/test_cp02_wrf_first_call.py",
+      "sha256": "de90b38ddceff35c7730e089fb9e1065147ef3a4e8d65114064a460ae8c5fd74",
+      "size_bytes": 14048
+    },
+    {
+      "path": "tools/cp02_wrf_first_call.py",
+      "sha256": "ae933f257659a952ed8ef60bbf588b1fce4617f41df9b520895cf7b18dcac222",
+      "size_bytes": 30942
+    }
+  ]
+}

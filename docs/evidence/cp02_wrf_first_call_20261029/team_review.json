@@ -1,0 +1,44 @@
+{
+  "status": "GO",
+  "reviewer": "independent_capture_and_tool_review",
+  "scope": [
+    "analyzer input validation and selection ownership",
+    "capture receipt consistency and evidence bindings",
+    "historical CP02 first-call capture interpretation",
+    "final report claims, links, and validation package"
+  ],
+  "reviewed_sha256": {
+    "tools/cp02_wrf_first_call.py": "ae933f257659a952ed8ef60bbf588b1fce4617f41df9b520895cf7b18dcac222",
+    "tests/test_cp02_wrf_first_call.py": "de90b38ddceff35c7730e089fb9e1065147ef3a4e8d65114064a460ae8c5fd74",
+    "docs/CP02_WRF_FIRST_CALL_20261029.md": "9e9a1640eafaa3313a5c4a82bb9b99ab09f91c3677b085bb46997cd452f03940",
+    "docs/evidence/cp02_wrf_first_call_20261029/independent_capture_review.json": "5bdf9d7fcb06d2709f17be40ff6316077e896ba6fb5f23b6ae6d6d0d19cdd086",
+    "docs/evidence/cp02_wrf_first_call_20261029/validation.json": "45c8bd4b1d51fc2c235087bae23bb158309b933d339d2185cbf8860d2c0e1e69"
+  },
+  "checks": {
+    "focused_tests": "26 passed",
+    "validation_manifest": "PASS_SCOPED_FIRST_KDM6_CAPTURE; all 108 listed artifact hashes verified",
+    "report_links": "all resolve, including this review and validation.json",
+    "validation_artifact_count": 108,
+    "clean_export_tests": 141,
+    "maintained_runner_tests": 26,
+    "kg_readback": "passed; 190 prior snapshots preserved; 192 total snapshots"
+  },
+  "resolved_findings": [
+    {
+      "finding": "The first analyzer version did not reject contradictory or altered capture receipt fields.",
+      "resolution": "The final validator binds executable and runtime-mapped executable hashes, manifest and selection receipts, copied input hashes, input unchanged counts and booleans, initial-history equality and hashes, per-rank capture hashes, and the intentional launcher stop status.",
+      "evidence": "Adversarial receipt mutation cases are covered by the focused test suite; all 26 tests pass."
+    }
+  ],
+  "scientific_scope_review": {
+    "result": "No blocking overclaim found.",
+    "limits_retained": [
+      "The source argument names remain candidates because compiled-source identity is unverified.",
+      "The captured call is identified by live ABI and return boundary; RK ordinal is unavailable.",
+      "12:00:20 is derived from start time, timestep, and delta rather than directly read from the model clock.",
+      "The capture is a diagnostic stop, not a completed forecast or noninterference validation.",
+      "No same-call MU/hybrid dry-mass ledger, process decomposition, or water/energy closure is claimed."
+    ]
+  },
+  "validation_self_cycle": "This review file is intentionally excluded from validation.json's artifact hash list."
+}

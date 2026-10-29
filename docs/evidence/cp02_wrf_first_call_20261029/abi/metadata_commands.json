@@ -1,0 +1,72 @@
+[
+  {
+    "command": [
+      "readelf",
+      "--wide",
+      "--sections",
+      "/var/tmp/cp02-wrf-first-call-20261029-1lo2fl6b/wrf.exe"
+    ],
+    "returncode": 0,
+    "stdout_file": "readelf_sections.txt",
+    "stderr": null
+  },
+  {
+    "command": [
+      "readelf",
+      "--wide",
+      "--program-headers",
+      "/var/tmp/cp02-wrf-first-call-20261029-1lo2fl6b/wrf.exe"
+    ],
+    "returncode": 0,
+    "stdout_file": "readelf_program_headers.txt",
+    "stderr": null
+  },
+  {
+    "command": [
+      "bash",
+      "-o",
+      "pipefail",
+      "-c",
+      "nm -an /var/tmp/cp02-wrf-first-call-20261029-1lo2fl6b/wrf.exe | rg -i 'module_microphysics_driver_mp_microphysics_driver_|module_mp_kdm6_mp_kdm6(_|2d_)'"
+    ],
+    "returncode": 0,
+    "stdout_file": "nm_relevant_symbols.txt",
+    "stderr": null
+  },
+  {
+    "command": [
+      "readelf",
+      "--version"
+    ],
+    "returncode": 0,
+    "stdout_file": "readelf_version.txt",
+    "stderr": null
+  },
+  {
+    "command": [
+      "nm",
+      "--version"
+    ],
+    "returncode": 0,
+    "stdout_file": "nm_version.txt",
+    "stderr": null
+  },
+  {
+    "command": [
+      "sha256sum",
+      "/var/tmp/cp02-wrf-first-call-20261029-1lo2fl6b/wrf.exe"
+    ],
+    "returncode": 0,
+    "stdout_file": "binary_sha256.txt",
+    "stderr": null
+  },
+  {
+    "command": [
+      "gdb",
+      "--version"
+    ],
+    "returncode": 0,
+    "stdout_file": "gdb_version.txt",
+    "stderr": null
+  }
+]

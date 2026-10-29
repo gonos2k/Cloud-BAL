@@ -1,0 +1,888 @@
+{
+  "2d_horizontal_array_deduplicated_deltas": {
+    "graupel": {
+      "columns_changed_entry_to_return": 0,
+      "entry_unique_values": 1,
+      "owned_columns": 16,
+      "return_unique_values": 1
+    },
+    "graupelncv": {
+      "columns_changed_entry_to_return": 0,
+      "entry_unique_values": 1,
+      "owned_columns": 16,
+      "return_unique_values": 1
+    },
+    "rain": {
+      "columns_changed_entry_to_return": 16,
+      "entry_unique_values": 1,
+      "owned_columns": 16,
+      "return_unique_values": 16
+    },
+    "rainncv": {
+      "columns_changed_entry_to_return": 16,
+      "entry_unique_values": 1,
+      "owned_columns": 16,
+      "return_unique_values": 16
+    },
+    "snow": {
+      "columns_changed_entry_to_return": 0,
+      "entry_unique_values": 1,
+      "owned_columns": 16,
+      "return_unique_values": 1
+    },
+    "snowncv": {
+      "columns_changed_entry_to_return": 0,
+      "entry_unique_values": 1,
+      "owned_columns": 16,
+      "return_unique_values": 1
+    },
+    "sr": {
+      "columns_changed_entry_to_return": 0,
+      "entry_unique_values": 1,
+      "owned_columns": 16,
+      "return_unique_values": 1
+    },
+    "xland": {
+      "columns_changed_entry_to_return": 0,
+      "entry_unique_values": 2,
+      "owned_columns": 16,
+      "return_unique_values": 2
+    }
+  },
+  "2d_horizontal_array_repeats_across_vertical_samples": {
+    "graupel": true,
+    "graupelncv": true,
+    "rain": true,
+    "rainncv": true,
+    "snow": true,
+    "snowncv": true,
+    "sr": true,
+    "xland": true
+  },
+  "array_identity_evidence": {
+    "binary_backed": "Executable call setup proves 77 positional by-reference arguments, register/stack order, callee/caller symbols and exact driver-to-KDM6 call site. Captured pointers and scalar bytes are real runtime values; selected 3D/2D spans fit readable/writable process mappings and independently decoded raw float bytes agree with stored f32 values.",
+    "candidate_source_labels": "Semantic field labels/order come from adjacent co-located source and Registry; that source has not been matched to the linked executable. NetCDF comparisons corroborate some fields but not every label. Treat names as candidate mappings; positional values are stronger than source-derived names.",
+    "no_direct_input_echo": "At the first captured KDM6 entry, QV/QC/QR/QI/QS and QNCCN differ from the initial 12Z history at selected locations; QG/QNCLOUD/QNICE/QNRAIN/QIB match all sampled locations. This is expected to be a later host state but differences cannot be attributed to the current KDM6 call since they precede it."
+  },
+  "capture_sha256": {
+    "capture_rank0_pid3948768.json": "f6f42d548e0626c75ce4ca49c58380fedcda25de2850854d01edcde459543086",
+    "capture_rank1_pid3948760.json": "38d3d99120d33098de35f468b82a806a852b1359708d6e875f5f8493e04a27ae",
+    "capture_rank2_pid3948766.json": "25f447b158b21a885bd133972c764f8e4a47549b8c996348dd3860a43f3ab88a",
+    "capture_rank3_pid3948758.json": "2aad5bd37ecd214e9344a0f5e69a1c267b201aeb5e27667589846b9e3cb49aa2",
+    "capture_rank4_pid3948755.json": "3d5f7fdd4ba73afa6ebd0477ffdfca52cb0a7343f44e8a52b6a744bef9045b62",
+    "capture_rank5_pid3948763.json": "32d6886ee0023a7528e312356317da2dc58d40d74a3f47884d6cc7fee407c802",
+    "capture_rank6_pid3948752.json": "ebd9a18419e6f77965395f52928b1dd363374ce4a4de82afcf17f86c18a7efb5",
+    "capture_rank7_pid3948764.json": "782e23d8a503ceae79d25996322e7197733ec119071de2220e6270124d2c33c0"
+  },
+  "carrier_contract": {
+    "aux_contract_labels": "Candidate registry supports QNCCN/QNCLOUD/QNICE/QNRAIN as number concentrations per kg; QIB is rime-ice volume per kg. The driver candidate maps NN/NC/NI/NR and BG to those fields, respectively. Source-to-binary identity remains unproven.",
+    "no_mu_or_mut_argument": "No semantic candidate among the 77 KDM6 formals is MU/MUT or native dry column mass. DEN/RHO and diag_rhog are density-like arrays, not substitutes for time-stage MU. Keep initial hybrid coefficient/geometry export separate from any stage MU ledger."
+  },
+  "coverage": {
+    "cells_by_rank": {
+      "1": 390,
+      "3": 234
+    },
+    "columns_by_rank": {
+      "1": 10,
+      "3": 6
+    },
+    "duplicate_coordinates": [],
+    "expected_16columns_x39levels": true,
+    "owned_cells": 624,
+    "per_cell_raw_hex_float32_decode_errors": 0,
+    "unique_coordinates": 624,
+    "unique_horizontal_columns": 16
+  },
+  "entry_nonfinite_negative_screen": {
+    "qc": {
+      "entry_negative": 10,
+      "entry_nonfinite": 0,
+      "return_negative": 0,
+      "return_nonfinite": 0
+    },
+    "qi": {
+      "entry_negative": 6,
+      "entry_nonfinite": 0,
+      "return_negative": 0,
+      "return_nonfinite": 0
+    },
+    "refl_10cm": {
+      "entry_negative": 0,
+      "entry_nonfinite": 0,
+      "return_negative": 0,
+      "return_nonfinite": 0
+    }
+  },
+  "entry_to_return_selected_array_stats": {
+    "bg": {
+      "changed_count": 56,
+      "n": 624,
+      "post_max": 3.061429165729379e-10,
+      "post_min": 0.0,
+      "pre_max": 0.0,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "delz": {
+      "changed_count": 0,
+      "n": 624,
+      "post_max": 828.19580078125,
+      "post_min": 51.81907653808594,
+      "pre_max": 828.19580078125,
+      "pre_min": 51.81907653808594,
+      "raw_decode_errors": 0
+    },
+    "den": {
+      "changed_count": 0,
+      "n": 624,
+      "post_max": 1.1387851238250732,
+      "post_min": 0.0860886499285698,
+      "pre_max": 1.1387851238250732,
+      "pre_min": 0.0860886499285698,
+      "raw_decode_errors": 0
+    },
+    "diag_rhog": {
+      "changed_count": 35,
+      "n": 624,
+      "post_max": 900.0,
+      "post_min": 0.0,
+      "pre_max": 0.0,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "graupel": {
+      "changed_count": 0,
+      "n": 624,
+      "post_max": 0.0,
+      "post_min": 0.0,
+      "pre_max": 0.0,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "graupelncv": {
+      "changed_count": 0,
+      "n": 624,
+      "post_max": 0.0,
+      "post_min": 0.0,
+      "pre_max": 0.0,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "nc": {
+      "changed_count": 32,
+      "n": 624,
+      "post_max": 4122232064.0,
+      "post_min": 0.0,
+      "pre_max": 0.0,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "ni": {
+      "changed_count": 122,
+      "n": 624,
+      "post_max": 1832515.375,
+      "post_min": 0.0,
+      "pre_max": 0.0,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "nn": {
+      "changed_count": 519,
+      "n": 624,
+      "post_max": 4153086720.0,
+      "post_min": 87812880.0,
+      "pre_max": 4153086720.0,
+      "pre_min": 0.00039107707561925054,
+      "raw_decode_errors": 0
+    },
+    "nr": {
+      "changed_count": 19,
+      "n": 624,
+      "post_max": 1355.0057373046875,
+      "post_min": 0.0,
+      "pre_max": 0.0,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "p": {
+      "changed_count": 0,
+      "n": 624,
+      "post_max": 100328.4296875,
+      "post_min": 5278.9384765625,
+      "pre_max": 100328.4296875,
+      "pre_min": 5278.9384765625,
+      "raw_decode_errors": 0
+    },
+    "pii": {
+      "changed_count": 0,
+      "n": 624,
+      "post_max": 1.0009372234344482,
+      "post_min": 0.4315322935581207,
+      "pre_max": 1.0009372234344482,
+      "pre_min": 0.4315322935581207,
+      "raw_decode_errors": 0
+    },
+    "q": {
+      "changed_count": 426,
+      "n": 624,
+      "post_max": 0.02108060009777546,
+      "post_min": 2.2049068775231717e-06,
+      "pre_max": 0.02108021453022957,
+      "pre_min": 2.2049068775231717e-06,
+      "raw_decode_errors": 0
+    },
+    "qc": {
+      "changed_count": 452,
+      "n": 624,
+      "post_max": 0.002031952142715454,
+      "post_min": 0.0,
+      "pre_max": 0.0021309326402843,
+      "pre_min": -2.8300570775741107e-08,
+      "raw_decode_errors": 0
+    },
+    "qg": {
+      "changed_count": 24,
+      "n": 624,
+      "post_max": 2.7552863457458443e-07,
+      "post_min": 0.0,
+      "pre_max": 0.0,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "qi": {
+      "changed_count": 426,
+      "n": 624,
+      "post_max": 3.838010798062896e-06,
+      "post_min": 0.0,
+      "pre_max": 0.0008844111580401659,
+      "pre_min": -1.4891795640313864e-18,
+      "raw_decode_errors": 0
+    },
+    "qr": {
+      "changed_count": 274,
+      "n": 624,
+      "post_max": 0.0003561803314369172,
+      "post_min": 0.0,
+      "pre_max": 0.0004569712036754936,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "qs": {
+      "changed_count": 173,
+      "n": 624,
+      "post_max": 0.00016025245713535696,
+      "post_min": 0.0,
+      "pre_max": 0.0001617988891666755,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "rain": {
+      "changed_count": 624,
+      "n": 624,
+      "post_max": 0.00036250584525987506,
+      "post_min": 2.5439867101795244e-08,
+      "pre_max": 0.0,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "rainncv": {
+      "changed_count": 624,
+      "n": 624,
+      "post_max": 0.00036250584525987506,
+      "post_min": 2.5439867101795244e-08,
+      "pre_max": 0.0,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "re_cloud": {
+      "changed_count": 32,
+      "n": 624,
+      "post_max": 1.9468498066999018e-05,
+      "post_min": 2.4900000425986946e-06,
+      "pre_max": 2.4900000425986946e-06,
+      "pre_min": 2.4900000425986946e-06,
+      "raw_decode_errors": 0
+    },
+    "re_ice": {
+      "changed_count": 122,
+      "n": 624,
+      "post_max": 1.0009999641624745e-05,
+      "post_min": 4.9899999794433825e-06,
+      "pre_max": 4.9899999794433825e-06,
+      "pre_min": 4.9899999794433825e-06,
+      "raw_decode_errors": 0
+    },
+    "re_snow": {
+      "changed_count": 116,
+      "n": 624,
+      "post_max": 0.0003193941374775022,
+      "post_min": 9.989999853132758e-06,
+      "pre_max": 9.989999853132758e-06,
+      "pre_min": 9.989999853132758e-06,
+      "raw_decode_errors": 0
+    },
+    "refl_10cm": {
+      "changed_count": 0,
+      "n": 624,
+      "post_max": 6.595223966348722e+22,
+      "post_min": 0.0,
+      "pre_max": 6.595223966348722e+22,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "snow": {
+      "changed_count": 0,
+      "n": 624,
+      "post_max": 0.0,
+      "post_min": 0.0,
+      "pre_max": 0.0,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "snowncv": {
+      "changed_count": 0,
+      "n": 624,
+      "post_max": 0.0,
+      "post_min": 0.0,
+      "pre_max": 0.0,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "sr": {
+      "changed_count": 0,
+      "n": 624,
+      "post_max": 0.0,
+      "post_min": 0.0,
+      "pre_max": 0.0,
+      "pre_min": 0.0,
+      "raw_decode_errors": 0
+    },
+    "th": {
+      "changed_count": 425,
+      "n": 624,
+      "post_max": 495.2239990234375,
+      "post_min": 296.8521423339844,
+      "pre_max": 495.2239990234375,
+      "pre_min": 296.9350891113281,
+      "raw_decode_errors": 0
+    },
+    "xland": {
+      "changed_count": 0,
+      "n": 624,
+      "post_max": 2.0,
+      "post_min": 1.0,
+      "pre_max": 2.0,
+      "pre_min": 1.0,
+      "raw_decode_errors": 0
+    }
+  },
+  "extreme_reflectivity_sample": [
+    {
+      "i": 153,
+      "j": 72,
+      "k": 3,
+      "label": "P09_01",
+      "rank": "3",
+      "raw_hex": "73745f65",
+      "same_at_return": true,
+      "value": 6.595223966348722e+22
+    }
+  ],
+  "flags": {
+    "0": {
+      "diagflag": {
+        "arg": 49,
+        "decoded": -1,
+        "raw_hex": "ffffffff"
+      },
+      "do_radar_ref": {
+        "arg": 50,
+        "decoded": 0,
+        "raw_hex": "00000000"
+      }
+    },
+    "1": {
+      "diagflag": {
+        "arg": 49,
+        "decoded": -1,
+        "raw_hex": "ffffffff"
+      },
+      "do_radar_ref": {
+        "arg": 50,
+        "decoded": 0,
+        "raw_hex": "00000000"
+      }
+    },
+    "2": {
+      "diagflag": {
+        "arg": 49,
+        "decoded": -1,
+        "raw_hex": "ffffffff"
+      },
+      "do_radar_ref": {
+        "arg": 50,
+        "decoded": 0,
+        "raw_hex": "00000000"
+      }
+    },
+    "3": {
+      "diagflag": {
+        "arg": 49,
+        "decoded": -1,
+        "raw_hex": "ffffffff"
+      },
+      "do_radar_ref": {
+        "arg": 50,
+        "decoded": 0,
+        "raw_hex": "00000000"
+      }
+    },
+    "4": {
+      "diagflag": {
+        "arg": 49,
+        "decoded": -1,
+        "raw_hex": "ffffffff"
+      },
+      "do_radar_ref": {
+        "arg": 50,
+        "decoded": 0,
+        "raw_hex": "00000000"
+      }
+    },
+    "5": {
+      "diagflag": {
+        "arg": 49,
+        "decoded": -1,
+        "raw_hex": "ffffffff"
+      },
+      "do_radar_ref": {
+        "arg": 50,
+        "decoded": 0,
+        "raw_hex": "00000000"
+      }
+    },
+    "6": {
+      "diagflag": {
+        "arg": 49,
+        "decoded": -1,
+        "raw_hex": "ffffffff"
+      },
+      "do_radar_ref": {
+        "arg": 50,
+        "decoded": 0,
+        "raw_hex": "00000000"
+      }
+    },
+    "7": {
+      "diagflag": {
+        "arg": 49,
+        "decoded": -1,
+        "raw_hex": "ffffffff"
+      },
+      "do_radar_ref": {
+        "arg": 50,
+        "decoded": 0,
+        "raw_hex": "00000000"
+      }
+    }
+  },
+  "history_baseline": {
+    "archived_file": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_12:00:00",
+    "archived_sha256": "203edd6d035b74a53d1e81cda11a58be22b18f056624f613ae3e0485e4a24388",
+    "byte_equal": true,
+    "fresh_copy_file": "/var/tmp/cp02-wrf-first-call-20261029-1lo2fl6b/run/wrfout_d01_2026-08-16_12:00:00",
+    "fresh_sha256": "203edd6d035b74a53d1e81cda11a58be22b18f056624f613ae3e0485e4a24388",
+    "initial_wrout_is_exact_archive_copy": true,
+    "sample_comparisons": {
+      "bg": {
+        "entry_equals_12utc_initial_history": true,
+        "entry_equals_wrfinput": true,
+        "max_abs_diff_vs_initial_history": 0.0,
+        "n": 624,
+        "netcdf_var": "QIB"
+      },
+      "nc": {
+        "entry_equals_12utc_initial_history": true,
+        "entry_equals_wrfinput": true,
+        "max_abs_diff_vs_initial_history": 0.0,
+        "n": 624,
+        "netcdf_var": "QNCLOUD"
+      },
+      "ni": {
+        "entry_equals_12utc_initial_history": true,
+        "entry_equals_wrfinput": true,
+        "max_abs_diff_vs_initial_history": 0.0,
+        "n": 624,
+        "netcdf_var": "QNICE"
+      },
+      "nn": {
+        "entry_equals_12utc_initial_history": false,
+        "entry_equals_wrfinput": false,
+        "max_abs_diff_vs_initial_history": 114286080.0,
+        "n": 624,
+        "netcdf_var": "QNCCN"
+      },
+      "nr": {
+        "entry_equals_12utc_initial_history": true,
+        "entry_equals_wrfinput": true,
+        "max_abs_diff_vs_initial_history": 0.0,
+        "n": 624,
+        "netcdf_var": "QNRAIN"
+      },
+      "q": {
+        "entry_equals_12utc_initial_history": false,
+        "entry_equals_wrfinput": false,
+        "max_abs_diff_vs_initial_history": 9.734928607940674e-05,
+        "n": 624,
+        "netcdf_var": "QVAPOR"
+      },
+      "qc": {
+        "entry_equals_12utc_initial_history": false,
+        "entry_equals_wrfinput": false,
+        "max_abs_diff_vs_initial_history": 8.209352381527424e-05,
+        "n": 624,
+        "netcdf_var": "QCLOUD"
+      },
+      "qg": {
+        "entry_equals_12utc_initial_history": true,
+        "entry_equals_wrfinput": true,
+        "max_abs_diff_vs_initial_history": 0.0,
+        "n": 624,
+        "netcdf_var": "QGRAUP"
+      },
+      "qi": {
+        "entry_equals_12utc_initial_history": false,
+        "entry_equals_wrfinput": false,
+        "max_abs_diff_vs_initial_history": 3.329268656671047e-05,
+        "n": 624,
+        "netcdf_var": "QICE"
+      },
+      "qr": {
+        "entry_equals_12utc_initial_history": false,
+        "entry_equals_wrfinput": false,
+        "max_abs_diff_vs_initial_history": 2.3647939087823033e-05,
+        "n": 624,
+        "netcdf_var": "QRAIN"
+      },
+      "qs": {
+        "entry_equals_12utc_initial_history": false,
+        "entry_equals_wrfinput": false,
+        "max_abs_diff_vs_initial_history": 9.038820280693471e-06,
+        "n": 624,
+        "netcdf_var": "QSNOW"
+      }
+    },
+    "sampled_host_entry_equal_to_initial_history": {
+      "bg": true,
+      "nc": true,
+      "ni": true,
+      "nn": false,
+      "nr": true,
+      "q": false,
+      "qc": false,
+      "qg": true,
+      "qi": false,
+      "qr": false,
+      "qs": false
+    },
+    "sampled_host_entry_equal_to_wrfinput": {
+      "bg": true,
+      "nc": true,
+      "ni": true,
+      "nn": false,
+      "nr": true,
+      "q": false,
+      "qc": false,
+      "qg": true,
+      "qi": false,
+      "qr": false,
+      "qs": false
+    },
+    "scope_note": "Byte identity is for the initial 12:00:00 wrfout only; it does not show complete run/output noninterference because the forecast was stopped at the observed KDM6 return."
+  },
+  "interpretation_limits": [
+    "Binary confirms positional ABI and code addresses, not all semantic labels; labels derive from candidate source, not proven source-to-object binding.",
+    "No MU/MUT dry carrier argument was captured at KDM6 entry. Do not infer a stage dry-mass ledger from density or initial hybrid coefficients.",
+    "A capture interruption at GDB return is not a completed forecast or a scientific validation.",
+    "The unchanged, extremely large refl_10cm samples with do_radar_ref=0 are retained raw values but remain uninterpreted."
+  ],
+  "mapping_geometry_check": {
+    "all_624_selector_records_match_manifest_corners_plus_one_and_k1_to39": true,
+    "all_owned_samples_inside_rank_tile": true,
+    "all_saved_f32_offsets_match_candidate_fortran_i_k_j_order_formula": true,
+    "offset_mismatch_examples": [],
+    "owned_samples_checked": 624,
+    "source_of_index_basis": "Input manifest native indices are zero-based; selector records add one for WRF global Fortran i/j/k."
+  },
+  "pointer_span_map_checks": {
+    "all_candidate_array_spans_readable_writable": true,
+    "candidate_array_names": [
+      "bg",
+      "delz",
+      "den",
+      "diag_rhog",
+      "graupel",
+      "graupelncv",
+      "nc",
+      "ni",
+      "nn",
+      "nr",
+      "p",
+      "pii",
+      "q",
+      "qc",
+      "qg",
+      "qi",
+      "qr",
+      "qs",
+      "rain",
+      "rainncv",
+      "re_cloud",
+      "re_ice",
+      "re_snow",
+      "refl_10cm",
+      "snow",
+      "snowncv",
+      "sr",
+      "th",
+      "xland"
+    ],
+    "per_field_readable_writable": {
+      "bg": true,
+      "delz": true,
+      "den": true,
+      "diag_rhog": true,
+      "graupel": true,
+      "graupelncv": true,
+      "nc": true,
+      "ni": true,
+      "nn": true,
+      "nr": true,
+      "p": true,
+      "pii": true,
+      "q": true,
+      "qc": true,
+      "qg": true,
+      "qi": true,
+      "qr": true,
+      "qs": true,
+      "rain": true,
+      "rainncv": true,
+      "re_cloud": true,
+      "re_ice": true,
+      "re_snow": true,
+      "refl_10cm": true,
+      "snow": true,
+      "snowncv": true,
+      "sr": true,
+      "th": true,
+      "xland": true
+    }
+  },
+  "rank_bounds": {
+    "0": {
+      "mem": {
+        "ime": 124,
+        "ims": -4,
+        "jme": 78,
+        "jms": -4,
+        "kme": 40,
+        "kms": 1
+      },
+      "tile": {
+        "ite": 117,
+        "its": 2,
+        "jte": 71,
+        "jts": 2,
+        "kte": 39,
+        "kts": 1
+      }
+    },
+    "1": {
+      "mem": {
+        "ime": 240,
+        "ims": 111,
+        "jme": 78,
+        "jms": -4,
+        "kme": 40,
+        "kms": 1
+      },
+      "tile": {
+        "ite": 233,
+        "its": 118,
+        "jte": 71,
+        "jts": 2,
+        "kte": 39,
+        "kts": 1
+      }
+    },
+    "2": {
+      "mem": {
+        "ime": 124,
+        "ims": -4,
+        "jme": 148,
+        "jms": 65,
+        "kme": 40,
+        "kms": 1
+      },
+      "tile": {
+        "ite": 117,
+        "its": 2,
+        "jte": 141,
+        "jts": 72,
+        "kte": 39,
+        "kts": 1
+      }
+    },
+    "3": {
+      "mem": {
+        "ime": 240,
+        "ims": 111,
+        "jme": 148,
+        "jms": 65,
+        "kme": 40,
+        "kms": 1
+      },
+      "tile": {
+        "ite": 233,
+        "its": 118,
+        "jte": 141,
+        "jts": 72,
+        "kte": 39,
+        "kts": 1
+      }
+    },
+    "4": {
+      "mem": {
+        "ime": 124,
+        "ims": -4,
+        "jme": 219,
+        "jms": 135,
+        "kme": 40,
+        "kms": 1
+      },
+      "tile": {
+        "ite": 117,
+        "its": 2,
+        "jte": 212,
+        "jts": 142,
+        "kte": 39,
+        "kts": 1
+      }
+    },
+    "5": {
+      "mem": {
+        "ime": 240,
+        "ims": 111,
+        "jme": 219,
+        "jms": 135,
+        "kme": 40,
+        "kms": 1
+      },
+      "tile": {
+        "ite": 233,
+        "its": 118,
+        "jte": 212,
+        "jts": 142,
+        "kte": 39,
+        "kts": 1
+      }
+    },
+    "6": {
+      "mem": {
+        "ime": 124,
+        "ims": -4,
+        "jme": 288,
+        "jms": 206,
+        "kme": 40,
+        "kms": 1
+      },
+      "tile": {
+        "ite": 117,
+        "its": 2,
+        "jte": 281,
+        "jts": 213,
+        "kte": 39,
+        "kts": 1
+      }
+    },
+    "7": {
+      "mem": {
+        "ime": 240,
+        "ims": 111,
+        "jme": 288,
+        "jms": 206,
+        "kme": 40,
+        "kms": 1
+      },
+      "tile": {
+        "ite": 233,
+        "its": 118,
+        "jte": 281,
+        "jts": 213,
+        "kte": 39,
+        "kts": 1
+      }
+    }
+  },
+  "review": "Independent read-only decode of retained raw GDB capture files and source/input baselines. No build or model launch by reviewer.",
+  "runtime_identity": {
+    "all_returns_match": true,
+    "caller_return_pc": "0x20c3722",
+    "candidate_argument_count": 77,
+    "console_return_markers": "Only rank 1 console file includes explicit CP02_KDM6_RETURN/PEERS_SETTLED; all eight per-rank JSON envelopes independently have status return_captured, matching return PC and a return sample list.",
+    "derived_valid_time": "2026-08-16 12:00:20 UTC (initial 12:00:00 + captured 20 s; inferred, not directly read from model clock)",
+    "dt_s": 20.0,
+    "entry_symbol_pc": "0x25df680",
+    "launcher_exit_code": 255,
+    "launcher_exit_interpretation": "Intentional debugger termination after captures; MPI ranks were then killed, so this is not a completed forecast.",
+    "namelist_mp_physics": 37,
+    "namelist_time_step_s": 20,
+    "rank_records": 8,
+    "rk_stage": "unavailable (not a KDM6 formal; unbound co-located source cannot establish exact compiled loop stage)",
+    "statuses": [
+      "return_captured",
+      "return_captured",
+      "return_captured",
+      "return_captured",
+      "return_captured",
+      "return_captured",
+      "return_captured",
+      "return_captured"
+    ],
+    "timestep": 1
+  },
+  "scalar_values_rank0": {
+    "ccn0": 100000000.0,
+    "cice": 2106.0,
+    "cliq": 4190.0,
+    "cpd": 1004.5,
+    "cpv": 1846.4000244140625,
+    "delt": 20.0,
+    "den0": 1.2799999713897705,
+    "denr": 1000.0,
+    "diagflag": -1,
+    "do_radar_ref": 0,
+    "ep1": 0.6083624362945557,
+    "ep2": 0.6217504143714905,
+    "g": 9.8100004196167,
+    "has_reqc": 1,
+    "has_reqi": 1,
+    "has_reqs": 1,
+    "itimestep": 1,
+    "ncmin_land": 10.0,
+    "ncmin_sea": 10.0,
+    "psat": 610.780029296875,
+    "qmin": 1.0000000036274937e-15,
+    "qnn_land_mult": 50.0,
+    "qnn_sea_mult": 0.5,
+    "rd": 287.0,
+    "rv": 461.6000061035156,
+    "scale_h": 750.0,
+    "t0c": 273.1499938964844,
+    "xlf0": 350000.0,
+    "xls": 2850000.0,
+    "xlv0": 2500000.0
+  }
+}

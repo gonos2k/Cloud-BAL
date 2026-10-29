@@ -1,0 +1,97 @@
+{
+  "baseline_sha256": "814401ed0ce1c3b81e5bb32e51f37e16542f7471d3740f047ee8be8ed95b2240",
+  "corpora": {
+    "Cloud-BAL": {
+      "before": {
+        "communities": 1417,
+        "edges": 28247,
+        "nodes": 15878
+      },
+      "extraction_edges": 98,
+      "extraction_nodes": 36,
+      "graph_sha256": "7e2de44b6b3af838209fa36be097c5ae8aad9377beafc4a64375f0dcd70ef3ae",
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "manifest_sha256": "54c7069d74a72070124a6636463e5a9c23ad54fa1783e1663fd2387d90f7e6b2",
+      "report_sha256": "e49a28090d1d0aa0155d0a7565374cb64e6ce57012e4d202a8a90e8cd7010b8c",
+      "snapshot": "2026-10-29-cp02-wrf-first-call",
+      "snapshot_file_hashes": {
+        "GRAPH_REPORT.md": "e49a28090d1d0aa0155d0a7565374cb64e6ce57012e4d202a8a90e8cd7010b8c",
+        "graph.json": "7e2de44b6b3af838209fa36be097c5ae8aad9377beafc4a64375f0dcd70ef3ae",
+        "manifest.json": "54c7069d74a72070124a6636463e5a9c23ad54fa1783e1663fd2387d90f7e6b2"
+      },
+      "stats": {
+        "communities": 1423,
+        "edges": 28329,
+        "nodes": 15913
+      }
+    },
+    "KLAPS50": {
+      "before": {
+        "communities": 3394,
+        "edges": 86705,
+        "nodes": 41706
+      },
+      "extraction_edges": 98,
+      "extraction_nodes": 36,
+      "graph_sha256": "605205f4ceec04c300c3fe49b4c162f0cff8d7aca1076bc7a111a650fe458d29",
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "manifest_sha256": "55767d41476f950be2e64de3b4e5b1859cbfbffed63ff53071e60ff7d4a34a45",
+      "report_sha256": "5fdab44f39c8534c9c3e2d289e45173f76c6e211ff9483704920fd96cd1bca2c",
+      "snapshot": "2026-10-29-cp02-wrf-first-call",
+      "snapshot_file_hashes": {
+        "GRAPH_REPORT.md": "5fdab44f39c8534c9c3e2d289e45173f76c6e211ff9483704920fd96cd1bca2c",
+        "graph.json": "605205f4ceec04c300c3fe49b4c162f0cff8d7aca1076bc7a111a650fe458d29",
+        "manifest.json": "55767d41476f950be2e64de3b4e5b1859cbfbffed63ff53071e60ff7d4a34a45"
+      },
+      "stats": {
+        "communities": 3418,
+        "edges": 86787,
+        "nodes": 41741
+      }
+    }
+  },
+  "created_at_utc": "2026-10-29T05:44:00.204897+00:00",
+  "extraction_limits": "Only the two frozen Python paths are structurally extracted. Evidence plots, extraction scripts, the report, and other changed files are SHA-256-bound only. This structural graph does not validate runtime behavior, physical assumptions, or scientific approval. Fortran cross-file CALL extraction is partial; graph freshness does not establish runtime or scientific validation.",
+  "freeze_id": "reviewed-ae933f257659",
+  "graphify_version": "graphify 0.9.53",
+  "hash_only_sha256": {
+    "docs/evidence/cp02_wrf_first_call_20261029/abi/capture_first_call.gdb": "ae836e8f94e505d2373e44dcf9fb1c78194203edf4d6d01b5b20d3e5a071eefd",
+    "docs/evidence/cp02_wrf_first_call_20261029/capture/receipt.json": "be5ee28110d63bca9e6eff8f28db84f55f2d5db82d2b785d188fd0a9aff15b8f",
+    "docs/evidence/cp02_wrf_first_call_20261029/inputs/extract_cp02_firstcall.py": "0b5c40e706c0c3ade61b7243677d919177ca87ae0b710cf807de0b37e309ca52",
+    "docs/evidence/cp02_wrf_first_call_20261029/inputs/manifest.json": "d57b7553b25ecb3bf38f0dea4cf92a1c74a7c53b8d5178e71c00bcf854b926b9",
+    "docs/evidence/cp02_wrf_first_call_20261029/plot_first_call.py": "2683c3db37ebe9e470fc40b74d942da431d717142443b86c2cf2a9cafbdce727"
+  },
+  "maintained_roots_verified_unchanged": true,
+  "preserved_baseline_snapshot_count": 190,
+  "schema": "cp02_wrf_first_call_kg_stage_v1",
+  "selected_source_sha256": {
+    "tests/test_cp02_wrf_first_call.py": "de90b38ddceff35c7730e089fb9e1065147ef3a4e8d65114064a460ae8c5fd74",
+    "tools/cp02_wrf_first_call.py": "ae933f257659a952ed8ef60bbf588b1fce4617f41df9b520895cf7b18dcac222"
+  },
+  "selection_lock_sha256": "4eee0b9c62fb26dc86dbc258d4606d2687c8221953777b8091e01e0c89ac6f2b",
+  "snapshot": "2026-10-29-cp02-wrf-first-call",
+  "source_commit": "89484dc0fc3109a9158d05ef9da102e820c9720b",
+  "source_root": "/var/tmp/cloudbal-cp02-wrf-first-call",
+  "stage_sha256": "bba3c0bbb0d76a70311f943fb385c84109d062b4d778ab635ce5c3ddc95a075e",
+  "staged_wiki_sha256": {
+    "graph-report-cloud-bal.md": "e49a28090d1d0aa0155d0a7565374cb64e6ce57012e4d202a8a90e8cd7010b8c",
+    "graph-report-klaps50.md": "5fdab44f39c8534c9c3e2d289e45173f76c6e211ff9483704920fd96cd1bca2c",
+    "graph-report.md": "878649644d1db8716767dfae400bfb79cef8da29e5e836463fb1c6bac5bb2fe6",
+    "index.md": "2680a565a9b3909f97e0ea98dd30cda4f9ca3c2ffdcf62c3c9e2e5cb889b4367",
+    "log.md": "e0273889bc2d28040bcd0a3cff07db731a290b2ee92acb6e73f8ccf2c2ed0db7"
+  },
+  "staging_directory": "/var/tmp/cp02_wrf_first_call_kg_20261029/stage-reviewed-ae933f257659",
+  "status": "STAGED_ONLY_NO_MAINTAINED_WRITES"
+}
