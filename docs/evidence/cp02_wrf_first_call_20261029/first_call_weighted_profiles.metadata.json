@@ -1,0 +1,51 @@
+{
+  "aggregation": "recorded four-corner bilinear weights; exactly one owning rank required per corner, level, and phase",
+  "delt_seconds": 20.0,
+  "fields": {
+    "qc": {
+      "abi_name_status": "provisional candidate",
+      "label": "Cloud candidate",
+      "plot_units": "g kg-1"
+    },
+    "qi": {
+      "abi_name_status": "provisional candidate",
+      "label": "Ice candidate",
+      "plot_units": "g kg-1"
+    },
+    "qr": {
+      "abi_name_status": "provisional candidate",
+      "label": "Rain candidate",
+      "plot_units": "g kg-1"
+    },
+    "qs": {
+      "abi_name_status": "provisional candidate",
+      "label": "Snow candidate",
+      "plot_units": "g kg-1"
+    }
+  },
+  "inputs": {
+    "capture/capture_rank0_pid3948768.json.gz": "4593ffe70749a04338a8fa027729e444f6a87cd35a4cfffd9e9cd4718daad650",
+    "capture/capture_rank1_pid3948760.json.gz": "f3e6849243dc70a7a332f4c2b8c206f4443a886b5a223bcaa68e52b2d0ec8fc8",
+    "capture/capture_rank2_pid3948766.json.gz": "3f8c338a1bc34c1f98a6ca2ab704086bbacae9e381ea8dfe7d3ccb68b64e48da",
+    "capture/capture_rank3_pid3948758.json.gz": "2bb95f549e86787b9b8173b5a7b94329bef08697407d64cebad3630af63e15e4",
+    "capture/capture_rank4_pid3948755.json.gz": "85c5dbd4c67fc29b358e216e7cb15f6a60fcb025259c6ff844f2affcc1fca626",
+    "capture/capture_rank5_pid3948763.json.gz": "e4682030f70b78876f963f01254f9bd037b0207877359aed0993f655b0233098",
+    "capture/capture_rank6_pid3948752.json.gz": "255bb85c3ac59f7473a03016c1124fae79643508ca1232b91dd41a41d7dddd27",
+    "capture/capture_rank7_pid3948764.json.gz": "ed5da9471db6d63420eab7f425314091c64d1307e75a11a65d24c1f25ba5271b",
+    "capture/receipt.json": "be5ee28110d63bca9e6eff8f28db84f55f2d5db82d2b785d188fd0a9aff15b8f",
+    "capture/selection.json": "38602c67768d0836c5f911c43ff4bcced57073f6f222f1c91a63499c16956c6e"
+  },
+  "plot_png_sha256": "489bfab992a1ee2edbfb79d12d2573b46b07c221b8c5efbde0e576a7b121ba0d",
+  "plot_script_sha256": "2683c3db37ebe9e470fc40b74d942da431d717142443b86c2cf2a9cafbdce727",
+  "purpose": "weighted PRE/POST profiles at first HYDRO KDM6 call; not a forecast or integrated mass analysis",
+  "role_descriptions": {
+    "P01": "lost_hit",
+    "P05": "retained_hit",
+    "P09": "removed_false_alarm",
+    "P13": "RN1_positive_reference_all_forecasts_below5mm"
+  },
+  "role_descriptions_sha256": "cf1cc8cebcd42cff4f08fb8d913bc9cf86303602bc8054b614ea7cc6d228ba60",
+  "role_descriptions_source": "inputs/manifest.json point_roles mapping",
+  "step": 1,
+  "vertical_index": "native WRF mass-level k=1..39"
+}

@@ -1,0 +1,819 @@
+{
+  "array_abi_sanity": {
+    "dtype": "float32 / 4 bytes per element (NetCDF source dtypes recorded per field)",
+    "fourpoint_fourcorner_profile_shape_kp": [
+      39,
+      16
+    ],
+    "full_mass_grid_bytes_per_field": 10294128,
+    "full_staggered_vertical_bytes_per_field": 10558080,
+    "mass_grid_shape_kji": [
+      39,
+      282,
+      234
+    ],
+    "selected_profile_bytes_per_field": 2496,
+    "staggered_vertical_shape_kji": [
+      40,
+      282,
+      234
+    ],
+    "warning": "Expected sizes for layout sanity only; not evidence the model consumed these values at its first call."
+  },
+  "boundary": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfbdy_d01",
+    "sha256": "74102ac2063f17a9007f3352e6e6c2f52629055bdf3f05b4f4d6d77aef835f45",
+    "source_from_prepare": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_native_12_18_AkoPPp/real/wrfbdy_d01"
+  },
+  "corners": {
+    "P01": [
+      {
+        "corner": "00",
+        "i0": 162,
+        "j0": 72,
+        "weight": 0.2477743869405342
+      },
+      {
+        "corner": "10",
+        "i0": 163,
+        "j0": 72,
+        "weight": 0.2395119077473378
+      },
+      {
+        "corner": "01",
+        "i0": 162,
+        "j0": 73,
+        "weight": 0.26070366721702104
+      },
+      {
+        "corner": "11",
+        "i0": 163,
+        "j0": 73,
+        "weight": 0.25201003809510697
+      }
+    ],
+    "P05": [
+      {
+        "corner": "00",
+        "i0": 162,
+        "j0": 69,
+        "weight": 0.24758316204551498
+      },
+      {
+        "corner": "10",
+        "i0": 163,
+        "j0": 69,
+        "weight": 0.23916269312038047
+      },
+      {
+        "corner": "01",
+        "i0": 162,
+        "j0": 70,
+        "weight": 0.26106659720334874
+      },
+      {
+        "corner": "11",
+        "i0": 163,
+        "j0": 70,
+        "weight": 0.2521875476307559
+      }
+    ],
+    "P09": [
+      {
+        "corner": "00",
+        "i0": 152,
+        "j0": 70,
+        "weight": 0.24673007796136381
+      },
+      {
+        "corner": "10",
+        "i0": 153,
+        "j0": 70,
+        "weight": 0.24000378456792226
+      },
+      {
+        "corner": "01",
+        "i0": 152,
+        "j0": 71,
+        "weight": 0.2601795434059361
+      },
+      {
+        "corner": "11",
+        "i0": 153,
+        "j0": 71,
+        "weight": 0.25308659406477785
+      }
+    ],
+    "P13": [
+      {
+        "corner": "00",
+        "i0": 121,
+        "j0": 36,
+        "weight": 0.24071487340328532
+      },
+      {
+        "corner": "10",
+        "i0": 122,
+        "j0": 36,
+        "weight": 0.23970907661844634
+      },
+      {
+        "corner": "01",
+        "i0": 121,
+        "j0": 37,
+        "weight": 0.2603319070338614
+      },
+      {
+        "corner": "11",
+        "i0": 122,
+        "j0": 37,
+        "weight": 0.25924414294440695
+      }
+    ]
+  },
+  "interpretation": "Native initial-history record is t=12:00:00 output; it may follow startup or integration, so it is not asserted to equal values at the first MP37 call.",
+  "launcher": {
+    "binary": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/main/wrf.exe",
+    "binary_sha256_expected": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+    "environment_script": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/tests/intel_toolchain.sh",
+    "mpi_command": "timeout 14400 mpirun -np 8",
+    "mpi_launcher": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpirun",
+    "mpi_library_paths": "libmpifort.so.12 and libmpi.so.12 resolve under mpi/2021.18 after sourcing pinned Intel toolchain; libimf.so resolves under compiler/2026.0/lib",
+    "mpi_ranks": 8,
+    "mpi_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18",
+    "mpi_version": "Intel MPI Library for Linux OS, Version 2021.18.0 Build 20260327 (id: 821f207)",
+    "omp_threads": 1,
+    "preprofile_note": "mpirun is absent from the unsourced shell PATH; sourcing intel_toolchain.sh makes the pinned MPI executable available.",
+    "runtime_env": "source intel_toolchain.sh; export OMP_NUM_THREADS=1; ulimit -s unlimited; run from a fresh copied run directory; do not run real.exe unless explicitly staged; timeout 14400 mpirun -np 8 pinned wrf.exe",
+    "script": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run.sh"
+  },
+  "mapping_csv": "/var/tmp/cloudbal-cp02-wrf-first-call/docs/evidence/cp02_density_controls_20261029/controls/wrf_mapping.csv",
+  "mapping_sha256": "09d9faecbe74fbdd8c5e09c2e6ae2d7598a00e1c89aea7d52a12d4ef347faee1",
+  "namelist": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/namelist.input",
+    "sha256": "eced598028b71b996c0c22cf7bd4bacb067087575ec06c4b65d71ab4913156df"
+  },
+  "point_roles": {
+    "P01": "lost_hit",
+    "P05": "retained_hit",
+    "P09": "removed_false_alarm",
+    "P13": "RN1_positive_reference_all_forecasts_below5mm"
+  },
+  "purpose": "Read-only extraction from retained HYDRO input and initial-time history; four mapped WRF mass-grid corners per P01/P05/P09/P13.",
+  "sources": {
+    "native_initial_history": {
+      "dimensions": {
+        "DateStrLen": 19,
+        "Time": 1,
+        "bottom_top": 39,
+        "bottom_top_stag": 40,
+        "seed_dim_stag": 2,
+        "soil_layers_stag": 4,
+        "south_north": 282,
+        "south_north_stag": 283,
+        "west_east": 234,
+        "west_east_stag": 235
+      },
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfout_d01_2026-08-16_12:00:00",
+      "sha256": "203edd6d035b74a53d1e81cda11a58be22b18f056624f613ae3e0485e4a24388",
+      "variables": {
+        "C1F": {
+          "dims": [
+            "Time",
+            "bottom_top_stag"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            40
+          ],
+          "units": "Dimensionless"
+        },
+        "C1H": {
+          "dims": [
+            "Time",
+            "bottom_top"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39
+          ],
+          "units": "Dimensionless"
+        },
+        "C2F": {
+          "dims": [
+            "Time",
+            "bottom_top_stag"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            40
+          ],
+          "units": "Pa"
+        },
+        "C2H": {
+          "dims": [
+            "Time",
+            "bottom_top"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39
+          ],
+          "units": "Pa"
+        },
+        "C3F": {
+          "dims": [
+            "Time",
+            "bottom_top_stag"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            40
+          ],
+          "units": "Dimensionless"
+        },
+        "C3H": {
+          "dims": [
+            "Time",
+            "bottom_top"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39
+          ],
+          "units": "Dimensionless"
+        },
+        "C4F": {
+          "dims": [
+            "Time",
+            "bottom_top_stag"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            40
+          ],
+          "units": "Pa"
+        },
+        "C4H": {
+          "dims": [
+            "Time",
+            "bottom_top"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39
+          ],
+          "units": "Pa"
+        },
+        "P_TOP": {
+          "dims": [
+            "Time"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1
+          ],
+          "units": "Pa"
+        },
+        "QCLOUD": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "kg kg-1"
+        },
+        "QGRAUP": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "kg kg-1"
+        },
+        "QIB": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "m(3) kg(-1)"
+        },
+        "QICE": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "kg kg-1"
+        },
+        "QNCCN": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "  kg(-1)"
+        },
+        "QNCLOUD": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "  kg(-1)"
+        },
+        "QNICE": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "  kg-1"
+        },
+        "QNRAIN": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "  kg(-1)"
+        },
+        "QRAIN": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "kg kg-1"
+        },
+        "QSNOW": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "kg kg-1"
+        },
+        "QVAPOR": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "kg kg-1"
+        },
+        "ZNU": {
+          "dims": [
+            "Time",
+            "bottom_top"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39
+          ],
+          "units": ""
+        },
+        "ZNW": {
+          "dims": [
+            "Time",
+            "bottom_top_stag"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            40
+          ],
+          "units": ""
+        }
+      }
+    },
+    "wrfinput_d01": {
+      "dimensions": {
+        "DIM0010": 5,
+        "DateStrLen": 19,
+        "Time": 1,
+        "bottom_top": 39,
+        "bottom_top_stag": 40,
+        "dust_erosion_dimension": 3,
+        "land_cat_stag": 21,
+        "month_hour": 288,
+        "num_ext_model_couple_dom_stag": 1,
+        "soil_cat_stag": 16,
+        "soil_layers_stag": 4,
+        "south_north": 282,
+        "south_north_stag": 283,
+        "urban_wind_directions_stag": 4,
+        "west_east": 234,
+        "west_east_stag": 235
+      },
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfinput_d01",
+      "sha256": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126",
+      "variables": {
+        "C1F": {
+          "dims": [
+            "Time",
+            "bottom_top_stag"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            40
+          ],
+          "units": "Dimensionless"
+        },
+        "C1H": {
+          "dims": [
+            "Time",
+            "bottom_top"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39
+          ],
+          "units": "Dimensionless"
+        },
+        "C2F": {
+          "dims": [
+            "Time",
+            "bottom_top_stag"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            40
+          ],
+          "units": "Pa"
+        },
+        "C2H": {
+          "dims": [
+            "Time",
+            "bottom_top"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39
+          ],
+          "units": "Pa"
+        },
+        "C3F": {
+          "dims": [
+            "Time",
+            "bottom_top_stag"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            40
+          ],
+          "units": "Dimensionless"
+        },
+        "C3H": {
+          "dims": [
+            "Time",
+            "bottom_top"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39
+          ],
+          "units": "Dimensionless"
+        },
+        "C4F": {
+          "dims": [
+            "Time",
+            "bottom_top_stag"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            40
+          ],
+          "units": "Pa"
+        },
+        "C4H": {
+          "dims": [
+            "Time",
+            "bottom_top"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39
+          ],
+          "units": "Pa"
+        },
+        "P_TOP": {
+          "dims": [
+            "Time"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1
+          ],
+          "units": "Pa"
+        },
+        "QCLOUD": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "kg kg-1"
+        },
+        "QGRAUP": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "kg kg-1"
+        },
+        "QIB": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "m(3) kg(-1)"
+        },
+        "QICE": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "kg kg-1"
+        },
+        "QNCCN": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "  kg(-1)"
+        },
+        "QNCLOUD": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "  kg(-1)"
+        },
+        "QNICE": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "  kg-1"
+        },
+        "QNRAIN": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "  kg(-1)"
+        },
+        "QRAIN": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "kg kg-1"
+        },
+        "QSNOW": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "kg kg-1"
+        },
+        "QVAPOR": {
+          "dims": [
+            "Time",
+            "bottom_top",
+            "south_north",
+            "west_east"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39,
+            282,
+            234
+          ],
+          "units": "kg kg-1"
+        },
+        "ZNU": {
+          "dims": [
+            "Time",
+            "bottom_top"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            39
+          ],
+          "units": ""
+        },
+        "ZNW": {
+          "dims": [
+            "Time",
+            "bottom_top_stag"
+          ],
+          "dtype": "float32",
+          "shape": [
+            1,
+            40
+          ],
+          "units": ""
+        }
+      }
+    }
+  }
+}

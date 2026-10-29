@@ -1,0 +1,39 @@
+{
+  "tree": "3675b8c414dd905c9d0ffddaa7c9893c82c54db5",
+  "export": "/var/tmp/cp02-pr125-clean-_0prliou",
+  "command": [
+    "python",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_trace_wps_species.py",
+    "tests/test_precipitation_transitions.py",
+    "tests/test_hourly_precip_scores.py",
+    "tests/test_cp02_boundary_events.py",
+    "tests/test_cp02_inner_capture.py",
+    "tests/test_cp02_capture_storage.py",
+    "tests/test_cp02_radar_inputs.py",
+    "tests/test_cp02_density_comparison.py",
+    "tests/test_cp02_precip_control_mapping.py",
+    "tests/test_cp02_control_capture_analysis.py",
+    "tests/test_cp02_control_density_comparison.py",
+    "tests/test_cp02_density_evidence.py",
+    "tests/test_cp02_wrf_first_call.py"
+  ],
+  "exit_code": 0,
+  "tests_passed": 141,
+  "new_tests_included": 26,
+  "cli_return_code": 0,
+  "analysis_byte_identical": {
+    "summary.json": true,
+    "profiles.csv": true,
+    "manifest.json": true
+  },
+  "plot_byte_identical": {
+    "first_call_weighted_profiles.png": true,
+    "first_call_weighted_profiles.metadata.json": true
+  },
+  "portable_registration": true,
+  "full_portable_suite": false,
+  "post_export_changes": "Plot metadata receipt digest refreshed and ABI metadata manifest refreshed; code/test/capture/input/receipt bytes unchanged."
+}

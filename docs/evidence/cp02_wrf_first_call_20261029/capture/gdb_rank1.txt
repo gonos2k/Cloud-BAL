@@ -1,0 +1,17 @@
+
+This GDB supports auto-downloading debuginfo from the following URLs:
+  <https://debuginfod.ubuntu.com>
+Enable debuginfod for this session? (y or [n]) [answered N; input not from terminal]
+Debuginfod has been disabled.
+To make this setting permanent, add 'set debuginfod enabled off' to .gdbinit.
+[Thread debugging using libthread_db enabled]
+Using host libthread_db library "/lib/x86_64-linux-gnu/libthread_db.so.1".
+ starting wrf task            1  of            8
+CP02_KDM6_ENTRY rank=1 pid=3948760 args=77 bounds=[111, 240, -4, 78, 1, 40] tile=[118, 233, 2, 71, 1, 39] points=624
+CP02_CAPTURE_FILE=/var/tmp/cp02-wrf-first-call-20261029-1lo2fl6b/capture/capture_rank1_pid3948760.json
+CP02_MAPS_FILE=/var/tmp/cp02-wrf-first-call-20261029-1lo2fl6b/capture/maps_rank1_pid3948760.txt
+CP02_KDM6_RETURN rank=1 pid=3948760 pc=0x20c3722
+CP02_CAPTURE_FILE=/var/tmp/cp02-wrf-first-call-20261029-1lo2fl6b/capture/capture_rank1_pid3948760.json
+CP02_KDM6_PEERS_SETTLED ranks=8
+
+Temporary breakpoint -14, 0x00000000020c3722 in module_microphysics_driver_mp_microphysics_driver_ ()
