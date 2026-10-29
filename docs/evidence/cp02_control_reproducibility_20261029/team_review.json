@@ -1,0 +1,50 @@
+{
+  "schema": "cp02_control_reproducibility_team_review_v1",
+  "result": "GO",
+  "reviewed_at": "2026-10-29",
+  "base_commit": "8c278b643c5fa2b663f32d2b68d0f59e0301a989",
+  "review_findings": [],
+  "reviewed_files": {
+    ".gitignore": "f140f5b75fba28817c033f7f78da7a2dccee6fecbe1409332f517e1f072e230a",
+    "docs/CP02_CONTROL_REPRODUCIBILITY_20261029.md": "8ce385c7c16601181e22442a0dd6cae3170ab4ee516422a2cc4b343376f22bc8",
+    "tools/cp02_control_density_comparison.py": "13180bc609d3cfee729ddaeadec83dd00eaac902f3e7dfe4c4e97b85d6559dbf",
+    "tests/test_cp02_control_density_comparison.py": "d141a2b16dd103035bd491a11d156aa68a652f51bc5410968a0c35c947e95afe",
+    "tests/test_cp02_density_evidence.py": "a329b47b3e1889dd879db903baa99424fb6d2dc24a4ca47af020158efa4d6fc1",
+    "docs/evidence/cp02_control_reproducibility_20261029/science/README.md": "854ba72f62421dc04bcb51555223c7c7d92950c87d085ce9a932fcbe63d66a54",
+    "docs/evidence/cp02_control_reproducibility_20261029/wrf_probe/README.md": "371f623fc74aef842060a02b0cc53a24d23ef868cf26e97e9c8bd8d198e9cabb",
+    "docs/evidence/cp02_density_controls_20261029/capture/standard_radar_analyzer_attempt.log": "7b38e3165cf733ba38a849042a5abe7083189d6ce90b05edcb8c70b302cda405",
+    "docs/evidence/cp02_control_reproducibility_20261029/science/control_density_comparison.json": "1c00efb03d142259f34292f4b59a2b1a947add7a5275f4d2aa7e7393cb88f824",
+    "docs/evidence/cp02_control_reproducibility_20261029/science/control_density_comparison.png": "38d3b5f541230bdb8e24b237bfc09abb6d2cc78d677725272f495b94c43aca06",
+    "docs/evidence/cp02_control_reproducibility_20261029/science/control_density_groups.csv": "1706a3401e1dbb78e83cf8fcec410624e97e64a209e0c411057866bb95aca775",
+    "docs/evidence/cp02_control_reproducibility_20261029/science/control_density_samples.csv": "7c7d1682b357e8e150b5e3f7a48d00b5f0720a45207e1829e18787137f859a80"
+  },
+  "validation": {
+    "clean_export": {
+      "tree": "722079c4a4335ac29f0a443b248e4c746e65c7d7",
+      "method": "git archive of staged tracked files",
+      "old_manifest_index_entries": 50,
+      "focused_tests": "115 passed in 39.48s; exit 0",
+      "capture_cli": "PASS_SCOPED_AVAILABLE_ENDPOINTS; 440 samples, 20 points; prior profiles byte-identical",
+      "science_outputs": "CSV and PNG byte-identical on fresh output directory"
+    },
+    "targeted_tests": ["density comparison: 8 passed", "evidence manifest: 1 passed"],
+    "independent_ratios": {
+      "method": "Validated capture profiles, then independently recomputed rho_d*q sums over active-phase rows.",
+      "counts_and_ratios": {
+        "lost_hit": {"rain": [33, 0.7148352521743722], "snow": [3, 0.15373327748228854]},
+        "retained_hit": {"rain": [34, 0.66200346988601], "snow": [17, 0.13595265750510574]},
+        "removed_false_alarm": {"rain": [25, 0.7746725506781537], "snow": [6, 0.17119439100973932]},
+        "RN1_positive_reference_all_forecasts_below5mm": {"rain": [22, 0.6536122009661717], "snow": [1, 0.11551995350184852]}
+      },
+      "matches_report": true
+    },
+    "log_regression": "Exact manifest path/hash/size asserted; all 50 entries hash/size checked; restored log is not ignored.",
+    "wrf_probe": "Read-only review; historical executable hash pinned; no build or model run. No DWARF, ABI/rank ownership unresolved, source hashes do not prove compile inputs.",
+    "graphify": "Used for navigation; source and tests authoritative; graph freshness is not runtime or scientific validation."
+  },
+  "scope_limits": [
+    "Focused tests are not the full portable suite.",
+    "The archived equal-density sample comparison does not establish causality, forecast skill, historical concentration, or mass conservation.",
+    "No WRF rebuild, forecast, or first-microphysics capture was performed; RN1 timing/coverage, historical background-generation rules, C2 completion, and full water/energy budgets remain open."
+  ]
+}

@@ -1,0 +1,19 @@
+Traceback (most recent call last):
+  File "/var/tmp/cloudbal-cp02-capture-evidence/tools/cp02_control_capture_analysis.py", line 329, in <module>
+    main()
+  File "/var/tmp/cloudbal-cp02-capture-evidence/tools/cp02_control_capture_analysis.py", line 316, in main
+    summary, profiles = analyze_paths(args.capture, args.point_csv, args.selection_csv)
+                        ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/cloudbal-cp02-capture-evidence/tools/cp02_control_capture_analysis.py", line 303, in analyze_paths
+    return summarize(capture, point_csv, selection_csv)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/cloudbal-cp02-capture-evidence/tools/cp02_control_capture_analysis.py", line 284, in summarize
+    "sha256": hashlib.sha256((ROOT / "docs/evidence/cp02_density_controls_20261029/capture/standard_radar_analyzer_attempt.log").read_bytes()).hexdigest(),
+                             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1021, in read_bytes
+    with self.open(mode='rb') as f:
+         ^^^^^^^^^^^^^^^^^^^^
+  File "/usr/lib/python3.12/pathlib.py", line 1015, in open
+    return io.open(self, mode, buffering, encoding, errors, newline)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+FileNotFoundError: [Errno 2] No such file or directory: '/var/tmp/cloudbal-cp02-capture-evidence/docs/evidence/cp02_density_controls_20261029/capture/standard_radar_analyzer_attempt.log'

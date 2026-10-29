@@ -1,0 +1,15 @@
+Traceback (most recent call last):
+  File "/var/tmp/cloudbal-cp02-density-controls/docs/evidence/cp02_radar_inputs_20261028/analyze_radar_inputs.py", line 416, in <module>
+    main()
+  File "/var/tmp/cloudbal-cp02-density-controls/docs/evidence/cp02_radar_inputs_20261028/analyze_radar_inputs.py", line 404, in main
+    report = analyze(args.capture, args.background_csv, args.prior_outer)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/cloudbal-cp02-density-controls/docs/evidence/cp02_radar_inputs_20261028/analyze_radar_inputs.py", line 382, in analyze
+    inner_report = INNER.analyze(capture_path, "HYDRO", prior_outer)
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/cloudbal-cp02-density-controls/docs/evidence/cp02_inner_capture_20261028/analyze_inner.py", line 456, in analyze
+    require(all(item["exact"] for item in conversion.values()), f"{arm}: published REAL*4 species do not match REAL*8 workarray conversion")
+  File "/var/tmp/cloudbal-cp02-density-controls/docs/evidence/cp02_inner_capture_20261028/analyze_inner.py", line 30, in require
+    raise ValueError(message)
+ValueError: HYDRO: published REAL*4 species do not match REAL*8 workarray conversion
+exit_code=1
