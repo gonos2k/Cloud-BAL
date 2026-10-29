@@ -1,0 +1,322 @@
+RUN portable tests/test_archive_member_hashes.py
+RUN portable tests/test_bound_executable.py
+RUN portable tests/test_bound_runtime.py
+RUN portable tests/test_candidate_endpoint_roundoff.py
+SKIP linux    tests/test_cloud_bal_stage_coordinator.py (select --tier linux; Exercises Linux process-group and signal behavior.)
+RUN portable tests/test_cloud_provenance_receipt.py
+RUN portable tests/test_compare_baseline.py
+RUN portable tests/test_cp02_boundary_events.py
+RUN portable tests/test_cp02_capture_storage.py
+RUN portable tests/test_cp02_control_capture_analysis.py
+RUN portable tests/test_cp02_density_comparison.py
+RUN portable tests/test_cp02_inner_capture.py
+SKIP realdata tests/test_cp02_metadata_staging.py (select --tier realdata; Requires externally staged CP02 real meteorological inputs.)
+RUN portable tests/test_cp02_precip_control_mapping.py
+RUN portable tests/test_cp02_radar_inputs.py
+RUN portable tests/test_cp06a_state_force_flux.py
+RUN portable tests/test_cp06a_thermo_density_readback.py
+SKIP linux    tests/test_detached_runtime.py (select --tier linux; Exercises Linux process and filesystem isolation behavior.)
+RUN portable tests/test_e01_completion_gate.py
+RUN portable tests/test_hourly_precip_scores.py
+RUN portable tests/test_hydrometeor_moments.py
+RUN portable tests/test_initialize_native_moments.py
+RUN portable tests/test_intel_integration_audit.py
+SKIP native   tests/test_interior_hydrostatic_receipt.py (select --tier native; Validates an external native receipt supplied as a command argument.)
+SKIP realdata tests/test_kg_external_helper_integration.py (select --tier realdata; Requires exact PR103/104/105 parent receipts and pinned helper scratch sources.)
+SKIP linux    tests/test_landlock_policy.py (select --tier linux; Requires Linux Landlock kernel support.)
+SKIP native   tests/test_lapsprep_off.py (select --tier native; Requires pinned OFF/ON build outputs, WPS binary, and source inputs via CLI arguments.)
+SKIP native   tests/test_lapsprep_vapor.py (select --tier native; Requires native build artifacts and source inputs supplied by its invocation.)
+RUN portable tests/test_lco_evidence.py
+RUN portable tests/test_legacy_deriv_safety.py
+SKIP realdata tests/test_lgt_observation.py (select --tier realdata; Requires four hash-bound operational lightning observations.)
+SKIP realdata tests/test_lsx_candidate.py (select --tier realdata; Requires operational FSF references named by the real-case manifest.)
+RUN portable tests/test_lt1_candidate.py
+RUN portable tests/test_mp37_aux_contract.py
+RUN portable tests/test_native_ccn_stage_trace.py
+RUN portable tests/test_native_host_pressure.py
+RUN portable tests/test_native_hybrid_geometry.py
+RUN portable tests/test_native_kdm6_call_geometry.py
+RUN portable tests/test_native_kdm6_trace.py
+RUN portable tests/test_native_mass_metric.py
+RUN portable tests/test_native_mp37_aux.py
+SKIP native   tests/test_ncgen_bridge.py (select --tier native; Requires the pinned external ncgen binary and data-model inputs.)
+RUN portable tests/test_operational_comparison_prep.py
+RUN portable tests/test_operational_shadow_compare.py
+SKIP linux    tests/test_original_upstream_replay.py (select --tier linux; Requires Linux /usr/bin/bwrap sandbox support.)
+RUN portable tests/test_output_transaction.py
+RUN portable tests/test_package_qbal_feasibility.py
+RUN portable tests/test_pin_compiler_inputs.py
+RUN portable tests/test_pin_link_inputs.py
+RUN portable tests/test_pr100_qc_process_reducer.py
+RUN portable tests/test_pr100_qc_source.py
+RUN portable tests/test_pr101_cloud_thermo_aggregate.py
+RUN portable tests/test_pr101_cloud_thermo_reducer.py
+RUN portable tests/test_pr101_cloud_thermo_source.py
+RUN portable tests/test_pr101_guarded_replay.py
+RUN portable tests/test_pr101_projected_c2_response.py
+SKIP realdata tests/test_pr101_projected_c2_response_native.py (select --tier realdata; Requires external PR99 closed C2 run receipts and the reviewed PR101 preflight.)
+RUN portable tests/test_pr101_upper_wind_capture.py
+SKIP native   tests/test_pr101_upper_wind_capture_native.py (select --tier native; Requires receipt-pinned external C2 source and native build inputs.)
+RUN portable tests/test_pr101_upper_wind_replay.py
+SKIP native   tests/test_pr101_upper_wind_replay_native.py (select --tier native; Checks captured-output replay against external horizontal diffusion source.)
+RUN portable tests/test_pr102_capture20_preflight.py
+RUN portable tests/test_pr102_capture_noninterference.py
+RUN portable tests/test_pr102_execution_preflight.py
+RUN portable tests/test_pr102_native_uv_smoother.py
+RUN portable tests/test_pr102_native_wind_candidate.py
+RUN portable tests/test_pr102_native_ww_bound.py
+RUN portable tests/test_pr102_response.py
+RUN portable tests/test_pr102_smoother_kkt_reference.py
+RUN portable tests/test_pr103_amplitude20_postclosure.py
+RUN portable tests/test_pr103_amplitude_control.py
+RUN portable tests/test_pr103_archived_consumer.py
+SKIP native   tests/test_pr103_archived_consumer_native.py (select --tier native; Requires receipt-pinned archived consumer executable, compiler profile, and driver.)
+RUN portable tests/test_pr103_history_response.py
+RUN portable tests/test_pr103_kg_guard.py
+RUN portable tests/test_pr103_surface_temperature_observation.py
+RUN portable tests/test_pr103_time_response.py
+RUN portable tests/test_pr104_kg_guard.py
+RUN portable tests/test_pr104_validtime_observation.py
+RUN portable tests/test_pr105_kg_guard.py
+RUN portable tests/test_pr105_paired_scores.py
+RUN portable tests/test_pr107_t39_first_group_replay.py
+RUN portable tests/test_pr107_t39_postprocess.py
+RUN portable tests/test_pr63_paired_bg_volume.py
+RUN portable tests/test_pr63_transition_replay.py
+RUN portable tests/test_pr64_qc_channel_replay.py
+RUN portable tests/test_pr65_nc_donor_replay.py
+RUN portable tests/test_pr65_pbl_domain_metrics.py
+RUN portable tests/test_pr65_pbl_operator_replay.py
+RUN portable tests/test_pr65_samecall_budget_audit.py
+RUN portable tests/test_pr67_kdm6_process_budget.py
+RUN portable tests/test_pr67_negative_qc_replay.py
+RUN portable tests/test_pr67_output_safety_crosscheck.py
+RUN portable tests/test_pr67_pbl_carrier_audit.py
+RUN portable tests/test_pr68_carrier_budget_replay.py
+RUN portable tests/test_pr68_completed_qc_audit.py
+RUN portable tests/test_pr68_rain_process_trace.py
+RUN portable tests/test_pr69_water_budget.py
+RUN portable tests/test_pr69_water_observer_runner.py
+SKIP native   tests/test_pr70_unit_process_composer.py (select --tier native; Requires the external captured PR68 KDM6 source for source-bound composition checks.)
+SKIP native   tests/test_pr71_composer.py (select --tier native; Requires external frozen PR71 sources and hash-bound patch arguments.)
+RUN portable tests/test_pr71_guarded_composer.py
+SKIP native   tests/test_pr71_guarded_composer_native.py (select --tier native; Applies the guarded PR71 composition to the external frozen PR68 model source.)
+SKIP native   tests/test_pr71_particle_output_contract.py (select --tier native; Requires external frozen KDM6 source selected by environment.)
+SKIP native   tests/test_pr71_step_count_contract.py (select --tier native; Requires external frozen KDM6 source selected by environment.)
+RUN portable tests/test_pr72_joint_candidate_preflight.py
+RUN portable tests/test_pr73_first_violation.py
+RUN portable tests/test_pr73_joint_analysis.py
+RUN portable tests/test_pr73_native_input_pair_audit.py
+RUN portable tests/test_pr74_common_moment_audit.py
+RUN portable tests/test_pr74_independent_oracle.py
+RUN portable tests/test_pr75_native_fp_transform.py
+RUN portable tests/test_pr75_stationarity_oracle.py
+RUN portable tests/test_pr76_degenerate_kkt_oracle.py
+RUN portable tests/test_pr76_native_fp_transform.py
+RUN portable tests/test_pr77_native_state_receipt.py
+RUN portable tests/test_pr77_native_state_transform.py
+RUN portable tests/test_pr78_native_fp_runtime_choice.py
+RUN portable tests/test_pr81_native_case_copy.py
+RUN portable tests/test_pr82_native_conversion_scale.py
+RUN portable tests/test_pr82_observation_signal_readback.py
+RUN portable tests/test_pr82_same13_native_readback.py
+RUN portable tests/test_pr83_moment_candidate_readback.py
+RUN portable tests/test_pr83_native_pair_readback.py
+RUN portable tests/test_pr83_off_runner_contract.py
+SKIP realdata tests/test_pr83_policy_source_integration.py (select --tier realdata; Requires exact PR83 model source, executable, archive, and receipt evidence.)
+RUN portable tests/test_pr83_rk_operands_patch.py
+SKIP native   tests/test_pr83_rk_operands_patch_native.py (select --tier native; Applies the observer patch to an external pinned KIM WRF source tree.)
+SKIP native   tests/test_pr83_same13_native_provenance.py (select --tier native; Verifies default provenance files on the native host.)
+RUN portable tests/test_pr83_same13_native_transaction.py
+RUN portable tests/test_pr84_ice_cap_pair_audit.py
+RUN portable tests/test_pr84_native_moment_policy.py
+SKIP native   tests/test_pr84_native_moment_policy_native.py (select --tier native; Validates policy bindings to external pinned native source and build evidence.)
+RUN portable tests/test_pr84_same13_boundary_contract.py
+RUN portable tests/test_pr84_shared_runner_contract.py
+SKIP native   tests/test_pr84_shared_runner_contract_native.py (select --tier native; Validates runner provenance against the external pinned Intel profile.)
+RUN portable tests/test_pr85_consumer_build_contract.py
+SKIP native   tests/test_pr85_fogdes_qn_regression.py (select --tier native; Compiles and runs Fortran with pinned Intel and an external source fixture.)
+SKIP native   tests/test_pr85_ice_transition_regression.py (select --tier native; Compiles and runs Fortran with pinned Intel and an external KDM6 source.)
+RUN portable tests/test_pr85_joint_stage_trace.py
+SKIP native   tests/test_pr85_kdm6_cold_process.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr85_kdm6_density_bridge.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr85_kdm6_freezing_packet.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr85_kdm6_graupel_cache.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr85_kdm6_graupel_sedimentation.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr85_kdm6_ice_sedimentation.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr85_kdm6_psd_boundary.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr85_kdm6_rain_freezing_packet.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr85_kdm6_subthreshold_melt.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr85_kdm6_warm_process.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr85_native_air_operator.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr85_pbl_packet_quantization.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr86_compare_response.py
+RUN portable tests/test_pr86_process_budget.py
+RUN portable tests/test_pr86_time_response.py
+RUN portable tests/test_pr86_water_budget.py
+RUN portable tests/test_pr86_water_terms.py
+SKIP native   tests/test_pr87_admission_reason_overlay.py (select --tier native; Transforms an external pinned PR85 KDM6 source file.)
+RUN portable tests/test_pr87_admission_reason_summary.py
+SKIP native   tests/test_pr87_all_pair_diffusion_consumer_intel.py (select --tier native; Requires the pinned Intel compiler and native consumer artifacts.)
+RUN portable tests/test_pr87_all_pair_diffusion_precision.py
+SKIP native   tests/test_pr87_cloud_diffusion_consumer.py (select --tier native; Compiles and runs the source-bound consumer with the pinned Intel profile.)
+RUN portable tests/test_pr87_cloud_diffusion_precision.py
+RUN portable tests/test_pr87_cloud_diffusion_replay.py
+SKIP native   tests/test_pr87_cloud_public_store.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr87_cloud_source_contract.py
+RUN portable tests/test_pr87_cold_reasons.py
+RUN portable tests/test_pr87_completed_state_audit.py
+SKIP native   tests/test_pr87_diffusion_intermediate_precision.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr87_fogdes_source_contract.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr87_graupel_activity_audit.py
+SKIP native   tests/test_pr87_graupel_cone_mixture.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr87_graupel_diffusion_probe.py
+RUN portable tests/test_pr87_graupel_failure_context.py
+SKIP native   tests/test_pr87_graupel_process_domain.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr87_graupel_source_contract.py
+SKIP native   tests/test_pr87_ice_sublimation.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr87_kdm6_ng_base_diag.py
+SKIP native   tests/test_pr87_native_history.py (select --tier native; Validates synthetic history inputs against pinned native constants receipt and compiler profile artifacts.)
+RUN portable tests/test_pr87_native_overlay_modules.py
+SKIP native   tests/test_pr87_pbl_compact_diagnostics.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr87_pbl_payload_consumer.py (select --tier native; Compiles and runs the source-bound consumer with the pinned Intel profile.)
+SKIP native   tests/test_pr87_pbl_source_payload.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr87_pbl_source_precision.py
+SKIP native   tests/test_pr87_pbl_source_precision_intel.py (select --tier native; Requires the pinned Intel compiler and native source precision harness.)
+RUN portable tests/test_pr87_pbl_source_probe.py
+RUN portable tests/test_pr87_physical_source_capture.py
+RUN portable tests/test_pr87_process_failure_context.py
+SKIP native   tests/test_pr87_progb_failure_context.py (select --tier native; Transforms an external pinned PR87 KDM6 source file.)
+RUN portable tests/test_pr87_progb_failure_context_portable.py
+SKIP native   tests/test_pr87_qn_density_storage.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr87_rain_density_storage.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr87_rain_diffusion_precision.py
+RUN portable tests/test_pr87_rain_diffusion_probe.py
+RUN portable tests/test_pr87_rain_diffusion_replay.py
+SKIP native   tests/test_pr87_rain_diffusion_replay_native.py (select --tier native; Checks the helper routine against external pinned KIM WRF source.)
+SKIP native   tests/test_pr87_rain_flux_cache.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr87_rain_process_contract.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr87_rain_public_store.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr87_rain_sedimentation.py
+SKIP native   tests/test_pr87_rain_sedimentation_kernel.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr87_rain_storage_contract.py
+SKIP native   tests/test_pr87_rain_volume_store.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr87_small_graupel_domain.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr87_source_representation.py
+RUN portable tests/test_pr87_source_storage_failures.py
+RUN portable tests/test_pr87_stage_cycle.py
+RUN portable tests/test_pr87_v42_budget.py
+SKIP native   tests/test_pr89_cold_process_summary.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr89_ice_consumer_contract.py (select --tier native; Compiles and runs Fortran with pinned Intel plus exact external source receipts.)
+RUN portable tests/test_pr89_paired_history.py
+SKIP native   tests/test_pr89_process_consumer_contract.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr90_cold_column_summary.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr90_execution_layout.py
+SKIP native   tests/test_pr90_joint_store_reason.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr90_rain_failure_replay.py
+SKIP native   tests/test_pr90_rain_final_psd.py (select --tier native; Compiles and runs Fortran with pinned Intel and external native build evidence.)
+SKIP native   tests/test_pr90_rain_producer_trace.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr90_rain_public_roundtrip.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr90_warm_rain_output.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr91_fogdes_store_contract.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr91_history_response.py
+RUN portable tests/test_pr91_host_store_replay.py
+RUN portable tests/test_pr91_host_store_trace.py
+SKIP native   tests/test_pr91_host_store_trace_native.py (select --tier native; Transforms a retained external PR90 module source.)
+SKIP native   tests/test_pr91_inactive_ice_store_c14.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr91_source_first_diffusion.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr91_source_first_diffusion_c11.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr91_source_store_contract.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr92_diffusion_producer_capture.py
+RUN portable tests/test_pr92_graupel_store_replay.py
+SKIP native   tests/test_pr92_graupel_store_replay_native.py (select --tier native; Compiles and runs the source-bound Fortran replay with pinned Intel.)
+RUN portable tests/test_pr92_mixture_witness_replay.py
+RUN portable tests/test_pr92_qc_vertical_support.py
+RUN portable tests/test_pr92_source_replay.py
+RUN portable tests/test_pr92_source_store_fixture.py
+SKIP native   tests/test_pr92_source_store_fixture_native.py (select --tier native; Compiles and runs the source-bound Fortran fixture with pinned Intel.)
+SKIP native   tests/test_pr93_active_ice_contract.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP native   tests/test_pr93_freezing_packet_contract.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr93_qc_chain.py
+RUN portable tests/test_pr94_cloud_response.py
+RUN portable tests/test_pr94_compact_diagnostics.py
+RUN portable tests/test_pr94_hydro_control.py
+SKIP realdata tests/test_pr94_hydro_control_realdata.py (select --tier realdata; Requires an externally staged hash-pinned HYDRO input candidate.)
+RUN portable tests/test_pr94_hydro_response.py
+RUN portable tests/test_pr94_longrun_audit.py
+RUN portable tests/test_pr94_water_budget.py
+RUN portable tests/test_pr95_call_budget.py
+RUN portable tests/test_pr95_closed_results.py
+RUN portable tests/test_pr96_column_closure.py
+SKIP native   tests/test_pr96_ice_ng_contract.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+SKIP realdata tests/test_pr97_620_c4_failure_classify.py (select --tier realdata; Requires external PR94 C4 run captures, runtime evidence, and native build receipt.)
+SKIP native   tests/test_pr97_liquid_observer.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr97_t1_rounding.py
+RUN portable tests/test_pr98_boundary640.py
+RUN portable tests/test_pr98_boundary_audit.py
+SKIP native   tests/test_pr98_boundary_audit_native.py (select --tier native; Loads the external frozen PR96 runner for source-bound snapshot schedules.)
+RUN portable tests/test_pr98_budget.py
+RUN portable tests/test_pr98_budget_faces.py
+RUN portable tests/test_pr98_kg_restore.py
+SKIP native   tests/test_pr98_native_capture.py (select --tier native; Requires external native build receipt and source overrides.)
+RUN portable tests/test_pr98_native_effect.py
+RUN portable tests/test_pr99_bulk_candidate_contract.py
+SKIP native   tests/test_pr99_bulk_candidate_contract_native.py (select --tier native; Transforms an external receipt-pinned C1 host source.)
+RUN portable tests/test_pr99_candidate_store_reducer.py
+RUN portable tests/test_pr99_cutoff_inventory.py
+SKIP native   tests/test_pr99_group_failure_trace.py (select --tier native; Compiles and runs Fortran with the pinned Intel profile.)
+RUN portable tests/test_pr99_native_consumer_replay.py
+RUN portable tests/test_pr99_native_mass_effect.py
+RUN portable tests/test_pr99_native_projection.py
+RUN portable tests/test_pr99_pressure_transfer.py
+RUN portable tests/test_pr99_projection_response.py
+RUN portable tests/test_pr99_selected_stage_reducer.py
+RUN portable tests/test_precipitation_transitions.py
+RUN portable tests/test_prepare_pr67_model_target.py
+RUN portable tests/test_pressure_cell_geometry.py
+RUN portable tests/test_pressure_continuity_oracle.py
+RUN portable tests/test_pressure_geometry_budget.py
+RUN portable tests/test_pressure_state_replay.py
+RUN portable tests/test_pressure_transition_payload.py
+RUN portable tests/test_pressure_transition_reference.py
+RUN portable tests/test_publication_filesystem.py
+RUN portable tests/test_python_test_runner.py
+RUN portable tests/test_qbal_boundary_diagnostics.py
+SKIP native   tests/test_qbal_cap_transition.py (select --tier native; Requires one or two pinned-Intel diagnostic executables.)
+RUN portable tests/test_qbal_cloud_force.py
+RUN portable tests/test_qbal_cloud_switch.py
+RUN portable tests/test_qbal_component_diagnostics.py
+RUN portable tests/test_qbal_dry_mass_column.py
+RUN portable tests/test_qbal_ground_ht.py
+RUN portable tests/test_qbal_ground_ht_force.py
+SKIP native   tests/test_qbal_lower_prepared.py (select --tier native; Requires a pinned-Intel compiled lower-transport driver.)
+SKIP realdata tests/test_qbal_real_input_manifest.py (select --tier realdata; Requires real WRF/WPS input files listed by the operational case manifest.)
+RUN portable tests/test_qbal_receiver_diagnostics.py
+SKIP native   tests/test_qbal_relative_force_prepared.py (select --tier native; Requires a pinned-Intel compiled relative-force driver.)
+RUN portable tests/test_qbal_sloping_inputs.py
+RUN portable tests/test_qbal_surface_mass_bridge.py
+SKIP native   tests/test_qbal_thickness_prepared.py (select --tier native; Requires pinned-Intel compiled thickness drivers and an artifact directory.)
+SKIP realdata tests/test_radar_decoder.py (select --tier realdata; Requires external raw Cf/Radial operational radar files.)
+SKIP realdata tests/test_radar_ledger_validator.py (select --tier realdata; Requires an actual independent radar ledger receipt as its path argument.)
+RUN portable tests/test_radar_proposal_replay.py
+RUN portable tests/test_radar_remap.py
+SKIP native   tests/test_radar_remap_lut.py (select --tier native; Requires a native Fortran-generated remap LUT artifact.)
+SKIP realdata tests/test_radar_remap_negative.py (select --tier realdata; Requires an operational radar input root and a native remap build.)
+SKIP realdata tests/test_radar_remap_two_volume.py (select --tier realdata; Requires a native remap build, two operational volumes, and a base snapshot.)
+RUN portable tests/test_real_manufactured_balance_generation.py
+RUN portable tests/test_run_isolated_native.py
+RUN portable tests/test_shadow_validator.py
+SKIP realdata tests/test_shadow_wps_pair_transaction.py (select --tier realdata; Requires an actual closed WPS/SHADOW pair fixture as its path argument.)
+RUN portable tests/test_surface_boundary_validator.py
+RUN portable tests/test_thermo_output_certificate.py
+RUN portable tests/test_thermo_stage_budget.py
+RUN portable tests/test_trace_wps_species.py
+RUN portable tests/test_transaction_recovery.py
+RUN portable tests/test_transition_geometry_ledger.py
+RUN portable tests/test_transition_geometry_reference.py
+RUN portable tests/test_transition_geopotential_reference.py
+RUN portable tests/test_transition_geostrophic_scope.py
+RUN portable tests/test_transition_radar_reader.py
+RUN portable tests/test_transition_state_validator.py
+RUN portable tests/test_verify_shadow_wps_pair_lambert.py
+Registered 321 Python tests; selected tier: portable

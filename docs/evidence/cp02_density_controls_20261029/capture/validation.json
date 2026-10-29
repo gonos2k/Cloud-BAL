@@ -1,0 +1,68 @@
+{
+  "status": "PASS_SCOPED_CAPTURE_ANALYSIS",
+  "test_command": "pytest -q tests/test_cp02_control_capture_analysis.py",
+  "test_result": "Running 7 items in this shard\n.......                                                                  [100%]\n7 passed in 0.57s",
+  "test_count": 7,
+  "py_compile": "PASS",
+  "analysis_status": "PASS_SCOPED_AVAILABLE_ENDPOINTS",
+  "sample_count": 440,
+  "point_count": 20,
+  "artifacts": {
+    "analysis_tool": {
+      "path": "/var/tmp/cloudbal-cp02-density-controls/tools/cp02_control_capture_analysis.py",
+      "sha256": "769a9aac1c6c0da53d7cd215bda6bb4a6b8285c0236769fe45e8bce89c98fd71",
+      "size_bytes": 20575
+    },
+    "test_file": {
+      "path": "/var/tmp/cloudbal-cp02-density-controls/tests/test_cp02_control_capture_analysis.py",
+      "sha256": "67060e8197c97cb49e09d59688b6fb97dd40370ebd3e4477b060e4bbeafb122d",
+      "size_bytes": 6038
+    },
+    "capture": {
+      "path": "/var/tmp/cloudbal-cp02-density-controls/docs/evidence/cp02_density_controls_20261029/capture/hydro_capture.json.gz",
+      "sha256": "b3686b7a7b3294c90504e71f75d17a8210f670df7608bef64714a27f777a6321",
+      "size_bytes": 682308
+    },
+    "point_csv": {
+      "path": "/var/tmp/cloudbal-cp02-density-controls/docs/evidence/cp02_density_controls_20261029/capture/shadow_points.csv",
+      "sha256": "0243e5cd8e29638b32edc501a68ab50f1f7de4415625b5301cf2b2b6f905bebd",
+      "size_bytes": 42396
+    },
+    "selection": {
+      "path": "/var/tmp/cloudbal-cp02-density-controls/docs/evidence/cp02_density_controls_20261029/controls/capture_points.csv",
+      "sha256": "5c842c51422cf144bce81ec2143258e3b54a0de7c85674d91a8194b826e14472",
+      "size_bytes": 5544
+    },
+    "analysis_summary": {
+      "path": "/var/tmp/cloudbal-cp02-density-controls/docs/evidence/cp02_density_controls_20261029/capture/control_analysis.json",
+      "sha256": "fc29e3b080151ee1fe029b385657e70f9665910f49a9120282adc0add3f96405",
+      "size_bytes": 46827
+    },
+    "analysis_profiles": {
+      "path": "/var/tmp/cloudbal-cp02-density-controls/docs/evidence/cp02_density_controls_20261029/capture/control_profiles.csv",
+      "sha256": "c69a6b8cbdea2cb2cac7007275fdb40bbab846ed07196ab057d21f2447f62fbc",
+      "size_bytes": 445658
+    },
+    "tests_log": {
+      "path": "/var/tmp/cloudbal-cp02-density-controls/docs/evidence/cp02_density_controls_20261029/capture/focused_tests.txt",
+      "sha256": "3decd34facfa6f3e509d678414d43d67e24991d26dba1f4a226e072b351e5e44",
+      "size_bytes": 128
+    },
+    "analyzer_attempt": {
+      "path": "/var/tmp/cloudbal-cp02-density-controls/docs/evidence/cp02_density_controls_20261029/capture/standard_radar_analyzer_attempt.log",
+      "sha256": "7b38e3165cf733ba38a849042a5abe7083189d6ce90b05edcb8c70b302cda405",
+      "size_bytes": 1265
+    }
+  },
+  "standard_analyzer_attempt": {
+    "result": "FAILED_AT_EXISTING_ALL_SELECTED_SAMPLE_WORKARRAY_CONVERSION_GATE",
+    "log_sha256": "7b38e3165cf733ba38a849042a5abe7083189d6ce90b05edcb8c70b302cda405",
+    "log_path": "/var/tmp/cloudbal-cp02-density-controls/docs/evidence/cp02_density_controls_20261029/capture/standard_radar_analyzer_attempt.log"
+  },
+  "limitations": [
+    "The four external control reflectivity-invalid labels are payload/shadow proxies; captured reflectivity validity and radar_observed flags are reported independently.",
+    "The unchanged full radar analyzer gate also asserts equality between each selected REAL64 workarray sample and the published REAL32 state. That assertion is not applied here because the external controls include unaffected positive-background cells; mismatches are counted and shown.",
+    "The prior 20-point outer capture is not used as an equality reference for this changed point set.",
+    "This is sampled debugger state, not a mass-conservation or forecast-skill result."
+  ]
+}

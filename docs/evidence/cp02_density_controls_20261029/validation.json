@@ -1,0 +1,300 @@
+{
+  "status": "PASS_SCOPED_ANALYSIS_AND_ARCHIVED_REPLAY",
+  "base_commit": "a0413424f79787a9055210f72756a3e44868eda2",
+  "review": "Independent density and mapping/capture/doc reviews GO; exact final report hash bound in mapping_review.json",
+  "tests": {
+    "existing_focused_passed": 79,
+    "new_density_passed": 12,
+    "new_mapping_passed": 8,
+    "new_capture_passed": 7,
+    "total_unique_focused_passed": 106,
+    "maintained_file_runner_passed": [
+      12,
+      8,
+      7
+    ],
+    "file_runners_are_subsets": true,
+    "full_portable_suite_run": false,
+    "registered_python_files": 321,
+    "portable_selection": 219
+  },
+  "results": {
+    "density_samples": 190,
+    "control_columns": 20,
+    "control_layer_samples": 440,
+    "rn1_mapped_points": 16,
+    "exact_hourly_precip_reconstructions": 48,
+    "external_unobserved_levels": 88,
+    "external_six_species_preserved": true
+  },
+  "runtime": {
+    "profile": "tests/intel_toolchain.sh",
+    "archived_intel_binary_replay": true,
+    "exit_code": 0,
+    "native_rebuild": false,
+    "new_wrf_forecast": false,
+    "unchanged_inputs": 114,
+    "runtime_files_checked": 41,
+    "wps_and_shadow_byte_identical": true,
+    "receipt": "capture/replay_receipt.json"
+  },
+  "limits": [
+    "Background equivalent concentration uses current captured diagnostic density; historical background density/formula not recovered.",
+    "Selected controls are exploratory; external controls are 283–467 km from RN1 samples and not matched causal controls.",
+    "Full model budgets and precipitation improvement not established.",
+    "RN1 upstream time/coverage and C2 T39/H/A/N completion remain open.",
+    "Graph updates are structural scoped extraction, not scientific or runtime validation."
+  ],
+  "artifacts": [
+    {
+      "path": "docs/CP02_DENSITY_CONTROLS_20261029.md",
+      "sha256": "8b890e66f20224b362979a09f6369065a67a9e6309b4f463b735e7a88b028a72",
+      "size_bytes": 8161
+    },
+    {
+      "path": "docs/CURRENT_RESEARCH_STATUS.md",
+      "sha256": "c6d6d253dd4fa82eccb77bfb278736ec896758cf06e365a44ead7ac8ede9b5d9",
+      "size_bytes": 6492
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/capture/control_analysis.json",
+      "sha256": "fc29e3b080151ee1fe029b385657e70f9665910f49a9120282adc0add3f96405",
+      "size_bytes": 46827
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/capture/control_profiles.csv",
+      "sha256": "c69a6b8cbdea2cb2cac7007275fdb40bbab846ed07196ab057d21f2447f62fbc",
+      "size_bytes": 445658
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/capture/focused_tests.txt",
+      "sha256": "3decd34facfa6f3e509d678414d43d67e24991d26dba1f4a226e072b351e5e44",
+      "size_bytes": 128
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/capture/gdb.log.gz",
+      "sha256": "7d8881045a81a194b864775bc366b7eabaa099de81ee313ff3dd422b2433f068",
+      "size_bytes": 3216
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/capture/hydro_capture.json.gz",
+      "sha256": "b3686b7a7b3294c90504e71f75d17a8210f670df7608bef64714a27f777a6321",
+      "size_bytes": 682308
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/capture/preflight.json",
+      "sha256": "044f26e842106261722569563b1e988a72edb789b460509f7c89c62f8a62b093",
+      "size_bytes": 26285
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/capture/preflight_final.json",
+      "sha256": "b12f7c42c7e998ec1b19e80c7d5670d224f7ab329d2917756027e4b030241ba6",
+      "size_bytes": 26851
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/capture/prepare_points.py",
+      "sha256": "05e8b50d1ac0469a82806b3d9d496b83752254103a1968a93cf7ffa1afdd2c25",
+      "size_bytes": 3425
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/capture/replay_receipt.json",
+      "sha256": "dcf33a0588105ecacaf9e4c6654c9a9406a3fcd32877dd99d4c14c2c1f7ea993",
+      "size_bytes": 41471
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/capture/shadow_points.csv",
+      "sha256": "0243e5cd8e29638b32edc501a68ab50f1f7de4415625b5301cf2b2b6f905bebd",
+      "size_bytes": 42396
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/capture/shadow_points_prelabel_draft.csv",
+      "sha256": "8b0e22b28dfa647e5bb82c3de3210f97483d06527461e773d98e50197cd74042",
+      "size_bytes": 36416
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/capture/standard_radar_analyzer_attempt.log",
+      "sha256": "7b38e3165cf733ba38a849042a5abe7083189d6ce90b05edcb8c70b302cda405",
+      "size_bytes": 1265
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/capture/validation.json",
+      "sha256": "aa0131809b5e4e562dde3e81096c16fde95f970c32d8fe0f3c2a899754d3cf7f",
+      "size_bytes": 3839
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/control_tier.txt",
+      "sha256": "1895e7e02da182d354d23d1dfa3dc4790783ef64c90d7aaabafbf9bf7a2893a6",
+      "size_bytes": 211
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/controls/README.md",
+      "sha256": "3a3d823cc66552bd849b121af8748885dec920286230e955024a479be81a9816",
+      "size_bytes": 3743
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/controls/capture_points.csv",
+      "sha256": "5c842c51422cf144bce81ec2143258e3b54a0de7c85674d91a8194b826e14472",
+      "size_bytes": 5544
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/controls/capture_points_prelabel_draft.csv",
+      "sha256": "542194ef72a3a716d990560c34f413bfd481ad00ee26e051a3aa36c29ff11395",
+      "size_bytes": 5435
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/controls/metgrid_corner_controls.csv",
+      "sha256": "ef9702ca53672ad9754417b9c3490ec8d2071417832851163af8b9017973807a",
+      "size_bytes": 347208
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/controls/precipitation_reconstruction.csv",
+      "sha256": "568d32c1d194736ad86e47edfd2fd16e4a1d9253f7f8d3c72e8cb4589a38966d",
+      "size_bytes": 5513
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/controls/receipt.json",
+      "sha256": "a9a9d892d82fab777b471b73955be38ef284375b995705e0bbf24babc0598d7d",
+      "size_bytes": 65030
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/controls/selected_points.csv",
+      "sha256": "32346b4f51acf2c7a5b84d5f9eb1877e90a044542b740747878f5497cc6df382",
+      "size_bytes": 7754
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/controls/source_grid_mapping.csv",
+      "sha256": "5916947dc288d5ea21d953e869f32ce23317ea7c60b95d86a5ebfea46d90ab19",
+      "size_bytes": 30926
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/controls/wrf_mapping.csv",
+      "sha256": "09d9faecbe74fbdd8c5e09c2e6ae2d7598a00e1c89aea7d52a12d4ef347faee1",
+      "size_bytes": 31416
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/controls/wrfinput_corner_controls.csv",
+      "sha256": "0aa9088a9f323ce31b0cbee5529b7dae6430bedc94500e26af853e5cd54bb3b8",
+      "size_bytes": 3276213
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/density/README.md",
+      "sha256": "5af3c38f544031feae326de3605d869618b68d383bf1caade35cab2be2870d62",
+      "size_bytes": 2808
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/density/density_comparison.csv",
+      "sha256": "0350cda6c87dd776c804f74b6aebb61e29026326eb2d74aaa5d80f69b9b690d8",
+      "size_bytes": 89408
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/density/density_comparison.json",
+      "sha256": "e84038b1cbe6ce38771bbbaccbb969318f9a59a7defe863092afc3bed2476a07",
+      "size_bytes": 5845
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/density/density_comparison.png",
+      "sha256": "6099c1de3aa038da7d6048e425d856ce70c273ff5f1f9f505b96b440062034ec",
+      "size_bytes": 140235
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/density_review.json",
+      "sha256": "0956ded5a1a33de2f4dc7698a81215b304451d1277237570e1b4f9602a87506c",
+      "size_bytes": 4192
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/density_tier.txt",
+      "sha256": "430ba26f687e58849858d7ca8dcdd04a1d404e62db969cd0cca21ac3ebd11453",
+      "size_bytes": 8609
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/existing_focused_tests.txt",
+      "sha256": "eb91ecb983ce27cf2297c901e89efdd66bf9e5dc3a555aa50d2e06f0d4877828",
+      "size_bytes": 194
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/kg/apply_readback_receipt.json",
+      "sha256": "8056a7a4aa4252baa3935f91c758e5b38a24fd77f68d857b7072453ea20ee32e",
+      "size_bytes": 6726
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/kg/root_go.json",
+      "sha256": "a3ff6d82d255ba9e982850a94c00767aa24d595878621937aa1b5b6a0ebe3c1c",
+      "size_bytes": 273
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/kg/stage_receipt.json",
+      "sha256": "b890b1243945c7895d09afc27491eceae6d9ebb157dfb1d12f3095397c2cbcfd",
+      "size_bytes": 20702
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/kg/validation.json",
+      "sha256": "6d1c8c988501c300f7ca9c90e0485fc04bc8e2279d24631076685e516f5f2c66",
+      "size_bytes": 1464
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/mapping_review.json",
+      "sha256": "96f3e1760b209bb499f445ed8e6f608ef7db2df6450e94c8a20f7b8ae5e8b058",
+      "size_bytes": 3335
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/mapping_tier.txt",
+      "sha256": "1f1d8d70050a4ccfd942e181a901fb6c2f122dc11b194699e3fec8c0a77cf5e0",
+      "size_bytes": 179
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/new_focused_tests.txt",
+      "sha256": "80af2a78884d5ed7ae863be36ff03a1225cc5b7a4db8429a914db6b4cb3dea6f",
+      "size_bytes": 113
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/pr122_review_version_delta.patch",
+      "sha256": "d113eac4a97764ee20b2c04349bb8fc42545f50627557dd0328f325ac6d87128",
+      "size_bytes": 610
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/pr122_review_version_reconciliation.json",
+      "sha256": "d08bfc8581408f0f7f4bb264c0342f77e639fa9af7dc8574048be80fee7ef437",
+      "size_bytes": 1303
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/reviewed_pr122_report.md",
+      "sha256": "66a52c589aea3d6ba1f1f61c88c17f6ca771934b800ca7c476acdaad2c8b2aa9",
+      "size_bytes": 6425
+    },
+    {
+      "path": "docs/evidence/cp02_density_controls_20261029/test_registration.txt",
+      "sha256": "e7a8ec40d86e6f55fffa50b6017563fb6e4e95ac80058e1d686ab3122b1af158",
+      "size_bytes": 25637
+    },
+    {
+      "path": "tests/test_cp02_control_capture_analysis.py",
+      "sha256": "67060e8197c97cb49e09d59688b6fb97dd40370ebd3e4477b060e4bbeafb122d",
+      "size_bytes": 6038
+    },
+    {
+      "path": "tests/test_cp02_density_comparison.py",
+      "sha256": "113a1673acc79e9e04b79892a5bd8e8b13780e655d7b6c6e47d75e70f5f54a27",
+      "size_bytes": 5177
+    },
+    {
+      "path": "tests/test_cp02_precip_control_mapping.py",
+      "sha256": "044d6dd248b6af886e6d71748bc59440b8eaf4076a74a63453e018575d9e3d68",
+      "size_bytes": 2683
+    },
+    {
+      "path": "tools/cp02_control_capture_analysis.py",
+      "sha256": "769a9aac1c6c0da53d7cd215bda6bb4a6b8285c0236769fe45e8bce89c98fd71",
+      "size_bytes": 20575
+    },
+    {
+      "path": "tools/cp02_density_comparison.py",
+      "sha256": "38a796ed0bc5c471b82f7c723af917e562c50a2c01373380e0df9abb007d51fe",
+      "size_bytes": 17301
+    },
+    {
+      "path": "tools/cp02_precip_control_mapping.py",
+      "sha256": "87269145385973d66d5e945e1f43860e3560055460341d3cb1c43647cb218198",
+      "size_bytes": 33216
+    }
+  ]
+}
