@@ -1,0 +1,91 @@
+{
+  "schema": "snow-sensitivity-preregistered-selection-v1",
+  "frozen_at_utc": "2026-10-30T03:45:10.857914+00:00",
+  "status": "FROZEN_BEFORE_CANDIDATE_FORECAST_OUTPUTS",
+  "base_commit": "e8f2e7e2c668672b5209a8cb142ca9d9d8e4138a",
+  "experiment": {
+    "new_cases": 12,
+    "families": [
+      "CONTROL",
+      "IMPROVED"
+    ],
+    "snow_factors": [
+      0.0,
+      0.25,
+      0.5,
+      0.75,
+      1.25,
+      1.5
+    ],
+    "factor_1": "Reuse separately sealed completed six-hour ORIGINAL and IMPROVED_BG_FIXED; do not rerun or overwrite.",
+    "initial_time_utc": "2026-08-16T12:00:00Z",
+    "end_time_utc": "2026-08-16T18:00:00Z",
+    "intervention": "Only native QSNOW values; compute float64(alpha * float64(base QSNOW)) then cast to original native dtype. All other variables and all metadata identical to family baseline.",
+    "interpretation": "Initial snow-hydrometeor sensitivity of total ground precipitation, not verification of surface snowfall. Direct native-state ablation; added/removed initial water is deliberate and no mass/energy conservation or initialization balance is claimed.",
+    "max_concurrent_jobs": 8,
+    "mpi_ranks_per_job": 8,
+    "omp_threads_per_rank": 1,
+    "cpu_affinity": "Disjoint eight-CPU sets per concurrent job, respecting available CPUs."
+  },
+  "display_labels": {
+    "ORIGINAL": "규준 실험",
+    "CURRENT_HYDRO": "기존 HYDRO",
+    "IMPROVED_BG_FIXED": "기존 개선안"
+  },
+  "evaluation": {
+    "paired_points_per_hour": 3688,
+    "lead_hours": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "window": "preceding one-hour increment, not 0–lead accumulation",
+    "thresholds_mm": [
+      0.1,
+      0.5,
+      1.0,
+      2.5,
+      5.0,
+      10.0
+    ],
+    "operator": "Same pinned six-hour RN1/WRF bilinear scoring operator as PR136",
+    "controls": "Use exact sealed PR136 arrays; map native family CONTROL to ORIGINAL and IMPROVED to IMPROVED_BG_FIXED."
+  },
+  "selection": {
+    "reference_case": "IMPROVED_BG_FIXED",
+    "eligible_cases": "Twelve new completed and identity-validated candidates plus the two factor-1 family baselines. CURRENT_HYDRO is contextual only, not a tunable candidate.",
+    "feasibility_constraints": [
+      "CSI at lead 1 h and 5 mm >= reference",
+      "RMSE at lead 1 h <= reference",
+      "Pooled six-hour MAE <= reference",
+      "Pooled six-hour RMSE <= reference"
+    ],
+    "pooled_MAE": "sum_h(N_h * MAE_h) / sum_h(N_h)",
+    "pooled_RMSE": "sqrt(sum_h(N_h * RMSE_h^2) / sum_h(N_h))",
+    "numerical_comparison_tolerance": 1e-12,
+    "ranking_order": [
+      "descending arithmetic mean of six threshold CSI values at lead 1 h (equal threshold weights)",
+      "ascending lead-1-hour MAE",
+      "ascending lead-1-hour RMSE",
+      "ascending absolute snow-factor deviation from 1",
+      "ascending case ID"
+    ],
+    "outputs": [
+      "best eligible overall case",
+      "best eligible IMPROVED-family case",
+      "full unfiltered ranking and feasibility failures for every case"
+    ],
+    "fallback": "Keep existing IMPROVED_BG_FIXED if no eligible case outranks it; do not force a new winner.",
+    "incomplete_or_failed_cases": "Retain failure evidence and exclude from ranking; never substitute partial forecast scores as six-hour results."
+  },
+  "limitations": [
+    "Selection and evaluation use the same one event; optimistic selection bias, no independent validation or general skill claim.",
+    "Thresholds and spatial points are correlated; mean CSI is a predefined ranking heuristic, not a physical quantity or significance test.",
+    "Six-hour pooled error guardrails do not guarantee every lead or threshold improves.",
+    "Family comparisons include differing initialization and executable; alpha effects are isolated only within a fixed family.",
+    "Future producer-consistent balanced implementation and independent weather cases are required before operational recommendation."
+  ]
+}

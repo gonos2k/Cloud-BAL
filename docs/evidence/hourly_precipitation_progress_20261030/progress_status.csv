@@ -1,0 +1,8 @@
+구분,항목,현재 상태와 남은 범위,근거
+완료,네 실험 6시간 적분,"ORIGINAL과 CURRENT_OFF, CURRENT_HYDRO, CURRENT_LIQUID가 18 UTC까지 완주했다. CURRENT 초기장은 현행 `a63a802` 소스로 생성했고, 네 실험에 같은 보관 CP02 WRF 실행파일을 사용했다.",[실행 계보](evidence/current_forecast_paper_20261029/runtime/README.md)
+완료,시간별 강수 검증,"공통 3,688개 지리 평가점에서 +1~+6시간을 각각 평가했다. 범주 점수 144행, 연속 점수 24행, 대응 전이 180행을 산출하고 독립 검산했다.","[범주](evidence/current_forecast_paper_20261029/scores/categorical_scores.csv), [연속](evidence/current_forecast_paper_20261029/scores/continuous_scores.csv), [전이](evidence/current_forecast_paper_20261029/scores/transitions.csv), [검산](evidence/current_forecast_paper_20261029/validation/independent_scores.json)"
+완료,회귀 확인,고정된 clean export의 집중 시험 35개가 통과했다. 이는 전체 모델의 물리 검증을 뜻하지 않는다.,"[시험 결과](evidence/current_forecast_paper_20261029/validation/clean_tests.txt), [소스 동일성](evidence/current_forecast_paper_20261029/validation/clean_test_source_identity.json)"
+제한,비교 기준과 성능,후보 결과는 시간·임계값·기준군에 따라 달라진다. ORIGINAL과 CURRENT_OFF의 초기장 준비 경로가 달라 그 차이를 한 물리 효과로 분리할 수 없다.,"[초기장 비교](evidence/current_forecast_paper_20261029/initial_original_vs_current_off.json), [기존 보고서](CURRENT_FORECAST_CONFERENCE_PAPER_20261029.md)"
+제한,보관 KDM6 진단,"선택 표본의 호출 경계와 분기를 관찰했으나 배열의 물리적 의미, 0 입력의 생성 원인 및 지상 강수 변화와의 인과관계는 미확정이다.","[호출 진단](CP02_KDM6_CONTROLS_20261029.md), [분기 진단](CP02_ZERO_CANDIDATE_20261029.md)"
+남음,RN1 시간·관측 범위,"상류 입력의 시간별 최신성과 coverage/QC, 공간 대표성을 확인해야 한다. 유한한 0을 관측 가능 영역의 확정적 무강수로 단정할 수 없다.","[RN1 범위](CP02_RN1_REPRESENTATIVENESS_20261027.md), [입력 확인](evidence/precip_hourly_20261027/rn1_recovery/source_findings.md)"
+남음,최신 C2와 수지,"최신 C2 T39, H/A/N 1시간 완료와 전 과정의 물·에너지 수지 및 강수 flux 검증은 별도로 남아 있다. 보관 사례의 6시간 완주로 대체할 수 없다.","[T39 범위](T39_C2_BUDGET_SCOPE_20261027.md), [물리 검증 범위](CURRENT_FORECAST_CONFERENCE_PAPER_20261029.md)"

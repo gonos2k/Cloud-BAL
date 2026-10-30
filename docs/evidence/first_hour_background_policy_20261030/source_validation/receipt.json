@@ -1,0 +1,75 @@
+{
+  "scope": "Focused implementation validation; no forecast skill or full operational conservation conclusion.",
+  "source_hashes_after_test": {
+    "src/common/cloud_bal_state.f90": "791e60fbf157c304a6945e7b04c11d3a7f8c36d82bb5c692d0b4a2ab97634d61",
+    "src/common/cloud_bal_column_physics.f90": "0c2cdbf4379814a2fa720ad387591c9396c9a959eb0cf383132bda910bd66ecf",
+    "src/common/cloud_bal_pressure_analysis.f90": "3959566091c36ea59f1dafa5eea04ea3125c7989f8c1f9f49fd9ab0b91d81807",
+    "src/common/cloud_bal_real_netcdf.f90": "4c73b8cabce3fd8c0a6af235f54733ea7cc339455aabf0d677062534bfa6336b",
+    "src/lapsprep/lapsprep.f90": "5191fcf222485a7db0ea5784a93d6774a92e46ef99e4dce8a940a0e6b1646eaf",
+    "tests/test_column_physics.f90": "2f274a399acdc98b8d66bda96524704abc327a3e80fc17751df536f6f9cd7501",
+    "tests/test_real_shadow_io_contract.f90": "6dba8670208255b0240a3fbb6f6d379e2c4b023b20db6fb9001279638bfef2bd",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tools/check_background_precip_shadow.py": "17ee6d5e23925e34b9fdc881d3e1c81a27ef60f832cb4702b8dd0247a0825abd",
+    "tests/test_background_precip_shadow.py": "c4a59cb1dc5cc73a1613f91e731dca804b9eac88c2014fdc3dbc17941ed93c22",
+    "tools/validate_shadow_diagnostics.py": "15f18034d7fb76bafd2f7375a1b992e0db7a832436bd6f5c971d010462d9f4d7"
+  },
+  "source_hash_timing_note": "Hashes recorded after tests; these focused invocations did not independently seal source hashes before compilation. Source files predate compiled executables. Producer build separately sealed export inputs.",
+  "column_runs": [
+    {
+      "profile": "O0",
+      "flags_variable": "CLOUD_BAL_FREE_FLAGS",
+      "scratch": "/var/tmp/cloudbal-retain-CLOUD_BAL_FREE_FLAGS.n8h4Uh",
+      "compiler_profile": "tests/intel_toolchain.sh",
+      "compiled_inputs": [
+        "src/common/cloud_bal_state.f90",
+        "src/common/cloud_bal_column_physics.f90",
+        "tests/test_column_physics.f90"
+      ],
+      "executable_sha256": "51d0add115e5dd59f102588f4bca676dea0f37dd4a0a9c3e31c8ce35e8ab3cd7",
+      "command_description": "source tests/intel_toolchain.sh; cd fresh scratch; ifx with profile flags and -module/-I scratch, three source inputs, then run executable",
+      "compile_exit": 0,
+      "run_exit": 0,
+      "run_stdout_from_tool_transcript": "Column physics tests passed",
+      "run_stdout_persisted_separately": false,
+      "build_log": "column_o0_build.log"
+    },
+    {
+      "profile": "O2",
+      "flags_variable": "CLOUD_BAL_REPRO_FLAGS",
+      "scratch": "/var/tmp/cloudbal-retain-CLOUD_BAL_REPRO_FLAGS.J54gW1",
+      "compiler_profile": "tests/intel_toolchain.sh",
+      "compiled_inputs": [
+        "src/common/cloud_bal_state.f90",
+        "src/common/cloud_bal_column_physics.f90",
+        "tests/test_column_physics.f90"
+      ],
+      "executable_sha256": "471285fbf0a2d8b5f4473b9dd396b7f1306a83937ce5462411b02064eb1bb8bb",
+      "command_description": "source tests/intel_toolchain.sh; cd fresh scratch; ifx with profile flags and -module/-I scratch, three source inputs, then run executable",
+      "compile_exit": 0,
+      "run_exit": 0,
+      "run_stdout_from_tool_transcript": "Column physics tests passed",
+      "run_stdout_persisted_separately": false,
+      "build_log": "column_o2_build.log"
+    }
+  ],
+  "shadow_io": {
+    "command": "CLOUD_BAL_WORKSPACE_ROOT=/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50 CLOUD_BAL_KEEP_TEST_ARTIFACTS=1 bash tests/run_real_shadow_io_contract_tests.sh",
+    "exit_code": 0,
+    "scratch": "/var/tmp/cloud_bal_real_shadow.pZc56d",
+    "test_executable_sha256": "5b24a71cbdb36ff14471a434f8e0cbff732fd71aa64efb60478ac58a04bf89de",
+    "log": "shadow_io.log",
+    "success_marker": "Real SHADOW I/O contract suite passed with pinned Intel/NetCDF inputs (20260816T120000Z)"
+  },
+  "fixture": {
+    "shadow_path": "/var/tmp/cloud_bal_real_shadow.pZc56d/background-precipitation-shadow.nc",
+    "sha256": "7225dd25b070183153d35ef7e648dad3d670a7c68c43456f38e0721fd89fd322",
+    "checker_status": "PASS_SCOPED_BACKGROUND_PRECIPITATION",
+    "legacy_validator": "Rejected with explicit policy-specific unsupported message; not a general SHADOW PASS"
+  },
+  "earlier_runs": "Separate previous broad attempts were interrupted and are not counted as passed; reviewer broad exit 130 is not this exit-0 run.",
+  "artifacts": {
+    "shadow_io.log": "0fc114e95eccc14d59fb89aeffae3fc593df7eaff14a9e7a530a7cbe395fc109",
+    "column_o0_build.log": "bb00c1bb46df03edcb2d29823e54ea09b56fed7bd934d64406e4fc84a0ccc71c",
+    "column_o2_build.log": "bb00c1bb46df03edcb2d29823e54ea09b56fed7bd934d64406e4fc84a0ccc71c"
+  }
+}

@@ -67,6 +67,10 @@ CONTAINS
     CASE ('HYDRO')
       CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
 
+    CASE ('HYDRO_BACKGROUND_PRECIP')
+      config%column%retain_background_precipitation=.TRUE.
+      CALL run_cloud_bal_pipeline(input,candidate,operational,result,config)
+
     CASE ('MODEL_DYNAMICS')
       ! The caller supplies the paired physical response and its covered halo.
       ! This preserves baseline boundary fluxes; it grants no observational

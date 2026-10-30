@@ -1,0 +1,119 @@
+{
+  "schema": "snow-sensitivity-prior-manifest-audit-v1",
+  "status": "PASS",
+  "source_commit": "e8f2e7e2c668672b5209a8cb142ca9d9d8e4138a",
+  "reason": "All prior evidence manifest entries were rehashed. PR134/135/136 current graph trio entries resolve to exact bytes in their existing dated snapshots; old manifests remain unmodified.",
+  "total_prior_manifest_entries": 633,
+  "hashes_verified": 633,
+  "preserved_in_place": 624,
+  "rebound_to_existing_dated_snapshot": 9,
+  "prior_evidence": [
+    {
+      "pr": "PR132",
+      "manifest": "docs/evidence/current_forecast_paper_20261029/validation.json",
+      "manifest_sha256": "dbe8e259b3b61102887a851c601c45567625124245d5237bad38eba50c7c9539",
+      "artifact_count": 200,
+      "artifact_hashes_verified": 200,
+      "preserved_in_place": 200,
+      "rebound_to_existing_dated_snapshot": [],
+      "status": "PASS"
+    },
+    {
+      "pr": "PR133",
+      "manifest": "docs/evidence/hourly_precipitation_progress_20261030/validation.json",
+      "manifest_sha256": "311451100993e0fc34d0f402e663c22eaf2dce4d6df279bb5d2c7da431105829",
+      "artifact_count": 49,
+      "artifact_hashes_verified": 49,
+      "preserved_in_place": 49,
+      "rebound_to_existing_dated_snapshot": [],
+      "status": "PASS"
+    },
+    {
+      "pr": "PR134",
+      "manifest": "docs/evidence/first_hour_background_policy_20261030/validation.json",
+      "manifest_sha256": "523196d1cccdcfef9d902bc57a3cfee70eee084b52b52d550626b907394442ef",
+      "artifact_count": 247,
+      "artifact_hashes_verified": 247,
+      "preserved_in_place": 244,
+      "rebound_to_existing_dated_snapshot": [
+        {
+          "prior_path": "graphify-out/GRAPH_REPORT.md",
+          "preserved_path": "graphify-out/2026-10-30-first-hour-zero-rate/GRAPH_REPORT.md",
+          "sha256": "89a5a7a265696568839e1f0cba44bd29ab7c2068e40ea8629ab9ab50b5f2e10f",
+          "size": 318660
+        },
+        {
+          "prior_path": "graphify-out/graph.json",
+          "preserved_path": "graphify-out/2026-10-30-first-hour-zero-rate/graph.json",
+          "sha256": "f35437ae57b9250755de78d10b2fc22373c7622cde054b412e819845e80f4bce",
+          "size": 19214479
+        },
+        {
+          "prior_path": "graphify-out/manifest.json",
+          "preserved_path": "graphify-out/2026-10-30-first-hour-zero-rate/manifest.json",
+          "sha256": "1a6e3be7b7413164538c0f0c4e3e69da35fe3eba3656f0829cb75133ae89f49f",
+          "size": 1076093
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "pr": "PR135",
+      "manifest": "docs/evidence/first_hour_factorial_20261030/validation.json",
+      "manifest_sha256": "cbacc9a1f8187eab8f408fd4153caa28dd2f1696e4de53d36f15d2580603a1ea",
+      "artifact_count": 64,
+      "artifact_hashes_verified": 64,
+      "preserved_in_place": 61,
+      "rebound_to_existing_dated_snapshot": [
+        {
+          "prior_path": "graphify-out/GRAPH_REPORT.md",
+          "preserved_path": "graphify-out/2026-10-30-first-hour-factorial/GRAPH_REPORT.md",
+          "sha256": "f36dd86f59fe1e496af489ee1c919430168ff972ab4401c91c08fd8b47db5680",
+          "size": 318060
+        },
+        {
+          "prior_path": "graphify-out/graph.json",
+          "preserved_path": "graphify-out/2026-10-30-first-hour-factorial/graph.json",
+          "sha256": "23687595ae1b3a5b961808d90b59cc13f2cc7079fd3712a23413fdf6fdb80f79",
+          "size": 19289145
+        },
+        {
+          "prior_path": "graphify-out/manifest.json",
+          "preserved_path": "graphify-out/2026-10-30-first-hour-factorial/manifest.json",
+          "sha256": "5dc83822ea69f1ca29b01c4242020a18f6662f23c0b5482904ede9ced9101fd2",
+          "size": 1077444
+        }
+      ],
+      "status": "PASS"
+    },
+    {
+      "pr": "PR136",
+      "manifest": "docs/evidence/six_hour_improvement_20261030/validation.json",
+      "manifest_sha256": "3dcbc8c8276ff4135fd497be6cc5de6ad20e3ce58cd98397d0e207668fa6f3a3",
+      "artifact_count": 73,
+      "artifact_hashes_verified": 73,
+      "preserved_in_place": 70,
+      "rebound_to_existing_dated_snapshot": [
+        {
+          "prior_path": "graphify-out/GRAPH_REPORT.md",
+          "preserved_path": "graphify-out/2026-10-30-six-hour-improvement/GRAPH_REPORT.md",
+          "sha256": "d8fd5fb25d9403d222d179f5bf34d2c22fdf8b34254f16911751f82a5da6a53a",
+          "size": 317627
+        },
+        {
+          "prior_path": "graphify-out/graph.json",
+          "preserved_path": "graphify-out/2026-10-30-six-hour-improvement/graph.json",
+          "sha256": "f4ca4ced62867dfe3d8bb63d852dd76b4fc0f1cfd76779d41b7205c24d8ab216",
+          "size": 19372966
+        },
+        {
+          "prior_path": "graphify-out/manifest.json",
+          "preserved_path": "graphify-out/2026-10-30-six-hour-improvement/manifest.json",
+          "sha256": "feb4df8979cde51a3412785be2f148c59daaae6a774343470d3a5b7bc794f403",
+          "size": 1079009
+        }
+      ],
+      "status": "PASS"
+    }
+  ]
+}

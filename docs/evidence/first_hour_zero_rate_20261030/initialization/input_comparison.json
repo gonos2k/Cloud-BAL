@@ -1,0 +1,747 @@
+{
+  "status": "PASS",
+  "paths": {
+    "ORIGINAL": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/original/wrfinput_d01",
+    "HYDRO": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/hydro/run/wrfinput_d01"
+  },
+  "sha256_before_after": {
+    "ORIGINAL": "5d6b2bdce4121642dea994f3e953cca690ad7c9f52f6f8feb01bb6c2f0b9b6bc",
+    "HYDRO": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126"
+  },
+  "comparison": "HYDRO minus ORIGINAL; all array elements, including outside verification mask",
+  "unweighted_sum_limitation": "Mixing-ratio sums are not a mass budget; require cell dry-air mass and area weights.",
+  "fields": {
+    "QVAPOR": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "kg kg-1",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 90,
+      "increased_count": 31,
+      "decreased_count": 59,
+      "original_positive_count": 2573532,
+      "hydro_positive_count": 2573532,
+      "max_abs_difference": 0.000258496031165123,
+      "mean_signed_difference": 1.4530219997678131e-09,
+      "sum_signed_unweighted_difference": 0.0037393986131064594,
+      "original_min_max": [
+        1.8941967994123843e-07,
+        0.02252335287630558
+      ],
+      "hydro_min_max": [
+        1.8941967994123843e-07,
+        0.02252335287630558
+      ]
+    },
+    "QCLOUD": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "kg kg-1",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 192,
+      "increased_count": 168,
+      "decreased_count": 24,
+      "original_positive_count": 967202,
+      "hydro_positive_count": 967240,
+      "max_abs_difference": 0.001277371853348086,
+      "mean_signed_difference": 2.006074169751666e-08,
+      "sum_signed_unweighted_difference": 0.051626960702293445,
+      "original_min_max": [
+        0.0,
+        0.006884201429784298
+      ],
+      "hydro_min_max": [
+        0.0,
+        0.006884201429784298
+      ]
+    },
+    "QICE": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "kg kg-1",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 72,
+      "increased_count": 72,
+      "decreased_count": 0,
+      "original_positive_count": 253248,
+      "hydro_positive_count": 253258,
+      "max_abs_difference": 0.0019483673859213013,
+      "mean_signed_difference": 2.1585423822515973e-08,
+      "sum_signed_unweighted_difference": 0.05555077894080718,
+      "original_min_max": [
+        0.0,
+        0.01022245828062296
+      ],
+      "hydro_min_max": [
+        0.0,
+        0.01022245828062296
+      ]
+    },
+    "QRAIN": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "kg kg-1",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 134348,
+      "increased_count": 14673,
+      "decreased_count": 119675,
+      "original_positive_count": 202569,
+      "hydro_positive_count": 209340,
+      "max_abs_difference": 0.0007816820871084929,
+      "mean_signed_difference": -1.0979586321382584e-06,
+      "sum_signed_unweighted_difference": -2.8256316744840366,
+      "original_min_max": [
+        0.0,
+        0.002388704102486372
+      ],
+      "hydro_min_max": [
+        0.0,
+        0.002388704102486372
+      ]
+    },
+    "QSNOW": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "kg kg-1",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 39990,
+      "increased_count": 764,
+      "decreased_count": 39226,
+      "original_positive_count": 146865,
+      "hydro_positive_count": 147604,
+      "max_abs_difference": 0.005615635309368372,
+      "mean_signed_difference": -2.077127148383524e-06,
+      "sum_signed_unweighted_difference": -5.345553184433747,
+      "original_min_max": [
+        0.0,
+        0.02082240581512451
+      ],
+      "hydro_min_max": [
+        0.0,
+        0.02082240581512451
+      ]
+    },
+    "QGRAUP": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "kg kg-1",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 68,
+      "increased_count": 0,
+      "decreased_count": 68,
+      "original_positive_count": 1536,
+      "hydro_positive_count": 1468,
+      "max_abs_difference": 0.0009629359701648355,
+      "mean_signed_difference": -8.593722515662488e-09,
+      "sum_signed_unweighted_difference": -0.022116219893177913,
+      "original_min_max": [
+        0.0,
+        0.00948484055697918
+      ],
+      "hydro_min_max": [
+        0.0,
+        0.00948484055697918
+      ]
+    },
+    "T": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "K",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 88,
+      "increased_count": 87,
+      "decreased_count": 1,
+      "original_positive_count": 2375010,
+      "hydro_positive_count": 2375010,
+      "max_abs_difference": 0.000640869140625,
+      "mean_signed_difference": 9.87791975313499e-09,
+      "sum_signed_unweighted_difference": 0.025421142578125,
+      "original_min_max": [
+        -6.444244384765625,
+        208.02194213867188
+      ],
+      "hydro_min_max": [
+        -6.444244384765625,
+        208.02194213867188
+      ]
+    },
+    "THM": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "K",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 90,
+      "increased_count": 89,
+      "decreased_count": 1,
+      "original_positive_count": 2573532,
+      "hydro_positive_count": 2573532,
+      "max_abs_difference": 0.125335693359375,
+      "mean_signed_difference": 7.10486869158563e-07,
+      "sum_signed_unweighted_difference": 1.828460693359375,
+      "original_min_max": [
+        0.576904296875,
+        208.0242919921875
+      ],
+      "hydro_min_max": [
+        0.576904296875,
+        208.0242919921875
+      ]
+    },
+    "P": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "Pa",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 163821,
+      "increased_count": 13317,
+      "decreased_count": 150504,
+      "original_positive_count": 2373871,
+      "hydro_positive_count": 2373820,
+      "max_abs_difference": 120.3984375,
+      "mean_signed_difference": -0.19464589405211155,
+      "sum_signed_unweighted_difference": -500927.43701171875,
+      "original_min_max": [
+        -277.4609375,
+        3178.7578125
+      ],
+      "hydro_min_max": [
+        -277.4609375,
+        3176.0546875
+      ]
+    },
+    "PB": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "Pa",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 0,
+      "increased_count": 0,
+      "decreased_count": 0,
+      "original_positive_count": 2573532,
+      "hydro_positive_count": 2573532,
+      "max_abs_difference": 0.0,
+      "mean_signed_difference": 0.0,
+      "sum_signed_unweighted_difference": 0.0,
+      "original_min_max": [
+        5280.0419921875,
+        99878.0859375
+      ],
+      "hydro_min_max": [
+        5280.0419921875,
+        99878.0859375
+      ]
+    },
+    "MU": {
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "Pa",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 65988,
+      "changed_count": 4,
+      "increased_count": 0,
+      "decreased_count": 4,
+      "original_positive_count": 37694,
+      "hydro_positive_count": 37694,
+      "max_abs_difference": 1.40625,
+      "mean_signed_difference": -8.405884403224828e-05,
+      "sum_signed_unweighted_difference": -5.546875,
+      "original_min_max": [
+        -647.59375,
+        2472.3671875
+      ],
+      "hydro_min_max": [
+        -647.59375,
+        2472.3671875
+      ]
+    },
+    "MUB": {
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "Pa",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 65988,
+      "changed_count": 0,
+      "increased_count": 0,
+      "decreased_count": 0,
+      "original_positive_count": 65988,
+      "hydro_positive_count": 65988,
+      "max_abs_difference": 0.0,
+      "mean_signed_difference": 0.0,
+      "sum_signed_unweighted_difference": 0.0,
+      "original_min_max": [
+        71243.7734375,
+        95172.421875
+      ],
+      "hydro_min_max": [
+        71243.7734375,
+        95172.421875
+      ]
+    },
+    "PH": {
+      "dimensions": [
+        "Time",
+        "bottom_top_stag",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        40,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "m2 s-2",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2639520,
+      "changed_count": 313793,
+      "increased_count": 286891,
+      "decreased_count": 26902,
+      "original_positive_count": 2573532,
+      "hydro_positive_count": 2573532,
+      "max_abs_difference": 70.5078125,
+      "mean_signed_difference": 0.16380440082493397,
+      "sum_signed_unweighted_difference": 432364.9920654297,
+      "original_min_max": [
+        0.0,
+        13527.171875
+      ],
+      "hydro_min_max": [
+        0.0,
+        13528.765625
+      ]
+    },
+    "PHB": {
+      "dimensions": [
+        "Time",
+        "bottom_top_stag",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        40,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "m2 s-2",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2639520,
+      "changed_count": 0,
+      "increased_count": 0,
+      "decreased_count": 0,
+      "original_positive_count": 2607685,
+      "hydro_positive_count": 2607685,
+      "max_abs_difference": 0.0,
+      "mean_signed_difference": 0.0,
+      "sum_signed_unweighted_difference": 0.0,
+      "original_min_max": [
+        -143.42970275878906,
+        195224.296875
+      ],
+      "hydro_min_max": [
+        -143.42970275878906,
+        195224.296875
+      ]
+    },
+    "U": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east_stag"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        235
+      ],
+      "dtype": "float32",
+      "units": "m s-1",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2584530,
+      "changed_count": 134,
+      "increased_count": 64,
+      "decreased_count": 70,
+      "original_positive_count": 1724560,
+      "hydro_positive_count": 1724560,
+      "max_abs_difference": 0.0018298625946044922,
+      "mean_signed_difference": 5.537321382918816e-10,
+      "sum_signed_unweighted_difference": 0.0014311373233795166,
+      "original_min_max": [
+        -19.813982009887695,
+        30.849817276000977
+      ],
+      "hydro_min_max": [
+        -19.813982009887695,
+        30.849817276000977
+      ]
+    },
+    "V": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north_stag",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        283,
+        234
+      ],
+      "dtype": "float32",
+      "units": "m s-1",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2582658,
+      "changed_count": 128,
+      "increased_count": 90,
+      "decreased_count": 38,
+      "original_positive_count": 2085764,
+      "hydro_positive_count": 2085764,
+      "max_abs_difference": 0.0020657777786254883,
+      "mean_signed_difference": -1.3967981497128025e-09,
+      "sum_signed_unweighted_difference": -0.003607451915740967,
+      "original_min_max": [
+        -15.372444152832031,
+        30.698633193969727
+      ],
+      "hydro_min_max": [
+        -15.372444152832031,
+        30.698633193969727
+      ]
+    },
+    "QNCCN": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "  kg(-1)",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 0,
+      "increased_count": 0,
+      "decreased_count": 0,
+      "original_positive_count": 0,
+      "hydro_positive_count": 0,
+      "max_abs_difference": 0.0,
+      "mean_signed_difference": 0.0,
+      "sum_signed_unweighted_difference": 0.0,
+      "original_min_max": [
+        0.0,
+        0.0
+      ],
+      "hydro_min_max": [
+        0.0,
+        0.0
+      ]
+    },
+    "QNCLOUD": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "  kg(-1)",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 0,
+      "increased_count": 0,
+      "decreased_count": 0,
+      "original_positive_count": 0,
+      "hydro_positive_count": 0,
+      "max_abs_difference": 0.0,
+      "mean_signed_difference": 0.0,
+      "sum_signed_unweighted_difference": 0.0,
+      "original_min_max": [
+        0.0,
+        0.0
+      ],
+      "hydro_min_max": [
+        0.0,
+        0.0
+      ]
+    },
+    "QNICE": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "  kg-1",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 0,
+      "increased_count": 0,
+      "decreased_count": 0,
+      "original_positive_count": 0,
+      "hydro_positive_count": 0,
+      "max_abs_difference": 0.0,
+      "mean_signed_difference": 0.0,
+      "sum_signed_unweighted_difference": 0.0,
+      "original_min_max": [
+        0.0,
+        0.0
+      ],
+      "hydro_min_max": [
+        0.0,
+        0.0
+      ]
+    },
+    "QNRAIN": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "  kg(-1)",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 0,
+      "increased_count": 0,
+      "decreased_count": 0,
+      "original_positive_count": 0,
+      "hydro_positive_count": 0,
+      "max_abs_difference": 0.0,
+      "mean_signed_difference": 0.0,
+      "sum_signed_unweighted_difference": 0.0,
+      "original_min_max": [
+        0.0,
+        0.0
+      ],
+      "hydro_min_max": [
+        0.0,
+        0.0
+      ]
+    },
+    "QIB": {
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ],
+      "dtype": "float32",
+      "units": "m(3) kg(-1)",
+      "metadata_equal": true,
+      "metadata_differences": {},
+      "count": 2573532,
+      "changed_count": 0,
+      "increased_count": 0,
+      "decreased_count": 0,
+      "original_positive_count": 0,
+      "hydro_positive_count": 0,
+      "max_abs_difference": 0.0,
+      "mean_signed_difference": 0.0,
+      "sum_signed_unweighted_difference": 0.0,
+      "original_min_max": [
+        0.0,
+        0.0
+      ],
+      "hydro_min_max": [
+        0.0,
+        0.0
+      ]
+    }
+  },
+  "global_attribute_differences": {}
+}

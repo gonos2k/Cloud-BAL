@@ -1,0 +1,11 @@
+# Six-hour improved B1 forecast
+
+The `IMPROVED_BG_FIXED` case extends the one-hour `POLICY_BG` initialization through 18 UTC using the fixed WRF executable and the same producer background-preserved input. It stages exactly the 89 declared runtime files from `/var/tmp/firsthour-runtime-plan-20261030/producer_pair/forecast/run_POLICY_BG`.
+
+Only three namelist values changed: `run_hours` 1→6, `end_hour` 13→18, and `history_end_s` 3600→21600. The hourly history interval remains 3600 seconds. The executable SHA is `68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f`; `wrfinput_d01` SHA is `9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5`; boundary SHA is `74102ac2063f17a9007f3352e6e6c2f52629055bdf3f05b4f4d6d77aef835f45`. That same boundary file was used by the completed original six-hour case, which produced its 18 UTC history.
+
+The new 13 UTC history is byte-for-byte identical to the prior one-hour B1 history (SHA `8b4ead8741dff7284b1de140038d85ba48a474d6b8b98e1905e10ddbac165702`). `one_hour_comparison.json` also records exact equality for `Times`, precipitation accumulations, near-surface fields, and rain/snow/graupel mixing ratios.
+
+Raw preflight and runtime receipts are retained with per-file hashes, UTC runtime, MPI launch details, source/staged postchecks, and seven hourly output hashes. Large histories and staged files remain in `/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/`. Completion demonstrates runtime success for this case; it does not by itself validate forecast skill or operational suitability.
+
+The run exited 0 with the WRF success marker and all seven hourly histories. Elapsed runtime was 818.760 seconds, from `2026-10-30T03:13:27.757228Z` through `2026-10-30T03:27:06.517532Z`. `receipt.json` is the raw runner receipt; `normalized_receipt.json` preserves its fields and adds aliases and hashes binding it to preflight, the exact namelist/boundary contract, and the one-hour comparison. `normalization_manifest.json` records these bindings. `history_validation.json` confirms each history's internal `Times` value and finite, unmasked `RAINC`, `RAINNC`, and `RAINSH`. Runtime text logs are retained as `.txt` files.

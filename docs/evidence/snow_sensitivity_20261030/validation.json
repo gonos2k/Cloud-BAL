@@ -1,0 +1,1014 @@
+{
+  "schema": "snow-sensitivity-validation-v1",
+  "status": "PASS_SCOPED_SIX_HOUR_SENSITIVITY",
+  "base_commit": "e8f2e7e2c668672b5209a8cb142ca9d9d8e4138a",
+  "dependency_pr": 136,
+  "experiment": {
+    "new_forecasts": 12,
+    "families": [
+      "CONTROL",
+      "IMPROVED"
+    ],
+    "new_initial_QSNOW_multipliers": [
+      0,
+      0.25,
+      0.5,
+      0.75,
+      1.25,
+      1.5
+    ],
+    "factor_one_controls": "Reused sealed ORIGINAL and IMPROVED_BG_FIXED forecasts",
+    "score_cases": 15,
+    "eligible_cases": 14,
+    "max_concurrent_cases": 8,
+    "mpi_ranks_per_case": 8,
+    "omp_threads_per_rank": 1,
+    "successful_six_hour_cases": 12,
+    "validated_history_files": 84,
+    "paired_points_per_hour": 3688,
+    "lead_hours": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "thresholds_mm": [
+      0.1,
+      0.5,
+      1,
+      2.5,
+      5,
+      10
+    ],
+    "score_window": "Each preceding one-hour total precipitation increment, not snowfall only or 0-to-lead total"
+  },
+  "results": {
+    "selected_overall": "IMPROVED_BG_FIXED",
+    "selected_improved_family": "IMPROVED_BG_FIXED",
+    "feasible_cases": [
+      "IMPROVED_BG_FIXED"
+    ],
+    "exploratory_unselected_case": "IMPROVED_SNOW_150",
+    "exploratory_failed_guards": [
+      "first_hour_RMSE_at_most_alpha1"
+    ],
+    "selection_plan_unchanged": true
+  },
+  "validation": {
+    "clean_index_targeted_tests_passed": 79,
+    "clean_index_tests_skipped": 0,
+    "exported_files": 1901,
+    "independent_categorical_rows": 540,
+    "independent_continuous_rows": 90,
+    "independent_transition_rows": 864,
+    "independent_selection_rows": 14,
+    "independent_numeric_max_difference": 0,
+    "deterministic_figure_assets": 15,
+    "byte_identical_report_artifacts": 2,
+    "prior_artifacts_verified": 633,
+    "prior_artifacts_in_place": 624,
+    "prior_graph_bindings_to_dated_snapshots": 9,
+    "kg_dated_snapshots_after": 216,
+    "team_review": "PASS; final staged-byte readback is a separate pre-commit check",
+    "whitespace": "Two extra EOF blank lines retained in pinned scorer/test; see validation/source_whitespace.json"
+  },
+  "limitations": [
+    "Native QSNOW-only diagnostic adds/removes initial water without compensation; no conservative initialization or energy closure claim.",
+    "Selection and verification use one event; no independent forecast-skill validation or operational promotion.",
+    "No new native compilation or full portable suite; pinned previous old/fixed WRF binaries reused.",
+    "RN1 input freshness, coverage/QC and representativeness limitations remain.",
+    "Initial /tmp noexec launch attempt and two pre-score CLI failures are preserved separately and excluded from successful forecast/score products.",
+    "KG structural freshness is not runtime or scientific validation."
+  ],
+  "manifest_scope": "All new published artifacts and current/new dated Cloud-BAL graph trio; this manifest excludes itself.",
+  "artifact_count": 185,
+  "artifacts": [
+    {
+      "path": "docs/SNOW_SENSITIVITY_20261030.md",
+      "size": 20923,
+      "sha256": "88a1673cb3ad87ace850753d4499ae0e87fe8e52d08e628e52b3faeee18421b8"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/README.md",
+      "size": 2303,
+      "sha256": "9baa92d3d10c1b34336126f97a6e6ab7105fec8e3a701192e4d46ab130417c43"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/analysis/categorical_scores.csv",
+      "size": 110191,
+      "sha256": "b75a8a85b470703694f6df8490e5be4087272f7c9f1cbdc48fb9ca6dbbc6b59f"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/analysis/continuous_scores.csv",
+      "size": 16520,
+      "sha256": "50ee5a6157257a5ec1d5aa96451364ea939e071e0b9144a5f651991359ed8d9f"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/analysis/hour_13_arrays.npz",
+      "size": 384855,
+      "sha256": "d1c0a46f9582509d064a3d5749182ca519510733608f2593fb4cfc892ccea5c2"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/analysis/hour_14_arrays.npz",
+      "size": 400047,
+      "sha256": "01d72ac752fda12e59d6a5bfbc9cba57986683c777383ea31e1a85b90e49c29b"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/analysis/hour_15_arrays.npz",
+      "size": 432788,
+      "sha256": "5c6058ce1d572eafc972f17ec004a657f876c0e0beee9d6cf791e8e7cc3ae7a6"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/analysis/hour_16_arrays.npz",
+      "size": 431772,
+      "sha256": "1ceba12b167682518829eae1febf4f03dddee292c1dc6757bb2ad63bf40eb518"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/analysis/hour_17_arrays.npz",
+      "size": 412227,
+      "sha256": "af31cfe89a6c7bdf9bb60709064922eca649567f961ec4d338035b6eba14cbb2"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/analysis/hour_18_arrays.npz",
+      "size": 435941,
+      "sha256": "fb6dcc5e7182f6d60775d665422bbb92cb5d96eccedaa0d7682f17f2f2f3e052"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/analysis/receipt.json",
+      "size": 421954,
+      "sha256": "18e2d82c3be0120b2da0e34fec75c12d6da52ddbfc28eaffb19781e94153e7ec"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/analysis/selection.json",
+      "size": 3194,
+      "sha256": "3da256a10b216da0e59c48164226d17fdc2d578e917a87bf3463bb71593f2e6b"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/analysis/selection_scores.csv",
+      "size": 2773,
+      "sha256": "33942c4777e87a1ba70e24e2b932c59f312a8d78b0e612458391cb77af580fd6"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/analysis/transitions.csv",
+      "size": 96364,
+      "sha256": "20f9a49f18698ed21a154ba12e3cf9ded0c0dbd11f22929eafff031d15564317"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/attempts/score_attempt_01_command.json",
+      "size": 965,
+      "sha256": "a606d99fe1165581c09d77fdf84a1f6b1161f2a80af048b963666b8dd24254ea"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/attempts/score_attempt_01_failure.json",
+      "size": 513,
+      "sha256": "c7918a1ee5eabd92832aa6eb3a70a72b1f6be8124a0a5372c8b8b17ee0b9548b"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/attempts/score_attempt_01_stdout.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/attempts/score_attempt_02_command.json",
+      "size": 965,
+      "sha256": "6bca245433b57252721b5d23f1839417e753bbd93e7ed0e66d6be235a4bc18fc"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/attempts/score_attempt_02_failure.json",
+      "size": 528,
+      "sha256": "98a2ee28074ac8a7c802186812d58cb3be5d315f8ecf1efb1fd72d7a43a3120d"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/attempts/score_attempt_02_stdout.txt",
+      "size": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/build_report.py",
+      "size": 16863,
+      "sha256": "c8e1efed25d5c225dbfa4103c34686fc776e08edc153ed13471ff5b18e788968"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/figure_manifest.json",
+      "size": 11215,
+      "sha256": "299b5fcc0585702cf98ded58182e3ce86339fe436679db55b827f7bace8ed65c"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/selected_case_csi_comparison.pdf",
+      "size": 43478,
+      "sha256": "800eb5149f2eac66edd08f2b5ea415d91fa45cd262a8f032f6bd3a34debed40a"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/selected_case_csi_comparison.png",
+      "size": 563736,
+      "sha256": "536c8595cfe55e53cfa0a5535b59bcb02a4ca1f7d50f5326cc37fb3028550880"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/selected_case_csi_comparison.svg",
+      "size": 147753,
+      "sha256": "b318e05aa3b5152afed48f11d914a1416ea00e453e4922db27a1e437468d8117"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/selected_case_hourly_errors.pdf",
+      "size": 22732,
+      "sha256": "3d0221c6c346245962e73cbbb9e23055f18515d6a91ac12d095dddec7e7ef1e2"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/selected_case_hourly_errors.png",
+      "size": 238308,
+      "sha256": "423992cb760de799e3da9b74bd109dcf7bd9e85a218ebc8ed3fbf05a87b73a9e"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/selected_case_hourly_errors.svg",
+      "size": 31223,
+      "sha256": "0e8d6095c23186a0450dca84c3b7d540c18e831730e4ad2cead4c4d9f7cc98b9"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/snow_alpha_dose_response.pdf",
+      "size": 34254,
+      "sha256": "2c4f557a258551daafe8d23ead91bc581e3aecd82c743e00b3afdee5ee63223a"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/snow_alpha_dose_response.png",
+      "size": 439042,
+      "sha256": "d9b31d94e82bb919f70c1ab2fcf5d15f292a509588a1c69b26b80502cf934615"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/snow_alpha_dose_response.svg",
+      "size": 61321,
+      "sha256": "afa3db68964f107c5c1b1d0d552dc51e4bd26bf127fa71fac8740a50eda509e9"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/snow_sensitivity_maps_leads_1_3.pdf",
+      "size": 70163,
+      "sha256": "2db8d2968043741afed6a1830efeb31f637923e785a8b832fa533284c68780d3"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/snow_sensitivity_maps_leads_1_3.png",
+      "size": 252317,
+      "sha256": "abaf19a90aaf5774f2ac049eb6452de726f749cb5799921bc7b833d34772d08c"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/snow_sensitivity_maps_leads_1_3.svg",
+      "size": 136631,
+      "sha256": "fbcb0ffdaf99cf758eb9ae8b0b69bb79bdc2e9f4a3e10fd0ab6323ce914809bb"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/snow_sensitivity_maps_leads_4_6.pdf",
+      "size": 75781,
+      "sha256": "adbcd0d12bed96f5cd13b03853054002cabe4ec1a01e3fe5642511b41cd6068a"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/snow_sensitivity_maps_leads_4_6.png",
+      "size": 272628,
+      "sha256": "0da7bacd156b6267c4f0ff2917620ecfc7907181b3a400f799a43a96f9026f76"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/figures/snow_sensitivity_maps_leads_4_6.svg",
+      "size": 149767,
+      "sha256": "a0e97fd670abd4d1394242754a67a0d2e93f7f1242fa944bf852b4b0c007ae96"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/kg/baseline.json",
+      "size": 139979,
+      "sha256": "ce70be70e281b98ead16030c0c263f55d026719c26a6757fc685d1f3817d1afa"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/kg/candidate_paths.json",
+      "size": 16646,
+      "sha256": "2879ab997c386e280dddebae81b77ea9adaab87c6a92e48c6c5652d782debf0e"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/kg/postpublish_readback.json",
+      "size": 2533,
+      "sha256": "68c8536fd6f7c452bdc3d8b019e1931f2b2712c5133d6cd0a80fea4d4c9253b0"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/kg/publish_go.json",
+      "size": 608,
+      "sha256": "0a8775e38978b49efa61d369d8cb19b022bb7f806629ac52f7c163808aaba876"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/kg/publish_kg.py",
+      "size": 10723,
+      "sha256": "d9da85413d5e7bfe334b5cded93e6475102ef1c7e488dd0ec5204fd35e1addfe"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/kg/publish_receipt.json",
+      "size": 3980,
+      "sha256": "db5f191f5c53d8719918204da19c8979d02361b01a43664990a47fdfd09d395a"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/kg/selection_lock.json",
+      "size": 27827,
+      "sha256": "8f4c8115dfaff971c17e14df144d3e95c678c622bd651d2f75f919690f20a3dc"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/kg/stage_kg.py",
+      "size": 22492,
+      "sha256": "c734de6d30193d2fa0c4f60511621cd42c292e226bc1ae9dbd22bf997c3c8656"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/kg/stage_receipt.json",
+      "size": 33409,
+      "sha256": "2cc1d65911ca89c420b24c1b77a6bb49391158622843cf45b05896eea9db6403"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/kg/stage_validation.json",
+      "size": 3215,
+      "sha256": "e00d9b3a5ab0dd4035ad3a0bad19dffa22953cd922c219c6471b9fa0a3b49980"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/report_receipt.json",
+      "size": 406,
+      "sha256": "461073bc6be8aa230fc9a74ffb5b9f2ccb90f95b6a8b32d64b122345fec47c6e"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/review/independent_review.json",
+      "size": 6131,
+      "sha256": "5cfa6922c6a20b63a9f2cbec85f99ebfdb847d46195f43fffc7314a02015100a"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/review/preflight.json",
+      "size": 2793,
+      "sha256": "fbc0042b3a136d4426b305074542c220c6b5519642c5c7541233ede3ccf04bdf"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/README.md",
+      "size": 3188,
+      "sha256": "fb24d962022e0d09e6ad9373487fe32b3533fb2452c57639a3c5deb224fb91a8"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/attempt.json",
+      "size": 4175,
+      "sha256": "b7d0c4a465528cd9c618c237733768ebca1a1c8f59e4b924863755a13f860d4e"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/batch_receipt.json",
+      "size": 6289,
+      "sha256": "7266aaad1155c0fadcdc4c009efd3cf84711755122842ba1eeb61ff2af975e66"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_000/launcher.txt",
+      "size": 848,
+      "sha256": "c86a04a9d01aecdcc7279abbedd850b4f2e14535fc9f4c6be6bb7dccd4b5b8c0"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_000/receipt.json",
+      "size": 62637,
+      "sha256": "7b18b4758ff7e399eb13cfc2dcfd9731b659036d830a85dd4907900c99e7a229"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_000/runner_stdout.txt",
+      "size": 182,
+      "sha256": "3269a653bc996220cf4efb2bc987848809b9873cd1d0bdb3b5e3b5359e813fda"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_025/launcher.txt",
+      "size": 1272,
+      "sha256": "0b5b04402e48ff1aec80f8b3096ecf8094ddc5ce954c4113c76eb70ab12386df"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_025/receipt.json",
+      "size": 62699,
+      "sha256": "3a5d5449b4a2cc75ffe1e41754cdd3580801def36fd31653e5cb888a69ca2978"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_025/runner_stdout.txt",
+      "size": 188,
+      "sha256": "553707c969840a51569826b5c6e772e9c130a015de91fd2dd455c49d33306374"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_050/launcher.txt",
+      "size": 848,
+      "sha256": "93cea35708d67fd3733285e69a0b4414b94b78bc441c2a0b26dc12fc267b0fb9"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_050/receipt.json",
+      "size": 62702,
+      "sha256": "4c35029d2b6509936eea2c41bccbbed765a1caf1376e07bce6e1efbc14a5bd46"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_050/runner_stdout.txt",
+      "size": 190,
+      "sha256": "cce2724f73a3291856f3442a906ed935930122d78daf2a3b7b78b967988727cc"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_075/launcher.txt",
+      "size": 848,
+      "sha256": "fad416201066def74146c7c7ed4d7372910ea77a64517d319a5973499b7edb7c"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_075/receipt.json",
+      "size": 62705,
+      "sha256": "30c1a8559ca781a75206b3dea3570b4f2f2de09e19b58a97bc03de901f72a73b"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_075/runner_stdout.txt",
+      "size": 190,
+      "sha256": "e4eac4ad8eb1df7f963efe71a5701e5fee1def8a42f5f438cddd423a71c621cc"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_125/launcher.txt",
+      "size": 1484,
+      "sha256": "df527821483cb2e8aea44d960ae0e69910e7346cae2d1ea0bdc48ca396cc3322"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_125/receipt.json",
+      "size": 62703,
+      "sha256": "bbe5d76542e220970c2cf60ee024378ebc6907d4bcc718ae6c3a510c909972e5"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_125/runner_stdout.txt",
+      "size": 190,
+      "sha256": "dc109a898e6f642aa19759dca7f13c5fcf57511431fd7e072c95336a8bfc5353"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_150/launcher.txt",
+      "size": 636,
+      "sha256": "1dfb908c31e7c6306de503674de2b29dfbeec074e4e1cf7d9d784ca22abe7220"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_150/receipt.json",
+      "size": 62701,
+      "sha256": "38978fdbde07840605a8311ebe8ca8be2e8ff16110912a7d91ff299747d610b4"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/CONTROL_SNOW_150/runner_stdout.txt",
+      "size": 190,
+      "sha256": "30d699f59df6c6a3741a23a50c11c5f83b2c0cb26587e9a7b0d40090c826bebc"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_000/launcher.txt",
+      "size": 1065,
+      "sha256": "384e7d677342e21dd3ed0a781d1feb0798867e0883d530a3c64943df401ac562"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_000/receipt.json",
+      "size": 62657,
+      "sha256": "e1e15d06a4b51189d7bfa15f8c8e36c89cf024efbbeaeb28e306f5ecd5745b91"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_000/runner_stdout.txt",
+      "size": 183,
+      "sha256": "87e3ea1e2cf890f5744bdba7856cf54d5b36683d6032f1f2d8fbb071cdf3ef1d"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_025/launcher.txt",
+      "size": 639,
+      "sha256": "3cf9920cbbc8461ea049b4d22a3d5c7486dd59b19975db943f4a0783270bef8d"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_025/receipt.json",
+      "size": 62719,
+      "sha256": "6b43560f51fb412930705e19889f514e5052c78f417c6d3509529432e7446c8b"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_025/runner_stdout.txt",
+      "size": 189,
+      "sha256": "e7f73256c09cfbd4e3b07c891827a71b6d20a281cecd48de13d9ec2fadb0e0c2"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_050/launcher.txt",
+      "size": 1065,
+      "sha256": "9a805b49094d493ad737041708ce9596c61edfd39fb13e79f1b4ac32c8d70ac3"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_050/receipt.json",
+      "size": 62721,
+      "sha256": "e454f13251dc449bc9735ff724e014b02560967b9367e93b9473608d85530d6f"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_050/runner_stdout.txt",
+      "size": 191,
+      "sha256": "2753fba2121d110718fe45aaf67727729dc8506a3172c248c0c4a75993d80367"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_075/launcher.txt",
+      "size": 1278,
+      "sha256": "b214a775437d9064f25fb106df644972e53c6b21288c2acb5073309e0893e445"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_075/receipt.json",
+      "size": 62725,
+      "sha256": "da3ca1c3937a492665eefef8342bd2fa209dac47319e75e552cc1a4b5317aa73"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_075/runner_stdout.txt",
+      "size": 191,
+      "sha256": "5f43ae80044c31057c0190b32de3ac0a1d3fb536edf12d6e353b84ec3ac7eeaf"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_125/launcher.txt",
+      "size": 1278,
+      "sha256": "4e880dd48d6d00b0e79f713da3048c12e0d3dd608dbf4bcf9a1442155c69db48"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_125/receipt.json",
+      "size": 62723,
+      "sha256": "aa073560aa5d3e76cda3d09228ba5b1735b9e255060fb46cf4a406002e3042dc"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_125/runner_stdout.txt",
+      "size": 191,
+      "sha256": "a66227d28a478102d78cc8c1aff7e93a1420408d1b44fa03ff98dda66ada6485"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_150/launcher.txt",
+      "size": 852,
+      "sha256": "f3a07a831c45cb161d911a8bd705ed104ae243b37e14ada46caa32bb21da0ce5"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_150/receipt.json",
+      "size": 62721,
+      "sha256": "60865b55b362a0f53a3b06cacc13ee34f626d7b389710144d1c647a17ae40229"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/cases/IMPROVED_SNOW_150/runner_stdout.txt",
+      "size": 191,
+      "sha256": "2c68c490adacd2ed3439e6673711c247fda59c2118c369c7ba344b851a1a27da"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/common_plan.json",
+      "size": 658795,
+      "sha256": "a09dacaa51fa2406dc789095b9532a2bfbbc9326dde92b13e659dde100b1c415"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/common_plan.sha256",
+      "size": 83,
+      "sha256": "d20bd2bbd64813d5c9c13b5b6fb37193a7590d74bff909ff9baac91826af785e"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/env.sh",
+      "size": 418,
+      "sha256": "f5ea8c614cc1f78eecd7b7b218c275ca97ae33a48e3fd6dadfc2d843be189be5"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/field_metadata_contract.json",
+      "size": 218885,
+      "sha256": "4aa3a31dcc26ddb8885db92ff61b1f19d228f5ed57a05a85d57c3df64a0057ba"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/field_value_case_sha256.json",
+      "size": 204981,
+      "sha256": "e5eba4cb7765be618ad5fc43a9170b5aa48a160651389daf5edc0d12d35eb6cc"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/field_value_source_sha256.json",
+      "size": 34148,
+      "sha256": "8d19e624edd674bf724c21e88c4a89f639e7fbbfed8ac6cfdf87246bc2c92f0a"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/launch_scripts.sha256.json",
+      "size": 342,
+      "sha256": "91fc456d64a7a3b02bb31ff109f5a70b9646a6f3ed1effa4a59d801161164e3d"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/prepare_cases.py",
+      "size": 23505,
+      "sha256": "95cc02bd4cb1e0b398359e3d0524b80da8bf56efb0d5d76b216a0e627db2647e"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/qsnow_audit.json",
+      "size": 14675,
+      "sha256": "ca8984c22f99dc807fe2a58880702dd54007e10ab52bb888bfeea4673962e9aa"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/run_all.py",
+      "size": 3767,
+      "sha256": "e2467c7ef501bd02a098a496d6bb81d11a3961378ba27772cd169769e93e5bda"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/attempts/initial_noexec/run_case.py",
+      "size": 8988,
+      "sha256": "ad7c199742278220b59d5273e454413f168703b70fd683ca65a3beb80c4ec979"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/batch_receipt.json",
+      "size": 6250,
+      "sha256": "3c14207aac8a798206cf020886d52dfc2822a7dc6660d72f3f3a36c7e6dc44f4"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_000/launcher.txt",
+      "size": 1275,
+      "sha256": "a2856c637d7fa7a6daf2c8015ce7f4dffcaf77ce8c529623e8f8b75bf68ec2ac"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_000/receipt.json",
+      "size": 64380,
+      "sha256": "6af762f26b35c66e20a0015ea181d6db1095968abe3557613a9307e1f56bc117"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_000/rsl.out.0000.txt",
+      "size": 98989,
+      "sha256": "eb2071181d31e63a4ed2f7560a79f5ae954f975852c948d47cc187c1239d7a0f"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_000/runner_stdout.txt",
+      "size": 177,
+      "sha256": "31740707829ce866ddff49ccd8122fe51539be3c6739277f0d878376364b1180"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_025/launcher.txt",
+      "size": 1281,
+      "sha256": "de41f97ada7ef295b7a4ed3df54d81cc7ac9eb17d365bea6d5d9e2eef4f9ed42"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_025/receipt.json",
+      "size": 64448,
+      "sha256": "8cac7164ff6fc354914d8d749c7a596a0a8e6c879165774ff3bdd9d72312584d"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_025/rsl.out.0000.txt",
+      "size": 98989,
+      "sha256": "4cb2bf37370d293f80f21ee87cedb5a65fba1823135bbe67ee4b9edc765a0e4b"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_025/runner_stdout.txt",
+      "size": 183,
+      "sha256": "8bcdb748b7a850d1dd6c6a2e4fb1fb581f08b64a5fa7686b869f303fc5249b74"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_050/launcher.txt",
+      "size": 1283,
+      "sha256": "81f28e69312b15c182677557aca1bb4aed4c371c1c7f01026587f75b93ef4464"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_050/receipt.json",
+      "size": 64453,
+      "sha256": "06cb76efad445613e69d2ac8ce890f7dc45e8fdf115bdefff061cd612018f14f"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_050/rsl.out.0000.txt",
+      "size": 99009,
+      "sha256": "2efbd088dd035567876f6c6cd50c8ee222f30620ca9a7610ebbb999ae2a3a6c8"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_050/runner_stdout.txt",
+      "size": 185,
+      "sha256": "300d922f037619822126f1198704e3576827149200ee5fe63a45dc2e1c0a694e"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_075/launcher.txt",
+      "size": 1283,
+      "sha256": "b6d03defc8abcdb23b9b1b07abe1b6674fb158efd63e5b03172c5ecc5c50b37f"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_075/receipt.json",
+      "size": 64456,
+      "sha256": "7ccf28836bcd8b59ba6f7f5b6757bfd0ef02be55c70d9b9ba876baf7b0ad7e7b"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_075/rsl.out.0000.txt",
+      "size": 98989,
+      "sha256": "14a7f939d4d9ef8008f2bedc474dbab9f8bd9676c6ea1d4dcd90996e3fca5663"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_075/runner_stdout.txt",
+      "size": 185,
+      "sha256": "521d0a2a555589b3b8bda5892a9e14564ba3d33aa7b30fef8c650d8d3f97192d"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_125/launcher.txt",
+      "size": 1283,
+      "sha256": "4bcaa009ee76655b4f8815eaa1b929407d503e8fbe491bf67c9cff9de3fd8dda"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_125/receipt.json",
+      "size": 64453,
+      "sha256": "540aef97d56e202c58433fdc2dff32635864e538bf73ebbe656a577a9fb48745"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_125/rsl.out.0000.txt",
+      "size": 98989,
+      "sha256": "3f03a7fb85d10595917a8a79086f7b3033d90dd7323eb6f1e737448e9f1a0e17"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_125/runner_stdout.txt",
+      "size": 185,
+      "sha256": "f932ac3d5235991ace6c4cb81a15d83e81f7be0d5b418aa1794aca53ddf1fdf2"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_150/launcher.txt",
+      "size": 1283,
+      "sha256": "8d94897c29d8b9d3e006d03691c59eb90f4888796cec854c2a081b9e7d6571f5"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_150/receipt.json",
+      "size": 64452,
+      "sha256": "14629c080677dc8e38d68225956fc6cf37649476d59a9b47fcfbf8f6479ef7cf"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_150/rsl.out.0000.txt",
+      "size": 98989,
+      "sha256": "8333bc52e7ce8cb8aafb6d20c6f68cd4925e5f49ef6d072919de49dcdcc324cf"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/CONTROL_SNOW_150/runner_stdout.txt",
+      "size": 185,
+      "sha256": "1f614b82d60a3b275d0dd60f17ac1155f395b548c60a2aecc14bf2697c579892"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_000/launcher.txt",
+      "size": 1275,
+      "sha256": "b7c604e0c0b99e33054a87e516adf4bb04fb9d057637a88d5c8fc4a5325e95a5"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_000/receipt.json",
+      "size": 64400,
+      "sha256": "2c8a010864f04de5dbb1152ba23e1b789549fca5a08cc19c8a635731c58003b2"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_000/rsl.out.0000.txt",
+      "size": 98989,
+      "sha256": "bedc8103e365c26faa74dd408313c24cb65e044bbf66f59e123fcb978337f5ef"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_000/runner_stdout.txt",
+      "size": 178,
+      "sha256": "7660c675f76cd0272fac5329261a3980a9a0c52839cbfd097a2401a0a4f6cb7e"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_025/launcher.txt",
+      "size": 1281,
+      "sha256": "1b9ae23db5f53fec6d0c2b29823bcd3d62d150c34640c5b1491f2cfc54e43ee8"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_025/receipt.json",
+      "size": 64467,
+      "sha256": "e04fedc2a1b1d1fd5f9e1c9fa43bc223bf41f748f92f2514d7732339a79ca6c6"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_025/rsl.out.0000.txt",
+      "size": 98989,
+      "sha256": "5bbfe3d3108e2935d6226d37e631e5a88f0aba46ce5f3d92503dd50e0b56fe2e"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_025/runner_stdout.txt",
+      "size": 184,
+      "sha256": "2ba18c9e01de26ab15191a686a75ccc6b94e50ee9e94520c73346a10ed1b176a"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_050/launcher.txt",
+      "size": 1283,
+      "sha256": "409c1d4665048a5116c0be912a20b5120092567505bf56627c57ecdf30ec2845"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_050/receipt.json",
+      "size": 64473,
+      "sha256": "a6d815b24a080c8e454e727a6a6a3f4c8250c209373e87e4297495c995236ea7"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_050/rsl.out.0000.txt",
+      "size": 99009,
+      "sha256": "436654b43531aa4dd1ba53bf6d955f2239defe584850f7dd12a30de94e95c7f1"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_050/runner_stdout.txt",
+      "size": 186,
+      "sha256": "ec94450d4d76156fa7044b1c4f1ff05865376d93b34d987ad7f5a6d1e0fa6ce6"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_075/launcher.txt",
+      "size": 1283,
+      "sha256": "f6cf323b994e7ec06cc866cffd07132f6af3d882311ab5f26a28337b1a40cbf9"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_075/receipt.json",
+      "size": 64476,
+      "sha256": "54a929cceb65ac55bfe78d4ea8a877b57b69ebb6c1d700abf48b63de84961b68"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_075/rsl.out.0000.txt",
+      "size": 98989,
+      "sha256": "bb573979fcceb632ec90339f028d50947662b1657695747f3ad786ed64f3a36c"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_075/runner_stdout.txt",
+      "size": 186,
+      "sha256": "36adaf247ef5f7f306e313c9900016823ae98b66da477b6d2e6c3028fad2e055"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_125/launcher.txt",
+      "size": 1283,
+      "sha256": "7a930ac9a9ff8aa068baaf7f3a7ed95cc5a1486fe84f5d94e2bdec3869405ad2"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_125/receipt.json",
+      "size": 64473,
+      "sha256": "18769eabd4ce881f69560d152a8733d3dfa4fd54b9e2e4296a238ded6977dcbc"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_125/rsl.out.0000.txt",
+      "size": 98989,
+      "sha256": "4c94bb7ac3c7fa3638b843e2b035518fb740e5dfdbc5678b6d8ea984658e13ac"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_125/runner_stdout.txt",
+      "size": 186,
+      "sha256": "fbefc4d0c0a8613455ac37fda078d4ae6170d1375578ea1fa8ac1e2cc682e439"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_150/launcher.txt",
+      "size": 1283,
+      "sha256": "fff0a8254cbcf6e7fbc9ffa866f1fa5778ddf665d929b41029c9afdf8891293d"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_150/receipt.json",
+      "size": 64472,
+      "sha256": "383d91bc0ba5dbf342b201697157ffd96adb4d360a0a01ba9c59c44f4cb276bb"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_150/rsl.out.0000.txt",
+      "size": 98989,
+      "sha256": "0d59371f3ec5dd3d50234601bcd5e2067cd6e64aec89358ad3e346cd57ba0260"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/cases/IMPROVED_SNOW_150/runner_stdout.txt",
+      "size": 186,
+      "sha256": "fb85bbd7e227f77c7f994a077da0f6d9d610737c4aec35c15adbf09cb179e8ff"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/common_plan.json",
+      "size": 660005,
+      "sha256": "3fb0c6c4a2770394a7ed1a4cd690cd61767c3f886deae9a0aa686f42bfb33a41"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/common_plan.sha256",
+      "size": 83,
+      "sha256": "55f508a79fd64ab99e25336e202397c842c711593302ac3cca1385cef8fd21d1"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/env.sh",
+      "size": 418,
+      "sha256": "f5ea8c614cc1f78eecd7b7b218c275ca97ae33a48e3fd6dadfc2d843be189be5"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/field_metadata_contract.json",
+      "size": 218885,
+      "sha256": "4aa3a31dcc26ddb8885db92ff61b1f19d228f5ed57a05a85d57c3df64a0057ba"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/field_value_case_sha256.json",
+      "size": 204981,
+      "sha256": "e5eba4cb7765be618ad5fc43a9170b5aa48a160651389daf5edc0d12d35eb6cc"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/field_value_source_sha256.json",
+      "size": 34148,
+      "sha256": "8d19e624edd674bf724c21e88c4a89f639e7fbbfed8ac6cfdf87246bc2c92f0a"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/final_receipt.json",
+      "size": 17572,
+      "sha256": "6cd114bca4035ff29d9c31180047722d0f67a3e53ee4552d4ec143dad4db4c62"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/finalize_batch.py",
+      "size": 5062,
+      "sha256": "9fd6ce27727de235c0064932144fc4e40f6fb505c3109886643f7a0dc56114ca"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/history_validation.json",
+      "size": 63565,
+      "sha256": "761ca59578bbf97e3c12dde88a016713c7e9591b5ac81e568ba244d54d60289b"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/launch_scripts.sha256.json",
+      "size": 342,
+      "sha256": "93d2a917da850db31a572520ed9a4f66340312a52214e1eea20b1154c7179da6"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/live_status.json",
+      "size": 7976,
+      "sha256": "3e331efec56b5ee85bfad7894ae057e8eee3da78bace85df42c00881b141dd81"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/prepare_cases.py",
+      "size": 23799,
+      "sha256": "700b81a028f123e6d15ceef62ee865d3fc41b51098017c8232d18f164689512a"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/qsnow_audit.json",
+      "size": 14675,
+      "sha256": "ca8984c22f99dc807fe2a58880702dd54007e10ab52bb888bfeea4673962e9aa"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/run_all.py",
+      "size": 3767,
+      "sha256": "e2467c7ef501bd02a098a496d6bb81d11a3961378ba27772cd169769e93e5bda"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/runtime/run_case.py",
+      "size": 8988,
+      "sha256": "ad7c199742278220b59d5273e454413f168703b70fd683ca65a3beb80c4ec979"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/scoring_command.json",
+      "size": 965,
+      "sha256": "ca78a64b26e0aefdd3fda0912dab492a2ed5cd8feb83ca32a977268b6b6ecf46"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/scoring_stdout.txt",
+      "size": 3558,
+      "sha256": "89cb8ce81fdee2e8fcc3741b97def258a2ee78b79991a551b416210cc314c06a"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/selection_plan.json",
+      "size": 3945,
+      "sha256": "1a5e236793f276ba9781664980ad37f79efa565038b17e0e90aa916fe953d6ef"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/validation/clean_index_tests.json",
+      "size": 1765,
+      "sha256": "f349999976e87b818ed77380d33985789422cbaef0c060ece7f6308887bd3b81"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/validation/clean_index_tests.txt",
+      "size": 211,
+      "sha256": "341fd8b12d1adf6b783cca43778ccd2a11b5296547b74cebf03dc901e1de785e"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/validation/navigation.json",
+      "size": 159,
+      "sha256": "28c2f39396a58046eab70fbc3bb14092eae1b7673e34268a6bba4c63e82b16bb"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/validation/prior_evidence.json",
+      "size": 4936,
+      "sha256": "26f6b61d59cb285d905e4c48f8acf93154c81962d8a11cff7f92d3c59fb4f27e"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/validation/report_reproduction.json",
+      "size": 664,
+      "sha256": "f3c06c1df45a653242394f7ad203bfc37765a1ed2e1ac6ea606cd8567597b24e"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/validation/root_visual_review.json",
+      "size": 845,
+      "sha256": "7072b8a268e3bc012c7f953157015b2a96b6637566eea2fcd28b673c66b18448"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/validation/science_validation.json",
+      "size": 2838,
+      "sha256": "9ab20d75900bb0ca47598a5404616997ae220a1a29ff88708a30026855f3aefd"
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/validation/source_whitespace.json",
+      "size": 349,
+      "sha256": "605201e55101fc2035ad35e7026e3d157728a852b17d662e9ad94b9384dfd4ca"
+    },
+    {
+      "path": "graphify-out/2026-10-30-snow-sensitivity/GRAPH_REPORT.md",
+      "size": 324027,
+      "sha256": "726ec3347968d9498cf4cd87483f2f37974b33f61d4bdc15f73943c7687c7dfb"
+    },
+    {
+      "path": "graphify-out/2026-10-30-snow-sensitivity/graph.json",
+      "size": 19534044,
+      "sha256": "1f6c62c1e6aed94418305de22f90696c4808d19557d6432c279618026d976d6f"
+    },
+    {
+      "path": "graphify-out/2026-10-30-snow-sensitivity/manifest.json",
+      "size": 1080536,
+      "sha256": "8e7604c502bcbe51e910efd17c5c2abff7472b7c930a7bf89a938a149754f3ee"
+    },
+    {
+      "path": "graphify-out/GRAPH_REPORT.md",
+      "size": 324027,
+      "sha256": "726ec3347968d9498cf4cd87483f2f37974b33f61d4bdc15f73943c7687c7dfb"
+    },
+    {
+      "path": "graphify-out/graph.json",
+      "size": 19534044,
+      "sha256": "1f6c62c1e6aed94418305de22f90696c4808d19557d6432c279618026d976d6f"
+    },
+    {
+      "path": "graphify-out/manifest.json",
+      "size": 1080536,
+      "sha256": "8e7604c502bcbe51e910efd17c5c2abff7472b7c930a7bf89a938a149754f3ee"
+    },
+    {
+      "path": "tests/test_cp02_snow_sensitivity.py",
+      "size": 15054,
+      "sha256": "e6f9a64c4e281a6228ddf00384cfa73520d6763e3521ddb39a2d26986e363689"
+    },
+    {
+      "path": "tests/test_plot_snow_sensitivity.py",
+      "size": 6616,
+      "sha256": "8ca4a694688e07af9659cb904c0f98a54dc95f0b0b86b627e1477acbdf4cb848"
+    },
+    {
+      "path": "tools/cp02_snow_sensitivity.py",
+      "size": 58225,
+      "sha256": "95c3e8591318eafda06598616fdec1c11f67aa78aef3306ab473a1602ccadc17"
+    },
+    {
+      "path": "tools/plot_snow_sensitivity.py",
+      "size": 46325,
+      "sha256": "d94b565130b1d8bca3029f90ac1d029ddf55fa44f61e7cccd6051d11fde00656"
+    }
+  ]
+}

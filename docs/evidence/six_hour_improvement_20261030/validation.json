@@ -1,0 +1,423 @@
+{
+  "schema": "six-hour-improvement-validation-v1",
+  "status": "PASS_SCOPED_SIX_HOUR",
+  "base_commit": "f6767ac1e5c80baad191385ca6622d23b8fd0fff",
+  "experiment": {
+    "new_forecasts": 1,
+    "reused_controls": 2,
+    "valid_period_utc": "2026-08-16 12:00–18:00",
+    "score_window": "Each preceding one-hour accumulation, not 0–lead total",
+    "paired_points_per_hour": 3688,
+    "thresholds_mm": [
+      0.1,
+      0.5,
+      1,
+      2.5,
+      5,
+      10
+    ],
+    "candidate": "IMPROVED_BG_FIXED",
+    "raw_run_exit": 0,
+    "elapsed_seconds": 818.7602670378983,
+    "histories": 7,
+    "first_hour_history_byte_identical_to_prior_B1": true
+  },
+  "results": {
+    "original_comparison_CSI_combinations": 36,
+    "improved": 21,
+    "tied": 0,
+    "worse": 15,
+    "five_mm_CSI_improved_hours": 6,
+    "interpretation": "Mixed time/threshold response; +4h MAE/RMSE and10mmCSI degrade; +6h strong-threshold CSI improvement does not improve MAE/RMSE."
+  },
+  "validation": {
+    "clean_index_targeted_tests_passed": 62,
+    "categorical_rows_independently_verified": 108,
+    "continuous_rows_independently_verified": 18,
+    "transition_rows_independently_verified": 72,
+    "source_records_rehashed": 241,
+    "runtime_manifest_entries": 20,
+    "byte_reproduced_figure_assets": 9,
+    "generated_report_and_receipt_byte_identical": true,
+    "prior_manifest_entries_verified": 560,
+    "prior_entries_in_place": 554,
+    "prior_entries_reconciled_to_existing_dated_snapshots": 6,
+    "kg_prior_snapshots_preserved": 212,
+    "kg_final_snapshots": 214
+  },
+  "limitations": [
+    "One event only; spatial points and time/threshold combinations are not independent cases.",
+    "Combined intervention, not isolated six-hour policy/guard effects or QR/QS-only change.",
+    "No new native rebuild or full portable suite.",
+    "RN1 input freshness/coverage, complete water/energy budgets, process attribution, separate C2 stability and operational approval remain open.",
+    "Graph freshness is structural bookkeeping, not scientific validation."
+  ],
+  "manifest_scope": "All new artifacts and current/new dated Cloud-BAL graph trio; excludes this manifest itself.",
+  "artifacts": [
+    {
+      "path": "docs/SIX_HOUR_IMPROVEMENT_20261030.md",
+      "size": 15182,
+      "sha256": "8ec4da9a7622c513e27342c12826ff33cd21feedc2db6f9d72af9fdf7882085c"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/README.md",
+      "size": 2474,
+      "sha256": "1b1ddc5c5037443b7b80ac998b374e800b0ba3bd525634b4a9c4d36ff3be98ce"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/analysis/categorical_scores.csv",
+      "size": 21842,
+      "sha256": "8aeb613697759ab6fe603672f2bd3aa934c87ef39d45d18f6a270a6e3570a8bb"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/analysis/continuous_scores.csv",
+      "size": 3356,
+      "sha256": "e59b84ac6311feea1e27a66fc3bc53b4ae5daf9a1b956d1d0327e33f52abd676"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/analysis/hour_13_arrays.npz",
+      "size": 100632,
+      "sha256": "2d2662f63a8d723435f56b1c462f111f0a05fd230d75f62277422be342c3a054"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/analysis/hour_14_arrays.npz",
+      "size": 103337,
+      "sha256": "3fe19b298b363220b8702b5d4d8ca0bd21b9447f6061bcac3797e1762edf7229"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/analysis/hour_15_arrays.npz",
+      "size": 111031,
+      "sha256": "0849753f7c66734b38ce2bfb5fd83bbda6fdac6def8906125fdb55c5cae60c68"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/analysis/hour_16_arrays.npz",
+      "size": 111087,
+      "sha256": "06002ab4cec80168a6f13d46039c9ab696f1cdb36b3109ec5ddc7995e5a0feb9"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/analysis/hour_17_arrays.npz",
+      "size": 107152,
+      "sha256": "8e8f42ae3d98f4745201207a8a1415913a712f2d188100cedf9773c2f2dd1b5f"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/analysis/hour_18_arrays.npz",
+      "size": 111507,
+      "sha256": "8c67e4ca27ac0c3ce0cc0ab4aee0f4b024854a208e1590a02793e167be2cfef0"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/analysis/receipt.json",
+      "size": 61837,
+      "sha256": "0db2f02ceece4d2f12cec459f5af26ca589b2f70c53c3d559b596b10828d8826"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/analysis/transitions.csv",
+      "size": 8084,
+      "sha256": "6a8b1fc795498d8cc5186c48e64f6b24fd601b9dc9ed13f74b43cf5340773393"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/build_report.py",
+      "size": 9818,
+      "sha256": "2ca545e9922e4add4d8ed72a0cd0bf3022abf6a384fecdf3c463680d193015cb"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/figures/figure_manifest.json",
+      "size": 9358,
+      "sha256": "790511a79976968952e7fa6c5046959f0aaf63b808d6a3f2b2c912d17a06f679"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/figures/precipitation_maps_leads_1_3.pdf",
+      "size": 66781,
+      "sha256": "628413f88c6ac524246480fd5a466d576d7713674fb54790c36e4606945ccca6"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/figures/precipitation_maps_leads_1_3.png",
+      "size": 232607,
+      "sha256": "866a69a63fed22d469f8acb17893ee9a303d18c83119c080456b3ae74454a31c"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/figures/precipitation_maps_leads_1_3.svg",
+      "size": 136067,
+      "sha256": "2d8bddb1ec0b7e53eac7e229782032307c44209eb920ea7c1f0e9d8cb12c3d60"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/figures/precipitation_maps_leads_4_6.pdf",
+      "size": 72469,
+      "sha256": "a51fc83863ff17b6a062c385474ef815c84ce80567043cd048b1560c2b1780f0"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/figures/precipitation_maps_leads_4_6.png",
+      "size": 252424,
+      "sha256": "04950904a190a5f8ce96a6903f169d861016ae0a7c22df41e965db0f0d27a46d"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/figures/precipitation_maps_leads_4_6.svg",
+      "size": 149407,
+      "sha256": "ab1aa1337c9166cfcb29bf2a14050241901364f223ae69c0ededc8cddb6ec001"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/figures/six_hour_skill_summary.pdf",
+      "size": 38341,
+      "sha256": "1db9301a29777524cd5bfbd137681a43df96ea2dab6979e0a7f8e492e74039c4"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/figures/six_hour_skill_summary.png",
+      "size": 506870,
+      "sha256": "99c3bd6c8feb4aa5ad365d5c8c8d0ca1a93ab448b1e94ba0be24ee5ee0c942b6"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/figures/six_hour_skill_summary.svg",
+      "size": 128948,
+      "sha256": "a3dec483d764cf1f8d7ece3f453e205f60f31775ddad99cfb0cde88af0e736ef"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/kg/baseline.json",
+      "size": 139014,
+      "sha256": "9b62db2d3c5d133c0798c40e5c964f3a784332e933fc53830e5d07232ca4a119"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/kg/candidate_paths.json",
+      "size": 5708,
+      "sha256": "279765e2ffb193c15ae76c916331eec01f67e26fe04c9b0c3f8b892225b581e6"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/kg/postpublish_readback.json",
+      "size": 2445,
+      "sha256": "67c1084ecf3b2b1c5a7fee09359b8820283787118e2b0f17684952ec7784ae7d"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/kg/publish_go.json",
+      "size": 525,
+      "sha256": "7919e16decac9f28f97986155389f6de39dba6466f0f8449bcbe9a85e561bea5"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/kg/publish_kg.py",
+      "size": 10753,
+      "sha256": "7a30a5f0ec27ab7cfb7557ffea6277e22ae3c4c6e5f27eb7885aee76503d7f91"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/kg/publish_receipt.json",
+      "size": 3992,
+      "sha256": "75e0418abc7cb109bf52e071fa0a31fca0d3542fb68b855810424b18cdf9b9f7"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/kg/selection_lock.json",
+      "size": 9346,
+      "sha256": "1c8b94a35373cad873608b53b45f128cc7202f10a2ff51ad0c05e0fd9ae2facd"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/kg/stage_kg.py",
+      "size": 22123,
+      "sha256": "11209dc5d490b1e4de4fcab05b8bc1ef1c5294f858f837d55e89c077f613684b"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/kg/stage_receipt.json",
+      "size": 15145,
+      "sha256": "117971e5ce96e57830f831ea482c936b00779a68e1806b8179efeb6c3074a385"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/kg/stage_validation.json",
+      "size": 2321,
+      "sha256": "8b886bc1cb2f18e915710f9716f409f26b18ebfd9882f365d64aac6535e68df9"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/report_receipt.json",
+      "size": 439,
+      "sha256": "7d07328c12ef8e1289a2e72f624710da67395ec3d64307ebf3fd3b9c24f60528"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/review/independent_review.md",
+      "size": 3632,
+      "sha256": "4aa3eeaa99dfde0f4fda5dbe9dd6e244c6689b2a9ff1674df7c06ec053c1fd0e"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/README.md",
+      "size": 2213,
+      "sha256": "bcb0966a7818ebee794b10212b4ecc764ed5c9a8c2f6f67b9f827fe7325218f3"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/compare_one_hour.py",
+      "size": 2814,
+      "sha256": "91e6b7cd7f02c04bdfa121edf70f30c1a28b30fcb35524eeb798388d15f9aa22"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/env.sh",
+      "size": 414,
+      "sha256": "0092b662ea29b630f12bba67bafd846bbc4a1addb7a5070e04806c19428d4c40"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/finalize_receipt.py",
+      "size": 7062,
+      "sha256": "eb99bb7a53216a2c8b58abe61b3d7fd56359a1c696205d7ca635669447be8d87"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/history_validation.json",
+      "size": 1464,
+      "sha256": "100abebecbae7c9da14272803c3b3e3cb0ae800d022977308b8e692e29fe3475"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/inputs.json",
+      "size": 17438,
+      "sha256": "fd9fb8977a568043343bcf3348052463b048638f679dd5deb696de9a1b1454e2"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/launcher.txt",
+      "size": 392,
+      "sha256": "40bd14bee34f6fae77d14b170ddbbd516b6f2ec07ccc48a315f762f9ba1c8a50"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/manifest.sha256",
+      "size": 1677,
+      "sha256": "c8e2d31dd2edf502534155c8ff4a614dd9be680627644c18218565023977f113"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/normalization_manifest.json",
+      "size": 1143,
+      "sha256": "90cdf73765e1209479caf5b044b8afc6384a97be440f43907cc948b1739124d6"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/normalized_receipt.json",
+      "size": 38423,
+      "sha256": "00eddd6ac26a3a4857ea40e294256d2b32c9c9e6a2998f112000c39d5281bf5e"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/one_hour_comparison.json",
+      "size": 2622,
+      "sha256": "805f9409ee932c515f7ad8c9f9c0de0357d9854e58f8de40951bf9c70067d17d"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/postrun_scripts.sha256.json",
+      "size": 96,
+      "sha256": "53d6dbf0b9ee93088107a472fdf6a978c1590cf5b37f13bfd9367b77c8c1ec9c"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/preflight.json",
+      "size": 29809,
+      "sha256": "7431b7da24a18ee3f1961d1b2048e2b32c0a4ed8661169c1bb101ec5548f1948"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/prepare.py",
+      "size": 7549,
+      "sha256": "e5e528e9b97c35843d9ca2ffe6558171f68cf0905a992dde7b3dd8849a1f8357"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/receipt.json",
+      "size": 20054,
+      "sha256": "75a4efd06097e82980908b0c3abbb06c9cad32133cd7c3f4b4fe94e77e93722b"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/rsl.out.0000.txt",
+      "size": 98989,
+      "sha256": "59ccd89f58bec15eb7124385bced6640b9830d3827a9554541a83c4296c60fc0"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/run.py",
+      "size": 4721,
+      "sha256": "71a16006fa5963c519c1295f86eee48ff00275aefe9c83a2ba328380390f48e8"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/scoring_command.json",
+      "size": 893,
+      "sha256": "20d3249fd6079151f46d5cea0b8a74d679e15f5011abd18cb64d7b0a6cebf3b8"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/scoring_stdout.txt",
+      "size": 1459,
+      "sha256": "5f99df4fcd13c5177e2fbac9f93b8c690390bb864a9c78d086b45755f0931061"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/scripts.sha256.json",
+      "size": 340,
+      "sha256": "85916c5385b3f15f8023b92439ed678979f878ec9cf8895f4b5f82df69059747"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/source_link_audit.json",
+      "size": 164,
+      "sha256": "4d4986d9052bfbeb3966d9cb9236ba1834d78c6e9957c2423794ed9987506368"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/validation/clean_index_tests.json",
+      "size": 1646,
+      "sha256": "85c64d0805a07bf3a81b9e4a7e1af22384dbd0ad186bcd3bf6389600739ef17e"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/validation/clean_index_tests.txt",
+      "size": 131,
+      "sha256": "668534f4e11702181a2d4513a5115af726380f3180fd222e644596436bd40229"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/validation/navigation.json",
+      "size": 744,
+      "sha256": "3f199549dae218adea21e11bbee527c991c26dc73fd4c0e65f0e0acad93cf4a6"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/validation/prior_evidence.json",
+      "size": 3254,
+      "sha256": "9c011b887556c2f66f0d9aea70dfc2bed79c33830646f0293d887a669a5ee71c"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/validation/report_reproduction.json",
+      "size": 611,
+      "sha256": "96915160021780568047af29cfba55b830e15df169dd866d5a155680c6d473b3"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/validation/root_source_audit.json",
+      "size": 489,
+      "sha256": "e6a8c71aee6e2e8625a9ba724eccf673e1a1630fb0002a349d795fe57b598f1f"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/validation/root_visual_review.json",
+      "size": 1630,
+      "sha256": "373af87390201cf84a07a6e75fdeeca39565eb1230510ed41f953103a2c185a7"
+    },
+    {
+      "path": "graphify-out/2026-10-30-six-hour-improvement/GRAPH_REPORT.md",
+      "size": 317627,
+      "sha256": "d8fd5fb25d9403d222d179f5bf34d2c22fdf8b34254f16911751f82a5da6a53a"
+    },
+    {
+      "path": "graphify-out/2026-10-30-six-hour-improvement/graph.json",
+      "size": 19372966,
+      "sha256": "f4ca4ced62867dfe3d8bb63d852dd76b4fc0f1cfd76779d41b7205c24d8ab216"
+    },
+    {
+      "path": "graphify-out/2026-10-30-six-hour-improvement/manifest.json",
+      "size": 1079009,
+      "sha256": "feb4df8979cde51a3412785be2f148c59daaae6a774343470d3a5b7bc794f403"
+    },
+    {
+      "path": "graphify-out/GRAPH_REPORT.md",
+      "size": 317627,
+      "sha256": "d8fd5fb25d9403d222d179f5bf34d2c22fdf8b34254f16911751f82a5da6a53a"
+    },
+    {
+      "path": "graphify-out/graph.json",
+      "size": 19372966,
+      "sha256": "f4ca4ced62867dfe3d8bb63d852dd76b4fc0f1cfd76779d41b7205c24d8ab216"
+    },
+    {
+      "path": "graphify-out/manifest.json",
+      "size": 1079009,
+      "sha256": "feb4df8979cde51a3412785be2f148c59daaae6a774343470d3a5b7bc794f403"
+    },
+    {
+      "path": "tests/test_cp02_six_hour_improvement.py",
+      "size": 10848,
+      "sha256": "ec17cb19179d66ae3369283a5fa4a7b053171caacde8a7ab9944b5eee680986c"
+    },
+    {
+      "path": "tests/test_plot_six_hour_improvement.py",
+      "size": 4704,
+      "sha256": "6613fd7ce1d4aa680992a5e6e0d35d4f51d1a5e84ad2419b9228d3404c45ce32"
+    },
+    {
+      "path": "tools/cp02_six_hour_improvement.py",
+      "size": 31130,
+      "sha256": "03f276ba462d4d46523823b82dcd4f83a3367404bfb95d41f20dfa9c80688467"
+    },
+    {
+      "path": "tools/plot_six_hour_improvement.py",
+      "size": 25069,
+      "sha256": "9e353e37c4d44f609e77f4fe9dec1dcb4997f05f83bc604070e06f5863141be7"
+    }
+  ]
+}

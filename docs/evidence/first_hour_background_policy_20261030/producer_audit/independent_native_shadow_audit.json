@@ -1,0 +1,133 @@
+{
+  "status": "PASS_SCOPED",
+  "checker": {
+    "status": "PASS_SCOPED_BACKGROUND_PRECIPITATION",
+    "shadow_sha256": "821543471d9d9540b77ddc9cee58cb74dfc32f6679b0bb233af56aaeedae9d07",
+    "configuration_id": "real-background-precip-shadow-v1",
+    "policy": "retain_background_v1",
+    "scope": "canonical precipitation and phase sidecar identity, no radar flux, finite endpoint terms; not source/build provenance, forecast validation, or operational conservation"
+  },
+  "historical_vs_baseline": {
+    "changed": {},
+    "global_attributes_equal": true,
+    "variable_count": 208
+  },
+  "baseline_vs_candidate": {
+    "changed": {
+      "PH": {
+        "changed_count": 313755,
+        "size": 2639520,
+        "max_abs_difference": 70.5078125,
+        "units": "m2 s-2",
+        "dimensions": [
+          "Time",
+          "bottom_top_stag",
+          "south_north",
+          "west_east"
+        ],
+        "metadata_equal": true
+      },
+      "P": {
+        "changed_count": 163755,
+        "size": 2573532,
+        "max_abs_difference": 120.3984375,
+        "units": "Pa",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "metadata_equal": true
+      },
+      "AL": {
+        "changed_count": 163833,
+        "size": 2573532,
+        "max_abs_difference": 0.001507401466369629,
+        "units": "m3 kg-1",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "metadata_equal": true
+      },
+      "P_HYD": {
+        "changed_count": 163755,
+        "size": 2573532,
+        "max_abs_difference": 120.3984375,
+        "units": "Pa",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "metadata_equal": true
+      },
+      "TH2": {
+        "changed_count": 8071,
+        "size": 65988,
+        "max_abs_difference": 0.101776123046875,
+        "units": "K",
+        "dimensions": [
+          "Time",
+          "south_north",
+          "west_east"
+        ],
+        "metadata_equal": true
+      },
+      "QRAIN": {
+        "changed_count": 134348,
+        "size": 2573532,
+        "max_abs_difference": 0.0007816820871084929,
+        "units": "kg kg-1",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "metadata_equal": true
+      },
+      "QSNOW": {
+        "changed_count": 39990,
+        "size": 2573532,
+        "max_abs_difference": 0.005615635309368372,
+        "units": "kg kg-1",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "metadata_equal": true
+      },
+      "QGRAUP": {
+        "changed_count": 68,
+        "size": 2573532,
+        "max_abs_difference": 0.0009629359701648355,
+        "units": "kg kg-1",
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "metadata_equal": true
+      }
+    },
+    "global_attributes_equal": true,
+    "variable_count": 208
+  },
+  "inputs_sha256": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/current_forecast_paper_20261029/run.PomEr8/forecast_HYDRO/wrfinput_d01": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126",
+    "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/native_HYDRO/real/wrfinput_d01": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126",
+    "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/native_HYDRO_BACKGROUND_PRECIP/real/wrfinput_d01": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+    "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/run_HYDRO_BACKGROUND_PRECIP/output.wps.shadow.nc": "821543471d9d9540b77ddc9cee58cb74dfc32f6679b0bb233af56aaeedae9d07",
+    "/var/tmp/cloudbal-first-hour-improvement/tools/check_background_precip_shadow.py": "17ee6d5e23925e34b9fdc881d3e1c81a27ef60f832cb4702b8dd0247a0825abd"
+  },
+  "baseline_bitwise_matches_historical": true,
+  "scope": "Read-only full native field and metadata comparison and scoped shadow contract; not a water or energy closure test."
+}

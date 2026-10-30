@@ -1,0 +1,92 @@
+{
+  "schema": "snow-sensitivity-independent-final-review-v1",
+  "reviewer": "factorial_review135",
+  "reviewed_at_utc": "2026-10-30T04:46:42Z",
+  "supersedes": {
+    "prior_record_sha256": "99dd424cbf69dcd0235c13bef2fe8f056f142a0f9c30c7fa7ebe3197ce2e8e3d",
+    "reason": "Corrected a future-dated review timestamp and refreshed the final figure renderer/manifest bindings."
+  },
+  "worktree": "/var/tmp/cloudbal-snow-sensitivity",
+  "review_status": "PASS",
+  "scope": "Independent runtime/source rehash, score and selector recomputation from saved NPZ arrays, scorer/test review, and report/figure review.",
+  "frozen_design": {
+    "selection_plan": "docs/evidence/snow_sensitivity_20261030/selection_plan.json",
+    "selection_plan_sha256": "1a5e236793f276ba9781664980ad37f79efa565038b17e0e90aa916fe953d6ef",
+    "common_plan": "docs/evidence/snow_sensitivity_20261030/runtime/common_plan.json",
+    "common_plan_sha256": "3fb0c6c4a2770394a7ed1a4cd690cd61767c3f886deae9a0aa686f42bfb33a41",
+    "review": "The frozen six-factor/two-family QSNOW experiment, four B1-relative gates, and ranking/tie-break order are implemented. Only ORIGINAL, B1, and the 12 variants are eligible; CURRENT_HYDRO remains contextual."
+  },
+  "runtime_revalidation": {
+    "final_receipt_sha256": "6cd114bca4035ff29d9c31180047722d0f67a3e53ee4552d4ec143dad4db4c62",
+    "batch_receipt_sha256": "3c14207aac8a798206cf020886d52dfc2822a7dc6660d72f3f3a36c7e6dc44f4",
+    "history_validation_sha256": "761ca59578bbf97e3c12dde88a016713c7e9591b5ac81e568ba244d54d60289b",
+    "cases_successful": 12,
+    "histories_rehashed_and_read": 84,
+    "staged_inputs_rehashed": 1068,
+    "history_hash_mismatches": 0,
+    "input_hash_mismatches": 0,
+    "history_checks": "All expected 12–18 UTC Times values; RAINC/RAINNC/RAINSH finite and unmasked; exact seven histories/case, no extra wrfout files.",
+    "runtime_and_source_checks_distinguished": true,
+    "current_source_inventory_rehash": {
+      "B1_inputs": "89/89 matched the frozen source manifest",
+      "ORIGINAL_inputs": "89/89 matched the frozen source manifest",
+      "producer_evidence_files": "23/23 matched",
+      "ORIGINAL_full_inventory_timing": "DURING_RUN, as declared by the historical receipt"
+    },
+    "prior_noexec_attempt": "Preserved as a /tmp noexec launch failure before WRF execution; it was not used as forecast output."
+  },
+  "successful_score_run": {
+    "scorer_path": "tools/cp02_snow_sensitivity.py",
+    "scorer_sha256": "95c3e8591318eafda06598616fdec1c11f67aa78aef3306ab473a1602ccadc17",
+    "cli_entrypoint": "The __main__ guard is after all helper definitions; the successful full CLI run completed return code 0.",
+    "command_sha256": "ca78a64b26e0aefdd3fda0912dab492a2ed5cd8feb83ca32a977268b6b6ecf46",
+    "stdout_sha256": "89cb8ce81fdee2e8fcc3741b97def258a2ee78b79991a551b416210cc314c06a",
+    "analysis_receipt_sha256": "18e2d82c3be0120b2da0e34fec75c12d6da52ddbfc28eaffb19781e94153e7ec",
+    "source_identity_count": 1540,
+    "preserved_pre_score_failures": [
+      "Attempt 1: CLI main ran before load_baseline_arrays definition; failed before candidate files or scores were read/written.",
+      "Attempt 2: RN1 filename prefix typo (`KLAPS` vs `KLPS`); failed before scores were computed or analysis outputs written."
+    ]
+  },
+  "independent_score_recomputation": {
+    "method": "Recomputed contingency counts and CSI/ETS/POD/FAR/bias, continuous MAE/RMSE/means, hit/false-alarm transitions, pooled six-hour errors, and all selection gates/ranks directly from the six hourly NPZ arrays.",
+    "rows": {
+      "categorical": 540,
+      "continuous": 90,
+      "transitions": 864,
+      "selection": 14
+    },
+    "maximum_difference_from_sealed_tables": 0,
+    "feasible_cases": ["IMPROVED_BG_FIXED"],
+    "best_overall": "IMPROVED_BG_FIXED",
+    "best_improved_family": "IMPROVED_BG_FIXED",
+    "fallback_used": true,
+    "unfiltered_rank_1": "IMPROVED_SNOW_150",
+    "unfiltered_rank_1_status": "Exploratory and unselected; fails only the first-hour RMSE gate (4.0578770767 vs B1 4.0441066864 mm)."
+  },
+  "tests": {
+    "scorer": {
+      "command": "pytest -q tests/test_cp02_snow_sensitivity.py",
+      "reported_result": "11 passed",
+      "test_file_sha256": "e6f9a64c4e281a6228ddf00384cfa73520d6763e3521ddb39a2d26986e363689",
+      "bound_by": "docs/evidence/snow_sensitivity_20261030/validation/science_validation.json"
+    },
+    "figures": {
+      "reported_result": "6/6 portable replay, changed-CSV rejection/rollback, and deterministic-render tests passed against the final renderer SHA d94b565130b1d8bca3029f90ac1d029ddf55fa44f61e7cccd6051d11fde00656",
+      "test_file_sha256": "8ca4a694688e07af9659cb904c0f98a54dc95f0b0b86b627e1477acbdf4cb848",
+      "reported_by": "figure agent; tests were not run by this reviewer"
+    },
+    "reviewer_ran_tests": false
+  },
+  "report_and_figures": {
+    "report_path": "docs/SNOW_SENSITIVITY_20261030.md",
+    "report_sha256": "88a1673cb3ad87ace850753d4499ae0e87fe8e52d08e628e52b3faeee18421b8",
+    "report_builder_sha256": "c8e1efed25d5c225dbfa4103c34686fc776e08edc153ed13471ff5b18e788968",
+    "report_receipt_sha256": "461073bc6be8aa230fc9a74ffb5b9f2ccb90f95b6a8b32d64b122345fec47c6e",
+    "figure_renderer_sha256": "d94b565130b1d8bca3029f90ac1d029ddf55fa44f61e7cccd6051d11fde00656",
+    "figure_manifest_sha256": "299b5fcc0585702cf98ded58182e3ce86339fe436679db55b827f7bace8ed65c",
+    "verified_figure_assets": 15,
+    "review": "Report values and tradeoff statements match the recomputation. Five PNGs visually reviewed; after the final figure-only rebuild, the three edited PNGs were inspected again, including alpha=1.0 tick, signed four-decimal CSI deltas, and purple unselected exploratory hourly-error curve. All 15 latest figure assets match the refreshed manifest. Selected B1 and unselected α=1.5 remain clearly distinguished. Interpretation stays diagnostic and single-event; no conservation, surface-snowfall verification, independent validation, or production-readiness claim."
+  },
+  "conclusion": "GO. No unresolved scientific, scoring, provenance, report, or figure blocker found."
+}

@@ -1,0 +1,7 @@
+# Background precipitation policy source validation
+
+The two focused column-physics executables passed under the pinned Intel O0 and O2 profiles in separate scratch directories. They test default equivalence, retained precipitation and phase metadata, zero radar-precipitation flux and endpoint changes, invalid-radar and missing-motion rollback, and rejection of unsupported thermo coupling. Their standard output and exit status were captured by the command tool; standard output was not separately saved. The compiler logs are preserved here.
+
+The pinned Intel/NetCDF SHADOW I/O suite completed with exit code 0. Its retained log includes the direct research-mode dispatcher, unknown-mode rollback, policy metadata readback, existing writer and WPS checks, and legacy mutations. The old general validator explicitly refuses this research policy; the dedicated checker passes the policy fixture with its narrower stated scope. The earlier interrupted broad review run is separate and is not counted as a successful test.
+
+`receipt.json` records post-test source hashes, executable hashes, test commands and artifact hashes. The focused invocations did not independently seal source hashes before compilation; file timestamps and these later hashes are not a substitute for such a seal. The separate producer build binds its exported source inputs. These checks do not establish forecast skill or native-model conservation.

@@ -1,0 +1,154 @@
+taskid: 0 hostname: KIM-meso-gpu
+ Ntasks in X            1 , ntasks in Y            1
+  Domain # 1: dx =  5000.000 m
+REAL_EM V4.6.0 PREPROCESSOR
+No git found or not a git repository, git commit version not available.
+ *************************************
+ Parent domain
+ ids,ide,jds,jde            1         235           1         283
+ ims,ime,jms,jme           -4         240          -4         288
+ ips,ipe,jps,jpe            1         235           1         283
+ *************************************
+DYNAMICS OPTION: Eulerian Mass Coordinate
+   alloc_space_field: domain            1 ,             2596074052  bytes allocated
+Time period #   1 to process = 2026-08-16_12:00:00.
+Time period #   2 to process = 2026-08-16_15:00:00.
+Total analysis times to input =    2.
+  
+ -----------------------------------------------------------------------------
+  
+ Domain  1: Current date being processed: 2026-08-16_12:00:00.0000, which is loop #   1 out of    2
+ configflags%julyr, %julday, %gmt:        2026         228   12.00000    
+d01 2026-08-16_12:00:00  Yes, this special data is acceptable to use: OUTPUT FROM METGRID V4.6.0
+d01 2026-08-16_12:00:00  Input data is acceptable to use: met_em.d01.2026-08-16_12:00:00.nc
+ metgrid input_wrf.F first_date_input = 2026-08-16_12:00:00
+ metgrid input_wrf.F first_date_nml = 2026-08-16_12:00:00
+d01 2026-08-16_12:00:00 Timing for input          0 s.
+d01 2026-08-16_12:00:00          flag_soil_layers read from met_em file is  1
+ Bathymetry dataset from GEBCO Compilation Group. Please acknowledge the following in presentations and publications: GEBCO Compilation Group (2021) GEBCO 2021 Grid (doi:10.5285/c6612cbe-50b3-0cff-e053-6c86abc09f8f).
+Max map factor in domain 1 =  0.99. Scale the dt in the model accordingly.
+Using sfcprs2 to compute psfc
+ using new automatic levels program
+           1   50.00000       50.00000      0.9938147    
+           2   64.00000       114.0000      0.9859506       1.280000    
+           3   81.56160       195.5616      0.9760143       1.274400    
+           4   103.3692       298.9308      0.9635575       1.267375    
+           5   130.1058       429.0366      0.9480931       1.258652    
+           6   162.3666       591.4032      0.9291238       1.247958    
+           7   200.5314       791.9346      0.9061912       1.235053    
+           8   244.6057       1036.540      0.8789424       1.219787    
+           9   294.0546       1330.595      0.8472080       1.202158    
+          10   347.6837       1678.279      0.8110777       1.182378    
+          11   403.6352       2081.914      0.7709490       1.160927    
+          12   459.5572       2541.471      0.7275254       1.138546    
+          13   512.9473       3054.418      0.6817554       1.116177    
+          14   564.2420       3618.660      0.6345036       1.100000    
+          15   620.6662       4239.326      0.5860305       1.100000    
+          16   682.7328       4922.059      0.5366501       1.100000    
+          17   751.0062       5673.065      0.4867300       1.100000    
+          18   826.1068       6499.172      0.4366882       1.100000    
+   25416.39       6499.172              39          18
+          19   900.8199       7399.992      0.3873971    
+          20   900.8199       8300.812      0.3430713    
+          21   900.8199       9201.633      0.3032106    
+          22   900.8199       10102.45      0.2673653    
+          23   900.8199       11003.27      0.2351308    
+          24   900.8199       11904.09      0.2061434    
+          25   900.8199       12804.91      0.1800760    
+          26   900.8199       13705.73      0.1566344    
+          27   900.8199       14606.55      0.1355543    
+          28   900.8199       15507.38      0.1165976    
+          29   900.8199       16408.20      9.9550493E-02
+          30   900.8199       17309.02      8.4220588E-02
+          31   900.8199       18209.84      7.0434950E-02
+          32   900.8199       19110.66      5.8037974E-02
+          33   900.8199       20011.48      4.6889834E-02
+          34   900.8199       20912.30      3.6864650E-02
+          35   900.8199       21813.12      2.7849358E-02
+          36   900.8199       22713.94      1.9742193E-02
+          37   900.8199       23614.76      1.2451711E-02
+          38   900.8199       24515.58      5.8956258E-03
+          39   900.8199       25416.40     -5.1398025E-08
+    1.0000    0.9938    0.9860    0.9760    0.9636    0.9481    0.9291    0.9062    0.8789    0.8472
+    0.8111    0.7709    0.7275    0.6818    0.6345    0.5860    0.5367    0.4867    0.4367    0.3874
+    0.3431    0.3032    0.2674    0.2351    0.2061    0.1801    0.1566    0.1356    0.1166    0.0996
+    0.0842    0.0704    0.0580    0.0469    0.0369    0.0278    0.0197    0.0125    0.0059    0.0000
+Full level index =    1     Height =     0.0 m
+Full level index =    2     Height =    50.0 m      Thickness =   50.0 m
+Full level index =    3     Height =   113.9 m      Thickness =   63.9 m
+Full level index =    4     Height =   195.2 m      Thickness =   81.3 m
+Full level index =    5     Height =   298.0 m      Thickness =  102.8 m
+Full level index =    6     Height =   427.2 m      Thickness =  129.1 m
+Full level index =    7     Height =   587.8 m      Thickness =  160.7 m
+Full level index =    8     Height =   785.5 m      Thickness =  197.7 m
+Full level index =    9     Height =  1025.6 m      Thickness =  240.0 m
+Full level index =   10     Height =  1312.6 m      Thickness =  287.0 m
+Full level index =   11     Height =  1649.6 m      Thickness =  337.0 m
+Full level index =   12     Height =  2037.7 m      Thickness =  388.2 m
+Full level index =   13     Height =  2475.6 m      Thickness =  437.9 m
+Full level index =   14     Height =  2959.3 m      Thickness =  483.7 m
+Full level index =   15     Height =  3485.1 m      Thickness =  525.8 m
+Full level index =   16     Height =  4056.1 m      Thickness =  570.9 m
+Full level index =   17     Height =  4675.0 m      Thickness =  618.9 m
+Full level index =   18     Height =  5344.9 m      Thickness =  669.8 m
+Full level index =   19     Height =  6068.4 m      Thickness =  723.5 m
+Full level index =   20     Height =  6841.5 m      Thickness =  773.1 m
+Full level index =   21     Height =  7598.1 m      Thickness =  756.6 m
+Full level index =   22     Height =  8338.2 m      Thickness =  740.1 m
+Full level index =   23     Height =  9061.9 m      Thickness =  723.7 m
+Full level index =   24     Height =  9769.1 m      Thickness =  707.2 m
+Full level index =   25     Height = 10459.8 m      Thickness =  690.7 m
+Full level index =   26     Height = 11134.1 m      Thickness =  674.2 m
+Full level index =   27     Height = 11791.8 m      Thickness =  657.8 m
+Full level index =   28     Height = 12433.1 m      Thickness =  641.3 m
+Full level index =   29     Height = 13057.9 m      Thickness =  624.8 m
+Full level index =   30     Height = 13678.6 m      Thickness =  620.7 m
+Full level index =   31     Height = 14299.3 m      Thickness =  620.7 m
+Full level index =   32     Height = 14919.9 m      Thickness =  620.7 m
+Full level index =   33     Height = 15540.6 m      Thickness =  620.7 m
+Full level index =   34     Height = 16161.3 m      Thickness =  620.7 m
+Full level index =   35     Height = 16782.0 m      Thickness =  620.7 m
+Full level index =   36     Height = 17402.6 m      Thickness =  620.7 m
+Full level index =   37     Height = 18023.3 m      Thickness =  620.7 m
+Full level index =   38     Height = 18644.0 m      Thickness =  620.7 m
+Full level index =   39     Height = 19264.7 m      Thickness =  620.7 m
+Full level index =   40     Height = 19885.3 m      Thickness =  620.7 m
+p_top =   5000. Pa, dzbot =   50.0 m, dzstretch_s/u =   1.30  1.10
+d01 2026-08-16_12:00:00 Using inland lakes with average surface temperature
+ Assume Noah LSM input
+          98         280  water and category           12 
+  both at 50%, landmask is   0.0000000E+00
+d01 2026-08-16_12:00:00 forcing artificial silty clay loam at  362 points, out of  65988
+ LAND  CHANGE =            0
+ WATER CHANGE =            0
+d01 2026-08-16_12:00:00 Timing for processing          1 s.
+write_initial_conditions = TRUE: Will create initial file
+Successfully created wrfinput file: wrfinput_d01
+d01 2026-08-16_12:00:00 Timing for output          0 s.
+d01 2026-08-16_12:00:00 Timing for loop #    1 =          2 s.
+  
+ -----------------------------------------------------------------------------
+  
+ Domain  1: Current date being processed: 2026-08-16_15:00:00.0000, which is loop #   2 out of    2
+ configflags%julyr, %julday, %gmt:        2026         228   15.00000    
+d01 2026-08-16_15:00:00  Yes, this special data is acceptable to use: OUTPUT FROM METGRID V4.6.0
+d01 2026-08-16_15:00:00  Input data is acceptable to use: met_em.d01.2026-08-16_15:00:00.nc
+ metgrid input_wrf.F first_date_input = 2026-08-16_15:00:00
+ metgrid input_wrf.F first_date_nml = 2026-08-16_12:00:00
+d01 2026-08-16_15:00:00 Timing for input          0 s.
+d01 2026-08-16_15:00:00          flag_soil_layers read from met_em file is  1
+ Bathymetry dataset from GEBCO Compilation Group. Please acknowledge the following in presentations and publications: GEBCO Compilation Group (2021) GEBCO 2021 Grid (doi:10.5285/c6612cbe-50b3-0cff-e053-6c86abc09f8f).
+Using sfcprs2 to compute psfc
+d01 2026-08-16_15:00:00 Using inland lakes with average surface temperature
+ Assume Noah LSM input
+          98         280  water and category           12 
+  both at 50%, landmask is   0.0000000E+00
+d01 2026-08-16_15:00:00 forcing artificial silty clay loam at   20 points, out of  65988
+ LAND  CHANGE =            0
+ WATER CHANGE =            0
+d01 2026-08-16_15:00:00 Timing for processing          0 s.
+write_initial_conditions = TRUE: Will create initial file
+ LBC valid between these times 2026-08-16_12:00:00 and 2026-08-16_15:00:00
+d01 2026-08-16_15:00:00 Timing for output          0 s.
+d01 2026-08-16_15:00:00 Timing for loop #    2 =          1 s.
+d01 2026-08-16_15:00:00 real_em: SUCCESS COMPLETE REAL_EM INIT

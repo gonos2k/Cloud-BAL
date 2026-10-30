@@ -1,0 +1,64 @@
+{
+  "status": "complete",
+  "cases": {
+    "H_ORIGINAL_QR": {
+      "directory": "/var/tmp/firsthour-runtime-plan-20261030/species_ablation/run_H_ORIGINAL_QR",
+      "paired_reference": "FIX_H",
+      "changed_variable": "QRAIN",
+      "input_count": 89,
+      "input_sha256": "fc71203e9cce20a1aabc0297d353de7a8879ee6463be6221278a33e76196771d",
+      "exe_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+      "namelist_sha256": "23f5c3cb94d44831c22d86a754fa30d242456d8d14cd70a72d89b00cdec4f3a3",
+      "wrfbdy_sha256": "74102ac2063f17a9007f3352e6e6c2f52629055bdf3f05b4f4d6d77aef835f45",
+      "receipt": {
+        "exit": 0,
+        "elapsed_seconds": 138.15342164039612,
+        "success_marker": true,
+        "histories": [
+          "wrfout_d01_2026-08-16_12:00:00",
+          "wrfout_d01_2026-08-16_13:00:00"
+        ],
+        "histories_exact": true,
+        "staged_unchanged": true,
+        "source_unchanged": true,
+        "output_sha256": {
+          "wrfout_d01_2026-08-16_12:00:00": "e36faf5db057bc4dee40d64f43da0288e81af8e87fd6e3d95acd0eb757bb0985",
+          "wrfout_d01_2026-08-16_13:00:00": "b5fc631c54963bf6c03cfc44d71947c7e1e5d6ff0c1c40c9722b8279493b5ac0"
+        }
+      },
+      "staged_difference_vs_reference": [
+        "wrfinput_d01"
+      ]
+    },
+    "H_ORIGINAL_QS": {
+      "directory": "/var/tmp/firsthour-runtime-plan-20261030/species_ablation/run_H_ORIGINAL_QS",
+      "paired_reference": "FIX_H",
+      "changed_variable": "QSNOW",
+      "input_count": 89,
+      "input_sha256": "c9e5458ab5ffaf5e96a473858d46d430f3f07d99910ffee742296b1443a33d79",
+      "exe_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+      "namelist_sha256": "23f5c3cb94d44831c22d86a754fa30d242456d8d14cd70a72d89b00cdec4f3a3",
+      "wrfbdy_sha256": "74102ac2063f17a9007f3352e6e6c2f52629055bdf3f05b4f4d6d77aef835f45",
+      "receipt": {
+        "exit": 0,
+        "elapsed_seconds": 138.85706496238708,
+        "success_marker": true,
+        "histories": [
+          "wrfout_d01_2026-08-16_12:00:00",
+          "wrfout_d01_2026-08-16_13:00:00"
+        ],
+        "histories_exact": true,
+        "staged_unchanged": true,
+        "source_unchanged": true,
+        "output_sha256": {
+          "wrfout_d01_2026-08-16_12:00:00": "8a29a0a49a3684f986e6da397cc4444e8f7439db2b81b55903ad22994c2a1033",
+          "wrfout_d01_2026-08-16_13:00:00": "1650b8fd558d01477359cc64d36767eea601c6db2c9b17cc95de5d78112c4902"
+        }
+      },
+      "staged_difference_vs_reference": [
+        "wrfinput_d01"
+      ]
+    }
+  },
+  "scope": "unbalanced single-species initial-state counterfactual; no hydrostatic rebalancing"
+}

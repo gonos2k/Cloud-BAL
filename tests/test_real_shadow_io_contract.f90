@@ -799,6 +799,37 @@ CONTAINS
     CALL check(rc==NF90_NOERR .AND. ALL(original_source==background%omega_target%source), &
       'original target provenance is read back exactly',failures)
     rc=nf90_close(ncid)
+    CALL run_pressure_analysis_shadow(background,candidate,operational,candidate_result, &
+      candidate_config,'HYDRO_BACKGROUND_PRECIP',status)
+    CALL check(status==STATUS_OK .AND. candidate_config%column%retain_background_precipitation .AND. &
+      canonical_states_equal(background,operational) .AND. &
+      ALL(candidate%rain%value==background%rain%value) .AND. &
+      ALL(candidate%snow%value==background%snow%value) .AND. &
+      ALL(candidate%graupel%value==background%graupel%value), &
+      'research dispatcher selects retained precipitation and keeps operational state',failures)
+    CALL run_pressure_analysis_shadow(background,forged_candidate,forged_operational,candidate_result, &
+      candidate_config,'UNKNOWN_BACKGROUND_PRECIP',status)
+    CALL check(status==STATUS_FAILED .AND. canonical_states_equal(background,forged_candidate) .AND. &
+      canonical_states_equal(background,forged_operational), &
+      'unknown precipitation policy rejects without mutation',failures)
+    candidate_config%column%retain_background_precipitation=.TRUE.
+    CALL run_cloud_bal_pipeline(background,candidate,operational,candidate_result,candidate_config)
+    CALL check(candidate_result%status==STATUS_OK .AND. canonical_states_equal(background,operational), &
+      'background precipitation policy passes pipeline without operational mutation',failures)
+    CALL build_balance_operator(candidate,candidate_config%balance,op,status,reason)
+    CALL state_continuity_residual(op,background,residual_before,status)
+    CALL state_continuity_residual(op,candidate,residual_after,status)
+    CALL write_shadow_diagnostics('background-precipitation-shadow.nc',background,candidate, &
+      candidate_longitude,candidate_result,candidate_config,residual_before,residual_after, &
+      status,operational,.TRUE.)
+    CALL check(status==STATUS_OK,'background precipitation shadow is writable',failures)
+    IF (status==STATUS_OK) THEN
+      rc=nf90_open('background-precipitation-shadow.nc',NF90_NOWRITE,ncid)
+      IF (rc==NF90_NOERR) rc=nf90_get_att(ncid,NF90_GLOBAL,'precipitation_research_policy',text)
+      CALL check(rc==NF90_NOERR .AND. TRIM(text)=='retain_background_v1', &
+        'shadow policy configuration readback',failures)
+      IF (rc==NF90_NOERR) rc=nf90_close(ncid)
+    END IF
   END SUBROUTINE test_pressure_analysis_candidate_shadow
 
   SUBROUTINE test_joint_pressure_candidate_shadow(failures)

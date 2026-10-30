@@ -1,0 +1,64 @@
+{
+  "schema": "snow-sensitivity-science-validation-v1",
+  "validated_utc": "2026-10-30T04:44:07Z",
+  "scorer": {
+    "path": "tools/cp02_snow_sensitivity.py",
+    "sha256": "95c3e8591318eafda06598616fdec1c11f67aa78aef3306ab473a1602ccadc17"
+  },
+  "tests": {
+    "command": "pytest -q tests/test_cp02_snow_sensitivity.py",
+    "result": "11 passed",
+    "test_file_sha256": "e6f9a64c4e281a6228ddf00384cfa73520d6763e3521ddb39a2d26986e363689"
+  },
+  "selection_plan_sha256": "1a5e236793f276ba9781664980ad37f79efa565038b17e0e90aa916fe953d6ef",
+  "common_plan_sha256": "3fb0c6c4a2770394a7ed1a4cd690cd61767c3f886deae9a0aa686f42bfb33a41",
+  "successful_cli": {
+    "status": "COMPLETE",
+    "return_code": 0,
+    "command_record": {
+      "path": "docs/evidence/snow_sensitivity_20261030/scoring_command.json",
+      "sha256": "ca78a64b26e0aefdd3fda0912dab492a2ed5cd8feb83ca32a977268b6b6ecf46"
+    },
+    "stdout_log": {
+      "path": "docs/evidence/snow_sensitivity_20261030/scoring_stdout.txt",
+      "sha256": "89cb8ce81fdee2e8fcc3741b97def258a2ee78b79991a551b416210cc314c06a"
+    },
+    "analysis_receipt": {
+      "path": "docs/evidence/snow_sensitivity_20261030/analysis/receipt.json",
+      "sha256": "18e2d82c3be0120b2da0e34fec75c12d6da52ddbfc28eaffb19781e94153e7ec"
+    },
+    "row_counts": {
+      "categorical": 540,
+      "continuous": 90,
+      "transitions": 864,
+      "selection": 14
+    },
+    "analysis_output_hashes_verified": 11
+  },
+  "post_score_source_identity_recheck": {
+    "status": "PASS",
+    "method": "Pinned scorer evaluator.verify_records over the sealed analysis receipt source set, followed by direct checks of command/stdout, plan, and runtime receipt identities.",
+    "source_identity_count": 1540,
+    "runtime_case_receipts": 12
+  },
+  "selection_result": {
+    "best_eligible_overall_case": "IMPROVED_BG_FIXED",
+    "best_eligible_improved_case": "IMPROVED_BG_FIXED",
+    "overall_fallback_used": true,
+    "improved_fallback_used": true
+  },
+  "failed_pre_score_attempts": [
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/attempts/score_attempt_01_failure.json",
+      "command_sha256": "a606d99fe1165581c09d77fdf84a1f6b1161f2a80af048b963666b8dd24254ea",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "failure": "CLI entry point ran before helper definitions; no candidate outputs read or analysis outputs written."
+    },
+    {
+      "path": "docs/evidence/snow_sensitivity_20261030/attempts/score_attempt_02_failure.json",
+      "command_sha256": "6bca245433b57252721b5d23f1839417e753bbd93e7ed0e66d6be235a4bc18fc",
+      "stdout_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "failure": "RN1 filename prefix typo prevented scoring before any category or continuous scores were computed."
+    }
+  ]
+}
