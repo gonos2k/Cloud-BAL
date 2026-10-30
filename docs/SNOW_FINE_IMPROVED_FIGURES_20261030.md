@@ -4,33 +4,121 @@
 
 ## 임계값별 ΔCSI heatmap
 
-| 임계값 | 그림 |
-| --- | --- |
-| ≥0.1 mm | [PNG](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t0p1.png) · [PDF](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t0p1.pdf) |
-| ≥0.5 mm | [PNG](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t0p5.png) · [PDF](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t0p5.pdf) |
-| ≥1 mm | [PNG](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t1.png) · [PDF](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t1.pdf) |
-| ≥2.5 mm | [PNG](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t2p5.png) · [PDF](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t2p5.pdf) |
-| ≥5 mm | [PNG](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t5.png) · [PDF](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t5.pdf) |
-| ≥10 mm | [PNG](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t10.png) · [PDF](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t10.pdf) |
+### 임계값 ≥0.1 mm
+
+![개선 계열 · ≥0.1 mm · 시간별 ΔCSI](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t0p1.png)
+
+### 임계값 ≥0.5 mm
+
+![개선 계열 · ≥0.5 mm · 시간별 ΔCSI](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t0p5.png)
+
+### 임계값 ≥1 mm
+
+![개선 계열 · ≥1 mm · 시간별 ΔCSI](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t1.png)
+
+### 임계값 ≥2.5 mm
+
+![개선 계열 · ≥2.5 mm · 시간별 ΔCSI](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t2p5.png)
+
+### 임계값 ≥5 mm
+
+![개선 계열 · ≥5 mm · 시간별 ΔCSI](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t5.png)
+
+### 임계값 ≥10 mm
+
+![개선 계열 · ≥10 mm · 시간별 ΔCSI](evidence/snow_fine_20261030/figures/delta_csi/improved/delta_csi_t10.png)
+
 
 ## 시간별 총강수 지도
 
 각 지도는 RN1 분석과 해당 개선 실험의 +1–+6시간을 같은 색 구간으로 비교한다.
 
-| 실험 ID | 실험 표기 | 지도 |
-| --- | --- | --- |
-| `IMPROVED_BG_FIXED` | 기존 개선안 B1 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_BG_FIXED.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_BG_FIXED.pdf) |
-| `IMPROVED_SNOW_000` | 개선 계열 α=0 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_000.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_000.pdf) |
-| `IMPROVED_SNOW_025` | 개선 계열 α=0.25 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_025.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_025.pdf) |
-| `IMPROVED_SNOW_050` | 개선 계열 α=0.5 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_050.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_050.pdf) |
-| `IMPROVED_SNOW_075` | 개선 계열 α=0.75 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_075.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_075.pdf) |
-| `IMPROVED_SNOW_110` | 개선 계열 α=1.1 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_110.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_110.pdf) |
-| `IMPROVED_SNOW_120` | 개선 계열 α=1.2 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_120.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_120.pdf) |
-| `IMPROVED_SNOW_125` | 개선 계열 α=1.25 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_125.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_125.pdf) |
-| `IMPROVED_SNOW_130` | 개선 계열 α=1.3 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_130.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_130.pdf) |
-| `IMPROVED_SNOW_140` | 개선 계열 α=1.4 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_140.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_140.pdf) |
-| `IMPROVED_SNOW_150` | 개선 계열 α=1.5 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_150.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_150.pdf) |
-| `IMPROVED_SNOW_175` | 개선 계열 α=1.75 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_175.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_175.pdf) |
-| `IMPROVED_SNOW_200` | 개선 계열 α=2 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_200.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_200.pdf) |
-| `IMPROVED_SNOW_250` | 개선 계열 α=2.5 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_250.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_250.pdf) |
-| `IMPROVED_SNOW_300` | 개선 계열 α=3 | [PNG](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_300.png) · [PDF](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_300.pdf) |
+### 기존 개선안 B1
+
+실험 ID: `IMPROVED_BG_FIXED`
+
+![기존 개선안 B1 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_BG_FIXED.png)
+
+### 개선 계열 α=0
+
+실험 ID: `IMPROVED_SNOW_000`
+
+![개선 계열 α=0 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_000.png)
+
+### 개선 계열 α=0.25
+
+실험 ID: `IMPROVED_SNOW_025`
+
+![개선 계열 α=0.25 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_025.png)
+
+### 개선 계열 α=0.5
+
+실험 ID: `IMPROVED_SNOW_050`
+
+![개선 계열 α=0.5 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_050.png)
+
+### 개선 계열 α=0.75
+
+실험 ID: `IMPROVED_SNOW_075`
+
+![개선 계열 α=0.75 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_075.png)
+
+### 개선 계열 α=1.1
+
+실험 ID: `IMPROVED_SNOW_110`
+
+![개선 계열 α=1.1 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_110.png)
+
+### 개선 계열 α=1.2
+
+실험 ID: `IMPROVED_SNOW_120`
+
+![개선 계열 α=1.2 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_120.png)
+
+### 개선 계열 α=1.25
+
+실험 ID: `IMPROVED_SNOW_125`
+
+![개선 계열 α=1.25 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_125.png)
+
+### 개선 계열 α=1.3
+
+실험 ID: `IMPROVED_SNOW_130`
+
+![개선 계열 α=1.3 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_130.png)
+
+### 개선 계열 α=1.4
+
+실험 ID: `IMPROVED_SNOW_140`
+
+![개선 계열 α=1.4 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_140.png)
+
+### 개선 계열 α=1.5
+
+실험 ID: `IMPROVED_SNOW_150`
+
+![개선 계열 α=1.5 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_150.png)
+
+### 개선 계열 α=1.75
+
+실험 ID: `IMPROVED_SNOW_175`
+
+![개선 계열 α=1.75 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_175.png)
+
+### 개선 계열 α=2
+
+실험 ID: `IMPROVED_SNOW_200`
+
+![개선 계열 α=2 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_200.png)
+
+### 개선 계열 α=2.5
+
+실험 ID: `IMPROVED_SNOW_250`
+
+![개선 계열 α=2.5 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_250.png)
+
+### 개선 계열 α=3
+
+실험 ID: `IMPROVED_SNOW_300`
+
+![개선 계열 α=3 · RN1과 +1–+6시간 총강수](evidence/snow_fine_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_300.png)

@@ -117,8 +117,8 @@ def table(headers: list[str], rows: list[list[str]]) -> str:
                       *('| ' + ' | '.join(row) + ' |' for row in rows)])
 
 
-def link(path: str, label_text: str = 'PNG') -> str:
-    return f'[{label_text}](evidence/snow_fine_20261030/figures/{path})'
+def inline_image(path: str, description: str) -> str:
+    return f'![{description}](evidence/snow_fine_20261030/figures/{path})'
 
 
 def build_galleries(figures: dict, cases: list[str]) -> tuple[str, str]:
@@ -137,24 +137,24 @@ def build_galleries(figures: dict, cases: list[str]) -> tuple[str, str]:
         title = {'control': '규준 계열 (규준 실험 + 14개 CONTROL)',
                  'improved': '개선 계열 (B1 + 14개 IMPROVED)',
                  'context': '참고 실험'}[group_name]
-        all_gallery.extend([f'### {title}', '',
-                            '| 임계값 | 그림 |', '| --- | --- |'])
+        all_gallery.extend([f'### {title}', ''])
         for threshold in THRESHOLDS:
             path = f'delta_csi/{group_name}/delta_csi_t{plotter.threshold_slug(threshold)}.png'
-            pdf = path[:-4] + '.pdf'
             if path not in heatmaps:
                 raise ValueError(f'missing heatmap link target: {path}')
-            all_gallery.append(f'| ≥{threshold:g} mm | {link(path)} · {link(pdf, "PDF")} |')
-        all_gallery.extend(['', f'Columns: {len(group_cases)} experiments. Every row is a separate lead.', ''])
+            all_gallery.extend([f'#### 임계값 ≥{threshold:g} mm', '',
+                                inline_image(path, f'{title} · ≥{threshold:g} mm · 시간별 ΔCSI'), ''])
+        all_gallery.extend(['', f'열은 {len(group_cases)}개 실험이며, 행은 각각의 예측시간이다.', ''])
     all_gallery.extend(['## 시간별 총강수 지도', '',
                         '각 PNG는 RN1 분석과 한 실험의 6개 시간별 총강수를 나란히 보인다. '
                         '모든 지도는 같은 색 구간과 공통 RN1 평가점을 사용한다.', ''])
     for group_name, group_cases in groups:
         title = {'control': '규준 계열', 'improved': '개선 계열', 'context': '참고 실험'}[group_name]
-        all_gallery.extend([f'### {title}', '', '| 실험 ID | 실험 표기 | 지도 |', '| --- | --- | --- |'])
+        all_gallery.extend([f'### {title}', ''])
         for case in group_cases:
             item = maps[case]
-            all_gallery.append(f'| `{case}` | {label(case)} | {link(item["figure"])} · {link(item["figure"][:-4] + ".pdf", "PDF")} |')
+            all_gallery.extend([f'#### {label(case)}', '', f'실험 ID: `{case}`', '',
+                                inline_image(item['figure'], f'{label(case)} · RN1과 +1–+6시간 총강수'), ''])
         all_gallery.append('')
 
     improved_cases = next(group for name, group in groups if name == 'improved')
@@ -162,18 +162,19 @@ def build_galleries(figures: dict, cases: list[str]) -> tuple[str, str]:
         '# 개선 계열 그림 모음', '',
         '개선 계열은 기존 개선안 B1(α=1)과 IMPROVED_SNOW 실험 14개를 한 그림 형식으로 정리했다. '
         '모든 ΔCSI는 규준 실험 ORIGINAL을 기준으로 하며 heatmap 색 범위는 전체 실험에 공통이다.', '',
-        '## 임계값별 ΔCSI heatmap', '', '| 임계값 | 그림 |', '| --- | --- |',
+        '## 임계값별 ΔCSI heatmap', '',
     ]
     for threshold in THRESHOLDS:
         path = f'delta_csi/improved/delta_csi_t{plotter.threshold_slug(threshold)}.png'
-        improved_gallery.append(f'| ≥{threshold:g} mm | {link(path)} · {link(path[:-4] + ".pdf", "PDF")} |')
+        improved_gallery.extend([f'### 임계값 ≥{threshold:g} mm', '',
+                                 inline_image(path, f'개선 계열 · ≥{threshold:g} mm · 시간별 ΔCSI'), ''])
     improved_gallery.extend(['', '## 시간별 총강수 지도', '',
-                             '각 지도는 RN1 분석과 해당 개선 실험의 +1–+6시간을 같은 색 구간으로 비교한다.', '',
-                             '| 실험 ID | 실험 표기 | 지도 |', '| --- | --- | --- |'])
+                             '각 지도는 RN1 분석과 해당 개선 실험의 +1–+6시간을 같은 색 구간으로 비교한다.', ''])
     for case in improved_cases:
         item = maps[case]
-        improved_gallery.append(f'| `{case}` | {label(case)} | {link(item["figure"])} · {link(item["figure"][:-4] + ".pdf", "PDF")} |')
-    return '\n'.join(all_gallery) + '\n', '\n'.join(improved_gallery) + '\n'
+        improved_gallery.extend([f'### {label(case)}', '', f'실험 ID: `{case}`', '',
+                                 inline_image(item['figure'], f'{label(case)} · RN1과 +1–+6시간 총강수'), ''])
+    return '\n'.join(all_gallery).rstrip() + '\n', '\n'.join(improved_gallery).rstrip() + '\n'
 
 
 def build() -> tuple[str, str, str]:

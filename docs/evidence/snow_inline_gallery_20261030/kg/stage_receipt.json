@@ -1,0 +1,121 @@
+{
+  "baseline_sha256": "9c6e6fe8e7955ae887328b1af26b221cdbdb23f672db2f59f88e2e308724d52b",
+  "corpora": {
+    "Cloud-BAL": {
+      "after": {
+        "communities": 1534,
+        "edges": 30255,
+        "nodes": 17009
+      },
+      "before": {
+        "communities": 1513,
+        "edges": 30237,
+        "nodes": 16998
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "prior_node_ids_preserved": 16997,
+      "prior_node_ids_removed": [
+        "docs_evidence_snow_fine_20261030_build_report_link"
+      ],
+      "selected_manifest_keys": [
+        "docs/evidence/snow_fine_20261030/build_report.py",
+        "docs/evidence/snow_inline_gallery_20261030/kg/update_graphs.py"
+      ],
+      "selected_source_sha256": {
+        "docs/evidence/snow_fine_20261030/build_report.py": "8f7a1c1834088a4b4723a1c74992821e723036a452d2e01db518416bdd0936d4",
+        "docs/evidence/snow_inline_gallery_20261030/kg/update_graphs.py": "865c9982445fdfd33d2c85f7378cf6ebefc65c516b3022f005f0f7069dd389ff"
+      },
+      "snapshot_file_sha256": {
+        "GRAPH_REPORT.md": "26cc16123bd322f17cb2ac859a6aa784d995c2850f506a2350a0b3d116e25cc6",
+        "graph.json": "e522467b82abfa01b63f5c17e9024ab0b8c903252bbcb6c7f29178e34415c122",
+        "manifest.json": "36d16795faeeff3d0f5bcf30ae9b7b386caba56a71f633999ce2db001ead71c7"
+      }
+    },
+    "KLAPS50": {
+      "after": {
+        "communities": 3495,
+        "edges": 88747,
+        "nodes": 42837
+      },
+      "before": {
+        "communities": 3493,
+        "edges": 88729,
+        "nodes": 42826
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "prior_node_ids_preserved": 42825,
+      "prior_node_ids_removed": [
+        "cloud_bal_docs_evidence_snow_fine_20261030_build_report_link"
+      ],
+      "selected_manifest_keys": [
+        "Cloud-BAL/docs/evidence/snow_fine_20261030/build_report.py",
+        "Cloud-BAL/docs/evidence/snow_inline_gallery_20261030/kg/update_graphs.py"
+      ],
+      "selected_source_sha256": {
+        "docs/evidence/snow_fine_20261030/build_report.py": "8f7a1c1834088a4b4723a1c74992821e723036a452d2e01db518416bdd0936d4",
+        "docs/evidence/snow_inline_gallery_20261030/kg/update_graphs.py": "865c9982445fdfd33d2c85f7378cf6ebefc65c516b3022f005f0f7069dd389ff"
+      },
+      "snapshot_file_sha256": {
+        "GRAPH_REPORT.md": "0fca9e799d741d297e603eb00321007e069194ac55670d00cbcb2b8d8f89af5c",
+        "graph.json": "e491713ab231ea9f666884d66f3ceb0288a6c1d751f4234be837c9cb72e89884",
+        "manifest.json": "8212cf34e603131a9e2f884b1ceade61557d455803fd261f1a0f4b907838fad0"
+      }
+    }
+  },
+  "extraction_limits": [
+    "Selected Python AST only; other evidence hash-bound only.",
+    "Only the obsolete build_report.link() node was removed, after verifying inline_image() in the same selected source file.",
+    "Fortran cross-file CALL extraction is partial.",
+    "Graph freshness is not runtime or scientific validation."
+  ],
+  "hash_only_sha256": {
+    "docs/SNOW_FINE_FIGURES_20261030.md": "6e8d683ee265c2e9bf53118fa0655b63e763903bd6cfd5bde4ef324e2401876a",
+    "docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md": "71a0084f79f54c75ab64d579f5996908e85bbc69a210c46120cb370dc76ecbd2",
+    "docs/evidence/snow_inline_gallery_20261030/prior_versions/docs/SNOW_FINE_FIGURES_20261030.md": "4e7123d721b6c296a1c44005203651fe0ab366b74ca239a496efc1e0e3c53de1",
+    "docs/evidence/snow_inline_gallery_20261030/prior_versions/docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md": "38aea62f7fba9c831b878729a2ceb17045a155f1bec9b046d9a137813f391804",
+    "docs/evidence/snow_inline_gallery_20261030/prior_versions/reconciliation.json": "da6c82a8a290dd550fd90d0f8a7cdf9f4df694e172dc110371e77b718a7baebb",
+    "docs/evidence/snow_inline_gallery_20261030/review/review_receipt.json": "beb0461947e6d7efbdd9d8a77556ffc7309666a5354052d1d184dc5e0e63934c"
+  },
+  "selection_lock_sha256": "1fdb33a8aadf30a659a58941b711157f4b0ed7131a3f4647291a84885d150a71",
+  "source_backed_node_removals": [
+    {
+      "corpus": "KLAPS50",
+      "id": "cloud_bal_docs_evidence_snow_fine_20261030_build_report_link",
+      "old": "link()",
+      "replacement": "inline_image()",
+      "source": "docs/evidence/snow_fine_20261030/build_report.py"
+    },
+    {
+      "corpus": "Cloud-BAL",
+      "id": "docs_evidence_snow_fine_20261030_build_report_link",
+      "old": "link()",
+      "replacement": "inline_image()",
+      "source": "docs/evidence/snow_fine_20261030/build_report.py"
+    }
+  ],
+  "source_extraction_scope": [
+    "docs/evidence/snow_fine_20261030/build_report.py",
+    "docs/evidence/snow_inline_gallery_20261030/kg/update_graphs.py"
+  ],
+  "stage": "/var/tmp/cloudbal_snow_inline_gallery_kg_20261030/stage-snow-inline-gallery-20261030-final-r2",
+  "staged_wiki_sha256": {
+    "graph-report-cloud-bal.md": "99414be8e76020daa4b0623c393b3b8a3438f5c6f8bad13fb86bfbf2f90a9c40",
+    "graph-report-klaps50.md": "6fa319d4e39453f6fa9d420ceb28a14b033e9b706bd819c989dc9af0199655db",
+    "graph-report.md": "f58785c908a1771ff98b6b27cbc9ff6575aa5e21597073bd40886e51c920c3ae",
+    "index.md": "b9420d027afbc35f12ce2673a83d79dc4668543026ed0daff7b1057cf7efd500",
+    "log.md": "5f010781557e3c9b60234271c4e7622b0611aca370301a58cead687097b249b2"
+  },
+  "status": "STAGED_ONLY_NO_MAINTAINED_WRITES"
+}
