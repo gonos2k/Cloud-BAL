@@ -1,0 +1,25 @@
+{
+  "checks": {
+    "preservation": "PASS: maintained graph/report/manifest files, wiki, git status, and prior dated snapshot inventories match baseline before publication.",
+    "scope_and_limitations": "PASS: extraction is limited to 12 selected Python AST sources; 233 other artifacts are hash-bound only; Fortran cross-file CALL extraction remains partial; graph freshness is not runtime or scientific validation.",
+    "source_lock_and_test_receipt": "PASS: exact 12 Python source hashes match frozen selection and final clean-index receipt (109 passed); all 233 hash-only evidence files match frozen hashes.",
+    "staged_graphs": "PASS: KLAPS50 and Cloud-BAL counts, zero integrity defects, full prior node-ID preservation, snapshot trio hashes, and staged wiki hashes independently verified."
+  },
+  "graph_deltas": {
+    "Cloud-BAL": {
+      "communities": -18,
+      "edges": 232,
+      "nodes": 123
+    },
+    "KLAPS50": {
+      "communities": 23,
+      "edges": 236,
+      "nodes": 123
+    }
+  },
+  "reviewer": "independent snow-fine review agent",
+  "schema": "snow-fine-graph-stage-review-v1",
+  "stage_receipt_sha256": "88a374063d0663f460f191a6113c00f0e94abd5b6e529991204b369b68ef7d68",
+  "status": "GO",
+  "unresolved_blockers": []
+}

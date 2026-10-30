@@ -1,0 +1,111 @@
+{
+  "evidence": {
+    "analysis_receipt": {
+      "path": "analysis/receipt.json",
+      "sha256": "62519a61700aa106419517a2acb4b31c50dd5c1f8860cdadf6c7314e65c948ae",
+      "status": "COMPLETE",
+      "summary": "31 contexts, 30 eligible candidates, 1,116 categorical rows, 186 continuous rows; CONTROL_SNOW_300 selected by frozen +1 h CSI@10 primary rule."
+    },
+    "clean_index_tests": {
+      "path": "validation/clean_index_tests.json",
+      "sha256": "1efdc45464d65bbe29834c5d2ed9b1c88673ec9483e03310efba42791bab35ac",
+      "status": "PASS",
+      "summary": "109 passed; includes full-table regression; all 12 frozen source hashes match."
+    },
+    "cli_replay": {
+      "path": "review/cli_replay.json",
+      "sha256": "bc9d70761e9671b9e417c44d448f1dd5b7498d95e6d41c30544c3408c44f1c95",
+      "status": "PASS_BYTE_IDENTICAL"
+    },
+    "figure_review": {
+      "path": "review/figure_review.json",
+      "sha256": "9419763c6c181387b14a92f423b1769a33deafd548c60a3d25193ebb0c35b02c",
+      "status": "PASS",
+      "summary": "18 heatmaps, 31 hourly-map sheets, 150 assets; complete threshold/lead/context coverage and common symmetric delta limits."
+    },
+    "full_table_review": {
+      "path": "review/full_table_review.json",
+      "sha256": "18881ab9d2fe40426cebd4a81d15af39c87dd8ac285e9f4279fdd33566b22df8",
+      "status": "PASS",
+      "summary": "42 tables and 13,578 cells validated."
+    },
+    "independent_score_recount": {
+      "path": "review/independent_score_recount.json",
+      "sha256": "98a27988e259a57906ed3903ee88bdd4e67b1be61446487740de313746a59137",
+      "status": "PASS",
+      "summary": "All 1,302 score values independently recomputed from six paired-hour arrays; maximum error 0.0."
+    },
+    "kg_postpublish_readback": {
+      "path": "kg/postpublish_copy_receipt.json",
+      "sha256": "c81fedf01cdfaf06c035a3e2f9d28138b47a55f277fe41a0a7648496429e2f4b",
+      "status": "POSTPUBLISH_WORKTREE_AND_WIKI_COPIES_READBACK_PASS"
+    },
+    "kg_publish_receipt": {
+      "path": "kg/publish_receipt.json",
+      "sha256": "f6bfa79120325b33e8154dace2aaa3acbb28083c8ed0a98bd01038018d04a80a",
+      "status": "PUBLISHED_AND_READBACK_PASS"
+    },
+    "kg_stage_review": {
+      "path": "kg/stage_review.json",
+      "sha256": "031b9b4b66e88073456ae1ba7a40dc7b34fefb912280997f6b0a5cdd68799217",
+      "stage_receipt_sha256": "88a374063d0663f460f191a6113c00f0e94abd5b6e529991204b369b68ef7d68",
+      "status": "GO"
+    },
+    "prelaunch_review": {
+      "path": "review/prelaunch_review.json",
+      "sha256": "cb4b801b6f309af0d72d49b08c767043a7567e6e4fa4437ff5cc73af8ab12513",
+      "status": "GO"
+    },
+    "renderer_replay": {
+      "path": "review/renderer_replay.json",
+      "sha256": "6791defbe765ccdebb211acab9ee876d66ed13d3e8a5e634d52ccd11bb8d3919",
+      "status": "PASS"
+    },
+    "root_tables_review": {
+      "path": "validation/root_tables.json",
+      "sha256": "6c6a38ba5dc2a56d78c2fa9588615c76901fd3d66758179981ab55d9e2ed7f05",
+      "status": "PASS"
+    },
+    "root_visual_review": {
+      "path": "validation/root_visual_review.json",
+      "sha256": "1e6479feab447778f761f76f118272b27dc0f7cafd18a6e7ecac8755edd7cc1d",
+      "status": "PASS"
+    },
+    "runtime_review": {
+      "path": "review/runtime_review.json",
+      "sha256": "cbc343bec2802b29ebc9ec8314392fd51664144ac156bc594b3d584ed8628821",
+      "status": "PASS"
+    }
+  },
+  "graph_publication": {
+    "deltas": {
+      "Cloud-BAL": {
+        "communities": -18,
+        "edges": 232,
+        "nodes": 123
+      },
+      "KLAPS50": {
+        "communities": 23,
+        "edges": 236,
+        "nodes": 123
+      }
+    },
+    "extraction_scope": "12 selected Python AST files; 233 other evidence artifacts are SHA-256 bound only.",
+    "limitations": [
+      "Fortran cross-file CALL extraction is partial.",
+      "Graph freshness does not establish runtime or scientific validation."
+    ],
+    "postpublish_readback_independent_checks": "PASS 31/31; maintained root graph/report/manifest and dated snapshot trios match staged hashes in both repositories; staged wiki copies match; all 218 prior dated snapshots preserved and each repository now has its new dated snapshot."
+  },
+  "reviewer": "independent snow-fine review agent",
+  "schema": "snow-fine-final-team-review-v1",
+  "scientific_limitations": [
+    "Parameter selection is diagnostic for one meteorological event and does not establish independent forecast skill or statistical significance.",
+    "QSNOW-only scaling does not establish conservative mass/energy closure or operational initialization.",
+    "Verification is against total surface precipitation, not snowfall alone.",
+    "CONTROL and IMPROVED comparisons vary in both initialization and executable; alpha effects are isolated within each family."
+  ],
+  "scope": "Final scientific, rendering, clean-index validation, staged graph, and post-publication readback review. This file intentionally excludes the aggregate final manifest to avoid a hash cycle.",
+  "status": "PASS",
+  "unresolved_blockers": []
+}
