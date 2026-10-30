@@ -1,0 +1,148 @@
+{
+  "schema": "first_hour_factorial_figures_v1",
+  "status": "COMPLETE",
+  "score_receipt_sha256": "900ee2342a434d418c67d2b86bd5519255fbb555872436ea0e219dd5d23adf56",
+  "renderer": {
+    "path": "/var/tmp/cloudbal-first-hour-factorial/tools/plot_first_hour_factorial.py",
+    "sha256": "40d47aba5cc0473dcc238b2994d025ea4936766f3a35f32d59165d52938fb04c",
+    "size_bytes": 22625
+  },
+  "points": 3688,
+  "case_keys": [
+    "BASE_H",
+    "FIX_H",
+    "BG_BASE",
+    "POLICY_BG",
+    "BASE_ORIGINAL"
+  ],
+  "case_labels": {
+    "BASE_H": "H0 · HYDRO, old WRF",
+    "FIX_H": "H1 · HYDRO, zero-rate fix",
+    "BG_BASE": "B0 · preserved background, old WRF",
+    "POLICY_BG": "B1 · preserved background, zero-rate fix",
+    "BASE_ORIGINAL": "O0 · original OFF"
+  },
+  "thresholds_mm_per_hour": [
+    0.1,
+    0.5,
+    1.0,
+    2.5,
+    5.0,
+    10.0
+  ],
+  "inputs": [
+    {
+      "path": "/var/tmp/cloudbal-first-hour-factorial/docs/evidence/first_hour_factorial_20261030/analysis/hour_13_arrays.npz",
+      "sha256": "f2f1a0159930527269a2c14594671c36e62a856a99c387feb6e54cdb296798f5",
+      "size": 147932
+    },
+    {
+      "path": "/var/tmp/cloudbal-first-hour-factorial/docs/evidence/first_hour_factorial_20261030/analysis/categorical_scores.csv",
+      "sha256": "88c59b05c14f7c526adef4a9ab87a529e30ba1790bd48850a5cb2bf01dcef18a",
+      "size": 4008
+    },
+    {
+      "path": "/var/tmp/cloudbal-first-hour-factorial/docs/evidence/first_hour_factorial_20261030/analysis/continuous_scores.csv",
+      "sha256": "0e3bb6ae6086f8a23ef0176b4f79dc559376b667779c98d4683f273be3e35a8b",
+      "size": 630
+    },
+    {
+      "path": "/var/tmp/cloudbal-first-hour-factorial/docs/evidence/first_hour_factorial_20261030/analysis/transitions.csv",
+      "sha256": "6f5e5032938c22b445d7ae7c75a7951e0175c16a5feacf547600d6ab20980833",
+      "size": 2704
+    },
+    {
+      "path": "/var/tmp/cloudbal-first-hour-factorial/docs/evidence/first_hour_factorial_20261030/analysis/score_contrasts.csv",
+      "sha256": "51016b286df7dc26a8b413bae4c2d4b5233d258a53ccca1976618669fa74d9eb",
+      "size": 40847
+    },
+    {
+      "path": "/var/tmp/cloudbal-first-hour-factorial/docs/evidence/first_hour_factorial_20261030/analysis/pointwise_precipitation_contrasts.csv",
+      "sha256": "dd8a4b41dae23b21f3cb20101c26c8fcf2a1b2e1026854ac7ef4c55f47c6f4f0",
+      "size": 1587271
+    },
+    {
+      "path": "/var/tmp/cloudbal-first-hour-factorial/docs/evidence/first_hour_factorial_20261030/analysis/receipt.json",
+      "sha256": "900ee2342a434d418c67d2b86bd5519255fbb555872436ea0e219dd5d23adf56",
+      "size": 282232
+    }
+  ],
+  "precipitation_point_counts": {
+    "reference": {
+      "0–<0.1": 2095,
+      "0.1–<0.5": 457,
+      "0.5–<1": 423,
+      "1–<2.5": 362,
+      "2.5–<5": 197,
+      "5–<10": 95,
+      "≥10": 59
+    },
+    "BASE_ORIGINAL": {
+      "0–<0.1": 2992,
+      "0.1–<0.5": 229,
+      "0.5–<1": 93,
+      "1–<2.5": 106,
+      "2.5–<5": 79,
+      "5–<10": 99,
+      "≥10": 90
+    },
+    "BASE_H": {
+      "0–<0.1": 3019,
+      "0.1–<0.5": 250,
+      "0.5–<1": 82,
+      "1–<2.5": 87,
+      "2.5–<5": 92,
+      "5–<10": 73,
+      "≥10": 85
+    },
+    "POLICY_BG": {
+      "0–<0.1": 2881,
+      "0.1–<0.5": 313,
+      "0.5–<1": 112,
+      "1–<2.5": 111,
+      "2.5–<5": 81,
+      "5–<10": 97,
+      "≥10": 93
+    }
+  },
+  "figures": [
+    {
+      "name": "hour_12_13_paired_precipitation",
+      "files": [
+        "hour_12_13_paired_precipitation.png",
+        "hour_12_13_paired_precipitation.pdf",
+        "hour_12_13_paired_precipitation.svg"
+      ]
+    },
+    {
+      "name": "hour_12_13_skill_factorial",
+      "files": [
+        "hour_12_13_skill_factorial.png",
+        "hour_12_13_skill_factorial.pdf",
+        "hour_12_13_skill_factorial.svg"
+      ]
+    },
+    {
+      "name": "factorial_design_and_metric",
+      "files": [
+        "factorial_design_and_metric.png",
+        "factorial_design_and_metric.pdf",
+        "factorial_design_and_metric.svg"
+      ]
+    }
+  ],
+  "scope": "One forecast hour (12–13 UTC), one spatial case, unweighted paired RN1 points; RN1 is a processed analysis, not gauge truth.",
+  "reference_limitation": "One forecast hour and one event. RN1 processed analysis has no coverage bitmap and may use previous-hour fallback; unweighted scores cover the retained 3688 point common sample.",
+  "provenance_note": "Renderer checks receipt source-record format and sealed analysis-output hashes, then recomputes plotted scores from the paired arrays. It does not reopen original host source files; runtime/source provenance remains in the scoring receipt audit.",
+  "figure_sha256": {
+    "factorial_design_and_metric.pdf": "1b1fb25ccff7f452a075d66a95d8b184cf0291b5c3048715417971cc1bf3c7cb",
+    "factorial_design_and_metric.png": "710623ade5d1c2308b1f36b1f3c6a38af67bfd82a68c71d86c6707802be31c2d",
+    "factorial_design_and_metric.svg": "3defd7d2e102204e996776a53430f3f438532dd92e0aa6d1bbba88ebe50d9e57",
+    "hour_12_13_paired_precipitation.pdf": "f394c48b196690a58d781f4d6a0afba6534e225b28876748a14b8eb6ff06cb6d",
+    "hour_12_13_paired_precipitation.png": "bc7e2b8a872bddb1d9f59adbe97481b592aaa15785392f606815eab847ddfd36",
+    "hour_12_13_paired_precipitation.svg": "c4701102359130fbc329b16d3f4076aba19a627e729f2e158a2a8ae968d8deeb",
+    "hour_12_13_skill_factorial.pdf": "b0f057ad285f9ef1dd8d721810bf1df3b40aa66b934ddd1cfbc3f671c5f3683d",
+    "hour_12_13_skill_factorial.png": "5555b77847879af1951c7dd7f41336c8a504a447c500bcfb6e515e55ed8eb78a",
+    "hour_12_13_skill_factorial.svg": "87e8bb649ca4a2b644bdf54142e0e321e417a79efadf5f691337ce64b77cc79b"
+  }
+}

@@ -1,0 +1,76 @@
+{
+  "checks": [
+    {
+      "after": {
+        "communities": 3440,
+        "edges": 87848,
+        "nodes": 42368
+      },
+      "before": {
+        "communities": 3453,
+        "edges": 87724,
+        "nodes": 42300
+      },
+      "corpus": "KLAPS50",
+      "delta": {
+        "communities": -13,
+        "edges": 124,
+        "nodes": 68
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "prior_node_ids_preserved": 42300,
+      "selected_manifest_rows": 8,
+      "snapshot_files_verified": 3,
+      "unselected_manifest_rows_preserved": 5507
+    },
+    {
+      "after": {
+        "communities": 1490,
+        "edges": 29369,
+        "nodes": 16540
+      },
+      "before": {
+        "communities": 1482,
+        "edges": 29247,
+        "nodes": 16472
+      },
+      "corpus": "Cloud-BAL",
+      "delta": {
+        "communities": 8,
+        "edges": 122,
+        "nodes": 68
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "prior_node_ids_preserved": 16472,
+      "selected_manifest_rows": 8,
+      "snapshot_files_verified": 3,
+      "unselected_manifest_rows_preserved": 5867
+    }
+  ],
+  "hash_only_count": 40,
+  "limitations": [
+    "Only the eight frozen Python paths were structurally extracted.",
+    "All other new non-code evidence leaves are hash-only; this does not validate their contents.",
+    "Graph structure is not runtime or scientific validation.",
+    "Fortran cross-file CALL extraction remains partial."
+  ],
+  "maintained_roots_verified_unchanged": true,
+  "schema": "first-hour-factorial-kg-stage-validation-v1",
+  "selection_lock_sha256": "32d2db111682edfcad09ae37505fc59b8f4352ece1f2145902ba5ef68dd3bb4d",
+  "source_scope_count": 8,
+  "stage_receipt_sha256": "aa0e70c9dc0eb547fa9a51e0895829a61e12f6c0ffbb8f4510233779f46bad32",
+  "status": "PASS_STAGED_ONLY",
+  "wiki_scope": "Derived graph reports/back-pointer/audit are prepared only in isolated stage; maintained wiki not written."
+}
