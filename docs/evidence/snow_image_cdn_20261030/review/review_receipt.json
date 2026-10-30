@@ -1,0 +1,27 @@
+{
+  "schema": "snow_image_cdn_review_v1",
+  "reviewed_at_utc": "2026-10-30T07:39:00Z",
+  "reviewed_commit": "7ff82e67ea509d1c624e51ca8ca7e083d71139ef",
+  "scope": [
+    "docs/evidence/snow_fine_20261030/build_report.py",
+    "docs/SNOW_FINE_FIGURES_20261030.md",
+    "docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md"
+  ],
+  "review_summary": "The generator URL encodes the immutable raw source URL as the images.weserv.nl url parameter and requests PNG output. Both generated galleries use the proxy consistently. The main gallery has 49 image references and the improved gallery has 21 references; together they cover 49 unique gallery PNGs. The manifest includes one additional PNG not linked by either gallery.",
+  "findings": [],
+  "validation": {
+    "gallery_references": 70,
+    "unique_gallery_paths": 49,
+    "gallery_paths_match_manifest_pngs_except_unreferenced_extra": true,
+    "manifest_png_count": 50,
+    "unreferenced_manifest_png": "refined_dose_response_csi.png",
+    "weserv_http_200_image_png_pixel_exact_count": 50,
+    "weserv_failed_count": 0,
+    "effective_host_distinct_from_raw_source": true,
+    "all_local_manifest_sha256_match_count": 50,
+    "large_download_bodies_kept_out_of_repository": true
+  },
+  "evidence": "../weserv_validation.json",
+  "prior_cdn_comparison": "../cdn_validation.json",
+  "disposition": "APPROVE"
+}
