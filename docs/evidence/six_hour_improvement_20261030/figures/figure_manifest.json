@@ -1,0 +1,326 @@
+{
+  "schema": "six_hour_improvement_figures_v1",
+  "status": "COMPLETE",
+  "renderer": {
+    "path": "/var/tmp/cloudbal-six-hour-improved/tools/plot_six_hour_improvement.py",
+    "sha256": "9e353e37c4d44f609e77f4fe9dec1dcb4997f05f83bc604070e06f5863141be7",
+    "size_bytes": 25069
+  },
+  "receipt_sha256": "0db2f02ceece4d2f12cec459f5af26ca589b2f70c53c3d559b596b10828d8826",
+  "cases": [
+    "ORIGINAL",
+    "CURRENT_HYDRO",
+    "IMPROVED_BG_FIXED"
+  ],
+  "hours_utc": [
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "lead_hours": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "thresholds_mm": [
+    0.1,
+    0.5,
+    1.0,
+    2.5,
+    5.0,
+    10.0
+  ],
+  "paired_points_per_hour": 3688,
+  "accumulation_definition": "Each forecast value and score is a one-hour increment over its valid window, not a 0-to-lead cumulative total.",
+  "inputs": [
+    {
+      "path": "/var/tmp/cloudbal-six-hour-improved/docs/evidence/six_hour_improvement_20261030/analysis/categorical_scores.csv",
+      "sha256": "8aeb613697759ab6fe603672f2bd3aa934c87ef39d45d18f6a270a6e3570a8bb",
+      "size_bytes": 21842
+    },
+    {
+      "path": "/var/tmp/cloudbal-six-hour-improved/docs/evidence/six_hour_improvement_20261030/analysis/continuous_scores.csv",
+      "sha256": "e59b84ac6311feea1e27a66fc3bc53b4ae5daf9a1b956d1d0327e33f52abd676",
+      "size_bytes": 3356
+    },
+    {
+      "path": "/var/tmp/cloudbal-six-hour-improved/docs/evidence/six_hour_improvement_20261030/analysis/hour_13_arrays.npz",
+      "sha256": "2d2662f63a8d723435f56b1c462f111f0a05fd230d75f62277422be342c3a054",
+      "size_bytes": 100632
+    },
+    {
+      "path": "/var/tmp/cloudbal-six-hour-improved/docs/evidence/six_hour_improvement_20261030/analysis/hour_14_arrays.npz",
+      "sha256": "3fe19b298b363220b8702b5d4d8ca0bd21b9447f6061bcac3797e1762edf7229",
+      "size_bytes": 103337
+    },
+    {
+      "path": "/var/tmp/cloudbal-six-hour-improved/docs/evidence/six_hour_improvement_20261030/analysis/hour_15_arrays.npz",
+      "sha256": "0849753f7c66734b38ce2bfb5fd83bbda6fdac6def8906125fdb55c5cae60c68",
+      "size_bytes": 111031
+    },
+    {
+      "path": "/var/tmp/cloudbal-six-hour-improved/docs/evidence/six_hour_improvement_20261030/analysis/hour_16_arrays.npz",
+      "sha256": "06002ab4cec80168a6f13d46039c9ab696f1cdb36b3109ec5ddc7995e5a0feb9",
+      "size_bytes": 111087
+    },
+    {
+      "path": "/var/tmp/cloudbal-six-hour-improved/docs/evidence/six_hour_improvement_20261030/analysis/hour_17_arrays.npz",
+      "sha256": "8e8f42ae3d98f4745201207a8a1415913a712f2d188100cedf9773c2f2dd1b5f",
+      "size_bytes": 107152
+    },
+    {
+      "path": "/var/tmp/cloudbal-six-hour-improved/docs/evidence/six_hour_improvement_20261030/analysis/hour_18_arrays.npz",
+      "sha256": "8c67e4ca27ac0c3ce0cc0ab4aee0f4b024854a208e1590a02793e167be2cfef0",
+      "size_bytes": 111507
+    },
+    {
+      "path": "/var/tmp/cloudbal-six-hour-improved/docs/evidence/six_hour_improvement_20261030/analysis/transitions.csv",
+      "sha256": "6a8b1fc795498d8cc5186c48e64f6b24fd601b9dc9ed13f74b43cf5340773393",
+      "size_bytes": 8084
+    },
+    {
+      "path": "/var/tmp/cloudbal-six-hour-improved/docs/evidence/six_hour_improvement_20261030/analysis/receipt.json",
+      "sha256": "0db2f02ceece4d2f12cec459f5af26ca589b2f70c53c3d559b596b10828d8826",
+      "size_bytes": 61837
+    }
+  ],
+  "point_counts_by_hour": {
+    "13": 3688,
+    "14": 3688,
+    "15": 3688,
+    "16": 3688,
+    "17": 3688,
+    "18": 3688
+  },
+  "rain_points_ge_threshold_by_hour": {
+    "13": {
+      "reference": {
+        "0.1 mm": 1593,
+        "0.5 mm": 1136,
+        "1 mm": 713,
+        "2.5 mm": 351,
+        "5 mm": 154,
+        "10 mm": 59
+      },
+      "ORIGINAL": {
+        "0.1 mm": 696,
+        "0.5 mm": 467,
+        "1 mm": 374,
+        "2.5 mm": 268,
+        "5 mm": 189,
+        "10 mm": 90
+      },
+      "CURRENT_HYDRO": {
+        "0.1 mm": 669,
+        "0.5 mm": 419,
+        "1 mm": 337,
+        "2.5 mm": 250,
+        "5 mm": 158,
+        "10 mm": 85
+      },
+      "IMPROVED_BG_FIXED": {
+        "0.1 mm": 807,
+        "0.5 mm": 494,
+        "1 mm": 382,
+        "2.5 mm": 271,
+        "5 mm": 190,
+        "10 mm": 93
+      }
+    },
+    "14": {
+      "reference": {
+        "0.1 mm": 1667,
+        "0.5 mm": 1113,
+        "1 mm": 693,
+        "2.5 mm": 383,
+        "5 mm": 218,
+        "10 mm": 79
+      },
+      "ORIGINAL": {
+        "0.1 mm": 1135,
+        "0.5 mm": 609,
+        "1 mm": 405,
+        "2.5 mm": 222,
+        "5 mm": 166,
+        "10 mm": 110
+      },
+      "CURRENT_HYDRO": {
+        "0.1 mm": 1122,
+        "0.5 mm": 612,
+        "1 mm": 427,
+        "2.5 mm": 232,
+        "5 mm": 163,
+        "10 mm": 109
+      },
+      "IMPROVED_BG_FIXED": {
+        "0.1 mm": 1142,
+        "0.5 mm": 608,
+        "1 mm": 406,
+        "2.5 mm": 219,
+        "5 mm": 164,
+        "10 mm": 112
+      }
+    },
+    "15": {
+      "reference": {
+        "0.1 mm": 1582,
+        "0.5 mm": 1158,
+        "1 mm": 847,
+        "2.5 mm": 572,
+        "5 mm": 345,
+        "10 mm": 132
+      },
+      "ORIGINAL": {
+        "0.1 mm": 1603,
+        "0.5 mm": 917,
+        "1 mm": 626,
+        "2.5 mm": 409,
+        "5 mm": 264,
+        "10 mm": 147
+      },
+      "CURRENT_HYDRO": {
+        "0.1 mm": 1611,
+        "0.5 mm": 909,
+        "1 mm": 629,
+        "2.5 mm": 390,
+        "5 mm": 258,
+        "10 mm": 151
+      },
+      "IMPROVED_BG_FIXED": {
+        "0.1 mm": 1589,
+        "0.5 mm": 910,
+        "1 mm": 630,
+        "2.5 mm": 398,
+        "5 mm": 262,
+        "10 mm": 143
+      }
+    },
+    "16": {
+      "reference": {
+        "0.1 mm": 1620,
+        "0.5 mm": 1222,
+        "1 mm": 942,
+        "2.5 mm": 591,
+        "5 mm": 344,
+        "10 mm": 165
+      },
+      "ORIGINAL": {
+        "0.1 mm": 1632,
+        "0.5 mm": 1029,
+        "1 mm": 809,
+        "2.5 mm": 503,
+        "5 mm": 297,
+        "10 mm": 139
+      },
+      "CURRENT_HYDRO": {
+        "0.1 mm": 1573,
+        "0.5 mm": 1013,
+        "1 mm": 769,
+        "2.5 mm": 481,
+        "5 mm": 291,
+        "10 mm": 128
+      },
+      "IMPROVED_BG_FIXED": {
+        "0.1 mm": 1610,
+        "0.5 mm": 1010,
+        "1 mm": 773,
+        "2.5 mm": 500,
+        "5 mm": 292,
+        "10 mm": 137
+      }
+    },
+    "17": {
+      "reference": {
+        "0.1 mm": 1697,
+        "0.5 mm": 1229,
+        "1 mm": 925,
+        "2.5 mm": 573,
+        "5 mm": 330,
+        "10 mm": 168
+      },
+      "ORIGINAL": {
+        "0.1 mm": 1522,
+        "0.5 mm": 1009,
+        "1 mm": 808,
+        "2.5 mm": 524,
+        "5 mm": 342,
+        "10 mm": 152
+      },
+      "CURRENT_HYDRO": {
+        "0.1 mm": 1514,
+        "0.5 mm": 1033,
+        "1 mm": 812,
+        "2.5 mm": 525,
+        "5 mm": 319,
+        "10 mm": 130
+      },
+      "IMPROVED_BG_FIXED": {
+        "0.1 mm": 1524,
+        "0.5 mm": 1046,
+        "1 mm": 833,
+        "2.5 mm": 553,
+        "5 mm": 333,
+        "10 mm": 148
+      }
+    },
+    "18": {
+      "reference": {
+        "0.1 mm": 1634,
+        "0.5 mm": 1249,
+        "1 mm": 968,
+        "2.5 mm": 611,
+        "5 mm": 348,
+        "10 mm": 124
+      },
+      "ORIGINAL": {
+        "0.1 mm": 1828,
+        "0.5 mm": 1270,
+        "1 mm": 984,
+        "2.5 mm": 629,
+        "5 mm": 398,
+        "10 mm": 206
+      },
+      "CURRENT_HYDRO": {
+        "0.1 mm": 1746,
+        "0.5 mm": 1201,
+        "1 mm": 964,
+        "2.5 mm": 625,
+        "5 mm": 400,
+        "10 mm": 210
+      },
+      "IMPROVED_BG_FIXED": {
+        "0.1 mm": 1774,
+        "0.5 mm": 1272,
+        "1 mm": 1002,
+        "2.5 mm": 629,
+        "5 mm": 394,
+        "10 mm": 214
+      }
+    }
+  },
+  "reference_limitation": "RN1 processed analysis has no coverage bitmap; per-hour input freshness is unproven and may use previous-hour fallback. Scores are unweighted over the common 3688 points.",
+  "provenance_note": "Renderer validates the scoring receipt schema and sealed analysis-output hashes, then recomputes categorical, continuous, and transition scores from the paired arrays. It does not reopen original host source files; runtime/source provenance remains in the scoring receipt audit.",
+  "scope": "Six hourly accumulations, one spatial case, 3,688 unweighted paired points per hour; RN1 is a processed analysis, not gauge truth.",
+  "figures": [
+    "precipitation_maps_leads_1_3",
+    "precipitation_maps_leads_4_6",
+    "six_hour_skill_summary"
+  ],
+  "figure_sha256": {
+    "precipitation_maps_leads_1_3.pdf": "628413f88c6ac524246480fd5a466d576d7713674fb54790c36e4606945ccca6",
+    "precipitation_maps_leads_1_3.png": "866a69a63fed22d469f8acb17893ee9a303d18c83119c080456b3ae74454a31c",
+    "precipitation_maps_leads_1_3.svg": "2d8bddb1ec0b7e53eac7e229782032307c44209eb920ea7c1f0e9d8cb12c3d60",
+    "precipitation_maps_leads_4_6.pdf": "a51fc83863ff17b6a062c385474ef815c84ce80567043cd048b1560c2b1780f0",
+    "precipitation_maps_leads_4_6.png": "04950904a190a5f8ce96a6903f169d861016ae0a7c22df41e965db0f0d27a46d",
+    "precipitation_maps_leads_4_6.svg": "ab1aa1337c9166cfcb29bf2a14050241901364f223ae69c0ededc8cddb6ec001",
+    "six_hour_skill_summary.pdf": "1db9301a29777524cd5bfbd137681a43df96ea2dab6979e0a7f8e492e74039c4",
+    "six_hour_skill_summary.png": "99c3bd6c8feb4aa5ad365d5c8c8d0ca1a93ab448b1e94ba0be24ee5ee0c942b6",
+    "six_hour_skill_summary.svg": "a3dec483d764cf1f8d7ece3f453e205f60f31775ddad99cfb0cde88af0e736ef"
+  }
+}
