@@ -1,0 +1,56 @@
+{
+  "schema": "original-b1-first-hour-replay-v1",
+  "status": "BITWISE_MATCH",
+  "reference_cell": "first-hour factorial H0\u00d7B1 (ORIGINAL executable \u00d7 B1 input)",
+  "new_case": "ORIGINAL_B1_100",
+  "source_execution_identity": {
+    "executable_sha256": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+    "wrfinput_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+    "wrfbdy_sha256": "74102ac2063f17a9007f3352e6e6c2f52629055bdf3f05b4f4d6d77aef835f45",
+    "same_mpirun_invocation_path_np": [
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpirun",
+      "-np",
+      "8"
+    ],
+    "mpirun_sha256_current_pinned": "f9b09c6d24ce83d52221fbc1cc59dbdf9f350ccf50b264e89980c4530c6369d4",
+    "omp_threads_new": 1,
+    "namelist_differences_only_forecast_end": {
+      "end_hour": {
+        "first_hour": "13",
+        "six_hour": "18"
+      },
+      "history_end_s": {
+        "first_hour": "3600",
+        "six_hour": "21600"
+      },
+      "run_hours": {
+        "first_hour": "1",
+        "six_hour": "6"
+      }
+    }
+  },
+  "output_comparison": {
+    "reference_path": "/var/tmp/firsthour-factorial-runtime-20261030/run_BG_BASE/wrfout_d01_2026-08-16_13:00:00",
+    "new_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100/wrfout_d01_2026-08-16_13:00:00",
+    "reference_sha256": "8159eb06ca85695c533de590c27d9274c4fec4c31a11aeff58516171dae11468",
+    "new_sha256": "8159eb06ca85695c533de590c27d9274c4fec4c31a11aeff58516171dae11468",
+    "all_output_bytes_equal": true,
+    "netcdf_variables_compared": 254,
+    "variables_equal": 254,
+    "times_equal": [
+      "2026-08-16_13:00:00"
+    ]
+  },
+  "bound_receipts": {
+    "first_hour_normalized_receipt_path": "/var/tmp/cloudbal-six-hour-improved/docs/evidence/first_hour_factorial_20261030/runtime/normalized_receipt.json",
+    "first_hour_normalized_receipt_sha256": "a71f9b780bcf7a6ec5d1d1aaa6bd367997e1c83bd68975883b3424998ebc185f",
+    "first_hour_preflight_path": "/var/tmp/cloudbal-six-hour-improved/docs/evidence/first_hour_factorial_20261030/runtime/preflight.json",
+    "first_hour_preflight_sha256": "c00b190e92d02cc9053b8f4cbf33c2d21ed6ff94d85f2c1d043afbdfa98624fd",
+    "first_hour_launcher_log_sha256": "e6724032a6e1a42e54094bcb9344f7c6b871d76230cfab2cc93085c6c23aa431",
+    "new_case_receipt_path": "/var/tmp/cloudbal-weak-strong/docs/evidence/weak_strong_balance_20261030/runtime/cases/ORIGINAL_B1_100/receipt.json",
+    "new_case_receipt_sha256": "4c084d3917825f639f1829e4f602f1469860dd94c50e4e0509a97d848a253bf5",
+    "selection_plan_sha256": "17e8833f2f28da76e1474f82440a88889bd55ba723ef9cd6618d06a0eb786248",
+    "common_plan_sha256": "a2d06679ea3a9b24a04f9ff359c842172f06fd7ec0f402f802c91399b2ad6a3a"
+  },
+  "limitation": "The old receipt records the same Intel MPI executable path and -np 8 invocation but does not retain the historical MPI binary hash. Current MPI path/hash is pinned by the new run. This check establishes byte-identical 13:00 output for matching executable/input/boundary and end-only namelist changes; it does not validate later hours or independent forecast skill."
+}

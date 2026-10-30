@@ -1,0 +1,27 @@
+{
+  "status": "NO_QUALIFIED_CANDIDATE",
+  "selected_case": null,
+  "ranking_order": [
+    "descending lead-1 CSI at 10 mm",
+    "descending lead-1 CSI at 5 mm",
+    "ascending lead-1 FAR at 10 mm",
+    "ascending lead-1 RMSE",
+    "ascending case ID"
+  ],
+  "admission": "all 18 weak cells CSI >= ORIGINAL and strict lead-1 CSI@10 > ORIGINAL; zero tolerance",
+  "qualified_cases": [],
+  "eligible_cases": [
+    "GATE_G50_90",
+    "EQ_G50_90",
+    "GATE_G75_95",
+    "EQ_G75_95",
+    "GATE_G90_99",
+    "EQ_G90_99",
+    "FIXED_ORIGINAL_100",
+    "ORIGINAL_B1_100"
+  ],
+  "comparison_baseline": "ORIGINAL",
+  "constraints": "weak thresholds 0.1/0.5/1.0 mm at each lead 1-6, plus lead-1 10.0 mm CSI",
+  "weak_threshold_interpretation": "These CSI floors include hits at all observed intensities above each cutoff, including heavy-rain hits; they are not light-rain-only scores.",
+  "averaging": "No aggregation across thresholds, leads, or experiments."
+}
