@@ -1,0 +1,59 @@
+{
+  "gravity_m_s2": 9.81,
+  "gravity_source": "retained host/share/module_model_constants.F:17",
+  "interpretation": "initial dry-air carrier-weighted change in QR and QS; not a runtime budget closure or hydrostatic adjustment",
+  "cases": {
+    "H_ORIGINAL_QRQS": {
+      "base_sha256": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126",
+      "intervention_sha256": "8ebf4f06f9a200efe6c0525575504d10857b5605a43d78c2c6d54a129844bf97",
+      "dx_m": 5000.0,
+      "dy_m": 5000.0,
+      "area_m2": 1731864965622.8145,
+      "cell_area_min_m2": 25286466.67286178,
+      "cell_area_max_m2": 26799275.69136113,
+      "dry_layer_dp_min_pa": 446.038646371875,
+      "dry_layer_dp_max_pa": 4922.400204503167,
+      "max_column_dp_minus_mu_pa": 0.0001093632890842855,
+      "fields": {
+        "QRAIN": {
+          "signed_change_kg": 22067602031.49187,
+          "positive_change_kg": 23211465365.56789,
+          "negative_change_kg": -1143863334.0760174,
+          "domain_area_mean_change_kg_m2": 0.012742103148645833
+        },
+        "QSNOW": {
+          "signed_change_kg": 64279050653.27948,
+          "positive_change_kg": 64382856157.47113,
+          "negative_change_kg": -103805504.19165644,
+          "domain_area_mean_change_kg_m2": 0.03711550953983494
+        }
+      }
+    },
+    "ORIGINAL_H_QRQS": {
+      "base_sha256": "5d6b2bdce4121642dea994f3e953cca690ad7c9f52f6f8feb01bb6c2f0b9b6bc",
+      "intervention_sha256": "490c213b1b99d135974db97f14969fab55c37e3b32d6b13b1aa998cf0a49331d",
+      "dx_m": 5000.0,
+      "dy_m": 5000.0,
+      "area_m2": 1731864965622.8145,
+      "cell_area_min_m2": 25286466.67286178,
+      "cell_area_max_m2": 26799275.69136113,
+      "dry_layer_dp_min_pa": 446.038646371875,
+      "dry_layer_dp_max_pa": 4922.400204503167,
+      "max_column_dp_minus_mu_pa": 0.0001093632890842855,
+      "fields": {
+        "QRAIN": {
+          "signed_change_kg": -22067602045.567516,
+          "positive_change_kg": 1143863334.0760174,
+          "negative_change_kg": -23211465379.643536,
+          "domain_area_mean_change_kg_m2": -0.012742103156773283
+        },
+        "QSNOW": {
+          "signed_change_kg": -64279050668.666916,
+          "positive_change_kg": 103805504.19165644,
+          "negative_change_kg": -64382856172.85857,
+          "domain_area_mean_change_kg_m2": -0.03711550954871983
+        }
+      }
+    }
+  }
+}

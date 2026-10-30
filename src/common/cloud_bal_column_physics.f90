@@ -46,6 +46,8 @@ MODULE cloud_bal_column_physics
     ! Static observation retrieval is an explicit analysis ablation. It is not
     ! a precipitation transport step and reports no transport ledger.
     LOGICAL :: transport_precipitation=.TRUE.
+    ! Research control: retain the entire background precipitation state.
+    LOGICAL :: retain_background_precipitation=.FALSE.
     REAL(real64) :: cloud_fraction_threshold=0.01_real64
     REAL(real64) :: radar_wavelength_m=0.10_real64
     REAL(real64) :: minimum_dbz=0.0_real64
@@ -247,6 +249,10 @@ CONTAINS
       END IF
       thermo_requested=ANY(thermo_active)
     END IF
+    IF (cfg%retain_background_precipitation .AND. thermo_requested) THEN
+      CALL reject_candidate(state_in,state_out,result,STATUS_FAILED,REASON_AUTHORITY)
+      RETURN
+    END IF
     ! Surface fields are optional here because no column equation uses them.
     CALL validate_canonical_state(state_in,.FALSE.,.FALSE.,status,reason,.FALSE.)
     IF (status/=STATUS_OK) THEN
@@ -396,7 +402,7 @@ CONTAINS
     radar_observed=.FALSE.; radar_no_echo=.FALSE.
     radar_derived=.FALSE.; phase_uncertain=.FALSE.
     phase=PHASE_UNKNOWN; zlinear=0.0_real64
-    IF (has_radar) THEN
+    IF (has_radar .AND. .NOT.cfg%retain_background_precipitation) THEN
       CALL diagnose_radar_cells(evaluation,cfg,radar_observed,phase,zlinear, &
         rain,snow,graupel,phase_uncertain,status)
       IF (status/=STATUS_OK) THEN
@@ -448,10 +454,26 @@ CONTAINS
           RETURN
         END IF
       END IF
+    ELSE IF (has_radar) THEN
+      ! Radar may support the cloud-derived wind target, but supplies no
+      ! precipitation mass, transport, phase update, or loading in this policy.
+      radar_observed=state_in%above_ground .AND. &
+        cell_is_usable(state_in%radar_reflectivity%valid, &
+        state_in%radar_reflectivity%quality,state_in%radar_reflectivity%source) .AND. &
+        REAL(state_in%radar_reflectivity%value,real64)>=cfg%minimum_dbz .AND. &
+        REAL(state_in%radar_reflectivity%value,real64)<=cfg%maximum_dbz
+      IF (PRESENT(analysis_support)) radar_observed=radar_observed .AND. analysis_support
+      IF (ANY(radar_observed .AND. .NOT.w_valid)) THEN
+        CALL reject_candidate(state_in,state_out,result,STATUS_DEGRADED, &
+                              REASON_REQUIRED_COVERAGE)
+        RETURN
+      END IF
     END IF
 
-    radar_derived=radar_observed .OR. rain>0.0_real64 .OR. snow>0.0_real64 .OR. &
-                  graupel>0.0_real64
+    IF (.NOT.cfg%retain_background_precipitation) THEN
+      radar_derived=radar_observed .OR. rain>0.0_real64 .OR. snow>0.0_real64 .OR. &
+                    graupel>0.0_real64
+    END IF
     phase_uncertain=phase_uncertain .OR. (radar_derived .AND. .NOT.radar_observed) .OR. &
       (radar_derived .AND. phase==PHASE_UNKNOWN) .OR. &
       (MERGE(1,0,rain>0.0_real64)+MERGE(1,0,snow>0.0_real64)+ &
@@ -533,7 +555,8 @@ CONTAINS
       snow=REAL(candidate%snow%value,real64)
       graupel=REAL(candidate%graupel%value,real64)
     END WHERE
-    IF (has_radar .AND. .NOT.use_model_dynamic_target .AND. .NOT.background_prior) THEN
+    IF (has_radar .AND. .NOT.cfg%retain_background_precipitation .AND. &
+        .NOT.use_model_dynamic_target .AND. .NOT.background_prior) THEN
       CALL add_loading_downdraft(candidate,cfg,radar_observed,rain,snow,graupel, &
         w_background,w_target,status)
       IF (status/=STATUS_OK) THEN

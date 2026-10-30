@@ -1,0 +1,11 @@
+--- a/phys/module_mp_kdm6.F
++++ b/phys/module_mp_kdm6.F
+@@ -1737,7 +1737,7 @@
+                 nci(i,k,3) = nci(i,k,3)+nrs(i,k,1)
+                 nrs(i,k,1) = 0.
+               endif
+-            else
++            else if (prevp(i,k).ne.0.) then
+               prevp(i,k) = min(prevp(i,k),(satdt)/2)
+             endif
+           endif

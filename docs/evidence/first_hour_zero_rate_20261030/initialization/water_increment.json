@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "scope": "All native mass cells, including lateral boundary cells; water imposed at fixed receiving-arm dry mass, not a closed water budget or physical-balance test.",
+  "formula": "dm=-(C1H*(MU+MUB)+C2H)*DNW*DX*DY/(MAPFAC_MX*MAPFAC_MY*g); sum(dm*delta_q)",
+  "gravity": 9.8100004196167,
+  "gravity_source_path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/host/share/module_model_constants.F",
+  "gravity_source_sha256": "5b80377fecdc18a5f0ad38d3b6c15cfc86ad5d76701adbbbb08a08698d0f7062",
+  "parent_sha256": {
+    "ORIGINAL": "5d6b2bdce4121642dea994f3e953cca690ad7c9f52f6f8feb01bb6c2f0b9b6bc",
+    "HYDRO": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126"
+  },
+  "arms": {
+    "H_ORIGINAL_QRQS": {
+      "water_increment_kg": {
+        "QRAIN": 22067601087.56384,
+        "QSNOW": 64279047903.78286
+      },
+      "total_water_increment_kg": 86346648991.3467,
+      "dry_mass_kg": 1.645917595121744e+16,
+      "cell_count": 2573532
+    },
+    "ORIGINAL_H_QRQS": {
+      "water_increment_kg": {
+        "QRAIN": -22067601101.639484,
+        "QSNOW": -64279047919.17028
+      },
+      "total_water_increment_kg": -86346649020.80977,
+      "dry_mass_kg": 1.6459175966197824e+16,
+      "cell_count": 2573532
+    }
+  }
+}

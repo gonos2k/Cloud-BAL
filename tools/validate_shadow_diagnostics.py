@@ -6575,6 +6575,13 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
             failures.append(message)
 
     with netCDF4.Dataset(path, "r") as dataset:
+        precip_policy = getattr(dataset, "precipitation_research_policy", None)
+        require(precip_policy in (None, "retain_background_v1"),
+                "unknown precipitation research policy")
+        if precip_policy is not None:
+            require(False, "background precipitation research policy requires its dedicated validator")
+            require(exact_scalar_integer(getattr(dataset, "precipitation_transport_effective", None)) == 0,
+                    "background precipitation policy requires disabled transport")
         interior_hydrostatic_present = "candidate_interior_hydrostatic_v1" in dataset.groups
         validate_interior_hydrostatic_assessment(dataset, require)
         interior_hydrostatic_clean = interior_hydrostatic_present and not failures
@@ -7096,7 +7103,10 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
         )
         require(
             getattr(dataset, "configuration_id", "")
-            == (PRESSURE_ANALYSIS_SHADOW_CONFIGURATION if pressure_analysis_candidate_present
+            == ("pressure-background-precip-shadow-v1" if precip_policy == "retain_background_v1"
+                and pressure_analysis_candidate_present
+                else "real-background-precip-shadow-v1" if precip_policy == "retain_background_v1"
+                else PRESSURE_ANALYSIS_SHADOW_CONFIGURATION if pressure_analysis_candidate_present
                 else "pressure-thermo-shadow-v3" if schema8
                 else "pressure-thermo-shadow-v2" if schema7
                 else "pressure-thermo-shadow-v1" if schema6
@@ -7426,6 +7436,12 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
         )
         fields = {name: values(dataset[name]) for name in FLOAT_UNITS}
         masks = {name: values(dataset[name]) for name in MASKS}
+        if precip_policy == "retain_background_v1":
+            for species in ("rain", "snow", "graupel"):
+                require(np.array_equal(fields[f"background_{species}"], fields[f"candidate_{species}"]),
+                        f"background precipitation policy changed {species}")
+            require(not np.any(masks["hydro_support"]),
+                    "background precipitation policy has radar hydrometeor support")
         validate_physical_joint_contract(dataset, masks["above_ground"].astype(bool), require)
         global_valid_time = exact_scalar_int64(
             getattr(dataset, "valid_time_epoch", None)
@@ -8371,6 +8387,9 @@ def validate(path: Path) -> tuple[dict[str, object], list[str]]:
         flux_terms = np.asarray(
             [float(getattr(dataset, name)) for name in flux_names], dtype=np.float64
         )
+        if precip_policy == "retain_background_v1":
+            require(flux_input == 0.0 and np.all(flux_terms == 0.0),
+                    "background precipitation policy has radar transport flux")
         reported_ledger_error = float(getattr(dataset, "flux_ledger_error"))
         require(
             np.isfinite(flux_input) and flux_input >= 0.0

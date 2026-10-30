@@ -1,0 +1,62 @@
+{
+  "status": "PASS",
+  "case": "HISTORICAL_HYDRO",
+  "categorical": [
+    {
+      "threshold_mm": 0.1,
+      "hit": 613,
+      "miss": 980,
+      "false_alarm": 56,
+      "correct_dry": 2039,
+      "CSI": 0.37174044875682233
+    },
+    {
+      "threshold_mm": 0.5,
+      "hit": 339,
+      "miss": 797,
+      "false_alarm": 80,
+      "correct_dry": 2472,
+      "CSI": 0.2787828947368421
+    },
+    {
+      "threshold_mm": 1.0,
+      "hit": 237,
+      "miss": 476,
+      "false_alarm": 100,
+      "correct_dry": 2875,
+      "CSI": 0.2915129151291513
+    },
+    {
+      "threshold_mm": 2.5,
+      "hit": 148,
+      "miss": 203,
+      "false_alarm": 102,
+      "correct_dry": 3235,
+      "CSI": 0.32671081677704195
+    },
+    {
+      "threshold_mm": 5.0,
+      "hit": 55,
+      "miss": 99,
+      "false_alarm": 103,
+      "correct_dry": 3431,
+      "CSI": 0.2140077821011673
+    },
+    {
+      "threshold_mm": 10.0,
+      "hit": 6,
+      "miss": 53,
+      "false_alarm": 79,
+      "correct_dry": 3550,
+      "CSI": 0.043478260869565216
+    }
+  ],
+  "mean_error_mm": -0.061773141774856245,
+  "MAE_mm": 1.1329302044077663,
+  "RMSE_mm": 4.110291887532229,
+  "input_sha256": {
+    "docs/evidence/current_forecast_paper_20261029/scores/hour_13_arrays.npz": "0df6e55167373751a2a9e50f10325c6d6d1e02603f1225e448c8e766184da9e4",
+    "docs/evidence/first_hour_background_policy_20261030/scoring/results/hour_13_arrays.npz": "5f5a5a215091543e1cefcbab5d89b2644cf5bbcfb85bb4dfd3b81dfb5a2a5438"
+  },
+  "scope": "Independent scalar historical HYDRO recount against identical pinned RN1/reference points."
+}
