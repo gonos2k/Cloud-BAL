@@ -1,0 +1,36 @@
+{
+  "exit": 0,
+  "argv": [
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpirun",
+    "-np",
+    "8",
+    "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/forecast/run_POLICY_BG/wrf.exe"
+  ],
+  "elapsed_seconds": 137.46199750900269,
+  "success_marker": true,
+  "histories": [
+    "wrfout_d01_2026-08-16_12:00:00",
+    "wrfout_d01_2026-08-16_13:00:00"
+  ],
+  "histories_exact": true,
+  "staged_unchanged": true,
+  "source_unchanged": true,
+  "evidence_unchanged": true,
+  "output_sha256": {
+    "wrfout_d01_2026-08-16_12:00:00": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+    "wrfout_d01_2026-08-16_13:00:00": "8b4ead8741dff7284b1de140038d85ba48a474d6b8b98e1905e10ddbac165702"
+  },
+  "evidence_before": {
+    "/var/tmp/firsthour-runtime-plan-20261030/experiment/run_FIX_H/inputs.json": "3bb1cf6cdda52d7b97f2fbd864408fc4a800ee87f0eae13dc6aed2463cf51ef6",
+    "/var/tmp/firsthour-runtime-plan-20261030/experiment/run_FIX_H/receipt.json": "cd77c068c91f5d096cf97fd1118164f658ffb2881521984e931a385d64811215",
+    "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/native_HYDRO_BACKGROUND_PRECIP/real/wrfinput_d01": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+    "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/run_HYDRO_BACKGROUND_PRECIP/receipt.json": "1e419ad83a3fbaa28f56d152a8d6b76235abd41279fbf5b2197c6ade83e5f8eb",
+    "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/run_HYDRO_BACKGROUND_PRECIP/output.wps.shadow.nc": "821543471d9d9540b77ddc9cee58cb74dfc32f6679b0bb233af56aaeedae9d07",
+    "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/native_HYDRO_BACKGROUND_PRECIP/receipt.json": "98ccbd08cd355f32c2d5b09a24b1a76af92c51911c5f328948d52ae057fc4577",
+    "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/build_receipt.json": "6888d79adb8b684c3883cbbcac937ee76cc304e51fe42848a34013630a8b75bd",
+    "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/policy_scoped_check.json": "00146728df4f72325314e3df43236a68876bfa7e43deffc3a133f172e83e8675",
+    "/var/tmp/cloudbal-first-hour-improvement/tools/check_background_precip_shadow.py": "17ee6d5e23925e34b9fdc881d3e1c81a27ef60f832cb4702b8dd0247a0825abd"
+  },
+  "policy": "HYDRO_BACKGROUND_PRECIP",
+  "scope": "diagnostic research forecast; not operational"
+}

@@ -1,0 +1,82 @@
+{
+  "source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_unit_contract_x3bcr8ui/host/phys/module_mp_kdm6.f90",
+  "source_sha256": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b",
+  "old_excerpt_sha256": "96071f587bbf81ba2ec6dce65c139d75dd12f526fadf24e53cc3e9d18c136bd6",
+  "new_excerpt_sha256": "44a35edab0b0f807bd86603c1321d9665e0129871db6f5f13740c581363eca94",
+  "tool_sha256": "7fa69fed8daf1465cd536e0d546fbad97f9907c1d7ad80c1e514941afe96f651",
+  "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "captured_summary_sha256": "bf33bd4b38241e2f880171a4e73588924758822c4f88f5bd449e76410c69dbda",
+  "inputs": [
+    {
+      "arm": "OFF",
+      "rank": 1,
+      "capture_sha256": "7651d739c8a907bd361cd8a061a5862f9cc213e2c9667192cc4bb612dc5cc8e2",
+      "satdt": 3097365466,
+      "rain": 972003868,
+      "dt": 1101004800,
+      "expected": 3088976858
+    },
+    {
+      "arm": "OFF",
+      "rank": 3,
+      "capture_sha256": "a48ecae9179ee791812e1ae315d7dbe5bab3c15c0aa3f34ec17b951d23a2eed9",
+      "satdt": 3091891942,
+      "rain": 953831408,
+      "dt": 1101004800,
+      "expected": 3083503334
+    },
+    {
+      "arm": "HYDRO",
+      "rank": 1,
+      "capture_sha256": "c8cd7c7d2f03437a7a020cc1a97f5476a48be816e3f53532b33b9d4994741e21",
+      "satdt": 3097235494,
+      "rain": 966001850,
+      "dt": 1101004800,
+      "expected": 3088846886
+    },
+    {
+      "arm": "HYDRO",
+      "rank": 3,
+      "capture_sha256": "c1d0b8d596df4205f1d689aa826e620ce18c44ba717501f3ccf481dc954c1271",
+      "satdt": 3091826189,
+      "rain": 950031609,
+      "dt": 1101004800,
+      "expected": 3083437581
+    },
+    {
+      "arm": "LIQUID",
+      "rank": 1,
+      "capture_sha256": "95ef0398f765da52508cb15339e190d08dbd4cf1f55abcde0da5742f276329fe",
+      "satdt": 3043255910,
+      "rain": 965977771,
+      "dt": 1101004800,
+      "expected": 3034867302
+    },
+    {
+      "arm": "LIQUID",
+      "rank": 3,
+      "capture_sha256": "05d4111e6bff6fac06b0d086f3d7ec7be7565f3e78a9aec580ca83fcd53eb9a1",
+      "satdt": 3069133005,
+      "rain": 950011264,
+      "dt": 1101004800,
+      "expected": 3060744397
+    }
+  ],
+  "runs": [
+    {
+      "profile": "O0",
+      "stdout": "capture 1 B81E0BDA 80000000\ncapture 2 B7CA86E6 80000000\ncapture 3 B81C1026 80000000\ncapture 4 B7C9860D 80000000\ncapture 5 B4E46666 80000000\ncapture 6 B66F40CD 80000000\n PASS signed-zero, both humidities, nonzero, floors, isolated mass and heat\n",
+      "build_stdout": "",
+      "build_stderr": "",
+      "executable_sha256": "7adeb6f4c70cb7ec5d29753865bc2a9590b79d4e084b0fd695ac7902e1739577"
+    },
+    {
+      "profile": "O2",
+      "stdout": "capture 1 B81E0BDA 80000000\ncapture 2 B7CA86E6 80000000\ncapture 3 B81C1026 80000000\ncapture 4 B7C9860D 80000000\ncapture 5 B4E46666 80000000\ncapture 6 B66F40CD 80000000\n PASS signed-zero, both humidities, nonzero, floors, isolated mass and heat\n",
+      "build_stdout": "",
+      "build_stderr": "",
+      "executable_sha256": "76a2a1a38f790a7009825c89b016ee3d1481963a5f1d125db9708f26de5a94bd"
+    }
+  ],
+  "scope": "isolated fragment; no full-model closure or source provenance claim"
+}

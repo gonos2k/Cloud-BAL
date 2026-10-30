@@ -15,6 +15,7 @@ PROGRAM test_column_physics
   CALL test_explicit_surface_policy(failures)
   CALL test_flux_ledgers(failures)
   CALL test_column_stage(failures)
+  CALL test_background_precipitation_policy(failures)
   CALL test_column_thermo_integration(failures)
   CALL test_column_evaluation_state(failures)
   IF (failures/=0) THEN
@@ -24,6 +25,93 @@ PROGRAM test_column_physics
   PRINT *,'Column physics tests passed'
 
 CONTAINS
+
+  SUBROUTINE test_background_precipitation_policy(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: input,baseline,explicit_default,retained,rejected
+    TYPE(stage_result) :: base_result,result
+    TYPE(pressure_analysis_budget) :: budget
+    TYPE(column_physics_config) :: cfg
+    LOGICAL :: thermo_active(4,4,4)
+    INTEGER :: thermo_surface(4,4,4)
+    INTEGER :: status
+
+    CALL make_state(input,4,4,4)
+    CALL valid_real(input%rain,SOURCE_BACKGROUND_MODEL)
+    CALL valid_real(input%snow,SOURCE_BACKGROUND_MODEL)
+    CALL valid_real(input%graupel,SOURCE_BACKGROUND_MODEL)
+    input%rain%value=1.e-4_real32; input%snow%value=2.e-4_real32
+    input%graupel%value=3.e-5_real32
+    input%precipitation_phase%value=PHASE_SNOW
+    input%precipitation_phase%valid=.TRUE.
+    input%precipitation_phase%quality=QUALITY_LEGACY_PROVENANCE
+    input%precipitation_phase%source=SOURCE_CLOUD_ANALYSIS
+    input%cloud_fraction%value(2,2,4)=0.8_real32
+    input%cloud_type%value(2,2,4)=1_int32
+    input%radar_reflectivity%value(2,2,4)=30.0_real32
+    input%radar_reflectivity%valid(2,2,4)=.TRUE.
+    input%radar_reflectivity%quality(2,2,4)=0_int32
+    input%radar_reflectivity%source(2,2,4)=SOURCE_RADAR_DBZ
+    CALL refresh_dry_air_mass_measure(input,status)
+    IF (status/=STATUS_OK) ERROR STOP 'precipitation fixture mass'
+    CALL derive_column_physics(input,baseline,base_result,cfg)
+    IF (base_result%status/=STATUS_OK) PRINT *,'default status/reason:',base_result%status,base_result%reason_code
+    CALL check(base_result%status==STATUS_OK .AND. base_result%numerical%flux_input>0.0_real64, &
+      'default policy still retrieves and transports radar precipitation',failures)
+    cfg%retain_background_precipitation=.FALSE.
+    CALL derive_column_physics(input,explicit_default,result,cfg)
+    CALL check(result%status==base_result%status .AND. canonical_states_equal(baseline,explicit_default), &
+      'explicit default policy equals the implicit default exactly',failures)
+    cfg%retain_background_precipitation=.TRUE.
+    CALL derive_column_physics(input,retained,result,cfg,analysis_budget=budget)
+    IF (result%status/=STATUS_OK) PRINT *,'retain status/reason:',result%status,result%reason_code
+    CALL check(result%status==STATUS_OK,'background precipitation policy succeeds',failures)
+    CALL check(ALL(retained%rain%value==input%rain%value) .AND. &
+      ALL(retained%snow%value==input%snow%value) .AND. &
+      ALL(retained%graupel%value==input%graupel%value), &
+      'policy retains all background precipitation values',failures)
+    CALL check(ALL(retained%rain%valid .EQV. input%rain%valid) .AND. &
+      ALL(retained%snow%valid .EQV. input%snow%valid) .AND. &
+      ALL(retained%graupel%valid .EQV. input%graupel%valid) .AND. &
+      ALL(retained%rain%quality==input%rain%quality) .AND. &
+      ALL(retained%snow%quality==input%snow%quality) .AND. &
+      ALL(retained%graupel%quality==input%graupel%quality) .AND. &
+      ALL(retained%rain%source==input%rain%source) .AND. &
+      ALL(retained%snow%source==input%snow%source) .AND. &
+      ALL(retained%graupel%source==input%graupel%source), &
+      'policy retains precipitation validity and provenance',failures)
+    CALL check(ALL(retained%precipitation_phase%value==input%precipitation_phase%value) .AND. &
+      ALL(retained%precipitation_phase%valid .EQV. input%precipitation_phase%valid) .AND. &
+      ALL(retained%precipitation_phase%quality==input%precipitation_phase%quality) .AND. &
+      ALL(retained%precipitation_phase%source==input%precipitation_phase%source), &
+      'policy retains phase provenance',failures)
+    CALL check(result%numerical%flux_input==0.0_real64 .AND. &
+      result%numerical%ledger_error==0.0_real64 .AND. &
+      result%numerical%radar_analysis_increment==0.0_real64 .AND. &
+      ALL(budget%species_change_kg==0.0_real64) .AND. budget%enthalpy_change_j==0.0_real64, &
+      'retained candidate has zero radar flux and unchanged water/enthalpy ledger',failures)
+    input%omega%valid(2,2,4)=.FALSE.
+    input%omega%quality(2,2,4)=QUALITY_RAW_MISSING
+    CALL derive_column_physics(input,rejected,result,cfg)
+    CALL check(result%status==STATUS_DEGRADED .AND. result%reason_code==REASON_REQUIRED_COVERAGE .AND. &
+      canonical_states_equal(input,rejected), 'policy retains missing-motion gate and rollback',failures)
+    input%omega%valid(2,2,4)=.TRUE.; input%omega%quality(2,2,4)=0_int32
+    input%radar_reflectivity%value(2,2,4)=90.0_real32
+    CALL derive_column_physics(input,rejected,result,cfg)
+    CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_RANGE .AND. &
+      canonical_states_equal(input,rejected), 'policy retains radar validation and rollback',failures)
+    input%radar_reflectivity%value(2,2,4)=30.0_real32
+    input%radar_reflectivity%source(2,2,4)=0_int32
+    CALL derive_column_physics(input,rejected,result,cfg)
+    CALL check(result%status==STATUS_FAILED .AND. &
+      canonical_states_equal(input,rejected), 'policy rejects invalid radar provenance',failures)
+    input%radar_reflectivity%source(2,2,4)=SOURCE_RADAR_DBZ
+    thermo_active=.FALSE.; thermo_active(2,2,4)=.TRUE.; thermo_surface=SATURATION_LIQUID
+    CALL derive_column_physics(input,rejected,result,cfg,thermo_active=thermo_active, &
+      thermo_surface=thermo_surface,target_rh=1.0_real64)
+    CALL check(result%status==STATUS_FAILED .AND. result%reason_code==REASON_AUTHORITY .AND. &
+      canonical_states_equal(input,rejected), 'policy rejects unproven thermo coupling',failures)
+  END SUBROUTINE test_background_precipitation_policy
 
   SUBROUTINE check(condition,message,failures)
     LOGICAL, INTENT(IN) :: condition

@@ -1,0 +1,13 @@
+{
+  "event": "accidental copy to generic temporary paths during producer evidence collection",
+  "observed_destination_mtime": "2026-10-30T10:43:57.577915492+09:00",
+  "source_receipt": "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/run_HYDRO/receipt.json",
+  "source_preparation": "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/run_HYDRO/preparation.json",
+  "destinations": [
+    {"path": "/tmp/receipt.json", "sha256_after": "612a53c1fd14331031d67764720fa9602ff82e830c95d11f7f1545d765a5f461"},
+    {"path": "/tmp/preparation.json", "sha256_after": "dea4f19d8b5a80f31c2fb31b222d7a6cb1ff2baadd20990ddabd72c55c88ecdc"}
+  ],
+  "prior_destination_state": "unknown; preexisting contents may have been overwritten",
+  "remediation": "The two unknown-prior-state paths were not deleted or modified again. Future files use only private named scratch directories.",
+  "workspace_and_inputs": "Producer and native post-run input/source manifests passed; this copy operation targeted only the two stated generic temporary paths."
+}

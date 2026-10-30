@@ -1,0 +1,22 @@
+{
+  "recorded_utc": "2026-10-30T01:04:51.887027+00:00",
+  "question": "Does the signed-zero rain-transfer limiter cause part of the first-hour forecast deterioration, and does preserving a zero calculated rate improve the paired forecast?",
+  "candidate": "Only the final else becomes else if(prevp.ne.0), preserving both zero signs; no initial-state or rain-number seeding changes.",
+  "controls": [
+    "Historical shortened run validates +1h time setup",
+    "Rebuilt unmodified object/executable must exactly match retained historical hashes",
+    "BASE_H versus FIX_H and BASE_ORIGINAL versus FIX_ORIGINAL use identical non-executable inputs"
+  ],
+  "evaluation": [
+    "Complete success and pinned 12/13UTC histories before scoring",
+    "Same 3688 RN1 paired points and thresholds 0.1,0.5,1,2.5,5,10 mm",
+    "All H/M/F,CSI,ETS,POD,FAR,frequency bias plus ME,MAE,RMSE",
+    "Paired hit gains/losses and false-alarm gains/losses; no selection on two diagnostic cells",
+    "Primary known degradation is first-hour >=5mm H versus ORIGINAL; judge changes across thresholds and amount errors, not a single metric"
+  ],
+  "limits": [
+    "One case; no operational or general-skill approval",
+    "Zero rain-number input origin and full model budgets remain separate",
+    "If first-hour results are promising, extend same-condition forecasts through six hours before declaring a generally useful change"
+  ]
+}

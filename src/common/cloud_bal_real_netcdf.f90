@@ -1283,6 +1283,16 @@ CONTAINS
       ! Preserve the inputs needed to reconstruct that earlier state.
       IF (.NOT.put_radar_reconstruction_inputs(ncid,(/xdim,ydim,zdim/),state_in,config)) GOTO 900
     END IF
+    IF (config%column%retain_background_precipitation) THEN
+      IF (.NOT.put_thermo_field(ncid,(/xdim,ydim,zdim/),'policy_background_rain',state_in%rain)) GOTO 900
+      IF (.NOT.put_thermo_field(ncid,(/xdim,ydim,zdim/),'policy_candidate_rain',candidate%rain)) GOTO 900
+      IF (.NOT.put_thermo_field(ncid,(/xdim,ydim,zdim/),'policy_background_snow',state_in%snow)) GOTO 900
+      IF (.NOT.put_thermo_field(ncid,(/xdim,ydim,zdim/),'policy_candidate_snow',candidate%snow)) GOTO 900
+      IF (.NOT.put_thermo_field(ncid,(/xdim,ydim,zdim/),'policy_background_graupel',state_in%graupel)) GOTO 900
+      IF (.NOT.put_thermo_field(ncid,(/xdim,ydim,zdim/),'policy_candidate_graupel',candidate%graupel)) GOTO 900
+      IF (.NOT.put_policy_phase(ncid,(/xdim,ydim,zdim/),'policy_background_phase',state_in%precipitation_phase)) GOTO 900
+      IF (.NOT.put_policy_phase(ncid,(/xdim,ydim,zdim/),'policy_candidate_phase',candidate%precipitation_phase)) GOTO 900
+    END IF
     IF (pressure_candidate) THEN
       IF (.NOT.put_pressure_candidate_extension(ncid,(/xdim,ydim,zdim/), &
         state_in,candidate,result,config)) GOTO 900
@@ -1349,7 +1359,8 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'background_continuity_prior', &
       MERGE(1,0,config%background_continuity_prior)))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'precipitation_transport_enabled', &
-      MERGE(1,0,config%column%transport_precipitation)))) RETURN
+      MERGE(1,0,config%column%transport_precipitation .AND. &
+        .NOT.config%column%retain_background_precipitation)))) RETURN
     IF (config%background_continuity_prior) THEN
       IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'dry_mass_tendency_prior', &
         'frozen_background_minus_dry_flux_divergence_kg_s-1'))) RETURN
@@ -1790,6 +1801,10 @@ CONTAINS
       IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'evidence_class', &
         'PRESSURE_ANALYSIS_SHADOW_PROPOSAL'))) RETURN
       IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'configuration_id','pressure-analysis-shadow-v1'))) RETURN
+      IF (config%column%retain_background_precipitation) THEN
+        IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'configuration_id', &
+          'pressure-background-precip-shadow-v1'))) RETURN
+      END IF
       IF (physical_boundary_contract_valid(background)) THEN
         IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'omega_boundary_provenance', &
           'PHYSICAL_INPUT_DIAGNOSTIC_ONLY'))) RETURN
@@ -2457,6 +2472,29 @@ CONTAINS
     IF (.NOT.nc_ok(nf90_put_var(ncid,source_var,field%source))) RETURN
     put_thermo_field=.TRUE.
   END FUNCTION put_thermo_field
+
+  LOGICAL FUNCTION put_policy_phase(ncid,dims,name,field)
+    INTEGER, INTENT(IN) :: ncid,dims(3)
+    CHARACTER(LEN=*), INTENT(IN) :: name
+    TYPE(integer_field3d), INTENT(IN) :: field
+    INTEGER :: ids(4),i
+    CHARACTER(LEN=8), PARAMETER :: suffix(4)=[CHARACTER(LEN=8) :: '', '_valid', '_quality', '_source']
+    put_policy_phase=.FALSE.
+    IF (.NOT.nc_ok(nf90_redef(ncid))) RETURN
+    DO i=1,4
+      IF (.NOT.nc_ok(nf90_def_var(ncid,TRIM(name)//TRIM(suffix(i)),NF90_INT,dims,ids(i)))) RETURN
+      IF (.NOT.nc_ok(nf90_def_var_deflate(ncid,ids(i),1,1,1))) RETURN
+      IF (.NOT.nc_ok(nf90_put_att(ncid,ids(i),'units','1'))) RETURN
+    END DO
+    IF (.NOT.nc_ok(nf90_put_att(ncid,ids(1),'valid_time',field%valid_time))) RETURN
+    IF (.NOT.nc_ok(nf90_put_att(ncid,ids(1),'code_table',TRIM(field%code_table)))) RETURN
+    IF (.NOT.nc_ok(nf90_enddef(ncid))) RETURN
+    IF (.NOT.nc_ok(nf90_put_var(ncid,ids(1),field%value))) RETURN
+    IF (.NOT.nc_ok(nf90_put_var(ncid,ids(2),MERGE(1_int32,0_int32,field%valid)))) RETURN
+    IF (.NOT.nc_ok(nf90_put_var(ncid,ids(3),field%quality))) RETURN
+    IF (.NOT.nc_ok(nf90_put_var(ncid,ids(4),field%source))) RETURN
+    put_policy_phase=.TRUE.
+  END FUNCTION put_policy_phase
 
   LOGICAL FUNCTION put_surface_field(ncid,dims,name,field)
     INTEGER, INTENT(IN) :: ncid,dims(2)
@@ -4390,6 +4428,8 @@ CONTAINS
     contract_name='real_radar_only_shadow_v3'
     evidence_class='REAL_RADAR_ONLY_SHADOW_PROPOSAL'
     configuration_id='real-radar-only-shadow-v3'
+    IF (config%column%retain_background_precipitation) &
+      configuration_id='real-background-precip-shadow-v1'
     target_provenance='OBSERVATIONAL_DYNAMIC_TARGET'
     boundary_provenance='COPIED_INTERIOR_DIAGNOSTIC_ONLY'
     IF (config%balance%target_authority==TARGET_AUTHORITY_MODEL_DYNAMICS) THEN
@@ -4472,6 +4512,11 @@ CONTAINS
                                 config%column%maximum_dbz))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'reference_mass_concentration', &
                                 config%column%reference_mass_concentration))) RETURN
+    IF (config%column%retain_background_precipitation) THEN
+      IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'precipitation_research_policy', &
+                                  'retain_background_v1'))) RETURN
+      IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'precipitation_transport_effective',0_int32))) RETURN
+    END IF
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'minimum_relative_fall_speed', &
                                 config%column%minimum_relative_fall_speed))) RETURN
     IF (.NOT.nc_ok(nf90_put_att(ncid,NF90_GLOBAL,'maximum_horizontal_substep', &
