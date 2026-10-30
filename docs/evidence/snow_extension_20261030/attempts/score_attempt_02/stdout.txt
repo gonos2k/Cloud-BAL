@@ -1,0 +1,319 @@
+{
+  "status": "COMPLETE",
+  "selection": {
+    "selected_case": "CONTROL_SNOW_300",
+    "selected_alpha": 3.0,
+    "selection_order": [
+      "CONTROL_SNOW_300",
+      "IMPROVED_SNOW_300",
+      "CONTROL_SNOW_250",
+      "IMPROVED_SNOW_250",
+      "IMPROVED_SNOW_200",
+      "CONTROL_SNOW_200",
+      "IMPROVED_BG_FIXED",
+      "IMPROVED_SNOW_125",
+      "IMPROVED_SNOW_175",
+      "IMPROVED_SNOW_150",
+      "CONTROL_SNOW_125",
+      "CONTROL_SNOW_150",
+      "CONTROL_SNOW_175",
+      "IMPROVED_SNOW_050",
+      "IMPROVED_SNOW_075",
+      "CONTROL_SNOW_050",
+      "CONTROL_SNOW_025",
+      "ORIGINAL",
+      "CONTROL_SNOW_075",
+      "IMPROVED_SNOW_000",
+      "IMPROVED_SNOW_025",
+      "CONTROL_SNOW_000"
+    ],
+    "ranking_order": [
+      "descending +1h CSI at 10 mm",
+      "descending +1h CSI at 5 mm",
+      "ascending +1h FAR at 10 mm",
+      "ascending +1h RMSE",
+      "ascending absolute alpha distance from 1",
+      "ascending case ID"
+    ],
+    "eligibility": "all 22 completed eligible cases ranked; forecast-error metrics are tie-breaks, not vetoes; failed/incomplete cases excluded",
+    "selection_plan": {
+      "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_extension_20261030/selection_plan.json",
+      "sha256": "36e094ac84d698351cdc477ec0bb58fd7580e0676e9ed830236a7d52b0818642",
+      "size": 3062
+    },
+    "context_only_cases": [
+      "CURRENT_HYDRO"
+    ],
+    "runtime_case_status": {
+      "CONTROL_SNOW_175": "SUCCESS",
+      "CONTROL_SNOW_200": "SUCCESS",
+      "CONTROL_SNOW_250": "SUCCESS",
+      "CONTROL_SNOW_300": "SUCCESS",
+      "IMPROVED_SNOW_175": "SUCCESS",
+      "IMPROVED_SNOW_200": "SUCCESS",
+      "IMPROVED_SNOW_250": "SUCCESS",
+      "IMPROVED_SNOW_300": "SUCCESS"
+    },
+    "failed_or_incomplete_cases_unranked": [],
+    "errors_reported_without_veto": {
+      "ORIGINAL": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.8685242919137923,
+        "pooled_RMSE_mm": 5.328994181894098
+      },
+      "CURRENT_HYDRO": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.8506282144451187,
+        "pooled_RMSE_mm": 5.331828738509799
+      },
+      "IMPROVED_BG_FIXED": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.8633174027744117,
+        "pooled_RMSE_mm": 5.337672713171055
+      },
+      "CONTROL_SNOW_000": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.833937352388465,
+        "pooled_RMSE_mm": 5.285906069712033
+      },
+      "CONTROL_SNOW_025": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.8480058500548666,
+        "pooled_RMSE_mm": 5.312820671855106
+      },
+      "CONTROL_SNOW_050": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.8604702964918771,
+        "pooled_RMSE_mm": 5.332717097412117
+      },
+      "CONTROL_SNOW_075": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.870035118011636,
+        "pooled_RMSE_mm": 5.371776364613995
+      },
+      "CONTROL_SNOW_125": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.8598042197176206,
+        "pooled_RMSE_mm": 5.308400989013691
+      },
+      "CONTROL_SNOW_150": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.8678915324154515,
+        "pooled_RMSE_mm": 5.343775410356671
+      },
+      "IMPROVED_SNOW_000": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.8399269237068816,
+        "pooled_RMSE_mm": 5.259743640765859
+      },
+      "IMPROVED_SNOW_025": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.8423520633347363,
+        "pooled_RMSE_mm": 5.260508201074095
+      },
+      "IMPROVED_SNOW_050": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.8415004163580224,
+        "pooled_RMSE_mm": 5.243085581648671
+      },
+      "IMPROVED_SNOW_075": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.85586846939718,
+        "pooled_RMSE_mm": 5.275659705483133
+      },
+      "IMPROVED_SNOW_125": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.859744935670787,
+        "pooled_RMSE_mm": 5.319961238318576
+      },
+      "IMPROVED_SNOW_150": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.859712355201011,
+        "pooled_RMSE_mm": 5.324854315153774
+      },
+      "CONTROL_SNOW_175": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.8681258482365286,
+        "pooled_RMSE_mm": 5.313021489129155
+      },
+      "CONTROL_SNOW_200": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.8753214706305457,
+        "pooled_RMSE_mm": 5.349970284960121
+      },
+      "CONTROL_SNOW_250": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.879504909414601,
+        "pooled_RMSE_mm": 5.339475081413208
+      },
+      "CONTROL_SNOW_300": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.901340433966317,
+        "pooled_RMSE_mm": 5.397707755260791
+      },
+      "IMPROVED_SNOW_175": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.859628712381859,
+        "pooled_RMSE_mm": 5.33441751733422
+      },
+      "IMPROVED_SNOW_200": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.881370011683377,
+        "pooled_RMSE_mm": 5.346899937122918
+      },
+      "IMPROVED_SNOW_250": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.8972939880480875,
+        "pooled_RMSE_mm": 5.363007211786405
+      },
+      "IMPROVED_SNOW_300": {
+        "valid_obs": 22128,
+        "pooled_MAE_mm": 1.9081469667547302,
+        "pooled_RMSE_mm": 5.392398994983957
+      }
+    },
+    "pooled_error_changes_vs_IMPROVED_BG_FIXED": {
+      "ORIGINAL": {
+        "delta_MAE_mm": 0.0052068891393806105,
+        "MAE_increased": true,
+        "delta_RMSE_mm": -0.00867853127695728,
+        "RMSE_increased": false
+      },
+      "CURRENT_HYDRO": {
+        "delta_MAE_mm": -0.012689188329293,
+        "MAE_increased": false,
+        "delta_RMSE_mm": -0.0058439746612561905,
+        "RMSE_increased": false
+      },
+      "IMPROVED_BG_FIXED": {
+        "delta_MAE_mm": 0.0,
+        "MAE_increased": false,
+        "delta_RMSE_mm": 0.0,
+        "RMSE_increased": false
+      },
+      "CONTROL_SNOW_000": {
+        "delta_MAE_mm": -0.02938005038594671,
+        "MAE_increased": false,
+        "delta_RMSE_mm": -0.05176664345902182,
+        "RMSE_increased": false
+      },
+      "CONTROL_SNOW_025": {
+        "delta_MAE_mm": -0.015311552719545096,
+        "MAE_increased": false,
+        "delta_RMSE_mm": -0.02485204131594898,
+        "RMSE_increased": false
+      },
+      "CONTROL_SNOW_050": {
+        "delta_MAE_mm": -0.002847106282534595,
+        "MAE_increased": false,
+        "delta_RMSE_mm": -0.004955615758937881,
+        "RMSE_increased": false
+      },
+      "CONTROL_SNOW_075": {
+        "delta_MAE_mm": 0.006717715237224198,
+        "MAE_increased": true,
+        "delta_RMSE_mm": 0.034103651442939587,
+        "RMSE_increased": true
+      },
+      "CONTROL_SNOW_125": {
+        "delta_MAE_mm": -0.003513183056791158,
+        "MAE_increased": false,
+        "delta_RMSE_mm": -0.0292717241573639,
+        "RMSE_increased": false
+      },
+      "CONTROL_SNOW_150": {
+        "delta_MAE_mm": 0.004574129641039759,
+        "MAE_increased": true,
+        "delta_RMSE_mm": 0.006102697185616179,
+        "RMSE_increased": true
+      },
+      "IMPROVED_SNOW_000": {
+        "delta_MAE_mm": -0.023390479067530112,
+        "MAE_increased": false,
+        "delta_RMSE_mm": -0.07792907240519575,
+        "RMSE_increased": false
+      },
+      "IMPROVED_SNOW_025": {
+        "delta_MAE_mm": -0.02096533943967538,
+        "MAE_increased": false,
+        "delta_RMSE_mm": -0.07716451209696018,
+        "RMSE_increased": false
+      },
+      "IMPROVED_SNOW_050": {
+        "delta_MAE_mm": -0.021816986416389295,
+        "MAE_increased": false,
+        "delta_RMSE_mm": -0.09458713152238385,
+        "RMSE_increased": false
+      },
+      "IMPROVED_SNOW_075": {
+        "delta_MAE_mm": -0.007448933377231626,
+        "MAE_increased": false,
+        "delta_RMSE_mm": -0.06201300768792173,
+        "RMSE_increased": false
+      },
+      "IMPROVED_SNOW_125": {
+        "delta_MAE_mm": -0.003572467103624799,
+        "MAE_increased": false,
+        "delta_RMSE_mm": -0.01771147485247937,
+        "RMSE_increased": false
+      },
+      "IMPROVED_SNOW_150": {
+        "delta_MAE_mm": -0.0036050475734006326,
+        "MAE_increased": false,
+        "delta_RMSE_mm": -0.012818398017280686,
+        "RMSE_increased": false
+      },
+      "CONTROL_SNOW_175": {
+        "delta_MAE_mm": 0.004808445462116895,
+        "MAE_increased": true,
+        "delta_RMSE_mm": -0.02465122404190012,
+        "RMSE_increased": false
+      },
+      "CONTROL_SNOW_200": {
+        "delta_MAE_mm": 0.012004067856133949,
+        "MAE_increased": true,
+        "delta_RMSE_mm": 0.012297571789066097,
+        "RMSE_increased": true
+      },
+      "CONTROL_SNOW_250": {
+        "delta_MAE_mm": 0.01618750664018931,
+        "MAE_increased": true,
+        "delta_RMSE_mm": 0.001802368242152852,
+        "RMSE_increased": true
+      },
+      "CONTROL_SNOW_300": {
+        "delta_MAE_mm": 0.0380230311919052,
+        "MAE_increased": true,
+        "delta_RMSE_mm": 0.0600350420897362,
+        "RMSE_increased": true
+      },
+      "IMPROVED_SNOW_175": {
+        "delta_MAE_mm": -0.003688690392552818,
+        "MAE_increased": false,
+        "delta_RMSE_mm": -0.0032551958368349787,
+        "RMSE_increased": false
+      },
+      "IMPROVED_SNOW_200": {
+        "delta_MAE_mm": 0.018052608908965206,
+        "MAE_increased": true,
+        "delta_RMSE_mm": 0.009227223951862484,
+        "RMSE_increased": true
+      },
+      "IMPROVED_SNOW_250": {
+        "delta_MAE_mm": 0.03397658527367575,
+        "MAE_increased": true,
+        "delta_RMSE_mm": 0.025334498615349865,
+        "RMSE_increased": true
+      },
+      "IMPROVED_SNOW_300": {
+        "delta_MAE_mm": 0.044829563980318454,
+        "MAE_increased": true,
+        "delta_RMSE_mm": 0.05472628181290151,
+        "RMSE_increased": true
+      }
+    },
+    "same_event_selection_limitation": "This is same-event parameter selection, not independent validation or a significance test.",
+    "initialization_limitation": "QSNOW-only initial-water sensitivity is diagnostic; it does not claim conservative or operational initialization.",
+    "precipitation_limitation": "The score verifies total surface precipitation, not surface snowfall alone."
+  }
+}

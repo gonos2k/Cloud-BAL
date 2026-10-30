@@ -1,0 +1,139 @@
+{
+  "schema": "snow-extension-stage-review-v1",
+  "status": "GO",
+  "reviewed_at_utc": "2026-10-30T05:48:33+00:00",
+  "stage_receipt_sha256": "4d62a50ef237c8a6fb08a0a864002549ee6976be8b9df4bc0c0c124ecb9413f4",
+  "selection_lock_sha256": "216f7841c356d3f986cd005c727d2bdda4e437e9af6ab7a8bcdd954092ec1263",
+  "baseline_sha256": "5e3f736838298d1c58cc971ebb4d7b29074308a24e8542ab21828aa1552bb6ec",
+  "stage_status": "STAGED_ONLY_NO_MAINTAINED_WRITES",
+  "scope_count": 11,
+  "source_extraction_scope": [
+    "docs/evidence/snow_extension_20261030/build_full_score_tables.py",
+    "docs/evidence/snow_extension_20261030/build_report.py",
+    "docs/evidence/snow_extension_20261030/kg/update_graphs.py",
+    "docs/evidence/snow_extension_20261030/runtime/finalize_batch.py",
+    "docs/evidence/snow_extension_20261030/runtime/prepare_cases.py",
+    "docs/evidence/snow_extension_20261030/runtime/run_all.py",
+    "docs/evidence/snow_extension_20261030/runtime/run_case.py",
+    "tests/test_cp02_snow_extension.py",
+    "tests/test_plot_snow_extension.py",
+    "tools/cp02_snow_extension.py",
+    "tools/plot_snow_extension.py"
+  ],
+  "hash_only_count": 103,
+  "hash_only_map_sha256": "159cae4c8287ca19f24d6644213df637e764bc4373687aa5dae8d2af7a1825de",
+  "checks": {
+    "receipt_exact_sha256": true,
+    "stage_status_and_lock_binding": true,
+    "baseline_binding": true,
+    "scope_exact_11": true,
+    "selected_source_hashes": true,
+    "hash_only_map_equals_lock": true,
+    "hash_only_disjoint_from_extracted": true,
+    "hash_only_live_hashes": true,
+    "hash_only_revalidated_before_publish": true,
+    "KLAPS50_stats_and_delta": true,
+    "KLAPS50_graph_integrity": true,
+    "KLAPS50_previous_node_ids_preserved": true,
+    "KLAPS50_current_and_dated_snapshot_hashes": true,
+    "KLAPS50_prior_snapshot_inventory_preserved": true,
+    "KLAPS50_maintained_graph_report_manifest_unchanged": true,
+    "KLAPS50_maintained_git_status_unchanged": true,
+    "KLAPS50_manifest_subset_only": true,
+    "KLAPS50_selected_manifest_entries": true,
+    "Cloud-BAL_stats_and_delta": true,
+    "Cloud-BAL_graph_integrity": true,
+    "Cloud-BAL_previous_node_ids_preserved": true,
+    "Cloud-BAL_current_and_dated_snapshot_hashes": true,
+    "Cloud-BAL_prior_snapshot_inventory_preserved": true,
+    "Cloud-BAL_maintained_graph_report_manifest_unchanged": true,
+    "Cloud-BAL_maintained_git_status_unchanged": true,
+    "Cloud-BAL_manifest_subset_only": true,
+    "Cloud-BAL_selected_manifest_entries": true,
+    "global_prior_snapshot_total_216": true,
+    "staged_wiki_hash_graph-report-cloud-bal.md": true,
+    "staged_wiki_hash_graph-report-klaps50.md": true,
+    "staged_wiki_hash_graph-report.md": true,
+    "staged_wiki_hash_index.md": true,
+    "staged_wiki_hash_log.md": true,
+    "maintained_wiki_unchanged_graph-report-cloud-bal.md": true,
+    "maintained_wiki_unchanged_graph-report-klaps50.md": true,
+    "maintained_wiki_unchanged_graph-report.md": true,
+    "maintained_wiki_unchanged_index.md": true,
+    "maintained_wiki_unchanged_log.md": true,
+    "graph_report_index_only_counts_changed": true,
+    "wiki_index_only_graph_snapshot_section_changed": true,
+    "wiki_log_prior_content_preserved_and_new_entry_appended": true,
+    "KLAPS50_graph_report_summary_matches_stage": true,
+    "Cloud-BAL_graph_report_summary_matches_stage": true,
+    "no_publication_receipt": true
+  },
+  "corpora": {
+    "KLAPS50": {
+      "before": {
+        "communities": 3471,
+        "edges": 88248,
+        "nodes": 42573
+      },
+      "after": {
+        "communities": 3470,
+        "edges": 88493,
+        "nodes": 42703
+      },
+      "delta": {
+        "nodes": 130,
+        "edges": 245,
+        "communities": -1
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "prior_node_ids_preserved": 42573,
+      "existing_snapshot_count": 106
+    },
+    "Cloud-BAL": {
+      "before": {
+        "communities": 1505,
+        "edges": 29764,
+        "nodes": 16745
+      },
+      "after": {
+        "communities": 1531,
+        "edges": 30005,
+        "nodes": 16875
+      },
+      "delta": {
+        "nodes": 130,
+        "edges": 241,
+        "communities": 26
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "prior_node_ids_preserved": 16745,
+      "existing_snapshot_count": 110
+    }
+  },
+  "preserved_prior_snapshots_total": 216,
+  "staged_wiki_sha256": {
+    "graph-report-cloud-bal.md": "da66c86b0b663a1d90312940af860baaa72cc854b5aa3a90dd65fa3249278c5f",
+    "graph-report-klaps50.md": "b6edf085dc9b5db871c72f64c429ebd08e204b84943e39828bd769fd97d79ed7",
+    "graph-report.md": "b24affddb2aa423597fdbb7b8ae74fc7c07ba803f68cc4acc18332e425a7b188",
+    "index.md": "fba2135bedb8c05b6b87823cad1ed0c2d681933c850f210a2b01bbc0f361887e",
+    "log.md": "b9f60b3b4231842c15d7b5a6f30a7bd14551a7f193291eaef3f897f8d78fb385"
+  },
+  "limitations": [
+    "Selected Python AST only; other evidence hash-bound only.",
+    "Fortran cross-file CALL extraction is partial.",
+    "Graph freshness is not runtime or scientific validation."
+  ],
+  "review_note": "GO approves only this isolated staged graph and exact receipt. It authorizes no publication. Prior graph snapshots and maintained wiki/graph roots remain unchanged."
+}

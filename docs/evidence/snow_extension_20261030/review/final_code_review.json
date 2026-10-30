@@ -1,0 +1,62 @@
+{
+  "schema": "snow-extension-final-code-review-v1",
+  "status": "GO_CODE_ONLY",
+  "reviewed_at_utc": "2026-10-30T05:43:16+00:00",
+  "checks": {
+    "scorer_current_hash_matches_final_cli_pin": true,
+    "separate_cli_replay_pass": true,
+    "scored_receipt_complete": true,
+    "full_table_receipt_complete": true,
+    "full_table_receipt_hashes_current": true,
+    "kg_helper_scope_exactly_11": true,
+    "kg_helper_rejects_unbound_or_wrong_stage": true,
+    "stage_or_publish_not_run": true
+  },
+  "reviewed_files": {
+    "tools/cp02_snow_extension.py": {
+      "sha256": "b450747f0d376a353eff8c33da7ebbddfedc5d137fa9e53e0b37f0e71907da86",
+      "size_bytes": 40866
+    },
+    "docs/evidence/snow_extension_20261030/build_full_score_tables.py": {
+      "sha256": "d244cb5b85a03b3b0784260b3c649ccca72c756d12fe6304b0e42949f6f18a99",
+      "size_bytes": 19993
+    },
+    "docs/evidence/snow_extension_20261030/kg/update_graphs.py": {
+      "sha256": "6f1460ee011fbc9001af248ade31c52fe6a0f2eb18390da9d19ed3098929f153",
+      "size_bytes": 6674
+    },
+    "docs/evidence/snow_extension_20261030/build_report.py": {
+      "sha256": "cf2525a340b5295a674519dd071b0cddae736d677c8bbcae6dec972004c38e5a",
+      "size_bytes": 22385
+    },
+    "docs/evidence/snow_extension_20261030/runtime/finalize_batch.py": {
+      "sha256": "c1e64bf9fb221cfc1db1d8d4070fa0edcb54dca13e6508ebb9d42616cb402751",
+      "size_bytes": 5060
+    }
+  },
+  "kg_required_paths": [
+    "docs/evidence/snow_extension_20261030/build_full_score_tables.py",
+    "docs/evidence/snow_extension_20261030/build_report.py",
+    "docs/evidence/snow_extension_20261030/kg/update_graphs.py",
+    "docs/evidence/snow_extension_20261030/runtime/finalize_batch.py",
+    "docs/evidence/snow_extension_20261030/runtime/prepare_cases.py",
+    "docs/evidence/snow_extension_20261030/runtime/run_all.py",
+    "docs/evidence/snow_extension_20261030/runtime/run_case.py",
+    "tests/test_cp02_snow_extension.py",
+    "tests/test_plot_snow_extension.py",
+    "tools/cp02_snow_extension.py",
+    "tools/plot_snow_extension.py"
+  ],
+  "cli_replay": {
+    "path": "docs/evidence/snow_extension_20261030/review/cli_replay.json",
+    "sha256": "27a8e44dda9d9fb89bb54695a24fef740cf3998a054dc0cf27dc7ff8c8c8e383",
+    "scorer_sha256": "b450747f0d376a353eff8c33da7ebbddfedc5d137fa9e53e0b37f0e71907da86"
+  },
+  "full_tables": {
+    "path": "docs/evidence/snow_extension_20261030/full_tables_receipt.json",
+    "sha256": "4cb78fef2ec6f826f59d16ec811bf632608b0558609515003d46f33111ea8566",
+    "report_sha256": "91e4b29ab0a67da42d7f5e183592aead609fde5458f8cdcf8385230b6578cc1d",
+    "matched_data_cells": 10074
+  },
+  "non_go_note": "This is code/evidence-binding review only. Actual KG stage receipt validation and overall final GO remain pending."
+}

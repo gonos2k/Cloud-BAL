@@ -1,0 +1,137 @@
+{
+  "schema": "snow-extension-final-team-review-v1",
+  "status": "GO",
+  "reviewed_at_utc": "2026-10-30T05:49:00+00:00",
+  "review_scope": "Final code, sealed scores and independent recount, report and full tables, isolated KG stage, test receipt, and prior evidence preservation. This GO is for the reviewed deliverable and isolated staged update; it does not state that KG publication has occurred.",
+  "checks": {
+    "runtime_complete": true,
+    "independent_npz_recount_pass": true,
+    "independent_cli_replay_pass": true,
+    "selection_result_matches_independent_recount": true,
+    "full_table_review_pass": true,
+    "final_report_review_pass": true,
+    "code_review_pass": true,
+    "isolated_graph_stage_review_pass": true,
+    "clean_index_94_tests_pass": true,
+    "prior_evidence_audit_pass": true,
+    "no_kg_publication_claim": true
+  },
+  "reviewed_artifact_sha256": {
+    "docs/evidence/snow_extension_20261030/selection_plan.json": "36e094ac84d698351cdc477ec0bb58fd7580e0676e9ed830236a7d52b0818642",
+    "tools/cp02_snow_extension.py": "b450747f0d376a353eff8c33da7ebbddfedc5d137fa9e53e0b37f0e71907da86",
+    "docs/evidence/snow_extension_20261030/analysis/receipt.json": "c1a10562d9d8bef95a3a3cdc5ad71ef574b78649c2313fe49e7061273c876086",
+    "docs/evidence/snow_extension_20261030/review/cli_replay.json": "27a8e44dda9d9fb89bb54695a24fef740cf3998a054dc0cf27dc7ff8c8c8e383",
+    "docs/evidence/snow_extension_20261030/review/independent_scores.json": "22b8b040ced4e7a3acfa00253624dbd1ff632a508a4974b495fbbec55bd03916",
+    "docs/evidence/snow_extension_20261030/review/independent_transitions.csv": "b3691477f6639568dee05709838c09553229fb2e829ee5d9311f86f3b4e7f367",
+    "docs/evidence/snow_extension_20261030/build_full_score_tables.py": "d244cb5b85a03b3b0784260b3c649ccca72c756d12fe6304b0e42949f6f18a99",
+    "docs/evidence/snow_extension_20261030/full_tables_receipt.json": "4cb78fef2ec6f826f59d16ec811bf632608b0558609515003d46f33111ea8566",
+    "docs/SNOW_EXTENSION_FULL_SCORES_20261030.md": "91e4b29ab0a67da42d7f5e183592aead609fde5458f8cdcf8385230b6578cc1d",
+    "docs/evidence/snow_extension_20261030/report_receipt.json": "1801b816a3f6b48079a10cc1fa7ff8210309029f4eda1d97849c1de7eb0fd645",
+    "docs/SNOW_HEAVY_EXTENSION_20261030.md": "d6fc612515230d942ccbc0cb5be466e356e825f69e2497f5fa974e93dd1b39a2",
+    "docs/evidence/snow_extension_20261030/review/final_report_review.json": "28ed35f43302e4cb7aeccd7857fdb9c0d0bab02d44dfb9552212deedac478b6c",
+    "docs/evidence/snow_extension_20261030/kg/update_graphs.py": "6f1460ee011fbc9001af248ade31c52fe6a0f2eb18390da9d19ed3098929f153",
+    "docs/evidence/snow_extension_20261030/kg/selection_lock.json": "216f7841c356d3f986cd005c727d2bdda4e437e9af6ab7a8bcdd954092ec1263",
+    "docs/evidence/snow_extension_20261030/kg/stage_receipt.json": "4d62a50ef237c8a6fb08a0a864002549ee6976be8b9df4bc0c0c124ecb9413f4",
+    "docs/evidence/snow_extension_20261030/kg/stage_review.json": "d109dad1fde3f4cca1b92dec8d27c1cca9f778689310bc29ec4c37be985f2e46",
+    "docs/evidence/snow_extension_20261030/validation/clean_index_tests.json": "b95aa4a4b9e353dd8afc236b9017a6d20e8d020daf538e14bae8aa497f82eace",
+    "docs/evidence/snow_extension_20261030/validation/clean_index_tests.txt": "897e1fe00cdaf076ee72d2a6692d8603834e039078b71d6f83d8183b2faac8a6",
+    "docs/evidence/snow_extension_20261030/validation/root_validation.json": "8ccae114ba3fb2a86b0cb82e31f1b7e58add72cffc045d0868290df18be99043",
+    "docs/evidence/snow_extension_20261030/validation/prior_evidence.json": "13ac95a6906f55d6ea23c2ab5ea398f778c004d526daad8a3823e0610b343925"
+  },
+  "result_summary": {
+    "selected_case": "CONTROL_SNOW_300",
+    "alpha": 3.0,
+    "lead1_csi_10mm": 0.12738853503184713,
+    "lead1_csi_5mm": 0.3181818181818182,
+    "lead1_far_10mm": 0.8305084745762712,
+    "lead1_rmse_mm": 4.1405787569149215,
+    "transitions_vs_original": {
+      "baseline_case": "ORIGINAL",
+      "baseline_false_alarm_count": 83,
+      "baseline_hit_count": 7,
+      "lead_hour": 1,
+      "lost_hits": 0,
+      "new_false_alarms": 15,
+      "new_hits": 13,
+      "removed_false_alarms": 0,
+      "retained_hits": 7,
+      "selected_case": "CONTROL_SNOW_300",
+      "selected_false_alarm_count": 98,
+      "selected_hit_count": 20,
+      "threshold_mm": 10.0
+    },
+    "transitions_vs_improved_bg_fixed": {
+      "baseline_case": "IMPROVED_BG_FIXED",
+      "baseline_false_alarm_count": 83,
+      "baseline_hit_count": 10,
+      "lead_hour": 1,
+      "lost_hits": 0,
+      "new_false_alarms": 15,
+      "new_hits": 10,
+      "removed_false_alarms": 0,
+      "retained_hits": 10,
+      "selected_case": "CONTROL_SNOW_300",
+      "selected_false_alarm_count": 98,
+      "selected_hit_count": 20,
+      "threshold_mm": 10.0
+    }
+  },
+  "test_summary": {
+    "exit": 0,
+    "command": [
+      "python",
+      "-m",
+      "pytest",
+      "-q",
+      "tests/test_cp02_six_hour_improvement.py",
+      "tests/test_plot_six_hour_improvement.py",
+      "tests/test_cp02_first_hour_factorial.py",
+      "tests/test_plot_first_hour_factorial.py",
+      "tests/test_background_precip_shadow.py",
+      "tests/test_background_producer_score_components.py",
+      "tests/test_first_hour_zero_rate_scoring.py",
+      "tests/test_first_hour_ablation_scoring.py",
+      "tests/test_first_hour_species_scoring.py",
+      "tests/test_hourly_precip_scores.py",
+      "tests/test_precipitation_transitions.py",
+      "tests/test_cp02_snow_sensitivity.py",
+      "tests/test_plot_snow_sensitivity.py",
+      "tests/test_cp02_snow_extension.py",
+      "tests/test_plot_snow_extension.py"
+    ],
+    "elapsed_seconds": 49.12746997177601,
+    "result": "94 passed in 48.65 seconds on the frozen Git-index export."
+  },
+  "kg_summary": {
+    "stage_receipt_sha256": "4d62a50ef237c8a6fb08a0a864002549ee6976be8b9df4bc0c0c124ecb9413f4",
+    "stage_review_sha256": "d109dad1fde3f4cca1b92dec8d27c1cca9f778689310bc29ec4c37be985f2e46",
+    "snapshot_name": "2026-10-30-snow-heavy-extension",
+    "prior_snapshot_count": 216,
+    "KLAPS50_delta": {
+      "nodes": 130,
+      "edges": 245,
+      "communities": -1
+    },
+    "Cloud_BAL_delta": {
+      "nodes": 130,
+      "edges": 241,
+      "communities": 26
+    },
+    "hash_only_paths": 103,
+    "limitations": [
+      "Selected Python AST only; other evidence hash-bound only.",
+      "Fortran cross-file CALL extraction is partial.",
+      "Graph freshness is not runtime or scientific validation."
+    ]
+  },
+  "scientific_limits": [
+    "One event; same-event selection is exploratory and not independent forecast validation or significance testing.",
+    "QSNOW-only changes are a diagnostic initial-water perturbation; conservative water/energy closure and operational initialization are not established.",
+    "Scores are total surface precipitation, not snowfall alone; spatial coverage is limited to the common RN1 points.",
+    "At +1 h and 10 mm, the selected case gained hits without losing hits but added 15 false alarms versus either ORIGINAL or B1."
+  ],
+  "formatting_notes": [
+    "`git diff --check` reports generated CSV CRLF, SVG trailing-space lines, and one extra EOF blank in a test file; these are formatting-only. Frozen generated hashes were preserved."
+  ],
+  "unresolved_blockers": []
+}
