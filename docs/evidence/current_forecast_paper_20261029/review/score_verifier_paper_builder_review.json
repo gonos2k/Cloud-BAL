@@ -1,0 +1,19 @@
+{
+  "status": "PASS_SCOPED",
+  "scope": "Independent review of score recount and paper-builder guards; no fresh forecasts scored, no final paper conversion or visual review performed.",
+  "files": {
+    "docs/evidence/current_forecast_paper_20261029/verify_scores_independently.py": "a8da16dbe77c82063cf440e95787c3c86866d0012adc8f76f95c5e7e265722d9",
+    "docs/build_current_forecast_paper.py": "a856c6b1e6afb7280aaf1e45f4c2298f8ef1eb8a61baac8323320e7faef21d3c"
+  },
+  "checks": [
+    "Synthetic historical-derived four-arm score dataset: 144 categorical, 24 continuous and 180 transition rows independently recounted.",
+    "Independently mutated categorical point count, hit count, duplicate flat index, and cross-hour latitude: each rejected without output receipt.",
+    "Builder rejects dangling output symlink and requires figure reference under --require-figures, without creating output.",
+    "Builder pre/post hashes markdown and embedded figures and checks DOCX media count."
+  ],
+  "limitations": [
+    "Synthetic input is historical-derived and supplies no new forecast evidence.",
+    "Final manuscript must explicitly include and visually inspect both +1 and +6 figures; --require-figures requires at least one figure, not specifically both.",
+    "Verifier validates derived arrays and score arithmetic, not forecast provenance or execution."
+  ]
+}

@@ -1,0 +1,25 @@
+{
+  "status": "PRELIMINARY_PASS_SCOPED",
+  "scope": "Science review of draft mathematics and interpretation, not final current forecasts or runtime validation.",
+  "files_sha256": {
+    "docs/CURRENT_FORECAST_CONFERENCE_PAPER_20261029.md": "bfa6c76921c8a7794460266613206db2cdfcfc97e01a20d36c3eb1b333ae28fc",
+    "src/common/cloud_bal_column_physics.f90": "d17e97bb573381529ab3228ac54fb897a792f55e9c663c4aac54521fdc5c733a",
+    "src/common/cloud_bal_state.f90": "791e60fbf157c304a6945e7b04c11d3a7f8c36d82bb5c692d0b4a2ab97634d61",
+    "docs/PRECIP_HOURLY_VERIFICATION_20261027.md": "3e00db4b061706e222e3f5b8777e77ced4afe13e4467d6ebb602e5180eb576ff",
+    "docs/CP02_KDM6_CONTROLS_20261029.md": "f97bdb88e6061e12c93379a24f267431950cc9b1d25834d141056cba68237293",
+    "docs/evidence/current_forecast_paper_20261029/initial_original_vs_current_off.json": "0606b1673ec15b591bb1901fee201da97350142568b0171c82d4abdb83df43b0"
+  },
+  "checks": [
+    "Current reflectivity diagnostic formula and dry-air equation checked against source code; diagnostic scope and units reviewed.",
+    "Contingency metrics and continuous error formulae checked; retained historical table checked against historical documentation.",
+    "Original/current initialization confounding and CURRENT_OFF comparison caveat, RN1 representativeness, single-case limits, unverified KDM6 candidate field identity and non-attribution language reviewed."
+  ],
+  "findings_addressed": [
+    "Corrected historical table cross-reference table 1 to table 2.",
+    "Clarified radar hydrometeor equation refers to pre-transport/pre-publication working diagnosis, not necessarily final model initial values."
+  ],
+  "open_items": [
+    "Fresh four-arm completion, score tables, figures and final paper are pending and were not reviewed.",
+    "Forecast-source provenance and native runtime validity are outside this science review."
+  ]
+}

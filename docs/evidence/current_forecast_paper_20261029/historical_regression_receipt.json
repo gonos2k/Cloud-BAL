@@ -1,0 +1,19 @@
+{
+  "scope": "Historical CP02 OFF/HYDRO/LIQUID regression only; these are not current forecast results.",
+  "scorer": "score_forecasts.py",
+  "scorer_sha256": "73d4ddd8d6b8c4c6eb7903eff000c2c1e1330a2d50a6692ee7e0eaf77d51d539",
+  "retained_historical_csv": "docs/evidence/precip_hourly_20261027/rn1_recovery/hourly_csi_108.csv",
+  "retained_historical_csv_sha256": "4f43530b6fa76ad138e5b17a313a9c2252bbcf4ec244d40af5b6f21250440fc7",
+  "new_scratch_csv": "/var/tmp/current-forecast-score-historical-check-v5-20261029/categorical_scores.csv",
+  "new_scratch_csv_sha256": "c044fdd4bc6ccd069d326e25fcb80fe382a6ba52d1c47ab6508257d6fdeed8cf",
+  "compared_rows": 108,
+  "columns_exact": [
+    "hit",
+    "miss",
+    "false_alarm",
+    "correct_dry",
+    "CSI"
+  ],
+  "additional_baseline": "HYDRO; transition rows validated for 3 distinct pairings",
+  "result": "PASS"
+}
