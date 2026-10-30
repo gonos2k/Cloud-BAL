@@ -1,0 +1,78 @@
+{
+  "browser_cause": "Unconfirmed: Chromium decoded existing images 21/21; screenshot timeouts occurred. Direct URLs are a compatibility fallback, not a proven root-cause fix.",
+  "checks": [
+    {
+      "check": "generated_image_count:docs/SNOW_FINE_FIGURES_20261030.md",
+      "detail": "49 refs; expected 49",
+      "result": "PASS"
+    },
+    {
+      "check": "generated_targets_absolute_and_pinned:docs/SNOW_FINE_FIGURES_20261030.md",
+      "detail": "49 refs point to immutable raw URL prefix",
+      "result": "PASS"
+    },
+    {
+      "check": "generated_image_count:docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md",
+      "detail": "21 refs; expected 21",
+      "result": "PASS"
+    },
+    {
+      "check": "generated_targets_absolute_and_pinned:docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md",
+      "detail": "21 refs point to immutable raw URL prefix",
+      "result": "PASS"
+    },
+    {
+      "check": "non_image_content_preserved:docs/SNOW_FINE_FIGURES_20261030.md",
+      "detail": "Only Markdown image destinations differ",
+      "result": "PASS"
+    },
+    {
+      "check": "non_image_content_preserved:docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md",
+      "detail": "Only Markdown image destinations differ",
+      "result": "PASS"
+    },
+    {
+      "check": "prior_version_preserved:docs/evidence/snow_fine_20261030/build_report.py",
+      "detail": "size and SHA-256 match reconciliation record",
+      "result": "PASS"
+    },
+    {
+      "check": "prior_version_preserved:docs/SNOW_FINE_FIGURES_20261030.md",
+      "detail": "size and SHA-256 match reconciliation record",
+      "result": "PASS"
+    },
+    {
+      "check": "prior_version_preserved:docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md",
+      "detail": "size and SHA-256 match reconciliation record",
+      "result": "PASS"
+    },
+    {
+      "check": "pinned_commit_png_bytes_match",
+      "detail": "49 unique images checked; mismatches: []",
+      "result": "PASS"
+    }
+  ],
+  "created_at_utc": "2026-10-30T07:21:24.794960+00:00",
+  "files_sha256": {
+    "docs/SNOW_FINE_FIGURES_20261030.md": "754ad00ad50d45862cc7767adc0b366163b8b420783ac6b6866d93716e1c75ba",
+    "docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md": "d74ff1c1e7984c673904a292f94398cb43f8fabcd81ce3e36e476fae3b72af3a",
+    "docs/evidence/snow_fine_20261030/build_report.py": "107f0a6670eeeb261a97074912ab9decfe1942430b624d61fb9dd13c3d0cd694"
+  },
+  "maintenance_note": "If any referenced PNG bytes change, update FIGURE_BASE_URL to a commit containing those exact bytes; current pin and local bytes were hash-compared.",
+  "pinned_image_commit": "18d8b45008428644c7a85d624830b76bce597289",
+  "public_http_check": {
+    "method": "urllib GET all unique direct URLs",
+    "result": "PASS",
+    "status": "200 image/png with PNG signature",
+    "unique_urls": 49
+  },
+  "schema": "snow-direct-image-implementation-review-v1",
+  "scope": [
+    "docs/evidence/snow_fine_20261030/build_report.py",
+    "docs/SNOW_FINE_FIGURES_20261030.md",
+    "docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md",
+    "docs/evidence/snow_direct_images_20261030/prior_versions"
+  ],
+  "status": "GO_IMPLEMENTATION",
+  "unique_image_targets": 49
+}

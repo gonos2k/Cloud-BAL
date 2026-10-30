@@ -1,0 +1,178 @@
+{
+  "baseline_sha256": "8fe86fe1a7d692ffc858a8f253e2dbdc5b01dba6e86ce19d3411e63fc97ef39b",
+  "checks": [
+    {
+      "check": "staged-only status",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "receipt baseline binding",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "receipt frozen selection binding",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "exact two-source extraction and manifest scope",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "separate dated snapshot counts recorded",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "KLAPS50 selected manifest keys",
+      "detail": "['Cloud-BAL/docs/evidence/snow_direct_images_20261030/kg/update_graphs.py', 'Cloud-BAL/docs/evidence/snow_fine_20261030/build_report.py']",
+      "result": "PASS"
+    },
+    {
+      "check": "KLAPS50 unchanged maintained graph trio",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "KLAPS50 exact maintained git status",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "KLAPS50 staged current and dated snapshot trio match receipt",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "KLAPS50 graph deltas match receipt",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "KLAPS50 graph integrity counters zero",
+      "detail": "{'dangling_endpoint_edges': 0, 'exact_duplicate_edges': 0, 'missing_endpoint_edges': 0, 'same_endpoint_group_count': 0, 'self_loop_edges': 0}",
+      "result": "PASS"
+    },
+    {
+      "check": "Cloud-BAL selected manifest keys",
+      "detail": "['docs/evidence/snow_direct_images_20261030/kg/update_graphs.py', 'docs/evidence/snow_fine_20261030/build_report.py']",
+      "result": "PASS"
+    },
+    {
+      "check": "Cloud-BAL unchanged maintained graph trio",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "Cloud-BAL exact maintained git status",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "Cloud-BAL staged current and dated snapshot trio match receipt",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "Cloud-BAL graph deltas match receipt",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "Cloud-BAL graph integrity counters zero",
+      "detail": "{'dangling_endpoint_edges': 0, 'exact_duplicate_edges': 0, 'missing_endpoint_edges': 0, 'same_endpoint_group_count': 0, 'self_loop_edges': 0}",
+      "result": "PASS"
+    },
+    {
+      "check": "staged wiki graph-report-cloud-bal.md",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "staged wiki graph-report-klaps50.md",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "staged wiki graph-report.md",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "staged wiki index.md",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "staged wiki log.md",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "maintained wiki unchanged graph-report-cloud-bal.md",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "maintained wiki unchanged graph-report-klaps50.md",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "maintained wiki unchanged graph-report.md",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "maintained wiki unchanged index.md",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "maintained wiki unchanged log.md",
+      "detail": "",
+      "result": "PASS"
+    },
+    {
+      "check": "limitations recorded",
+      "detail": "",
+      "result": "PASS"
+    }
+  ],
+  "created_at_utc": "2026-10-30T07:24:22.205636+00:00",
+  "dated_snapshots_preserved": 222,
+  "extraction_limits": [
+    "Only the two frozen Python paths are structurally extracted; other evidence is hash-bound only.",
+    "Manifest updates are selected-path-only; no corpus scan or prune occurs.",
+    "The absolute PNG URL presentation fix does not validate browser rendering.",
+    "Graph freshness does not establish runtime or scientific validation.",
+    "Fortran cross-file CALL extraction is partial."
+  ],
+  "graph_deltas": {
+    "Cloud-BAL": {
+      "communities_after": 1538,
+      "communities_before": 1534,
+      "edges": 28,
+      "nodes": 12
+    },
+    "KLAPS50": {
+      "communities_after": 3499,
+      "communities_before": 3495,
+      "edges": 28,
+      "nodes": 12
+    }
+  },
+  "schema": "snow-direct-images-kg-stage-review-v1",
+  "selection_lock_sha256": "ed319e1e0facd53c7a74657b34709fab127438f26ced5c003b03206c5b857e02",
+  "snapshot": "2026-10-30-snow-direct-images",
+  "snapshot_counts_by_corpus": {
+    "Cloud-BAL": 113,
+    "KLAPS50": 109
+  },
+  "stage_receipt_path": "docs/evidence/snow_direct_images_20261030/kg/stage_receipt.json",
+  "stage_receipt_sha256": "4e421fb4e87b1838945a5db223f589b218523483bad2453cc53433edd99cb515",
+  "status": "GO"
+}

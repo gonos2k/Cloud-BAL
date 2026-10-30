@@ -117,8 +117,17 @@ def table(headers: list[str], rows: list[list[str]]) -> str:
                       *('| ' + ' | '.join(row) + ' |' for row in rows)])
 
 
+# Immutable commit containing the reviewed figure bytes. Direct URLs also work
+# when a Markdown viewer does not resolve repository-relative image paths.
+FIGURE_BASE_URL = (
+    'https://raw.githubusercontent.com/gonos2k/Cloud-BAL/'
+    '18d8b45008428644c7a85d624830b76bce597289/'
+    'docs/evidence/snow_fine_20261030/figures'
+)
+
+
 def inline_image(path: str, description: str) -> str:
-    return f'![{description}](evidence/snow_fine_20261030/figures/{path})'
+    return f'![{description}]({FIGURE_BASE_URL}/{path})'
 
 
 def build_galleries(figures: dict, cases: list[str]) -> tuple[str, str]:
