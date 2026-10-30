@@ -1,0 +1,105 @@
+{
+  "best_eligible_overall_case": "IMPROVED_BG_FIXED",
+  "best_eligible_overall_alpha": 1.0,
+  "best_eligible_improved_case": "IMPROVED_BG_FIXED",
+  "best_eligible_improved_alpha": 1.0,
+  "ranking_all_eligible_cases": [
+    "IMPROVED_SNOW_150",
+    "IMPROVED_SNOW_125",
+    "IMPROVED_BG_FIXED",
+    "CONTROL_SNOW_150",
+    "IMPROVED_SNOW_075",
+    "CONTROL_SNOW_125",
+    "IMPROVED_SNOW_050",
+    "ORIGINAL",
+    "IMPROVED_SNOW_025",
+    "CONTROL_SNOW_075",
+    "IMPROVED_SNOW_000",
+    "CONTROL_SNOW_050",
+    "CONTROL_SNOW_025",
+    "CONTROL_SNOW_000"
+  ],
+  "ranking_feasible_cases": [
+    "IMPROVED_BG_FIXED"
+  ],
+  "feasibility_failures": {
+    "ORIGINAL": [
+      "first_hour_CSI_at_5mm_at_least_alpha1",
+      "first_hour_RMSE_at_most_alpha1",
+      "pooled_6h_MAE_at_most_alpha1"
+    ],
+    "CONTROL_SNOW_000": [
+      "first_hour_CSI_at_5mm_at_least_alpha1",
+      "first_hour_RMSE_at_most_alpha1"
+    ],
+    "CONTROL_SNOW_025": [
+      "first_hour_CSI_at_5mm_at_least_alpha1",
+      "first_hour_RMSE_at_most_alpha1"
+    ],
+    "CONTROL_SNOW_050": [
+      "first_hour_CSI_at_5mm_at_least_alpha1",
+      "first_hour_RMSE_at_most_alpha1"
+    ],
+    "CONTROL_SNOW_075": [
+      "first_hour_CSI_at_5mm_at_least_alpha1",
+      "first_hour_RMSE_at_most_alpha1",
+      "pooled_6h_MAE_at_most_alpha1",
+      "pooled_6h_RMSE_at_most_alpha1"
+    ],
+    "CONTROL_SNOW_125": [
+      "first_hour_RMSE_at_most_alpha1"
+    ],
+    "CONTROL_SNOW_150": [
+      "first_hour_RMSE_at_most_alpha1",
+      "pooled_6h_MAE_at_most_alpha1",
+      "pooled_6h_RMSE_at_most_alpha1"
+    ],
+    "IMPROVED_SNOW_000": [
+      "first_hour_CSI_at_5mm_at_least_alpha1",
+      "first_hour_RMSE_at_most_alpha1"
+    ],
+    "IMPROVED_SNOW_025": [
+      "first_hour_CSI_at_5mm_at_least_alpha1",
+      "first_hour_RMSE_at_most_alpha1"
+    ],
+    "IMPROVED_SNOW_050": [
+      "first_hour_CSI_at_5mm_at_least_alpha1",
+      "first_hour_RMSE_at_most_alpha1"
+    ],
+    "IMPROVED_SNOW_075": [
+      "first_hour_CSI_at_5mm_at_least_alpha1"
+    ],
+    "IMPROVED_SNOW_125": [
+      "first_hour_RMSE_at_most_alpha1"
+    ],
+    "IMPROVED_SNOW_150": [
+      "first_hour_RMSE_at_most_alpha1"
+    ]
+  },
+  "overall_fallback_used": true,
+  "improved_fallback_used": true,
+  "selection_plan": {
+    "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_sensitivity_20261030/selection_plan.json",
+    "sha256": "1a5e236793f276ba9781664980ad37f79efa565038b17e0e90aa916fe953d6ef",
+    "size": 3945
+  },
+  "eligibility_reference_case": "IMPROVED_BG_FIXED",
+  "eligibility_reference_values": {
+    "lead1_CSI_at_5mm": 0.2835820895522388,
+    "lead1_RMSE_mm": 4.044106686375486,
+    "pooled6h_MAE_mm": 1.8633174027744117,
+    "pooled6h_RMSE_mm": 5.337672713171055
+  },
+  "eligibility_rules": [
+    "lead-1 CSI at 5 mm >= IMPROVED_BG_FIXED",
+    "lead-1 RMSE <= IMPROVED_BG_FIXED",
+    "pooled six-hour MAE <= IMPROVED_BG_FIXED",
+    "pooled six-hour RMSE <= IMPROVED_BG_FIXED"
+  ],
+  "rank_metric": "equal-weight arithmetic mean of six lead-1 threshold CSI values",
+  "pooled_error_definitions": {
+    "MAE": "sum_h(N_h * MAE_h) / sum_h(N_h)",
+    "RMSE": "sqrt(sum_h(N_h * RMSE_h^2) / sum_h(N_h))"
+  },
+  "comparison_tolerance": 1e-12
+}

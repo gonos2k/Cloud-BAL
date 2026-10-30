@@ -1,0 +1,327 @@
+{
+  "schema": "snow_sensitivity_figures_v1",
+  "status": "COMPLETE",
+  "renderer": {
+    "path": "/var/tmp/cloudbal-snow-sensitivity/tools/plot_snow_sensitivity.py",
+    "sha256": "d94b565130b1d8bca3029f90ac1d029ddf55fa44f61e7cccd6051d11fde00656",
+    "size_bytes": 46325
+  },
+  "receipt_sha256": "18e2d82c3be0120b2da0e34fec75c12d6da52ddbfc28eaffb19781e94153e7ec",
+  "cases": [
+    "ORIGINAL",
+    "CURRENT_HYDRO",
+    "IMPROVED_BG_FIXED",
+    "CONTROL_SNOW_000",
+    "CONTROL_SNOW_025",
+    "CONTROL_SNOW_050",
+    "CONTROL_SNOW_075",
+    "CONTROL_SNOW_125",
+    "CONTROL_SNOW_150",
+    "IMPROVED_SNOW_000",
+    "IMPROVED_SNOW_025",
+    "IMPROVED_SNOW_050",
+    "IMPROVED_SNOW_075",
+    "IMPROVED_SNOW_125",
+    "IMPROVED_SNOW_150"
+  ],
+  "hours_utc": [
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "lead_hours": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "thresholds_mm": [
+    0.1,
+    0.5,
+    1.0,
+    2.5,
+    5.0,
+    10.0
+  ],
+  "paired_points_per_hour": 3688,
+  "display_labels": {
+    "ORIGINAL": "규준 실험",
+    "CURRENT_HYDRO": "기존 HYDRO",
+    "IMPROVED_BG_FIXED": "기존 개선안"
+  },
+  "selected_best_case": "IMPROVED_BG_FIXED",
+  "exploratory_comparison_case": "IMPROVED_SNOW_150",
+  "exploratory_comparison_selected": false,
+  "exploratory_comparison_rank_all_eligible_cases": 1,
+  "exploratory_comparison_failed_gates": [
+    "first_hour_RMSE_at_most_alpha1"
+  ],
+  "exploratory_comparison_interpretation": "Top unfiltered rank is shown as an exploratory comparison; it was not selected.",
+  "selection_plan_sha256": "1a5e236793f276ba9781664980ad37f79efa565038b17e0e90aa916fe953d6ef",
+  "selected_best_alpha": 1.0,
+  "selected_best_improved_case": "IMPROVED_BG_FIXED",
+  "selected_best_improved_alpha": 1.0,
+  "selection_basis": "Frozen eligible-case ranking with four B1 guardrails; B1 fallback when no eligible case outranks it.",
+  "selection_feasible_cases": [
+    "IMPROVED_BG_FIXED"
+  ],
+  "selection_rule": "Eligible: ORIGINAL, IMPROVED_BG_FIXED, and 12 QSNOW variants. Gates: CSI@5mm first hour ≥ B1; first-hour RMSE and pooled 6-hour MAE/RMSE ≤ B1 within 1e-12. Rank by first-hour mean CSI, first-hour MAE/RMSE, |alpha−1|, then case ID; B1 fallback.",
+  "accumulation_definition": "Each forecast value/score is a one-hour increment over its valid window, not a 0-to-lead cumulative total.",
+  "inputs": [
+    {
+      "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_sensitivity_20261030/analysis/categorical_scores.csv",
+      "sha256": "b75a8a85b470703694f6df8490e5be4087272f7c9f1cbdc48fb9ca6dbbc6b59f",
+      "size_bytes": 110191
+    },
+    {
+      "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_sensitivity_20261030/analysis/continuous_scores.csv",
+      "sha256": "50ee5a6157257a5ec1d5aa96451364ea939e071e0b9144a5f651991359ed8d9f",
+      "size_bytes": 16520
+    },
+    {
+      "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_sensitivity_20261030/analysis/hour_13_arrays.npz",
+      "sha256": "d1c0a46f9582509d064a3d5749182ca519510733608f2593fb4cfc892ccea5c2",
+      "size_bytes": 384855
+    },
+    {
+      "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_sensitivity_20261030/analysis/hour_14_arrays.npz",
+      "sha256": "01d72ac752fda12e59d6a5bfbc9cba57986683c777383ea31e1a85b90e49c29b",
+      "size_bytes": 400047
+    },
+    {
+      "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_sensitivity_20261030/analysis/hour_15_arrays.npz",
+      "sha256": "5c6058ce1d572eafc972f17ec004a657f876c0e0beee9d6cf791e8e7cc3ae7a6",
+      "size_bytes": 432788
+    },
+    {
+      "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_sensitivity_20261030/analysis/hour_16_arrays.npz",
+      "sha256": "1ceba12b167682518829eae1febf4f03dddee292c1dc6757bb2ad63bf40eb518",
+      "size_bytes": 431772
+    },
+    {
+      "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_sensitivity_20261030/analysis/hour_17_arrays.npz",
+      "sha256": "af31cfe89a6c7bdf9bb60709064922eca649567f961ec4d338035b6eba14cbb2",
+      "size_bytes": 412227
+    },
+    {
+      "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_sensitivity_20261030/analysis/hour_18_arrays.npz",
+      "sha256": "fb6dcc5e7182f6d60775d665422bbb92cb5d96eccedaa0d7682f17f2f2f3e052",
+      "size_bytes": 435941
+    },
+    {
+      "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_sensitivity_20261030/analysis/selection.json",
+      "sha256": "3da256a10b216da0e59c48164226d17fdc2d578e917a87bf3463bb71593f2e6b",
+      "size_bytes": 3194
+    },
+    {
+      "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_sensitivity_20261030/analysis/selection_scores.csv",
+      "sha256": "33942c4777e87a1ba70e24e2b932c59f312a8d78b0e612458391cb77af580fd6",
+      "size_bytes": 2773
+    },
+    {
+      "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_sensitivity_20261030/analysis/transitions.csv",
+      "sha256": "20f9a49f18698ed21a154ba12e3cf9ded0c0dbd11f22929eafff031d15564317",
+      "size_bytes": 96364
+    },
+    {
+      "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_sensitivity_20261030/analysis/receipt.json",
+      "sha256": "18e2d82c3be0120b2da0e34fec75c12d6da52ddbfc28eaffb19781e94153e7ec",
+      "size_bytes": 421954
+    },
+    {
+      "path": "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_sensitivity_20261030/selection_plan.json",
+      "sha256": "1a5e236793f276ba9781664980ad37f79efa565038b17e0e90aa916fe953d6ef",
+      "size_bytes": 3945
+    }
+  ],
+  "reference_limitation": "RN1 processed analysis lacks a coverage bitmap; hourly input freshness is not proven and may use previous-hour fallback. All scores are unweighted over the common 3688 points.",
+  "provenance_note": "Renderer verifies receipt schema and sealed analysis-output hashes, then recomputes categorical, continuous, transition, pooled-error, and selection results from the paired arrays. It does not reopen original host files; runtime/source provenance remains in the scorer receipt audit.",
+  "scope": "QSNOW alpha diagnostics across two experiment families; one spatial case, six one-hour windows, 3,688 unweighted paired points per hour. Not a balanced or operational initialization.",
+  "rain_points_ge_threshold_by_hour": {
+    "13": {
+      "reference": {
+        "0.1 mm": 1593,
+        "0.5 mm": 1136,
+        "1 mm": 713,
+        "2.5 mm": 351,
+        "5 mm": 154,
+        "10 mm": 59
+      },
+      "ORIGINAL": {
+        "0.1 mm": 696,
+        "0.5 mm": 467,
+        "1 mm": 374,
+        "2.5 mm": 268,
+        "5 mm": 189,
+        "10 mm": 90
+      },
+      "IMPROVED_BG_FIXED": {
+        "0.1 mm": 807,
+        "0.5 mm": 494,
+        "1 mm": 382,
+        "2.5 mm": 271,
+        "5 mm": 190,
+        "10 mm": 93
+      }
+    },
+    "14": {
+      "reference": {
+        "0.1 mm": 1667,
+        "0.5 mm": 1113,
+        "1 mm": 693,
+        "2.5 mm": 383,
+        "5 mm": 218,
+        "10 mm": 79
+      },
+      "ORIGINAL": {
+        "0.1 mm": 1135,
+        "0.5 mm": 609,
+        "1 mm": 405,
+        "2.5 mm": 222,
+        "5 mm": 166,
+        "10 mm": 110
+      },
+      "IMPROVED_BG_FIXED": {
+        "0.1 mm": 1142,
+        "0.5 mm": 608,
+        "1 mm": 406,
+        "2.5 mm": 219,
+        "5 mm": 164,
+        "10 mm": 112
+      }
+    },
+    "15": {
+      "reference": {
+        "0.1 mm": 1582,
+        "0.5 mm": 1158,
+        "1 mm": 847,
+        "2.5 mm": 572,
+        "5 mm": 345,
+        "10 mm": 132
+      },
+      "ORIGINAL": {
+        "0.1 mm": 1603,
+        "0.5 mm": 917,
+        "1 mm": 626,
+        "2.5 mm": 409,
+        "5 mm": 264,
+        "10 mm": 147
+      },
+      "IMPROVED_BG_FIXED": {
+        "0.1 mm": 1589,
+        "0.5 mm": 910,
+        "1 mm": 630,
+        "2.5 mm": 398,
+        "5 mm": 262,
+        "10 mm": 143
+      }
+    },
+    "16": {
+      "reference": {
+        "0.1 mm": 1620,
+        "0.5 mm": 1222,
+        "1 mm": 942,
+        "2.5 mm": 591,
+        "5 mm": 344,
+        "10 mm": 165
+      },
+      "ORIGINAL": {
+        "0.1 mm": 1632,
+        "0.5 mm": 1029,
+        "1 mm": 809,
+        "2.5 mm": 503,
+        "5 mm": 297,
+        "10 mm": 139
+      },
+      "IMPROVED_BG_FIXED": {
+        "0.1 mm": 1610,
+        "0.5 mm": 1010,
+        "1 mm": 773,
+        "2.5 mm": 500,
+        "5 mm": 292,
+        "10 mm": 137
+      }
+    },
+    "17": {
+      "reference": {
+        "0.1 mm": 1697,
+        "0.5 mm": 1229,
+        "1 mm": 925,
+        "2.5 mm": 573,
+        "5 mm": 330,
+        "10 mm": 168
+      },
+      "ORIGINAL": {
+        "0.1 mm": 1522,
+        "0.5 mm": 1009,
+        "1 mm": 808,
+        "2.5 mm": 524,
+        "5 mm": 342,
+        "10 mm": 152
+      },
+      "IMPROVED_BG_FIXED": {
+        "0.1 mm": 1524,
+        "0.5 mm": 1046,
+        "1 mm": 833,
+        "2.5 mm": 553,
+        "5 mm": 333,
+        "10 mm": 148
+      }
+    },
+    "18": {
+      "reference": {
+        "0.1 mm": 1634,
+        "0.5 mm": 1249,
+        "1 mm": 968,
+        "2.5 mm": 611,
+        "5 mm": 348,
+        "10 mm": 124
+      },
+      "ORIGINAL": {
+        "0.1 mm": 1828,
+        "0.5 mm": 1270,
+        "1 mm": 984,
+        "2.5 mm": 629,
+        "5 mm": 398,
+        "10 mm": 206
+      },
+      "IMPROVED_BG_FIXED": {
+        "0.1 mm": 1774,
+        "0.5 mm": 1272,
+        "1 mm": 1002,
+        "2.5 mm": 629,
+        "5 mm": 394,
+        "10 mm": 214
+      }
+    }
+  },
+  "figures": [
+    "snow_alpha_dose_response",
+    "selected_case_csi_comparison",
+    "selected_case_hourly_errors",
+    "snow_sensitivity_maps_leads_1_3",
+    "snow_sensitivity_maps_leads_4_6"
+  ],
+  "figure_sha256": {
+    "selected_case_csi_comparison.pdf": "800eb5149f2eac66edd08f2b5ea415d91fa45cd262a8f032f6bd3a34debed40a",
+    "selected_case_csi_comparison.png": "536c8595cfe55e53cfa0a5535b59bcb02a4ca1f7d50f5326cc37fb3028550880",
+    "selected_case_csi_comparison.svg": "b318e05aa3b5152afed48f11d914a1416ea00e453e4922db27a1e437468d8117",
+    "selected_case_hourly_errors.pdf": "3d0221c6c346245962e73cbbb9e23055f18515d6a91ac12d095dddec7e7ef1e2",
+    "selected_case_hourly_errors.png": "423992cb760de799e3da9b74bd109dcf7bd9e85a218ebc8ed3fbf05a87b73a9e",
+    "selected_case_hourly_errors.svg": "0e8d6095c23186a0450dca84c3b7d540c18e831730e4ad2cead4c4d9f7cc98b9",
+    "snow_alpha_dose_response.pdf": "2c4f557a258551daafe8d23ead91bc581e3aecd82c743e00b3afdee5ee63223a",
+    "snow_alpha_dose_response.png": "d9b31d94e82bb919f70c1ab2fcf5d15f292a509588a1c69b26b80502cf934615",
+    "snow_alpha_dose_response.svg": "afa3db68964f107c5c1b1d0d552dc51e4bd26bf127fa71fac8740a50eda509e9",
+    "snow_sensitivity_maps_leads_1_3.pdf": "2db8d2968043741afed6a1830efeb31f637923e785a8b832fa533284c68780d3",
+    "snow_sensitivity_maps_leads_1_3.png": "abaf19a90aaf5774f2ac049eb6452de726f749cb5799921bc7b833d34772d08c",
+    "snow_sensitivity_maps_leads_1_3.svg": "fbcb0ffdaf99cf758eb9ae8b0b69bb79bdc2e9f4a3e10fd0ab6323ce914809bb",
+    "snow_sensitivity_maps_leads_4_6.pdf": "adbcd0d12bed96f5cd13b03853054002cabe4ec1a01e3fe5642511b41cd6068a",
+    "snow_sensitivity_maps_leads_4_6.png": "0da7bacd156b6267c4f0ff2917620ecfc7907181b3a400f799a43a96f9026f76",
+    "snow_sensitivity_maps_leads_4_6.svg": "a0e97fd670abd4d1394242754a67a0d2e93f7f1242fa944bf852b4b0c007ae96"
+  }
+}

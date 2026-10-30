@@ -1,0 +1,91 @@
+{
+  "checks": [
+    {
+      "after": {
+        "communities": 3471,
+        "edges": 88248,
+        "nodes": 42573
+      },
+      "before": {
+        "communities": 3470,
+        "edges": 87983,
+        "nodes": 42441
+      },
+      "corpus": "KLAPS50",
+      "delta": {
+        "communities": 1,
+        "edges": 265,
+        "nodes": 132
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "prior_node_ids_preserved": 42441,
+      "selected_manifest_rows": 9,
+      "snapshot_files_verified": 3,
+      "unselected_manifest_rows_preserved": 5523
+    },
+    {
+      "after": {
+        "communities": 1505,
+        "edges": 29764,
+        "nodes": 16745
+      },
+      "before": {
+        "communities": 1486,
+        "edges": 29502,
+        "nodes": 16613
+      },
+      "corpus": "Cloud-BAL",
+      "delta": {
+        "communities": 19,
+        "edges": 262,
+        "nodes": 132
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "prior_node_ids_preserved": 16613,
+      "selected_manifest_rows": 9,
+      "snapshot_files_verified": 3,
+      "unselected_manifest_rows_preserved": 5883
+    }
+  ],
+  "hash_only_count": 158,
+  "limitations": [
+    "Only nine frozen Python paths were structurally extracted.",
+    "All 158 other new evidence files, including failed-attempt scripts, are hash-only; no document content is extracted.",
+    "Graph freshness is not runtime or scientific validation.",
+    "Fortran cross-file CALL extraction remains partial."
+  ],
+  "maintained_roots_unchanged": true,
+  "prior_pr134_pr135_pr136_snapshots_preserved": true,
+  "schema": "snow-sensitivity-kg-stage-validation-v1",
+  "selection_lock_sha256": "8f4c8115dfaff971c17e14df144d3e95c678c622bd651d2f75f919690f20a3dc",
+  "source_scope_count": 9,
+  "stage_receipt_sha256": "2cc1d65911ca89c420b24c1b77a6bb49391158622843cf45b05896eea9db6403",
+  "status": "PASS_STAGED_ONLY",
+  "superseded_isolated_stage_attempts": [
+    {
+      "result": "Stopped by frozen-source hash recheck after build_report.py changed; no maintained writes.",
+      "stage": "/var/tmp/cloudbal_snow_sensitivity_kg_20261030/final-graphify-uv/stage-snow-sensitivity-source-stage-20261030"
+    },
+    {
+      "result": "Extraction completed, then superseded because report/wiki caveat described unbound non-code evidence as hash-bound; no maintained writes.",
+      "stage": "/var/tmp/cloudbal_snow_sensitivity_kg_20261030/final-graphify-uv-rev2/stage-snow-sensitivity-source-stage-final-20261030"
+    },
+    {
+      "result": "Source-only interim stage; superseded by final evidence hash freeze; no maintained writes.",
+      "stage": "/var/tmp/cloudbal_snow_sensitivity_kg_20261030/final-graphify-uv-rev3/stage-snow-sensitivity-source-stage-final-20261030"
+    }
+  ],
+  "wiki_scope": "Graph reports, back-pointer, and audit are prepared in isolated stage only; maintained wiki untouched."
+}

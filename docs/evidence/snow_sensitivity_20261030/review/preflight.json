@@ -1,0 +1,42 @@
+{
+  "schema": "snow-sensitivity-independent-preflight-review-v1",
+  "reviewer": "factorial_review135",
+  "reviewed_at_utc": "2026-10-30T03:54:50Z",
+  "worktree": "/var/tmp/cloudbal-snow-sensitivity",
+  "scope": "Read-only design, provenance, staging and launch review before independent score recount.",
+  "selection_plan": {
+    "path": "docs/evidence/snow_sensitivity_20261030/selection_plan.json",
+    "sha256": "1a5e236793f276ba9781664980ad37f79efa565038b17e0e90aa916fe953d6ef",
+    "status": "FROZEN_BEFORE_CANDIDATE_FORECAST_OUTPUTS",
+    "review": "Agrees with the requested two-family six-factor QSNOW experiment, B1-relative feasibility gates, and frozen ranking/tie-break order. CURRENT_HYDRO is contextual only; B1 is the fallback."
+  },
+  "runtime_preflight": {
+    "common_plan_path": "docs/evidence/snow_sensitivity_20261030/runtime/common_plan.json",
+    "common_plan_sha256": "3fb0c6c4a2770394a7ed1a4cd690cd61767c3f886deae9a0aa686f42bfb33a41",
+    "selection_plan_pin_matches": true,
+    "all_four_launcher_script_hashes_match": true,
+    "staged_input_hashes_rechecked": 1068,
+    "staged_input_hash_mismatches": 0,
+    "declared_cases": 12,
+    "declared_inputs_per_case": 89,
+    "cpu_slots": 8,
+    "cpu_ids_per_slot": 8,
+    "cpu_slots_disjoint": true,
+    "scratch_filesystem": "Lustre; path is outside /tmp's noexec tmpfs mount.",
+    "review": "The current plan and staged input hashes pass independent checks. The clean Lustre rerun was observed executing; its final runtime receipt and forecast outputs were not yet available at this review timestamp."
+  },
+  "failed_initial_attempt": {
+    "cause": "/tmp is mounted noexec; MPI launch failed with Permission denied before WRF execution.",
+    "model_outputs_created": false,
+    "preservation": "The attempt is recorded by the runtime evidence and its receipt hash is pinned in the current common plan.",
+    "review": "This is an execution-location failure, not a forecast result. The rerun uses fresh Lustre scratch."
+  },
+  "scientific_scope_review": {
+    "intervention": "Native QSNOW values only: float64 scaling followed by cast to native float32; other 207 native fields and metadata are required unchanged.",
+    "interpretation": "Initial QSNOW sensitivity of total ground precipitation; no mass/energy conservation or balanced initialization claim.",
+    "score_method": "Pinned PR136 paired hourly scoring on 3,688 common points, 13–18 UTC, with six thresholds.",
+    "limitations": "Single-event selection/evaluation; correlated thresholds/points; no independent validation claim."
+  },
+  "tests": "No tests run by this reviewer.",
+  "conclusion": "No preflight/design blocker identified. Final runtime identity, independent score recount, result interpretation, and report review remain pending."
+}
