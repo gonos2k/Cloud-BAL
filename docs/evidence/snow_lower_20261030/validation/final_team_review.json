@@ -1,0 +1,103 @@
+{
+  "checks": {
+    "archives": "PASS: three offline archives (87, 31, and 23 PNGs) independently pass ZIP CRC checks; archive PNG bytes match manifest pins; local indexes have no external URLs and use lazy-loaded images.",
+    "figures": "PASS: 87 manifest-bound PNGs comprise all requested absolute CSI/\u0394CSI thresholds, focused alpha 0.5\u20130.9 comparisons, and maps for all 39 contexts \u00d7 six leads. \u0394P is case minus ORIGINAL at same lead/paired point, using shared zero-centered \u00b142.8 mm limits containing observed extrema without clipping.",
+    "independent_scoring": "PASS: 39 contexts / 38 eligible cases independently recomputed; 1404 categorical, 234 continuous, 1368 same-lead/same-threshold ORIGINAL-baseline rows, and 6 \u0394P arrays / 234 case-lead pointwise differences. Maximum metric error 0.0; selection is CONTROL_SNOW_300 using the frozen lead-1-only order and exact integer factor-code distance.",
+    "kg_publication": "PASS: exact stage receipt and team stage-review hashes bind publication; postpublish readback confirms graph/report/manifest copies, both dated snapshots, five wiki mirrors, and preservation of all 226 prior snapshots.",
+    "pr_preview": "PASS: PR body embeds the requested focused \u226510 mm \u0394CSI image; URL is pinned to the reviewed asset commit and resolves to `focused/low_factor_delta_csi_t10.png`.",
+    "prior_evidence": "PASS: 32 prior evidence bindings audited and preserved; prior_graph/snapshot references resolve to their recorded immutable snapshots.",
+    "replay": "PASS: scorer CLI replay is byte-identical across 18 analysis outputs; renderer replay matched all 87 PNG hashes; full score tables and report builders replayed from pinned sources.",
+    "reports": "PASS: four final Markdown documents and the full-table receipt are hash-bound; 42 tables cover 1,404 categorical and 234 continuous rows and 17,082 matched table cells.",
+    "runtime": "PASS: all 8 new 6-hour forecasts completed; all 56 new hourly histories validated. The two reused alpha=0.5 cases passed explicit common-plan, executable, physics-input, QSNOW-transform, history, and source-provenance checks.",
+    "tests": "PASS: final clean export suite exited 0 with 125 tests; receipt source hashes match frozen sources.",
+    "visual_and_browser": "PASS: reviewer visually checked focused CSI/\u0394CSI and representative rainfall maps. Headless Chromium loaded 87/87 all-gallery and 31/31 improved-gallery image URLs with intrinsic dimensions. The browser receipt does not claim a deployed-page screenshot."
+  },
+  "external_sha256": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/snow_lower_figures_20261030/all_experiments.zip": "0c0d574ebc4c214bcd2e92df215be273c995b214aa55baed729afa08f0043237",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/snow_lower_figures_20261030/improved_experiments.zip": "301ca7009cd8ee8138b60819f68ca22504bc7015b9ebd179be3f732430cf594b",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/snow_lower_figures_20261030/requested_lower_factors.zip": "3b5eb94840c65321b0465bfe6bed83b75834899f9dc62851b838a38a58f12144",
+    "/var/tmp/snow-lower-final-pr.md": "2af63c3a43219e52aa825c97404fed698a54f9f46c36834c7f5c69c4da76a8db"
+  },
+  "graph_deltas": {
+    "Cloud-BAL": {
+      "communities": 13,
+      "edges": 291,
+      "nodes": 146
+    },
+    "KLAPS50": {
+      "communities": 1,
+      "edges": 296,
+      "nodes": 146
+    }
+  },
+  "graph_extraction_limits": [
+    "Only the 12 frozen Python paths were structurally extracted; other evidence is hash-bound only.",
+    "Fortran cross-file CALL extraction is partial.",
+    "Graph freshness does not establish runtime, physical, or scientific validation."
+  ],
+  "not_in_scope": [
+    "Final aggregate manifest and final index/staging review, to be completed separately by the parent."
+  ],
+  "reviewer": "independent lower-snow review agent",
+  "schema": "snow-lower-final-team-review-v1",
+  "scientific_scope_limits": [
+    "Same-event diagnostic sensitivity only; independent-event forecast validation is not claimed.",
+    "The changed QSNOW initialization is not claimed to be conservative or physically approved.",
+    "Scoring evaluates total surface precipitation against RN1, not snowfall alone.",
+    "Improved and control families use different executable/parent-state bases, so their family difference is not a QSNOW-only causal effect.",
+    "The selected result does not establish water/energy budget closure or production readiness."
+  ],
+  "scope": "Independent final review of the lower-factor QSNOW sensitivity runtime, scorer, reports, figures, archives, browser checks, prior-evidence audit, and KG publication/readback. Does not replace the pending final index/aggregate manifest review.",
+  "selection": {
+    "comparison_baseline": "ORIGINAL",
+    "selected_alpha": 3.0,
+    "selected_case": "CONTROL_SNOW_300",
+    "selection_order": "frozen, single-winner lead-1-only selection; no pooled or averaged selection"
+  },
+  "sha256": {
+    "docs/SNOW_LOWER_FIGURES_20261030.md": "30c808ace1c7f51c3ae51cf7d7e05bfc4399c9f897ca909f1252f876fc00c782",
+    "docs/SNOW_LOWER_FULL_SCORES_20261030.md": "a5b1c7b23485e66749c758a429b91520e8edd580d0a9e69f83d36c96cde3c2b2",
+    "docs/SNOW_LOWER_IMPROVED_FIGURES_20261030.md": "f285a488480dec1208b65deee8ba3f0547803ce4662f352de7d197fea24305d9",
+    "docs/SNOW_LOWER_SENSITIVITY_20261030.md": "2955aec7541f7bff4eb88affe1a110b2bc7bba01fe60548f773bf95b1a32e589",
+    "docs/evidence/snow_lower_20261030/analysis/categorical_scores.csv": "3dcab1e1ca19b3bce65611a3196eeaa93ae0c23560f00145ccfbd6b0fd170c7b",
+    "docs/evidence/snow_lower_20261030/analysis/comparison_vs_original.csv": "e4e63d38ea53f43a547bdac9fbfa9132d927c6e0ccc6a3aa3a66af739c2973ff",
+    "docs/evidence/snow_lower_20261030/analysis/continuous_scores.csv": "3c00bfc8680387b953909fbccec4ab1be1a3696929c31dcc708b584f418a3d46",
+    "docs/evidence/snow_lower_20261030/analysis/receipt.json": "a9b8fa97e12d85bd49ce91b42f5126c8fc727ef0846eba1eeddc6a552a044602",
+    "docs/evidence/snow_lower_20261030/analysis/selection.json": "bbff511cd6e1c7117f03a55d49926f9e258238ff331ccb6ad2d6a16466dd03a1",
+    "docs/evidence/snow_lower_20261030/build_full_score_tables.py": "ab2cc2b83c611edfbd25aba96b86653e8d82d9e0d3a387b40aaecc24acdc46a0",
+    "docs/evidence/snow_lower_20261030/build_report.py": "1524d7e1618be25d85546f1eb140f37b0b1183cc85ed3758cd8c20a25234682c",
+    "docs/evidence/snow_lower_20261030/figures/figure_manifest.json": "44f3f5187001186fec8ee79b7b885f508732a1fca904c55cd636426ad8d5cd8e",
+    "docs/evidence/snow_lower_20261030/full_tables_receipt.json": "2a9b3cb2adaaeda81eec1ab1b5272d416fd61732740ce49d32e911b034da6d7d",
+    "docs/evidence/snow_lower_20261030/kg/baseline.json": "5402ff08af9ae1ce44cba139083a809cf67c735436b205180481a6ff982a3b6a",
+    "docs/evidence/snow_lower_20261030/kg/postpublish_copy_receipt.json": "47f730edbfdea4523850cf900e5a658a9db0d42a49a35e9468241c55f7cc73c7",
+    "docs/evidence/snow_lower_20261030/kg/publish_receipt.json": "4ac083601df5c52c5c7ebeb47a304a1391b7bfe8c8bef3076eb011782bfc23f2",
+    "docs/evidence/snow_lower_20261030/kg/selection_lock.json": "0e6d5c94fb30d517526e147461866a9d6fb35c1f1e0fb928a95805106c0b7ea5",
+    "docs/evidence/snow_lower_20261030/kg/stage_receipt.json": "a34df22ceb87009679c17b34e64fa9a880bb6e749dde0c97b50720a9f395ba63",
+    "docs/evidence/snow_lower_20261030/kg/stage_review.json": "74549b50da315bcecc43158609a9502554658270609bf1eb2eed9987da9c1631",
+    "docs/evidence/snow_lower_20261030/kg/update_graphs.py": "cd671759004178dab8832885e50d2d395a8ace6ea4bf89625df62d8ab02d49c1",
+    "docs/evidence/snow_lower_20261030/review/cli_replay.json": "ad4f93aa00de77bfbe26152064b5ceb3f21f12d14c0dd5cac4695076327ab919",
+    "docs/evidence/snow_lower_20261030/review/cli_replay.py": "8fdb19ad2cc8a97d649b97edc3d555431015e6f503c6dcc01c9f83b0a27cfe4c",
+    "docs/evidence/snow_lower_20261030/review/independent_score_recount.json": "ba208f04739c16d7bac911f1b55d33884d334fa5e4d7fa2cbc790ec440f6851c",
+    "docs/evidence/snow_lower_20261030/review/independent_score_recount.py": "bf5407fabca6999b4e0812c59e07f1ed4ed91c50d0f1cc34159528b423734ab6",
+    "docs/evidence/snow_lower_20261030/runtime/batch_receipt.json": "120fd1eb06d28dcbb50a87a387b0f1aeaabb33fad9641a9c63554b61a435fcce",
+    "docs/evidence/snow_lower_20261030/runtime/common_plan.json": "58dae266e4b4f893f5a9d940e30c8e38574823b03785e68b089811ef9d085871",
+    "docs/evidence/snow_lower_20261030/runtime/final_receipt.json": "8222f0d32d89b2b859a194568e60bc6bd4032978c2539f7d5dad8daff4f66750",
+    "docs/evidence/snow_lower_20261030/runtime/history_validation.json": "ffe97d0d552403f91fd842bc4bba0e4fee867841e956b868db6719a2cca88ad2",
+    "docs/evidence/snow_lower_20261030/runtime/reused_factor050_provenance.json": "4bd2ba6da28b464976f6748a52fd31862c14368e2e64daa9d1ff4828957ae86c",
+    "docs/evidence/snow_lower_20261030/selection_plan.json": "8d30f3f7a3d82a34332013334d5f0d6c66f1a1576198db228b98b1a89c950cf2",
+    "docs/evidence/snow_lower_20261030/validation/browser_command.txt": "f4f23e53c9ba4636b07e0c66a24f0901ab513f3998a3d18e5643144715d6f0d1",
+    "docs/evidence/snow_lower_20261030/validation/browser_images.json": "8bcf96db8156c14738c533ac54a09a5468d83403c5fe23fa38e15042aa9b5833",
+    "docs/evidence/snow_lower_20261030/validation/final_clean_export_tests.json": "e7c4b6fae20209c0a3738d43800d3851f2f90e0abca25c7cd3a3651c27934789",
+    "docs/evidence/snow_lower_20261030/validation/final_clean_export_tests.txt": "2cd6428964a289234e1444bd3bdf561ca154f0207ae9f3a17f8f439bd517c58c",
+    "docs/evidence/snow_lower_20261030/validation/package_figures.json": "06474995721f289bc05ac8bb5cb36520517109a4dae8dff542a835adcd3d1c72",
+    "docs/evidence/snow_lower_20261030/validation/prior_evidence.json": "bb7fc8ee4453b988471a2f40f6e93c4f5209590d25935123c3edff79aa2335c7",
+    "docs/evidence/snow_lower_20261030/validation/root_visual_review.json": "366d06cc22d8da4f2218b7a6a6a5c147844ca925c798affddaeed3b27684a3fa",
+    "tests/test_cp02_snow_lower.py": "fd3fb6b8a16e95dd39303766c5a7d5e789e34149fbef19ff710677bec8d6ed25",
+    "tests/test_plot_snow_lower.py": "80d927652514cb77021b151b08c22e5dde1f6ce209aa2c8df5c8d9a95772a519",
+    "tools/cp02_snow_lower.py": "04108676ffe44db688ee53a24ee07fdb2031a0d9fd4012f17619a6245c03d3c2",
+    "tools/plot_snow_lower.py": "fd081fbed3f885dfbf640e431edb66e6d67806da18a0106629d46515251b8ea0"
+  },
+  "source_asset_commit": "1dd452b84b44797d29f547d7f94660a2092d9192",
+  "status": "GO",
+  "unresolved_blockers": []
+}

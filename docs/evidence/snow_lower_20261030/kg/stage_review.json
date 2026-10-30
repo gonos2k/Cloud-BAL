@@ -1,0 +1,32 @@
+{
+  "checks": {
+    "baseline_preservation": "PASS: both maintained roots retain their exact baseline graph/report/manifest hashes, wiki hashes, git-status bytes, and dated snapshot inventories (111 KLAPS50 + 115 Cloud-BAL); the new snapshot is not present in maintained roots.",
+    "frozen_scope": "PASS: stage extraction scope, manifest update scope, and the source lock all contain the same 12 Python paths; each selected source hash matches the staged copy in both corpus views.",
+    "hash_only_evidence": "PASS: all 169 frozen hash-only artifacts match current bytes, including the figure ZIPs, 87 PNGs, reports, score CSVs, NPZ arrays, runtime receipts, and score replay evidence.",
+    "staged_graph_integrity": "PASS: KLAPS50 and Cloud-BAL graph/report/manifest root files match their dated snapshot copies and receipt hashes; all five staged wiki mirrors match receipt hashes; all five integrity counters are zero and every prior node ID is preserved.",
+    "stage_isolation": "PASS: receipt status is STAGED_ONLY_NO_MAINTAINED_WRITES; independently verified that maintained graph files, dated snapshot inventories, wiki hashes, and exact git-status bytes still match the frozen baseline.",
+    "extraction_limits": "PASS: receipts and reports state that only 12 frozen Python paths are structurally extracted, other evidence is hash-bound only, Fortran cross-file CALL extraction is partial, and graph freshness does not establish runtime or scientific validity."
+  },
+  "graph_deltas": {
+    "Cloud-BAL": {
+      "communities": 13,
+      "edges": 291,
+      "nodes": 146
+    },
+    "KLAPS50": {
+      "communities": 1,
+      "edges": 296,
+      "nodes": 146
+    }
+  },
+  "not_in_scope": [
+    "Final browser validation of Markdown galleries and refreshed asset-commit image links.",
+    "Postpublication copy/readback and final evidence manifest review."
+  ],
+  "reviewer": "independent lower-snow review agent",
+  "schema": "snow-lower-graph-stage-review-v1",
+  "selection_lock_sha256": "0e6d5c94fb30d517526e147461866a9d6fb35c1f1e0fb928a95805106c0b7ea5",
+  "stage_receipt_sha256": "a34df22ceb87009679c17b34e64fa9a880bb6e749dde0c97b50720a9f395ba63",
+  "status": "GO",
+  "unresolved_blockers": []
+}

@@ -1,0 +1,1089 @@
+{
+  "schema": "snow-lower-validation-v1",
+  "status": "PASS",
+  "base_commit": "d22a1492fd8a8df4e621a132558162f6c3cd3392",
+  "asset_commit": "1dd452b84b44797d29f547d7f94660a2092d9192",
+  "dependency_pr": 140,
+  "experiment": {
+    "new_forecasts": 8,
+    "new_factors": [
+      0.6,
+      0.7,
+      0.8,
+      0.9
+    ],
+    "reused_factors": [
+      0.5
+    ],
+    "families": [
+      "CONTROL",
+      "IMPROVED"
+    ],
+    "lead_hours": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "thresholds_mm": [
+      0.1,
+      0.5,
+      1,
+      2.5,
+      5,
+      10
+    ],
+    "comparison_reference": "ORIGINAL alpha=1.0",
+    "contexts": 39,
+    "eligible_cases": 38,
+    "paired_points_per_hour": 3688
+  },
+  "results": {
+    "overall_selected_case": "CONTROL_SNOW_300",
+    "requested_lower_selected_case": "IMPROVED_SNOW_080",
+    "original_lead1_csi10": 0.04929577464788732,
+    "requested_lower_selected_lead1_csi10": 0.06428571428571428,
+    "overall_selected_lead1_csi10": 0.12738853503184713,
+    "categorical_rows": 1404,
+    "continuous_rows": 234,
+    "comparison_rows": 1368,
+    "pointwise_case_lead_differences": 234
+  },
+  "validation": {
+    "new_histories": 56,
+    "reused_half_histories": 14,
+    "focused_tests": 125,
+    "independent_max_metric_error": 0,
+    "byte_identical_analysis_files": 18,
+    "png_assets": 87,
+    "browser_loaded_images": [
+      87,
+      31
+    ],
+    "offline_zip_png_counts": [
+      87,
+      31,
+      23
+    ],
+    "team_review": "GO",
+    "kg_status": "PUBLISHED_AND_READBACK_PASS",
+    "prior_snapshots_preserved": 226
+  },
+  "limitations": [
+    "Same case and initialization time; no independent-event validation.",
+    "QSNOW-only scaling does not establish conservation; improved family also differs in parent initialization and executable.",
+    "External native history/input files and ZIP deliverables remain on the research host; their hashes and identities are recorded.",
+    "Graph extraction is limited to 12 selected Python files; Fortran cross-file call extraction is partial and graph freshness is not runtime or scientific proof."
+  ],
+  "manifest_scope": "All changes since the image-delivery base including the already published PNG asset commit; manifest excludes itself.",
+  "artifact_count": 201,
+  "artifacts": [
+    {
+      "path": "docs/SNOW_LOWER_FIGURES_20261030.md",
+      "size": 33154,
+      "sha256": "30c808ace1c7f51c3ae51cf7d7e05bfc4399c9f897ca909f1252f876fc00c782"
+    },
+    {
+      "path": "docs/SNOW_LOWER_FULL_SCORES_20261030.md",
+      "size": 199483,
+      "sha256": "a5b1c7b23485e66749c758a429b91520e8edd580d0a9e69f83d36c96cde3c2b2"
+    },
+    {
+      "path": "docs/SNOW_LOWER_IMPROVED_FIGURES_20261030.md",
+      "size": 12178,
+      "sha256": "f285a488480dec1208b65deee8ba3f0547803ce4662f352de7d197fea24305d9"
+    },
+    {
+      "path": "docs/SNOW_LOWER_SENSITIVITY_20261030.md",
+      "size": 8810,
+      "sha256": "2955aec7541f7bff4eb88affe1a110b2bc7bba01fe60548f773bf95b1a32e589"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/categorical_scores.csv",
+      "size": 287100,
+      "sha256": "3dcab1e1ca19b3bce65611a3196eeaa93ae0c23560f00145ccfbd6b0fd170c7b"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/comparison_vs_original.csv",
+      "size": 207723,
+      "sha256": "e4e63d38ea53f43a547bdac9fbfa9132d927c6e0ccc6a3aa3a66af739c2973ff"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/continuous_scores.csv",
+      "size": 38067,
+      "sha256": "3c00bfc8680387b953909fbccec4ab1be1a3696929c31dcc708b584f418a3d46"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/hour_13_arrays.npz",
+      "size": 955621,
+      "sha256": "db3c69de36fe7d82ff3223dc92f849031fe5bb68bb7118592526e65fa6501048"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/hour_13_difference_vs_original.npz",
+      "size": 901834,
+      "sha256": "ec8c37b77bfa18ca0ae45a2215c2e7d734861141170e229284f4eb43259537a4"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/hour_14_arrays.npz",
+      "size": 991762,
+      "sha256": "5b3411c6b03fc1a9fdad78dd05fa04d5181b18e28adb8de6f96a11a220e3a983"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/hour_14_difference_vs_original.npz",
+      "size": 976632,
+      "sha256": "19443528976d9649b28e04d2b799e5c1aab4e0a09ccbae919dfa657d935ebf59"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/hour_15_arrays.npz",
+      "size": 1076969,
+      "sha256": "2dcbd2c0960c75fc18b1932e37187ad1b53079ca245ad2e225b0c0157ce44bba"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/hour_15_difference_vs_original.npz",
+      "size": 1068685,
+      "sha256": "ae712f50101a32e6b6f2a2add2440ac6fd35e179a6fadc8a41fe9c126d97cc85"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/hour_16_arrays.npz",
+      "size": 1074345,
+      "sha256": "902b55a65837f64a1ae78fab0d8a59f3ce40906e82fa0aa0eab7c88d115765e5"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/hour_16_difference_vs_original.npz",
+      "size": 1065409,
+      "sha256": "a019b073a07f52459e84736ad58fae41434e846db4bbfd45a1dce4d574dd40f2"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/hour_17_arrays.npz",
+      "size": 1026105,
+      "sha256": "f48d9b98e6cdf6acb48466bb9e3669739ecdc148bc751a64e2ecc2f1af3222e7"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/hour_17_difference_vs_original.npz",
+      "size": 1021132,
+      "sha256": "6fcf39ec564f18e8b7ff907aec8eefce374e764d22a568ac09935cc1f3443810"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/hour_18_arrays.npz",
+      "size": 1087450,
+      "sha256": "91732db992aa3936946d789dae7445f5d9b29c10ee8da03dcb72d922b5841130"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/hour_18_difference_vs_original.npz",
+      "size": 1076287,
+      "sha256": "c423ca5e5a62eabedca812c1ed5447ad08e10322cff5a63cc8e3aaee1bf0324d"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/receipt.json",
+      "size": 157559,
+      "sha256": "a9b8fa97e12d85bd49ce91b42f5126c8fc727ef0846eba1eeddc6a552a044602"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/selection.json",
+      "size": 15244,
+      "sha256": "bbff511cd6e1c7117f03a55d49926f9e258238ff331ccb6ad2d6a16466dd03a1"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/analysis/selection_scores.csv",
+      "size": 4285,
+      "sha256": "f24adf2c77d27f90eaffe43b5d1af59ab3ed193007546a069e311e28cc885587"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/build_full_score_tables.py",
+      "size": 20606,
+      "sha256": "ab2cc2b83c611edfbd25aba96b86653e8d82d9e0d3a387b40aaecc24acdc46a0"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/build_report.py",
+      "size": 21988,
+      "sha256": "1524d7e1618be25d85546f1eb140f37b0b1183cc85ed3758cd8c20a25234682c"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/context/csi_t0p1.png",
+      "size": 74346,
+      "sha256": "03f0681b258b4c793119559e12625b0301ecccc7a7269bb1acb0d13dfc6d811a"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/context/csi_t0p5.png",
+      "size": 74935,
+      "sha256": "49f4e8dca3f532291e517c4ef88df6ce6c58dd2fc92fae5dd6b623fa1e23b02e"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/context/csi_t1.png",
+      "size": 72975,
+      "sha256": "06f9284dc78498fddca9d9beeaaafc7d93f3f874b3bb00a7b8f051c2eedcc7d5"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/context/csi_t10.png",
+      "size": 74272,
+      "sha256": "90e6e4bf0bcb8c8552e7cc6a8cc1b783dc4bd0abcb37a99ebd7e910fc58df99c"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/context/csi_t2p5.png",
+      "size": 75057,
+      "sha256": "6c347dad8897b3c7598c58d9a959fdf6b5b8d6a6b2a73497e0babcff9f75e640"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/context/csi_t5.png",
+      "size": 73032,
+      "sha256": "dc1a3791cf9374b142c4941c1500da024ba4082250aec880ee3319aee528e9df"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/control/csi_t0p1.png",
+      "size": 191095,
+      "sha256": "8cacb785455c60c672cf2553ab5593600537e26f6a1655ad65509e9963d10cbe"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/control/csi_t0p5.png",
+      "size": 195247,
+      "sha256": "8eb480df70b574517ce19e28051f7fb8a77ec54821fd2be7b7df9547609a6bdc"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/control/csi_t1.png",
+      "size": 199500,
+      "sha256": "045505f27231e6a0ed741d65f3806ae4f6b7fb99e10dbc9fed976696efb05e7f"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/control/csi_t10.png",
+      "size": 196220,
+      "sha256": "717a366d2d8f1f6940b607739699d0e670e23c7a979893b0daef1cf934117848"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/control/csi_t2p5.png",
+      "size": 199369,
+      "sha256": "9bf74e6b344d6a79ebf76bd119234ac30e38e668c04bd14db2a9779920d50aef"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/control/csi_t5.png",
+      "size": 196989,
+      "sha256": "f3e980ac870d0b4e968ac8a289ff8e8b64b3547f983dfd2fdf581f85021b2968"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/improved/csi_t0p1.png",
+      "size": 191389,
+      "sha256": "b3ea63e93e7bed589004fa19bc97cbdb27c81256567292184fd0b156fc975f46"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/improved/csi_t0p5.png",
+      "size": 201279,
+      "sha256": "388b98ff46b7fba839b010bfdf490e37b6ad93f7222131a07b133792802b61a0"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/improved/csi_t1.png",
+      "size": 205166,
+      "sha256": "e2ca62ab15f739ed3ddc161c0460d3fe4cf152c597dda67f93ea66c9f150842a"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/improved/csi_t10.png",
+      "size": 199980,
+      "sha256": "46c14e654a276a6bb4415d1f96ac48c7cf53c244d3344a31153bb906f922b1dc"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/improved/csi_t2p5.png",
+      "size": 205790,
+      "sha256": "47314b1aba5b9724012e96d47a83bbd7602376542fcced949558af39b6cc5f62"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/csi/improved/csi_t5.png",
+      "size": 202511,
+      "sha256": "acdf12854b5db2ece9a10826f80eb35872aef3abbec00566eb39885bb57d7398"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/context/delta_csi_t0p1.png",
+      "size": 106346,
+      "sha256": "181342439ba3b5473057a6d12e1feb534b630b6855868b526d96d72352029b60"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/context/delta_csi_t0p5.png",
+      "size": 106501,
+      "sha256": "3e53b19b601ebfcf7ee2c0a1cdb12568e6fd7da74f97f94dedd36d82a996d6cd"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/context/delta_csi_t1.png",
+      "size": 106578,
+      "sha256": "5e3fa6b902961f6550087b7b107bec250d256e0af65fca196a965009952ab870"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/context/delta_csi_t10.png",
+      "size": 107443,
+      "sha256": "f619d728846091fac956ca1132f5ccd7101d9db04c1c6456c16867b413d2ab9f"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/context/delta_csi_t2p5.png",
+      "size": 107301,
+      "sha256": "db0928f21c4f4a92c86e49877fbb0799b34e30e3b1f873a2dd4e1c5777513ccf"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/context/delta_csi_t5.png",
+      "size": 105174,
+      "sha256": "cdc4e2a47737b7407f7e1d01a7913fa1c8bbbd3fafd6576aeebdc96918196b41"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/control/delta_csi_t0p1.png",
+      "size": 289383,
+      "sha256": "45f5b4773d4fa25ff05e578429984291c79032f5ddbd0011aea9e4b59d3bc4cf"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/control/delta_csi_t0p5.png",
+      "size": 286858,
+      "sha256": "82fc2403ed5864e4589154e452d40dc44dfe0f86a311420f776e5ee859a68e0b"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/control/delta_csi_t1.png",
+      "size": 295038,
+      "sha256": "6669dfe702a47fb09eeecba9e3137cb72e59b3f18303c46405d20c1788b58b7c"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/control/delta_csi_t10.png",
+      "size": 279680,
+      "sha256": "1b96f1948e0b1847cda5a9d0c5b8a964e0c0b1d6f1dd3b3fa6f53f65016543a7"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/control/delta_csi_t2p5.png",
+      "size": 299235,
+      "sha256": "2cb3f5c20500ffec5b9d300d91c917cfb78f96ffb6a62a84b80752b0690c2a81"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/control/delta_csi_t5.png",
+      "size": 290759,
+      "sha256": "9cb1df7681d24e9b4fb3b3cf20ce7d952b6f7b858dc0af67f833d55f4b7b203c"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/improved/delta_csi_t0p1.png",
+      "size": 279650,
+      "sha256": "d65862a2568748c11d1be43b0445d133a34cf3b3c1ab788fad4740bc1e751c16"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/improved/delta_csi_t0p5.png",
+      "size": 293234,
+      "sha256": "db1564bbe0eb29b4f7c3e24bc02f49db06857f37c81f7df21747c9b6270226c3"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/improved/delta_csi_t1.png",
+      "size": 307072,
+      "sha256": "aebf6cdc464a5afe13f8cd83db68560a40c31bd62f03351ca282ad50e8dca882"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/improved/delta_csi_t10.png",
+      "size": 283832,
+      "sha256": "21f2b9c3a9eea1d322bfd335b537eddcb4fc27f7ee6d116f44df968d847e7a32"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/improved/delta_csi_t2p5.png",
+      "size": 295526,
+      "sha256": "8317c123b7a4577898a5106c63c909aa9eb3fa54af7b7537a89373671065b1fb"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/delta_csi/improved/delta_csi_t5.png",
+      "size": 289718,
+      "sha256": "dfc592b84a48300c2325d2e052b0b2850e025c2305ecc02222e21709423c96d5"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/figure_manifest.json",
+      "size": 73269,
+      "sha256": "44f3f5187001186fec8ee79b7b885f508732a1fca904c55cd636426ad8d5cd8e"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/focused/low_factor_csi_t0p1.png",
+      "size": 151732,
+      "sha256": "b5cee0b698986fd3459d8500500112d7528f92d42b3214a34e5855fa55cdef75"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/focused/low_factor_csi_t0p5.png",
+      "size": 160195,
+      "sha256": "2708cd642cd376bbd703401306a1d3df38f3e19f2ad5100351b5f87a2bf4826f"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/focused/low_factor_csi_t1.png",
+      "size": 157391,
+      "sha256": "aac69cf5d17f51a85a6dbe2dd23ef6cb153c273ee17becb9bbe2a32a97b6259f"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/focused/low_factor_csi_t10.png",
+      "size": 149798,
+      "sha256": "42e5b70ce21419f7ba1cdb07622a3fd49bd078366e429536d27d9f37e5700fc9"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/focused/low_factor_csi_t2p5.png",
+      "size": 150306,
+      "sha256": "d24bff6db59f673bc33e75599b9d6d4a6b7d6b6f69ca2c26c1d29f5014abf17b"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/focused/low_factor_csi_t5.png",
+      "size": 145407,
+      "sha256": "523c0dcca54aa29eb70ffd4e4e9820baf080e4b8b9c828ef59943444ebd4fe44"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/focused/low_factor_delta_csi_t0p1.png",
+      "size": 218674,
+      "sha256": "8fc627ee95f9c6ed6eaed9ec9b6f6d97eb54f011061429fdb924b7dba2894970"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/focused/low_factor_delta_csi_t0p5.png",
+      "size": 223563,
+      "sha256": "258ab4f9c60e11185871e27269dc09bf0e5745860189dc00e74ac294c41668d5"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/focused/low_factor_delta_csi_t1.png",
+      "size": 223348,
+      "sha256": "d36fd0e6e3bd77d30d4fa4aeb36740278c50f9e0e4763ff2ea9a2cfa8b38a5fc"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/focused/low_factor_delta_csi_t10.png",
+      "size": 202483,
+      "sha256": "82296307d82616d2eff918b0ba86d923f8369bd96862f811c98732c7aaea3e29"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/focused/low_factor_delta_csi_t2p5.png",
+      "size": 213092,
+      "sha256": "fa7100496febbbd94d6dda55215f214227a6e442f7c7fd1f4ecaad72c8f0f1c4"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/focused/low_factor_delta_csi_t5.png",
+      "size": 208798,
+      "sha256": "f7623ed79e62dc87a6c798812b471f2aa3a7ebfa8220b631c1d5504b7b73513c"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/context/hourly_total_precip_CURRENT_HYDRO.png",
+      "size": 352359,
+      "sha256": "d638f0dc454f317df2510674b651274e0b3ef96f8a78a424c4f8f4bd0e59497e"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_000.png",
+      "size": 350181,
+      "sha256": "07d2b5d4681cabcb9cfdd5051f6eb28ad0511ec64a6c3aaf0d88eca32a0a5c16"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_025.png",
+      "size": 349335,
+      "sha256": "487fed009efd1308295c746fce4a890608009d224dff446ae433182635d62370"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_050.png",
+      "size": 346696,
+      "sha256": "c0eeb4b7a4b3b2e8e90140f7963fca3e909b0d1039acb60bce897c4dce14764a"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_060.png",
+      "size": 346922,
+      "sha256": "cc37b05ac30759530b1ce4d913a6022f7a1e93537d02b4253ad2ef0ba8fe79cb"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_070.png",
+      "size": 345259,
+      "sha256": "c97f7714bcccb3f847c899df93bbb2b417b59a149d0e80fffd47d125e48aee60"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_075.png",
+      "size": 345427,
+      "sha256": "8638049563fa03ad76ce9077f2622f44ff1234cf26808e57ac9e11368d544a6b"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_080.png",
+      "size": 345771,
+      "sha256": "fe534f855db79df554409d314867cac5c286da029442081a8f95979b11268894"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_090.png",
+      "size": 343673,
+      "sha256": "505495c563d8f3fdd441a49fb5ba1cdde0645c189905c412bf13af8d16f29e33"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_110.png",
+      "size": 340971,
+      "sha256": "cae84e2c13d801aae4b8323e92f90a9b7a00746573089b8a33f36a87fced6824"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_120.png",
+      "size": 343355,
+      "sha256": "0ec379f03735bf412241e256f573626f6352eb6f5f05bdeee8e966c380674516"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_125.png",
+      "size": 344805,
+      "sha256": "1066e3dc8ba57cdd292c4cbb1035f43c54b4d53c6a1cf9929132242bbf60cc6d"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_130.png",
+      "size": 344507,
+      "sha256": "7f681dd069bbf48a15e261db1210b55407ec06e2557bf6b2c071bb45fc38f391"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_140.png",
+      "size": 344064,
+      "sha256": "d0ce9580d9e20721dbcff6e1be62bd23775dc3cb28f6560bcd4490fbf477fc35"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_150.png",
+      "size": 345772,
+      "sha256": "c2e193a072ede74e8d78a2dbd13b6993fb60d47750a5043e21758411ecd4eb26"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_175.png",
+      "size": 347385,
+      "sha256": "17a27306326478e4f48c737c07673c5a226551aea9da627a61f7fe1dc499c103"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_200.png",
+      "size": 348002,
+      "sha256": "743a6b8dd61665f6a6ae73f36f0b2e0339741076e58ac76508169ffb827c4d57"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_250.png",
+      "size": 350949,
+      "sha256": "d078426393eab07986a29e521aba7c5ac6395dfd7d1f5af480a835d8392d16e8"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_CONTROL_SNOW_300.png",
+      "size": 351899,
+      "sha256": "8dcbefd765f45c01517bf51ece0051afa00eed1d66973510aa99d1c837eb6557"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/control/hourly_total_precip_ORIGINAL.png",
+      "size": 318571,
+      "sha256": "9684b14f119af145329d3c7006011b77ee9a096b23d157d5fc68da2df6d0782e"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_BG_FIXED.png",
+      "size": 355765,
+      "sha256": "14f511fb1e38f22448a8c098c8817a1d3253c80482fbcc898d258fff98a6665e"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_000.png",
+      "size": 353011,
+      "sha256": "b590954db3ab23f45ed9934addc3b4410480e67c0685d3de7307ebbd8038615a"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_025.png",
+      "size": 354272,
+      "sha256": "b9797b30d70e7580961797919ccfac52f3dc08b66c4a0f72c9573ecde845dbd7"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_050.png",
+      "size": 352355,
+      "sha256": "8c7afd8a1651a1fb892a8f4f0948c227ce131a329d4d26b3c2b48d6775ba962a"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_060.png",
+      "size": 352900,
+      "sha256": "6f36ed032fde1f3bd2b785aa4dfaedd80741dc0849f40def323684c935d99ef2"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_070.png",
+      "size": 352176,
+      "sha256": "bdac6a6037a47dc02178c2c6d46a160b8b28a7013d754612bfb35130f39ba3fb"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_075.png",
+      "size": 353272,
+      "sha256": "e8b07b73253be22818d435dbd8015c941a0009df258178a04edf98ac42a312e4"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_080.png",
+      "size": 352183,
+      "sha256": "2267775cd19bdb7b4c88c6d1a5fb2dd67cbb158bc1e23615818d3339fe8d7a6b"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_090.png",
+      "size": 351758,
+      "sha256": "d8ecb36049ad5a054682fc239541bd471b5ed910822d8ffcadfc7413b61a2bae"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_110.png",
+      "size": 349111,
+      "sha256": "9897937b4dcfcfd41abb1d7c87e39fd4cd9380e9dcc9becee23de2d0864564b1"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_120.png",
+      "size": 349952,
+      "sha256": "9e555b6739c2629bc0c3750b4bd2c56a5a22c1ee7d47fc5ca252e1dd2581efd5"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_125.png",
+      "size": 351564,
+      "sha256": "e831212443ca89acf0f9398a293106287610bf751404bf2e0a5b53332e26e984"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_130.png",
+      "size": 350939,
+      "sha256": "d7874b12ba871fe9cf6623d1d1aedaae6b5b88fa29b8acb7d15aa78168dcdf5a"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_140.png",
+      "size": 349813,
+      "sha256": "d4f021eeaf3b3dc39264fd5171b511323a1d931a7a30272868ac020b0e9ae9c9"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_150.png",
+      "size": 351396,
+      "sha256": "414ddda82a4ffcf0856c2c0345621c592ff711befb9b4948933f44e5155cc16d"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_175.png",
+      "size": 351354,
+      "sha256": "721aaccd6ac3bac0e2df2d5855a49370fdf786734cceec62630104e03d8ed862"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_200.png",
+      "size": 351163,
+      "sha256": "4bd8f5e58c11245438fc2a3a3d8914ace72885b3027284ceab7edac5f241a125"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_250.png",
+      "size": 354253,
+      "sha256": "5e63e07a6cf0a306eaf45b3d37b0ef38b3d127c2580bdc04f65d732914ff765f"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/figures/hourly_maps/improved/hourly_total_precip_IMPROVED_SNOW_300.png",
+      "size": 353838,
+      "sha256": "f94456082000d827de4eb444ce011fb55a5bb4964475f1f7bcea1ebfcc7c53df"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/full_tables_receipt.json",
+      "size": 3911,
+      "sha256": "2a9b3cb2adaaeda81eec1ab1b5272d416fd61732740ce49d32e911b034da6d7d"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/kg/baseline.json",
+      "size": 142988,
+      "sha256": "5402ff08af9ae1ce44cba139083a809cf67c735436b205180481a6ff982a3b6a"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/kg/postpublish_copy_receipt.json",
+      "size": 6195,
+      "sha256": "47f730edbfdea4523850cf900e5a658a9db0d42a49a35e9468241c55f7cc73c7"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/kg/publish_receipt.json",
+      "size": 3637,
+      "sha256": "4ac083601df5c52c5c7ebeb47a304a1391b7bfe8c8bef3076eb011782bfc23f2"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/kg/selection_lock.json",
+      "size": 29972,
+      "sha256": "0e6d5c94fb30d517526e147461866a9d6fb35c1f1e0fb928a95805106c0b7ea5"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/kg/stage_receipt.json",
+      "size": 35411,
+      "sha256": "a34df22ceb87009679c17b34e64fa9a880bb6e749dde0c97b50720a9f395ba63"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/kg/stage_review.json",
+      "size": 2211,
+      "sha256": "74549b50da315bcecc43158609a9502554658270609bf1eb2eed9987da9c1631"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/kg/update_graphs.py",
+      "size": 12855,
+      "sha256": "cd671759004178dab8832885e50d2d395a8ace6ea4bf89625df62d8ab02d49c1"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/kg/wiki/graph-report-cloud-bal.md",
+      "size": 331294,
+      "sha256": "8e25f2750fab25e593ee14f4db54a262ef7d387c86cb76e7913c1e3d1a9b8217"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/kg/wiki/graph-report-klaps50.md",
+      "size": 489024,
+      "sha256": "b1e3aedb637fdce508de4372ae5b10c170c2ea96ea5854be98c259f619c33322"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/kg/wiki/graph-report.md",
+      "size": 31592,
+      "sha256": "0d6ef35b0269dd2031abc5ce937ea24301e74656c1df2bb41386f2d2d5f22639"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/kg/wiki/index.md",
+      "size": 1466,
+      "sha256": "4836e3c5608e5b3e62cc94ea71542bb9f7a51685b6190ba238bb851e9202b980"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/kg/wiki/log.md",
+      "size": 470349,
+      "sha256": "2ccf37943bb486fae84dd70f0f445acbe83d035bbe8149291b63527c1d3b4190"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/review/attempts/first_independent_recount_attempt.json",
+      "size": 874,
+      "sha256": "8716da5e8277d288b849ec2652f302cd12629415a9aa4fbb0efb0746bce074ec"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/review/attempts/first_score_attempt.json",
+      "size": 976,
+      "sha256": "6594d2c78ca9c11e5ce1e4501bfef71b0c22b94b477e1820fd7e08dae9cd36ff"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/review/cli_replay.json",
+      "size": 23270,
+      "sha256": "ad4f93aa00de77bfbe26152064b5ceb3f21f12d14c0dd5cac4695076327ab919"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/review/cli_replay.py",
+      "size": 2392,
+      "sha256": "8fdb19ad2cc8a97d649b97edc3d555431015e6f503c6dcc01c9f83b0a27cfe4c"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/review/independent_score_recount.json",
+      "size": 2013,
+      "sha256": "ba208f04739c16d7bac911f1b55d33884d334fa5e4d7fa2cbc790ec440f6851c"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/review/independent_score_recount.py",
+      "size": 12617,
+      "sha256": "bf5407fabca6999b4e0812c59e07f1ed4ed91c50d0f1cc34159528b423734ab6"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/README.md",
+      "size": 1860,
+      "sha256": "67cf572e60c601fa132bf096afd4a2dfd12409c7f169a71a41b3af4948fd2d50"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/batch_receipt.json",
+      "size": 4259,
+      "sha256": "120fd1eb06d28dcbb50a87a387b0f1aeaabb33fad9641a9c63554b61a435fcce"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_060/launcher.txt",
+      "size": 1275,
+      "sha256": "f6bded041148aea92bbe4a078ae9d71c685a5bca60dc6479984a6acb1e0e746d"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_060/receipt.json",
+      "size": 65268,
+      "sha256": "ed91419dfa81d5615a09efb8fd2c1169512b87fcaba22458542c5b6dd545f333"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_060/rsl.out.0000.txt",
+      "size": 98993,
+      "sha256": "6a8e0a3184d7b61de1e012db16de4e53681cc7a0b0569f9908b8405936f15ab6"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_060/runner_stdout.txt",
+      "size": 177,
+      "sha256": "ee097b5780f4edf98f86ecff4edac64e64f25ef6d982866c34c779664b65ac18"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_070/launcher.txt",
+      "size": 1283,
+      "sha256": "96c61e44b9f116025b51dcb57551b1dbe8fd3c79a59bddf8d57915c1ffd97407"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_070/receipt.json",
+      "size": 65301,
+      "sha256": "29a9b2ff1b1523b92cad418b84fb136147ef770faad87a1e3aec60d2ccf3be4a"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_070/rsl.out.0000.txt",
+      "size": 99009,
+      "sha256": "c97cade9e556c844e4a998257e5da786c405da549db61544664bccdca5e62473"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_070/runner_stdout.txt",
+      "size": 185,
+      "sha256": "85d815010bb1267659daa881a2d2174ebdcca110855c4141cf03b91825995416"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_080/launcher.txt",
+      "size": 1283,
+      "sha256": "2a3481d94f44d21866d98441979b5971a92d21476237c47cabb02e8f5acde1b0"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_080/receipt.json",
+      "size": 65301,
+      "sha256": "80da0391f90813342694084b1b1a3c2f4e4d25205180464d2e29606f6f1054cc"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_080/rsl.out.0000.txt",
+      "size": 98993,
+      "sha256": "76f68fb74112960fee9592c40e7829b8456c1056c775b59f2c3cc0ab0ff21ac4"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_080/runner_stdout.txt",
+      "size": 185,
+      "sha256": "21e8c393a1c655d7b7822b3ad482e26dffd36b4a27b03f29978c690f1e5aa3d4"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_090/launcher.txt",
+      "size": 1283,
+      "sha256": "bbfe65526619314135cce82f371a937b8111778d5f433f459c3236de1a1ac173"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_090/receipt.json",
+      "size": 65302,
+      "sha256": "1624203c352466d1ab223e56ffc0a336ac9f2da49b780f25aa1d838049edcd92"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_090/rsl.out.0000.txt",
+      "size": 99009,
+      "sha256": "cc8f54105abc2281637dfcb77250e23b88eb5536bff977b73eec4f2be5b35c18"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/CONTROL_SNOW_090/runner_stdout.txt",
+      "size": 185,
+      "sha256": "5c57dfed1ba9f5055f41b409dc006a7ab8fe73084d567a170cb0eaaf64284315"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_060/launcher.txt",
+      "size": 1281,
+      "sha256": "79506be54892297be512f73f5dd0038e14ce5d2404b1c3c04837aa132e90dc8e"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_060/receipt.json",
+      "size": 65312,
+      "sha256": "53888fcc95d39114092f483241a1a164ddd5406036535f6a74e4e4ce3f43b2f6"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_060/rsl.out.0000.txt",
+      "size": 98993,
+      "sha256": "18bf983b9933383455b2027d3282c2e030f65b9989b3e00bec96338a45ed666f"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_060/runner_stdout.txt",
+      "size": 184,
+      "sha256": "f814136ce0deafa032e23a34625f87b664556a034e27f406716c2b289d5c7d49"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_070/launcher.txt",
+      "size": 1283,
+      "sha256": "b7c1e5c4861da05305923ce93f2d5ac26eeb38b6725d681797338d433259bed5"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_070/receipt.json",
+      "size": 65321,
+      "sha256": "a92cc9c66dd51e1cdd7fe81a290c05bdbbb0238ac54bca4f2520fdb07b93d896"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_070/rsl.out.0000.txt",
+      "size": 98993,
+      "sha256": "8ea93671aeef9fca982e1713a05d902cc57904f1ac897144db0ed237b65a4b86"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_070/runner_stdout.txt",
+      "size": 186,
+      "sha256": "90e4faaad9f44aabe3f51f31c5ad22532637397c7a1f5b23686b18cc5e740d76"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_080/launcher.txt",
+      "size": 1283,
+      "sha256": "67d2095cd993d1d65a041c09f1cc211f2d167ec08bd4f344eacc6e0c7a92a7a9"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_080/receipt.json",
+      "size": 65320,
+      "sha256": "c338bc3448c8d9c01a9d416c81ba6edce3e7beea3246bfb24b0dc1f2d26dadbd"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_080/rsl.out.0000.txt",
+      "size": 98993,
+      "sha256": "21646d445e8ea7e15f421716304dc225b6562cfafa9a2a700a1966635617f32a"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_080/runner_stdout.txt",
+      "size": 186,
+      "sha256": "1f2a8ac45ba718729e5df76f2091f045486c20426c43eefd1e3262c5d106c362"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_090/launcher.txt",
+      "size": 1283,
+      "sha256": "195105ce522e7ecf958fc4dfc3ffb79751ac7fe005b6f480eb0290458617f322"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_090/receipt.json",
+      "size": 65322,
+      "sha256": "eda2e8cee01b93a56869aeff1fe07d115778143282550091fa9b485c26bfb472"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_090/rsl.out.0000.txt",
+      "size": 98993,
+      "sha256": "b29af2bb4cc3cdfdd55dcc1207db9d1cd4e74b4389d551a02ce533036f1a061e"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/cases/IMPROVED_SNOW_090/runner_stdout.txt",
+      "size": 186,
+      "sha256": "90d6d166168b80826493024268f053fcca37f217c5ada164f5767c5d46b7b44d"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/common_plan.json",
+      "size": 548292,
+      "sha256": "58dae266e4b4f893f5a9d940e30c8e38574823b03785e68b089811ef9d085871"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/env.sh",
+      "size": 391,
+      "sha256": "60204c0a8906802c9d65313944f6c1d07fb633889ee624b8d9fe637bef1c4522"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/field_metadata_contract.json",
+      "size": 218885,
+      "sha256": "4aa3a31dcc26ddb8885db92ff61b1f19d228f5ed57a05a85d57c3df64a0057ba"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/field_value_case_sha256.json",
+      "size": 136655,
+      "sha256": "f07396f205db9c1341b83a85b9bb53742e96ed7ab38ff4fc1f4c0137b0e2c8b5"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/field_value_source_sha256.json",
+      "size": 34148,
+      "sha256": "8d19e624edd674bf724c21e88c4a89f639e7fbbfed8ac6cfdf87246bc2c92f0a"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/final_receipt.json",
+      "size": 11778,
+      "sha256": "8222f0d32d89b2b859a194568e60bc6bd4032978c2539f7d5dad8daff4f66750"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/finalize_batch.py",
+      "size": 5209,
+      "sha256": "f9df2b1df245c2da9d96772e43512079bebf88e6ac176ba47228b41817a33968"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/history_validation.json",
+      "size": 42391,
+      "sha256": "ffe97d0d552403f91fd842bc4bba0e4fee867841e956b868db6719a2cca88ad2"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/launch_scripts.sha256.json",
+      "size": 433,
+      "sha256": "51203643d16bb203710f8521edc382799a446deeb760373d975096e5681f8baa"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/prepare_cases.py",
+      "size": 25034,
+      "sha256": "f7f5e57de84c881aa2214dea18d2fd4d9066153202f7f8220a3e07138ac5293b"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/qsnow_audit.json",
+      "size": 9836,
+      "sha256": "5297e5f8942107e62b77a6a8f0d406713ba62257c6895c450d13cb3e1b232783"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/reused_factor050_provenance.json",
+      "size": 3882,
+      "sha256": "4bd2ba6da28b464976f6748a52fd31862c14368e2e64daa9d1ff4828957ae86c"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/run_all.py",
+      "size": 3766,
+      "sha256": "984da127d06ba6143dba376ee7f8e3b861a1d75681fba20a2343503063fe0dba"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/runtime/run_case.py",
+      "size": 10082,
+      "sha256": "7e82cfc1416136d61919c2bff5537c6928336fff9321f2a8cd32db7499fd718e"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/selection_plan.json",
+      "size": 2928,
+      "sha256": "8d30f3f7a3d82a34332013334d5f0d6c66f1a1576198db228b98b1a89c950cf2"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/validation/browser_command.txt",
+      "size": 2275,
+      "sha256": "f4f23e53c9ba4636b07e0c66a24f0901ab513f3998a3d18e5643144715d6f0d1"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/validation/browser_images.json",
+      "size": 44506,
+      "sha256": "8bcf96db8156c14738c533ac54a09a5468d83403c5fe23fa38e15042aa9b5833"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/validation/clean_export_tests.json",
+      "size": 1519,
+      "sha256": "978dd7944f119734ac4b4cac9b714b1e1f3b58bdb4bd8d39ca7db6edc11539fb"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/validation/clean_export_tests.txt",
+      "size": 213,
+      "sha256": "b2e5098c7d0375c5088df8bed294b24c9d91607dfcf0a6d25f8e4ddad4501c1d"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/validation/final_clean_export_tests.json",
+      "size": 2232,
+      "sha256": "e7c4b6fae20209c0a3738d43800d3851f2f90e0abca25c7cd3a3651c27934789"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/validation/final_clean_export_tests.txt",
+      "size": 213,
+      "sha256": "2cd6428964a289234e1444bd3bdf561ca154f0207ae9f3a17f8f439bd517c58c"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/validation/final_team_review.json",
+      "size": 10555,
+      "sha256": "30752e0d7bafd3385ad0190e0fc89ebc27d348806509e604075b39d5fa15874b"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/validation/package_figures.json",
+      "size": 5353,
+      "sha256": "06474995721f289bc05ac8bb5cb36520517109a4dae8dff542a835adcd3d1c72"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/validation/pr_body_reviewed.md",
+      "size": 3882,
+      "sha256": "2af63c3a43219e52aa825c97404fed698a54f9f46c36834c7f5c69c4da76a8db"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/validation/prior_evidence.json",
+      "size": 9358,
+      "sha256": "bb7fc8ee4453b988471a2f40f6e93c4f5209590d25935123c3edff79aa2335c7"
+    },
+    {
+      "path": "docs/evidence/snow_lower_20261030/validation/root_visual_review.json",
+      "size": 1016,
+      "sha256": "366d06cc22d8da4f2218b7a6a6a5c147844ca925c798affddaeed3b27684a3fa"
+    },
+    {
+      "path": "graphify-out/2026-10-30-snow-lower/GRAPH_REPORT.md",
+      "size": 331294,
+      "sha256": "8e25f2750fab25e593ee14f4db54a262ef7d387c86cb76e7913c1e3d1a9b8217"
+    },
+    {
+      "path": "graphify-out/2026-10-30-snow-lower/graph.json",
+      "size": 20070288,
+      "sha256": "812272015ddc1eba8a117dc8a9d472114b22056ff8ac835792bc9de4d60fa3e9"
+    },
+    {
+      "path": "graphify-out/2026-10-30-snow-lower/manifest.json",
+      "size": 1086950,
+      "sha256": "d653b1bae4316e45778665b5ca0796ac5fdbcd3e78d67fbac889dd8415601482"
+    },
+    {
+      "path": "graphify-out/GRAPH_REPORT.md",
+      "size": 331294,
+      "sha256": "8e25f2750fab25e593ee14f4db54a262ef7d387c86cb76e7913c1e3d1a9b8217"
+    },
+    {
+      "path": "graphify-out/graph.json",
+      "size": 20070288,
+      "sha256": "812272015ddc1eba8a117dc8a9d472114b22056ff8ac835792bc9de4d60fa3e9"
+    },
+    {
+      "path": "graphify-out/manifest.json",
+      "size": 1086950,
+      "sha256": "d653b1bae4316e45778665b5ca0796ac5fdbcd3e78d67fbac889dd8415601482"
+    },
+    {
+      "path": "tests/test_cp02_snow_lower.py",
+      "size": 10464,
+      "sha256": "fd3fb6b8a16e95dd39303766c5a7d5e789e34149fbef19ff710677bec8d6ed25"
+    },
+    {
+      "path": "tests/test_plot_snow_lower.py",
+      "size": 3242,
+      "sha256": "80d927652514cb77021b151b08c22e5dde1f6ce209aa2c8df5c8d9a95772a519"
+    },
+    {
+      "path": "tools/cp02_snow_lower.py",
+      "size": 38498,
+      "sha256": "04108676ffe44db688ee53a24ee07fdb2031a0d9fd4012f17619a6245c03d3c2"
+    },
+    {
+      "path": "tools/plot_snow_lower.py",
+      "size": 39734,
+      "sha256": "fd081fbed3f885dfbf640e431edb66e6d67806da18a0106629d46515251b8ea0"
+    }
+  ]
+}

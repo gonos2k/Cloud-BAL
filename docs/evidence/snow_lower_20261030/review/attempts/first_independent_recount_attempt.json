@@ -1,0 +1,9 @@
+{
+  "status": "FAILED_BEFORE_REVIEW_OUTPUT_CREATION",
+  "command": ["python", "docs/evidence/snow_lower_20261030/review/independent_score_recount.py"],
+  "working_directory": "/var/tmp/cloudbal-snow-lower",
+  "exit_code": 1,
+  "review_output_created": false,
+  "stderr": "Traceback (most recent call last):\n  File \"/var/tmp/cloudbal-snow-lower/docs/evidence/snow_lower_20261030/review/independent_score_recount.py\", line 235, in <module>\n    result = recount()\n             ^^^^^^^^^\n  File \"/var/tmp/cloudbal-snow-lower/docs/evidence/snow_lower_20261030/review/independent_score_recount.py\", line 178, in recount\n    or float(row['alpha']) != alphas[case]\n                              ~~~~~~^^^^^^\nKeyError: 'IMPROVED_BG_FIXED'\n",
+  "resolution": "Add explicit alpha=1.0 mappings for ORIGINAL and IMPROVED_BG_FIXED, and verify their distinct family labels."
+}
