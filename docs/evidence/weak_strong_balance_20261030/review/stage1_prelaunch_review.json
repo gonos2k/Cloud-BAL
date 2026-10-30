@@ -1,0 +1,43 @@
+{
+  "review": "independent stage-1 prelaunch review",
+  "result": "GO",
+  "reviewer": "tradeoff_audit",
+  "frozen_inputs": {
+    "common_plan_sha256": "a2d06679ea3a9b24a04f9ff359c842172f06fd7ec0f402f802c91399b2ad6a3a",
+    "selection_plan_sha256": "17e8833f2f28da76e1474f82440a88889bd55ba723ef9cd6618d06a0eb786248",
+    "gate_manifest_sha256": "07e95e73af040e4388c6636634e334606ad1292bab7f30340d5148e90841b29c",
+    "frozen_maps_sha256": "40b8b1d2fd772a1fbf462824ab77f958f31be19f86733d09e7504ff4630e4909",
+    "launch_manifest_sha256": "215d09226ba5c129d920e15aec7a6e46c22339d73c77d449f67b722d1cc54dde",
+    "qsnow_audit_sha256": "f2b4f2dc79d329ac9fb17b29c5899fb5df20d8982438cf70fe90c2e407a717ad",
+    "staged_field_hashes_sha256": "f14d9d578e4ca19c6cb03982269db6fb13ab23d9a49f89fe58a10ea2d052d965",
+    "scorer_sha256": "77116d08ee24f050a7d0ed856aa866e572178835c78421ddc871e27c1374f64d",
+    "scorer_test_sha256": "4e7525728cb44cd4cb71ddf7989e33dd6105e744194e8bbe034a8de3b3739494"
+  },
+  "checks": {
+    "status_pass_ready_to_launch": true,
+    "eight_cases_and_expected_2x2_crosses_present": true,
+    "all_eight_staging_directories_have_89_pinned_files_and_no_hardlinks": true,
+    "all_native_208_variable_metadata_unchanged": true,
+    "all_non_qsnow_native_values_match_their_declared_parent": true,
+    "all_staged_qsnow_value_hashes_match_frozen_plan": true,
+    "all_six_gate_and_equal_mass_arrays_reread_exactly_from_frozen_float32_maps": true,
+    "six_qsnow_column_kg_m2_maps_recomputed_bit_exact_using_dry_mass_then_area": true,
+    "three_equal_mass_controls_match_gates_below_1e-6_relative_diagnostic_mass_error": true,
+    "no_forecast_outputs_present_at_review": true,
+    "input_gate_uses_only_initial_precipitating_hydrometeors_and_hybrid_geometry": true,
+    "hybrid_dp_uses_C1H_C2H_MU_MUB_DNW_via_read_geometry": true,
+    "selection_scorer_and_test_are_pinned_to_final_selection_plan": true,
+    "pinned_intel_toolchain_and_mpi_hashes_match": true
+  },
+  "mass_match_relative_errors": {
+    "G50_90": 1.2892278824294647e-10,
+    "G75_95": 7.887810292034658e-11,
+    "G90_99": 6.644736481608931e-11
+  },
+  "selection_contract": "Strict zero-tolerance weak CSI admission against ORIGINAL in all 18 lead-by-threshold cells (leads 1-6; thresholds 0.1, 0.5, 1), then lead-1 CSI@10 must be strictly greater. Qualified candidates are ranked by lead-1 CSI@10, CSI@5, FAR@10, RMSE, then case ID; no averages.",
+  "scientific_scope": "Gate is preferential QSNOW enhancement in columns selected from positive initial precipitating-water proxy X; alpha is 1 at/below the low quantile and increases smoothly to 3 at/above the high quantile. Equal-mass controls match diagnostic initial dry-mass-weighted QSNOW only. The intervention is nonconservative relative to ORIGINAL and makes no water, energy, or balance conservation claim.",
+  "remaining_limits": [
+    "Forecast skill and the selection outcome are unknown until all eight pinned runs and scoring/recount complete.",
+    "This experiment isolates spatial placement against equal diagnostic initial QSNOW addition for each gate and crosses the B1 input/executable effects; it does not establish universal weak-versus-strong precipitation behavior."
+  ]
+}

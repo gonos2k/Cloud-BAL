@@ -1,0 +1,71 @@
+{
+  "schema": "weak-strong-balance-kg-source-hash-history-v1",
+  "status": "OBSERVATION_ONLY_FINAL_SOURCE_REPLAY_PENDING",
+  "purpose": "Reconcile the preserved pre-review stage-v2 plan reference with the final runtime/scorer pins without editing the prelaunch review or creating a KG selection lock.",
+  "analysis_code_evolution": {
+    "status": "POST_RUN_REPORTING_FIXES_IN_PROGRESS",
+    "note": "Scoring/postprocessing source changed after the prelaunch audit to correct reporting issues. The historic stage1 prelaunch review remains unchanged and is not represented as a review of those later reporting edits.",
+    "scorer_source_observations": [
+      {
+        "path": "tools/cp02_weak_strong_balance.py",
+        "sha256": "f1e204ef77ee91d26db817e6af5207e1550f4164d124709377e7a72b26dd2258",
+        "observation": "Prior observed scorer state; superseded during report/postprocessing fixes."
+      },
+      {
+        "path": "tools/cp02_weak_strong_balance.py",
+        "sha256": "3d454cadb85fc17d63cc4380020691ce7b35fc2a8d89a064d5e72f5cffde7796",
+        "observation": "Current source observation while fixes remain in progress; recompute and review before source lock."
+      }
+    ],
+    "unchanged_runtime_identities_at_current_observation": {
+      "initial_precip_gate_source": {
+        "path": "tools/initial_precip_gate.py",
+        "sha256": "7363b02b603659bdf85af58e33193774ceed5a35e3dce9c24739fa2b2685c9fa"
+      },
+      "gate_maps": {
+        "path": "docs/evidence/weak_strong_balance_20261030/runtime/frozen/initial_precip_gate_maps.npz",
+        "sha256": "40b8b1d2fd772a1fbf462824ab77f958f31be19f86733d09e7504ff4630e4909"
+      },
+      "common_plan": {
+        "path": "docs/evidence/weak_strong_balance_20261030/runtime/common_plan.json",
+        "sha256": "a2d06679ea3a9b24a04f9ff359c842172f06fd7ec0f402f802c91399b2ad6a3a"
+      }
+    }
+  },
+  "reconciled_identities": {
+    "pre_review_stage_v2_archived_common_plan": {
+      "path": "docs/evidence/weak_strong_balance_20261030/runtime/attempts/pre-review-stage-v2/common_plan.json",
+      "sha256": "709884ca5416dd50227b3a987e75afe768fd23db6e6a5193b997254ec19bb638",
+      "selection_plan_sha256_inside": "5f0b4637ad64b8d20de48d542d7cd58b30315f0b14c560c28634e3ce928d17a4",
+      "disposition": "Preserved failed/superseded preflight attempt; not the launched common plan."
+    },
+    "final_selection_plan": {
+      "path": "docs/evidence/weak_strong_balance_20261030/selection_plan.json",
+      "sha256": "17e8833f2f28da76e1474f82440a88889bd55ba723ef9cd6618d06a0eb786248"
+    },
+    "launched_common_plan": {
+      "path": "docs/evidence/weak_strong_balance_20261030/runtime/common_plan.json",
+      "sha256": "a2d06679ea3a9b24a04f9ff359c842172f06fd7ec0f402f802c91399b2ad6a3a",
+      "selection_plan_sha256_inside": "17e8833f2f28da76e1474f82440a88889bd55ba723ef9cd6618d06a0eb786248"
+    },
+    "final_scorer_expected_pins_at_observation": {
+      "path": "tools/cp02_weak_strong_balance.py",
+      "sha256": "3d454cadb85fc17d63cc4380020691ce7b35fc2a8d89a064d5e72f5cffde7796",
+      "selection_plan_sha256_pin": "17e8833f2f28da76e1474f82440a88889bd55ba723ef9cd6618d06a0eb786248",
+      "common_plan_sha256_pin": "a2d06679ea3a9b24a04f9ff359c842172f06fd7ec0f402f802c91399b2ad6a3a"
+    }
+  },
+  "preserved_reviews": {
+    "stage1_prelaunch_review": {
+      "path": "docs/evidence/weak_strong_balance_20261030/review/stage1_prelaunch_review.json",
+      "sha256": "df042e11687d5afde0dc5eb0bdde0ebb2b2776fda69e580a9bfdd156aaf4dc30",
+      "modified_by_this_reconciliation": false
+    }
+  },
+  "notes": [
+    "The archived stage-v2 common plan points at the earlier selection plan and remains retained as an attempt artifact.",
+    "The final common plan and the current scorer pin agree on the launched selection plan identity; recompute scorer hash/pins after reporting fixes finish.",
+    "Exact archived common-plan and scorer source hashes must be recomputed after final source/replay review; the archived source is never rewritten.",
+    "This note does not freeze structural extraction scope, hash-only evidence, a selection lock, or a graph baseline."
+  ]
+}

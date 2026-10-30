@@ -1,0 +1,90 @@
+{
+  "review": "independent final analysis, report and asset review after relocation-safe scorer pin",
+  "result": "PASS",
+  "reviewer": "tradeoff_audit",
+  "prior_review_path": "docs/evidence/weak_strong_balance_20261030/review/prior_versions/final_analysis_review.json",
+  "prior_review_sha256": "2ff74a80281e9d88086648676fe10f61904d7737d49271f9c930f6f3792b3b73",
+  "version_reconciliation_path": "docs/evidence/weak_strong_balance_20261030/review/scorer_version_reconciliation_final.json",
+  "source_pins": {
+    "selection_plan_sha256": "17e8833f2f28da76e1474f82440a88889bd55ba723ef9cd6618d06a0eb786248",
+    "common_plan_sha256": "a2d06679ea3a9b24a04f9ff359c842172f06fd7ec0f402f802c91399b2ad6a3a",
+    "gate_manifest_sha256": "07e95e73af040e4388c6636634e334606ad1292bab7f30340d5148e90841b29c",
+    "gate_maps_sha256": "40b8b1d2fd772a1fbf462824ab77f958f31be19f86733d09e7504ff4630e4909",
+    "scorer_sha256": "2572d41d352c70d72d8488fe9f0dc9d961de8b10c21f7ade459f131e7c4fbdb5",
+    "recount_sha256": "39fa26c634d9de36d92d3d63f0b0c79d332c90a27e6bb77169331eec0b399926",
+    "analysis_receipt_sha256": "c04e2e6002d043ec1624d7bc2145e78fed9a4173487251e4ce472c963094c0ae",
+    "runtime_batch_receipt_sha256": "2716f7376d20575c4cf015434266dcdb4e4050ce12e2d203c13beb317a66aa4a",
+    "runtime_history_validation_sha256": "8d912c0c05940d3cd9dfe8d84048381e7e87abab4e47741d094744f00c1eae52",
+    "runtime_final_receipt_sha256": "4322b9de5a4490a3f874c6cdb826889a1f721185f907aa6383e07f9c113f3f58",
+    "independent_recount_replay_sha256": "8bf9ac77f4bfc8fc7b63ac0f9d33857379547897095b77a9a56f41543bdd485c",
+    "clean_export_validation_sha256": "44dcbd427be7883ea56720012360c3c5ee9eae85934eb531a0d8e4fada700fdc",
+    "main_report_sha256": "1b6e1f31ed34fb6aab36eceaa07b15e6eb3719b87b1ba5373d0b34d675b3e029",
+    "main_report_receipt_sha256": "91634100c76d073a4979d62b89178cce699d3f2ef1b3ca09031f4fce1294e18d",
+    "full_score_report_sha256": "1880d37d09eeea4853dfb3a5b85b551971211dcde9db584be6df8ec9d97c33c8",
+    "full_score_receipt_sha256": "79303a1be7297e8bdd89878dd01fc9b2c50239af715fa2c02cd7c4a29f31359e",
+    "figures_document_sha256": "cb4ffd8079aeb6f0079c4a7675b591bb0c6e8182298477ff065177be17500ae1",
+    "figures_document_receipt_sha256": "39e512d2e6e4ca9a68e123ad34fa667715b7cc2003e7d8a2a28b8b4f4fe6cedc",
+    "figure_manifest_sha256": "d82c218799a2de166424c350a988b5ebbf07562105598220d88403aece9ab1ad"
+  },
+  "runtime_and_recount": {
+    "eight_forecasts_and_56_histories_validated": true,
+    "independent_recount_status": "PASS",
+    "absolute_path_full_byte_replay_status": "PASS",
+    "byte_identical_outputs": 29,
+    "rows_recounted": {
+      "categorical": 432,
+      "continuous": 72,
+      "point_transitions": 396,
+      "admission_constraints": 152,
+      "observation_band_transitions": 1980,
+      "observed_forecast_bin_counts": 3300
+    },
+    "selection_status": "NO_QUALIFIED_CANDIDATE",
+    "selected_case": null,
+    "data_bytes_identical_to_prior_final_source_replay": true,
+    "relocation_safe_source_version_did_not_change_scores": true
+  },
+  "admission_and_diagnostic_findings": {
+    "weak_CSI_floor_failures_of_18": {
+      "GATE_G50_90": 9,
+      "EQ_G50_90": 5,
+      "GATE_G75_95": 8,
+      "EQ_G75_95": 6,
+      "GATE_G90_99": 10,
+      "EQ_G90_99": 7,
+      "FIXED_ORIGINAL_100": 13,
+      "ORIGINAL_B1_100": 8
+    },
+    "ORIGINAL_B1_100_strong_condition": "FAIL",
+    "lead1_CSI10": {
+      "GATE_G50_90": 0.12903225806451613,
+      "EQ_G50_90": 0.1118421052631579,
+      "CONTROL_SNOW_300_context": 0.12738853503184713,
+      "ORIGINAL": 0.04929577464788732
+    },
+    "GATE_G50_90_interpretation": "Strong-only lead-1 diagnostic lead; 9 of 18 weak CSI floors fail versus 5 for matched-mass EQ_G50_90, so it is neither admitted nor selected.",
+    "low_0_1mm_CSI_delta_vs_ORIGINAL_by_lead_1_to_6": {
+      "FIXED_ORIGINAL_100": [0.04004578641525286, -0.01617823584857525, -0.00921001417947609, -0.012694512694512716, -0.0036723697691781743, -0.017529436098143336],
+      "ORIGINAL_B1_100": [0.0009770633278511354, -0.00320322214413149, -0.0055746595445697045, 0.0005495662638519416, -0.000425688790246459, 0.00010124674774253384]
+    },
+    "interpretation_limit": "The cross cases show distinct score associations in one case; factorial comparisons are descriptive nonlinear score contrasts, not single-process causal attribution. Low-threshold CSI includes hits from all observed intensities above threshold and is not a light-rain-only metric."
+  },
+  "final_assets": {
+    "asset_batch_review_sha256": "5550e10b1b21deaafc010f793f332799e982730de311a4d5103ae3f65bb929f3",
+    "38_pngs_and_manifest_validated": true,
+    "main_report_full_tables_and_figures_document_bind_final_analysis_and_manifest": true
+  },
+  "clean_export": {
+    "status": "PASS",
+    "tests_passed": 147,
+    "source_sha256_includes_final_scorer_and_recount": true,
+    "scope_limit": "Related Python validation; no full portable suite or new native build claimed."
+  },
+  "next_step": "Do not claim a universal weak-versus-strong direction or run a blind snow-factor grid. Use the strong-only/weak-floor conflict and the executable/input cross sensitivity to prioritize process-budget and guard qualification. Any rain-number initializer should first be tied to an authoritative PSD or observation constraint.",
+  "scope_limits": [
+    "One initialization case and event with six one-hour windows on common paired RN1 analysis points.",
+    "No independent-event or operational forecast-skill claim.",
+    "Equal initial diagnostic dry-mass-weighted QSNOW is not full water, energy or microphysical-state conservation.",
+    "Stage-1 scorer source hash was an interim prelaunch review pin; its bytes were not retained. The final scorer is separately reviewed and reconciled above."
+  ]
+}

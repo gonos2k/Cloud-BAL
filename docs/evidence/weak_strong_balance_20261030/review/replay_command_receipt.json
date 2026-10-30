@@ -1,0 +1,64 @@
+{
+  "analysis_data_outputs": 28,
+  "analysis_receipt_sha256": "c04e2e6002d043ec1624d7bc2145e78fed9a4173487251e4ce472c963094c0ae",
+  "comparison_to_pre_relocation_run": {
+    "change_scope": "receipt source binding only; the frozen plan/admission/scoring/data outputs did not change",
+    "changed_data_outputs": [],
+    "data_outputs_compared": 28,
+    "previous_analysis_receipt_sha256": "01da50b3efbb077d88c49f11052377b3bc5e6016f9b4ac8baeace8c489b8fc7d"
+  },
+  "exact_row_counts": {
+    "admission_constraints": 152,
+    "categorical": 432,
+    "continuous": 72,
+    "csi_change_exact_counts": 396,
+    "factorial_difference_in_differences": 312,
+    "gate_equal_mass_comparison": 126,
+    "observation_band_transitions": 1980,
+    "observed_forecast_bin_counts": 3300,
+    "transitions": 396
+  },
+  "pythonhashseed": 0,
+  "recount_source": {
+    "path": "/var/tmp/cloudbal-weak-strong/tools/recount_cp02_weak_strong_balance.py",
+    "sha256": "39fa26c634d9de36d92d3d63f0b0c79d332c90a27e6bb77169331eec0b399926"
+  },
+  "replay_command": "PYTHONHASHSEED=0 python3 tools/recount_cp02_weak_strong_balance.py --analysis /var/tmp/cloudbal-weak-strong/docs/evidence/weak_strong_balance_20261030/analysis --runtime-dir /var/tmp/cloudbal-weak-strong/docs/evidence/weak_strong_balance_20261030/runtime --plan /var/tmp/cloudbal-weak-strong/docs/evidence/weak_strong_balance_20261030/selection_plan.json --plan-sha256 17e8833f2f28da76e1474f82440a88889bd55ba723ef9cd6618d06a0eb786248 --replay --output /var/tmp/cloudbal-weak-strong/docs/evidence/weak_strong_balance_20261030/review/independent_recount_replay_final.json",
+  "replay_result_sha256": "8bf9ac77f4bfc8fc7b63ac0f9d33857379547897095b77a9a56f41543bdd485c",
+  "replay_status": "PASS",
+  "replayed_outputs": 29,
+  "runtime_common_plan_sha256": "a2d06679ea3a9b24a04f9ff359c842172f06fd7ec0f402f802c91399b2ad6a3a",
+  "scorer_source": {
+    "path": "/var/tmp/cloudbal-weak-strong/tools/cp02_weak_strong_balance.py",
+    "sha256": "2572d41d352c70d72d8488fe9f0dc9d961de8b10c21f7ade459f131e7c4fbdb5"
+  },
+  "selection_plan_sha256": "17e8833f2f28da76e1474f82440a88889bd55ba723ef9cd6618d06a0eb786248",
+  "status": "PASS",
+  "winner": {
+    "admission": "all 18 weak cells CSI >= ORIGINAL and strict lead-1 CSI@10 > ORIGINAL; zero tolerance",
+    "averaging": "No aggregation across thresholds, leads, or experiments.",
+    "comparison_baseline": "ORIGINAL",
+    "constraints": "weak thresholds 0.1/0.5/1.0 mm at each lead 1-6, plus lead-1 10.0 mm CSI",
+    "eligible_cases": [
+      "GATE_G50_90",
+      "EQ_G50_90",
+      "GATE_G75_95",
+      "EQ_G75_95",
+      "GATE_G90_99",
+      "EQ_G90_99",
+      "FIXED_ORIGINAL_100",
+      "ORIGINAL_B1_100"
+    ],
+    "qualified_cases": [],
+    "ranking_order": [
+      "descending lead-1 CSI at 10 mm",
+      "descending lead-1 CSI at 5 mm",
+      "ascending lead-1 FAR at 10 mm",
+      "ascending lead-1 RMSE",
+      "ascending case ID"
+    ],
+    "selected_case": null,
+    "status": "NO_QUALIFIED_CANDIDATE",
+    "weak_threshold_interpretation": "These CSI floors include hits at all observed intensities above each cutoff, including heavy-rain hits; they are not light-rain-only scores."
+  }
+}
