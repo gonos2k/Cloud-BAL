@@ -1,0 +1,274 @@
+{
+  "status": "PASS_SCOPED_REPORT_ATTACHMENTS",
+  "base_commit": "8467433a440a3b3bf746c1a65ea7420bca8bc8aa",
+  "dependency_pr": 132,
+  "scope": "Core mathematical and meteorological schematics, six hourly paired precipitation maps, and separate progress appendix; uses existing forecast arrays without new integration.",
+  "validation": {
+    "new_map_tests_passed": 4,
+    "test_tier": "linux",
+    "map_outputs_reproduced_byte_identically": 13,
+    "concept_outputs_independently_reproduced": 6,
+    "final_report_pages": 8,
+    "embedded_figures": 8,
+    "prior_forecast_artifacts_unchanged": 200,
+    "kg_prior_snapshots_preserved": 206,
+    "kg_total_snapshots": 208,
+    "team_review": "GO"
+  },
+  "limitations": [
+    "One existing 2026-08-16 case; 2026-10-30 is reporting cutoff.",
+    "Maps show common 3688 evaluation points, not full-domain or observation coverage.",
+    "Concept pathway does not establish process attribution or closed water/energy budget.",
+    "Baseline preparation differs; no uniform or general forecast improvement claim.",
+    "No new model integration or full test suite."
+  ],
+  "artifact_count": 49,
+  "artifacts": [
+    {
+      "path": "docs/HOURLY_PRECIPITATION_PROGRESS_20261030.md",
+      "size": 5999,
+      "sha256": "b1bc4c1d39844b49817d8eea9e24c4c3af02a203960bedcce8a3605f60b2b524"
+    },
+    {
+      "path": "docs/HOURLY_PRECIPITATION_PROGRESS_APPENDIX_20261030.md",
+      "size": 5750,
+      "sha256": "ae88aa4ba92e9b8123fc1ccfd87621b40d3cc8037e3f3ac31a2155b6fc5ee9df"
+    },
+    {
+      "path": "docs/build_hourly_progress_report.py",
+      "size": 6328,
+      "sha256": "8215609b3835b70a1cd32a39f5427647e5fcc4196c276bd3a210e0214e3a31aa"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/README.md",
+      "size": 2496,
+      "sha256": "708ed2d7479917d2d8381d7d5a29d00b711741830f2fc1479aad8e134b63affd"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/clean_export.json",
+      "size": 442,
+      "sha256": "b402f1e44d46d6e3df05d31a8be3954136744573ab51394923447dd1ff78a8a4"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/clean_tests.txt",
+      "size": 128,
+      "sha256": "004412a10d29fa45844cb5821ad5cb2fac3a6da232f2d77b878ba4ad019c204e"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/concepts/figure_manifest.json",
+      "size": 1326,
+      "sha256": "5e9fecf7449fcf72be59110a17067fab94299207dd5c6f6fa91845593ef54fb6"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/concepts/precipitation_physics_flow.pdf",
+      "size": 37366,
+      "sha256": "f713a4d3f2fcd83bfc822e10e745995687042de32b7f582c5d645ee1e0ace673"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/concepts/precipitation_physics_flow.png",
+      "size": 243273,
+      "sha256": "9b3f4587094287e3a1ad13c5f91480ea56d7c0dc074ef346e269123d56621263"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/concepts/precipitation_physics_flow.svg",
+      "size": 104849,
+      "sha256": "38b89089e2c4cd1c8d3046a957a42235bae5f0262861c0f0d3c95423a7fa73e5"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/concepts/threshold_skill_comparison.pdf",
+      "size": 35291,
+      "sha256": "dc2259478c3c34172409791c4881b1a46eab761e3961509592d8ad75735459a8"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/concepts/threshold_skill_comparison.png",
+      "size": 203606,
+      "sha256": "aa5dd72eb33236f79f3b1576d50f5b510e10fa6a793a0683f3f55ed25d3f37c5"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/concepts/threshold_skill_comparison.svg",
+      "size": 92884,
+      "sha256": "a7c07aa758040b9f576b468988e0a0523efa18aae22d79eac2db314f2b81883c"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/figures/figure_manifest.json",
+      "size": 4353,
+      "sha256": "18b05532a10e39c57c58f7b31a6369f5417fc1fcacab57a447acc9a44f2a3e3e"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/figures/hour_13_paired_precipitation.pdf",
+      "size": 39281,
+      "sha256": "090ac4a057ba556e92da2fdcf1e68e72ff9158e876419c1e8e10577dcf92397c"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/figures/hour_13_paired_precipitation.png",
+      "size": 155542,
+      "sha256": "e2c218933b264a4cc9ba4a61bf21f68ec2c41ae879472a80ce68def0c9100b83"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/figures/hour_14_paired_precipitation.pdf",
+      "size": 40851,
+      "sha256": "22cdc14c47838f679c3890f9984a1525d855ed5e75346081eaf5788d57dec52a"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/figures/hour_14_paired_precipitation.png",
+      "size": 160533,
+      "sha256": "218176b81563e54f65109fc015de2312102ea9223e7884fb6d0f394ee2fa7836"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/figures/hour_15_paired_precipitation.pdf",
+      "size": 42854,
+      "sha256": "7cfd447fc6557cf12d926292c0a41eb75dbf521af63bba228f899065c97ac72c"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/figures/hour_15_paired_precipitation.png",
+      "size": 165954,
+      "sha256": "5990c5acb5513e5e612094f59bb523c20805d10117a9973ad9cc4a7a4f59cad9"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/figures/hour_16_paired_precipitation.pdf",
+      "size": 43206,
+      "sha256": "8b0461b2dfed20062a57481af26d98a3dac737ce89274d325984257d934ac2c4"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/figures/hour_16_paired_precipitation.png",
+      "size": 167849,
+      "sha256": "ef7bcde80d196cb0818aeb1b2b328c709c38a72b05880f31440f0de742fdf80c"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/figures/hour_17_paired_precipitation.pdf",
+      "size": 43258,
+      "sha256": "74a302a955c686bd7523e9f95190d3a25d4b5275dbc565d3e333ab62517b279c"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/figures/hour_17_paired_precipitation.png",
+      "size": 168782,
+      "sha256": "d3ca6a9902f122d2c9fd8ed2ec8a70e6fe1dd0120ee8927bf52bfb3a3e07fb50"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/figures/hour_18_paired_precipitation.pdf",
+      "size": 43705,
+      "sha256": "7dc280e8b86b530e8c6a15d0da1990497a7ab4dc7b81b0c48213f38bd17f2d9d"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/figures/hour_18_paired_precipitation.png",
+      "size": 171281,
+      "sha256": "27853e1d8ce506251a4d713a05a117407f5fa28af3f1d43caa3a7c82f324eaf5"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/figures/hourly_precipitation_all_leads.pdf",
+      "size": 167072,
+      "sha256": "8b4d48e8db59616ae892030c5af8f05c038a8d29cb3265b7466e192c0bf62fd3"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/kg/baseline.json",
+      "size": 135741,
+      "sha256": "27bb0349cbf90d09b3fd8c32eea9390fc92a5eb8f8583fa7b4cf17879b8e4335"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/kg/postpublish_readback.json",
+      "size": 714,
+      "sha256": "f7a325bd306998373290fd8ca50c16f1b7ff05a10a5d593076284ace8bb9332a"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/kg/publish_go.json",
+      "size": 488,
+      "sha256": "a742baa0af5fc0af84deaec813497d12d783261776467caa0e70516a296a2dd1"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/kg/publish_kg.py",
+      "size": 10803,
+      "sha256": "5ce01044496b281ecdbd270959f5e704d28b73fbf52cabbb28ea3c0ac5d601b6"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/kg/publish_receipt.json",
+      "size": 4010,
+      "sha256": "fe621918005c34a583ec86d4eacdc220b9906789d92375095d53298c0d17d210"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/kg/root_readback_review.json",
+      "size": 616,
+      "sha256": "733a89eb097b95162243b540c87e7e333b83dd31cd27383d91efe2cba72ef16c"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/kg/selection_lock.json",
+      "size": 6007,
+      "sha256": "02aa81824864816a7691d82bbc3b1201edb4282bcaac85adbec9a1bd5baae276"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/kg/stage_kg.py",
+      "size": 21228,
+      "sha256": "ee90229926939ea350612bf0e2f24c2d19a893f1df3ce5d9fbdfdf66eb320cfc"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/kg/stage_receipt.json",
+      "size": 9911,
+      "sha256": "f27d168582ef9b1eb9d23feafc87970aff44dcf5c649a7c27d4ea5bb8b40f18d"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/kg/stage_validation.json",
+      "size": 375,
+      "sha256": "dccbd922484362d42f51f4341278587d74c2d00042c10b9b5881d4449ca81190"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/progress_status.csv",
+      "size": 2632,
+      "sha256": "b98120e6e7f4b9d8b33e9b8e51381c5391693002b95d7b3a6e903fb54eee2aeb"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/report/HOURLY_PRECIPITATION_PROGRESS_20261030.docx",
+      "size": 1214077,
+      "sha256": "bb4d4d29004bd1daaaa91545ec9021496455758f6dca0c07446578da3de7e0c4"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/report/HOURLY_PRECIPITATION_PROGRESS_20261030.md",
+      "size": 6080,
+      "sha256": "dc364d4cd566ef8a2931d73bfe9b78c6d7acf3d8923ca7632af428a47af423f3"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/report/HOURLY_PRECIPITATION_PROGRESS_20261030.pdf",
+      "size": 1742562,
+      "sha256": "0b229576bc318965c1ce9e964ea3c6b06b2ba4f7799d93936b08583697074754"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/report/build_receipt.json",
+      "size": 1808,
+      "sha256": "46ca3467a57f0078e4d9455391bfade2fe6642e56e49b35f3ae06d34a0ace059"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/reproduction.json",
+      "size": 2561,
+      "sha256": "d08ded55888a14b80b2d1c626903358337c5ebf4daedf236085c00dc9472e276"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/review/hourly_report_map_review.json",
+      "size": 7560,
+      "sha256": "54823f9e507dbb80c513192fbcc5e87a13c36d76e5d43ed706640abdc37662d7"
+    },
+    {
+      "path": "docs/evidence/hourly_precipitation_progress_20261030/review/root_visual_and_scope.json",
+      "size": 1780,
+      "sha256": "5d6c5b7c7500421de238ceaae9f0993ee9c82452ddd07af47ff1fffb2d6b7edc"
+    },
+    {
+      "path": "tests/test_hourly_forecast_distribution.py",
+      "size": 1954,
+      "sha256": "73aa3a2ed8d80c3d7c9af43ecac1a2d82a6870c85406c75dfa254806d9b68775"
+    },
+    {
+      "path": "tests/test_tier_exceptions.json",
+      "size": 11344,
+      "sha256": "94951be56387f92c7983f5ad2f91d4569c36d80da7eaa95efc984e30822ef868"
+    },
+    {
+      "path": "tools/plot_hourly_forecast_distribution.py",
+      "size": 7746,
+      "sha256": "a5b08863c6711fa5e8e4fcfcb93e43da5b2c1ae08d19c53a69f1b7aebffe47e7"
+    },
+    {
+      "path": "tools/plot_precipitation_concept_diagrams.py",
+      "size": 8203,
+      "sha256": "303c73e55afac22af8924743127c274063d67b9ebe6dd901da7f580a2da7d2e2"
+    }
+  ],
+  "self_excluded": true
+}
