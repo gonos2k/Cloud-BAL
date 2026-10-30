@@ -1,0 +1,95 @@
+{
+  "independent_input_preflight": {
+    "artifact": "docs/evidence/snow_extension_20261030/review/preflight_independent.json",
+    "checks": [
+      "8 staged native inputs: only QSNOW values differ and match float64 source \u00d7 alpha cast float32; all native metadata equal family baseline.",
+      "All 8 \u00d7 89 staged file hashes match frozen records.",
+      "89 ORIGINAL, 89 B1, and 23 source-evidence hashes match.",
+      "Eight planned disjoint 8-CPU slots cover CPU IDs 0\u201363, one case each.",
+      "Live observation saw 8 WRF ranks per case, all one CPU each inside assigned slots."
+    ],
+    "limitation": "Audit ran while forecasts were active; it validates staged inputs and live process affinity at the observation time.",
+    "status": "PASS"
+  },
+  "kg_helper_code_review": {
+    "execution": "NOT_RUN; no stage/publication approval implied.",
+    "review": "The initial audit found self-derived scope validation and missing staged-status guard. Rechecked the updated file: literal exact 10-path REQUIRED_PATHS is enforced through lock loading and publish scope; publication requires STAGED_ONLY_NO_MAINTAINED_WRITES. Existing baseline/snapshot/wiki preservation, exact stage receipt hash gate, and rollback publisher wiring are intact.",
+    "reviewed_file": "docs/evidence/snow_extension_20261030/kg/update_graphs.py",
+    "status": "GO_CODE_ONLY"
+  },
+  "not_run": [
+    "WRF runtime finalization, output history revalidation and post-run source/input rehash.",
+    "Actual scorer CLI on completed runtime and sealed prior arrays.",
+    "Independent contingency/continuous score recount and selected-vs-ORIGINAL / selected-vs-IMPROVED_BG_FIXED transitions for all 36 lead/threshold pairs.",
+    "Plots and report review.",
+    "Final graph stage review/publication review."
+  ],
+  "open_items": [
+    "Recheck scorer/helper/report hashes after final freeze.",
+    "Complete runtime and score/recount validation; do not treat this artifact as final team GO."
+  ],
+  "review_status": "PARTIAL_REVIEW_NO_FINAL_GO",
+  "reviewed_at_utc": "2026-10-30",
+  "reviewed_file_identities": [
+    {
+      "path": "docs/evidence/snow_extension_20261030/selection_plan.json",
+      "sha256": "36e094ac84d698351cdc477ec0bb58fd7580e0676e9ed830236a7d52b0818642",
+      "size_bytes": 3062
+    },
+    {
+      "path": "docs/evidence/snow_extension_20261030/runtime/common_plan.json",
+      "sha256": "fa4fcbfc6b21a70875297759dadbbd5a482df3ebd158fdcbbacee85df46c325d",
+      "size_bytes": 547653
+    },
+    {
+      "path": "docs/evidence/snow_extension_20261030/runtime/prepare_cases.py",
+      "sha256": "b4449a8c2bbb765347d1a1cd26b88be36960e86fcae06cf2cf2b8978ad740088",
+      "size_bytes": 24027
+    },
+    {
+      "path": "docs/evidence/snow_extension_20261030/runtime/run_case.py",
+      "sha256": "ad7c199742278220b59d5273e454413f168703b70fd683ca65a3beb80c4ec979",
+      "size_bytes": 8988
+    },
+    {
+      "path": "docs/evidence/snow_extension_20261030/runtime/run_all.py",
+      "sha256": "984da127d06ba6143dba376ee7f8e3b861a1d75681fba20a2343503063fe0dba",
+      "size_bytes": 3766
+    },
+    {
+      "path": "docs/evidence/snow_extension_20261030/runtime/finalize_batch.py",
+      "sha256": "c1e64bf9fb221cfc1db1d8d4070fa0edcb54dca13e6508ebb9d42616cb402751",
+      "size_bytes": 5060
+    },
+    {
+      "path": "tools/cp02_snow_extension.py",
+      "sha256": "3f9e8f1689031a977c2c92402dcf6ae8e780cf6053896aecfa2504aca61bd80f",
+      "size_bytes": 40697
+    },
+    {
+      "path": "docs/evidence/snow_extension_20261030/kg/update_graphs.py",
+      "sha256": "f5ec9f350fde54c70bfca81d535bfe044eff0fbd8349583272d8a77e4358424a",
+      "size_bytes": 6602
+    },
+    {
+      "path": "docs/evidence/snow_extension_20261030/review/preflight_independent.json",
+      "sha256": "febaa0d0c0b1831b74d63c72a1b96252dd8948bbdda77da4406d65a417144477",
+      "size_bytes": 21683
+    }
+  ],
+  "reviewer": "independent reviewer",
+  "schema": "snow-extension-independent-code-review-v1",
+  "scorer_source_review": {
+    "actual_cli_path": "NOT_RUN_PENDING_FINALIZED_RUNTIME_OUTPUTS",
+    "independent_npz_recount": "NOT_RUN",
+    "plots_report_review": "NOT_RUN",
+    "review": "Frozen plan/common-plan pins, old artifact receipt checks, case scope, full score-grid contract, lexicographic single-case selector and runtime receipt bindings appear consistent.",
+    "status": "PRELIMINARY_NO_SOURCE_BLOCKER_FOUND"
+  },
+  "selection_design": {
+    "review": "Frozen lead-1 10 mm CSI primary endpoint, then lead-1 5 mm CSI, FAR10, RMSE, factor distance, case ID. Full six thresholds \u00d7 six leads retained; no average ranking; 22 eligible cases, CURRENT_HYDRO contextual only. Same-event/QSNOW-only limitations are explicit.",
+    "selection_plan_sha256": "36e094ac84d698351cdc477ec0bb58fd7580e0676e9ed830236a7d52b0818642",
+    "status": "PASS"
+  },
+  "worktree": "/var/tmp/cloudbal-snow-sensitivity"
+}

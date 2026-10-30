@@ -1,0 +1,95 @@
+{
+  "all_analysis_outputs_byte_identical": true,
+  "canonical_vs_independent_analysis_artifacts": {
+    "categorical_scores.csv": {
+      "canonical_sha256": "01ee65d93a70b6c8f6e4bc6f194d5f100065b52f42dd2ac1b8e4aebfe9f97307",
+      "independent_sha256": "01ee65d93a70b6c8f6e4bc6f194d5f100065b52f42dd2ac1b8e4aebfe9f97307",
+      "match": true
+    },
+    "continuous_scores.csv": {
+      "canonical_sha256": "400cb9147aee5b820e8573b27f3ff74b8079a88b120dc5849cb260eda3dd6606",
+      "independent_sha256": "400cb9147aee5b820e8573b27f3ff74b8079a88b120dc5849cb260eda3dd6606",
+      "match": true
+    },
+    "hour_13_arrays.npz": {
+      "canonical_sha256": "a3355112938e15bf81dbc3e24b00bd1971a8faaf00e09ccc16ed6a95a9088569",
+      "independent_sha256": "a3355112938e15bf81dbc3e24b00bd1971a8faaf00e09ccc16ed6a95a9088569",
+      "match": true
+    },
+    "hour_14_arrays.npz": {
+      "canonical_sha256": "ace6ed0f1e85801036107c1f301f3d90333b44d497dcdb007204120343a6897a",
+      "independent_sha256": "ace6ed0f1e85801036107c1f301f3d90333b44d497dcdb007204120343a6897a",
+      "match": true
+    },
+    "hour_15_arrays.npz": {
+      "canonical_sha256": "736d399d97fe1718595e5149a2126afcaac033200c403610489c188c4b8dedb5",
+      "independent_sha256": "736d399d97fe1718595e5149a2126afcaac033200c403610489c188c4b8dedb5",
+      "match": true
+    },
+    "hour_16_arrays.npz": {
+      "canonical_sha256": "d13b5d3b7483b46c4c2f298946eaabde77cbdb27e35d443641cacb63b0691179",
+      "independent_sha256": "d13b5d3b7483b46c4c2f298946eaabde77cbdb27e35d443641cacb63b0691179",
+      "match": true
+    },
+    "hour_17_arrays.npz": {
+      "canonical_sha256": "fdabd906c7438e2e5fcfa0ee0a7eee40d54c54573830314c3cc3b311e3ed0852",
+      "independent_sha256": "fdabd906c7438e2e5fcfa0ee0a7eee40d54c54573830314c3cc3b311e3ed0852",
+      "match": true
+    },
+    "hour_18_arrays.npz": {
+      "canonical_sha256": "75f17cb4657d55b9ced6be946a8952aa7247f54693c822f0fb65056b14f42d13",
+      "independent_sha256": "75f17cb4657d55b9ced6be946a8952aa7247f54693c822f0fb65056b14f42d13",
+      "match": true
+    },
+    "selection.json": {
+      "canonical_sha256": "843fe074e42f4264c11dab103d71c1dde127dc98b0a6f9f0d265e7d81d97c281",
+      "independent_sha256": "843fe074e42f4264c11dab103d71c1dde127dc98b0a6f9f0d265e7d81d97c281",
+      "match": true
+    },
+    "selection_scores.csv": {
+      "canonical_sha256": "8a60e97a2d1d4577a3aefc56a5f5973f974c0cfaea6e690e72b713ea4846c806",
+      "independent_sha256": "8a60e97a2d1d4577a3aefc56a5f5973f974c0cfaea6e690e72b713ea4846c806",
+      "match": true
+    }
+  },
+  "command": "python3 tools/cp02_snow_extension.py --output /var/tmp/cloudbal_snow_extension_independent_analysis_20261030",
+  "completed_utc": "2026-10-30T05:35:19.391907+00:00",
+  "independent_cli_result": {
+    "row_counts": {
+      "categorical": 828,
+      "continuous": 138,
+      "selection_ranked": 22,
+      "selection_status": 22
+    },
+    "runtime_cases": {
+      "CONTROL_SNOW_175": "SUCCESS",
+      "CONTROL_SNOW_200": "SUCCESS",
+      "CONTROL_SNOW_250": "SUCCESS",
+      "CONTROL_SNOW_300": "SUCCESS",
+      "IMPROVED_SNOW_175": "SUCCESS",
+      "IMPROVED_SNOW_200": "SUCCESS",
+      "IMPROVED_SNOW_250": "SUCCESS",
+      "IMPROVED_SNOW_300": "SUCCESS"
+    },
+    "selected_alpha": 3.0,
+    "selected_case": "CONTROL_SNOW_300",
+    "status": "COMPLETE"
+  },
+  "independent_output_dir": "/var/tmp/cloudbal_snow_extension_independent_analysis_20261030",
+  "parent_cli_attempt": {
+    "elapsed_seconds": 100.91417215205729,
+    "exit_code": 0,
+    "path": "docs/evidence/snow_extension_20261030/attempts/score_attempt_02",
+    "scorer_sha256": "b450747f0d376a353eff8c33da7ebbddfedc5d137fa9e53e0b37f0e71907da86"
+  },
+  "pinned_inputs": {
+    "common_plan_sha256": "fa4fcbfc6b21a70875297759dadbbd5a482df3ebd158fdcbbacee85df46c325d",
+    "final_runtime_receipt_sha256": "6f759c7edb755b75bbc0c1df6b6b35813c89cfb5a7740139dc32baa12386f81d",
+    "old_analysis_receipt_sha256": "18e2d82c3be0120b2da0e34fec75c12d6da52ddbfc28eaffb19781e94153e7ec",
+    "scorer_sha256": "b450747f0d376a353eff8c33da7ebbddfedc5d137fa9e53e0b37f0e71907da86",
+    "selection_plan_sha256": "36e094ac84d698351cdc477ec0bb58fd7580e0676e9ed830236a7d52b0818642"
+  },
+  "reviewer": "independent reviewer",
+  "schema": "snow-extension-independent-cli-replay-v1",
+  "status": "PASS"
+}

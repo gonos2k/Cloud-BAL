@@ -1,0 +1,12 @@
+{
+  "status": "NO_MODEL_LAUNCHED",
+  "controller_pid": "2240325",
+  "attempted_at_utc": "2026-10-30T05:04:25Z",
+  "observed": {
+    "stdout_bytes": 0,
+    "batch_receipt_present": false,
+    "case_runners_started": false,
+    "wrf_processes_started": false
+  },
+  "reason": "The initial compound shell backgrounded the whole && chain; the recorded PID was the shell chain and it exited before invoking env.sh. It produced no case process, model output, or batch receipt. The tracked direct exec session is the actual model launch recorded in actual_launch_start_utc.txt and controller.pid."
+}

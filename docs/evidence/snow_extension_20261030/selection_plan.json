@@ -1,0 +1,76 @@
+{
+  "schema": "snow-heavy-extension-selection-v1",
+  "frozen_at_utc": "2026-10-30T05:02:48.873785+00:00",
+  "status": "FROZEN_BEFORE_EXTENSION_FORECAST_OUTPUTS",
+  "base_commit": "7a967ad6951fc3d739e2aa2180c15d1cc45620e8",
+  "reason": "User replaced average-threshold ranking with one best experiment prioritizing strong precipitation. Earlier 14 results already known; this is prospective only for eight extension runs, not independent validation.",
+  "experiment": {
+    "families": [
+      "CONTROL",
+      "IMPROVED"
+    ],
+    "snow_factors": [
+      1.75,
+      2.0,
+      2.5,
+      3.0
+    ],
+    "new_cases": 8,
+    "initial_time_utc": "2026-08-16T12:00:00Z",
+    "end_time_utc": "2026-08-16T18:00:00Z",
+    "intervention": "Only native initial QSNOW, float64(source)*float64(alpha), cast to native float32; all other fields and metadata unchanged from family baseline.",
+    "max_concurrent_jobs": 8,
+    "mpi_ranks_per_job": 8,
+    "omp_threads_per_rank": 1
+  },
+  "evaluation": {
+    "lead_hours": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "thresholds_mm": [
+      0.1,
+      0.5,
+      1.0,
+      2.5,
+      5.0,
+      10.0
+    ],
+    "paired_points_per_hour": 3688,
+    "window": "preceding one-hour accumulation",
+    "primary_threshold_mm": 10.0,
+    "primary_lead_hour": 1,
+    "strong_precipitation_definition": "Study threshold of hourly precipitation >=10 mm, not an official warning classification."
+  },
+  "selection": {
+    "eligible_cases": "14 completed previous family cases plus 8 extension cases; CURRENT_HYDRO contextual only",
+    "ranking_order": [
+      "descending lead-1-hour CSI at 10 mm",
+      "descending lead-1-hour CSI at 5 mm",
+      "ascending lead-1-hour FAR at 10 mm",
+      "ascending lead-1-hour RMSE",
+      "ascending absolute snow-factor deviation from 1",
+      "ascending case ID"
+    ],
+    "numerical_comparison_tolerance": 0.0,
+    "undefined_scores": "Undefined CSI ranked below defined CSI; undefined FAR after defined FAR. Never convert undefined metric to zero.",
+    "outputs": [
+      "one selected best case",
+      "all cases by every lead and threshold with contingency counts and continuous errors"
+    ],
+    "previous_error_guard": "Previous B1 RMSE and pooled-error vetoes do not govern this user-requested strong-precipitation ranking. Report all degradations explicitly.",
+    "incomplete_or_failed_cases": "Exclude from completed six-hour ranking; preserve failure evidence."
+  },
+  "limitations": [
+    "Same-event parameter selection, no independent skill claim.",
+    "QSNOW-only perturbation deliberately changes initial water without vapor/temperature/auxiliary compensation; diagnostic sensitivity, not conservative or operational initialization.",
+    "Verify total surface precipitation, not surface snowfall alone.",
+    "No averaging across thresholds, leads, or experiments for ranking.",
+    "More severe untested thresholds do not silently replace the primary endpoint.",
+    "Family comparisons include both initialization and executable changes."
+  ]
+}

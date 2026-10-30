@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/var/tmp/cloudbal-snow-sensitivity/tools/cp02_snow_extension.py", line 662, in <module>
+    result = score_extension(args.runtime_dir, args.output, args.plan,
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/cloudbal-snow-sensitivity/tools/cp02_snow_extension.py", line 561, in score_extension
+    _, run_dirs, runtime_records, runtime_status = check_extension_bundle(
+                                                   ^^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/cloudbal-snow-sensitivity/tools/cp02_snow_extension.py", line 209, in check_extension_bundle
+    raise ValueError(f'{case}: staged executable/input/boundary contract failed')
+ValueError: CONTROL_SNOW_175: staged executable/input/boundary contract failed
