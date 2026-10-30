@@ -1,0 +1,9 @@
+{
+  "status": "FAILED_BEFORE_OUTPUT_CREATION",
+  "command": ["python", "tools/cp02_snow_lower.py"],
+  "working_directory": "/var/tmp/cloudbal-snow-lower",
+  "exit_code": 1,
+  "analysis_output_created": false,
+  "stderr": "Traceback (most recent call last):\n  File \"/var/tmp/cloudbal-snow-lower/tools/cp02_snow_lower.py\", line 646, in <module>\n    result = score_lower(args.runtime_dir, args.output, args.plan, args.plan_sha256,\n             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/tmp/cloudbal-snow-lower/tools/cp02_snow_lower.py\", line 543, in score_lower\n    scorer = old_tool.load_prior_tool().load_prior_scorer().load_scorer()\n             ^^^^^^^^^^^^^^^^^^^^^^^^\nAttributeError: module 'pinned_cp02_snow_sensitivity' has no attribute 'load_prior_tool'. Did you mean: 'load_prior_scorer'?\n",
+  "resolution": "Call load_prior_scorer() directly on the sensitivity module returned by the pinned extension loader."
+}

@@ -1,0 +1,80 @@
+{
+  "schema": "snow-lower-sensitivity-selection-v1",
+  "frozen_at_utc": "2026-10-30T07:45:38Z",
+  "status": "FROZEN_BEFORE_NEW_FORECAST_OUTPUTS_PRIOR_RESULTS_KNOWN",
+  "base_commit": "d22a1492fd8a8df4e621a132558162f6c3cd3392",
+  "experiment": {
+    "families": [
+      "CONTROL",
+      "IMPROVED"
+    ],
+    "snow_factors": [
+      0.6,
+      0.7,
+      0.8,
+      0.9
+    ],
+    "factor_codes": [
+      "060",
+      "070",
+      "080",
+      "090"
+    ],
+    "new_cases": 8,
+    "initial_time_utc": "2026-08-16T12:00:00Z",
+    "end_time_utc": "2026-08-16T18:00:00Z",
+    "intervention": "Only native initial QSNOW; float64(source)*float64(alpha), cast to native float32. All other variables and metadata unchanged from each family baseline.",
+    "max_concurrent_jobs": 8,
+    "mpi_ranks_per_job": 8,
+    "omp_threads_per_rank": 1
+  },
+  "evaluation": {
+    "lead_hours": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "thresholds_mm": [
+      0.1,
+      0.5,
+      1.0,
+      2.5,
+      5.0,
+      10.0
+    ],
+    "paired_points_per_hour": 3688,
+    "window": "preceding one-hour accumulation",
+    "primary_threshold_mm": 10.0,
+    "primary_lead_hour": 1,
+    "strong_precipitation_definition": "Hourly precipitation >=10 mm, the study threshold."
+  },
+  "selection": {
+    "eligible_cases": "38 completed CONTROL/IMPROVED candidates: 30 prior eligible cases already scored plus these eight if completed and identity validated; CURRENT_HYDRO is contextual only.",
+    "prior_known_selection": "Prior 30 eligible candidate scores and the previous single-case selection are known before these eight runs; report this extension as diagnostic same-event selection and preserve that known-selection context.",
+    "ranking_order": [
+      "descending lead-1-hour CSI at 10 mm",
+      "descending lead-1-hour CSI at 5 mm",
+      "ascending lead-1-hour FAR at 10 mm",
+      "ascending lead-1-hour RMSE",
+      "ascending absolute snow-factor deviation from 1",
+      "ascending case ID"
+    ],
+    "numerical_comparison_tolerance": 0.0,
+    "undefined_scores": "Undefined CSI ranks below defined CSI; undefined FAR after defined FAR. Do not replace undefined metrics with zero.",
+    "outputs": [
+      "one selected best case",
+      "all eligible cases by lead and threshold with contingency counts and continuous errors"
+    ],
+    "incomplete_or_failed_cases": "Exclude from completed six-hour selection; preserve failure evidence."
+  },
+  "limitations": [
+    "Same-event selection; no independent skill validation.",
+    "QSNOW-only changes initial water without compensating other species or energy; diagnostic, not conservative or operational.",
+    "Score total surface precipitation, not snowfall alone.",
+    "No averaging across thresholds, leads, or experiments.",
+    "CONTROL and IMPROVED comparisons differ in initialization and executable; alpha effects are isolated only within a family."
+  ]
+}
