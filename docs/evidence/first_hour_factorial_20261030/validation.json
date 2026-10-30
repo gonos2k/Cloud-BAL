@@ -1,0 +1,369 @@
+{
+  "schema": "first-hour-factorial-validation-v1",
+  "status": "PASS_SCOPED_ONE_HOUR",
+  "base_commit": "8871aeef7734d34636f44430f175d43a5b8b60ad",
+  "experiment": {
+    "new_forecasts": 1,
+    "reused_controls": 4,
+    "valid_period_utc": "2026-08-16 12:00–13:00",
+    "paired_points": 3688,
+    "thresholds_mm": [
+      0.1,
+      0.5,
+      1,
+      2.5,
+      5,
+      10
+    ],
+    "design": "2x2 executable/initialization factorial plus actual original OFF anchor"
+  },
+  "validation": {
+    "clean_index_targeted_tests_passed": 53,
+    "categorical_rows": 30,
+    "continuous_rows": 5,
+    "transition_rows": 48,
+    "contrast_rows": 306,
+    "bound_source_records": 1185,
+    "byte_reproduced_figure_assets": 9,
+    "paper_pages": 6,
+    "paper_equations": 15,
+    "paper_figures": 3,
+    "team_review": "review/independent_review.md",
+    "prior_manifest_entries_verified": 496,
+    "prior_entries_in_place": 493,
+    "prior_graph_entries_reconciled_to_existing_dated_snapshot": 3,
+    "kg_prior_snapshots_preserved": 210,
+    "kg_final_snapshots": 212
+  },
+  "limitations": [
+    "One event and one forecast hour; no general or operational improvement claim.",
+    "No new native rebuild, full portable suite, or six-hour forecast.",
+    "Coupled background-preservation policy changes eight native fields; not QR/QS-only causation.",
+    "Score interaction is not a physical causal share; complete water/energy budgets remain unverified.",
+    "RN1 upstream timing/coverage and separate C2 stability work remain open.",
+    "Graph freshness is structural bookkeeping, not scientific validation."
+  ],
+  "manifest_scope": "All new artifacts plus current and newly dated Cloud-BAL graph trio. This manifest excludes itself.",
+  "artifacts": [
+    {
+      "path": "docs/FIRST_HOUR_FACTORIAL_PAPER_20261030.md",
+      "size": 17627,
+      "sha256": "7a7296f49335d5ebacb2521f2bb9a14dc5e0da8c6cdcf03ed7a1db1472592b65"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/README.md",
+      "size": 3248,
+      "sha256": "3c131e28a2dda7eadc27de5876b13e772fe31697005f85bb46c50d2326cfc9e4"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/analysis/categorical_scores.csv",
+      "size": 4008,
+      "sha256": "88c59b05c14f7c526adef4a9ab87a529e30ba1790bd48850a5cb2bf01dcef18a"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/analysis/continuous_scores.csv",
+      "size": 630,
+      "sha256": "0e3bb6ae6086f8a23ef0176b4f79dc559376b667779c98d4683f273be3e35a8b"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/analysis/hour_13_arrays.npz",
+      "size": 147932,
+      "sha256": "f2f1a0159930527269a2c14594671c36e62a856a99c387feb6e54cdb296798f5"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/analysis/pointwise_precipitation_contrasts.csv",
+      "size": 1587271,
+      "sha256": "dd8a4b41dae23b21f3cb20101c26c8fcf2a1b2e1026854ac7ef4c55f47c6f4f0"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/analysis/receipt.json",
+      "size": 282232,
+      "sha256": "900ee2342a434d418c67d2b86bd5519255fbb555872436ea0e219dd5d23adf56"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/analysis/score_contrasts.csv",
+      "size": 40847,
+      "sha256": "51016b286df7dc26a8b413bae4c2d4b5233d258a53ccca1976618669fa74d9eb"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/analysis/transitions.csv",
+      "size": 2704,
+      "sha256": "6f5e5032938c22b445d7ae7c75a7951e0175c16a5feacf547600d6ab20980833"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/figures/factorial_design_and_metric.pdf",
+      "size": 34236,
+      "sha256": "1b1fb25ccff7f452a075d66a95d8b184cf0291b5c3048715417971cc1bf3c7cb"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/figures/factorial_design_and_metric.png",
+      "size": 342517,
+      "sha256": "710623ade5d1c2308b1f36b1f3c6a38af67bfd82a68c71d86c6707802be31c2d"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/figures/factorial_design_and_metric.svg",
+      "size": 31794,
+      "sha256": "3defd7d2e102204e996776a53430f3f438532dd92e0aa6d1bbba88ebe50d9e57"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/figures/figure_manifest.json",
+      "size": 5650,
+      "sha256": "5264c2a19303e7f4e32543ef18e03e22173797a0fc47dc1292976f0ac7ce29bf"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/figures/hour_12_13_paired_precipitation.pdf",
+      "size": 33960,
+      "sha256": "f394c48b196690a58d781f4d6a0afba6534e225b28876748a14b8eb6ff06cb6d"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/figures/hour_12_13_paired_precipitation.png",
+      "size": 184179,
+      "sha256": "bc7e2b8a872bddb1d9f59adbe97481b592aaa15785392f606815eab847ddfd36"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/figures/hour_12_13_paired_precipitation.svg",
+      "size": 51902,
+      "sha256": "c4701102359130fbc329b16d3f4076aba19a627e729f2e158a2a8ae968d8deeb"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/figures/hour_12_13_skill_factorial.pdf",
+      "size": 22407,
+      "sha256": "b0f057ad285f9ef1dd8d721810bf1df3b40aa66b934ddd1cfbc3f671c5f3683d"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/figures/hour_12_13_skill_factorial.png",
+      "size": 239593,
+      "sha256": "5555b77847879af1951c7dd7f41336c8a504a447c500bcfb6e515e55ed8eb78a"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/figures/hour_12_13_skill_factorial.svg",
+      "size": 45185,
+      "sha256": "87e8bb649ca4a2b644bdf54142e0e321e417a79efadf5f691337ce64b77cc79b"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/kg/baseline.json",
+      "size": 138384,
+      "sha256": "83bf782746aacfa2a8c8146e63b39211593663435131dd8404d2f156b038ef3f"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/kg/candidate_paths.json",
+      "size": 5016,
+      "sha256": "998027ffc5dd2d3f8d0b4e2792a52e13b1d57d86947b702c3d3483f1fca69080"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/kg/postpublish_readback.json",
+      "size": 7401,
+      "sha256": "0dd4508c1873150f5495565436c2b1b332b1ae65ba352c3cfd25e9b909814d3a"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/kg/publish_go.json",
+      "size": 469,
+      "sha256": "83c778924a869fb3844bf1745dafb14173c9f4bb5bfcdb3dcc58c5db09898475"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/kg/publish_kg.py",
+      "size": 10753,
+      "sha256": "4a262508eae2620d0afddfb6859435ea88812183cbd4ea3b7da32754f7b10fed"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/kg/publish_receipt.json",
+      "size": 3992,
+      "sha256": "76e05e7e05919ae10d429abd58440fdb2ed5cb2c0d881263cbde57e7c30fc828"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/kg/selection_lock.json",
+      "size": 7717,
+      "sha256": "32d2db111682edfcad09ae37505fc59b8f4352ece1f2145902ba5ef68dd3bb4d"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/kg/stage_kg.py",
+      "size": 21413,
+      "sha256": "a322eafa3949b47762b43b965080c6876953c2361a5a6595eb5e7a8de202feb1"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/kg/stage_receipt.json",
+      "size": 13353,
+      "sha256": "aa0e70c9dc0eb547fa9a51e0895829a61e12f6c0ffbb8f4510233779f46bad32"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/kg/stage_validation.json",
+      "size": 2291,
+      "sha256": "949eca438bbef83a11a1c7426b09ee44cce01a46d2392f376d49890509a4c703"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/paper/FIRST_HOUR_FACTORIAL_PAPER_20261030.docx",
+      "size": 660326,
+      "sha256": "108a7a830b398b60644358f4c1b0d900bf90a7c656f4ba68a184a07054c66839"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/paper/FIRST_HOUR_FACTORIAL_PAPER_20261030.pdf",
+      "size": 851970,
+      "sha256": "cc60a28f1a1714889b3bc8771049c784978ba1398989c04103610889534f7f4f"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/paper/build_receipt.json",
+      "size": 2338,
+      "sha256": "5cf4c3a6c83681e19e2fd0f349e673ef5de667813b4cfe625f9771524e65df9a"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/review/independent_review.md",
+      "size": 5758,
+      "sha256": "d73c4ae666fad3ca869669559d92baf3fdc754f17e325c1c4ae5010ed17d641b"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/README.md",
+      "size": 2099,
+      "sha256": "193f8d161948fbf6a936362a794e75a345d0898e929cc97e2ab2b63a4c17acde"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/env.sh",
+      "size": 414,
+      "sha256": "0092b662ea29b630f12bba67bafd846bbc4a1addb7a5070e04806c19428d4c40"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/inputs.json",
+      "size": 17325,
+      "sha256": "d135046d054c5bb03242c6b52c43fb728943f598f904c4e17699cb8fd3284504"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/launcher.log",
+      "size": 392,
+      "sha256": "e6724032a6e1a42e54094bcb9344f7c6b871d76230cfab2cc93085c6c23aa431"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/manifest.sha256",
+      "size": 1239,
+      "sha256": "2b3ae1f265907183957344b2e78afa01de63481c4dece149ed4101f616fa86d3"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/normalization_manifest.json",
+      "size": 626,
+      "sha256": "1e3f6f735037b0ea02646af54c09698594ef17745c5a1ac0626723620f6564d2"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/normalize_receipt.py",
+      "size": 3870,
+      "sha256": "a2eeefc06d1160888780157cebc167f267cf991b9f1099449794afd106e00934"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/normalized_receipt.json",
+      "size": 30230,
+      "sha256": "a71f9b780bcf7a6ec5d1d1aaa6bd367997e1c83bd68975883b3424998ebc185f"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/postrun_scripts.sha256.json",
+      "size": 97,
+      "sha256": "32e49ae28ce6ff0016c46a8ef1853edf38954d1a8a96943816d5298681862026"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/preflight.json",
+      "size": 29816,
+      "sha256": "c00b190e92d02cc9053b8f4cbf33c2d21ed6ff94d85f2c1d043afbdfa98624fd"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/prepare.py",
+      "size": 5483,
+      "sha256": "2dbe3f8065354234cf24767fc98fdc48f900f7098a1bbe6a1ca867bd2a0bf074"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/receipt.json",
+      "size": 19971,
+      "sha256": "0d26c89e013d25d0a82605d19ab002914dd9fa5489d31be82eb7f62f21fe0455"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/rsl.out.0000.txt",
+      "size": 22743,
+      "sha256": "18ff07e364188d0519a26d7795cc8e8e70527af4ef56b229d3649caf588f5ccc"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/run.py",
+      "size": 4912,
+      "sha256": "6eb99b119e472d930e157f551e5fe7b0b110dc6536d9fa2064e1c7f570788cdc"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/scripts.sha256.json",
+      "size": 247,
+      "sha256": "649e51860e818d32e744dd4472eb2a5914a53f6620aeb6f31e2aaee0b6185c98"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/runtime/source_link_audit.json",
+      "size": 11561,
+      "sha256": "4419e239d571cef8ee9080b563ba90ef9dc4583ccc26fe68c69c41d8a0a88ca7"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/validation/clean_index_tests.json",
+      "size": 1601,
+      "sha256": "d489b1cf2adcdf1255940e4354f2c6e6bcbf06383ae3b32f214fb1cf7b1b4e81"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/validation/clean_index_tests.txt",
+      "size": 131,
+      "sha256": "574214b45674569d953c97774b48b3fb334c98abdb49d03fae72ed6085592f4e"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/validation/prior_evidence.json",
+      "size": 2102,
+      "sha256": "58593969373eb9500d0a29e5946b6df291282afd2f660c2a81fa83bf9d8acdec"
+    },
+    {
+      "path": "docs/evidence/first_hour_factorial_20261030/validation/root_visual_review.json",
+      "size": 1978,
+      "sha256": "0f1272d7cf5010667b255ae465a984cd733e3aca8568bc42cfdba0d860fd9854"
+    },
+    {
+      "path": "graphify-out/2026-10-30-first-hour-factorial/GRAPH_REPORT.md",
+      "size": 318060,
+      "sha256": "f36dd86f59fe1e496af489ee1c919430168ff972ab4401c91c08fd8b47db5680"
+    },
+    {
+      "path": "graphify-out/2026-10-30-first-hour-factorial/graph.json",
+      "size": 19289145,
+      "sha256": "23687595ae1b3a5b961808d90b59cc13f2cc7079fd3712a23413fdf6fdb80f79"
+    },
+    {
+      "path": "graphify-out/2026-10-30-first-hour-factorial/manifest.json",
+      "size": 1077444,
+      "sha256": "5dc83822ea69f1ca29b01c4242020a18f6662f23c0b5482904ede9ced9101fd2"
+    },
+    {
+      "path": "graphify-out/GRAPH_REPORT.md",
+      "size": 318060,
+      "sha256": "f36dd86f59fe1e496af489ee1c919430168ff972ab4401c91c08fd8b47db5680"
+    },
+    {
+      "path": "graphify-out/graph.json",
+      "size": 19289145,
+      "sha256": "23687595ae1b3a5b961808d90b59cc13f2cc7079fd3712a23413fdf6fdb80f79"
+    },
+    {
+      "path": "graphify-out/manifest.json",
+      "size": 1077444,
+      "sha256": "5dc83822ea69f1ca29b01c4242020a18f6662f23c0b5482904ede9ced9101fd2"
+    },
+    {
+      "path": "tests/test_cp02_first_hour_factorial.py",
+      "size": 5732,
+      "sha256": "705303708379e05acca8cd69c7706cf2f12d86baa3ede91418d16f08504eb17e"
+    },
+    {
+      "path": "tests/test_plot_first_hour_factorial.py",
+      "size": 4136,
+      "sha256": "806420eb76ec7673358ce6bf733c243cd29959e462a72c93c807cc6d20ee5774"
+    },
+    {
+      "path": "tools/build_first_hour_factorial_paper.py",
+      "size": 8232,
+      "sha256": "9e7937487845339364f45530ce2ff0df12bc8a5971c986ab5aa621c47acebf83"
+    },
+    {
+      "path": "tools/cp02_first_hour_factorial.py",
+      "size": 21409,
+      "sha256": "6151e43ec0d04b0e9cf22e46b16ea210990b54ff56379a392128156004290ebe"
+    },
+    {
+      "path": "tools/plot_first_hour_factorial.py",
+      "size": 22625,
+      "sha256": "40d47aba5cc0473dcc238b2994d025ea4936766f3a35f32d59165d52938fb04c"
+    }
+  ]
+}
