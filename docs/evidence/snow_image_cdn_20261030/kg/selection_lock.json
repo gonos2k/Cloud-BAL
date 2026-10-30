@@ -1,0 +1,31 @@
+{
+  "freeze_id": "snow-image-cdn-20261030-final",
+  "frozen_at_utc": "2026-10-30T07:38:31.479686+00:00",
+  "hash_only_sha256": {
+    "docs/SNOW_FINE_FIGURES_20261030.md": "890599d27b9e84e11d5b93ddc90889947183f60f640595650f890acd1219fbe8",
+    "docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md": "64f490b0f6b34644238142242cd1ae95e21fb19ea073fd9216e3822303c9d625",
+    "docs/evidence/snow_image_cdn_20261030/cdn_validation.json": "6cfe847e2494fa5d29f45edab2f24ba8915af638317df28358c5a59aefcd930d",
+    "docs/evidence/snow_image_cdn_20261030/prior_versions/docs/SNOW_FINE_FIGURES_20261030.md": "754ad00ad50d45862cc7767adc0b366163b8b420783ac6b6866d93716e1c75ba",
+    "docs/evidence/snow_image_cdn_20261030/prior_versions/docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md": "d74ff1c1e7984c673904a292f94398cb43f8fabcd81ce3e36e476fae3b72af3a",
+    "docs/evidence/snow_image_cdn_20261030/prior_versions/reconciliation.json": "1d6c5b164809003ca4aa1c92dddefc64b07ce2e95c2b212ca2186cbd9c91913b",
+    "docs/evidence/snow_image_cdn_20261030/review/review_receipt.json": "cb28f0898ff50d4beef06a718d8d10a49d521d45980ab5963c5fc4ffe3cb3244",
+    "docs/evidence/snow_image_cdn_20261030/validation/browser_decode.json": "63ff5359fa9be44daae271dede7d3208c5c6fd57209bc86b308fe97babc43dc4",
+    "docs/evidence/snow_image_cdn_20261030/validation/prior_evidence.json": "a6d4fdc4a4f6656a24d3a89bcc527542e225894c5566b45978d6490b9f3d73eb",
+    "docs/evidence/snow_image_cdn_20261030/weserv_validation.json": "594cc17e274706a055888419f38f2464b5a01a9cbd044e95ffca3e85592177f9"
+  },
+  "open_items": [
+    "The image proxy is an external availability dependency.",
+    "Browser validation used standalone HTML; no deployed-page screenshot is claimed because screenshot capture timed out in the test environment.",
+    "Gallery byte and decoded-pixel identity establish presentation-only changes, not scientific validation."
+  ],
+  "review_status": "GO",
+  "reviewer": "cdn_gallery_review",
+  "selected_source_sha256": {
+    "docs/evidence/snow_fine_20261030/build_report.py": "afaf6bacace931592047bc33cbee46fb0bdc9a150c88882e9576d120963ad5fc",
+    "docs/evidence/snow_image_cdn_20261030/kg/update_graphs.py": "bcce4b0a9ac878fd454b72eeffd3610506c512684d4d77f2a2b3fda58b549176"
+  },
+  "snapshot": "2026-10-30-snow-image-cdn",
+  "source_commit": "7ff82e67ea509d1c624e51ca8ca7e083d71139ef",
+  "status": "FROZEN",
+  "validation_summary": "The frozen builder uses images.weserv.nl as an image proxy for immutable raw PNGs pinned to Cloud-BAL commit 18d8b45008428644c7a85d624830b76bce597289. Independent validation returned HTTP 200 image/png for all 50 manifest PNGs with exact decoded RGBA pixels; browser validation loaded all 49 main-gallery and 21 improved-gallery references with intrinsic dimensions. The generated Python report helper and builder are the only structurally extracted paths."
+}

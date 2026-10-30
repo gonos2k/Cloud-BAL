@@ -1,0 +1,34 @@
+{
+  "schema": "kg_stage_review_v1",
+  "reviewed_at_utc": "2026-10-30T07:41:28.688262+00:00",
+  "reviewer": "cdn_gallery_review",
+  "review_status": "GO",
+  "stage_receipt_path": "docs/evidence/snow_image_cdn_20261030/kg/stage_receipt.json",
+  "stage_receipt_sha256": "ab9ca65ac72937dbc0154699db24ff49c89e577858515047dc2788f52686bb2e",
+  "selection_lock_sha256": "69af0df6d3b10b592131782479d78f1552a1b8d47b95d3a22fa845c14a05c319",
+  "stage_path": "/var/tmp/cloudbal_snow_image_cdn_kg_20261030-r2/stage-snow-image-cdn-20261030-final",
+  "checks": {
+    "receipt_sha256": "ab9ca65ac72937dbc0154699db24ff49c89e577858515047dc2788f52686bb2e",
+    "selection_lock_sha256_matches": true,
+    "selection_lock_review_status": "GO",
+    "selection_lock_status": "FROZEN",
+    "stage_status": "STAGED_ONLY_NO_MAINTAINED_WRITES",
+    "stage_exists": true,
+    "snapshot_and_wiki_hashes_match": true,
+    "dated_snapshots_preserved_exact": true,
+    "integrity_zero_counts": true,
+    "prior_node_ids_preserved": true,
+    "source_hashes_match_frozen_selection": true,
+    "scope_is_selected_paths_only": true,
+    "all_checks_pass": true
+  },
+  "review_summary": "Both dated corpus snapshots and staged wiki files match the exact hashes in the receipt. The frozen selection lock matches the receipt; staged graph integrity counters are zero, every prior node ID is preserved, and the two per-corpus dated snapshot counts sum to the declared preserved total. Scope is limited to the two selected Python paths. Extraction limits and the distinction between graph freshness and runtime/scientific validation are stated in the receipt. No maintained writes occurred during staging.",
+  "open_items": [
+    "Only the two frozen Python paths are structurally extracted; other evidence is hash-bound only.",
+    "Manifest updates are selected-path-only; no corpus scan or prune occurs.",
+    "The image proxy is an external dependency; these graph outputs do not establish rendering in every report viewer.",
+    "Graph freshness does not establish runtime or scientific validation.",
+    "Fortran cross-file CALL extraction is partial."
+  ],
+  "status": "GO"
+}

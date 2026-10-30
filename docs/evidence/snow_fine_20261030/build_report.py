@@ -7,6 +7,7 @@ import hashlib
 import json
 from pathlib import Path
 import sys
+from urllib.parse import quote
 from build_full_score_tables import check_analysis as check_full_score_analysis
 
 HERE = Path(__file__).resolve().parent
@@ -117,8 +118,8 @@ def table(headers: list[str], rows: list[list[str]]) -> str:
                       *('| ' + ' | '.join(row) + ' |' for row in rows)])
 
 
-# Immutable commit containing the reviewed figure bytes. Direct URLs also work
-# when a Markdown viewer does not resolve repository-relative image paths.
+# Fetch the immutable PNG through an independent image host for viewers where
+# raw.githubusercontent.com is unavailable. Keep original dimensions and pixels.
 FIGURE_BASE_URL = (
     'https://raw.githubusercontent.com/gonos2k/Cloud-BAL/'
     '18d8b45008428644c7a85d624830b76bce597289/'
@@ -127,7 +128,8 @@ FIGURE_BASE_URL = (
 
 
 def inline_image(path: str, description: str) -> str:
-    return f'![{description}]({FIGURE_BASE_URL}/{path})'
+    source = quote(f'{FIGURE_BASE_URL}/{path}', safe='')
+    return f'![{description}](https://images.weserv.nl/?url={source}&output=png)'
 
 
 def build_galleries(figures: dict, cases: list[str]) -> tuple[str, str]:
