@@ -1,0 +1,107 @@
+{
+  "schema": "snow-fine-renderer-independent-replay-v1",
+  "started_at_utc": "2026-10-30T06:28:29.991621+00:00",
+  "canonical_output": "docs/evidence/snow_fine_20261030/figures",
+  "fresh_output": "/var/tmp/snow_fine_figures_replay_20261030",
+  "scientific_results_changed": false,
+  "fresh_render": {
+    "command": [
+      "python",
+      "tools/plot_snow_fine.py",
+      "--analysis-dir",
+      "/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_fine_20261030/analysis",
+      "--output-dir",
+      "/var/tmp/snow_fine_figures_replay_20261030"
+    ],
+    "started_at_utc": "2026-10-30T06:28:29.991647+00:00",
+    "finished_at_utc": "2026-10-30T06:29:49.105669+00:00",
+    "returncode": 0,
+    "stderr": ""
+  },
+  "render_comparison": {
+    "canonical_file_count": 151,
+    "fresh_file_count": 151,
+    "matching_file_count": 151,
+    "missing_from_fresh": [],
+    "extra_in_fresh": [],
+    "different_bytes": [],
+    "manifest_sha256": "6809bc9163688b680ec56403b9f88dddadc678248bc6cac417e071fd09427e05",
+    "fresh_manifest_sha256": "6809bc9163688b680ec56403b9f88dddadc678248bc6cac417e071fd09427e05"
+  },
+  "builder_replays": [
+    {
+      "command": [
+        "python",
+        "docs/evidence/snow_fine_20261030/build_full_score_tables.py"
+      ],
+      "started_at_utc": "2026-10-30T06:29:49.141291+00:00",
+      "finished_at_utc": "2026-10-30T06:29:49.193977+00:00",
+      "returncode": 0,
+      "stdout": "{\"status\": \"COMPLETE\", \"report\": \"docs/SNOW_FINE_FULL_SCORES_20261030.md\", \"report_sha256\": \"9fe3805f14c6295419c93029fbcf678c40aca477bbabea406511516518eb9664\", \"table_counts\": {\"categorical\": 36, \"continuous\": 6, \"total\": 42}, \"row_counts\": {\"categorical\": 1116, \"continuous\": 186, \"total_table_rows\": 1302}}\n",
+      "stderr": ""
+    },
+    {
+      "command": [
+        "python",
+        "docs/evidence/snow_fine_20261030/build_report.py"
+      ],
+      "started_at_utc": "2026-10-30T06:29:49.193996+00:00",
+      "finished_at_utc": "2026-10-30T06:29:49.316685+00:00",
+      "returncode": 0,
+      "stdout": "{\"status\": \"COMPLETE\", \"reports\": [{\"path\": \"docs/SNOW_FINE_SENSITIVITY_20261030.md\", \"sha256\": \"67d3c8e9f2a224982ff38455ff21dd3fb0a53076e805e8c5eb5e5f698eaca306\", \"size_bytes\": 7066}, {\"path\": \"docs/SNOW_FINE_FIGURES_20261030.md\", \"sha256\": \"4e7123d721b6c296a1c44005203651fe0ab366b74ca239a496efc1e0e3c53de1\", \"size_bytes\": 12388}, {\"path\": \"docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md\", \"sha256\": \"38aea62f7fba9c831b878729a2ceb17045a155f1bec9b046d9a137813f391804\", \"size_bytes\": 5556}]}\n",
+      "stderr": ""
+    }
+  ],
+  "builder_output_comparison": {
+    "file_count": 7,
+    "before_sha256": {
+      "docs/SNOW_FINE_SENSITIVITY_20261030.md": "67d3c8e9f2a224982ff38455ff21dd3fb0a53076e805e8c5eb5e5f698eaca306",
+      "docs/SNOW_FINE_FULL_SCORES_20261030.md": "9fe3805f14c6295419c93029fbcf678c40aca477bbabea406511516518eb9664",
+      "docs/SNOW_FINE_FIGURES_20261030.md": "4e7123d721b6c296a1c44005203651fe0ab366b74ca239a496efc1e0e3c53de1",
+      "docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md": "38aea62f7fba9c831b878729a2ceb17045a155f1bec9b046d9a137813f391804",
+      "docs/evidence/snow_fine_20261030/full_tables_receipt.json": "e04557879ce437b20b81dcaf0d401a5feef868f4381dcb75066b016251b89a56",
+      "docs/evidence/snow_fine_20261030/figures/figure_manifest.json": "6809bc9163688b680ec56403b9f88dddadc678248bc6cac417e071fd09427e05",
+      "docs/evidence/snow_fine_20261030/analysis/receipt.json": "62519a61700aa106419517a2acb4b31c50dd5c1f8860cdadf6c7314e65c948ae"
+    },
+    "after_sha256": {
+      "docs/SNOW_FINE_SENSITIVITY_20261030.md": "67d3c8e9f2a224982ff38455ff21dd3fb0a53076e805e8c5eb5e5f698eaca306",
+      "docs/SNOW_FINE_FULL_SCORES_20261030.md": "9fe3805f14c6295419c93029fbcf678c40aca477bbabea406511516518eb9664",
+      "docs/SNOW_FINE_FIGURES_20261030.md": "4e7123d721b6c296a1c44005203651fe0ab366b74ca239a496efc1e0e3c53de1",
+      "docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md": "38aea62f7fba9c831b878729a2ceb17045a155f1bec9b046d9a137813f391804",
+      "docs/evidence/snow_fine_20261030/full_tables_receipt.json": "e04557879ce437b20b81dcaf0d401a5feef868f4381dcb75066b016251b89a56",
+      "docs/evidence/snow_fine_20261030/figures/figure_manifest.json": "6809bc9163688b680ec56403b9f88dddadc678248bc6cac417e071fd09427e05",
+      "docs/evidence/snow_fine_20261030/analysis/receipt.json": "62519a61700aa106419517a2acb4b31c50dd5c1f8860cdadf6c7314e65c948ae"
+    },
+    "unchanged": true,
+    "changed_paths": []
+  },
+  "mutated_csv_negative_test": {
+    "command": [
+      "python",
+      "tools/plot_snow_fine.py",
+      "--analysis-dir",
+      "/tmp/snow-fine-negative-bbncni7d/analysis",
+      "--output-dir",
+      "/tmp/snow-fine-negative-bbncni7d/old_figures"
+    ],
+    "returncode": 1,
+    "stderr": "Traceback (most recent call last):\n  File \"/var/tmp/cloudbal-snow-sensitivity/tools/plot_snow_fine.py\", line 498, in <module>\n    main()\n  File \"/var/tmp/cloudbal-snow-sensitivity/tools/plot_snow_fine.py\", line 494, in main\n    print(json.dumps(render(args.analysis_dir, args.output_dir), indent=2, ensure_ascii=False))\n                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/tmp/cloudbal-snow-sensitivity/tools/plot_snow_fine.py\", line 279, in render\n    receipt, categorical, continuous, selection_rows, cases = verify_analysis(analysis)\n                                                              ^^^^^^^^^^^^^^^^^^^^^^^^^\n  File \"/var/tmp/cloudbal-snow-sensitivity/tools/plot_snow_fine.py\", line 91, in verify_analysis\n    raise ValueError(f\"analysis output hash mismatch: {name}\")\nValueError: analysis output hash mismatch: categorical_scores.csv\n",
+    "analysis_copy_only": true,
+    "changed_file": "categorical_scores.csv (one trailing space added; receipt unchanged)",
+    "expected_error": "analysis output hash mismatch: categorical_scores.csv",
+    "expected_rejection": true,
+    "preserved_existing_output": true,
+    "preserved_file_count": 151,
+    "changed_old_output_paths": []
+  },
+  "status": "PASS",
+  "finished_at_utc": "2026-10-30T06:29:49.597713+00:00",
+  "coverage": {
+    "heatmaps": 18,
+    "experiment_map_sheets": 31,
+    "map_case_lead_pairs": 186,
+    "delta_csi_cells": 1116,
+    "figure_assets": 150,
+    "fresh_tree_files": 151
+  }
+}

@@ -1,0 +1,47 @@
+{
+  "schema": "snow-fine-prelaunch-review-v1",
+  "status": "GO",
+  "reviewed_at_utc": "2026-10-30T05:58:24Z",
+  "independent_review": true,
+  "selection_plan": {
+    "path": "docs/evidence/snow_fine_20261030/selection_plan.json",
+    "sha256": "99d810d036d3bb6931065cc54117e90d85e2a76e388fbb12f5760729a2b703d3",
+    "frozen_before_new_forecast_outputs": true,
+    "primary_metric": "lead-1-hour CSI at 10 mm",
+    "ranking": [
+      "descending lead-1-hour CSI at 10 mm",
+      "descending lead-1-hour CSI at 5 mm",
+      "ascending lead-1-hour FAR at 10 mm",
+      "ascending lead-1-hour RMSE",
+      "ascending absolute snow-factor deviation from 1",
+      "ascending case ID"
+    ],
+    "averaging_used": false
+  },
+  "runtime_plan": {
+    "path": "docs/evidence/snow_fine_20261030/runtime/common_plan.json",
+    "sha256": "e9b38c481d19251062957fde4fd2be0e965979bef3ae0f02ed5b6503ef305978",
+    "case_count": 8,
+    "inputs_per_case": 89,
+    "native_variable_count": 208,
+    "native_dimension_count": 16,
+    "q_snow_scaling": "float64(source QSNOW) * float64(factor), then cast to float32",
+    "all_207_other_fields_unchanged": true,
+    "all_native_metadata_unchanged": true,
+    "cross_family_metadata_equal": true,
+    "case_input_hashes_independently_checked": true,
+    "original_executable_sha256": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+    "fixed_executable_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+    "shared_boundary_sha256": "74102ac2063f17a9007f3352e6e6c2f52629055bdf3f05b4f4d6d77aef835f45",
+    "shared_namelist_sha256": "eced598028b71b996c0c22cf7bd4bacb067087575ec06c4b65d71ab4913156df"
+  },
+  "intel_runtime_and_cpu": {
+    "pinned_intel_profile_and_mpi_hashes_independently_checked": true,
+    "mpi_version": "Intel(R) MPI Library for Linux* OS, Version 2021.18.0 Build 20260327 (id: 821f207)",
+    "allowed_cpu_count": 72,
+    "assigned_cpu_count": 64,
+    "assigned_cpu_sets_disjoint": true,
+    "no_model_processes_visible_before_launch": true
+  },
+  "launch_state_at_review": "No new forecast outputs were present when independent prelaunch checks completed."
+}

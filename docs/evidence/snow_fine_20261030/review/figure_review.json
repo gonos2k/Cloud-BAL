@@ -1,0 +1,50 @@
+{
+  "schema": "snow-fine-figures-review-v1",
+  "status": "PASS",
+  "reviewed_at_utc": "2026-10-30T06:24:33Z",
+  "independent_review": true,
+  "figure_manifest": {
+    "path": "docs/evidence/snow_fine_20261030/figures/figure_manifest.json",
+    "sha256": "6809bc9163688b680ec56403b9f88dddadc678248bc6cac417e071fd09427e05",
+    "heatmaps": 18,
+    "map_sheets": 31,
+    "visual_asset_count": 150,
+    "delta_cells": 1116,
+    "case_lead_map_keys": 186,
+    "shared_delta_csi_limits": [-0.1, 0.1],
+    "selected_case": "CONTROL_SNOW_300"
+  },
+  "coverage": {
+    "all_experiment_contexts_in_heatmaps": 31,
+    "all_thresholds_mm": [0.1, 0.5, 1.0, 2.5, 5.0, 10.0],
+    "all_lead_hours": [1, 2, 3, 4, 5, 6],
+    "case_groups": {"control": 15, "improved": 15, "context": 1},
+    "delta_reference": "ORIGINAL",
+    "diverging_scale_centered_at_zero": true,
+    "all_experiments_mapped_for_six_leads": true,
+    "common_precipitation_bins_across_maps": true,
+    "improved_only_gallery": {
+      "baseline_and_variants": 15,
+      "heatmap_thresholds": 6,
+      "six_lead_maps": 15
+    },
+    "all_gallery_links_resolve": true
+  },
+  "visual_inspection": {
+    "representative_control_and_improved_heatmaps_viewed": true,
+    "representative_control_and_improved_six_lead_maps_viewed": true,
+    "annotations_and_labels_readable_at_full_image_scale": true,
+    "rain_maps_show_RN1_and_one_experiment_on_shared_bins": true,
+    "no_all_leads_winner_claim": true
+  },
+  "outputs": {
+    "main_report": {"path": "docs/SNOW_FINE_SENSITIVITY_20261030.md", "sha256": "67d3c8e9f2a224982ff38455ff21dd3fb0a53076e805e8c5eb5e5f698eaca306"},
+    "full_score_tables": {"path": "docs/SNOW_FINE_FULL_SCORES_20261030.md", "sha256": "9fe3805f14c6295419c93029fbcf678c40aca477bbabea406511516518eb9664"},
+    "all_figures_gallery": {"path": "docs/SNOW_FINE_FIGURES_20261030.md", "sha256": "4e7123d721b6c296a1c44005203651fe0ab366b74ca239a496efc1e0e3c53de1"},
+    "improved_only_gallery": {"path": "docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md", "sha256": "38aea62f7fba9c831b878729a2ceb17045a155f1bec9b046d9a137813f391804"}
+  },
+  "limitations": [
+    "Same-event diagnostic selection with prior candidate results known; not independent skill validation.",
+    "Fields plot total surface precipitation over the common paired RN1 analysis points, not snowfall alone."
+  ]
+}

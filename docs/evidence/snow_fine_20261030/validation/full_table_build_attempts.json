@@ -1,0 +1,81 @@
+{
+  "schema": "snow-fine-full-table-replay-attempts-v1",
+  "status": "PASS_REPLAYED_AFTER_PIN_FIX",
+  "analysis_receipt_sha256": "62519a61700aa106419517a2acb4b31c50dd5c1f8860cdadf6c7314e65c948ae",
+  "scientific_results_changed": false,
+  "attempts": [
+    {
+      "command": "python docs/evidence/snow_fine_20261030/build_full_score_tables.py",
+      "status": "FAILED",
+      "error": "NameError: name 'ANALYSIS_RECEIPT_SHA256' is not defined. Did you mean: 'PRIOR_ANALYSIS_RECEIPT_SHA256'?",
+      "traceback": "Traceback (most recent call last):\n  File \"/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_fine_20261030/build_full_score_tables.py\", line 401, in <module>\n    main()\n  File \"/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_fine_20261030/build_full_score_tables.py\", line 384, in main\n    if sha256(ANALYSIS_RECEIPT) != ANALYSIS_RECEIPT_SHA256:\nNameError: name 'ANALYSIS_RECEIPT_SHA256' is not defined. Did you mean: 'PRIOR_ANALYSIS_RECEIPT_SHA256'?"
+    },
+    {
+      "command": "python docs/evidence/snow_fine_20261030/build_full_score_tables.py",
+      "status": "FAILED",
+      "error": "NameError: name 'CATEGORICAL_SHA256' is not defined",
+      "traceback": "Traceback (most recent call last):\n  File \"/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_fine_20261030/build_full_score_tables.py\", line 402, in <module>\n    main()\n  File \"/var/tmp/cloudbal-snow-sensitivity/docs/evidence/snow_fine_20261030/build_full_score_tables.py\", line 387, in main\n    if sha256(cat_path) != CATEGORICAL_SHA256 or sha256(cont_path) != CONTINUOUS_SHA256:\nNameError: name 'CATEGORICAL_SHA256' is not defined"
+    }
+  ],
+  "completed_at_utc": "2026-10-30T06:26:33Z",
+  "resolution": "Restored final analysis receipt and categorical/continuous CSV SHA-256 pins. Only the report/table entrypoint had failed before writing outputs; scorer outputs and values were unchanged.",
+  "positive_path_regression": "tests.test_snow_fine_full_tables.test_complete_31_case_grid_builds_all_42_tables invokes tables.main() on a complete synthetic sealed 31-case grid and verifies both generated destinations.",
+  "targeted_tests": {
+    "command": "python -m unittest tests.test_snow_fine_full_tables tests.test_plot_snow_fine",
+    "status": "PASS",
+    "tests": 10
+  },
+  "successful_replays": [
+    {
+      "command": "python docs/evidence/snow_fine_20261030/build_full_score_tables.py",
+      "status": "PASS",
+      "report_sha256": "9fe3805f14c6295419c93029fbcf678c40aca477bbabea406511516518eb9664",
+      "table_counts": {
+        "categorical": 36,
+        "continuous": 6,
+        "total": 42
+      },
+      "row_counts": {
+        "categorical": 1116,
+        "continuous": 186,
+        "total": 1302
+      }
+    },
+    {
+      "command": "python tools/plot_snow_fine.py --analysis-dir docs/evidence/snow_fine_20261030/analysis --output-dir docs/evidence/snow_fine_20261030/figures",
+      "status": "PASS",
+      "heatmaps": 18,
+      "map_sheets": 31,
+      "assets": 150,
+      "shared_delta_csi_limits": [
+        -0.1,
+        0.1
+      ]
+    },
+    {
+      "command": "python docs/evidence/snow_fine_20261030/build_report.py",
+      "status": "PASS",
+      "reports": {
+        "docs/SNOW_FINE_SENSITIVITY_20261030.md": "67d3c8e9f2a224982ff38455ff21dd3fb0a53076e805e8c5eb5e5f698eaca306",
+        "docs/SNOW_FINE_FIGURES_20261030.md": "4e7123d721b6c296a1c44005203651fe0ab366b74ca239a496efc1e0e3c53de1",
+        "docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md": "38aea62f7fba9c831b878729a2ceb17045a155f1bec9b046d9a137813f391804"
+      }
+    }
+  ],
+  "review": "PASS: parent and independent reviewer confirmed all 18 heatmaps, all 31 map sheets, improved-only 15-experiment coverage, shared CSI/rain scales, and representative image readability.",
+  "final_source_sha256": {
+    "tools/plot_snow_fine.py": "e2452292b3c56b5d1ec7e0cbb8cccab2a69381932390e7e762e2f33a5e3f5a61",
+    "tests/test_plot_snow_fine.py": "288cfdbd4224d8a1ae9a55805afbbd74a33516c1b1c645c9d8f1d4f5c15aaffa",
+    "tests/test_snow_fine_full_tables.py": "adf5d74e911079f1b7a0369350331e101b6b6b6e6adbfae48e39013bfaf613a0",
+    "docs/evidence/snow_fine_20261030/build_full_score_tables.py": "6520cd32ff8cea4ff94f1ebfcb8db5c3391f5b7b192103a8266571921a7e3623",
+    "docs/evidence/snow_fine_20261030/build_report.py": "ab7b648510e9e49db12119a63af593b4bcbc5e671caecf890c39b9e807afcfab"
+  },
+  "final_outputs_sha256": {
+    "docs/SNOW_FINE_SENSITIVITY_20261030.md": "67d3c8e9f2a224982ff38455ff21dd3fb0a53076e805e8c5eb5e5f698eaca306",
+    "docs/SNOW_FINE_FULL_SCORES_20261030.md": "9fe3805f14c6295419c93029fbcf678c40aca477bbabea406511516518eb9664",
+    "docs/SNOW_FINE_FIGURES_20261030.md": "4e7123d721b6c296a1c44005203651fe0ab366b74ca239a496efc1e0e3c53de1",
+    "docs/SNOW_FINE_IMPROVED_FIGURES_20261030.md": "38aea62f7fba9c831b878729a2ceb17045a155f1bec9b046d9a137813f391804",
+    "docs/evidence/snow_fine_20261030/full_tables_receipt.json": "e04557879ce437b20b81dcaf0d401a5feef868f4381dcb75066b016251b89a56",
+    "docs/evidence/snow_fine_20261030/figures/figure_manifest.json": "6809bc9163688b680ec56403b9f88dddadc678248bc6cac417e071fd09427e05"
+  }
+}
