@@ -1,0 +1,33 @@
+{
+  "status": "PASS",
+  "reviewer": "root",
+  "reviewed_files": [
+    {
+      "path": "docs/SIX_HOUR_IMPROVEMENT_20261030.md",
+      "sha256": "8ec4da9a7622c513e27342c12826ff33cd21feedc2db6f9d72af9fdf7882085c"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/figures/figure_manifest.json",
+      "sha256": "790511a79976968952e7fa6c5046959f0aaf63b808d6a3f2b2c912d17a06f679"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/figures/six_hour_skill_summary.png",
+      "sha256": "99c3bd6c8feb4aa5ad365d5c8c8d0ca1a93ab448b1e94ba0be24ee5ee0c942b6"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/figures/precipitation_maps_leads_1_3.png",
+      "sha256": "866a69a63fed22d469f8acb17893ee9a303d18c83119c080456b3ae74454a31c"
+    },
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/figures/precipitation_maps_leads_4_6.png",
+      "sha256": "04950904a190a5f8ce96a6903f169d861016ae0a7c22df41e965db0f0d27a46d"
+    }
+  ],
+  "checks": [
+    "All three PNGs visually inspected: labels readable, one-hour accumulation units, common bins and separate cases, no clipped main panels.",
+    "All lead times +1 through +6 shown; map plates span12\u201315 and15\u201318UTC with row-specific hourly windows.",
+    "CSI heatmap uses rounded values; exact four-decimal tables and machine-readable values retained.",
+    "Report explicitly identifies +4h degradation and +6h strong-threshold CSI versus overall error tradeoff; no universal improvement claim."
+  ],
+  "scope": "Scientific figures and tabular Markdown; no new PDF or DOCX generated for this extension."
+}
