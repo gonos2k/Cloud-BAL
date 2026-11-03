@@ -1,0 +1,36 @@
+{
+  "status": "FAILED_BEFORE_RUNNER_NO_MODEL_STARTED",
+  "attempts": [
+    {
+      "arm": "OLD",
+      "exec_session_id": 94011,
+      "exit_code": 1
+    },
+    {
+      "arm": "FIX",
+      "exec_session_id": 47175,
+      "exit_code": 1
+    }
+  ],
+  "failure_summary": "The archived experiment/env.sh was sourced as an environment initializer. Its final exec invoked experiment/run.py with no argv; run.py indexed sys.argv and raised IndexError before any model launch.",
+  "stderr_capture_available": false,
+  "root_reported_failure": true,
+  "read_only_verification": {
+    "checked_utc": "2026-11-03T07:51:31Z",
+    "case_dirs": "/var/tmp/b1-two-hour-probe-20261103/cases/{OLD,FIX}",
+    "launcher_logs": 0,
+    "launch_receipts": 0,
+    "rsl_logs": 0,
+    "history_files": 0,
+    "trace_files": 0,
+    "model_process_visible": false
+  },
+  "source_wrapper": {
+    "original_path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/env.sh",
+    "sha256": "f93c8af328ea9527b45ae4efd62e910b0be49831fd37cc40f54ed1168ca0ae1c",
+    "preserved_copy": "/var/tmp/b1-two-hour-probe-20261103/attempts/archived_experiment_env.sh",
+    "preserved_copy_sha256": "f93c8af328ea9527b45ae4efd62e910b0be49831fd37cc40f54ed1168ca0ae1c"
+  },
+  "frozen_plan_or_runner_modified": false,
+  "model_restarted_by_this_agent": false
+}

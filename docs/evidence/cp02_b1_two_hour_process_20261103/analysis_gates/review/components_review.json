@@ -1,0 +1,126 @@
+{
+  "status": "PASS_COMPONENT_MATH_AND_DATA_REVIEW",
+  "scope": "Independent review of the keyed time-integrated CP02 component derivation and selected aggregates. No model run, raw-trace replay, deriver edit, or component-CSV edit was performed.",
+  "pins": {
+    "deriver": {
+      "path": "tools/derive_cp02_b1_components.py",
+      "sha256": "26d3746f71af569698e3b858b7ef64d29ace416eceb91748fbe2cb88e24a92bf"
+    },
+    "components_csv": {
+      "path": "docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/integrated_components.csv",
+      "sha256": "67e0a833725f71e23e6c5186225ccb8529900ab01083cabfaf833dd50c185b6f",
+      "bytes": 533474
+    },
+    "derivation_receipt": {
+      "path": "docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/integrated_components_receipt.json",
+      "sha256": "8951dd00278812bc7a4930b3189bd7207462c64769ca83c494925177ccbc8fbc"
+    },
+    "run1_analysis_receipt": {
+      "path": "docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/run1_analysis_receipt.json",
+      "sha256": "59b07f13b8f49a98fcee96bfb6ee56a09c86eb0c72a66fa2b0e002496d62e836",
+      "status": "PASS_BOTH_ARMS"
+    },
+    "frozen_corners": {
+      "path": "docs/evidence/cp02_b1_two_hour_process_20261103/cohorts/corners.csv",
+      "sha256": "04e373790e17d2f4f5d189bdecede70e04a567ebcaab4a69b4ee8c2c37260a59"
+    },
+    "analysis_inputs": {
+      "OLD_cell_steps": {
+        "sha256": "5b6599036bb2af952e3ad83c06e97c13265e550e751435ef9f3e773af6350889",
+        "bytes": 133848833
+      },
+      "OLD_phase_records": {
+        "sha256": "8fb2ed1f7b630e2a4327a53427f5e93bdaa5b81da359664c0db87a6c9f70261d",
+        "bytes": 1285604832
+      },
+      "FIX_cell_steps": {
+        "sha256": "e918ff5e5ddc9c6211c828ff19addb37a362afaba758310baaa86c32d2c5b6f1",
+        "bytes": 137554411
+      },
+      "FIX_phase_records": {
+        "sha256": "176895fbc5666ca0811b24d0eb3813cd12504b3f871f3c2e0ea610facab6ed99",
+        "bytes": 1296415483
+      }
+    },
+    "instrumented_source": {
+      "BASE_OLD_sha256": "b3a7f22c5929eab80784b2b2963e34798811b16c0f9a433601b16498f52aae02",
+      "FIX_sha256": "bd4e0a021f770daf0fbbdedfa3f07b964638edac5b3fb1b1f97dbe4826b72e90",
+      "candidate_patch_sha256": "94f109e624aa0b3b25689db20b1ac1acb4122920288d3765499147ed385fea3e"
+    },
+    "raw_trace_review": {
+      "independent_science_review_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/analysis_scratch/science_review.json",
+      "independent_science_review_sha256": "a34d32a3b0de9f5dd4abb7c9c4e9078fde04d1ad5014200253804631309afa26",
+      "OLD_compressed_trace_sha256": "9bc68ad9da6c2324bc8674079f49f10584fa388f028d9ce8e980b5d387c5c773",
+      "FIX_compressed_trace_sha256": "753c2168670baae19524b8632e33d91d76b86d949da84bc80ae179b6604d3c16"
+    }
+  },
+  "review_checks": {
+    "source_to_receipt_and_csv_hash_bindings_match": true,
+    "all_four_analysis_input_actual_sha256_and_sizes_match_derivation_receipt": true,
+    "run1_receipt_and_corner_hashes_match_derivation_receipt": true,
+    "csv_rows": 2496,
+    "unique_group_keys": 2496,
+    "groups_per_arm": 1248,
+    "expected_grouping": "2 arms × 4 points × 4 native corners × 39 levels × 2 hours",
+    "cell_step_count_per_group": 180,
+    "weight_application": "Weights are checked against frozen corner metadata and carried as metadata; the integration formulas do not multiply by them. Apply weights only when constructing a point remap/plot.",
+    "paired_PREVP_vapor_rain_terms": {
+      "all_rows_exact_opposites": true,
+      "delta_qv_equals_negative_integrated_PREVP": true,
+      "delta_qr_equals_integrated_PREVP": true,
+      "interpretation": "The isolated vapor/rain terms cancel algebraically by construction before state floors and other process terms; this is not a whole-model or column water budget."
+    },
+    "zero_raw_counts_match_independent_trace_review": {
+      "OLD": {"zero_raw": 1185, "negative_sat_cap": 1025, "negative_final_process": 1025},
+      "FIX": {"zero_raw": 1542, "negative_sat_cap": 0, "negative_final_process": 0}
+    },
+    "selected_group_independent_recalculation": {
+      "group": "P03, corner 00, model level k=1, hour 1; recalculated from 180 cell-step rows and 180 key-matched LATENT_INPUT records per arm",
+      "recalculation_script": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/analysis_scratch/check_integrated_selected_rows.py",
+      "recalculation_script_sha256": "a627da54eebe42735de44dd37004d58d4043d17a2212e2e4fde2dcc8d807d403",
+      "OLD": {
+        "integrated_prevp_rate_dt": -1.8542810921031195e-06,
+        "delta_qv_prevp": 1.8542810921031195e-06,
+        "delta_qr_prevp": -1.8542810921031195e-06,
+        "delta_t_prevp": -0.004455260639859434,
+        "delta_t_latent_total": -0.004455260639859434,
+        "all_recomputed_fields_exactly_match_csv": true
+      },
+      "FIX": {
+        "integrated_prevp_rate_dt": -1.46786220545156e-09,
+        "delta_qv_prevp": 1.46786220545156e-09,
+        "delta_qr_prevp": -1.46786220545156e-09,
+        "delta_t_prevp": -3.5269394431799933e-06,
+        "delta_t_latent_total": -3.5269394431799933e-06,
+        "all_recomputed_fields_exactly_match_csv": true
+      }
+    }
+  },
+  "source_math_review": {
+    "BASE_OLD": {
+      "q_vapor_tendency": "work2=-(prevp+psdep+pgdep+pinud+pidep)",
+      "q_rain_tendency_contains": "+prevp",
+      "latent": "xlwork2 includes -xl*prevp; temperature update is t=t-xlwork2/cpm*dtcld",
+      "line_anchors": "instrumented module_mp_kdm6_BASE.f90: 2653, 2685, 2691-2693, 2717-2727"
+    },
+    "FIX": {
+      "q_vapor_tendency": "work2=-(prevp+psevp+pgevp)",
+      "q_rain_tendency_contains": "+prevp",
+      "latent": "xlwork2 includes -xl*(prevp+psevp+pgevp); temperature update follows the same signed outer update",
+      "line_anchors": "instrumented module_mp_kdm6_FIX.f90: 2806, 2829, 2832-2834, 2844-2846"
+    },
+    "component_definitions": {
+      "delta_qv_prevp": "sum(REAL32(-REAL32(prevp*dtcld)))",
+      "delta_qr_prevp": "sum(REAL32(prevp*dtcld))",
+      "delta_t_prevp": "Termwise REAL32 contribution from the -xl*prevp part of xlwork2, with the temperature update sign applied.",
+      "delta_t_latent_total": "Sum of the full logged LATENT_INPUT xlwork2 temperature term.",
+      "state_deltas": "Observed POST_STEP minus PRE_UPDATE values inside the local KDM6 process update; not whole KDM6 return values."
+    }
+  },
+  "limitations": [
+    "delta_t_prevp is a diagnostic component; finite precision and the nonlinear full update prevent treating it as exact causal attribution of total temperature change.",
+    "Component integration is per arm, point, corner, level, and hour, summed over time only. No vertical, area, pooled, or full-model budget is formed.",
+    "The paired vapor/rain cancellation is algebraic for the isolated PREVP terms; rain floors, other process rates, and local state updates can make state deltas differ.",
+    "No score or candidate-selection change is asserted."
+  ]
+}

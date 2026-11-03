@@ -1,0 +1,350 @@
+{
+  "audited_at_utc": "2026-11-03T09:01:59.011816+00:00",
+  "baseline_sha256": "20c558417cca579388dce5844085a39d8c54390f312126be202c3dfd6eaf26a3",
+  "checks": {
+    "active_graph_published_Cloud-BAL": {
+      "details": {
+        "GRAPH_REPORT.md": "e6516574a0db261f0180af1a38f0babe7070a31b4685d79fefcdb85b43bc7aed",
+        "graph.json": "0619d08587d6173892f7c36bdc7cb3ab673ec5e80055047fa4725c9ec8a48c0f",
+        "manifest.json": "c7b1afc3b6e0a74339a341c89bf61581aab7defd792b60ea99ed9dbfa5b42885"
+      },
+      "pass": true
+    },
+    "active_graph_published_KLAPS50": {
+      "details": {
+        "GRAPH_REPORT.md": "988b321248675ffc154300657dbc0a4564d62e666395d507b732d094626d11b6",
+        "graph.json": "8360c6b5a8f7ac76cdc03feee8d7cc8de236dc9a91300d42d1c080639db4d091",
+        "manifest.json": "ef3654b212d9592349db6c2954d74f39d39114653131d5abb87d92514a66c976"
+      },
+      "pass": true
+    },
+    "active_worktree_copy_targets": {
+      "details": {
+        "bad": [],
+        "copied": 9
+      },
+      "pass": true
+    },
+    "all_13_targets_exact": {
+      "details": [],
+      "pass": true
+    },
+    "copy_receipt_pin": {
+      "details": "PASS_ACTIVE_WORKTREE_AND_WIKI_READBACK",
+      "pass": true
+    },
+    "expected_dirty_paths_Cloud-BAL": {
+      "details": {
+        "active_graph": {
+          "GRAPH_REPORT.md": "e6516574a0db261f0180af1a38f0babe7070a31b4685d79fefcdb85b43bc7aed",
+          "graph.json": "0619d08587d6173892f7c36bdc7cb3ab673ec5e80055047fa4725c9ec8a48c0f",
+          "manifest.json": "c7b1afc3b6e0a74339a341c89bf61581aab7defd792b60ea99ed9dbfa5b42885"
+        },
+        "baseline_status_sha256": "fd50b41cc0f95e24891ce217c22775cf85299ff3c8b0a8ed1b9dac44f124b6d2",
+        "current_snapshot_count": 119,
+        "expected_new_snapshot_status_entries_removed": 1,
+        "old_snapshot_count": 118,
+        "old_snapshot_file_count": 443,
+        "old_snapshot_mismatches": 0,
+        "status_after_expected_new_snapshot_removal_sha256": "fd50b41cc0f95e24891ce217c22775cf85299ff3c8b0a8ed1b9dac44f124b6d2"
+      },
+      "pass": true
+    },
+    "expected_dirty_paths_KLAPS50": {
+      "details": {
+        "active_graph": {
+          "GRAPH_REPORT.md": "988b321248675ffc154300657dbc0a4564d62e666395d507b732d094626d11b6",
+          "graph.json": "8360c6b5a8f7ac76cdc03feee8d7cc8de236dc9a91300d42d1c080639db4d091",
+          "manifest.json": "ef3654b212d9592349db6c2954d74f39d39114653131d5abb87d92514a66c976"
+        },
+        "baseline_status_sha256": "1a1413308efe42ec56d6b79c224a1865d1f1788dec8437c0f512631459bd3068",
+        "current_snapshot_count": 115,
+        "expected_new_snapshot_status_entries_removed": 0,
+        "old_snapshot_count": 114,
+        "old_snapshot_file_count": 421,
+        "old_snapshot_mismatches": 0,
+        "status_after_expected_new_snapshot_removal_sha256": "1a1413308efe42ec56d6b79c224a1865d1f1788dec8437c0f512631459bd3068"
+      },
+      "pass": true
+    },
+    "failed_attempt_preserved": {
+      "details": {
+        "failure_sha256": "0d0ef287bca17bc0e431a141ed8a54f997cacc0e0ddc7ad1c12f95b60fef10ab",
+        "publisher_sha256": "81a0349289cb2105c25d03f03bfbdb1a415dc9cb3740daf1b36868480e8ae71c",
+        "report": {
+          "backup": "/var/tmp/b1_two_hour_kg_20261103/publish-backup-ea0097adb497dd4b",
+          "error": "KeyError: git_status_exact",
+          "independent_rollback_check": "PASS: staged helper verified exact Git hashes, active graphs, wiki mirrors, all 232 snapshots before retry; independent native agent confirmed",
+          "reason": "Publisher reused prior baseline schema; new baseline stores git_state.porcelain_v1_z_sha256. Failure occurred at postpublish dirty-state check and triggered the existing all-target rollback.",
+          "status": "FAILED_AND_ROLLBACK_EXECUTED",
+          "successful_retry": "kg/publish_receipt.json"
+        }
+      },
+      "pass": true
+    },
+    "preservation_totals": {
+      "details": {
+        "Cloud-BAL": {
+          "active_graph": {
+            "GRAPH_REPORT.md": "e6516574a0db261f0180af1a38f0babe7070a31b4685d79fefcdb85b43bc7aed",
+            "graph.json": "0619d08587d6173892f7c36bdc7cb3ab673ec5e80055047fa4725c9ec8a48c0f",
+            "manifest.json": "c7b1afc3b6e0a74339a341c89bf61581aab7defd792b60ea99ed9dbfa5b42885"
+          },
+          "baseline_status_sha256": "fd50b41cc0f95e24891ce217c22775cf85299ff3c8b0a8ed1b9dac44f124b6d2",
+          "current_snapshot_count": 119,
+          "expected_new_snapshot_status_entries_removed": 1,
+          "old_snapshot_count": 118,
+          "old_snapshot_file_count": 443,
+          "old_snapshot_mismatches": 0,
+          "status_after_expected_new_snapshot_removal_sha256": "fd50b41cc0f95e24891ce217c22775cf85299ff3c8b0a8ed1b9dac44f124b6d2"
+        },
+        "KLAPS50": {
+          "active_graph": {
+            "GRAPH_REPORT.md": "988b321248675ffc154300657dbc0a4564d62e666395d507b732d094626d11b6",
+            "graph.json": "8360c6b5a8f7ac76cdc03feee8d7cc8de236dc9a91300d42d1c080639db4d091",
+            "manifest.json": "ef3654b212d9592349db6c2954d74f39d39114653131d5abb87d92514a66c976"
+          },
+          "baseline_status_sha256": "1a1413308efe42ec56d6b79c224a1865d1f1788dec8437c0f512631459bd3068",
+          "current_snapshot_count": 115,
+          "expected_new_snapshot_status_entries_removed": 0,
+          "old_snapshot_count": 114,
+          "old_snapshot_file_count": 421,
+          "old_snapshot_mismatches": 0,
+          "status_after_expected_new_snapshot_removal_sha256": "1a1413308efe42ec56d6b79c224a1865d1f1788dec8437c0f512631459bd3068"
+        }
+      },
+      "pass": true
+    },
+    "preserve_prior_snapshots_Cloud-BAL": {
+      "details": {
+        "counts": {
+          "current": 119,
+          "files": 443,
+          "prior": 118
+        },
+        "current": 119,
+        "mismatches": [],
+        "new_present": true
+      },
+      "pass": true
+    },
+    "preserve_prior_snapshots_KLAPS50": {
+      "details": {
+        "counts": {
+          "current": 115,
+          "files": 421,
+          "prior": 114
+        },
+        "current": 115,
+        "mismatches": [],
+        "new_present": true
+      },
+      "pass": true
+    },
+    "publish_receipt_hash": {
+      "details": "c35469743eeecc6e5e947025fccbbd1a9670dc17e861a529533d4c7896368a73",
+      "pass": true
+    },
+    "publish_receipt_status": {
+      "details": "PUBLISHED_AND_READBACK_PASS",
+      "pass": true
+    },
+    "publish_target_count": {
+      "details": {
+        "expected": 13,
+        "receipt": 13
+      },
+      "pass": true
+    },
+    "receipt_pins": {
+      "details": {
+        "baseline": "20c558417cca579388dce5844085a39d8c54390f312126be202c3dfd6eaf26a3",
+        "selection": "02da3504e5e11a39ed40ca34e57e9fddab8119b3a585fc367057309f3186036e",
+        "stage": "2eb88dcdfd18e3f67abd5e96f25d3875e9d6be74d846d7b5d40ceeb6c6c1bb0f"
+      },
+      "pass": true
+    },
+    "snapshot_counts": {
+      "details": {
+        "prior": 232,
+        "published": 234
+      },
+      "pass": true
+    }
+  },
+  "failure_attempt": {
+    "failure_receipt_path": "docs/evidence/cp02_b1_two_hour_process_20261103/kg/attempts/publish_baseline_schema/failure.json",
+    "failure_receipt_sha256": "0d0ef287bca17bc0e431a141ed8a54f997cacc0e0ddc7ad1c12f95b60fef10ab",
+    "outcome": "First publish attempt failed with KeyError: git_status_exact; its captured files remain intact, rollback passed baseline verification, corrected retry succeeded.",
+    "preserved": true,
+    "publisher_source_path": "docs/evidence/cp02_b1_two_hour_process_20261103/kg/attempts/publish_baseline_schema/publisher_before_schema_fix.txt",
+    "publisher_source_sha256": "81a0349289cb2105c25d03f03bfbdb1a415dc9cb3740daf1b36868480e8ae71c"
+  },
+  "failures": [],
+  "limitations": [
+    "This readback verifies artifact publication and repository-state preservation only.",
+    "Graph freshness does not establish runtime or scientific validity."
+  ],
+  "maintained_roots": {
+    "Cloud-BAL": {
+      "active_graph": {
+        "GRAPH_REPORT.md": "e6516574a0db261f0180af1a38f0babe7070a31b4685d79fefcdb85b43bc7aed",
+        "graph.json": "0619d08587d6173892f7c36bdc7cb3ab673ec5e80055047fa4725c9ec8a48c0f",
+        "manifest.json": "c7b1afc3b6e0a74339a341c89bf61581aab7defd792b60ea99ed9dbfa5b42885"
+      },
+      "baseline_status_sha256": "fd50b41cc0f95e24891ce217c22775cf85299ff3c8b0a8ed1b9dac44f124b6d2",
+      "current_snapshot_count": 119,
+      "expected_new_snapshot_status_entries_removed": 1,
+      "old_snapshot_count": 118,
+      "old_snapshot_file_count": 443,
+      "old_snapshot_mismatches": 0,
+      "status_after_expected_new_snapshot_removal_sha256": "fd50b41cc0f95e24891ce217c22775cf85299ff3c8b0a8ed1b9dac44f124b6d2"
+    },
+    "KLAPS50": {
+      "active_graph": {
+        "GRAPH_REPORT.md": "988b321248675ffc154300657dbc0a4564d62e666395d507b732d094626d11b6",
+        "graph.json": "8360c6b5a8f7ac76cdc03feee8d7cc8de236dc9a91300d42d1c080639db4d091",
+        "manifest.json": "ef3654b212d9592349db6c2954d74f39d39114653131d5abb87d92514a66c976"
+      },
+      "baseline_status_sha256": "1a1413308efe42ec56d6b79c224a1865d1f1788dec8437c0f512631459bd3068",
+      "current_snapshot_count": 115,
+      "expected_new_snapshot_status_entries_removed": 0,
+      "old_snapshot_count": 114,
+      "old_snapshot_file_count": 421,
+      "old_snapshot_mismatches": 0,
+      "status_after_expected_new_snapshot_removal_sha256": "1a1413308efe42ec56d6b79c224a1865d1f1788dec8437c0f512631459bd3068"
+    }
+  },
+  "maintained_roots_modified_by_audit": false,
+  "postpublish_copy_receipt_sha256": "80ae8433b57e9011643693d249c7b78caeefea740331781fc432f36afaae7116",
+  "prior_snapshot_count": 232,
+  "prior_snapshot_files_count": 864,
+  "publish_receipt_sha256": "c35469743eeecc6e5e947025fccbbd1a9670dc17e861a529533d4c7896368a73",
+  "publish_status": "PUBLISHED_AND_READBACK_PASS",
+  "published_snapshot_count": 234,
+  "published_target_count": 13,
+  "related_validation_evidence": {
+    "combined_test_receipt": {
+      "all_source_sha256_matches": true,
+      "note": "Receipt reports 174 passed from the clean export suite plus renderer tests; this post-publish audit did not rerun tests.",
+      "path": "validation/combined_tests.json",
+      "related_tests": 169,
+      "renderer_tests": 5,
+      "sha256": "2b7398852ee5311d602bc66bc5f8dffa88ce89024c8bee622e21fb5375a7f939",
+      "source_sha256_matches": {
+        "tests/test_cp02_b1_process_trace.py": true,
+        "tests/test_cp02_six_hour_improvement.py": true,
+        "tests/test_derive_cp02_b1_components.py": true,
+        "tests/test_plot_cp02_b1_process.py": true,
+        "tools/cp02_b1_process_trace.py": true,
+        "tools/derive_cp02_b1_components.py": true,
+        "tools/plot_cp02_b1_process.py": true
+      },
+      "status": "PASS",
+      "unique_tests": 174
+    },
+    "figure_package_receipt": {
+      "path": "figures/package_receipt.json",
+      "png_count": 8,
+      "sha256": "94d2fafb1f7ee4854ebb3888bffc82b25c8c232242cdd50b625c185b5fb9d30c",
+      "status": "PASS"
+    },
+    "figure_render_receipt": {
+      "all_png_bytes_still_match_receipt": true,
+      "path": "figures/render_receipt.json",
+      "png_count": 8,
+      "pngs": {
+        "b1_hourly_csi.png": {
+          "bytes": 240417,
+          "match": true,
+          "receipt_bytes": 240417,
+          "receipt_sha256": "39810879e52e7c76858737eb07db5e38d67f7945f887411fa0ec00a697e07c40",
+          "sha256": "39810879e52e7c76858737eb07db5e38d67f7945f887411fa0ec00a697e07c40"
+        },
+        "b1_hourly_delta_csi.png": {
+          "bytes": 190096,
+          "match": true,
+          "receipt_bytes": 190096,
+          "receipt_sha256": "65b5ce5b11776c9bb7c3de17a78eb92d5e0902b909d4c011ad5afba9c44ea5a6",
+          "sha256": "65b5ce5b11776c9bb7c3de17a78eb92d5e0902b909d4c011ad5afba9c44ea5a6"
+        },
+        "b1_prevp_qv_temperature_profiles.png": {
+          "bytes": 420196,
+          "match": true,
+          "receipt_bytes": 420196,
+          "receipt_sha256": "c61de1817007eb1c0ce30604c186d88ea5fe0351243e0993bfa4e15594828499",
+          "sha256": "c61de1817007eb1c0ce30604c186d88ea5fe0351243e0993bfa4e15594828499"
+        },
+        "b1_q_state_vertical_profiles.png": {
+          "bytes": 285978,
+          "match": true,
+          "receipt_bytes": 285978,
+          "receipt_sha256": "dae7ed1411c6eda86b29bc614a9c73c5022476fe0ffff8dc2bdedd9dd8f6612e",
+          "sha256": "dae7ed1411c6eda86b29bc614a9c73c5022476fe0ffff8dc2bdedd9dd8f6612e"
+        },
+        "b1_selected_point_hourly_precip.png": {
+          "bytes": 222466,
+          "match": true,
+          "receipt_bytes": 222466,
+          "receipt_sha256": "a6f1666179972be62113bebd3f331b2eb822160a8732e2e89eeb953ab4c13077",
+          "sha256": "a6f1666179972be62113bebd3f331b2eb822160a8732e2e89eeb953ab4c13077"
+        },
+        "b1_t_state_vertical_profiles.png": {
+          "bytes": 271964,
+          "match": true,
+          "receipt_bytes": 271964,
+          "receipt_sha256": "84477f3ee4b09d81e25d370c63bb0c4220a3e12853c9cf3acd2115e4782b2fdb",
+          "sha256": "84477f3ee4b09d81e25d370c63bb0c4220a3e12853c9cf3acd2115e4782b2fdb"
+        },
+        "b1_zero_rate_transitions.png": {
+          "bytes": 140828,
+          "match": true,
+          "receipt_bytes": 140828,
+          "receipt_sha256": "1b35593af9425613d269a2b73d8e3665a50c7db8026d541495ec39f683349ede",
+          "sha256": "1b35593af9425613d269a2b73d8e3665a50c7db8026d541495ec39f683349ede"
+        },
+        "b1_zero_rate_transitions_level_corner.png": {
+          "bytes": 144882,
+          "match": true,
+          "receipt_bytes": 144882,
+          "receipt_sha256": "8282a490274c71daad1ebc418154eabcae0b1530bd149e0c15aa07e77f447b9c",
+          "sha256": "8282a490274c71daad1ebc418154eabcae0b1530bd149e0c15aa07e77f447b9c"
+        }
+      },
+      "sha256": "99b1ee9619fc1f9868d794020c7beee451a3df18bdf369cf0bb3fae2221a7392"
+    },
+    "independent_analysis_review": {
+      "findings": 0,
+      "path": "review/independent_analysis_review.json",
+      "reported_validation": {
+        "clean_export_suite": "169 passed (root-reported; not rerun by this reviewer)",
+        "combined_tests": "174 passed (root-reported: clean export plus five renderer tests; evidence is hash-inventoried)",
+        "focused_analyzer_tests": "14 passed (reported; not rerun by this reviewer)",
+        "focused_renderer_tests": "5 passed (validation receipt and test log; not rerun by this reviewer)",
+        "native_validation": "Existing strict prefix/run/analysis/physics receipts reviewed as provenance; no native rerun claimed."
+      },
+      "sha256": "da5dbda46c4deab2467de004d81b3fed6a2c62c925dc4bc5bd55434b5b610ab8"
+    },
+    "science_review": {
+      "path": "review/science_review.json",
+      "scope": "Independent bounded review of selected-cell KDM6 traces from the same-B1 OLD/FIX two-hour runs. This review did not change the model, parser, run, or raw payloads.",
+      "sha256": "a34d32a3b0de9f5dd4abb7c9c4e9078fde04d1ad5014200253804631309afa26",
+      "status": "INDEPENDENT_SCIENCE_REVIEW_COMPLETE_OBSERVATION_ONLY"
+    },
+    "two_run_replay_receipt": {
+      "all_16_byte_equal": true,
+      "comparison_count": 16,
+      "path": "analysis_gates/run2_byte_replay_16_outputs_receipt.json",
+      "receipt_valid": true,
+      "sha256": "edc35650f7c67abcdbb1950a9d450ca1a940842870a53907b5f22a85d3d7ec73",
+      "status": "PASS_BYTE_IDENTICAL_REPLAY",
+      "total_bytes_compared": 2965143005
+    }
+  },
+  "review_status": "GO",
+  "rollback_attempt_preserved": true,
+  "schema": "independent-postpublish-review-v1",
+  "selection_lock_sha256": "02da3504e5e11a39ed40ca34e57e9fddab8119b3a585fc367057309f3186036e",
+  "stage_receipt_sha256": "2eb88dcdfd18e3f67abd5e96f25d3875e9d6be74d846d7b5d40ceeb6c6c1bb0f",
+  "status": "PASS"
+}

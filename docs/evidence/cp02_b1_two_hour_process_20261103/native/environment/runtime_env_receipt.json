@@ -1,0 +1,32 @@
+{
+  "status": "SUPPLEMENTAL_ENVIRONMENT_READY_ROOT_LAUNCH_PENDING",
+  "runtime_environment": {
+    "path": "/var/tmp/b1-two-hour-probe-20261103/runtime_env.sh",
+    "sha256": "2f2d5ab9de758583377fc4ee61bc84311d0250dab84e43dfd53950e03bb24c73",
+    "syntax_check": "bash -n PASS",
+    "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "mpi_env_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh",
+    "mpi_env_sha256": "1f807842591f742c0e285df3769b4a07e8944536cbd0b0905e88520ae07dbcf8",
+    "adds_no_build_or_model_invocation": true
+  },
+  "startup_failure": {
+    "receipt_path": "/var/tmp/b1-two-hour-probe-20261103/attempts/startup_failure.json",
+    "receipt_sha256": "8f182f427ccf92a2217b17512190794a736a10b853619c99954e699a3cd5d323",
+    "archived_wrapper_copy": "/var/tmp/b1-two-hour-probe-20261103/attempts/archived_experiment_env.sh",
+    "archived_wrapper_sha256": "f93c8af328ea9527b45ae4efd62e910b0be49831fd37cc40f54ed1168ca0ae1c"
+  },
+  "authorization_and_plan_pins": {
+    "prior_go_path": "/var/tmp/b1-two-hour-probe-20261103/launch_GO.json",
+    "prior_go_sha256": "1767d93f1a400fdff955f61cce6df08ac05e8a55148a2d4c69f4c53a53cfd690",
+    "review_bundle_path": "/var/tmp/b1-two-hour-probe-20261103/review_bundle.json",
+    "review_bundle_sha256": "a0e9fa3ebaf7dc4be258c23a40c517fc3f7dcc5157e62407cc49cedc783edce5",
+    "source_runner_case_plan_modified": false
+  },
+  "intended_root_commands": [
+    "cd /var/tmp/b1-two-hour-probe-20261103 && source /var/tmp/b1-two-hour-probe-20261103/runtime_env.sh && export B1_NATIVE_GO=ROOT_GO && python3 run_pair.py --case OLD --authorize-native",
+    "cd /var/tmp/b1-two-hour-probe-20261103 && source /var/tmp/b1-two-hour-probe-20261103/runtime_env.sh && export B1_NATIVE_GO=ROOT_GO && python3 run_pair.py --case FIX --authorize-native"
+  ],
+  "launch_mode": "run the two commands in separate shells/sessions concurrently, preserving the pinned CPU sets in run_pair.py",
+  "launch_authority": "root only; this receipt does not authorize or initiate a model run"
+}

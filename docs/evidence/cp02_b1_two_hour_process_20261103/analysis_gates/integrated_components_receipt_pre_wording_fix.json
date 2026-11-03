@@ -1,0 +1,47 @@
+{
+  "analysis_inputs": {
+    "FIX_cell_steps": {
+      "bytes": 137554411,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/analysis_run1/FIX/fix_cell_steps.csv",
+      "sha256": "e918ff5e5ddc9c6211c828ff19addb37a362afaba758310baaa86c32d2c5b6f1"
+    },
+    "FIX_phase_records": {
+      "bytes": 1296415483,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/analysis_run1/FIX/fix_phase_records.csv",
+      "sha256": "176895fbc5666ca0811b24d0eb3813cd12504b3f871f3c2e0ea610facab6ed99"
+    },
+    "OLD_cell_steps": {
+      "bytes": 133848833,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/analysis_run1/OLD/old_cell_steps.csv",
+      "sha256": "5b6599036bb2af952e3ad83c06e97c13265e550e751435ef9f3e773af6350889"
+    },
+    "OLD_phase_records": {
+      "bytes": 1285604832,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/analysis_run1/OLD/old_phase_records.csv",
+      "sha256": "8fb2ed1f7b630e2a4327a53427f5e93bdaa5b81da359664c0db87a6c9f70261d"
+    }
+  },
+  "corners_path": "docs/evidence/cp02_b1_two_hour_process_20261103/cohorts/corners.csv",
+  "corners_sha256": "04e373790e17d2f4f5d189bdecede70e04a567ebcaab4a69b4ee8c2c37260a59",
+  "derive_tool_sha256": "d5e79de74e7370036af8e2a4cc0b00b00b407223a9ea294cac3795953fe04139",
+  "groups": 2496,
+  "latent_input_record_counts": {
+    "FIX": 224640,
+    "OLD": 224640
+  },
+  "output_bytes": 533474,
+  "output_path": "docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/integrated_components.csv",
+  "output_sha256": "67e0a833725f71e23e6c5186225ccb8529900ab01083cabfaf833dd50c185b6f",
+  "run1_status": "PASS_BOTH_ARMS",
+  "run_receipt_path": "docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/run1_analysis_receipt.json",
+  "run_receipt_sha256": "59b07f13b8f49a98fcee96bfb6ee56a09c86eb0c72a66fa2b0e002496d62e836",
+  "scope": "per-arm, point, bilinear corner, model level k, and hour; summed over time only; no vertical, area, or pooled budget",
+  "status": "PASS_KEYED_LATENT_COMPONENT_DERIVATION",
+  "term_definitions": {
+    "delta_qr_prevp": "sum(REAL32(prevp*dtcld)); paired vapor/rain terms cancel by construction",
+    "delta_qv_prevp": "sum(REAL32(-prevp*dtcld))",
+    "delta_qv_state/delta_qr_state/delta_t_state": "sum of observed POST_STEP minus PRE_UPDATE state over steps; full microphysics state deltas",
+    "delta_t_latent_total": "sum(REAL32(-REAL32(REAL32(xlwork2/cpm)*dtcld))) from full LATENT_INPUT",
+    "delta_t_prevp": "termwise REAL32 contribution from -xl*prevp in xlwork2; diagnostic component, not exact nonlinear attribution"
+  }
+}

@@ -1,0 +1,66 @@
+{
+  "status": "PASS_ENV_BINDING_ROOT_RUNS_ACTIVE_NO_FURTHER_LAUNCH",
+  "review_bundle_sha256": "a0e9fa3ebaf7dc4be258c23a40c517fc3f7dcc5157e62407cc49cedc783edce5",
+  "runtime_env_sha256": "2f2d5ab9de758583377fc4ee61bc84311d0250dab84e43dfd53950e03bb24c73",
+  "runtime_env_receipt_sha256": "7b4ccebbed6988ab11d9cb5fdb7ea6a0ce74c66c20eaf52ece92a952b08364b8",
+  "runtime_env_receipt_claims": "SUPPLEMENTAL_ENVIRONMENT_READY_ROOT_LAUNCH_PENDING",
+  "runtime_environment": {
+    "pinned_profile_matches": true,
+    "pinned_mpi_vars_match": true,
+    "NETCDF_LD_PATH_set": true,
+    "no_model_runner_embedded": true,
+    "inherited_ulimit_stack_unlimited": true
+  },
+  "startup_failure_receipt_sha256": "8f182f427ccf92a2217b17512190794a736a10b853619c99954e699a3cd5d323",
+  "startup_failure_status": "FAILED_BEFORE_RUNNER_NO_MODEL_STARTED",
+  "GO_binding": {
+    "bundle_hash_matches_GO": true,
+    "peer_review_hash_matches_GO": true,
+    "authorized_scope": "Diagnostic-only same B1 OLD/FIX pair, 0\u20132 h. No physical policy change beyond each existing parent. All shared history variables and metadata at 0/1/2h must match corresponding retained reference exactly before interpretation."
+  },
+  "frozen_bundle_files_match": true,
+  "case_plan_and_staged_inputs_unchanged": true,
+  "root_launched_process_observation": {
+    "OLD": {
+      "rank_process_count": 8,
+      "rank_cpus": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "hour12_output_present": true,
+      "hour13_14_outputs_present": [
+        false,
+        false
+      ],
+      "launch_receipt_present": false
+    },
+    "FIX": {
+      "rank_process_count": 8,
+      "rank_cpus": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ],
+      "hour12_output_present": true,
+      "hour13_14_outputs_present": [
+        false,
+        false
+      ],
+      "launch_receipt_present": false
+    }
+  },
+  "reviewer_launched_model": false,
+  "no_further_launch_by_reviewer": true,
+  "note": "runtime_env_receipt was frozen before the ROOT_GO launch and correctly records launch pending at creation; root launch is now observed live in the pinned cases/CPU sets. No completion claim is made here."
+}

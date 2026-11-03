@@ -1,0 +1,67 @@
+{
+  "receipt_schema_version": 1,
+  "status": "PASS_FULL_PREFIX",
+  "full_prefix_pass": true,
+  "case": "OLD",
+  "times_utc_hours": [
+    12,
+    13,
+    14
+  ],
+  "time_step_seconds": 20,
+  "timesteps": [
+    1,
+    360
+  ],
+  "source_executable_sha256": "916bac01f950c4c900947a264767b573d0735413c0d2883ff4f13eead4729cc1",
+  "launch_authorization_path": "/var/tmp/b1-two-hour-probe-20261103/launch_GO.json",
+  "launch_authorization_sha256": "1767d93f1a400fdff955f61cce6df08ac05e8a55148a2d4c69f4c53a53cfd690",
+  "launch_receipt_path": "/var/tmp/b1-two-hour-probe-20261103/cases/OLD/launch_receipt.json",
+  "launch_receipt_sha256": "d8ff0b58c6538b1de08b95d747becb801e163a324e0078cc0f1a40ac79ee7b34",
+  "history_comparison_path": "/var/tmp/b1-two-hour-probe-20261103/cases/OLD/history_prefix_comparison.json",
+  "history_comparison_sha256": "fba884095479ad1b8a44e0e7c6590dac249d5a4afbd8d9f702a674cbfb20b7dd",
+  "trace_validation_path": "/var/tmp/b1-two-hour-probe-20261103/cases/OLD/trace_validation.json",
+  "trace_validation_sha256": "5452f05075a64709489a29f545602cbd4c0b921f6642f22c2d086efc575f3771",
+  "trace_files": [
+    {
+      "path": "/var/tmp/b1-two-hour-probe-20261103/cases/OLD/kdm6_trace_rank3.bits",
+      "sha256": "ad62a98072b25cc2f6cadfaaf31e5111ab698985d446c69b398303bcfbe075a8",
+      "bytes": 484154377
+    }
+  ],
+  "history_hours": {
+    "12": {
+      "path": "/var/tmp/b1-two-hour-probe-20261103/cases/OLD/wrfout_d01_2026-08-16_12:00:00",
+      "sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+      "reference_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100/wrfout_d01_2026-08-16_12:00:00",
+      "reference_sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6"
+    },
+    "13": {
+      "path": "/var/tmp/b1-two-hour-probe-20261103/cases/OLD/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "8159eb06ca85695c533de590c27d9274c4fec4c31a11aeff58516171dae11468",
+      "reference_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100/wrfout_d01_2026-08-16_13:00:00",
+      "reference_sha256": "8159eb06ca85695c533de590c27d9274c4fec4c31a11aeff58516171dae11468"
+    },
+    "14": {
+      "path": "/var/tmp/b1-two-hour-probe-20261103/cases/OLD/wrfout_d01_2026-08-16_14:00:00",
+      "sha256": "bb0afd836d622d06eef78c445c80c4544e879cfa6963f7932882e86309117ff5",
+      "reference_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100/wrfout_d01_2026-08-16_14:00:00",
+      "reference_sha256": "bb0afd836d622d06eef78c445c80c4544e879cfa6963f7932882e86309117ff5"
+    }
+  },
+  "verified_conditions": {
+    "all_variables_values_masks_and_metadata_exact": true,
+    "staged_inputs_unchanged": true,
+    "launch_success_marker": true,
+    "rank_count_8": true,
+    "rank_affinities_pairwise_nonoverlapping": true,
+    "affinities_within_assigned_cpu_set": true,
+    "trace_16_cells_single_owner_39_levels_timesteps_1_360": true,
+    "duplicate_trace_identity_count": 0,
+    "namelist_time_step_20_seconds": true
+  },
+  "supersedes_gate_sha256": "d5442be87f37b2202b7d0cb39f7677adda4a1873d2bec0243613732b4c233478",
+  "preserved_prior_gate_path": "/var/tmp/b1-two-hour-probe-20261103/attempts/OLD_full_prefix_gate_pre_schema_v1.json",
+  "preserved_prior_gate_sha256": "d5442be87f37b2202b7d0cb39f7677adda4a1873d2bec0243613732b4c233478",
+  "interpretation_scope": "Runtime and prefix integrity only; no scientific improvement claim."
+}

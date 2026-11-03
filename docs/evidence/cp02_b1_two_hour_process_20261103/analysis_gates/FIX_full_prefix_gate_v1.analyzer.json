@@ -1,0 +1,103 @@
+{
+  "analyzer_gate_projection": {
+    "mapping_rule": "preserve trace hashes/sizes/encoding/decompressed hashes; make only trace path relative to analysis_gates",
+    "projection_schema": 1,
+    "source_gate_relative_path": "../native/portable_gates/FIX_full_prefix_gate_v1.portable.json",
+    "source_gate_sha256": "126fda2b28224073b41e8981bae23b1dcafde582f3df57f67887a2dfacbd0a6d",
+    "trace_inventory_field": "portable_trace_files"
+  },
+  "case": "FIX",
+  "compression_receipt_path": "../capture/FIX_trace_compression_receipt.json",
+  "compression_receipt_sha256": "14efc7cba6f73bcfd1d4843b308b2c2482a8e7572e6989d051dce8ec710827ce",
+  "full_prefix_pass": true,
+  "history_comparison_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/rerun_FIX/history_prefix_comparison.json",
+  "history_comparison_sha256": "3f61d73c4f23f6010a728d696afc1ef457d3151e1a0e609e92150708b00b928b",
+  "history_hours": {
+    "12": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/rerun_FIX/wrfout_d01_2026-08-16_12:00:00",
+      "reference_path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_12:00:00",
+      "reference_sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+      "sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6"
+    },
+    "13": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/rerun_FIX/wrfout_d01_2026-08-16_13:00:00",
+      "reference_path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_13:00:00",
+      "reference_sha256": "8b4ead8741dff7284b1de140038d85ba48a474d6b8b98e1905e10ddbac165702",
+      "sha256": "8b4ead8741dff7284b1de140038d85ba48a474d6b8b98e1905e10ddbac165702"
+    },
+    "14": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/rerun_FIX/wrfout_d01_2026-08-16_14:00:00",
+      "reference_path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_14:00:00",
+      "reference_sha256": "e4c2ef230a1e3574390a015945fdc051673c345156e9360bc8a54a3922561208",
+      "sha256": "e4c2ef230a1e3574390a015945fdc051673c345156e9360bc8a54a3922561208"
+    }
+  },
+  "interpretation_scope": "Runtime and prefix integrity only; no scientific improvement claim.",
+  "launch_authorization_path": "/var/tmp/b1-two-hour-probe-20261103/launch_GO_FIX_rerun.json",
+  "launch_authorization_sha256": "4d156d1e02e467e3902f9370c8098033cfd3b359624dba45919dc8673aa527aa",
+  "launch_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/rerun_FIX/launch_receipt.json",
+  "launch_receipt_sha256": "6267ae30cdb9733d8603d491b0b2b7ee8fd46dceee8dc746261928628e28d649",
+  "original_full_raw_gate_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/rerun_FIX/full_prefix_gate_v1.json",
+  "original_full_raw_gate_sha256": "fad38282473f00fabe1ca5e4fe54ffba3b8939d04062ddc5edb36d262cea49a6",
+  "portable_trace_files": [
+    {
+      "bytes": 57883241,
+      "decompressed_sha256": "0421252d30c2e7a755124f1835263e90b7fd9b4340dc5e73dabdfd00fd049c13",
+      "encoding": "gzip",
+      "path": "../capture/raw/FIX_kdm6_trace_rank3.bits.gz",
+      "sha256": "753c2168670baae19524b8632e33d91d76b86d949da84bc80ae179b6604d3c16"
+    }
+  ],
+  "prior_failed_attempt": {
+    "archive_manifest_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/failed_FIX_diskfull.manifest.json",
+    "archive_manifest_sha256": "b2a64fa6179b2d560c4028e1ff0e17ce5bf68cfd5ba74f507a74bfe2df579371",
+    "archive_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/failed_FIX_diskfull",
+    "strict_failure_receipt": "/var/tmp/b1-two-hour-probe-20261103/review/failed_FIX_archive_prefix_comparison.json",
+    "strict_failure_sha256": "be78a94487b99230812bb956907905a46b3d1dd6ba7bf4fc6195da2b6fd0a824"
+  },
+  "raw_trace_files": [
+    {
+      "bytes": 488254065,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/rerun_FIX/kdm6_trace_rank3.bits",
+      "sha256": "0421252d30c2e7a755124f1835263e90b7fd9b4340dc5e73dabdfd00fd049c13"
+    }
+  ],
+  "receipt_schema_version": 1,
+  "rerun_stage_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/rerun_FIX_stage_receipt.json",
+  "rerun_stage_receipt_sha256": "23a84ed6d411214d659a6e2a3abc158a43857f6f8897eea043bfea2ac5027abf",
+  "source_executable_sha256": "149ce39b6b79a5c296aee96f6d6caa3b51e18e6b91ef1935718339d3b4fe658c",
+  "status": "PASS_FULL_PREFIX",
+  "time_step_seconds": 20,
+  "times_utc_hours": [
+    12,
+    13,
+    14
+  ],
+  "timesteps": [
+    1,
+    360
+  ],
+  "trace_files": [
+    {
+      "bytes": 57883241,
+      "decompressed_sha256": "0421252d30c2e7a755124f1835263e90b7fd9b4340dc5e73dabdfd00fd049c13",
+      "encoding": "gzip",
+      "path": "../native/capture/raw/FIX_kdm6_trace_rank3.bits.gz",
+      "sha256": "753c2168670baae19524b8632e33d91d76b86d949da84bc80ae179b6604d3c16",
+      "source_portable_path": "../capture/raw/FIX_kdm6_trace_rank3.bits.gz"
+    }
+  ],
+  "trace_validation_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/rerun_FIX/trace_validation.json",
+  "trace_validation_sha256": "7cb13d13819d58489333b25ec602f973c95d993442f09d79e2996dd64f2cc3f2",
+  "verified_conditions": {
+    "affinities_within_assigned_cpu_set": true,
+    "all_variables_values_masks_and_metadata_exact": true,
+    "duplicate_trace_identity_count": 0,
+    "launch_success_marker": true,
+    "namelist_time_step_20_seconds": true,
+    "rank_affinities_pairwise_nonoverlapping": true,
+    "rank_count_8": true,
+    "staged_inputs_unchanged": true,
+    "trace_16_cells_single_owner_39_levels_timesteps_1_360": true
+  }
+}

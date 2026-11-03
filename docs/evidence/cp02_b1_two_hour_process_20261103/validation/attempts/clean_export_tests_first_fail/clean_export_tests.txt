@@ -1,0 +1,20 @@
+Running 169 items in this shard
+.....F.................................................................. [ 42%]
+........................................................................ [ 85%]
+.........................                                                [100%]
+=================================== FAILURES ===================================
+___________ test_archived_array_replay_is_hash_and_coordinate_bound ____________
+
+    def test_archived_array_replay_is_hash_and_coordinate_bound():
+        evidence = []
+        arrays, first, _ = improvement.load_archived_arrays(evidence)
+        assert len(arrays) == 6
+        assert first['reference'].shape == (3688,)
+>       assert len({row['sha256'] for row in evidence if 'hour_' in row['path']}) == 6
+E       AssertionError: assert 10 == 6
+E        +  where 10 = len({'0df6e55167373751a2a9e50f10325c6d6d1e02603f1225e448c8e766184da9e4', '1228ba4d4106c151c79bcf01fb2f3a609e91a81bce4833f6...e1ce1061372602fe964606768587350d998fa22486d2', '38c7c3fc0bbfafa10d341e816d42159c845f3e2088aefeb083866705007f36bb', ...})
+
+tests/test_cp02_six_hour_improvement.py:174: AssertionError
+=========================== short test summary info ============================
+FAILED tests/test_cp02_six_hour_improvement.py::test_archived_array_replay_is_hash_and_coordinate_bound
+1 failed, 168 passed in 52.62s

@@ -1,5 +1,7 @@
 # Cloud-BAL
 
+**2026-11-03 CP02 진단 업데이트:** 동일 B1 초기장의 기존/수정 KDM6를 2시간 재실행해 +0·+1·+2시간 전체 출력의 보관본 일치를 확인했습니다. [과정 진단 보고서](docs/CP02_B1_TWO_HOUR_PROCESS_20261103.md)는 비 증발률·수증기·냉각의 국지 연결을 다룹니다. 새 개선 후보나 강수 성능 개선을 채택한 단계는 아닙니다. 아래 PR143 현황은 당시 기록으로 보존됩니다.
+
 Focused KLAPS baseline for improving cloud-derived vertical motion, balance
 coupling, and hydrometeor initialization.
 

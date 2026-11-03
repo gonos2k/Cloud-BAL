@@ -1,0 +1,68 @@
+{
+  "status": "PASS_REVIEW_READY_PARENT_GO_REQUIRED",
+  "review_bundle_sha256": "cea3c4baf6a06a64295ab6c72ce03768a47a7106c112b20d04c56ca655569ecb",
+  "patch_sha256": "94f109e624aa0b3b25689db20b1ac1acb4122920288d3765499147ed385fea3e",
+  "bundle_hashes_all_match": true,
+  "native_launch_authorized": false,
+  "source_build_review": {
+    "BASE": {
+      "source_sha256": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b",
+      "instrumented_sha256": "b3a7f22c5929eab80784b2b2963e34798811b16c0f9a433601b16498f52aae02",
+      "insertions": 25,
+      "deletions_or_replacements": 0,
+      "compile_exit": 0,
+      "link_exit": 0,
+      "executable_sha256": "916bac01f950c4c900947a264767b573d0735413c0d2883ff4f13eead4729cc1"
+    },
+    "FIX": {
+      "source_sha256": "0b468be19f7dd66ad2f6e65a53b42f10391a4565831a96c80dddddf21934cf79",
+      "instrumented_sha256": "bd4e0a021f770daf0fbbdedfa3f07b964638edac5b3fb1b1f97dbe4826b72e90",
+      "insertions": 25,
+      "deletions_or_replacements": 0,
+      "compile_exit": 0,
+      "link_exit": 0,
+      "executable_sha256": "149ce39b6b79a5c296aee96f6d6caa3b51e18e6b91ef1935718339d3b4fe658c"
+    }
+  },
+  "source_changes": "insertions only; no original expression/state-update lines changed",
+  "PREVP_FORMULA": "direct computed prevp word is recorded before fac_evap; nrs, qrs, den, rh, double-precision n0r as 64-bit transfer word, and fac_evap are recorded",
+  "LATENT_INPUT": "records work2/xlwork2/cpm/dtcld/xl/xlf immediately before both t updates",
+  "PRE_UPDATE": "records q/t/den/hydrometeor states plus work2 and dtcld immediately before each q state update",
+  "plan_pins": {
+    "old_fix_input_equal": true,
+    "old_fix_boundary_equal": true,
+    "common_stage_file_count": 89,
+    "old_cpus": [
+      32,
+      33,
+      34,
+      35,
+      36,
+      37,
+      38,
+      39
+    ],
+    "fix_cpus": [
+      40,
+      41,
+      42,
+      43,
+      44,
+      45,
+      46,
+      47
+    ],
+    "mpi_ranks": 8,
+    "omp_threads": 1,
+    "prefix_compare": "strict all dimensions, variables, coordinates, and global attrs at 0/1/2 hours"
+  },
+  "runner_review": {
+    "runner_sha256": "44ca9e6050f1e8b20a5f50ae1a6ed233e639f69b44502d248f7599f4de6c8c00",
+    "requires_explicit_authorize_flag": true,
+    "requires_root_supplied_B1_NATIVE_GO_marker": true,
+    "documentation_does_not_self_set_marker": true,
+    "history_compare_sha256": "907f5f9f78b011202cf5febd5fa838f02dda9330c518a307c1c5fe17b701c0db",
+    "history_compare_is_bitwise": true
+  },
+  "remaining_gate": "Root must provide explicit GO/marker before either native launch. No model launch by reviewer."
+}

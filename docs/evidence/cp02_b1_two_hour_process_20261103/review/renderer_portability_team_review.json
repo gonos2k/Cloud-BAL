@@ -1,0 +1,25 @@
+{
+  "checks": {
+    "ambiguity_test": "PASS: duplicate pair_summary.json basename entries are rejected.",
+    "canonical_replay": "PASS: renderer validation receipt records portable CLI replay equal to canonical receipt and all eight figure hashes.",
+    "component_binding": "PASS: component receipt still binds the exact analysis-receipt hash plus component CSV hash, size, and PASS_KEYED_LATENT_COMPONENT_DERIVATION status.",
+    "pair_summary_identity": "PASS: exactly one receipt analysis_outputs entry must have basename pair_summary.json; its SHA-256 and byte count must match the current pair summary; passing receipt and pair-summary status are both required.",
+    "png_readback": "PASS: all eight current PNG hashes equal sealed receipt hashes.",
+    "relocation_test": "PASS: identical pair_summary.json can be read from portable analysis-dir despite a distinct receipt provenance path.",
+    "validation_before_write": "PASS: invalid analysis/component receipt tests assert no output and no staging directory; existing-output sentinel remains protected."
+  },
+  "findings": [],
+  "limitations": "Receipt path provenance remains absolute in the analysis receipt; the renderer uses basename only for identity and exact hash/size for content binding. No new native run or scientific claim reviewed.",
+  "renderer": {
+    "path": "tools/plot_cp02_b1_process.py",
+    "sha256": "30d340eac848fa1e35034fb4f17e4a7228cc9341c95608d2b757c58b906732b1"
+  },
+  "schema": "b1-two-hour-renderer-portability-review-v1",
+  "scope": "Static review of the exact portability patch plus readback of its frozen validation receipt and eight final PNG hashes; no native analysis rerun.",
+  "status": "GO",
+  "tests": {
+    "path": "tests/test_plot_cp02_b1_process.py",
+    "reported_result": "5 passed",
+    "sha256": "b507102b035e6bdd38e7f87090e0ebcab18b09c364b405c6da3ea9aa0152e193"
+  }
+}

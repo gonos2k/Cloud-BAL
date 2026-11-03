@@ -1,0 +1,622 @@
+--- archived/BASE/module_mp_kdm6.f90
++++ diagnostic/BASE/module_mp_kdm6.f90
+@@ -178,8 +178,32 @@
+   real, parameter, private :: F1S= 0.66 
+   real, parameter, private :: F2S =0.44 
+ 
++    integer, save :: cloud_bal_trace_next_call = 0
++
+     contains
+ 
++
++   logical function cloud_bal_trace_cell(trace_i, trace_j) result(found)
++      implicit none
++      integer, intent(in) :: trace_i, trace_j
++      found = .false.
++      if (trace_i == 140 .and. trace_j == 79) found = .true.
++      if (trace_i == 141 .and. trace_j == 79) found = .true.
++      if (trace_i == 140 .and. trace_j == 80) found = .true.
++      if (trace_i == 141 .and. trace_j == 80) found = .true.
++      if (trace_i == 131 .and. trace_j == 86) found = .true.
++      if (trace_i == 132 .and. trace_j == 86) found = .true.
++      if (trace_i == 131 .and. trace_j == 87) found = .true.
++      if (trace_i == 132 .and. trace_j == 87) found = .true.
++      if (trace_i == 142 .and. trace_j == 78) found = .true.
++      if (trace_i == 143 .and. trace_j == 78) found = .true.
++      if (trace_i == 142 .and. trace_j == 79) found = .true.
++      if (trace_i == 143 .and. trace_j == 79) found = .true.
++      if (trace_i == 161 .and. trace_j == 80) found = .true.
++      if (trace_i == 162 .and. trace_j == 80) found = .true.
++      if (trace_i == 161 .and. trace_j == 81) found = .true.
++      if (trace_i == 162 .and. trace_j == 81) found = .true.
++   end function cloud_bal_trace_cell
+ 
+     subroutine kdm6(th, q, qc, qr, qi, qs, qg,             &
+                     nn, nc, ni, nr, bg, diag_rhog,         &
+@@ -277,6 +301,10 @@
+    real, dimension(its:ite,kts:kte,3) :: qrs
+    real, dimension(its:ite,kts:kte)   :: n0so, n0go
+    integer                            :: i,j,k
++   integer                            :: cloud_bal_trace_rank, cloud_bal_trace_call_id
++   integer                            :: cloud_bal_trace_unit
++   character(len=16)                  :: cloud_bal_trace_rank_text
++   character(len=64)                  :: cloud_bal_trace_file
+    real, dimension(its:ite,kts:kte) :: brs
+    real, dimension(its:ite,kts:kte) :: rhox
+    real, dimension(its:ite,kts:kte) :: cmg
+@@ -300,6 +328,12 @@
+    real, dimension(kts:kte) :: qi1d, ni1d
+    real, dimension(kts:kte) :: re_qc, re_qi, re_qs
+ 
++
++   call wrf_get_myproc(cloud_bal_trace_rank)
++   cloud_bal_trace_next_call = cloud_bal_trace_next_call + 1
++   cloud_bal_trace_call_id = cloud_bal_trace_next_call
++   write(cloud_bal_trace_rank_text,'(i0)') cloud_bal_trace_rank
++   cloud_bal_trace_file = 'kdm6_trace_rank'//trim(cloud_bal_trace_rank_text)//'.bits'
+ 
+    do j = jts,jte
+      do k = kts,kte
+@@ -341,7 +375,29 @@
+                 ,its,ite, jts,jte, kts,kte,n0so,n0go          &
+                 ,snow(ims,j),snowncv(ims,j)                &
+                 ,graupel(ims,j),graupelncv(ims,j)          &
++                ,itimestep, cloud_bal_trace_call_id, cloud_bal_trace_rank &
+                 )
++
++     if (itimestep >= 1 .and. itimestep <= 360) then
++       do i = its,ite
++         if (cloud_bal_trace_cell(i,j)) then
++           open(newunit=cloud_bal_trace_unit,file=trim(cloud_bal_trace_file), &
++                status='unknown',position='append',action='write')
++           write(cloud_bal_trace_unit,*) 'SURFACE_RETURN', cloud_bal_trace_rank, &
++             cloud_bal_trace_call_id, itimestep, j, i, transfer(rainncv(i,j),0), &
++             transfer(rain(i,j),0), transfer(sr(i,j),0)
++           if (present(snow)) then
++             write(cloud_bal_trace_unit,*) 'SNOW_RETURN', cloud_bal_trace_rank, &
++               cloud_bal_trace_call_id, itimestep, j, i, transfer(snow(i,j),0)
++           endif
++           if (present(graupel)) then
++             write(cloud_bal_trace_unit,*) 'GRAUPEL_RETURN', cloud_bal_trace_rank, &
++               cloud_bal_trace_call_id, itimestep, j, i, transfer(graupel(i,j),0)
++           endif
++           close(cloud_bal_trace_unit)
++         endif
++       enddo
++     endif
+ 
+      do k = kts,kte
+        do i = its,ite
+@@ -436,6 +492,7 @@
+                    ,its,ite, jts,jte, kts,kte, n0so, n0go         &
+                    ,snow,snowncv                                  &
+                    ,graupel,graupelncv                            &
++                   ,diagnostic_itimestep, diagnostic_call_id, diagnostic_rank &
+                     )
+ 
+     implicit none
+@@ -534,6 +591,7 @@
+                                                    ims,ime, jms,jme, kms,kme, &
+                                                    its,ite, jts,jte, kts,kte
+    integer                                , intent(in   ) :: lat
++   integer, intent(in) :: diagnostic_itimestep, diagnostic_call_id, diagnostic_rank
+    real                                   , intent(in   ) :: delt
+    real                                   , intent(in   ) :: g, cpd, cpv, t0c, &
+                                                              den0, rd, rv,     &
+@@ -634,6 +692,10 @@
+ 
+ 
+    integer                            :: kte_in
++   integer                            :: diagnostic_trace_unit, diagnostic_i
++   integer                            :: diagnostic_trace_active
++   character(len=16)                  :: diagnostic_rank_text
++   character(len=64)                  :: diagnostic_trace_file
+ 
+ 
+ 
+@@ -712,8 +774,29 @@
+ 
+ 
+ 
++   diagnostic_trace_active = 0
++   if (diagnostic_itimestep >= 1 .and. diagnostic_itimestep <= 360) then
++     do diagnostic_i = its, ite
++       if (cloud_bal_trace_cell(diagnostic_i,lat)) diagnostic_trace_active = 1
++     enddo
++   endif
++   if (diagnostic_trace_active == 1) then
++     write(diagnostic_rank_text,'(i0)') diagnostic_rank
++     diagnostic_trace_file = 'kdm6_trace_rank'//trim(diagnostic_rank_text)//'.bits'
++     open(newunit=diagnostic_trace_unit,file=trim(diagnostic_trace_file), &
++          status='unknown',position='append',action='write')
++   endif
++
+    do k = kts, kte
+      do i = its, ite
++       if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++         write(diagnostic_trace_unit,*) 'ENTRY_RAW', diagnostic_rank, diagnostic_call_id, &
++           diagnostic_itimestep, 0, lat, i, k, transfer(q(i,k),0), transfer(t(i,k),0), &
++           transfer(den(i,k),0), transfer(qci(i,k,1),0), transfer(qci(i,k,2),0), &
++           transfer(qrs(i,k,1),0), transfer(qrs(i,k,2),0), transfer(qrs(i,k,3),0), &
++           transfer(nci(i,k,1),0), transfer(nci(i,k,2),0), transfer(nci(i,k,3),0), &
++           transfer(nrs(i,k,1),0), transfer(nrs(i,k,2),0), transfer(nrs(i,k,3),0), &
++           transfer(brs(i,k),0)
+        qci(i,k,1) = max(qci(i,k,1),0.0)
+        qrs(i,k,1) = max(qrs(i,k,1),0.0)
+        qci(i,k,2) = max(qci(i,k,2),0.0)
+@@ -729,6 +812,14 @@
+        nci(i,k,2) = min(max(nci(i,k,2),0.0),1.0e6)
+        rhox(i,k) = 0.0
+        brs(i,k) = max(brs(i,k),0.0)
++       if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++         write(diagnostic_trace_unit,*) 'ENTRY_CLAMPED', diagnostic_rank, diagnostic_call_id, &
++           diagnostic_itimestep, 0, lat, i, k, transfer(q(i,k),0), transfer(t(i,k),0), &
++           transfer(den(i,k),0), transfer(qci(i,k,1),0), transfer(qci(i,k,2),0), &
++           transfer(qrs(i,k,1),0), transfer(qrs(i,k,2),0), transfer(qrs(i,k,3),0), &
++           transfer(nci(i,k,1),0), transfer(nci(i,k,2),0), transfer(nci(i,k,3),0), &
++           transfer(nrs(i,k,1),0), transfer(nrs(i,k,2),0), transfer(nrs(i,k,3),0), &
++           transfer(brs(i,k),0)
+      enddo
+    enddo
+ 
+@@ -851,6 +942,11 @@
+          qs(i,k,2) = ep2*qs(i,k,2)/(p(i,k)-qs(i,k,2))
+          qs(i,k,2) = max(qs(i,k,2),qmin)
+          rh(i,k,2) = max(q(i,k)/qs(i,k,2),qmin)
++         if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++           write(diagnostic_trace_unit,*) 'SATURATION', diagnostic_rank, diagnostic_call_id, &
++             diagnostic_itimestep, loop, lat, i, k, transfer(q(i,k),0), transfer(t(i,k),0), &
++             transfer(den(i,k),0), transfer(qs(i,k,1),0), transfer(qs(i,k,2),0), &
++             transfer(rh(i,k,1),0), transfer(rh(i,k,2),0), transfer(sw(i,k),0)
+        enddo
+      enddo
+ 
+@@ -1629,6 +1725,10 @@
+         do i = its, ite
+           supsat = max(q(i,k),qmin)-qs(i,k,1)
+           satdt = supsat/dtcld
++          if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++            write(diagnostic_trace_unit,*) 'SATDT', diagnostic_rank, diagnostic_call_id, &
++              diagnostic_itimestep, loop, lat, i, k, transfer(dtcld,0), transfer(satdt,0), &
++              transfer(q(i,k),0), transfer(qs(i,k,1),0), transfer(rh(i,k,1),0)
+ 
+ 
+ 
+@@ -1717,11 +1817,27 @@
+             prevp(i,k) = ((rh(i,k,1)-1.))*n0r(i,k)*(precr1*rslope2(i,k,1)&
+                         *rslopemu(i,k,1)+(precr2)*work2(i,k)*coeres)/work1(i,k,1)
+ 
++            if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++              write(diagnostic_trace_unit,*) 'PREVP_FORMULA', diagnostic_rank, diagnostic_call_id, &
++                diagnostic_itimestep, loop, lat, i, k, transfer(prevp(i,k),0), &
++                transfer(nrs(i,k,1),0), &
++                transfer(qrs(i,k,1),0), transfer(den(i,k),0), transfer(rh(i,k,1),0), &
++                transfer(n0r(i,k),0_8), transfer(fac_evap,0)
+             prevp(i,k) = fac_evap*prevp(i,k) 
++            if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++              write(diagnostic_trace_unit,*) 'PREVP_RAW', diagnostic_rank, diagnostic_call_id, &
++                diagnostic_itimestep, loop, lat, i, k, transfer(prevp(i,k),0), &
++                transfer(qrs(i,k,1),0), transfer(satdt,0), transfer(dtcld,0)
+ 
+             if(prevp(i,k).lt.0.) then
+               prevp(i,k) = max(prevp(i,k),-(qrs(i,k,1))/dtcld)
++              if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++                write(diagnostic_trace_unit,*) 'PREVP_QR_CAP', diagnostic_rank, diagnostic_call_id, &
++                  diagnostic_itimestep, loop, lat, i, k, transfer(prevp(i,k),0)
+               prevp(i,k) = max(prevp(i,k),(satdt)/2)
++              if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++                write(diagnostic_trace_unit,*) 'PREVP_SAT_CAP', diagnostic_rank, diagnostic_call_id, &
++                  diagnostic_itimestep, loop, lat, i, k, transfer(prevp(i,k),0)
+ 
+ 
+ 
+@@ -1732,6 +1848,9 @@
+               endif
+             else
+               prevp(i,k) = min(prevp(i,k),(satdt)/2)
++              if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++                write(diagnostic_trace_unit,*) 'PREVP_SAT_CAP', diagnostic_rank, diagnostic_call_id, &
++                  diagnostic_itimestep, loop, lat, i, k, transfer(prevp(i,k),0)
+             endif
+           endif
+         enddo
+@@ -2545,6 +2664,22 @@
+               bgaci(i,k) = pgaci(i,k)/deni
+               bgacr(i,k) = pgacr(i,k)/denr
+               bsdep(i,k)=psdep(i,k)/dens
++          if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++            write(diagnostic_trace_unit,*) 'PROCESS_RATES', diagnostic_rank, diagnostic_call_id, &
++              diagnostic_itimestep, loop, lat, i, k, transfer(praut(i,k),0), transfer(pracw(i,k),0), &
++              transfer(prevp(i,k),0), transfer(piacr(i,k),0), transfer(pgacr(i,k),0), &
++              transfer(psacr(i,k),0), transfer(pmulrs(i,k),0), transfer(pmulrg(i,k),0), &
++              transfer(pseml(i,k),0), transfer(pgeml(i,k),0), transfer(psevp(i,k),0), &
++              transfer(pgevp(i,k),0), transfer(psdep(i,k),0), transfer(pgdep(i,k),0), &
++              transfer(pinud(i,k),0), transfer(pidep(i,k),0)
++          if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++            write(diagnostic_trace_unit,*) 'PRE_UPDATE', diagnostic_rank, diagnostic_call_id, &
++              diagnostic_itimestep, loop, lat, i, k, transfer(q(i,k),0), transfer(t(i,k),0), &
++              transfer(den(i,k),0), transfer(qci(i,k,1),0), transfer(qci(i,k,2),0), &
++              transfer(qrs(i,k,1),0), transfer(qrs(i,k,2),0), transfer(qrs(i,k,3),0), &
++              transfer(nci(i,k,1),0), transfer(nci(i,k,2),0), transfer(nci(i,k,3),0), &
++              transfer(nrs(i,k,1),0), transfer(nrs(i,k,2),0), transfer(nrs(i,k,3),0), &
++              transfer(brs(i,k),0), transfer(work2(i,k),0), transfer(dtcld,0)
+ 
+ 
+             q(i,k) = q(i,k)+work2(i,k)*dtcld 
+@@ -2584,6 +2719,11 @@
+                       -xl(i,k)*prevp(i,k)-xlf*(piacr(i,k)+paacw(i,k)           &
+                       +pmulcs(i,k)+pmulcg(i,k)+pmulrs(i,k)+pmulrg(i,k)         &
+                       +piacw(i,k) +paacw(i,k)+pgacr(i,k)+psacr(i,k)) 
++            if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++              write(diagnostic_trace_unit,*) 'LATENT_INPUT', diagnostic_rank, diagnostic_call_id, &
++                diagnostic_itimestep, loop, lat, i, k, transfer(work2(i,k),0), &
++                transfer(xlwork2,0), transfer(cpm(i,k),0), transfer(dtcld,0), &
++                transfer(xl(i,k),0), transfer(xlf,0)
+             t(i,k) = t(i,k)-xlwork2/cpm(i,k)*dtcld
+ 
+           else
+@@ -2669,6 +2809,22 @@
+ 
+             if(pgevp(i,k).ne.0.) bgevp(i,k)=pgevp(i,k)/rhox(i,k)
+             if(pgeml(i,k).ne.0.) bgeml(i,k)=pgeml(i,k)/rhox(i,k)
++          if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++            write(diagnostic_trace_unit,*) 'PROCESS_RATES', diagnostic_rank, diagnostic_call_id, &
++              diagnostic_itimestep, loop, lat, i, k, transfer(praut(i,k),0), transfer(pracw(i,k),0), &
++              transfer(prevp(i,k),0), transfer(piacr(i,k),0), transfer(pgacr(i,k),0), &
++              transfer(psacr(i,k),0), transfer(pmulrs(i,k),0), transfer(pmulrg(i,k),0), &
++              transfer(pseml(i,k),0), transfer(pgeml(i,k),0), transfer(psevp(i,k),0), &
++              transfer(pgevp(i,k),0), transfer(psdep(i,k),0), transfer(pgdep(i,k),0), &
++              transfer(pinud(i,k),0), transfer(pidep(i,k),0)
++          if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++            write(diagnostic_trace_unit,*) 'PRE_UPDATE', diagnostic_rank, diagnostic_call_id, &
++              diagnostic_itimestep, loop, lat, i, k, transfer(q(i,k),0), transfer(t(i,k),0), &
++              transfer(den(i,k),0), transfer(qci(i,k,1),0), transfer(qci(i,k,2),0), &
++              transfer(qrs(i,k,1),0), transfer(qrs(i,k,2),0), transfer(qrs(i,k,3),0), &
++              transfer(nci(i,k,1),0), transfer(nci(i,k,2),0), transfer(nci(i,k,3),0), &
++              transfer(nrs(i,k,1),0), transfer(nrs(i,k,2),0), transfer(nrs(i,k,3),0), &
++              transfer(brs(i,k),0), transfer(work2(i,k),0), transfer(dtcld,0)
+ 
+             q(i,k) = q(i,k)+work2(i,k)*dtcld
+             qci(i,k,1) = max(qci(i,k,1)-(praut(i,k)+pracw(i,k)                 &
+@@ -2688,8 +2844,21 @@
+             xlf = xls-xl(i,k)
+             xlwork2 = -xl(i,k)*(prevp(i,k)+psevp(i,k)+pgevp(i,k))              &
+                       -xlf*(pseml(i,k)+pgeml(i,k))
++            if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++              write(diagnostic_trace_unit,*) 'LATENT_INPUT', diagnostic_rank, diagnostic_call_id, &
++                diagnostic_itimestep, loop, lat, i, k, transfer(work2(i,k),0), &
++                transfer(xlwork2,0), transfer(cpm(i,k),0), transfer(dtcld,0), &
++                transfer(xl(i,k),0), transfer(xlf,0)
+             t(i,k) = t(i,k)-xlwork2/cpm(i,k)*dtcld
+           endif
++          if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++            write(diagnostic_trace_unit,*) 'POST_STEP', diagnostic_rank, diagnostic_call_id, &
++              diagnostic_itimestep, loop, lat, i, k, transfer(q(i,k),0), transfer(t(i,k),0), &
++              transfer(den(i,k),0), transfer(qci(i,k,1),0), transfer(qci(i,k,2),0), &
++              transfer(qrs(i,k,1),0), transfer(qrs(i,k,2),0), transfer(qrs(i,k,3),0), &
++              transfer(nci(i,k,1),0), transfer(nci(i,k,2),0), transfer(nci(i,k,3),0), &
++              transfer(nrs(i,k,1),0), transfer(nrs(i,k,2),0), transfer(nrs(i,k,3),0), &
++              transfer(brs(i,k),0)
+         enddo
+       enddo
+ 
+@@ -2951,6 +3120,8 @@
+         enddo
+       enddo 
+    enddo                  
++
++   if (diagnostic_trace_active == 1) close(diagnostic_trace_unit)
+ 
+    end subroutine kdm62d
+ 
+--- archived/FIX/module_mp_kdm6.f90
++++ diagnostic/FIX/module_mp_kdm6.f90
+@@ -178,8 +178,32 @@
+   real, parameter, private :: F1S= 0.66 
+   real, parameter, private :: F2S =0.44 
+ 
++    integer, save :: cloud_bal_trace_next_call = 0
++
+     contains
+ 
++
++   logical function cloud_bal_trace_cell(trace_i, trace_j) result(found)
++      implicit none
++      integer, intent(in) :: trace_i, trace_j
++      found = .false.
++      if (trace_i == 140 .and. trace_j == 79) found = .true.
++      if (trace_i == 141 .and. trace_j == 79) found = .true.
++      if (trace_i == 140 .and. trace_j == 80) found = .true.
++      if (trace_i == 141 .and. trace_j == 80) found = .true.
++      if (trace_i == 131 .and. trace_j == 86) found = .true.
++      if (trace_i == 132 .and. trace_j == 86) found = .true.
++      if (trace_i == 131 .and. trace_j == 87) found = .true.
++      if (trace_i == 132 .and. trace_j == 87) found = .true.
++      if (trace_i == 142 .and. trace_j == 78) found = .true.
++      if (trace_i == 143 .and. trace_j == 78) found = .true.
++      if (trace_i == 142 .and. trace_j == 79) found = .true.
++      if (trace_i == 143 .and. trace_j == 79) found = .true.
++      if (trace_i == 161 .and. trace_j == 80) found = .true.
++      if (trace_i == 162 .and. trace_j == 80) found = .true.
++      if (trace_i == 161 .and. trace_j == 81) found = .true.
++      if (trace_i == 162 .and. trace_j == 81) found = .true.
++   end function cloud_bal_trace_cell
+ 
+     subroutine kdm6(th, q, qc, qr, qi, qs, qg,             &
+                     nn, nc, ni, nr, bg, diag_rhog,         &
+@@ -277,6 +301,10 @@
+    real, dimension(its:ite,kts:kte,3) :: qrs
+    real, dimension(its:ite,kts:kte)   :: n0so, n0go
+    integer                            :: i,j,k
++   integer                            :: cloud_bal_trace_rank, cloud_bal_trace_call_id
++   integer                            :: cloud_bal_trace_unit
++   character(len=16)                  :: cloud_bal_trace_rank_text
++   character(len=64)                  :: cloud_bal_trace_file
+    real, dimension(its:ite,kts:kte) :: brs
+    real, dimension(its:ite,kts:kte) :: rhox
+    real, dimension(its:ite,kts:kte) :: cmg
+@@ -300,6 +328,12 @@
+    real, dimension(kts:kte) :: qi1d, ni1d
+    real, dimension(kts:kte) :: re_qc, re_qi, re_qs
+ 
++
++   call wrf_get_myproc(cloud_bal_trace_rank)
++   cloud_bal_trace_next_call = cloud_bal_trace_next_call + 1
++   cloud_bal_trace_call_id = cloud_bal_trace_next_call
++   write(cloud_bal_trace_rank_text,'(i0)') cloud_bal_trace_rank
++   cloud_bal_trace_file = 'kdm6_trace_rank'//trim(cloud_bal_trace_rank_text)//'.bits'
+ 
+    do j = jts,jte
+      do k = kts,kte
+@@ -341,7 +375,29 @@
+                 ,its,ite, jts,jte, kts,kte,n0so,n0go          &
+                 ,snow(ims,j),snowncv(ims,j)                &
+                 ,graupel(ims,j),graupelncv(ims,j)          &
++                ,itimestep, cloud_bal_trace_call_id, cloud_bal_trace_rank &
+                 )
++
++     if (itimestep >= 1 .and. itimestep <= 360) then
++       do i = its,ite
++         if (cloud_bal_trace_cell(i,j)) then
++           open(newunit=cloud_bal_trace_unit,file=trim(cloud_bal_trace_file), &
++                status='unknown',position='append',action='write')
++           write(cloud_bal_trace_unit,*) 'SURFACE_RETURN', cloud_bal_trace_rank, &
++             cloud_bal_trace_call_id, itimestep, j, i, transfer(rainncv(i,j),0), &
++             transfer(rain(i,j),0), transfer(sr(i,j),0)
++           if (present(snow)) then
++             write(cloud_bal_trace_unit,*) 'SNOW_RETURN', cloud_bal_trace_rank, &
++               cloud_bal_trace_call_id, itimestep, j, i, transfer(snow(i,j),0)
++           endif
++           if (present(graupel)) then
++             write(cloud_bal_trace_unit,*) 'GRAUPEL_RETURN', cloud_bal_trace_rank, &
++               cloud_bal_trace_call_id, itimestep, j, i, transfer(graupel(i,j),0)
++           endif
++           close(cloud_bal_trace_unit)
++         endif
++       enddo
++     endif
+ 
+      do k = kts,kte
+        do i = its,ite
+@@ -436,6 +492,7 @@
+                    ,its,ite, jts,jte, kts,kte, n0so, n0go         &
+                    ,snow,snowncv                                  &
+                    ,graupel,graupelncv                            &
++                   ,diagnostic_itimestep, diagnostic_call_id, diagnostic_rank &
+                     )
+ 
+     implicit none
+@@ -534,6 +591,7 @@
+                                                    ims,ime, jms,jme, kms,kme, &
+                                                    its,ite, jts,jte, kts,kte
+    integer                                , intent(in   ) :: lat
++   integer, intent(in) :: diagnostic_itimestep, diagnostic_call_id, diagnostic_rank
+    real                                   , intent(in   ) :: delt
+    real                                   , intent(in   ) :: g, cpd, cpv, t0c, &
+                                                              den0, rd, rv,     &
+@@ -634,6 +692,10 @@
+ 
+ 
+    integer                            :: kte_in
++   integer                            :: diagnostic_trace_unit, diagnostic_i
++   integer                            :: diagnostic_trace_active
++   character(len=16)                  :: diagnostic_rank_text
++   character(len=64)                  :: diagnostic_trace_file
+ 
+ 
+ 
+@@ -712,8 +774,29 @@
+ 
+ 
+ 
++   diagnostic_trace_active = 0
++   if (diagnostic_itimestep >= 1 .and. diagnostic_itimestep <= 360) then
++     do diagnostic_i = its, ite
++       if (cloud_bal_trace_cell(diagnostic_i,lat)) diagnostic_trace_active = 1
++     enddo
++   endif
++   if (diagnostic_trace_active == 1) then
++     write(diagnostic_rank_text,'(i0)') diagnostic_rank
++     diagnostic_trace_file = 'kdm6_trace_rank'//trim(diagnostic_rank_text)//'.bits'
++     open(newunit=diagnostic_trace_unit,file=trim(diagnostic_trace_file), &
++          status='unknown',position='append',action='write')
++   endif
++
+    do k = kts, kte
+      do i = its, ite
++       if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++         write(diagnostic_trace_unit,*) 'ENTRY_RAW', diagnostic_rank, diagnostic_call_id, &
++           diagnostic_itimestep, 0, lat, i, k, transfer(q(i,k),0), transfer(t(i,k),0), &
++           transfer(den(i,k),0), transfer(qci(i,k,1),0), transfer(qci(i,k,2),0), &
++           transfer(qrs(i,k,1),0), transfer(qrs(i,k,2),0), transfer(qrs(i,k,3),0), &
++           transfer(nci(i,k,1),0), transfer(nci(i,k,2),0), transfer(nci(i,k,3),0), &
++           transfer(nrs(i,k,1),0), transfer(nrs(i,k,2),0), transfer(nrs(i,k,3),0), &
++           transfer(brs(i,k),0)
+        qci(i,k,1) = max(qci(i,k,1),0.0)
+        qrs(i,k,1) = max(qrs(i,k,1),0.0)
+        qci(i,k,2) = max(qci(i,k,2),0.0)
+@@ -729,6 +812,14 @@
+        nci(i,k,2) = min(max(nci(i,k,2),0.0),1.0e6)
+        rhox(i,k) = 0.0
+        brs(i,k) = max(brs(i,k),0.0)
++       if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++         write(diagnostic_trace_unit,*) 'ENTRY_CLAMPED', diagnostic_rank, diagnostic_call_id, &
++           diagnostic_itimestep, 0, lat, i, k, transfer(q(i,k),0), transfer(t(i,k),0), &
++           transfer(den(i,k),0), transfer(qci(i,k,1),0), transfer(qci(i,k,2),0), &
++           transfer(qrs(i,k,1),0), transfer(qrs(i,k,2),0), transfer(qrs(i,k,3),0), &
++           transfer(nci(i,k,1),0), transfer(nci(i,k,2),0), transfer(nci(i,k,3),0), &
++           transfer(nrs(i,k,1),0), transfer(nrs(i,k,2),0), transfer(nrs(i,k,3),0), &
++           transfer(brs(i,k),0)
+      enddo
+    enddo
+ 
+@@ -851,6 +942,11 @@
+          qs(i,k,2) = ep2*qs(i,k,2)/(p(i,k)-qs(i,k,2))
+          qs(i,k,2) = max(qs(i,k,2),qmin)
+          rh(i,k,2) = max(q(i,k)/qs(i,k,2),qmin)
++         if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++           write(diagnostic_trace_unit,*) 'SATURATION', diagnostic_rank, diagnostic_call_id, &
++             diagnostic_itimestep, loop, lat, i, k, transfer(q(i,k),0), transfer(t(i,k),0), &
++             transfer(den(i,k),0), transfer(qs(i,k,1),0), transfer(qs(i,k,2),0), &
++             transfer(rh(i,k,1),0), transfer(rh(i,k,2),0), transfer(sw(i,k),0)
+        enddo
+      enddo
+ 
+@@ -1629,6 +1725,10 @@
+         do i = its, ite
+           supsat = max(q(i,k),qmin)-qs(i,k,1)
+           satdt = supsat/dtcld
++          if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++            write(diagnostic_trace_unit,*) 'SATDT', diagnostic_rank, diagnostic_call_id, &
++              diagnostic_itimestep, loop, lat, i, k, transfer(dtcld,0), transfer(satdt,0), &
++              transfer(q(i,k),0), transfer(qs(i,k,1),0), transfer(rh(i,k,1),0)
+ 
+ 
+ 
+@@ -1717,11 +1817,27 @@
+             prevp(i,k) = ((rh(i,k,1)-1.))*n0r(i,k)*(precr1*rslope2(i,k,1)&
+                         *rslopemu(i,k,1)+(precr2)*work2(i,k)*coeres)/work1(i,k,1)
+ 
++            if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++              write(diagnostic_trace_unit,*) 'PREVP_FORMULA', diagnostic_rank, diagnostic_call_id, &
++                diagnostic_itimestep, loop, lat, i, k, transfer(prevp(i,k),0), &
++                transfer(nrs(i,k,1),0), &
++                transfer(qrs(i,k,1),0), transfer(den(i,k),0), transfer(rh(i,k,1),0), &
++                transfer(n0r(i,k),0_8), transfer(fac_evap,0)
+             prevp(i,k) = fac_evap*prevp(i,k) 
++            if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++              write(diagnostic_trace_unit,*) 'PREVP_RAW', diagnostic_rank, diagnostic_call_id, &
++                diagnostic_itimestep, loop, lat, i, k, transfer(prevp(i,k),0), &
++                transfer(qrs(i,k,1),0), transfer(satdt,0), transfer(dtcld,0)
+ 
+             if(prevp(i,k).lt.0.) then
+               prevp(i,k) = max(prevp(i,k),-(qrs(i,k,1))/dtcld)
++              if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++                write(diagnostic_trace_unit,*) 'PREVP_QR_CAP', diagnostic_rank, diagnostic_call_id, &
++                  diagnostic_itimestep, loop, lat, i, k, transfer(prevp(i,k),0)
+               prevp(i,k) = max(prevp(i,k),(satdt)/2)
++              if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++                write(diagnostic_trace_unit,*) 'PREVP_SAT_CAP', diagnostic_rank, diagnostic_call_id, &
++                  diagnostic_itimestep, loop, lat, i, k, transfer(prevp(i,k),0)
+ 
+ 
+ 
+@@ -1732,6 +1848,9 @@
+               endif
+             else if (prevp(i,k).ne.0.) then
+               prevp(i,k) = min(prevp(i,k),(satdt)/2)
++              if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++                write(diagnostic_trace_unit,*) 'PREVP_SAT_CAP', diagnostic_rank, diagnostic_call_id, &
++                  diagnostic_itimestep, loop, lat, i, k, transfer(prevp(i,k),0)
+             endif
+           endif
+         enddo
+@@ -2545,6 +2664,22 @@
+               bgaci(i,k) = pgaci(i,k)/deni
+               bgacr(i,k) = pgacr(i,k)/denr
+               bsdep(i,k)=psdep(i,k)/dens
++          if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++            write(diagnostic_trace_unit,*) 'PROCESS_RATES', diagnostic_rank, diagnostic_call_id, &
++              diagnostic_itimestep, loop, lat, i, k, transfer(praut(i,k),0), transfer(pracw(i,k),0), &
++              transfer(prevp(i,k),0), transfer(piacr(i,k),0), transfer(pgacr(i,k),0), &
++              transfer(psacr(i,k),0), transfer(pmulrs(i,k),0), transfer(pmulrg(i,k),0), &
++              transfer(pseml(i,k),0), transfer(pgeml(i,k),0), transfer(psevp(i,k),0), &
++              transfer(pgevp(i,k),0), transfer(psdep(i,k),0), transfer(pgdep(i,k),0), &
++              transfer(pinud(i,k),0), transfer(pidep(i,k),0)
++          if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++            write(diagnostic_trace_unit,*) 'PRE_UPDATE', diagnostic_rank, diagnostic_call_id, &
++              diagnostic_itimestep, loop, lat, i, k, transfer(q(i,k),0), transfer(t(i,k),0), &
++              transfer(den(i,k),0), transfer(qci(i,k,1),0), transfer(qci(i,k,2),0), &
++              transfer(qrs(i,k,1),0), transfer(qrs(i,k,2),0), transfer(qrs(i,k,3),0), &
++              transfer(nci(i,k,1),0), transfer(nci(i,k,2),0), transfer(nci(i,k,3),0), &
++              transfer(nrs(i,k,1),0), transfer(nrs(i,k,2),0), transfer(nrs(i,k,3),0), &
++              transfer(brs(i,k),0), transfer(work2(i,k),0), transfer(dtcld,0)
+ 
+ 
+             q(i,k) = q(i,k)+work2(i,k)*dtcld 
+@@ -2584,6 +2719,11 @@
+                       -xl(i,k)*prevp(i,k)-xlf*(piacr(i,k)+paacw(i,k)           &
+                       +pmulcs(i,k)+pmulcg(i,k)+pmulrs(i,k)+pmulrg(i,k)         &
+                       +piacw(i,k) +paacw(i,k)+pgacr(i,k)+psacr(i,k)) 
++            if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++              write(diagnostic_trace_unit,*) 'LATENT_INPUT', diagnostic_rank, diagnostic_call_id, &
++                diagnostic_itimestep, loop, lat, i, k, transfer(work2(i,k),0), &
++                transfer(xlwork2,0), transfer(cpm(i,k),0), transfer(dtcld,0), &
++                transfer(xl(i,k),0), transfer(xlf,0)
+             t(i,k) = t(i,k)-xlwork2/cpm(i,k)*dtcld
+ 
+           else
+@@ -2669,6 +2809,22 @@
+ 
+             if(pgevp(i,k).ne.0.) bgevp(i,k)=pgevp(i,k)/rhox(i,k)
+             if(pgeml(i,k).ne.0.) bgeml(i,k)=pgeml(i,k)/rhox(i,k)
++          if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++            write(diagnostic_trace_unit,*) 'PROCESS_RATES', diagnostic_rank, diagnostic_call_id, &
++              diagnostic_itimestep, loop, lat, i, k, transfer(praut(i,k),0), transfer(pracw(i,k),0), &
++              transfer(prevp(i,k),0), transfer(piacr(i,k),0), transfer(pgacr(i,k),0), &
++              transfer(psacr(i,k),0), transfer(pmulrs(i,k),0), transfer(pmulrg(i,k),0), &
++              transfer(pseml(i,k),0), transfer(pgeml(i,k),0), transfer(psevp(i,k),0), &
++              transfer(pgevp(i,k),0), transfer(psdep(i,k),0), transfer(pgdep(i,k),0), &
++              transfer(pinud(i,k),0), transfer(pidep(i,k),0)
++          if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++            write(diagnostic_trace_unit,*) 'PRE_UPDATE', diagnostic_rank, diagnostic_call_id, &
++              diagnostic_itimestep, loop, lat, i, k, transfer(q(i,k),0), transfer(t(i,k),0), &
++              transfer(den(i,k),0), transfer(qci(i,k,1),0), transfer(qci(i,k,2),0), &
++              transfer(qrs(i,k,1),0), transfer(qrs(i,k,2),0), transfer(qrs(i,k,3),0), &
++              transfer(nci(i,k,1),0), transfer(nci(i,k,2),0), transfer(nci(i,k,3),0), &
++              transfer(nrs(i,k,1),0), transfer(nrs(i,k,2),0), transfer(nrs(i,k,3),0), &
++              transfer(brs(i,k),0), transfer(work2(i,k),0), transfer(dtcld,0)
+ 
+             q(i,k) = q(i,k)+work2(i,k)*dtcld
+             qci(i,k,1) = max(qci(i,k,1)-(praut(i,k)+pracw(i,k)                 &
+@@ -2688,8 +2844,21 @@
+             xlf = xls-xl(i,k)
+             xlwork2 = -xl(i,k)*(prevp(i,k)+psevp(i,k)+pgevp(i,k))              &
+                       -xlf*(pseml(i,k)+pgeml(i,k))
++            if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++              write(diagnostic_trace_unit,*) 'LATENT_INPUT', diagnostic_rank, diagnostic_call_id, &
++                diagnostic_itimestep, loop, lat, i, k, transfer(work2(i,k),0), &
++                transfer(xlwork2,0), transfer(cpm(i,k),0), transfer(dtcld,0), &
++                transfer(xl(i,k),0), transfer(xlf,0)
+             t(i,k) = t(i,k)-xlwork2/cpm(i,k)*dtcld
+           endif
++          if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
++            write(diagnostic_trace_unit,*) 'POST_STEP', diagnostic_rank, diagnostic_call_id, &
++              diagnostic_itimestep, loop, lat, i, k, transfer(q(i,k),0), transfer(t(i,k),0), &
++              transfer(den(i,k),0), transfer(qci(i,k,1),0), transfer(qci(i,k,2),0), &
++              transfer(qrs(i,k,1),0), transfer(qrs(i,k,2),0), transfer(qrs(i,k,3),0), &
++              transfer(nci(i,k,1),0), transfer(nci(i,k,2),0), transfer(nci(i,k,3),0), &
++              transfer(nrs(i,k,1),0), transfer(nrs(i,k,2),0), transfer(nrs(i,k,3),0), &
++              transfer(brs(i,k),0)
+         enddo
+       enddo
+ 
+@@ -2951,6 +3120,8 @@
+         enddo
+       enddo 
+    enddo                  
++
++   if (diagnostic_trace_active == 1) close(diagnostic_trace_unit)
+ 
+    end subroutine kdm62d
+ 

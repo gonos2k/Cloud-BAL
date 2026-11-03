@@ -1,0 +1,21 @@
+{
+  "status": "PEER_REVIEW_PASS_SCALAR_MUTATION_PROBE_PASS",
+  "base_bundle_sha256": "a0e9fa3ebaf7dc4be258c23a40c517fc3f7dcc5157e62407cc49cedc783edce5",
+  "base_comparator_sha256": "6763b28635afbabc8e88e52ede2fc79b7afb97318b410a93337442742d086882",
+  "base_comparator_copy": "/var/tmp/b1-two-hour-probe-20261103/attempts/compare_histories_pre_scalar_fix.py",
+  "base_comparator_copy_sha256": "6763b28635afbabc8e88e52ede2fc79b7afb97318b410a93337442742d086882",
+  "updated_comparator": "/var/tmp/b1-two-hour-probe-20261103/compare_histories.py",
+  "updated_comparator_sha256": "85266c10a7c9228846509e753bd755caf80ef6747b3332460a298a06f68ae0ce",
+  "minimal_change": "numeric signatures now serialize with native.tobytes(order=\"C\"), supporting 0d scalar attrs and preserving prior C-order array bytes.",
+  "probe": "/var/tmp/b1-two-hour-probe-20261103/review/value_signature_scalar_probe.py",
+  "probe_sha256": "a60e9387f96b6aac311d68714eeb77cdd1e3f1a4486badf01c8d0d193502f836",
+  "probe_result": "PASS: scalar int32/float32 serialization and changed-scalar inequality; changed-array inequality; exact array-byte parity with prior view serialization.",
+  "syntax_check": "python3 -m py_compile PASS",
+  "independent_peer_review": "/var/tmp/b1-two-hour-probe-20261103/review/comparator_peer_review.json",
+  "independent_peer_review_sha256": "9f0badd96e080a6d0beed94e6886b115a433debc9c45b2c247a3360687977992",
+  "independent_peer_review_result": "PASS: strictness retained, no tolerances or metadata exemptions; direct scalar mutation assertion added after peer review and independently passed.",
+  "failure_attempt": "/var/tmp/b1-two-hour-probe-20261103/attempts/compare_scalar_failure.json",
+  "failure_attempt_sha256": "0d3c6e86d1605c7fedf306de0b48a86c150f337288db0462e9d5608b54928dd2",
+  "native_model_runs_modified_or_restarted": false,
+  "strict_history_check_allowed": "root authorized exact 12Z early comparisons after this proof; full 12/13/14 checks remain gated on model completion."
+}

@@ -1,0 +1,17 @@
+cd /var/tmp/cloudbal-b1-two-hour
+python tools/cp02_b1_process_trace.py \
+  --old docs/evidence/cp02_b1_two_hour_process_20261103/native/capture/raw/OLD_kdm6_trace_rank3.bits.gz \
+  --fix docs/evidence/cp02_b1_two_hour_process_20261103/native/capture/raw/FIX_kdm6_trace_rank3.bits.gz \
+  --prefix-receipts \
+    docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/OLD_full_prefix_gate_v1.analyzer.json \
+    docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/FIX_full_prefix_gate_v1.analyzer.json \
+  --cohorts docs/evidence/cp02_b1_two_hour_process_20261103/cohorts/corners.csv \
+  --source-pin native_manifest=docs/evidence/cp02_b1_two_hour_process_20261103/native/native_provenance_manifest.json \
+  --source-pin cohort_receipt=docs/evidence/cp02_b1_two_hour_process_20261103/cohorts/receipt.json \
+  --source-pin portable_gate_mapping=docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/portable_gate_mapping_receipt.json \
+  --source-pin native_portable_old_gate=docs/evidence/cp02_b1_two_hour_process_20261103/native/portable_gates/OLD_full_prefix_gate_v1.portable.json \
+  --source-pin native_portable_fix_gate=docs/evidence/cp02_b1_two_hour_process_20261103/native/portable_gates/FIX_full_prefix_gate_v1.portable.json \
+  --source-pin old_compression_receipt=docs/evidence/cp02_b1_two_hour_process_20261103/native/capture/OLD_trace_compression_receipt.json \
+  --source-pin fix_compression_receipt=docs/evidence/cp02_b1_two_hour_process_20261103/native/capture/FIX_trace_compression_receipt.json \
+  --scratch /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/analysis_scratch \
+  --out /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/analysis_run1

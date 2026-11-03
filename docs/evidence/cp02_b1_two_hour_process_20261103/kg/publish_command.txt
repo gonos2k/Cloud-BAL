@@ -1,0 +1,75 @@
+from pathlib import Path
+import hashlib,importlib.util,json,shutil,subprocess,uuid
+ROOT=Path('/var/tmp/cloudbal-b1-two-hour');K=ROOT/'docs/evidence/cp02_b1_two_hour_process_20261103/kg';M=Path('/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50');STAMP='2026-11-03-b1-two-hour'
+sha=lambda p:hashlib.sha256(p.read_bytes()).hexdigest()
+def require(x,msg):
+ if not x:raise RuntimeError(msg)
+read=lambda name:json.loads((K/name).read_text())
+review=read('stage_review.json');receipt=read('stage_receipt.json');lock=read('selection_lock.json');baseline=read('baseline.json')
+require(review['status']=='GO' and review['review_status']=='GO','independent GO required')
+require(review['stage_receipt_sha256']==sha(K/'stage_receipt.json'),'stage review receipt mismatch')
+require(review['stage_validation_sha256']==sha(K/'stage_validation.json'),'stage validation mismatch')
+require(receipt['selection_lock_sha256']==sha(K/'selection_lock.json') and receipt['baseline_sha256']==sha(K/'baseline.json'),'stage source/baseline mismatch')
+for name,value in {**lock['selected_source_sha256'],**lock['hash_only_sha256']}.items():require(sha(ROOT/name)==value,f'frozen input changed: {name}')
+spec=importlib.util.spec_from_file_location('scoped_recount_kg',K/'prepare_kg.py');helper=importlib.util.module_from_spec(spec);spec.loader.exec_module(helper);helper.verify_baseline(baseline)
+baseline_status={}
+for label,dest in [('KLAPS50',M),('Cloud-BAL',M/'Cloud-BAL')]:
+ raw=subprocess.check_output(['git','-C',str(dest),'status','--porcelain=v1','-z'])
+ require(hashlib.sha256(raw).hexdigest()==baseline['maintained_roots'][label]['git_state']['porcelain_v1_z_sha256'],'prepublication status hash mismatch')
+ baseline_status[label]=subprocess.check_output(['git','-C',str(dest),'status','--short'],text=True).splitlines()
+run=Path(receipt['stage']);targets=[]
+for label,dest in [('KLAPS50',M),('Cloud-BAL',M/'Cloud-BAL')]:
+ graph=run/label/'graphify-out';hashes=receipt['corpora'][label]['snapshot_file_sha256']
+ for n,h in hashes.items():targets.append({'src':graph/n,'dst':dest/'graphify-out'/n,'hashes':h,'kind':'file'})
+ require(not(dest/'graphify-out'/STAMP).exists(),'snapshot already exists')
+ targets.append({'src':graph/STAMP,'dst':dest/'graphify-out'/STAMP,'hashes':hashes,'kind':'directory'})
+for n,h in receipt['staged_wiki_sha256'].items():targets.append({'src':run/'wiki'/n,'dst':M/'wiki'/n,'hashes':h,'kind':'file'})
+def verify(path,t):
+ if t['kind']=='file':require(sha(path)==t['hashes'],f'hash mismatch {path}')
+ else:
+  require({p.name for p in path.iterdir() if p.is_file()}==set(t['hashes']),f'snapshot scope mismatch {path}')
+  for n,h in t['hashes'].items():require(sha(path/n)==h,f'snapshot mismatch {path/n}')
+for t in targets:require(not t['dst'].is_symlink(),'symlink destination');verify(t['src'],t)
+backup=run.parent/('publish-backup-'+lock['freeze_id']+'-attempt2');require(not backup.exists(),'backup exists');backup.mkdir();undo=[];temps=[]
+def unrelated(label,lines):
+ allowed={'graphify-out/graph.json','graphify-out/GRAPH_REPORT.md','graphify-out/manifest.json','graphify-out/'+STAMP}
+ if label=='KLAPS50':allowed.update('wiki/'+n for n in helper.WIKI_FILES)
+ result=[]
+ for line in lines:
+  p=line[3:]
+  if label=='KLAPS50' and p.startswith('Cloud-BAL/'):p=p[len('Cloud-BAL/'):]
+  if not any(p==a or p.startswith(a+'/') for a in allowed):result.append(line)
+ return result
+try:
+ for i,t in enumerate(targets):
+  dest=t['dst'];saved=backup/str(i);exists=dest.exists();undo.append((dest,saved,exists,t['kind']))
+  if exists:shutil.copy2(dest,saved)
+  temp=dest.with_name('.'+dest.name+'.recount-'+uuid.uuid4().hex);temps.append(temp)
+  if t['kind']=='directory':shutil.copytree(t['src'],temp)
+  else:shutil.copy2(t['src'],temp)
+  temp.replace(dest)
+ for t in targets:verify(t['dst'],t)
+ for label,root in [('KLAPS50',M),('Cloud-BAL',M/'Cloud-BAL')]:
+  current=helper.snapshot_inventory(root);prior=baseline['maintained_roots'][label]['dated_snapshots'];require({n:current[n] for n in prior}==prior,'prior snapshots changed');require(len(current)==len(prior)+1,'unexpected snapshot count')
+  status=subprocess.check_output(['git','-C',str(root),'status','--short'],text=True).splitlines();require(unrelated(label,status)==unrelated(label,baseline_status[label]),'unrelated dirty paths changed')
+except BaseException:
+ for p in temps:
+  if p.exists():shutil.rmtree(p) if p.is_dir() else p.unlink()
+ for dest,saved,exists,kind in reversed(undo):
+  if exists:
+   temp=dest.with_name('.'+dest.name+'.rollback-'+uuid.uuid4().hex);shutil.copy2(saved,temp);temp.replace(dest)
+  elif dest.exists():shutil.rmtree(dest) if dest.is_dir() else dest.unlink()
+ raise
+result={'status':'PUBLISHED_AND_READBACK_PASS','approval_sha256':sha(K/'stage_review.json'),'stage_receipt_sha256':sha(K/'stage_receipt.json'),'selection_lock_sha256':sha(K/'selection_lock.json'),'baseline_sha256':sha(K/'baseline.json'),'prior_snapshot_count':232,'published_snapshot_count':234,'backup':str(backup),'targets':[{'path':str(t['dst']),'kind':t['kind'],'hashes':t['hashes']} for t in targets]}
+(K/'publish_receipt.json').write_text(json.dumps(result,indent=2)+'\n')
+copied=[]
+for t in targets:
+ if str(t['dst']).startswith(str(M/'Cloud-BAL')):
+  dest=ROOT/t['dst'].relative_to(M/'Cloud-BAL');dest.parent.mkdir(parents=True,exist_ok=True)
+  if t['kind']=='directory':shutil.copytree(t['dst'],dest)
+  else:shutil.copy2(t['dst'],dest)
+  verify(dest,t);copied.append({'path':str(dest),'kind':t['kind'],'hashes':t['hashes']})
+for n,h in receipt['staged_wiki_sha256'].items():
+ dest=K/'wiki'/n;dest.parent.mkdir(exist_ok=True);shutil.copy2(M/'wiki'/n,dest);require(sha(dest)==h,'wiki copy failed');copied.append({'path':str(dest),'hashes':h,'kind':'file'})
+(K/'postpublish_copy_receipt.json').write_text(json.dumps({'status':'PASS_ACTIVE_WORKTREE_AND_WIKI_READBACK','publish_receipt_sha256':sha(K/'publish_receipt.json'),'copied':copied},indent=2)+'\n')
+print('PASS published234 snapshots; active worktree +5wiki copied',sha(K/'publish_receipt.json'))
