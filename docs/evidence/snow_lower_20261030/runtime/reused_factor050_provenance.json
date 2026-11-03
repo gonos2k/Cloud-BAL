@@ -1,0 +1,62 @@
+{
+  "schema": "snow-lower-reused-factor050-provenance-v1",
+  "status": "PASS",
+  "lower_common_plan_sha256": "58dae266e4b4f893f5a9d940e30c8e38574823b03785e68b089811ef9d085871",
+  "prior_common_plan_sha256": "3fb0c6c4a2770394a7ed1a4cd690cd61767c3f886deae9a0aa686f42bfb33a41",
+  "prior_final_receipt_sha256": "6cd114bca4035ff29d9c31180047722d0f67a3e53ee4552d4ec143dad4db4c62",
+  "baseline_pin_comparisons": {
+    "original_executable": true,
+    "improved_executable": true,
+    "original_wrfinput": true,
+    "improved_wrfinput": true,
+    "common_wrfbdy": true,
+    "six_hour_namelist": true,
+    "all_original_source_files": true,
+    "all_improved_source_files": true,
+    "native_field_metadata": true
+  },
+  "prior_batch_status": "SUCCESS",
+  "prior_batch_case_count": 12,
+  "prior_all_histories_validated": true,
+  "reused_cases": {
+    "CONTROL_SNOW_050": {
+      "status": "REUSED_VALIDATED",
+      "group": "CONTROL",
+      "alpha": 0.5,
+      "prior_case_receipt_sha256": "06cb76efad445613e69d2ac8ce890f7dc45e8fdf115bdefff061cd612018f14f",
+      "prior_scratch_directory": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/snow_sensitivity_20261030/CONTROL_SNOW_050",
+      "prior_histories_validated": true,
+      "source_qsnow_value_sha256": "240c38712192c7def6d0d27dfdd69811ac7442dd1dceae77da1cec8f2d97c97a",
+      "scaled_qsnow_value_sha256": "c6f1889e7b00252eb7d5cd7bcf5ce917a603c00f01ebe528389c6707284efc76",
+      "history_sha256": {
+        "wrfout_d01_2026-08-16_12:00:00": "8ed8fce1c386191a09be63d9ecd27d43b65267544af2a88e9541c3e1c8f534d1",
+        "wrfout_d01_2026-08-16_13:00:00": "2736f5fbc9471c3b912587626e96ceb10732fc9830a959a295e423bcbe58bfec",
+        "wrfout_d01_2026-08-16_14:00:00": "13d27e75a82e5dc6624404d8250c2c472e9804c85cacb6c07c112ad79a80f8a4",
+        "wrfout_d01_2026-08-16_15:00:00": "0ab3315da31304d351f96bcec1320180aa83476b0e7a7d384398e04a73127e56",
+        "wrfout_d01_2026-08-16_16:00:00": "387674dc8f21987a64f7c45d431bf8163a6790ec53cfc49fe9d29815cf9ec758",
+        "wrfout_d01_2026-08-16_17:00:00": "1544842db0f81942b104c268b8c293cfc2d0c40099cd3cb3b64a30f89b2b13b6",
+        "wrfout_d01_2026-08-16_18:00:00": "8cb60853089666ee1de9d032caa76cc5c2a2a425e1fd4a2573dabeb9cfb2c884"
+      }
+    },
+    "IMPROVED_SNOW_050": {
+      "status": "REUSED_VALIDATED",
+      "group": "IMPROVED",
+      "alpha": 0.5,
+      "prior_case_receipt_sha256": "a6d815b24a080c8e454e727a6a6a3f4c8250c209373e87e4297495c995236ea7",
+      "prior_scratch_directory": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/snow_sensitivity_20261030/IMPROVED_SNOW_050",
+      "prior_histories_validated": true,
+      "source_qsnow_value_sha256": "c54f4be2eb04018e480c1b0e40cd5481ae66199ef17541fc012f0b082b77da84",
+      "scaled_qsnow_value_sha256": "8693825924e5a239a9f98066a1eb6a3d3fde8abf2eff80cc9d178cbc7528beec",
+      "history_sha256": {
+        "wrfout_d01_2026-08-16_12:00:00": "25d2cc3c20ee01b9c031504d38de32163fdadf575c6d33780933ef50ba9c397b",
+        "wrfout_d01_2026-08-16_13:00:00": "348121982aa3b2cecfeaba37fc126c2b93026f3338caae3f1a95faeb4bf3dd86",
+        "wrfout_d01_2026-08-16_14:00:00": "a986b942e77feb786cf2da05e4f7a5ef50a482a06cde5d7a20e15f6f23661526",
+        "wrfout_d01_2026-08-16_15:00:00": "b78252a889f86dec403d414e68ab331dd0f3b4b9dd38ffaeed6ae31813a4a8b7",
+        "wrfout_d01_2026-08-16_16:00:00": "62fd0e53c1571d7828699f89b99c9f954cb81bb02fdd4834766f59403cdb6ef5",
+        "wrfout_d01_2026-08-16_17:00:00": "e838f2325a3e733a6036261e86f9df84c2d60642f7327dcc62e172aee604399e",
+        "wrfout_d01_2026-08-16_18:00:00": "6e2b2918accfa736a3fa3b359c5e904f15c8c0738bf93bc33305e4b18858e83e"
+      }
+    }
+  },
+  "reuse_rule": "Reuse only after exact family executable/input, shared boundary/namelist, source baseline, independently reproduced QSNOW scaling audit, successful per-case receipt, and all seven retained history hashes match."
+}

@@ -1,0 +1,23 @@
+import json,re,html,hashlib,subprocess
+from pathlib import Path
+from playwright.sync_api import sync_playwright
+root=Path('/var/tmp/cloudbal-snow-lower')
+bundle=root/'docs/evidence/snow_lower_20261030/validation'
+bundle.mkdir(parents=True,exist_ok=True)
+results=[]
+with sync_playwright() as p:
+ b=p.chromium.launch(headless=True,args=['--no-sandbox','--disable-gpu','--disable-dev-shm-usage'])
+ for name,expected in [('SNOW_LOWER_FIGURES_20261030.md',87),('SNOW_LOWER_IMPROVED_FIGURES_20261030.md',31)]:
+  path=root/'docs'/name;urls=re.findall(r'!\[[^\]]*\]\(([^)]+)\)',path.read_text());assert len(urls)==expected
+  page=b.new_page(viewport={'width':1440,'height':1000});errors=[]
+  page.on('requestfailed',lambda r:errors.append({'url':r.url,'failure':r.failure}))
+  page.set_content('<!doctype html><meta charset="utf-8"><style>img{max-width:100%}</style>'+''.join(f'<img src="{html.escape(url)}">' for url in urls),wait_until='load',timeout=120000)
+  decoded=page.locator('img').evaluate_all('xs=>xs.map(x=>({src:x.src,complete:x.complete,width:x.naturalWidth,height:x.naturalHeight}))')
+  assert len(decoded)==expected and all(x['width']>0 and x['height']>0 for x in decoded)
+  assert not errors,errors
+  results.append({'document':str(path.relative_to(root)),'sha256':hashlib.sha256(path.read_bytes()).hexdigest(),'expected':expected,'loaded_with_intrinsic_dimensions':len(decoded),'images':decoded,'failed_requests':errors})
+  page.close()
+ browser_version=b.version;b.close()
+r={'status':'PASS','environment':'Headless Chromium','browser_version':browser_version,'scope':'Candidate gallery PNG URLs loaded with intrinsic dimensions in browser HTML without a repository-relative base; not a deployed-page screenshot.','reported_failure':'raw.githubusercontent.com file unavailable in user environment; root GET of exact supplied URL returned valid PNG. CDN is an alternate delivery host.','screenshot_limitation':'Screenshot timed out even for a single text-only smoke page in this environment; no screenshot-based visual validation claimed.','pages':results}
+(bundle/'browser_images.json').write_text(json.dumps(r,ensure_ascii=False,indent=2)+'\n')
+print('Browser decode PASS',[(x['document'],x['loaded_with_intrinsic_dimensions']) for x in results],browser_version)
