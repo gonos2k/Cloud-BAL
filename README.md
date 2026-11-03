@@ -130,15 +130,17 @@ boundary are explicitly test-only, and every artifact states science authority
 `NONE`.  See [docs/REAL_GEOMETRY_DYNAMIC_BALANCE.md](docs/REAL_GEOMETRY_DYNAMIC_BALANCE.md).
 
 
-## Multi-radar balanced initialization planning
+## Current research status — 2026-11-03
 
-The [current research status](docs/CURRENT_RESEARCH_STATUS.md) records the
-PR106 baseline: six C2 experiments completed 640 seconds, while the H/A/N
-one-hour requests stopped after 760 seconds at T39/RK2. The immediate task is
-to connect the first grouped rejection to its RK1 source producer; actual 14 UTC
-observation scores remain unavailable. Wind candidates and physical/promotion
-gates are unchanged. The [PR84 execution checklist](docs/FAST_COMPLETION_CHECKLIST_20261012.md)
-is retained as a historical record.
+| Track | Comparison basis and current evidence | Status |
+| --- | --- | --- |
+| C2 stability | Same C2 experiment's OFF/HYDRO/COUPLED/PROJECTED/STRUCTURED/AMPLITUDE configurations completed 640 seconds. H/A/N one-hour runs stopped at 760 seconds / 38 steps at T39. The first group rejection `(199,52,21)` differs from fatal consumer `(2,219,13)`; [replay evidence](docs/evidence/recount_contract_20261103/c2/first_group_replay.json) records the sentinel path, while its source stencil remains uncaptured. | 14 UTC forecast and observation scores unevaluated. |
+| CP02 B1 precipitation | Across 36 existing lead × threshold CSI cells, 21 improved and 15 worsened. CSI@5 mm improved at all six leads; several low-threshold cells worsened and +4 h RMSE increased. | This six-hour result does not complete the separate C2 one-hour runs. |
+| Latest PR142 selection | Eight new six-hour forecasts completed; all 56 hourly histories passed validation. | All eight are `NO_QUALIFIED_CANDIDATE` under the frozen gate: each must meet or exceed ORIGINAL CSI in all 18 cells (six leads × 0.1, 0.5, 1 mm) and strictly improve +1 h CSI@10 mm. No averaging across leads, thresholds, or cases. |
+
+These are separate experiments and selection rules, not sequential operational-best changes. Initial `QSNOW` is atmospheric snow mixing ratio; the verification scores total surface precipitation. As of 2026-11-03, main contains PR137 at `5f6641f2`; research contains PR142 at `83804668`, whose tree equals `5e3bba43`'s tree. PR142 is not yet in main. See the [dated research status](docs/CURRENT_RESEARCH_STATUS.md), [PR142 analysis](docs/WEAK_STRONG_BALANCE_REPORT_20261030.md), [source hash receipt](docs/evidence/recount_contract_20261103/status/source_hashes.json), and the [historical PR84 execution checklist](docs/FAST_COMPLETION_CHECKLIST_20261012.md).
+
+The immediate C2 work is to connect the first grouped rejection to its RK1 source producer; actual 14 UTC observation scores remain unavailable. The `QRAIN`/`QNRAIN` writer, density and particle-size rules, RN1 upstream timing and coverage, independent cases, and full water/energy budgets remain open. The separate CP02 P2 recount fix is complete on this research branch: six focused tests pass; the [validation receipt](docs/evidence/recount_contract_20261103/validation.json) and [malformed-input manifest](docs/evidence/recount_contract_20261103/validator/manifest.json) record the scoped checks. It is not a fix on main, which remains at PR137.
 
 The added CP02 work diagnoses localized vertical motion before time integration,
 using the existing radar-informed horizontal analysis and hydrometeors.

@@ -19,6 +19,7 @@ import numpy as np
 ROOT = Path(__file__).resolve().parents[1]
 SCORER_PATH = ROOT / 'tools/cp02_weak_strong_balance.py'
 SCORER_SHA256 = '2572d41d352c70d72d8488fe9f0dc9d961de8b10c21f7ade459f131e7c4fbdb5'
+EXPECTED_THRESHOLDS_MM = [0.1, 0.5, 1.0, 2.5, 5.0, 10.0]
 
 
 def sha256(path: Path) -> str:
@@ -78,6 +79,11 @@ def read_csv(path):
         return list(csv.DictReader(stream))
 
 
+def require_row_count(rows, expected, name):
+    if len(rows) != expected:
+        raise ValueError(f'{name} row count mismatch: expected {expected}, found {len(rows)}')
+
+
 def recount(analysis_dir: Path):
     analysis_dir = Path(analysis_dir)
     receipt_path = analysis_dir / 'receipt.json'
@@ -91,6 +97,8 @@ def recount(analysis_dir: Path):
     cases = receipt['cases']
     hours = receipt['hours_utc']
     thresholds = receipt['thresholds_mm']
+    if thresholds != EXPECTED_THRESHOLDS_MM:
+        raise ValueError('analysis threshold scope differs from the frozen contract')
     expected_case_order = ['ORIGINAL', 'CONTROL_SNOW_300', 'IMPROVED_BG_FIXED', 'IMPROVED_SNOW_080',
                            'GATE_G50_90', 'EQ_G50_90', 'GATE_G75_95', 'EQ_G75_95',
                            'GATE_G90_99', 'EQ_G90_99', 'FIXED_ORIGINAL_100', 'ORIGINAL_B1_100']
@@ -143,14 +151,26 @@ def recount(analysis_dir: Path):
     gate_comparison_rows = read_csv(analysis_dir / 'gate_equal_mass_comparison.csv')
     factorial_rows = read_csv(analysis_dir / 'factorial_difference_in_differences.csv')
     csi_change_rows = read_csv(analysis_dir / 'csi_change_exact_counts.csv')
+    for rows, expected, name in (
+        (category_rows, 432, 'categorical score'),
+        (continuous_rows, 72, 'continuous score'),
+        (transition_rows, 396, 'transition'),
+        (admission_rows, 152, 'admission constraint'),
+        (band_transition_rows, 1980, 'observation-band transition'),
+        (bin_count_rows, 3300, 'observed/forecast bin'),
+        (gate_comparison_rows, 126, 'gate/equal-mass comparison'),
+        (factorial_rows, 312, 'factorial difference-in-differences'),
+        (csi_change_rows, 396, 'exact CSI contingency algebra'),
+    ):
+        require_row_count(rows, expected, name)
     category_index = {(row['case'], int(row['lead_hour']), float(row['threshold_mm'])): row
                       for row in category_rows}
     continuous_index = {(row['case'], int(row['lead_hour'])): row for row in continuous_rows}
-    if len(category_index) != len(cases) * 6 * 6 or len(continuous_index) != len(cases) * 6:
+    if len(category_index) != 432 or len(continuous_index) != 72:
         raise ValueError('score CSVs do not form the complete context/lead/threshold grid')
     transition_index = {(row['case'], int(row['lead_hour']), float(row['threshold_mm'])): row
                         for row in transition_rows}
-    if len(transition_index) != (len(cases) - 1) * 6 * 6:
+    if len(transition_index) != 396:
         raise ValueError('transition CSV does not form the complete non-baseline grid')
     bands = (('dry', 0.0, 0.1), ('light', 0.1, 1.0), ('moderate', 1.0, 5.0),
              ('strong', 5.0, 10.0), ('very_strong', 10.0, None))
@@ -158,9 +178,9 @@ def recount(analysis_dir: Path):
                   for row in band_transition_rows}
     bin_index = {(row['case'], int(row['lead_hour']), row['observed_bin'],
                   row['forecast_case'], row['forecast_bin']): row for row in bin_count_rows}
-    if len(band_index) != (len(cases) - 1) * 6 * 6 * len(bands):
+    if len(band_index) != 1980:
         raise ValueError('observation-band transition table has incomplete coverage')
-    if len(bin_index) != (len(cases) - 1) * 6 * len(bands) * 2 * len(bands):
+    if len(bin_index) != 3300:
         raise ValueError('observed/forecast bin table has incomplete coverage')
     counts = {'categorical': 0, 'continuous': 0, 'transitions': 0, 'admission': 0,
               'observation_band_transitions': 0, 'observed_forecast_bins': 0}
@@ -285,10 +305,15 @@ def recount(analysis_dir: Path):
         passed = cd > 0 and bd > 0 and int(candidate['hit']) * bd > int(baseline['hit']) * cd
         expected_admission[(case, 'lead1_CSI10_strictly_greater_than_ORIGINAL', 1, 10.0)] = {
             'status': 'PASS' if passed else 'FAIL', 'candidate': candidate, 'baseline': baseline}
-    if len(expected_admission) != len(admission_rows):
+    if len(expected_admission) != 152 or len(admission_rows) != 152:
         raise ValueError('admission table row count mismatch')
-    for actual in admission_rows:
-        key = (actual['case'], actual['constraint'], int(actual['lead_hour']), float(actual['threshold_mm']))
+    admission_index = {
+        (row['case'], row['constraint'], int(row['lead_hour']), float(row['threshold_mm'])): row
+        for row in admission_rows
+    }
+    if len(admission_index) != 152 or admission_index.keys() != expected_admission.keys():
+        raise ValueError('admission table does not form the complete constraint grid')
+    for key, actual in admission_index.items():
         expected = expected_admission[key]
         if actual['status'] != expected['status']:
             raise ValueError(f'{key}: admission constraint status differs')
@@ -305,7 +330,7 @@ def recount(analysis_dir: Path):
     gate_index = {(row['gate_case'], row['equal_mass_case'], int(row['lead_hour']),
                    None if row['threshold_mm'] == '' else float(row['threshold_mm'])): row
                   for row in gate_comparison_rows}
-    if len(gate_index) != len(gate_pairs) * 6 * 7:
+    if len(gate_index) != 126:
         raise ValueError('gate/equal-mass comparison table has incomplete dimensions')
 
     def verify_difference(actual, left, right, label):
@@ -334,11 +359,11 @@ def recount(analysis_dir: Path):
     factorial_index = {(int(row['lead_hour']),
                         None if row['threshold_mm'] == '' else float(row['threshold_mm']), row['metric']): row
                        for row in factorial_rows}
-    if len(factorial_index) != 6 * (6 * (len(categorical_metrics) + len(count_metrics)) + len(continuous_metrics)):
+    if len(factorial_index) != 312:
         raise ValueError('factorial difference-in-differences table has incomplete dimensions')
     csi_change_index = {(row['case'], int(row['lead_hour']), float(row['threshold_mm'])): row
                         for row in csi_change_rows}
-    if len(csi_change_index) != (len(cases) - 1) * 6 * 6:
+    if len(csi_change_index) != 396:
         raise ValueError('exact CSI contingency algebra table has incomplete dimensions')
     factorial_cases = ('ORIGINAL', 'FIXED_ORIGINAL_100', 'ORIGINAL_B1_100', 'IMPROVED_BG_FIXED')
     for lead in range(1, 7):
@@ -435,8 +460,6 @@ def recount(analysis_dir: Path):
             assert_metric(row['difference_in_differences'], expected,
                           f'{lead}/{metric}/difference_in_differences')
 
-    admission_index = {(row['case'], row['constraint'], int(row['lead_hour']), float(row['threshold_mm'])): row
-                       for row in admission_rows}
     ranked = []
     for case in receipt['eligible_cases']:
         weak_pass = all(admission_index[(case, 'weak_CSI_at_least_ORIGINAL', lead, threshold)]['status'] == 'PASS'
@@ -484,6 +507,16 @@ def recount(analysis_dir: Path):
                 assert_metric(actual[field], expected[field], f'rank-{index}/{field}')
     elif ranking_path.exists():
         raise ValueError('qualified ranking emitted when no candidate passed admission')
+    expected_counts = {
+        'categorical': 432,
+        'continuous': 72,
+        'transitions': 396,
+        'admission': 152,
+        'observation_band_transitions': 1980,
+        'observed_forecast_bins': 3300,
+    }
+    if counts != expected_counts:
+        raise ValueError(f'independently recounted row counts differ from the frozen contract: {counts}')
     return {'status': 'PASS', 'analysis_receipt_sha256': sha256(receipt_path),
             'recount_tool': identity(Path(__file__)), 'scoring_tool': identity(SCORER_PATH),
             'independently_recounted_rows': counts,

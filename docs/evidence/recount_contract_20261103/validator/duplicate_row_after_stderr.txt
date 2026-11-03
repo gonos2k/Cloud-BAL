@@ -1,0 +1,11 @@
+Traceback (most recent call last):
+  File "/var/tmp/cloudbal-recount-contract/tools/recount_cp02_weak_strong_balance.py", line 574, in <module>
+    main()
+  File "/var/tmp/cloudbal-recount-contract/tools/recount_cp02_weak_strong_balance.py", line 564, in main
+    result = recount(args.analysis)
+             ^^^^^^^^^^^^^^^^^^^^^^
+  File "/var/tmp/cloudbal-recount-contract/tools/recount_cp02_weak_strong_balance.py", line 165, in recount
+    require_row_count(rows, expected, name)
+  File "/var/tmp/cloudbal-recount-contract/tools/recount_cp02_weak_strong_balance.py", line 84, in require_row_count
+    raise ValueError(f'{name} row count mismatch: expected {expected}, found {len(rows)}')
+ValueError: continuous score row count mismatch: expected 72, found 73

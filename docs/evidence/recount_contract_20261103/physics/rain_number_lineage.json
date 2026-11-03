@@ -1,0 +1,521 @@
+{
+  "actions": {
+    "build_run": false,
+    "graphify": "read-only focused query against worktree graphify-out/graph.json",
+    "input_changed": false,
+    "model_run": false,
+    "source_changed": false
+  },
+  "artifacts": {
+    "current_b1_wrfinput": {
+      "bytes": 376278396,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100/wrfinput_d01",
+      "sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+      "sha256_verified_against_common_plan": true
+    },
+    "host_density_solver": {
+      "bytes": 233863,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_process_domain_fm547n5i/host/dyn_em/module_big_step_utilities_em.F",
+      "sha256": "27ce690b27b24c80247a5551b48d37fc32fc47470d806cbef1bb859d58edc31c"
+    },
+    "host_microphysics_driver": {
+      "bytes": 174657,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_process_domain_fm547n5i/host/phys/module_microphysics_driver.F",
+      "sha256": "bcac98180bfb5e260271a5836d71c5936d47ab167e2164c37b328f37ec2c03f4"
+    },
+    "host_registry": {
+      "bytes": 453886,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_process_domain_fm547n5i/host/Registry/Registry.EM_COMMON",
+      "sha256": "b01855ed80569be04bbd99e43ea1672a60e35590db00145c839b8f74cfd9b07f"
+    },
+    "hydro_met_em": {
+      "bytes": 146054308,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/metgrid_HYDRO/met_em.d01.2026-08-16_12:00:00.nc",
+      "sha256": "a42ca71750143896056bc6e5018364fb1eea73f51099f788c639359bde8fe43a"
+    },
+    "hydro_wps": {
+      "bytes": 62572040,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/HYDRO_vapor2.wps",
+      "sha256": "d7d8adfd3589cce46a4cee82b0f125a31e8232b3102d271959bcdefeed4dae0e"
+    },
+    "hydro_wps_shadow": {
+      "bytes": 99003376,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/HYDRO_vapor2.wps.shadow.nc",
+      "sha256": "c1f5d039ac73c90cb6b21dd619ebc5774f3b6c7387c9b9701af4360fb635f2cb"
+    },
+    "hydro_wrfinput": {
+      "bytes": 376278396,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/real_HYDRO/wrfinput_d01",
+      "sha256": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126"
+    },
+    "kdm6_source": {
+      "bytes": 138534,
+      "exists": true,
+      "path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/build_BASE/module_mp_kdm6.f90",
+      "sha256": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b"
+    },
+    "lapsprep_wps_source_current": {
+      "bytes": 24786,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/src/lapsprep/module_lapsprep_wps.f90",
+      "sha256": "d41849677d965d3b8ad1e5834cbd74f99f958f3e9894b7157049ec1dae077cce"
+    },
+    "liquid_met_em": {
+      "bytes": 146054308,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/metgrid_LIQUID_RADAR_RH1/met_em.d01.2026-08-16_12:00:00.nc",
+      "sha256": "a6d6f8a884c3bc5716394692692d9208e376cc45b5f4d752556183b7b02d5d59"
+    },
+    "liquid_wps": {
+      "bytes": 62572040,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/LIQUID_RADAR_RH1_vapor2.wps",
+      "sha256": "748c0fffc5ab809fc08ccc72e954f024a63d0287e67ef624dda8caf58ce2ef9b"
+    },
+    "liquid_wps_shadow": {
+      "bytes": 120907599,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/LIQUID_RADAR_RH1_vapor2.wps.shadow.nc",
+      "sha256": "12a9cbc7b895bf5dd7020a85b4590f2f1ef334f74c0505865a961be30ab57bac"
+    },
+    "liquid_wrfinput": {
+      "bytes": 376278396,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_actual12_liquid_wps.HisIOM/real_LIQUID_RADAR_RH1/wrfinput_d01",
+      "sha256": "1dae2480a9ff4c4a386abf9ff5210f36ad3162330e2dc579d870d64b37be4470"
+    },
+    "off_met_em": {
+      "bytes": 146054308,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_native_12_15.B4Lwmh/metgrid/met_em.d01.2026-08-16_12:00:00.nc",
+      "sha256": "1b347e1fce9e8db7fd4dd4e6f5de7e542a58793a0b9af3e403b834e73bafbed5"
+    },
+    "off_metgrid_tbl": {
+      "bytes": 37308,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_native_12_15.B4Lwmh/metgrid/METGRID.TBL",
+      "sha256": "44f1a43af35441957d0bef3a6220831aad1cf56ebc765d64d08e20f439a63b44"
+    },
+    "off_wrfinput": {
+      "bytes": 376278396,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_native_12_15.B4Lwmh/real/wrfinput_d01",
+      "sha256": "5d6b2bdce4121642dea994f3e953cca690ad7c9f52f6f8feb01bb6c2f0b9b6bc"
+    },
+    "real_executable": {
+      "bytes": 72940808,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_process_domain_fm547n5i/host/main/real.exe",
+      "sha256": "58118b30f35f1e817cd500fc0047ee3e0b334975a3231faf3a46b3a5728c5c10"
+    },
+    "real_initialize_source": {
+      "bytes": 420880,
+      "exists": true,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_process_domain_fm547n5i/host/dyn_em/module_initialize_real.F",
+      "sha256": "a4bb2497d0c70588f45da06fe9754b56597245033fec7b4bb51beba05901ce2c"
+    }
+  },
+  "created_utc": "2026-11-03",
+  "historical_lineage_receipt": {
+    "pair_receipt_sha256": "02df7d1abea0bdec013548d84e96ac14de91d216b35d80e4bdf9fb43b4a0a885",
+    "path": "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/export/docs/evidence/cp02_initial_species_20261027/historical_lineage.json",
+    "real_executable_sha256": "58118b30f35f1e817cd500fc0047ee3e0b334975a3231faf3a46b3a5728c5c10",
+    "real_source_binding": "unresolved: binary hash is pinned, but no receipt binds module_initialize_real.F to this binary",
+    "thermo_receipt_sha256": "114c9dbd2ca0c17e5ac67ed6c8d61c99c124554a8fd584a64650d2675e18df89"
+  },
+  "lineage": {
+    "current_recount_b1": {
+      "alpha": 1.0,
+      "bytes": 376278396,
+      "case": "ORIGINAL_B1_100",
+      "common_plan_path": "/var/tmp/cloudbal-recount-contract/docs/evidence/weak_strong_balance_20261030/runtime/common_plan.json",
+      "executable_family": "ORIGINAL",
+      "full_file_counts": {
+        "all_cells": 2573532,
+        "qnrain_zero": 2573532,
+        "qrain_positive": 202569,
+        "qrain_positive_and_qnrain_positive": 0,
+        "qrain_positive_and_qnrain_zero": 202569
+      },
+      "input_family": "B1",
+      "receipt_path": "/var/tmp/cloudbal-recount-contract/docs/evidence/weak_strong_balance_20261030/runtime/cases/ORIGINAL_B1_100/receipt.json",
+      "sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+      "source_writer": "UNRESOLVED; do not infer source policy from input state alone",
+      "transform": "no QSNOW change",
+      "wrfinput": "current_b1_wrfinput"
+    },
+    "historical_cp02_arms": {
+      "HYDRO": {
+        "met_em": "hydro_met_em",
+        "sha256": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126",
+        "wrfinput": "hydro_wrfinput"
+      },
+      "LIQUID": {
+        "met_em": "liquid_met_em",
+        "sha256": "1dae2480a9ff4c4a386abf9ff5210f36ad3162330e2dc579d870d64b37be4470",
+        "wrfinput": "liquid_wrfinput"
+      },
+      "OFF_original": {
+        "role": "actual historical six-hour OFF input, not paired-preparation real_OFF control",
+        "sha256": "5d6b2bdce4121642dea994f3e953cca690ad7c9f52f6f8feb01bb6c2f0b9b6bc",
+        "wrfinput": "off_wrfinput"
+      }
+    },
+    "historical_cp02_sample_qrain_positive_qnrain_zero": "210/624 each arm; 4 mapped points x 4 native corners x 39 levels, selected sample only"
+  },
+  "netcdf_inventory": {
+    "current_b1_wrfinput": {
+      "AL": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "m3 kg-1"
+      },
+      "ALB": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "m3 kg-1"
+      },
+      "QNRAIN": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "  kg(-1)"
+      },
+      "QRAIN": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "QVAPOR": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "absent_variables": [
+        "ALT",
+        "RHO"
+      ],
+      "count_scope": "whole exact retained B1 wrfinput_d01 file, directly read; not a KDM6-call capture",
+      "counts": {
+        "all_cells": 2573532,
+        "qnrain_zero": 2573532,
+        "qrain_positive": 202569,
+        "qrain_positive_and_qnrain_positive": 0,
+        "qrain_positive_and_qnrain_zero": 202569
+      }
+    },
+    "hydro_met_em": {
+      "QC": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "QG": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "QI": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "QR": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "QS": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "absent": [
+        "QNR",
+        "QRAIN",
+        "QNRAIN"
+      ]
+    },
+    "hydro_wrfinput": {
+      "QNRAIN": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "  kg(-1)"
+      },
+      "QRAIN": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      }
+    },
+    "liquid_met_em": {
+      "QC": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "QG": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "QI": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "QR": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "QS": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "absent": [
+        "QNR",
+        "QRAIN",
+        "QNRAIN"
+      ]
+    },
+    "liquid_wrfinput": {
+      "QNRAIN": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "  kg(-1)"
+      },
+      "QRAIN": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      }
+    },
+    "off_met_em": {
+      "QC": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "QG": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "QI": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "QR": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "QS": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          21,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      },
+      "absent": [
+        "QNR",
+        "QRAIN",
+        "QNRAIN"
+      ]
+    },
+    "off_wrfinput": {
+      "QNRAIN": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "  kg(-1)"
+      },
+      "QRAIN": {
+        "dtype": "float32",
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "units": "kg kg-1"
+      }
+    }
+  },
+  "schema": "cp02-rain-number-lineage-v1",
+  "scope": "read-only historical artifact metadata and source inspection",
+  "source_observations": {
+    "current_b1_policy_status": "Current B1 input state and whole-file counts observed. Upstream writer and initializer policy are not claimed until the actual writer is bound.",
+    "kdm6": {
+      "density_conversion": "nr*den at 316; nr=nrs/den at 355",
+      "diag_rhog": "graupel density rhox=qg/bg, not the QNRAIN conversion density",
+      "host_caller": "DEN=rho and diag_rhog=rhopo3d are distinct actual arguments",
+      "host_density_equation": {
+        "diag_rhog": "KDM6 source writes graupel density rhox to diag_rhog; this is separate from either atmospheric density",
+        "inverse_density_construction": "same source candidate line 943: alt=al+alb",
+        "provenance_limit": "retained host source copies co-located with recorded real build tree, not tied to that executable by independent source hash manifest",
+        "registry": "Registry.EM_COMMON lines 326-328: AL/ALB/ALT inverse density in m3 kg-1; line 546 QNRAIN # kg(-1); line 343 RHO kg m-3",
+        "runtime_status": "not directly validated: solver and caller source copies are not bound to the exact executable, and no same-point/same-timestep KDM6 PRE density capture was available",
+        "solver_source_candidate": "dyn_em/module_big_step_utilities_em.F line 4856: rho = 1./alt*(1.+moist(...,P_QV))",
+        "source_algebra": "retained source candidate computes rho=(1+QVAPOR)/ALT; dry density diagnostic is 1/ALT; equations differ by factor 1+QVAPOR"
+      },
+      "rain_shape": "mur=1 at line 60",
+      "source_sha256": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b"
+    },
+    "metgrid_tbl_entries": {
+      "QNR": "line 758",
+      "QR": "line 709"
+    },
+    "metgrid_tbl_sha256": "44f1a43af35441957d0bef3a6220831aad1cf56ebc765d64d08e20f439a63b44",
+    "observed_met_em": "QR exists; QNR, QRAIN, QNRAIN absent in all three pinned met_em products",
+    "psd_limits": "make_RainNumber is Thompson-only; do not treat as KDM6 policy or match it to KDM6 mur=1 closure without additional justification",
+    "real_initializer_source_candidate": {
+      "density_basis": "temp_rho=1/ALT; uses dry-air density to convert QRAIN to volumetric mass and divides generated number concentration by same temp_rho",
+      "gate": "THOMPSON or THOMPSONAERO only, source lines 4784-4788",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_process_domain_fm547n5i/host/dyn_em/module_initialize_real.F",
+      "policy": "positive QR and nonpositive QNR generates QNR from rain mass, temperature-dependent N0, then divides by temp_rho",
+      "sha256": "a4bb2497d0c70588f45da06fe9754b56597245033fec7b4bb51beba05901ce2c",
+      "source_lines": "4811, 4833-4837; make_RainNumber lines 9149-9180",
+      "source_to_executable_binding": "not established"
+    },
+    "wps_writer": {
+      "current_checkout_source_sha256": "d41849677d965d3b8ad1e5834cbd74f99f958f3e9894b7157049ec1dae077cce",
+      "current_hash_matches_historical": false,
+      "historical_module_lapsprep_wps_sha256": "d75eadaea8440d4cec9437aa0670d6cb86f6e8ee2a627714fbfc180bce3a9078",
+      "source_commit": "0aa7590626dafd096de9db32946501d2b0d1b1fe",
+      "writer_fields": "QC,QI,QR,QS,QG; no QNR/QNRAIN"
+    }
+  }
+}

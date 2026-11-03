@@ -1,5 +1,23 @@
 # 현재 연구 상태
 
+## 2026-11-03: 통합 현황 — C2와 CP02는 별도 실험 계열
+
+| 계열 | 비교 기준·범위 | 현재 결과 |
+| --- | --- | --- |
+| C2 안정성 | 동일 C2 실험의 OFF/HYDRO/COUPLED/PROJECTED/STRUCTURED/AMPLITUDE 6개 설정 | 각 설정의 640초 실험은 완료. H/A/N 1시간 요청은 760초·38단계 T39에서 중단됐다. 14 UTC 예보·관측 점수는 미평가다. 첫 group 거부 `(199,52,21)`은 별도 fatal consumer `(2,219,13)`와 다르다. [재생 기록](evidence/recount_contract_20261103/c2/first_group_replay.json)은 store 거부 뒤 sentinel 소비를 확인하며, 최초 거부 셀의 원래 생성 stencil은 여전히 포착되지 않았다. |
+| CP02 B1 강수 | 같은 사례의 규준실험 1.0 (ORIGINAL)과 6시간 지상 총강수 검증 | 기존 36개 lead×임계값 CSI 중 21개 개선·15개 악화. ≥5 mm CSI는 여섯 lead 모두 개선했지만 낮은 임계값은 여러 셀에서 악화됐고 +4시간 RMSE는 더 높다. 이 CP02 결과는 C2 1시간 완주를 뜻하지 않는다. |
+| 최신 선택 점검 (PR142) | 8개 추가 6시간 예보, 시간별 공통 3,688 RN1 점 | 56개 history가 검증됐고, 8개 모두 **NO_QUALIFIED_CANDIDATE**. 규준실험 1.0 대비 6개 lead×{0.1, 0.5, 1 mm}의 18개 CSI가 모두 이상이고 +1시간 CSI@10 mm가 엄격히 높아야 한다. 후보·lead·임계값 간 평균은 하지 않았다. |
+
+이 세 비교는 서로 다른 실험과 사전 선택 규칙이다. 개선안을 순차적으로 바꾸며 운영 최적값을 찾은 기록으로 합치지 않는다. 검증 변수는 지상 총강수이고, 초기 `QSNOW`는 대기 중 눈 혼합비다. 최신 저장소 기준은 [main의 PR137 병합본](https://github.com/gonos2k/Cloud-BAL/pull/137), 연구 누적본은 [research의 PR142 병합본](https://github.com/gonos2k/Cloud-BAL/pull/142)이다. 2026-11-03 확인 시 main은 `5f6641f2`, research는 `83804668`이며 research tree는 `5e3bba43`의 tree와 같다. 따라서 PR142는 이 현황에 포함되지만 main에는 아직 통합되지 않았다.
+
+세부 범위와 근거: [C2 종료·실패 및 IR 범위](PR106_CLOSED_FORECAST_AND_IR_SCOPE_20261026.md), [T39 닫힌 replay](T39_CLOSED_REPLAY_20261027.md), [CP02 B1 6시간 결과](SIX_HOUR_IMPROVEMENT_20261030.md), [PR142의 약·강수 선택 분석](WEAK_STRONG_BALANCE_REPORT_20261030.md), [기계 판독 검증 영수증](evidence/weak_strong_balance_20261030/validation.json), [사전 고정 선택 규칙](evidence/weak_strong_balance_20261030/selection_plan.json), [문서·원자료 SHA-256 목록](evidence/recount_contract_20261103/status/source_hashes.json).
+
+다음 미해결 항목은 C2 최초 거부 셀의 producer stencil 연결, 실제 `QRAIN`/`QNRAIN` 작성 경로와 밀도·입도분포 규약, RN1 상류 시각·coverage 및 독립 사례, 전체 물·에너지 수지다. 별도 CP02 P2 재계산 검증 수정은 이 research branch에서 완료됐다. 집중 시험 6개가 통과했고 [통합 검증 receipt](evidence/recount_contract_20261103/validation.json), [빈 scope·전이자료 재현](evidence/recount_contract_20261103/validator/manifest.json), [152행·151개 key 중복 검출](evidence/recount_contract_20261103/validator/duplicate_admission_manifest.json), [원본 배열 전후 동일 row count](evidence/recount_contract_20261103/validator/normal_saved_arrays_before_after.json)이 근거다. main에는 아직 반영되지 않았다. 이 도구 수정은 C2 T39나 물리 검증의 완료를 뜻하지 않는다.
+
+실제 rain-number 경로의 open finding은 [QRAIN/QNRAIN 작성 경로·밀도 근거 조사](evidence/recount_contract_20261103/physics/rain_number_lineage.md)에 기록했다. 현 B1 입력 2,573,532셀 중 202,569셀은 `QRAIN>0`이고 전체 `QNRAIN`은 0이다. 보관된 `met_em`에는 `QR`은 있지만 `QNR`은 없다. 보관된 소스 사본에는 Thompson 전용 rain-number initializer 후보가 있으나 pinned `real.exe`에 연결되지는 않았다. 이는 조사 범위를 좁히며 완료나 물리 검증을 주장하지 않는다.
+
+다음 CP02 진단 초점은 +2~+6시간 낮은 임계값 CSI 회복을 조사하면서, 현재 B1의 +1시간 여섯 임계값 CSI와 매시간 ≥5 mm CSI를 보호하는 것이다. 같은 B1의 OLD/FIX 0~2시간 비교를 다음 진단으로 계획한다. 모델 trace는 아직 시작하거나 완료하지 않았으며, native 준비는 별도 외부 scratch batch에서 진행 중이다. PR142의 ORIGINAL 기준 선택 규칙은 해당 역사 결과에 유지하며 사후 변경하지 않는다.
+
 ## 2026-10-30: CP02 +1시간 개선 실험
 
 [1시간 강수예보 원인 분리·개선](FIRST_HOUR_PRECIPITATION_IMPROVEMENT_20261030.md)에서
@@ -12,7 +30,7 @@ KDM6의 정확한 0 계산항 처리와 초기 강수 수종 대체의 민감도
 뜻하지 않는다. 기본 HYDRO 정책은 유지한다. 아래의 최신 C2 T39 미완료와
 RN1 상류 시각·coverage, 전체 물·에너지 수지의 미확정 상태는 별개다.
 
-## 기존 C2 연구 상태
+## 2026-10-30 기록: C2 연구 상태
 
 실행 근거: PR106 종료 기록과 PR107 병합본
 `4c290f1fff9c78cbe9967ce312114f0f53a27a43`의 진단 구현.
@@ -43,7 +61,7 @@ PR108에서는 [입력·실행 실패 계약](PR108_INPUT_EXECUTION_CONTRACTS_20
 보강한다. PR111은 [정적 격자의 결측값·좌표 검증](PR111_STATIC_VALUE_VALIDATION_20261027.md)을
 실제 reader–WPS 출력 경계에 연결한다. 이 공학적 변경은 예보·관측 판정을 승격하지 않는다.
 
-## 바로 다음 작업
+## 2026-10-30 당시 다음 작업
 
 1. 보존된 T39 결과에서 group 첫 거부와 fatal consumer가 다른 셀임을 유지하고,
    최초 셀 `(199,52,21)`의 source·transport 생성 입력을 추가로 연결한다.

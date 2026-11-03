@@ -1,0 +1,76 @@
+{
+  "c2_review": {
+    "O0_O2": "Pinned Intel replays reproduce the separate store-stage group failure and callback conversion result; no numeric policy changed.",
+    "copied_evidence_hashes_checked": 9,
+    "limits": "No full H/A/N forecast, no first producer stencil, no model forecast, and no source-tree build; initial /tmp execute-permission failure retained.",
+    "receipt": "c2/validation.json",
+    "source_hashes_checked": 4,
+    "status": "PASS_BOUNDED_PINNED_INTEL_REPLAYS"
+  },
+  "kg_baseline": {
+    "dated_snapshots_total": 230,
+    "path": "kg/baseline.json",
+    "per_root": {
+      "Cloud-BAL": 117,
+      "KLAPS50": 113
+    },
+    "readback": "All prior dated-snapshot contents, active graph trios, five wiki mirrors, and exact dirty states match baseline.",
+    "sha256": "8272a6e765a3f15f442a8ca15943f10e5e04ad31b5a9a9c1afd212bd34d7fd45"
+  },
+  "kg_driver_review": {
+    "graphify": "Reuses pinned Graphify 0.9.53 stage logic; only exact selected paths update manifests; no corpus scan/prune.",
+    "helper_sha256": "0e2f308a9857e7dbf1e54ffb89fb54f1330990310f20c70016998b2a556cc22c",
+    "publication": "No publish action; staging requires explicit --stage and writes isolated stage receipt.",
+    "scope": "Three selected Python paths (recount tool, test, this driver); hash-only covers all evidence under the new dated evidence folder plus README/CURRENT, excluding KG outputs and postpublication validation/final review.",
+    "syntax": "AST parse PASS; CLI --help PASS; baseline verification PASS."
+  },
+  "physics_review": {
+    "assessment": "Historical CP02 arms are separate from current ORIGINAL_B1_100. Full B1 input count finds QRAIN positive in 202569 cells and QNRAIN zero in 2573532; this is input-state evidence. Upstream writer, runtime KDM6 density/call-entry and initializer-to-executable binding remain unclaimed. Thompson-only source candidate and KDM6 closure are distinguished.",
+    "machine_receipt_sha256": "a30e514058737d3076d509088831cf8803a43f4d32198b5b51614cfacee26693",
+    "pinned_artifact_mismatches": [],
+    "pinned_artifacts_checked": 19,
+    "report_sha256": "6e8b34c4f52a4c06f988a9e0c705094a5f745fc5633c03fa4c7755a4314583c6"
+  },
+  "recount_contract_review": {
+    "admission_hole": "Interim fix accepted 152 physical admission rows with 151 unique keys after replacing GATE_G50_90 weak lead-6 threshold-0.1; final requires the exact unique key set and rejects it.",
+    "final_module_sha256": "f264425741b8ef69f8d372ed1992898185a709d53c14a14c32fb1fc7b18fcdf1",
+    "finding": "Original HEAD recount accepted a duplicate continuous_scores.csv data row after its receipt size/hash were refreshed (73 physical rows for 72 expected); final recount rejects it.",
+    "focused_tests": "pytest -q tests/test_recount_cp02_weak_strong_balance.py: 6 passed",
+    "normal_saved_arrays": "Before and after both PASS with identical receipt hash and row counts: 432 categorical, 72 continuous, 396 transitions, 152 admission, 1980 band transitions, 3300 observed/forecast bins.",
+    "original_module_sha256": "39fa26c634d9de36d92d3d63f0b0c79d332c90a27e6bb77169331eec0b399926",
+    "related_clean_export_tests": "152 passed in isolated export; native build not performed.",
+    "validator_receipts": {
+      "empty_threshold_and_transition_archive": "validator/manifest.json",
+      "extra_continuous_row": "validator/duplicate_row_manifest.json",
+      "normal_saved_arrays": "validator/normal_saved_arrays_before_after.json",
+      "same_count_duplicate_admission_key": "validator/duplicate_admission_manifest.json"
+    }
+  },
+  "review_limits": [
+    "No runtime/scientific validation is implied.",
+    "Graph staging is not yet run.",
+    "The root consolidated validation.json and final team review are produced after KG readback and excluded from the prepublication lock."
+  ],
+  "reviewed_at_utc": "2026-11-03T07:36:07.157901+00:00",
+  "reviewer": "independent code/data/KG reviewer",
+  "schema": "recount-contract-independent-review-v1",
+  "source_hashes": {
+    "README.md": "c57409d9a78214be8dbce3332df32f651fbb1939fb570932003f110bb18500f2",
+    "docs/CURRENT_RESEARCH_STATUS.md": "a214f09eef0085622adf59701bb0734dea9126ada1f77d5d99de2592d43d2024",
+    "docs/evidence/recount_contract_20261103/kg/prepare_kg.py": "0e2f308a9857e7dbf1e54ffb89fb54f1330990310f20c70016998b2a556cc22c",
+    "tests/test_recount_cp02_weak_strong_balance.py": "cf6dfbaf434c3f66ea8da63ffed9108c47275e4efeef8c7ec09648664dc91e86",
+    "tools/recount_cp02_weak_strong_balance.py": "f264425741b8ef69f8d372ed1992898185a709d53c14a14c32fb1fc7b18fcdf1"
+  },
+  "status": "PASS_SOURCE_AND_EVIDENCE_REVIEW",
+  "status_review": {
+    "assessment": "C2, CP02 B1, and PR142 selection remain separate; P2 fix is scoped to research; B1 follow-up trace is planned, not run; open items and main-branch status are represented accurately.",
+    "source_files_pinned": 19,
+    "source_hash_mismatches": [],
+    "source_hash_receipt_sha256": "e73d3bbc1af0cc4f5e8ac45f56211106b09dbd8f7786609c3c7a03a9b7744b91",
+    "tree_equivalence": {
+      "commit_a": "83804668a02e20eeac686d00ff5b2ff6b9a71154",
+      "commit_b": "5e3bba43a7d471900ff7bef96934ec629f2dbd96",
+      "tree": "642b891cd052a151ec83442db3cce06e4445ca07"
+    }
+  }
+}

@@ -1,0 +1,94 @@
+{
+  "schema": "recount-contract-status-sources-v1",
+  "as_of": "2026-11-03",
+  "repository_refs": {
+    "main_pr": 137,
+    "main_merge": "5f6641f24b8117d5d61caf1e8f655f9bdb529b67",
+    "research_pr": 142,
+    "research_merge": "83804668a02e20eeac686d00ff5b2ff6b9a71154",
+    "research_tree": "642b891cd052a151ec83442db3cce06e4445ca07",
+    "tree_equivalent_commit": "5e3bba43a7d471900ff7bef96934ec629f2dbd96",
+    "status_checkout_head": "83804668a02e20eeac686d00ff5b2ff6b9a71154",
+    "merge_note": "PR142 targets the PR137 research branch chain; commit 83804668 has the same tree as 5e3bba43. Main remains at PR137 as of this date."
+  },
+  "source_files": [
+    {
+      "path": "README.md",
+      "sha256": "c57409d9a78214be8dbce3332df32f651fbb1939fb570932003f110bb18500f2"
+    },
+    {
+      "path": "docs/CURRENT_RESEARCH_STATUS.md",
+      "sha256": "a214f09eef0085622adf59701bb0734dea9126ada1f77d5d99de2592d43d2024"
+    },
+    {
+      "path": "tools/recount_cp02_weak_strong_balance.py",
+      "sha256": "f264425741b8ef69f8d372ed1992898185a709d53c14a14c32fb1fc7b18fcdf1"
+    },
+    {
+      "path": "tests/test_recount_cp02_weak_strong_balance.py",
+      "sha256": "cf6dfbaf434c3f66ea8da63ffed9108c47275e4efeef8c7ec09648664dc91e86"
+    },
+    {
+      "path": "docs/PR106_CLOSED_FORECAST_AND_IR_SCOPE_20261026.md",
+      "sha256": "37ada8d8eb3a7b0268c2f45ef39cea81c76eefd971e815586b5ff57702d11092"
+    },
+    {
+      "path": "docs/T39_CLOSED_REPLAY_20261027.md",
+      "sha256": "47b1bb582050e7e3eca6dfc1c17f0a17a890c52717d85d54905ae3857728cfa2"
+    },
+    {
+      "path": "docs/SIX_HOUR_IMPROVEMENT_20261030.md",
+      "sha256": "8ec4da9a7622c513e27342c12826ff33cd21feedc2db6f9d72af9fdf7882085c"
+    },
+    {
+      "path": "docs/SNOW_EXTENSION_FULL_SCORES_20261030.md",
+      "sha256": "91e4b29ab0a67da42d7f5e183592aead609fde5458f8cdcf8385230b6578cc1d"
+    },
+    {
+      "path": "docs/WEAK_STRONG_BALANCE_REPORT_20261030.md",
+      "sha256": "1435f1d19991016be735cc558d76519af196851359df3926b1d1c818daefc40c"
+    },
+    {
+      "path": "docs/evidence/pr106_closed_forecast_20261026/structured_receipt.json",
+      "sha256": "b378fae3722d7fcdff4fa895108f1373a75f2f258d57c4d221a36e86bba884ae"
+    },
+    {
+      "path": "docs/evidence/weak_strong_balance_20261030/validation.json",
+      "sha256": "2dbfc2fb6100b1094c21b3919b62a61362838c99f0e510b9470adbccf4fb0188"
+    },
+    {
+      "path": "docs/evidence/weak_strong_balance_20261030/selection_plan.json",
+      "sha256": "17e8833f2f28da76e1474f82440a88889bd55ba723ef9cd6618d06a0eb786248"
+    },
+    {
+      "path": "docs/evidence/weak_strong_balance_20261030/runtime/final_receipt.json",
+      "sha256": "4322b9de5a4490a3f874c6cdb826889a1f721185f907aa6383e07f9c113f3f58"
+    },
+    {
+      "path": "docs/evidence/recount_contract_20261103/c2/first_group_replay.json",
+      "sha256": "b7996b3a899185df2b366118da7e05524327d78679880864ad1b212dd4620a26"
+    },
+    {
+      "path": "docs/evidence/recount_contract_20261103/physics/rain_number_lineage.md",
+      "sha256": "6e8b34c4f52a4c06f988a9e0c705094a5f745fc5633c03fa4c7755a4314583c6"
+    },
+    {
+      "path": "docs/evidence/recount_contract_20261103/physics/rain_number_lineage.json",
+      "sha256": "a30e514058737d3076d509088831cf8803a43f4d32198b5b51614cfacee26693"
+    },
+    {
+      "path": "docs/evidence/recount_contract_20261103/validator/manifest.json",
+      "sha256": "1278f1aeed4f7d86000cd9581e9bd7367d228db24c35577f35399e3a7ff3dcea"
+    },
+    {
+      "path": "docs/evidence/recount_contract_20261103/validator/duplicate_admission_manifest.json",
+      "sha256": "9f5017bb8fa9d5b9fab7f34a82eb3b4f5063ea89cd134922ff65727cb91ceef8"
+    },
+    {
+      "path": "docs/evidence/recount_contract_20261103/validator/normal_saved_arrays_before_after.json",
+      "sha256": "68ae52419962cdfe551777047d31b88cbcc928f93c23b3f92d21c7e704df8fbc"
+    }
+  ],
+  "pr142_report_hash_in_validation": "1435f1d19991016be735cc558d76519af196851359df3926b1d1c818daefc40c",
+  "scope_note": "Pins the final status prose, recount implementation and focused tests, plus the source documents and evidence cited by the overviews. The consolidated validation receipt is linked by path and binds the broader batch. Hashes do not establish native stability or physical validation."
+}
