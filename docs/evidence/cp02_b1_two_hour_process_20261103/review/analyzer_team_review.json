@@ -1,0 +1,67 @@
+{
+  "schema": "b1-two-hour-analysis-review-v2",
+  "status": "STATIC_CODE_GO_CONDITIONAL_ON_NHNHOME_RUN_PATHS",
+  "scope": "Independent source/test review only. No raw process trace data opened; native CLI not invoked; tests not rerun.",
+  "worktree_head": "47998849a79ede61ce23d928b9fe56eb67934de1",
+  "source_sha256": {
+    "tools/cp02_b1_process_trace.py": "071021915bd3e8075c824e3626c824a1bbf5a6d37400eb6811c8fe673128dd37",
+    "tests/test_cp02_b1_process_trace.py": "9c416e42169bcb29b43859550467917d428d3e04b387a8300d5855734a664ebf"
+  },
+  "cohort_reported_validation": {
+    "focused_tests": "14 passed",
+    "py_compile": "PASS",
+    "diff_check": "PASS",
+    "independently_verified": false
+  },
+  "previous_findings": [
+    {
+      "id": "GATE-1",
+      "status": "RESOLVED",
+      "evidence": "Requires receipt_schema_version=1, OLD/FIX case, status and full-prefix true, exact ordered [12,13,14]; gate bytes are hashed at read and checked before/after parsing and before publication; tests reject unsupported schema and wrong time order."
+    },
+    {
+      "id": "CHRONO-1",
+      "status": "RESOLVED",
+      "evidence": "Stores source path/file ordinal and requires joined PREVP/update events to come from one source file; checks phase chronology by same-file line number; emits stable source/file-ordinal/line order. Test rejects split-file update transaction."
+    },
+    {
+      "id": "PHASES-1",
+      "status": "RESOLVED",
+      "evidence": "Initializes count map with every declared SCHEMAS phase at zero; test asserts exact 15-key schema coverage."
+    },
+    {
+      "id": "ARITH-1",
+      "status": "RESOLVED",
+      "evidence": "Separates observed-after minus REAL32 expected residual from change-equation diagnostic. Summary labels these unthresholded diagnostics and pass status is schema/join validation only; no undue bitwise-equality claim."
+    },
+    {
+      "id": "ATOMIC-1",
+      "status": "RESOLVED",
+      "evidence": "Stages both arms under the output parent and renames the completed pair into a new target; existing targets are refused; test checks second-arm failure leaves no published output."
+    },
+    {
+      "id": "HASH-1",
+      "status": "RESOLVED",
+      "evidence": "Hashes gate bytes from same read object and rechecks; trace bytes are hash-checked before and after parse; summary binds both gate hashes and trace hashes/sizes."
+    }
+  ],
+  "review_checks": [
+    "Schema v1 and strict full-prefix case/time gate are checked before either trace inventory is opened.",
+    "Optional PREVP formula/raw/cap phases are joined with required update phases; raw/formula presence is paired, caps require raw, duplicate phase keys fail, and signed zero is classified from the exact f32 word.",
+    "n0r is decoded and emitted as REAL64 with its raw 64-bit word; remaining transfer values are finite REAL32.",
+    "All 15 phase counts appear, including zeros; output event rows include source, ordinal/line chronology and phase transfer words.",
+    "Local q/T arithmetic uses explicit REAL32 rounding but is not declared closed or thresholded.",
+    "Process sums remain separate by point, corner, model level, and hour; no density multiplier or column/area budget is claimed."
+  ],
+  "execution_condition": {
+    "status": "MUST_VERIFY_BEFORE_TRACE_RUN",
+    "detail": "Code requires --scratch and --out parent to share a device, but that alone does not prove the device is the large NHNHOME filesystem. Before raw parsing, verify both requested paths resolve on NHNHOME (and that required free capacity is available); the phase-record CSV and staged output can be large."
+  },
+  "minor_note": "`shutil` is imported but unused; cosmetic only.",
+  "blockers_in_analyzer_or_tests": [],
+  "post_go_addendum": {
+    "field": "formula_to_raw_delta",
+    "status": "APPROVED_ADDITIVE_DIAGNOSTIC",
+    "rationale": "Both operands are the schema-paired PREVP_FORMULA/PREVP_RAW REAL32 `prevp` values for the same transaction key. It is emitted only when PREVP_RAW exists; join validation already requires matching formula presence. The field does not affect gates, joins, count classification, or outputs beyond one numeric delta."
+  }
+}

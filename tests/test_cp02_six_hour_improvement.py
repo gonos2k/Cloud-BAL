@@ -171,7 +171,12 @@ def test_archived_array_replay_is_hash_and_coordinate_bound():
     arrays, first, _ = improvement.load_archived_arrays(evidence)
     assert len(arrays) == 6
     assert first['reference'].shape == (3688,)
-    assert len({row['sha256'] for row in evidence if 'hour_' in row['path']}) == 6
+    hour_array_rows = [row for row in evidence
+                       if Path(row['path']).name.startswith('hour_')
+                       and Path(row['path']).suffix == '.npz']
+    expected_hour_arrays = [f'hour_{hour}_arrays.npz' for hour in improvement.HOURS]
+    assert [Path(row['path']).name for row in hour_array_rows] == expected_hour_arrays
+    assert len({row['sha256'] for row in hour_array_rows}) == len(expected_hour_arrays)
     scorer = improvement.load_scorer()
     archived_csv = list(csv.DictReader((improvement.ARCHIVE_DIR / 'scores/categorical_scores.csv').open()))
     hour_rows = [row for row in archived_csv if row['lead_hour'] == '1' and row['case'] == 'CURRENT_HYDRO']

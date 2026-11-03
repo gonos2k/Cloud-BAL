@@ -1,0 +1,240 @@
+{
+  "renderer": "plot_cp02_b1_process.py",
+  "inputs": {
+    "/var/tmp/cloudbal-b1-two-hour/docs/evidence/weak_strong_balance_20261030/analysis/categorical_scores.csv": {
+      "sha256": "9eeb68e5c0e548098a877fec09fc888ebef039fa44e48f15db1a35530b923d00",
+      "bytes": 86981
+    },
+    "/var/tmp/cloudbal-b1-two-hour/docs/evidence/cp02_b1_two_hour_process_20261103/cohorts/receipt.json": {
+      "sha256": "1858711adc90579ffebb0990d8de7721ced46eeadbbe0499b764dbda3af4f107",
+      "bytes": 4760
+    },
+    "/var/tmp/cloudbal-b1-two-hour/docs/evidence/cp02_b1_two_hour_process_20261103/cohorts/selected_points.csv": {
+      "sha256": "a712f67b8da484999f1c956eac95b00cce6ac44760862582f78941e8e3133dcd",
+      "bytes": 2889
+    },
+    "/var/tmp/cloudbal-b1-two-hour/docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/run1_analysis_receipt.json": {
+      "sha256": "59b07f13b8f49a98fcee96bfb6ee56a09c86eb0c72a66fa2b0e002496d62e836",
+      "bytes": 13618
+    },
+    "/var/tmp/cloudbal-b1-two-hour/docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/integrated_components.csv": {
+      "sha256": "67e0a833725f71e23e6c5186225ccb8529900ab01083cabfaf833dd50c185b6f",
+      "bytes": 533474
+    },
+    "/var/tmp/cloudbal-b1-two-hour/docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/integrated_components_receipt.json": {
+      "sha256": "8951dd00278812bc7a4930b3189bd7207462c64769ca83c494925177ccbc8fbc",
+      "bytes": 2749
+    },
+    "/var/tmp/cloudbal-b1-two-hour/docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/compact_tables/pair_summary.json": {
+      "sha256": "f6336876a0cf7833a05d9bc7bd7d4089297f49397c64e89e715abc9065eaf2bd",
+      "bytes": 9050
+    },
+    "/var/tmp/cloudbal-b1-two-hour/tools/plot_cp02_b1_process.py": {
+      "sha256": "30d340eac848fa1e35034fb4f17e4a7228cc9341c95608d2b757c58b906732b1",
+      "bytes": 24662
+    }
+  },
+  "analysis_status": "PASS_BOTH_ARMS",
+  "component_run_receipt_sha256": "59b07f13b8f49a98fcee96bfb6ee56a09c86eb0c72a66fa2b0e002496d62e836",
+  "scope": "validated compact per-arm/point/corner/level/hour components; local profiles retain each level",
+  "exact_zero_raw_transitions": {
+    "OLD": {
+      "P01_hour1": {
+        "raw_zero": 143,
+        "negative_cap_to_applied": 143,
+        "cap_branch_skipped_final_zero": 0,
+        "sat_cap_present": 143,
+        "final_negative": 143,
+        "final_positive": 0,
+        "final_negative_zero": 0,
+        "final_positive_zero": 0
+      },
+      "P01_hour2": {
+        "raw_zero": 47,
+        "negative_cap_to_applied": 47,
+        "cap_branch_skipped_final_zero": 0,
+        "sat_cap_present": 47,
+        "final_negative": 47,
+        "final_positive": 0,
+        "final_negative_zero": 0,
+        "final_positive_zero": 0
+      },
+      "P02_hour1": {
+        "raw_zero": 123,
+        "negative_cap_to_applied": 121,
+        "cap_branch_skipped_final_zero": 0,
+        "sat_cap_present": 123,
+        "final_negative": 121,
+        "final_positive": 0,
+        "final_negative_zero": 0,
+        "final_positive_zero": 2
+      },
+      "P02_hour2": {
+        "raw_zero": 98,
+        "negative_cap_to_applied": 93,
+        "cap_branch_skipped_final_zero": 0,
+        "sat_cap_present": 98,
+        "final_negative": 93,
+        "final_positive": 0,
+        "final_negative_zero": 0,
+        "final_positive_zero": 5
+      },
+      "P03_hour1": {
+        "raw_zero": 473,
+        "negative_cap_to_applied": 466,
+        "cap_branch_skipped_final_zero": 0,
+        "sat_cap_present": 473,
+        "final_negative": 466,
+        "final_positive": 0,
+        "final_negative_zero": 0,
+        "final_positive_zero": 7
+      },
+      "P03_hour2": {
+        "raw_zero": 64,
+        "negative_cap_to_applied": 64,
+        "cap_branch_skipped_final_zero": 0,
+        "sat_cap_present": 64,
+        "final_negative": 64,
+        "final_positive": 0,
+        "final_negative_zero": 0,
+        "final_positive_zero": 0
+      },
+      "P04_hour1": {
+        "raw_zero": 183,
+        "negative_cap_to_applied": 56,
+        "cap_branch_skipped_final_zero": 0,
+        "sat_cap_present": 183,
+        "final_negative": 56,
+        "final_positive": 0,
+        "final_negative_zero": 0,
+        "final_positive_zero": 127
+      },
+      "P04_hour2": {
+        "raw_zero": 54,
+        "negative_cap_to_applied": 35,
+        "cap_branch_skipped_final_zero": 0,
+        "sat_cap_present": 54,
+        "final_negative": 35,
+        "final_positive": 0,
+        "final_negative_zero": 0,
+        "final_positive_zero": 19
+      }
+    },
+    "FIX": {
+      "P01_hour1": {
+        "raw_zero": 253,
+        "negative_cap_to_applied": 0,
+        "cap_branch_skipped_final_zero": 253,
+        "sat_cap_present": 0,
+        "final_negative": 0,
+        "final_positive": 0,
+        "final_negative_zero": 248,
+        "final_positive_zero": 5
+      },
+      "P01_hour2": {
+        "raw_zero": 26,
+        "negative_cap_to_applied": 0,
+        "cap_branch_skipped_final_zero": 26,
+        "sat_cap_present": 0,
+        "final_negative": 0,
+        "final_positive": 0,
+        "final_negative_zero": 26,
+        "final_positive_zero": 0
+      },
+      "P02_hour1": {
+        "raw_zero": 302,
+        "negative_cap_to_applied": 0,
+        "cap_branch_skipped_final_zero": 302,
+        "sat_cap_present": 0,
+        "final_negative": 0,
+        "final_positive": 0,
+        "final_negative_zero": 301,
+        "final_positive_zero": 1
+      },
+      "P02_hour2": {
+        "raw_zero": 18,
+        "negative_cap_to_applied": 0,
+        "cap_branch_skipped_final_zero": 18,
+        "sat_cap_present": 0,
+        "final_negative": 0,
+        "final_positive": 0,
+        "final_negative_zero": 18,
+        "final_positive_zero": 0
+      },
+      "P03_hour1": {
+        "raw_zero": 633,
+        "negative_cap_to_applied": 0,
+        "cap_branch_skipped_final_zero": 633,
+        "sat_cap_present": 0,
+        "final_negative": 0,
+        "final_positive": 0,
+        "final_negative_zero": 614,
+        "final_positive_zero": 19
+      },
+      "P03_hour2": {
+        "raw_zero": 79,
+        "negative_cap_to_applied": 0,
+        "cap_branch_skipped_final_zero": 79,
+        "sat_cap_present": 0,
+        "final_negative": 0,
+        "final_positive": 0,
+        "final_negative_zero": 79,
+        "final_positive_zero": 0
+      },
+      "P04_hour1": {
+        "raw_zero": 178,
+        "negative_cap_to_applied": 0,
+        "cap_branch_skipped_final_zero": 178,
+        "sat_cap_present": 0,
+        "final_negative": 0,
+        "final_positive": 0,
+        "final_negative_zero": 58,
+        "final_positive_zero": 120
+      },
+      "P04_hour2": {
+        "raw_zero": 53,
+        "negative_cap_to_applied": 0,
+        "cap_branch_skipped_final_zero": 53,
+        "sat_cap_present": 0,
+        "final_negative": 0,
+        "final_positive": 0,
+        "final_negative_zero": 36,
+        "final_positive_zero": 17
+      }
+    }
+  },
+  "figures": {
+    "b1_hourly_csi.png": {
+      "sha256": "39810879e52e7c76858737eb07db5e38d67f7945f887411fa0ec00a697e07c40",
+      "bytes": 240417
+    },
+    "b1_hourly_delta_csi.png": {
+      "sha256": "65b5ce5b11776c9bb7c3de17a78eb92d5e0902b909d4c011ad5afba9c44ea5a6",
+      "bytes": 190096
+    },
+    "b1_selected_point_hourly_precip.png": {
+      "sha256": "a6f1666179972be62113bebd3f331b2eb822160a8732e2e89eeb953ab4c13077",
+      "bytes": 222466
+    },
+    "b1_prevp_qv_temperature_profiles.png": {
+      "sha256": "c61de1817007eb1c0ce30604c186d88ea5fe0351243e0993bfa4e15594828499",
+      "bytes": 420196
+    },
+    "b1_q_state_vertical_profiles.png": {
+      "sha256": "dae7ed1411c6eda86b29bc614a9c73c5022476fe0ffff8dc2bdedd9dd8f6612e",
+      "bytes": 285978
+    },
+    "b1_t_state_vertical_profiles.png": {
+      "sha256": "84477f3ee4b09d81e25d370c63bb0c4220a3e12853c9cf3acd2115e4782b2fdb",
+      "bytes": 271964
+    },
+    "b1_zero_rate_transitions.png": {
+      "sha256": "1b35593af9425613d269a2b73d8e3665a50c7db8026d541495ec39f683349ede",
+      "bytes": 140828
+    },
+    "b1_zero_rate_transitions_level_corner.png": {
+      "sha256": "8282a490274c71daad1ebc418154eabcae0b1530bd149e0c15aa07e77f447b9c",
+      "bytes": 144882
+    }
+  }
+}

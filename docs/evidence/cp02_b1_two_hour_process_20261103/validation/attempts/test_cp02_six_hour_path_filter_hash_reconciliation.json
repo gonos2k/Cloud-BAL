@@ -1,0 +1,33 @@
+{
+  "base_commit": "47998849a79ede61ce23d928b9fe56eb67934de1",
+  "change_scope": "test-only filter narrows archive-hour array rows to basename hour_<hour>_arrays.npz and asserts exact canonical six filenames; scoring code unchanged",
+  "files": {
+    "final_test": {
+      "bytes": 11204,
+      "path": "tests/test_cp02_six_hour_improvement.py",
+      "sha256": "214ff42732f5ff85c70f8cec39490c92bd919a218c3b254de459828e886a8a99"
+    },
+    "first_failure_receipt": {
+      "bytes": 2299,
+      "path": "docs/evidence/cp02_b1_two_hour_process_20261103/validation/attempts/clean_export_tests_first_fail/clean_export_tests.json",
+      "sha256": "eaecd3b1f0c80fbb53fbdba89141fb3e3e342863e3575e34f7efffeca9ca6278"
+    },
+    "first_failure_stdout": {
+      "bytes": 1349,
+      "path": "docs/evidence/cp02_b1_two_hour_process_20261103/validation/attempts/clean_export_tests_first_fail/clean_export_tests.txt",
+      "sha256": "941ed2c92c5a108b4f78737b462328736f5f4782073809f40796d9b75672bf93"
+    },
+    "original_test": {
+      "bytes": 10848,
+      "path": "docs/evidence/cp02_b1_two_hour_process_20261103/prior_versions/test_cp02_six_hour_improvement_pre_path_filter_fix.py",
+      "sha256": "ec17cb19179d66ae3369283a5fa4a7b053171caacde8a7ab9944b5eee680986c"
+    }
+  },
+  "first_failure": {
+    "clean_export_json_sha256": "eaecd3b1f0c80fbb53fbdba89141fb3e3e342863e3575e34f7efffeca9ca6278",
+    "failure": "test filter matched hour_ in ancestor NHNHOME scratch path and counted unrelated path pins",
+    "result": "168 passed, 1 failed",
+    "stdout_sha256": "941ed2c92c5a108b4f78737b462328736f5f4782073809f40796d9b75672bf93"
+  },
+  "status": "PRESERVED_BEFORE_AND_AFTER_TEST_HASHES"
+}

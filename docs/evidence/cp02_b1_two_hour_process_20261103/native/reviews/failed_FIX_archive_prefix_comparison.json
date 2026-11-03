@@ -1,0 +1,32 @@
+{
+  "case": "FIX_FAILED_DISKFULL_ATTEMPT",
+  "status": "FAIL_STOP",
+  "comparator_sha256": "85266c10a7c9228846509e753bd755caf80ef6747b3332460a298a06f68ae0ce",
+  "scope": "strict exact values/masks/metadata at 12/13/14 UTC; no tolerance",
+  "checks": [
+    {
+      "new": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/failed_FIX_diskfull/wrfout_d01_2026-08-16_12:00:00",
+      "reference": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_12:00:00",
+      "new_sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+      "reference_sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+      "all_history_values_and_metadata_exact": true
+    },
+    {
+      "new": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/failed_FIX_diskfull/wrfout_d01_2026-08-16_13:00:00",
+      "reference": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_13:00:00",
+      "new_sha256": "8b4ead8741dff7284b1de140038d85ba48a474d6b8b98e1905e10ddbac165702",
+      "reference_sha256": "8b4ead8741dff7284b1de140038d85ba48a474d6b8b98e1905e10ddbac165702",
+      "all_history_values_and_metadata_exact": true
+    }
+  ],
+  "failure": {
+    "hour": 14,
+    "type": "AssertionError",
+    "message": "('Time', 'dimension size differs')",
+    "new_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/failed_FIX_diskfull/wrfout_d01_2026-08-16_14:00:00",
+    "reference_path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_14:00:00"
+  },
+  "archive_manifest_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/failed_FIX_diskfull.manifest.json",
+  "archive_manifest_sha256": "b2a64fa6179b2d560c4028e1ff0e17ce5bf68cfd5ba74f507a74bfe2df579371",
+  "next_action": "reject original FIX run; no trace interpretation; clean rerun is separately staged"
+}

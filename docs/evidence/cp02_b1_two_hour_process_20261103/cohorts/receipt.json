@@ -1,0 +1,105 @@
+{
+  "artifacts": {
+    "README.md": {
+      "sha256": "3a0addb758c781d7a42e29e1f5e1714597f18236a927c6e8326615cef91a0eaf",
+      "size_bytes": 4510
+    },
+    "corners.csv": {
+      "sha256": "04e373790e17d2f4f5d189bdecede70e04a567ebcaab4a69b4ee8c2c37260a59",
+      "size_bytes": 4852
+    },
+    "history_samples.csv": {
+      "sha256": "4afab7cc46c71178e5057b9cff0cc99cc416a51026168100318c5b68a3b20d6d",
+      "size_bytes": 684952
+    },
+    "native_precip_reconstruction.csv": {
+      "sha256": "8dbab646c3f0ffec292c2ba2768545a04df85197f7d2e1a85ee9b5c8f8773739",
+      "size_bytes": 3181
+    },
+    "paired_scores.csv": {
+      "sha256": "ac6b491e6779901f73bbb69e062e127fac016c4065a8f0128a62d20e4cca3499",
+      "size_bytes": 6898
+    },
+    "recalc.py": {
+      "sha256": "ce09d890d941209a76f73b2c2e31cea2b5ed7461be8cab217fa0f50d7c68d9ff",
+      "size_bytes": 23308
+    },
+    "selected_points.csv": {
+      "sha256": "a712f67b8da484999f1c956eac95b00cce6ac44760862582f78941e8e3133dcd",
+      "size_bytes": 2889
+    },
+    "selection.json": {
+      "sha256": "f5cfbedce388ab3ccb852aa78837eca26ae5f2056cede9fa2a5d3b1aefd51fbc",
+      "size_bytes": 13732
+    }
+  },
+  "base_commit": "83804668a02e20eeac686d00ff5b2ff6b9a71154",
+  "canonical_native_precip_reconstruction": {
+    "all_within_1e-6_mm": true,
+    "max_abs_difference_mm": 0.0,
+    "method": "canonical RAINC+RAINNC cumulative remap then hourly differencing; RAINSH checked/excluded",
+    "rows": 16
+  },
+  "pull_request": 142,
+  "recalc_script_sha256": "ce09d890d941209a76f73b2c2e31cea2b5ed7461be8cab217fa0f50d7c68d9ff",
+  "replay_comparison": {
+    "corners.csv": {
+      "byte_identical": true,
+      "primary_sha256": "04e373790e17d2f4f5d189bdecede70e04a567ebcaab4a69b4ee8c2c37260a59",
+      "replay_sha256": "04e373790e17d2f4f5d189bdecede70e04a567ebcaab4a69b4ee8c2c37260a59"
+    },
+    "history_samples.csv": {
+      "byte_identical": true,
+      "primary_sha256": "4afab7cc46c71178e5057b9cff0cc99cc416a51026168100318c5b68a3b20d6d",
+      "replay_sha256": "4afab7cc46c71178e5057b9cff0cc99cc416a51026168100318c5b68a3b20d6d"
+    },
+    "native_precip_reconstruction.csv": {
+      "byte_identical": true,
+      "primary_sha256": "8dbab646c3f0ffec292c2ba2768545a04df85197f7d2e1a85ee9b5c8f8773739",
+      "replay_sha256": "8dbab646c3f0ffec292c2ba2768545a04df85197f7d2e1a85ee9b5c8f8773739"
+    },
+    "paired_scores.csv": {
+      "byte_identical": true,
+      "primary_sha256": "ac6b491e6779901f73bbb69e062e127fac016c4065a8f0128a62d20e4cca3499",
+      "replay_sha256": "ac6b491e6779901f73bbb69e062e127fac016c4065a8f0128a62d20e4cca3499"
+    },
+    "selected_points.csv": {
+      "byte_identical": true,
+      "primary_sha256": "a712f67b8da484999f1c956eac95b00cce6ac44760862582f78941e8e3133dcd",
+      "replay_sha256": "a712f67b8da484999f1c956eac95b00cce6ac44760862582f78941e8e3133dcd"
+    },
+    "selection.json": {
+      "byte_identical": true,
+      "primary_sha256": "f5cfbedce388ab3ccb852aa78837eca26ae5f2056cede9fa2a5d3b1aefd51fbc",
+      "replay_sha256": "f5cfbedce388ab3ccb852aa78837eca26ae5f2056cede9fa2a5d3b1aefd51fbc"
+    }
+  },
+  "runtime_receipt_pins": {
+    "FIX_history_validation": {
+      "path": "/var/tmp/cloudbal-recount-contract/docs/evidence/six_hour_improvement_20261030/runtime/history_validation.json",
+      "sha256": "100abebecbae7c9da14272803c3b3e3cb0ae800d022977308b8e692e29fe3475"
+    },
+    "FIX_normalized_receipt": {
+      "path": "/var/tmp/cloudbal-recount-contract/docs/evidence/six_hour_improvement_20261030/runtime/normalized_receipt.json",
+      "sha256": "00eddd6ac26a3a4857ea40e294256d2b32c9c9e6a2998f112000c39d5281bf5e"
+    },
+    "FIX_one_hour_comparison": {
+      "path": "/var/tmp/cloudbal-recount-contract/docs/evidence/six_hour_improvement_20261030/runtime/one_hour_comparison.json",
+      "sha256": "805f9409ee932c515f7ad8c9f9c0de0357d9854e58f8de40951bf9c70067d17d"
+    },
+    "OLD_case_receipt": {
+      "path": "/var/tmp/cloudbal-recount-contract/docs/evidence/weak_strong_balance_20261030/runtime/cases/ORIGINAL_B1_100/receipt.json",
+      "sha256": "4c084d3917825f639f1829e4f602f1469860dd94c50e4e0509a97d848a253bf5"
+    },
+    "OLD_final_receipt": {
+      "path": "/var/tmp/cloudbal-recount-contract/docs/evidence/weak_strong_balance_20261030/runtime/final_receipt.json",
+      "sha256": "4322b9de5a4490a3f874c6cdb826889a1f721185f907aa6383e07f9c113f3f58"
+    },
+    "OLD_history_validation": {
+      "path": "/var/tmp/cloudbal-recount-contract/docs/evidence/weak_strong_balance_20261030/runtime/history_validation.json",
+      "sha256": "8d912c0c05940d3cd9dfe8d84048381e7e87abab4e47741d094744f00c1eae52"
+    }
+  },
+  "same_B1_input_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+  "status": "PASS_BYTE_IDENTICAL_REPLAY"
+}

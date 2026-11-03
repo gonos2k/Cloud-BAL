@@ -1,0 +1,17 @@
+{
+  "status": "PASS_REVIEW_NOTE_CLOSED",
+  "supplemental_receipt_sha256": "32087b448a140d6af5708931f404edb45f3c5e90be3409e64b6cb7d1d45554f6",
+  "base_bundle_sha256": "a0e9fa3ebaf7dc4be258c23a40c517fc3f7dcc5157e62407cc49cedc783edce5",
+  "comparator_sha256": "85266c10a7c9228846509e753bd755caf80ef6747b3332460a298a06f68ae0ce",
+  "probe_sha256": "a60e9387f96b6aac311d68714eeb77cdd1e3f1a4486badf01c8d0d193502f836",
+  "probe_result": "PASS scalar int/float attributes, changed payload, and array byte parity",
+  "py_compile": "PASS",
+  "independent_assertions_reviewed": [
+    "int32 scalar signature differs for 3 vs 4",
+    "float32 scalar signature differs for 1.25 vs 1.5",
+    "numeric 0-D int/float serialization succeeds",
+    "modified array payload differs",
+    "array tobytes payload matches previous view serialization"
+  ],
+  "no_model_or_history_comparison_run": true
+}

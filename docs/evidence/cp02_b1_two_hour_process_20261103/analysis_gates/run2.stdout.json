@@ -1,0 +1,200 @@
+{
+  "FIX": {
+    "arm": "FIX",
+    "claim_scope": "local q/T update diagnostics only; no full process budget, column budget, pooled score, or uncapped PREVP formula replay",
+    "max_abs_q_equation_residual": 9.313184667902874e-10,
+    "max_abs_q_residual": 0.0,
+    "max_abs_t_equation_residual": 1.5258759958669543e-05,
+    "max_abs_t_residual": 0.0,
+    "outputs": {
+      "cell_steps_csv": "fix_cell_steps.csv",
+      "phase_records_csv": "fix_phase_records.csv",
+      "point_hour_process_sums_csv": "fix_point_hour_process_sums.csv",
+      "prevp_phase_counts_csv": "fix_prevp_phase_counts.csv",
+      "prevp_phase_events_csv": "fix_prevp_phase_events.csv",
+      "zero_rate_events_csv": "fix_zero_rate_events.csv"
+    },
+    "phase_record_counts": {
+      "ENTRY_CLAMPED": 224640,
+      "ENTRY_RAW": 224640,
+      "GRAUPEL_RETURN": 5760,
+      "LATENT_INPUT": 224640,
+      "POST_STEP": 224640,
+      "PREVP_FORMULA": 91968,
+      "PREVP_QR_CAP": 57151,
+      "PREVP_RAW": 91968,
+      "PREVP_SAT_CAP": 90426,
+      "PRE_UPDATE": 224640,
+      "PROCESS_RATES": 224640,
+      "SATDT": 224640,
+      "SATURATION": 224640,
+      "SNOW_RETURN": 5760,
+      "SURFACE_RETURN": 5760
+    },
+    "process_sum_scope": "sum(rate*dtcld) over observed timesteps and loops, kept separate by point, native corner, model level k, and hour; not a mass-column or area budget",
+    "residual_interpretation": "unthresholded REAL32 source-order diagnostics only; pass status validates schemas and joins, not arithmetic closure",
+    "source_pins": [
+      {
+        "name": "native_manifest",
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/native/native_provenance_manifest.json",
+        "sha256": "2544f73ec162dc1ac4da9aa3136b3d5dac2648f5204d410be2acd0425dbfb8b4"
+      },
+      {
+        "name": "cohort_receipt",
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/cohorts/receipt.json",
+        "sha256": "1858711adc90579ffebb0990d8de7721ced46eeadbbe0499b764dbda3af4f107"
+      },
+      {
+        "name": "portable_gate_mapping",
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/portable_gate_mapping_receipt.json",
+        "sha256": "5cb52fedac7346594d7ffcc30d23456f9379df5f97530f5429c4aba6617d466d"
+      },
+      {
+        "name": "native_portable_old_gate",
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/native/portable_gates/OLD_full_prefix_gate_v1.portable.json",
+        "sha256": "72ad38aafaeeb6acb268c5062eb3e50c80f952becc99b51b9a5014960562f6ef"
+      },
+      {
+        "name": "native_portable_fix_gate",
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/native/portable_gates/FIX_full_prefix_gate_v1.portable.json",
+        "sha256": "126fda2b28224073b41e8981bae23b1dcafde582f3df57f67887a2dfacbd0a6d"
+      },
+      {
+        "name": "old_compression_receipt",
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/native/capture/OLD_trace_compression_receipt.json",
+        "sha256": "585163ab93a03c4fb5e4146aac807460d1a3a8bdf78c0a8e97a7351c31f09a12"
+      },
+      {
+        "name": "fix_compression_receipt",
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/native/capture/FIX_trace_compression_receipt.json",
+        "sha256": "14efc7cba6f73bcfd1d4843b308b2c2482a8e7572e6989d051dce8ec710827ce"
+      },
+      {
+        "name": "analysis_tool",
+        "path": "/var/tmp/cloudbal-b1-two-hour/tools/cp02_b1_process_trace.py",
+        "sha256": "071021915bd3e8075c824e3626c824a1bbf5a6d37400eb6811c8fe673128dd37"
+      },
+      {
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/FIX_full_prefix_gate_v1.analyzer.json",
+        "sha256": "8b92aa2529827374fc89d16a5d0176dedc4b4b7bffd978025873dcf9c6ccb1e7"
+      },
+      {
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/cohorts/corners.csv",
+        "sha256": "04e373790e17d2f4f5d189bdecede70e04a567ebcaab4a69b4ee8c2c37260a59"
+      },
+      {
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/native/capture/raw/FIX_kdm6_trace_rank3.bits.gz",
+        "recognized_records": 2145913,
+        "sha256": "753c2168670baae19524b8632e33d91d76b86d949da84bc80ae179b6604d3c16"
+      }
+    ],
+    "status": "PASS_SCHEMA_AND_JOIN_VALIDATION",
+    "transaction_count": 224640,
+    "update_phase_record_counts": {
+      "LATENT_INPUT": 224640,
+      "POST_STEP": 224640,
+      "PRE_UPDATE": 224640,
+      "PROCESS_RATES": 224640
+    }
+  },
+  "OLD": {
+    "arm": "OLD",
+    "claim_scope": "local q/T update diagnostics only; no full process budget, column budget, pooled score, or uncapped PREVP formula replay",
+    "max_abs_q_equation_residual": 9.313225746154785e-10,
+    "max_abs_q_residual": 0.0,
+    "max_abs_t_equation_residual": 1.52587890625e-05,
+    "max_abs_t_residual": 0.0,
+    "outputs": {
+      "cell_steps_csv": "old_cell_steps.csv",
+      "phase_records_csv": "old_phase_records.csv",
+      "point_hour_process_sums_csv": "old_point_hour_process_sums.csv",
+      "prevp_phase_counts_csv": "old_prevp_phase_counts.csv",
+      "prevp_phase_events_csv": "old_prevp_phase_events.csv",
+      "zero_rate_events_csv": "old_zero_rate_events.csv"
+    },
+    "phase_record_counts": {
+      "ENTRY_CLAMPED": 224640,
+      "ENTRY_RAW": 224640,
+      "GRAUPEL_RETURN": 5760,
+      "LATENT_INPUT": 224640,
+      "POST_STEP": 224640,
+      "PREVP_FORMULA": 84277,
+      "PREVP_QR_CAP": 49910,
+      "PREVP_RAW": 84277,
+      "PREVP_SAT_CAP": 84277,
+      "PRE_UPDATE": 224640,
+      "PROCESS_RATES": 224640,
+      "SATDT": 224640,
+      "SATURATION": 224640,
+      "SNOW_RETURN": 5760,
+      "SURFACE_RETURN": 5760
+    },
+    "process_sum_scope": "sum(rate*dtcld) over observed timesteps and loops, kept separate by point, native corner, model level k, and hour; not a mass-column or area budget",
+    "residual_interpretation": "unthresholded REAL32 source-order diagnostics only; pass status validates schemas and joins, not arithmetic closure",
+    "source_pins": [
+      {
+        "name": "native_manifest",
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/native/native_provenance_manifest.json",
+        "sha256": "2544f73ec162dc1ac4da9aa3136b3d5dac2648f5204d410be2acd0425dbfb8b4"
+      },
+      {
+        "name": "cohort_receipt",
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/cohorts/receipt.json",
+        "sha256": "1858711adc90579ffebb0990d8de7721ced46eeadbbe0499b764dbda3af4f107"
+      },
+      {
+        "name": "portable_gate_mapping",
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/portable_gate_mapping_receipt.json",
+        "sha256": "5cb52fedac7346594d7ffcc30d23456f9379df5f97530f5429c4aba6617d466d"
+      },
+      {
+        "name": "native_portable_old_gate",
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/native/portable_gates/OLD_full_prefix_gate_v1.portable.json",
+        "sha256": "72ad38aafaeeb6acb268c5062eb3e50c80f952becc99b51b9a5014960562f6ef"
+      },
+      {
+        "name": "native_portable_fix_gate",
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/native/portable_gates/FIX_full_prefix_gate_v1.portable.json",
+        "sha256": "126fda2b28224073b41e8981bae23b1dcafde582f3df57f67887a2dfacbd0a6d"
+      },
+      {
+        "name": "old_compression_receipt",
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/native/capture/OLD_trace_compression_receipt.json",
+        "sha256": "585163ab93a03c4fb5e4146aac807460d1a3a8bdf78c0a8e97a7351c31f09a12"
+      },
+      {
+        "name": "fix_compression_receipt",
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/native/capture/FIX_trace_compression_receipt.json",
+        "sha256": "14efc7cba6f73bcfd1d4843b308b2c2482a8e7572e6989d051dce8ec710827ce"
+      },
+      {
+        "name": "analysis_tool",
+        "path": "/var/tmp/cloudbal-b1-two-hour/tools/cp02_b1_process_trace.py",
+        "sha256": "071021915bd3e8075c824e3626c824a1bbf5a6d37400eb6811c8fe673128dd37"
+      },
+      {
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/analysis_gates/OLD_full_prefix_gate_v1.analyzer.json",
+        "sha256": "70858f2266f3c03ee4d1a0b04f2fbc5a551c651da8e87a62dbf3b2d33549fca2"
+      },
+      {
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/cohorts/corners.csv",
+        "sha256": "04e373790e17d2f4f5d189bdecede70e04a567ebcaab4a69b4ee8c2c37260a59"
+      },
+      {
+        "path": "docs/evidence/cp02_b1_two_hour_process_20261103/native/capture/raw/OLD_kdm6_trace_rank3.bits.gz",
+        "recognized_records": 2117141,
+        "sha256": "9bc68ad9da6c2324bc8674079f49f10584fa388f028d9ce8e980b5d387c5c773"
+      }
+    ],
+    "status": "PASS_SCHEMA_AND_JOIN_VALIDATION",
+    "transaction_count": 224640,
+    "update_phase_record_counts": {
+      "LATENT_INPUT": 224640,
+      "POST_STEP": 224640,
+      "PRE_UPDATE": 224640,
+      "PROCESS_RATES": 224640
+    }
+  },
+  "comparison_scope": "arms are summarized independently; no pooled score or cross-arm mean",
+  "status": "PASS_BOTH_ARMS"
+}

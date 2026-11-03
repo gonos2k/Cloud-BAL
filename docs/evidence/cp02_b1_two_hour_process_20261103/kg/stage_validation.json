@@ -1,0 +1,441 @@
+{
+  "audited_at_utc": "2026-11-03T08:56:43.444914+00:00",
+  "baseline_path": "docs/evidence/cp02_b1_two_hour_process_20261103/kg/baseline.json",
+  "baseline_sha256": "20c558417cca579388dce5844085a39d8c54390f312126be202c3dfd6eaf26a3",
+  "checks": {
+    "all_hash_only_current": {
+      "detail": [],
+      "pass": true
+    },
+    "baseline_totals": {
+      "detail": 232,
+      "pass": true
+    },
+    "extraction_limits_present": {
+      "detail": [
+        "Only the eight listed frozen Python sources (analyzer, component deriver, plotter, their selected tests, the six-hour path test, and KG helper) are structurally extracted.",
+        "All other new evidence, including native source copies and compressed traces, is hash-only.",
+        "Manifest updates are selected-path-only; no corpus scan or prune occurs.",
+        "Fortran cross-file CALL extraction is partial.",
+        "Graph freshness does not establish runtime behavior, physical assumptions, or scientific approval."
+      ],
+      "pass": true
+    },
+    "freeze_status": {
+      "detail": {
+        "freeze_id": "ea0097adb497dd4b",
+        "review_status": "GO",
+        "status": "FROZEN"
+      },
+      "pass": true
+    },
+    "hash_only_count": {
+      "detail": 210,
+      "pass": true
+    },
+    "hash_only_lock_receipt_exact": {
+      "detail": {
+        "lock": 210,
+        "receipt": 210
+      },
+      "pass": true
+    },
+    "independent_review_pin": {
+      "detail": "da5dbda46c4deab2467de004d81b3fed6a2c62c925dc4bc5bd55434b5b610ab8",
+      "pass": true
+    },
+    "lock_receipt_link": {
+      "detail": "02da3504e5e11a39ed40ca34e57e9fddab8119b3a585fc367057309f3186036e",
+      "pass": true
+    },
+    "maintained_wiki_unchanged": {
+      "detail": [],
+      "pass": true
+    },
+    "manifest_scope_Cloud-BAL": {
+      "detail": {
+        "changed_count": 8,
+        "missing_selected": [],
+        "selected_count": 8,
+        "unexpected": []
+      },
+      "pass": true
+    },
+    "manifest_scope_KLAPS50": {
+      "detail": {
+        "changed_count": 8,
+        "missing_selected": [],
+        "selected_count": 8,
+        "unexpected": []
+      },
+      "pass": true
+    },
+    "new_snapshot_absent_Cloud-BAL": {
+      "detail": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-11-03-b1-two-hour",
+      "pass": true
+    },
+    "new_snapshot_absent_KLAPS50": {
+      "detail": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-11-03-b1-two-hour",
+      "pass": true
+    },
+    "pin_baseline_sha": {
+      "detail": "20c558417cca579388dce5844085a39d8c54390f312126be202c3dfd6eaf26a3",
+      "pass": true
+    },
+    "pin_lock_sha": {
+      "detail": "02da3504e5e11a39ed40ca34e57e9fddab8119b3a585fc367057309f3186036e",
+      "pass": true
+    },
+    "pin_receipt_sha": {
+      "detail": "2eb88dcdfd18e3f67abd5e96f25d3875e9d6be74d846d7b5d40ceeb6c6c1bb0f",
+      "pass": true
+    },
+    "receipt_stage_only": {
+      "detail": "STAGED_ONLY_NO_MAINTAINED_WRITES",
+      "pass": true
+    },
+    "root_active_trio_Cloud-BAL": {
+      "detail": {
+        "GRAPH_REPORT.md": "aa727ecf20bb5872af9cc52d35d4dfcda07ae248ac03d198f950c0e3a8b02d4f",
+        "graph.json": "a905da739a79e1129b42dca90c55a98814e7c1f61ed36a05a2461318af81e257",
+        "manifest.json": "0b4682e0695c4d32db466a194f2d5656d397c7a11c39177883e33234d73ed2ad"
+      },
+      "pass": true
+    },
+    "root_active_trio_KLAPS50": {
+      "detail": {
+        "GRAPH_REPORT.md": "9871e5e84ba383cc6f2ca384a75ef46cb06ff2374a4c0939b1c6f076b6e2b30a",
+        "graph.json": "a304a349a7f793e59426cd74583a74511189ce7f339e35e8acbe0fcfde62a8ba",
+        "manifest.json": "5839c8fb2568cb3e6be4c176b70057b6582f874c53b22230d1917d1df223d10f"
+      },
+      "pass": true
+    },
+    "root_all_snapshots_Cloud-BAL": {
+      "detail": {
+        "examples": [],
+        "mismatch_count": 0
+      },
+      "pass": true
+    },
+    "root_all_snapshots_KLAPS50": {
+      "detail": {
+        "examples": [],
+        "mismatch_count": 0
+      },
+      "pass": true
+    },
+    "root_counts": {
+      "detail": {
+        "Cloud-BAL": {
+          "head": "f837bad0bdf1050a34975d93b178b7dee4420094",
+          "porcelain_count": 718,
+          "porcelain_sha256": "fd50b41cc0f95e24891ce217c22775cf85299ff3c8b0a8ed1b9dac44f124b6d2",
+          "snapshot_count": 118,
+          "snapshot_file_count": 443,
+          "snapshot_mismatches": []
+        },
+        "KLAPS50": {
+          "head": "d79b97ea2f4d90ea439ef129cabf014ac73464f1",
+          "porcelain_count": 52,
+          "porcelain_sha256": "1a1413308efe42ec56d6b79c224a1865d1f1788dec8437c0f512631459bd3068",
+          "snapshot_count": 114,
+          "snapshot_file_count": 421,
+          "snapshot_mismatches": []
+        }
+      },
+      "pass": true
+    },
+    "root_git_state_Cloud-BAL": {
+      "detail": {
+        "head": "f837bad0bdf1050a34975d93b178b7dee4420094",
+        "porcelain_count": 718,
+        "porcelain_sha256": "fd50b41cc0f95e24891ce217c22775cf85299ff3c8b0a8ed1b9dac44f124b6d2",
+        "snapshot_count": 118,
+        "snapshot_file_count": 443,
+        "snapshot_mismatches": []
+      },
+      "pass": true
+    },
+    "root_git_state_KLAPS50": {
+      "detail": {
+        "head": "d79b97ea2f4d90ea439ef129cabf014ac73464f1",
+        "porcelain_count": 52,
+        "porcelain_sha256": "1a1413308efe42ec56d6b79c224a1865d1f1788dec8437c0f512631459bd3068",
+        "snapshot_count": 114,
+        "snapshot_file_count": 421,
+        "snapshot_mismatches": []
+      },
+      "pass": true
+    },
+    "source_docs/evidence/cp02_b1_two_hour_process_20261103/kg/prepare_kg.py": {
+      "detail": [
+        "01341c8b7d204999d78eb1e727ccfd41abaa8be2876f0d9272dbed71186989df",
+        "01341c8b7d204999d78eb1e727ccfd41abaa8be2876f0d9272dbed71186989df",
+        "01341c8b7d204999d78eb1e727ccfd41abaa8be2876f0d9272dbed71186989df"
+      ],
+      "pass": true
+    },
+    "source_scope": {
+      "detail": [
+        "docs/evidence/cp02_b1_two_hour_process_20261103/kg/prepare_kg.py",
+        "tests/test_cp02_b1_process_trace.py",
+        "tests/test_cp02_six_hour_improvement.py",
+        "tests/test_derive_cp02_b1_components.py",
+        "tests/test_plot_cp02_b1_process.py",
+        "tools/cp02_b1_process_trace.py",
+        "tools/derive_cp02_b1_components.py",
+        "tools/plot_cp02_b1_process.py"
+      ],
+      "pass": true
+    },
+    "source_tests/test_cp02_b1_process_trace.py": {
+      "detail": [
+        "9c416e42169bcb29b43859550467917d428d3e04b387a8300d5855734a664ebf",
+        "9c416e42169bcb29b43859550467917d428d3e04b387a8300d5855734a664ebf",
+        "9c416e42169bcb29b43859550467917d428d3e04b387a8300d5855734a664ebf"
+      ],
+      "pass": true
+    },
+    "source_tests/test_cp02_six_hour_improvement.py": {
+      "detail": [
+        "214ff42732f5ff85c70f8cec39490c92bd919a218c3b254de459828e886a8a99",
+        "214ff42732f5ff85c70f8cec39490c92bd919a218c3b254de459828e886a8a99",
+        "214ff42732f5ff85c70f8cec39490c92bd919a218c3b254de459828e886a8a99"
+      ],
+      "pass": true
+    },
+    "source_tests/test_derive_cp02_b1_components.py": {
+      "detail": [
+        "1f1f134f905503d6c1d96ef199f6986d3f7fa02155ea9474e3528616375a391c",
+        "1f1f134f905503d6c1d96ef199f6986d3f7fa02155ea9474e3528616375a391c",
+        "1f1f134f905503d6c1d96ef199f6986d3f7fa02155ea9474e3528616375a391c"
+      ],
+      "pass": true
+    },
+    "source_tests/test_plot_cp02_b1_process.py": {
+      "detail": [
+        "b507102b035e6bdd38e7f87090e0ebcab18b09c364b405c6da3ea9aa0152e193",
+        "b507102b035e6bdd38e7f87090e0ebcab18b09c364b405c6da3ea9aa0152e193",
+        "b507102b035e6bdd38e7f87090e0ebcab18b09c364b405c6da3ea9aa0152e193"
+      ],
+      "pass": true
+    },
+    "source_tools/cp02_b1_process_trace.py": {
+      "detail": [
+        "071021915bd3e8075c824e3626c824a1bbf5a6d37400eb6811c8fe673128dd37",
+        "071021915bd3e8075c824e3626c824a1bbf5a6d37400eb6811c8fe673128dd37",
+        "071021915bd3e8075c824e3626c824a1bbf5a6d37400eb6811c8fe673128dd37"
+      ],
+      "pass": true
+    },
+    "source_tools/derive_cp02_b1_components.py": {
+      "detail": [
+        "26d3746f71af569698e3b858b7ef64d29ace416eceb91748fbe2cb88e24a92bf",
+        "26d3746f71af569698e3b858b7ef64d29ace416eceb91748fbe2cb88e24a92bf",
+        "26d3746f71af569698e3b858b7ef64d29ace416eceb91748fbe2cb88e24a92bf"
+      ],
+      "pass": true
+    },
+    "source_tools/plot_cp02_b1_process.py": {
+      "detail": [
+        "30d340eac848fa1e35034fb4f17e4a7228cc9341c95608d2b757c58b906732b1",
+        "30d340eac848fa1e35034fb4f17e4a7228cc9341c95608d2b757c58b906732b1",
+        "30d340eac848fa1e35034fb4f17e4a7228cc9341c95608d2b757c58b906732b1"
+      ],
+      "pass": true
+    },
+    "stage_graph_Cloud-BAL": {
+      "detail": {
+        "expected": {
+          "GRAPH_REPORT.md": "e6516574a0db261f0180af1a38f0babe7070a31b4685d79fefcdb85b43bc7aed",
+          "graph.json": "0619d08587d6173892f7c36bdc7cb3ab673ec5e80055047fa4725c9ec8a48c0f",
+          "manifest.json": "c7b1afc3b6e0a74339a341c89bf61581aab7defd792b60ea99ed9dbfa5b42885"
+        },
+        "snapshot_trio": {
+          "GRAPH_REPORT.md": "e6516574a0db261f0180af1a38f0babe7070a31b4685d79fefcdb85b43bc7aed",
+          "graph.json": "0619d08587d6173892f7c36bdc7cb3ab673ec5e80055047fa4725c9ec8a48c0f",
+          "manifest.json": "c7b1afc3b6e0a74339a341c89bf61581aab7defd792b60ea99ed9dbfa5b42885"
+        },
+        "stats": {
+          "communities": 1552,
+          "dangling": 0,
+          "duplicate_edges": 0,
+          "edges": 31394,
+          "hyperedges": 0,
+          "missing_prior_node_ids": 0,
+          "nodes": 17514,
+          "selfloops": 0,
+          "unique_nodes": 17514
+        },
+        "trio": {
+          "GRAPH_REPORT.md": "e6516574a0db261f0180af1a38f0babe7070a31b4685d79fefcdb85b43bc7aed",
+          "graph.json": "0619d08587d6173892f7c36bdc7cb3ab673ec5e80055047fa4725c9ec8a48c0f",
+          "manifest.json": "c7b1afc3b6e0a74339a341c89bf61581aab7defd792b60ea99ed9dbfa5b42885"
+        }
+      },
+      "pass": true
+    },
+    "stage_graph_KLAPS50": {
+      "detail": {
+        "expected": {
+          "GRAPH_REPORT.md": "988b321248675ffc154300657dbc0a4564d62e666395d507b732d094626d11b6",
+          "graph.json": "8360c6b5a8f7ac76cdc03feee8d7cc8de236dc9a91300d42d1c080639db4d091",
+          "manifest.json": "ef3654b212d9592349db6c2954d74f39d39114653131d5abb87d92514a66c976"
+        },
+        "snapshot_trio": {
+          "GRAPH_REPORT.md": "988b321248675ffc154300657dbc0a4564d62e666395d507b732d094626d11b6",
+          "graph.json": "8360c6b5a8f7ac76cdc03feee8d7cc8de236dc9a91300d42d1c080639db4d091",
+          "manifest.json": "ef3654b212d9592349db6c2954d74f39d39114653131d5abb87d92514a66c976"
+        },
+        "stats": {
+          "communities": 3504,
+          "dangling": 0,
+          "duplicate_edges": 0,
+          "edges": 89897,
+          "hyperedges": 0,
+          "missing_prior_node_ids": 0,
+          "nodes": 43342,
+          "selfloops": 0,
+          "unique_nodes": 43342
+        },
+        "trio": {
+          "GRAPH_REPORT.md": "988b321248675ffc154300657dbc0a4564d62e666395d507b732d094626d11b6",
+          "graph.json": "8360c6b5a8f7ac76cdc03feee8d7cc8de236dc9a91300d42d1c080639db4d091",
+          "manifest.json": "ef3654b212d9592349db6c2954d74f39d39114653131d5abb87d92514a66c976"
+        }
+      },
+      "pass": true
+    },
+    "staged_wiki_hashes": {
+      "detail": {
+        "actual": {
+          "graph-report-cloud-bal.md": "e6516574a0db261f0180af1a38f0babe7070a31b4685d79fefcdb85b43bc7aed",
+          "graph-report-klaps50.md": "988b321248675ffc154300657dbc0a4564d62e666395d507b732d094626d11b6",
+          "graph-report.md": "b5612ff46561a1cc1a65059bdb402ee1835789aadce6b7a3b8c38f102ef47e5d",
+          "index.md": "95dda175ab5d37052d17b341c46fd9cb8acf30a6728d34b5206bbcbe3218339d",
+          "log.md": "5846eb32ddb69b8f3c4f1d9d03e076f1fbb3727a26c03be314cb5b73b822626e"
+        },
+        "expected": {
+          "graph-report-cloud-bal.md": "e6516574a0db261f0180af1a38f0babe7070a31b4685d79fefcdb85b43bc7aed",
+          "graph-report-klaps50.md": "988b321248675ffc154300657dbc0a4564d62e666395d507b732d094626d11b6",
+          "graph-report.md": "b5612ff46561a1cc1a65059bdb402ee1835789aadce6b7a3b8c38f102ef47e5d",
+          "index.md": "95dda175ab5d37052d17b341c46fd9cb8acf30a6728d34b5206bbcbe3218339d",
+          "log.md": "5846eb32ddb69b8f3c4f1d9d03e076f1fbb3727a26c03be314cb5b73b822626e"
+        }
+      },
+      "pass": true
+    },
+    "target_count": {
+      "detail": [
+        "Cloud-BAL/graphify-out/GRAPH_REPORT.md",
+        "Cloud-BAL/graphify-out/graph.json",
+        "Cloud-BAL/graphify-out/manifest.json",
+        "Cloud-BAL/graphify-out/2026-11-03-b1-two-hour/(snapshot directory)",
+        "KLAPS50/graphify-out/GRAPH_REPORT.md",
+        "KLAPS50/graphify-out/graph.json",
+        "KLAPS50/graphify-out/manifest.json",
+        "KLAPS50/graphify-out/2026-11-03-b1-two-hour/(snapshot directory)",
+        "wiki/graph-report-cloud-bal.md",
+        "wiki/graph-report-klaps50.md",
+        "wiki/graph-report.md",
+        "wiki/index.md",
+        "wiki/log.md"
+      ],
+      "pass": true
+    },
+    "wiki_report_mirrors": {
+      "detail": {
+        "graph-report-cloud-bal.md": "e6516574a0db261f0180af1a38f0babe7070a31b4685d79fefcdb85b43bc7aed",
+        "graph-report-klaps50.md": "988b321248675ffc154300657dbc0a4564d62e666395d507b732d094626d11b6"
+      },
+      "pass": true
+    }
+  },
+  "failures": [],
+  "freeze_id": "ea0097adb497dd4b",
+  "hash_only_pin_count": 210,
+  "limitations": [
+    "Only the eight frozen Python sources are structurally extracted; Fortran cross-file extraction remains partial.",
+    "The 210 hash-only inputs, including compressed native traces, are pinned by SHA-256 without semantic extraction.",
+    "Graph freshness or graph statistics do not establish runtime correctness or scientific validity.",
+    "Validation covers the isolated stage only; no publication was performed or authorized."
+  ],
+  "maintained_root_checks": {
+    "Cloud-BAL": {
+      "head": "f837bad0bdf1050a34975d93b178b7dee4420094",
+      "porcelain_count": 718,
+      "porcelain_sha256": "fd50b41cc0f95e24891ce217c22775cf85299ff3c8b0a8ed1b9dac44f124b6d2",
+      "snapshot_count": 118,
+      "snapshot_file_count": 443,
+      "snapshot_mismatches": []
+    },
+    "KLAPS50": {
+      "head": "d79b97ea2f4d90ea439ef129cabf014ac73464f1",
+      "porcelain_count": 52,
+      "porcelain_sha256": "1a1413308efe42ec56d6b79c224a1865d1f1788dec8437c0f512631459bd3068",
+      "snapshot_count": 114,
+      "snapshot_file_count": 421,
+      "snapshot_mismatches": []
+    }
+  },
+  "maintained_roots_written": false,
+  "maintained_snapshot_count": 232,
+  "maintained_snapshot_file_count": 864,
+  "reviewed_source_commit": "47998849a79ede61ce23d928b9fe56eb67934de1",
+  "schema": "independent-kg-stage-validation-v1",
+  "selection_lock_path": "docs/evidence/cp02_b1_two_hour_process_20261103/kg/selection_lock.json",
+  "selection_lock_sha256": "02da3504e5e11a39ed40ca34e57e9fddab8119b3a585fc367057309f3186036e",
+  "snapshot_preservation": {
+    "Cloud-BAL": 118,
+    "KLAPS50": 114,
+    "all_prior_snapshot_file_hashes_match": true,
+    "expected_prior_snapshots": 232,
+    "new_snapshot_present_in_maintained_roots": false
+  },
+  "source_pin_count": 8,
+  "stage": "/var/tmp/b1_two_hour_kg_20261103/stage-ea0097adb497dd4b",
+  "stage_receipt_path": "docs/evidence/cp02_b1_two_hour_process_20261103/kg/stage_receipt.json",
+  "stage_receipt_sha256": "2eb88dcdfd18e3f67abd5e96f25d3875e9d6be74d846d7b5d40ceeb6c6c1bb0f",
+  "staged_graph_stats": {
+    "Cloud-BAL": {
+      "communities": 1552,
+      "dangling": 0,
+      "duplicate_edges": 0,
+      "edges": 31394,
+      "hyperedges": 0,
+      "missing_prior_node_ids": 0,
+      "nodes": 17514,
+      "selfloops": 0,
+      "unique_nodes": 17514
+    },
+    "KLAPS50": {
+      "communities": 3504,
+      "dangling": 0,
+      "duplicate_edges": 0,
+      "edges": 89897,
+      "hyperedges": 0,
+      "missing_prior_node_ids": 0,
+      "nodes": 43342,
+      "selfloops": 0,
+      "unique_nodes": 43342
+    }
+  },
+  "status": "PASS_STAGED_ONLY",
+  "target_count": 13,
+  "targets": [
+    "Cloud-BAL/graphify-out/GRAPH_REPORT.md",
+    "Cloud-BAL/graphify-out/graph.json",
+    "Cloud-BAL/graphify-out/manifest.json",
+    "Cloud-BAL/graphify-out/2026-11-03-b1-two-hour/(snapshot directory)",
+    "KLAPS50/graphify-out/GRAPH_REPORT.md",
+    "KLAPS50/graphify-out/graph.json",
+    "KLAPS50/graphify-out/manifest.json",
+    "KLAPS50/graphify-out/2026-11-03-b1-two-hour/(snapshot directory)",
+    "wiki/graph-report-cloud-bal.md",
+    "wiki/graph-report-klaps50.md",
+    "wiki/graph-report.md",
+    "wiki/index.md",
+    "wiki/log.md"
+  ],
+  "wiki_mirror_files_unchanged": 5
+}

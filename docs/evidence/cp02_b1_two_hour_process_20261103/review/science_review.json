@@ -1,0 +1,281 @@
+{
+  "status": "INDEPENDENT_SCIENCE_REVIEW_COMPLETE_OBSERVATION_ONLY",
+  "scope": "Independent bounded review of selected-cell KDM6 traces from the same-B1 OLD/FIX two-hour runs. This review did not change the model, parser, run, or raw payloads.",
+  "provenance": {
+    "same_B1_wrfinput_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+    "strict_history_and_trace_gates": {
+      "OLD": {
+        "path": "/var/tmp/b1-two-hour-probe-20261103/cases/OLD/full_prefix_gate_v1.json",
+        "sha256": "8c7341934910f908c64c83990504df9a2a82fdcc35a76a209f2db49f41dc6c86",
+        "status": "PASS_FULL_PREFIX",
+        "exe_sha256": "916bac01f950c4c900947a264767b573d0735413c0d2883ff4f13eead4729cc1",
+        "decompressed_trace_sha256": "ad62a98072b25cc2f6cadfaaf31e5111ab698985d446c69b398303bcfbe075a8",
+        "compressed_trace_sha256": "9bc68ad9da6c2324bc8674079f49f10584fa388f028d9ce8e980b5d387c5c773"
+      },
+      "FIX": {
+        "path": "/var/tmp/b1-two-hour-probe-20261103/cases/FIX/full_prefix_gate_v1.json",
+        "sha256": "fad38282473f00fabe1ca5e4fe54ffba3b8939d04062ddc5edb36d262cea49a6",
+        "status": "PASS_FULL_PREFIX",
+        "exe_sha256": "149ce39b6b79a5c296aee96f6d6caa3b51e18e6b91ef1935718339d3b4fe658c",
+        "decompressed_trace_sha256": "0421252d30c2e7a755124f1835263e90b7fd9b4340dc5e73dabdfd00fd049c13",
+        "compressed_trace_sha256": "753c2168670baae19524b8632e33d91d76b86d949da84bc80ae179b6604d3c16"
+      }
+    },
+    "instrumented_source_sha256": {
+      "BASE_OLD": "b3a7f22c5929eab80784b2b2963e34798811b16c0f9a433601b16498f52aae02",
+      "FIX": "bd4e0a021f770daf0fbbdedfa3f07b964638edac5b3fb1b1f97dbe4826b72e90"
+    },
+    "candidate_patch_sha256": "94f109e624aa0b3b25689db20b1ac1acb4122920288d3765499147ed385fea3e",
+    "analysis_summary_sha256": {
+      "OLD": "3cb5b9cc289e34c6f9e88c0e050a3535d8e67041f72f7c253135f96b4580e9fa",
+      "FIX": "dacbd3b3604033051daff68af0ba633dfdaf6b0f40c7dc5597b7e6e00e8304ff"
+    },
+    "trace_scope": {
+      "native_cells": 16,
+      "levels_per_cell": 39,
+      "itimestep": [
+        1,
+        360
+      ],
+      "time_step_seconds": 20,
+      "phase_update_rows_per_arm": 224640,
+      "transaction_key": "rank, call_id, itimestep, loop, j, i, k"
+    }
+  },
+  "independent_method": {
+    "script": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/analysis_scratch/independent_trace_review.py",
+    "script_sha256": "f6ae00a967b5a4265501530bc9df142d0cb759dc65ee64ce87d7221aa45bd673",
+    "result": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/analysis_scratch/independent_trace_review.json",
+    "result_sha256": "a19808ea25db4a70103548a433aaf234ea6245ba16ab6d600783eebde50069a0",
+    "method": "Custom gzip streaming/token reader, independent of maintained analyzer. Paired logged phases on the full transaction key; decoded signed int32 REAL32 and int64 REAL64 transfer words. Cross-checked zero-event counts against run1 summary CSVs.",
+    "duplicate_phase_keys": {
+      "OLD": {},
+      "FIX": {}
+    }
+  },
+  "observations": {
+    "source_difference": {
+      "BASE_OLD": "Instrumented source line 1849 has unconditional ELSE, followed at 1850 by MIN(prevp,satdt/2).",
+      "FIX": "Instrumented source line 1849 has ELSE IF (prevp.ne.0.), so exact zero bypasses that MIN.",
+      "bounded_read": "Observed OLD zero raw events with negative satdt become negative at SAT_CAP; FIX exact-zero events remain zero. This matches the source branch difference, without claiming a precipitation-score or full-budget effect."
+    },
+    "exact_zero_events_by_point_and_hour": {
+      "OLD": {
+        "P01_13Z": {
+          "exact_zero_PREVP_RAW_events": 143,
+          "negative_PREVP_SAT_CAP_events": 143,
+          "negative_final_PROCESS_RATES_PREVP_events": 143,
+          "negative_SAT_CAP_itimestep_min": 1,
+          "negative_SAT_CAP_itimestep_max": 174,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": -5.5956237026721707e-11,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        },
+        "P01_14Z": {
+          "exact_zero_PREVP_RAW_events": 47,
+          "negative_PREVP_SAT_CAP_events": 47,
+          "negative_final_PROCESS_RATES_PREVP_events": 47,
+          "negative_SAT_CAP_itimestep_min": 185,
+          "negative_SAT_CAP_itimestep_max": 355,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": -3.8509306950297714e-11,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        },
+        "P02_13Z": {
+          "exact_zero_PREVP_RAW_events": 123,
+          "negative_PREVP_SAT_CAP_events": 121,
+          "negative_final_PROCESS_RATES_PREVP_events": 121,
+          "negative_SAT_CAP_itimestep_min": 1,
+          "negative_SAT_CAP_itimestep_max": 179,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": -0.00046656748983983355,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        },
+        "P02_14Z": {
+          "exact_zero_PREVP_RAW_events": 98,
+          "negative_PREVP_SAT_CAP_events": 93,
+          "negative_final_PROCESS_RATES_PREVP_events": 93,
+          "negative_SAT_CAP_itimestep_min": 201,
+          "negative_SAT_CAP_itimestep_max": 360,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": -1.020227212664848e-11,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        },
+        "P03_13Z": {
+          "exact_zero_PREVP_RAW_events": 473,
+          "negative_PREVP_SAT_CAP_events": 466,
+          "negative_final_PROCESS_RATES_PREVP_events": 466,
+          "negative_SAT_CAP_itimestep_min": 1,
+          "negative_SAT_CAP_itimestep_max": 180,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": -8.00072851223117e-10,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        },
+        "P03_14Z": {
+          "exact_zero_PREVP_RAW_events": 64,
+          "negative_PREVP_SAT_CAP_events": 64,
+          "negative_final_PROCESS_RATES_PREVP_events": 64,
+          "negative_SAT_CAP_itimestep_min": 181,
+          "negative_SAT_CAP_itimestep_max": 360,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": -9.775881309977596e-12,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        },
+        "P04_13Z": {
+          "exact_zero_PREVP_RAW_events": 183,
+          "negative_PREVP_SAT_CAP_events": 56,
+          "negative_final_PROCESS_RATES_PREVP_events": 56,
+          "negative_SAT_CAP_itimestep_min": 1,
+          "negative_SAT_CAP_itimestep_max": 179,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": -0.0002615593395120959,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        },
+        "P04_14Z": {
+          "exact_zero_PREVP_RAW_events": 54,
+          "negative_PREVP_SAT_CAP_events": 35,
+          "negative_final_PROCESS_RATES_PREVP_events": 35,
+          "negative_SAT_CAP_itimestep_min": 181,
+          "negative_SAT_CAP_itimestep_max": 307,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": -4.481375563300477e-11,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        }
+      },
+      "FIX": {
+        "P01_13Z": {
+          "exact_zero_PREVP_RAW_events": 253,
+          "negative_PREVP_SAT_CAP_events": 0,
+          "negative_final_PROCESS_RATES_PREVP_events": 0,
+          "negative_SAT_CAP_itimestep_min": null,
+          "negative_SAT_CAP_itimestep_max": null,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": 0.0,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        },
+        "P01_14Z": {
+          "exact_zero_PREVP_RAW_events": 26,
+          "negative_PREVP_SAT_CAP_events": 0,
+          "negative_final_PROCESS_RATES_PREVP_events": 0,
+          "negative_SAT_CAP_itimestep_min": null,
+          "negative_SAT_CAP_itimestep_max": null,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": 0.0,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        },
+        "P02_13Z": {
+          "exact_zero_PREVP_RAW_events": 302,
+          "negative_PREVP_SAT_CAP_events": 0,
+          "negative_final_PROCESS_RATES_PREVP_events": 0,
+          "negative_SAT_CAP_itimestep_min": null,
+          "negative_SAT_CAP_itimestep_max": null,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": 0.0,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        },
+        "P02_14Z": {
+          "exact_zero_PREVP_RAW_events": 18,
+          "negative_PREVP_SAT_CAP_events": 0,
+          "negative_final_PROCESS_RATES_PREVP_events": 0,
+          "negative_SAT_CAP_itimestep_min": null,
+          "negative_SAT_CAP_itimestep_max": null,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": 0.0,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        },
+        "P03_13Z": {
+          "exact_zero_PREVP_RAW_events": 633,
+          "negative_PREVP_SAT_CAP_events": 0,
+          "negative_final_PROCESS_RATES_PREVP_events": 0,
+          "negative_SAT_CAP_itimestep_min": null,
+          "negative_SAT_CAP_itimestep_max": null,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": 0.0,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        },
+        "P03_14Z": {
+          "exact_zero_PREVP_RAW_events": 79,
+          "negative_PREVP_SAT_CAP_events": 0,
+          "negative_final_PROCESS_RATES_PREVP_events": 0,
+          "negative_SAT_CAP_itimestep_min": null,
+          "negative_SAT_CAP_itimestep_max": null,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": 0.0,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        },
+        "P04_13Z": {
+          "exact_zero_PREVP_RAW_events": 178,
+          "negative_PREVP_SAT_CAP_events": 0,
+          "negative_final_PROCESS_RATES_PREVP_events": 0,
+          "negative_SAT_CAP_itimestep_min": null,
+          "negative_SAT_CAP_itimestep_max": null,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": 0.0,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        },
+        "P04_14Z": {
+          "exact_zero_PREVP_RAW_events": 53,
+          "negative_PREVP_SAT_CAP_events": 0,
+          "negative_final_PROCESS_RATES_PREVP_events": 0,
+          "negative_SAT_CAP_itimestep_min": null,
+          "negative_SAT_CAP_itimestep_max": null,
+          "sum_final_PROCESS_PREVP_times_dtcld_over_event_records": 0.0,
+          "sum_scope": "sum across recorded levels/corners/transactions; not a physical column or domain budget"
+        }
+      }
+    },
+    "arm_totals": {
+      "OLD": {
+        "raw_zero": 1185,
+        "negative_sat_cap": 1025,
+        "negative_final_process": 1025,
+        "final_process_zero": 160,
+        "negative_cap_itimestep_minmax": [
+          1,
+          360
+        ]
+      },
+      "FIX": {
+        "raw_zero": 1542,
+        "negative_sat_cap": 0,
+        "negative_final_process": 0,
+        "final_process_zero": 1542,
+        "negative_cap_itimestep_minmax": [
+          null,
+          null
+        ]
+      }
+    },
+    "number_moment_observations": {
+      "OLD": "All 1,185 exact-zero PREVP_RAW rows also had zero formula PREVP, nrs=0, REAL64 n0r=0.",
+      "FIX": "Of 1,542 exact-zero PREVP_RAW rows, 1,531 had nrs=0 and n0r=0. Eleven had tiny positive nrs (1.0930e-42 to 4.3660e-35) and n0r (1.3389e-33 to 5.3483e-26), captured RH 0.8480 to 0.9116, fac_evap=1; their formula and raw PREVP words were signed zero.",
+      "limit": "The eleven rows do not establish why formula PREVP is zero. Formula operands are omitted from the trace; no initializer, underflow, or PSD mechanism is inferred."
+    },
+    "local_q_T_equation_replay": {
+      "equations": "q_post = q_pre + REAL32(work2*dtcld); T_post = T_pre - REAL32(REAL32(xlwork2/cpm)*dtcld).",
+      "OLD": {
+        "matched_zero_raw_updates": 1185,
+        "max_q_REAL32_replay_residual": 0.0,
+        "max_T_REAL32_replay_residual": 0.0
+      },
+      "FIX": {
+        "matched_zero_raw_updates": 1542,
+        "max_q_REAL32_replay_residual": 0.0,
+        "max_T_REAL32_replay_residual": 0.0
+      },
+      "interpretation": "All matched zero-raw event updates replay exactly at REAL32 precision. This checks local state arithmetic; it does not isolate process causality or establish a full budget."
+    },
+    "qrs_zero_and_raw_prevp_negative_event_count": {
+      "OLD": 0,
+      "FIX": 0
+    },
+    "official_analyzer_crosscheck": {
+      "OLD": {
+        "transaction_count": 224640,
+        "max_abs_q_equation_residual": 9.313225746154785e-10,
+        "max_abs_T_equation_residual": 1.52587890625e-05,
+        "max_abs_q_source_order_residual": 0.0,
+        "max_abs_T_source_order_residual": 0.0
+      },
+      "FIX": {
+        "transaction_count": 224640,
+        "max_abs_q_equation_residual": 9.313184667902874e-10,
+        "max_abs_T_equation_residual": 1.5258759958669543e-05,
+        "max_abs_q_source_order_residual": 0.0,
+        "max_abs_T_source_order_residual": 0.0
+      }
+    }
+  },
+  "limits": [
+    "Four post hoc points with four native corners each; no pooled performance inference.",
+    "Transaction sums cover levels/corners and are not mass-column, water, or energy budgets.",
+    "The logged PREVP_FORMULA omits terms needed to replay the complete expression.",
+    "No upstream QNRAIN initialization or general KDM6 policy is established by these runs.",
+    "No CSI change, score improvement, precipitation causality, candidate selection, or production approval is claimed."
+  ]
+}

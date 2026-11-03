@@ -1,0 +1,32 @@
+{
+  "status": "PASS_REVIEW_READY_NO_LAUNCH",
+  "review_bundle_sha256": "a0e9fa3ebaf7dc4be258c23a40c517fc3f7dcc5157e62407cc49cedc783edce5",
+  "runner_sha256": "a8e480d3eb6759fb0c12c5da10453fe7e39ec7a497967f39e79d6ab58af31acb",
+  "history_comparator_sha256": "6763b28635afbabc8e88e52ede2fc79b7afb97318b410a93337442742d086882",
+  "bundle_hashes_all_match": true,
+  "proc_scope_probe_sha256": "c887aed9e333fe3bb3fa1fe5b57eabbd45ce4bb1f18928b2ad3249068b2f7201",
+  "proc_scope_probe_status": "PASS",
+  "runner_findings": {
+    "filters_exact_resolved_cwd_and_exe": true,
+    "rank_pid_key_retained": true,
+    "requires_eight_observed_pids": true,
+    "checks_pairwise_cpuset_nonoverlap": true,
+    "checks_each_cpuset_within_arm": true,
+    "requires_explicit_flag_and_parent_marker": true
+  },
+  "history_comparison_findings": {
+    "checks_dimension_names_sizes_unlimited_status": true,
+    "checks_variable_names_dimensions_dtype": true,
+    "compares_numeric_payloads_and_masks_bitwise": true,
+    "compares_char_and_object_values_exactly": true,
+    "compares_variable_attribute_sets_and_values": true,
+    "compares_global_attribute_sets_and_values": true,
+    "hours_compared": [
+      "12",
+      "13",
+      "14"
+    ],
+    "notes": "All bundle pins match; compare code is strict over logical NetCDF history values and metadata, including attributes and dtype. No native run was launched."
+  },
+  "native_launch_authorized": false
+}

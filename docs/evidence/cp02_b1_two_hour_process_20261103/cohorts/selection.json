@@ -1,0 +1,306 @@
+{
+  "base_commit": "83804668a02e20eeac686d00ff5b2ff6b9a71154",
+  "base_pull_request": 142,
+  "common_sample_size": 3688,
+  "lead_definition": "+1/+2 each denotes a separate 1-hour accumulation window ending 13Z/14Z",
+  "mapping": {
+    "analysis_coordinate_file": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/DFSD/20260816/klps_lc05_anal_20260816_1300",
+    "analysis_coordinate_sha256": "bfa8e9d050244166ee53973be9593cdcad0e322d9b69209084c8dd19d159b23e",
+    "analysis_crop": {
+      "native_coordinate_crop": "[j=5:259,i=74:224]",
+      "shape_yx": [
+        253,
+        149
+      ],
+      "source_slice": "[6:259,75:224]"
+    },
+    "canonical_archived_mapper": "/var/tmp/cloudbal-recount-contract/docs/evidence/precip_hourly_20261027/rn1_recovery/archived_compare_six_hour_csi.py",
+    "canonical_archived_mapper_sha256": "1cfa4965155ec273e8e1ca9f963bd79a5ece3bc47beb4ae3db4e8b8f5e21b2c0",
+    "control_mapping_tool": "/var/tmp/cloudbal-recount-contract/tools/cp02_precip_control_mapping.py",
+    "control_mapping_tool_sha256": "87269145385973d66d5e945e1f43860e3560055460341d3cb1c43647cb218198",
+    "mapping_function": "existing archived_compare_six_hour_csi.build_curvilinear_mapping loaded through cp02_precip_control_mapping.load_archived_mapper()",
+    "max_mapping_residual_deg": 0.0,
+    "old_b1_time0_history": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100/wrfout_d01_2026-08-16_12:00:00",
+    "old_b1_time0_history_sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6"
+  },
+  "native_precip_reconstruction": {
+    "all_within_1e-6_mm": true,
+    "max_abs_difference_mm": 0.0,
+    "method": "canonical RAINC+RAINNC cumulative remap then hourly differencing; RAINSH checked/excluded",
+    "rows": 16
+  },
+  "paired_comparison": {
+    "FIX": "IMPROVED_BG_FIXED (FIX executable, same B1 input)",
+    "OLD": "ORIGINAL_B1_100 (ORIGINAL executable, B1 input)",
+    "input_identity_check": "exact wrfinput_d01 SHA-256 equality verified"
+  },
+  "points": [
+    {
+      "FIX_plus1_mm": 9.264834050478842e-08,
+      "FIX_plus1_t0p1_FA": false,
+      "FIX_plus1_t0p1_hit": false,
+      "FIX_plus1_t5_hit": false,
+      "FIX_plus2_mm": 0.08058245592120747,
+      "FIX_plus2_t0p1_FA": false,
+      "FIX_plus2_t0p1_hit": false,
+      "FIX_plus2_t5_hit": false,
+      "OLD_plus1_mm": 6.387428111965087e-05,
+      "OLD_plus1_t0p1_FA": false,
+      "OLD_plus1_t0p1_hit": false,
+      "OLD_plus1_t5_hit": false,
+      "OLD_plus2_mm": 0.33377015703293156,
+      "OLD_plus2_t0p1_FA": false,
+      "OLD_plus2_t0p1_hit": true,
+      "OLD_plus2_t5_hit": false,
+      "RN1_plus1_mm": 0.0,
+      "RN1_plus2_mm": 0.2,
+      "delta_P_plus2_mm": -0.25318770111172406,
+      "diagnostic_group": "weak_hit_lost",
+      "eligible_group_counts": {
+        "strong_hit_gain": 0,
+        "strong_stable_hit_fallback": 59,
+        "weak_hit_lost": 10,
+        "weak_new_false_alarm": 31,
+        "weak_stable_hit": 143
+      },
+      "latitude": 35.139495849609375,
+      "longitude": 127.28880310058594,
+      "point_id": "P01",
+      "reference_plus2_mm": 0.2,
+      "rn1_sample_index_zero_based": 476,
+      "selection_note": "weak_hit_lost",
+      "selection_rule": "within the declared group, maximize abs(FIX\u2212OLD) one-hour precipitation at +2; tie-break smallest target_flat_index_yx; posthoc diagnostic, not performance holdout or physics/input mask",
+      "target_flat_index_yx": 10942
+    },
+    {
+      "FIX_plus1_mm": 0.013397517054424667,
+      "FIX_plus1_t0p1_FA": false,
+      "FIX_plus1_t0p1_hit": false,
+      "FIX_plus1_t5_hit": false,
+      "FIX_plus2_mm": 0.8299988137145277,
+      "FIX_plus2_t0p1_FA": true,
+      "FIX_plus2_t0p1_hit": false,
+      "FIX_plus2_t5_hit": false,
+      "OLD_plus1_mm": 9.614187232954989e-05,
+      "OLD_plus1_t0p1_FA": false,
+      "OLD_plus1_t0p1_hit": false,
+      "OLD_plus1_t5_hit": false,
+      "OLD_plus2_mm": 0.023861743426123086,
+      "OLD_plus2_t0p1_FA": false,
+      "OLD_plus2_t0p1_hit": false,
+      "OLD_plus2_t5_hit": false,
+      "RN1_plus1_mm": 0.0,
+      "RN1_plus2_mm": 0.0,
+      "delta_P_plus2_mm": 0.8061370702884045,
+      "diagnostic_group": "weak_new_false_alarm",
+      "eligible_group_counts": {
+        "strong_hit_gain": 0,
+        "strong_stable_hit_fallback": 59,
+        "weak_hit_lost": 10,
+        "weak_new_false_alarm": 31,
+        "weak_stable_hit": 143
+      },
+      "latitude": 35.465721130371094,
+      "longitude": 126.78839111328125,
+      "point_id": "P02",
+      "reference_plus2_mm": 0.0,
+      "rn1_sample_index_zero_based": 819,
+      "selection_note": "weak_new_false_alarm",
+      "selection_rule": "within the declared group, maximize abs(FIX\u2212OLD) one-hour precipitation at +2; tie-break smallest target_flat_index_yx; posthoc diagnostic, not performance holdout or physics/input mask",
+      "target_flat_index_yx": 11976
+    },
+    {
+      "FIX_plus1_mm": 2.8156021491151447e-07,
+      "FIX_plus1_t0p1_FA": false,
+      "FIX_plus1_t0p1_hit": false,
+      "FIX_plus1_t5_hit": false,
+      "FIX_plus2_mm": 0.4277010804788892,
+      "FIX_plus2_t0p1_FA": false,
+      "FIX_plus2_t0p1_hit": true,
+      "FIX_plus2_t5_hit": false,
+      "OLD_plus1_mm": 0.005683648361931779,
+      "OLD_plus1_t0p1_FA": false,
+      "OLD_plus1_t0p1_hit": false,
+      "OLD_plus1_t5_hit": false,
+      "OLD_plus2_mm": 0.6933360042513304,
+      "OLD_plus2_t0p1_FA": false,
+      "OLD_plus2_t0p1_hit": true,
+      "OLD_plus2_t5_hit": false,
+      "RN1_plus1_mm": 0.0,
+      "RN1_plus2_mm": 0.5,
+      "delta_P_plus2_mm": -0.26563492377244113,
+      "diagnostic_group": "weak_stable_hit",
+      "eligible_group_counts": {
+        "strong_hit_gain": 0,
+        "strong_stable_hit_fallback": 59,
+        "weak_hit_lost": 10,
+        "weak_new_false_alarm": 31,
+        "weak_stable_hit": 143
+      },
+      "latitude": 35.09214782714844,
+      "longitude": 127.39987182617188,
+      "point_id": "P03",
+      "reference_plus2_mm": 0.5,
+      "rn1_sample_index_zero_based": 439,
+      "selection_note": "weak_stable_hit",
+      "selection_rule": "within the declared group, maximize abs(FIX\u2212OLD) one-hour precipitation at +2; tie-break smallest target_flat_index_yx; posthoc diagnostic, not performance holdout or physics/input mask",
+      "target_flat_index_yx": 10795
+    },
+    {
+      "FIX_plus1_mm": 13.322852500857554,
+      "FIX_plus1_t0p1_FA": false,
+      "FIX_plus1_t0p1_hit": true,
+      "FIX_plus1_t5_hit": false,
+      "FIX_plus2_mm": 62.83795731256127,
+      "FIX_plus2_t0p1_FA": false,
+      "FIX_plus2_t0p1_hit": true,
+      "FIX_plus2_t5_hit": true,
+      "OLD_plus1_mm": 13.511116050582897,
+      "OLD_plus1_t0p1_FA": false,
+      "OLD_plus1_t0p1_hit": true,
+      "OLD_plus1_t5_hit": false,
+      "OLD_plus2_mm": 60.44618882247576,
+      "OLD_plus2_t0p1_FA": false,
+      "OLD_plus2_t0p1_hit": true,
+      "OLD_plus2_t5_hit": true,
+      "RN1_plus1_mm": 1.6,
+      "RN1_plus2_mm": 9.4,
+      "delta_P_plus2_mm": 2.3917684900855107,
+      "diagnostic_group": "strong_stable_hit_fallback",
+      "eligible_group_counts": {
+        "strong_hit_gain": 0,
+        "strong_stable_hit_fallback": 59,
+        "weak_hit_lost": 10,
+        "weak_new_false_alarm": 31,
+        "weak_stable_hit": 143
+      },
+      "latitude": 35.16273880004883,
+      "longitude": 128.46669006347656,
+      "point_id": "P04",
+      "reference_plus2_mm": 9.4,
+      "rn1_sample_index_zero_based": 544,
+      "selection_note": "predeclared fallback: threshold-5 hit-gain cohort empty",
+      "selection_rule": "within the declared group, maximize abs(FIX\u2212OLD) one-hour precipitation at +2; tie-break smallest target_flat_index_yx; posthoc diagnostic, not performance holdout or physics/input mask",
+      "target_flat_index_yx": 11112
+    }
+  ],
+  "recalc_script_sha256": "ce09d890d941209a76f73b2c2e31cea2b5ed7461be8cab217fa0f50d7c68d9ff",
+  "runtime_files_sha256": {
+    "FIX_wrfinput": {
+      "path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfinput_d01",
+      "sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5"
+    },
+    "FIX_wrfout_hour1": {
+      "path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "8b4ead8741dff7284b1de140038d85ba48a474d6b8b98e1905e10ddbac165702"
+    },
+    "FIX_wrfout_hour2": {
+      "path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_14:00:00",
+      "sha256": "e4c2ef230a1e3574390a015945fdc051673c345156e9360bc8a54a3922561208"
+    },
+    "OLD_wrfinput": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100/wrfinput_d01",
+      "sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5"
+    },
+    "OLD_wrfout_hour1": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "8159eb06ca85695c533de590c27d9274c4fec4c31a11aeff58516171dae11468"
+    },
+    "OLD_wrfout_hour2": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100/wrfout_d01_2026-08-16_14:00:00",
+      "sha256": "bb0afd836d622d06eef78c445c80c4544e879cfa6963f7932882e86309117ff5"
+    }
+  },
+  "runtime_receipt_sha256": {
+    "FIX_history_validation": {
+      "path": "/var/tmp/cloudbal-recount-contract/docs/evidence/six_hour_improvement_20261030/runtime/history_validation.json",
+      "sha256": "100abebecbae7c9da14272803c3b3e3cb0ae800d022977308b8e692e29fe3475"
+    },
+    "FIX_normalized_receipt": {
+      "path": "/var/tmp/cloudbal-recount-contract/docs/evidence/six_hour_improvement_20261030/runtime/normalized_receipt.json",
+      "sha256": "00eddd6ac26a3a4857ea40e294256d2b32c9c9e6a2998f112000c39d5281bf5e"
+    },
+    "FIX_one_hour_comparison": {
+      "path": "/var/tmp/cloudbal-recount-contract/docs/evidence/six_hour_improvement_20261030/runtime/one_hour_comparison.json",
+      "sha256": "805f9409ee932c515f7ad8c9f9c0de0357d9854e58f8de40951bf9c70067d17d"
+    },
+    "OLD_case_receipt": {
+      "path": "/var/tmp/cloudbal-recount-contract/docs/evidence/weak_strong_balance_20261030/runtime/cases/ORIGINAL_B1_100/receipt.json",
+      "sha256": "4c084d3917825f639f1829e4f602f1469860dd94c50e4e0509a97d848a253bf5"
+    },
+    "OLD_final_receipt": {
+      "path": "/var/tmp/cloudbal-recount-contract/docs/evidence/weak_strong_balance_20261030/runtime/final_receipt.json",
+      "sha256": "4322b9de5a4490a3f874c6cdb826889a1f721185f907aa6383e07f9c113f3f58"
+    },
+    "OLD_history_validation": {
+      "path": "/var/tmp/cloudbal-recount-contract/docs/evidence/weak_strong_balance_20261030/runtime/history_validation.json",
+      "sha256": "8d912c0c05940d3cd9dfe8d84048381e7e87abab4e47741d094744f00c1eae52"
+    }
+  },
+  "schema": "b1-two-hour-cohort-probe-v1",
+  "selection_design": {
+    "rule": "maximum absolute FIX\u2212OLD one-hour precipitation difference within each group; tie-break by smallest RN1 target flat index; diagnostic posthoc selection, not performance holdout or physics/input mask",
+    "strong_control_fallback": "use stable observed>=5 mm and OLD,FIX>=5 mm if threshold-5 hit-gain group is empty",
+    "superseded_unrestricted_selection_audit": {
+      "hit_lost": {
+        "FIX_plus2_mm": 0.0321117358418741,
+        "OLD_plus2_mm": 0.3164687734142179,
+        "flat_index_yx": 10201,
+        "latitude": 34.90729904174805,
+        "longitude": 127.50761413574219,
+        "observed_plus2_mm": 11.2,
+        "sample_index": 305
+      },
+      "new_false_alarm": {
+        "FIX_plus2_mm": 1.1176509935011945,
+        "OLD_plus2_mm": 0.0004008733247453883,
+        "flat_index_yx": 11082,
+        "latitude": 35.19065475463867,
+        "longitude": 126.78507995605469,
+        "observed_plus2_mm": 0.0,
+        "sample_index": 514
+      },
+      "selection_rule": "unrestricted first pass: one point from each binary transition/stable category, max abs delta then flat-index tie-break; replaced after weak-observed focus was specified",
+      "stable_hit": {
+        "FIX_plus2_mm": 13.789640728532676,
+        "OLD_plus2_mm": 16.22711137544967,
+        "flat_index_yx": 9614,
+        "latitude": 34.71521759033203,
+        "longitude": 128.00437927246094,
+        "observed_plus2_mm": 0.5,
+        "sample_index": 201
+      },
+      "strong_stable_fallback": {
+        "FIX_plus2_mm": 62.83795731256127,
+        "OLD_plus2_mm": 60.44618882247576,
+        "flat_index_yx": 11112,
+        "latitude": 35.16273880004883,
+        "longitude": 128.46669006347656,
+        "observed_plus2_mm": 9.4,
+        "sample_index": 544
+      },
+      "threshold5_hit_gain": {
+        "eligible_count": 0
+      }
+    },
+    "threshold_mm": 0.1,
+    "weak_forecast_band_mm": "[0.1,1.0)",
+    "weak_observed_band_mm": "[0.1,1.0)"
+  },
+  "selection_group_counts": {
+    "strong_hit_gain": 0,
+    "strong_stable_hit_fallback": 59,
+    "weak_hit_lost": 10,
+    "weak_new_false_alarm": 31,
+    "weak_stable_hit": 143
+  },
+  "source_hashes_sha256": {
+    "hour_13_arrays.npz": "5ab0cc484b1bd47c587e9f710a8d19072b383447b8a7aa4c0c0d8f22a2ae5354",
+    "hour_14_arrays.npz": "309706609edb4f40c6063aacabf86cea2a28aafff39d73d584cc41336e0941f9",
+    "hour_15_arrays.npz": "6ccac20f2d141b9ff270e5dde8bf219378e456ae073614f783d41d0d1abc8510",
+    "hour_16_arrays.npz": "0fa329fc68ece6ce1334d168b8eeb92c8c3404cbdae3a5db274aae3194052852",
+    "hour_17_arrays.npz": "b4e2c8bf84daee247ba632c53ebd556e3d40313a91e1ad144340f6c5c6fab982",
+    "hour_18_arrays.npz": "5b29e885d50be1fb306a1f1f16d5961a87650f76b3432ebb12c4bd835728090a"
+  },
+  "status": "FROZEN_DIAGNOSTIC_SELECTION"
+}

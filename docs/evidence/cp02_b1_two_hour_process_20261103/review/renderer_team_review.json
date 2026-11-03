@@ -1,0 +1,44 @@
+{
+  "schema": "b1-two-hour-renderer-review-v1",
+  "status": "GO",
+  "scope": "Independent static review of renderer and tests only; no raw native trace was opened and no renderer/test was run by this reviewer.",
+  "source_hashes": {
+    "tools/plot_cp02_b1_process.py": "6c13bd8c2a56dcf61e28045ba664fe09d2a109e34768151b60cdf4c714002331",
+    "tests/test_plot_cp02_b1_process.py": "78826b3d6378d052b95219343b30f3e3e218f8f5b7bb7797875b5a9e6b013eca"
+  },
+  "validation_receipt": {
+    "path": "docs/evidence/cp02_b1_two_hour_process_20261103/validation/renderer_validation_receipt.json",
+    "sha256": "ca9626b315d1f2d59d56dcd51ae92283cf2d96b890a964780a81332fbdf1923d",
+    "reported_focused_tests": "3 passed",
+    "reported_cli_replay": "PASS, byte-identical receipt plus all 8 PNG hashes"
+  },
+  "findings": [],
+  "verified_properties": [
+    "All input validation runs before the renderer creates its output parent or temporary staging directory.",
+    "An existing output path, including a dangling symlink, is refused before any output operation.",
+    "All score, selected-point, OLD/FIX pair-summary, component CSV, analysis receipt, and component receipt bindings are validated before rendering.",
+    "The component receipt must bind the exact analysis-receipt SHA, output CSV SHA, and byte count; the analysis receipt must bind the exact pair_summary path/SHA/bytes and pass status.",
+    "The selected_points.csv SHA and size must match the original cohort receipt.",
+    "Figures and render_receipt.json are generated inside a fresh same-parent staging directory, then published with one directory replace only after rendering completes; exceptions remove staging.",
+    "The render receipt records hashes and sizes for all source inputs and eight PNGs; the recorded eight-PNG CLI replay is byte-identical.",
+    "Renderer reads score/cohort/component products only and performs no scoring or native history access."
+  ],
+  "test_coverage_note": "The three focused tests cover an existing-output sentinel, a mismatched component-output hash before target creation, and a failed paired-analysis receipt before target creation. The focused suite does not itself exercise a successful render or a mismatched run_receipt_sha256; the package validation receipt records the successful byte-identical CLI replay and code checks those bindings directly.",
+  "kg_scope": {
+    "selected_sources": [
+      "tools/cp02_b1_process_trace.py",
+      "tests/test_cp02_b1_process_trace.py",
+      "tools/derive_cp02_b1_components.py",
+      "tests/test_derive_cp02_b1_components.py",
+      "tools/plot_cp02_b1_process.py",
+      "tests/test_plot_cp02_b1_process.py",
+      "tests/test_cp02_six_hour_improvement.py",
+      "docs/evidence/cp02_b1_two_hour_process_20261103/kg/prepare_kg.py"
+    ],
+    "selected_count": 8,
+    "helper_sha256": "01341c8b7d204999d78eb1e727ccfd41abaa8be2876f0d9272dbed71186989df",
+    "hash_only_path_count": 188,
+    "baseline_total": 232,
+    "stage_or_extract_invoked": false
+  }
+}

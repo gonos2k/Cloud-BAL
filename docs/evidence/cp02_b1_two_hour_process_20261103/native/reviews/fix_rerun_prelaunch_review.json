@@ -1,0 +1,33 @@
+{
+  "status": "PRELAUNCH_REVIEW_GO_READY_FOR_ROOT_AUTHORIZATION",
+  "launch_authorized": false,
+  "review_scope": "fresh FIX rerun staging only; no model launch and no raw trace/history payload inspection",
+  "verified": {
+    "artifact_hashes": {
+      "preparation_receipt_sha256": "e7b5052163ae692a29378184833f967375e4699592e7bc1af6d7c99f15d6c8fe",
+      "stage_receipt_sha256": "23a84ed6d411214d659a6e2a3abc158a43857f6f8897eea043bfea2ac5027abf",
+      "failed_attempt_manifest_sha256": "b2a64fa6179b2d560c4028e1ff0e17ce5bf68cfd5ba74f507a74bfe2df579371",
+      "strict_prefix_failure_sha256": "3ee408019843574cfb24279985668d71303286131352036ffa0412fca17b3008",
+      "case_plan_sha256": "f115304db8cf39b1c2e514fd566926eb73af304d805d10c4aed7f4d0ee699ca3",
+      "review_bundle_sha256": "a0e9fa3ebaf7dc4be258c23a40c517fc3f7dcc5157e62407cc49cedc783edce5",
+      "runner_sha256": "a8e480d3eb6759fb0c12c5da10453fe7e39ec7a497967f39e79d6ab58af31acb",
+      "comparator_sha256": "85266c10a7c9228846509e753bd755caf80ef6747b3332460a298a06f68ae0ce",
+      "diagnostic_executable_sha256": "149ce39b6b79a5c296aee96f6d6caa3b51e18e6b91ef1935718339d3b4fe658c"
+    },
+    "fresh_case_resolves_to": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/rerun_FIX",
+    "staged_input_count": 89,
+    "all_89_actual_hashes_equal_stage_receipt_and_FIX_case_plan": true,
+    "FIX_wrfinput_equals_OLD_wrfinput": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+    "FIX_instrumented_exe_matches_build_and_expected_pin": true,
+    "launch_controls": "8 MPI ranks CPUs 40-47, OMP 1; only run_hours/end_hour/history_end_s adjusted for 2 h",
+    "failed_attempt_preserved": "111 files, 2,007,550,711 bytes; manifest inventory sizes match; no PID/runtime metadata synthesized",
+    "fresh_case_has_no_wrfout_rsl_or_trace_outputs": true,
+    "available_bytes_reported_by_df": 3435973836800,
+    "disk_capacity_bytes_reported_by_df": 3435973836800,
+    "prior_strict_prefix_failure": "12Z and 13Z exact; 14Z failed on Time dimension size; prior payload rejected"
+  },
+  "limitations": [
+    "Archived failed-attempt payload hashes were not re-read in this prelaunch review; inventory counts and sizes were checked.",
+    "Root must provide a separate fresh launch authorization."
+  ]
+}

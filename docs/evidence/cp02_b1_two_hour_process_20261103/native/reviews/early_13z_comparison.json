@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "scope": "exact 13Z only where output existed; all variables, numerical payloads, masks, dimensions, datatypes, variable/global attributes",
+  "comparator_sha256": "85266c10a7c9228846509e753bd755caf80ef6747b3332460a298a06f68ae0ce",
+  "checks": [
+    {
+      "new": "/var/tmp/b1-two-hour-probe-20261103/cases/OLD/wrfout_d01_2026-08-16_13:00:00",
+      "reference": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100/wrfout_d01_2026-08-16_13:00:00",
+      "new_sha256": "8159eb06ca85695c533de590c27d9274c4fec4c31a11aeff58516171dae11468",
+      "reference_sha256": "8159eb06ca85695c533de590c27d9274c4fec4c31a11aeff58516171dae11468",
+      "all_history_values_and_metadata_exact": true,
+      "arm": "OLD",
+      "hour": 13
+    },
+    {
+      "new": "/var/tmp/b1-two-hour-probe-20261103/cases/FIX/wrfout_d01_2026-08-16_13:00:00",
+      "reference": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_13:00:00",
+      "new_sha256": "8b4ead8741dff7284b1de140038d85ba48a474d6b8b98e1905e10ddbac165702",
+      "reference_sha256": "8b4ead8741dff7284b1de140038d85ba48a474d6b8b98e1905e10ddbac165702",
+      "all_history_values_and_metadata_exact": true,
+      "arm": "FIX",
+      "hour": 13
+    }
+  ],
+  "failure": null,
+  "next_action": "stop interpretation on any mismatch; no relaxation"
+}

@@ -1,0 +1,23 @@
+{
+  "status": "PASS_WITH_SCALAR_MUTATION_COVERAGE_NOTE",
+  "base_bundle_sha256": "a0e9fa3ebaf7dc4be258c23a40c517fc3f7dcc5157e62407cc49cedc783edce5",
+  "base_bundle_unchanged": true,
+  "new_comparator_sha256": "85266c10a7c9228846509e753bd755caf80ef6747b3332460a298a06f68ae0ce",
+  "probe_sha256": "e658809afe3cbcfff426af07154e9ae52b634d138eee26c40092111572855201",
+  "supplemental_receipt_sha256": "abdf6fd9ec22a2697ae54fb17ea7dfddae05f4afda9e02755cfe09bd3ba8cbb8",
+  "failure_receipt_sha256": "0d3c6e86d1605c7fedf306de0b48a86c150f337288db0462e9d5608b54928dd2",
+  "old_comparator_preserved_sha256": "6763b28635afbabc8e88e52ede2fc79b7afb97318b410a93337442742d086882",
+  "review": {
+    "scalar_numeric_attrs_supported": true,
+    "array_payload_bytes_preserved": true,
+    "variable_and_global_metadata_checks_retained": true,
+    "no_tolerances_or_exclusions_added": true,
+    "mutated_payload_is_array_not_scalar_attribute": true
+  },
+  "findings": [
+    "Numeric 0-D attributes now serialize through ndarray.tobytes(order=\"C\"), preserving exact native-endian bytes and avoiding the failing dtype view.",
+    "Coverage probe exercises scalar int32/float32 serialization and array payload inequality/parity; add a direct changed scalar-attribute inequality assertion if tightening test coverage."
+  ],
+  "no_model_or_comparator_run_by_reviewer": true,
+  "comparison_mismatch_found_by_original_failure": false
+}

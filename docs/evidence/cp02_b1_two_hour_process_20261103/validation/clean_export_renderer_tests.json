@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "command": [
+    "taskset",
+    "-c",
+    "64-71",
+    "python3",
+    "-m",
+    "pytest",
+    "-q",
+    "tests/test_plot_cp02_b1_process.py"
+  ],
+  "exit": 0,
+  "elapsed_seconds": 1.1908740997314453,
+  "export_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_two_hour_probe_20261103/clean_export_8wd__ee2",
+  "source_sha256": {
+    "tools/plot_cp02_b1_process.py": "30d340eac848fa1e35034fb4f17e4a7228cc9341c95608d2b757c58b906732b1",
+    "tests/test_plot_cp02_b1_process.py": "b507102b035e6bdd38e7f87090e0ebcab18b09c364b405c6da3ea9aa0152e193"
+  },
+  "stdout_sha256": "5d2fbd1d5dc61f04fdeff21d84436b0bed24cd57b059d2e497efe47108eb3bb3",
+  "related_suite": "clean_export_tests.json:169 passed; adds 5 unique renderer tests without changing prior suite sources",
+  "unique_tests_total": 174
+}

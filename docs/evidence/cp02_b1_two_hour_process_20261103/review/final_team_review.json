@@ -1,0 +1,177 @@
+{
+  "independent_reviews": {
+    "components_review": {
+      "groups": 2496,
+      "groups_per_arm": 1248,
+      "sha256": "1c77105a72038679b2bd607821ea6bb35d361bc88e3c6202c0a6f62f5b3f9742",
+      "status": "PASS_COMPONENT_MATH_AND_DATA_REVIEW"
+    },
+    "renderer_review": {
+      "sha256": "7e2ded1d654de74d0ebd17c1211dc7ecbb7cfe28a39f7e56d55b23e6585684da",
+      "status": "GO"
+    },
+    "science_review": {
+      "limits": [
+        "Four post hoc points with four native corners each; no pooled performance inference.",
+        "Transaction sums cover levels/corners and are not mass-column, water, or energy budgets.",
+        "The logged PREVP_FORMULA omits terms needed to replay the complete expression.",
+        "No upstream QNRAIN initialization or general KDM6 policy is established by these runs.",
+        "No CSI change, score improvement, precipitation causality, candidate selection, or production approval is claimed."
+      ],
+      "sha256": "a34d32a3b0de9f5dd4abb7c9c4e9078fde04d1ad5014200253804631309afa26",
+      "status": "INDEPENDENT_SCIENCE_REVIEW_COMPLETE_OBSERVATION_ONLY"
+    },
+    "visual_review": {
+      "sha256": "3f76164cc0dd9f7aaebbd48dea657ed58abf7dad542c5da8e6ef46ea13bc62d0",
+      "status": "GO"
+    }
+  },
+  "interpretation_limits": [
+    "Graphify structurally extracted only the eight selected Python sources; other evidence, including native source copies and compressed OLD/FIX traces, was hash-only.",
+    "Fortran cross-file CALL extraction is partial.",
+    "The two-hour native evidence is scoped and does not establish a full forecast or whole-model conservation/budget result; the science review is observational and bounded to the documented local diagnostics.",
+    "Graph freshness does not establish runtime behavior, physical correctness, scientific approval, or production readiness."
+  ],
+  "kg_publication": {
+    "baseline_snapshots_preserved": 232,
+    "graph_deltas": {
+      "Cloud-BAL": {
+        "communities": 6,
+        "edges": 298,
+        "nodes": 119
+      },
+      "KLAPS50": {
+        "communities": 8,
+        "edges": 300,
+        "nodes": 119
+      }
+    },
+    "graph_integrity_defects": 0,
+    "hash_only_pin_count": 210,
+    "postpublish_review_sha256": "4f90a2728322c838d3cd55ebdba2726b7ff2121e244c429d8a4fd009746754d3",
+    "postpublish_review_status": "PASS",
+    "postpublish_snapshot_counts": {
+      "Cloud-BAL": 119,
+      "KLAPS50": 115
+    },
+    "prior_node_ids_preserved": {
+      "Cloud-BAL": 17395,
+      "KLAPS50": 43223
+    },
+    "publication_receipt_sha256": "c35469743eeecc6e5e947025fccbbd1a9670dc17e861a529533d4c7896368a73",
+    "published_targets": 13,
+    "selection_lock_sha256": "02da3504e5e11a39ed40ca34e57e9fddab8119b3a585fc367057309f3186036e",
+    "session_close": {
+      "append_sha256": "28be367079557e0aa8003dc6d606cfa32e18b6f5f9b1d2dd537bb33ec045db8e",
+      "failures": 0,
+      "independent_readback_checks": 28,
+      "maintained_log_after_sha256": "ea87b2b16e831c9f4a5f303b3315d3b6b801f2cd7f19bece2648d4877d566620",
+      "prior_log_preserved_as_prefix": true,
+      "prior_snapshot_files_rechecked": 864,
+      "receipt_sha256": "2a644fcfca90c29f858c5957bfd74e6eccf22ffcd99ba461eda2f83528ad0d00",
+      "status": "PASS_APPEND_ONLY_SESSION_CLOSE",
+      "worktree_log_copy_sha256": "ea87b2b16e831c9f4a5f303b3315d3b6b801f2cd7f19bece2648d4877d566620"
+    },
+    "snapshot_label": "2026-11-03-b1-two-hour",
+    "source_extraction_count": 8,
+    "stage_receipt_sha256": "2eb88dcdfd18e3f67abd5e96f25d3875e9d6be74d846d7b5d40ceeb6c6c1bb0f",
+    "stage_review_sha256": "26c4d1828ad07e92684e47ea20235ff4b9aebb0e7968cfc8bb0ccd0c770229a3",
+    "stage_validation_sha256": "52b586ef78129fa4c21e213c15513d26ef316c2f50fd892895809230ec812ad2"
+  },
+  "open_items": "No blocker remains for this scoped batch. The root aggregate validation is written after this review to avoid a self-hash cycle.",
+  "prior_evidence_audit": {
+    "archived_overviews": 2,
+    "dated_graph_aliases": 3,
+    "prior_entries": 58,
+    "sha256": "cb0901100b848a10fcb97884e8e363ce5b87da16eafb6e8dcbdae846f37663c4",
+    "status": "PASS",
+    "unchanged_current": 53
+  },
+  "report": {
+    "editorial_changes": "terminology alignment only; no numeric or scientific content changed",
+    "path": "docs/CP02_B1_TWO_HOUR_PROCESS_20261103.md",
+    "sha256": "73012b34995485be71b54d42f1ce6aa12a2934fc40a326bb190c24ea051b6557"
+  },
+  "review_status": "GO",
+  "schema": "cp02-b1-two-hour-final-team-review-v1",
+  "scope": "Final review of frozen sources and report, validation evidence, prior evidence reconciliation, published KG readback, and append-only session closure.",
+  "selected_sources": {
+    "count": 8,
+    "selection_lock_sha256": "02da3504e5e11a39ed40ca34e57e9fddab8119b3a585fc367057309f3186036e",
+    "sha256": {
+      "docs/evidence/cp02_b1_two_hour_process_20261103/kg/prepare_kg.py": "01341c8b7d204999d78eb1e727ccfd41abaa8be2876f0d9272dbed71186989df",
+      "tests/test_cp02_b1_process_trace.py": "9c416e42169bcb29b43859550467917d428d3e04b387a8300d5855734a664ebf",
+      "tests/test_cp02_six_hour_improvement.py": "214ff42732f5ff85c70f8cec39490c92bd919a218c3b254de459828e886a8a99",
+      "tests/test_derive_cp02_b1_components.py": "1f1f134f905503d6c1d96ef199f6986d3f7fa02155ea9474e3528616375a391c",
+      "tests/test_plot_cp02_b1_process.py": "b507102b035e6bdd38e7f87090e0ebcab18b09c364b405c6da3ea9aa0152e193",
+      "tools/cp02_b1_process_trace.py": "071021915bd3e8075c824e3626c824a1bbf5a6d37400eb6811c8fe673128dd37",
+      "tools/derive_cp02_b1_components.py": "26d3746f71af569698e3b858b7ef64d29ace416eceb91748fbe2cb88e24a92bf",
+      "tools/plot_cp02_b1_process.py": "30d340eac848fa1e35034fb4f17e4a7228cc9341c95608d2b757c58b906732b1"
+    }
+  },
+  "source_commit": "47998849a79ede61ce23d928b9fe56eb67934de1",
+  "status": "PASS_FINAL_TEAM_REVIEW",
+  "validation": {
+    "analysis": {
+      "replay_all_byte_equal": true,
+      "replay_output_count": 16,
+      "replay_receipt_sha256": "edc35650f7c67abcdbb1950a9d450ca1a940842870a53907b5f22a85d3d7ec73",
+      "run1_status": "PASS_BOTH_ARMS",
+      "run2_replay_status": "PASS_BYTE_IDENTICAL_REPLAY"
+    },
+    "clean_export_receipts": {
+      "clean_export_sha256": "256476942bbfecb2d1709114c9b343b00a6153a6d540826c07481b1520494cd2",
+      "renderer_sha256": "682f80d146566f87cb31c5f617eae8c09ee9975345b54959a8c6dab77035fd72"
+    },
+    "combined_tests": {
+      "path": "docs/evidence/cp02_b1_two_hour_process_20261103/validation/combined_tests.json",
+      "sha256": "2b7398852ee5311d602bc66bc5f8dffa88ce89024c8bee622e21fb5375a7f939",
+      "split": {
+        "clean_export": 169,
+        "renderer": 5
+      },
+      "status": "PASS",
+      "unique_tests": 174
+    },
+    "figures": {
+      "count": 8,
+      "package_crc": "PASS",
+      "package_receipt_sha256": "94d2fafb1f7ee4854ebb3888bffc82b25c8c232242cdd50b625c185b5fb9d30c",
+      "png_sha256": {
+        "b1_hourly_csi.png": "39810879e52e7c76858737eb07db5e38d67f7945f887411fa0ec00a697e07c40",
+        "b1_hourly_delta_csi.png": "65b5ce5b11776c9bb7c3de17a78eb92d5e0902b909d4c011ad5afba9c44ea5a6",
+        "b1_prevp_qv_temperature_profiles.png": "c61de1817007eb1c0ce30604c186d88ea5fe0351243e0993bfa4e15594828499",
+        "b1_q_state_vertical_profiles.png": "dae7ed1411c6eda86b29bc614a9c73c5022476fe0ffff8dc2bdedd9dd8f6612e",
+        "b1_selected_point_hourly_precip.png": "a6f1666179972be62113bebd3f331b2eb822160a8732e2e89eeb953ab4c13077",
+        "b1_t_state_vertical_profiles.png": "84477f3ee4b09d81e25d370c63bb0c4220a3e12853c9cf3acd2115e4782b2fdb",
+        "b1_zero_rate_transitions.png": "1b35593af9425613d269a2b73d8e3665a50c7db8026d541495ec39f683349ede",
+        "b1_zero_rate_transitions_level_corner.png": "8282a490274c71daad1ebc418154eabcae0b1530bd149e0c15aa07e77f447b9c"
+      },
+      "render_receipt_sha256": "99b1ee9619fc1f9868d794020c7beee451a3df18bdf369cf0bb3fae2221a7392"
+    },
+    "native_trace_validation": {
+      "FIX": {
+        "entry_call_groups": 5760,
+        "selected_cells": 16,
+        "sha256": "7cb13d13819d58489333b25ec602f973c95d993442f09d79e2996dd64f2cc3f2",
+        "status": "PASS"
+      },
+      "OLD": {
+        "entry_call_groups": 5760,
+        "selected_cells": 16,
+        "sha256": "5452f05075a64709489a29f545602cbd4c0b921f6642f22c2d086efc575f3771",
+        "status": "PASS"
+      }
+    },
+    "prefix_gates": {
+      "FIX": {
+        "sha256": "8b92aa2529827374fc89d16a5d0176dedc4b4b7bffd978025873dcf9c6ccb1e7",
+        "status": "PASS_FULL_PREFIX"
+      },
+      "OLD": {
+        "sha256": "70858f2266f3c03ee4d1a0b04f2fbc5a551c651da8e87a62dbf3b2d33549fca2",
+        "status": "PASS_FULL_PREFIX"
+      }
+    }
+  }
+}
