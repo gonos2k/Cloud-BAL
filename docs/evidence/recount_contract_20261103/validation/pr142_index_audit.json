@@ -1,0 +1,59 @@
+{
+  "schema": "pr142-index-audit-v1",
+  "base_commit": "83804668a02e20eeac686d00ff5b2ff6b9a71154",
+  "base_tree": "642b891c",
+  "method": "Compared the carried-forward 343-entry PR142 index selection to commit blobs and aliases. Prior active graph aliases were checked byte-for-byte against the dated 2026-10-30 snapshot trio.",
+  "audited_entry_count": 343,
+  "unchanged_count": 339,
+  "old_recount_source": {
+    "path": "tools/recount_cp02_weak_strong_balance.py",
+    "status": "resolved_from_git_blob_at_base",
+    "base_git_blob": "506b4b16eacb1e50c6de427fee6c0df21b86d843",
+    "base_sha256": "39fa26c634d9de36d92d3d63f0b0c79d332c90a27e6bb77169331eec0b399926",
+    "current_sha256": "f264425741b8ef69f8d372ed1992898185a709d53c14a14c32fb1fc7b18fcdf1",
+    "change_scope": "P2 recount contract repair in this batch"
+  },
+  "graph_aliases": [
+    {
+      "path": "graphify-out/GRAPH_REPORT.md",
+      "base_status": "matches_dated_pr142_snapshot",
+      "base_sha256": "b6d8636318babc9022fe1555386208e1e7468bc7eb8cebb2436cc6cc81ee3bf1",
+      "snapshot_path": "graphify-out/2026-10-30-weak-strong-balance/GRAPH_REPORT.md",
+      "current_status": "matches_new_dated_snapshot",
+      "current_sha256": "aa727ecf20bb5872af9cc52d35d4dfcda07ae248ac03d198f950c0e3a8b02d4f",
+      "current_snapshot_path": "graphify-out/2026-11-03-recount-contract/GRAPH_REPORT.md"
+    },
+    {
+      "path": "graphify-out/graph.json",
+      "base_status": "matches_dated_pr142_snapshot",
+      "base_sha256": "6a8d4eaa96b9c477fb6e9fb3d84a8c0a7dd73d6a1cd75e5ad5f65275dd3366c3",
+      "snapshot_path": "graphify-out/2026-10-30-weak-strong-balance/graph.json",
+      "current_status": "matches_new_dated_snapshot",
+      "current_sha256": "a905da739a79e1129b42dca90c55a98814e7c1f61ed36a05a2461318af81e257",
+      "current_snapshot_path": "graphify-out/2026-11-03-recount-contract/graph.json"
+    },
+    {
+      "path": "graphify-out/manifest.json",
+      "base_status": "matches_dated_pr142_snapshot",
+      "base_sha256": "01b23fdb3b6114d787ceb8eba5976688fc3bd3fda51de86a27dbe7e981283688",
+      "snapshot_path": "graphify-out/2026-10-30-weak-strong-balance/manifest.json",
+      "current_status": "matches_new_dated_snapshot",
+      "current_sha256": "0b4682e0695c4d32db466a194f2d5656d397c7a11c39177883e33234d73ed2ad",
+      "current_snapshot_path": "graphify-out/2026-11-03-recount-contract/manifest.json"
+    }
+  ],
+  "historical_audit_reconciles": 343,
+  "separate_batch_regression_test": {
+    "path": "tests/test_recount_cp02_weak_strong_balance.py",
+    "status": "changed_in_current_batch",
+    "sha256": "cf6dfbaf434c3f66ea8da63ffed9108c47275e4efeef8c7ec09648664dc91e86"
+  },
+  "full_first_parent_pr142_diff_paths": 344,
+  "diff_reconciliation": {
+    "339_byte_identical": 339,
+    "old_recount_source_updated": 1,
+    "active_graph_aliases_updated_to_new_snapshot": 3,
+    "regression_test_updated_in_current_batch": 1
+  },
+  "note": "The 343-entry historical index audit is 339 unchanged entries, one recount source resolved from the PR142 Git blob, and three graph aliases verified against the dated PR142 snapshot. The current-batch regression test is separately recorded; the complete first-parent PR142 patch list has 344 paths."
+}

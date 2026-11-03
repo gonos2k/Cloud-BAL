@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "analysis_receipt_sha256": "d7e7896055d7ec41b547cf267a5fc2df9be3ac389063c31aa55fa0cf55b73992",
+  "recount_tool": {
+    "path": "/var/tmp/recount-contract-interim/tools/recount_cp02_weak_strong_balance.py",
+    "sha256": "fcedfeb2d41c59c359b80bd608cf9beef26e35e5b862b2896070dea0a95c2ae1",
+    "size_bytes": 34827
+  },
+  "scoring_tool": {
+    "path": "/var/tmp/recount-contract-interim/tools/cp02_weak_strong_balance.py",
+    "sha256": "2572d41d352c70d72d8488fe9f0dc9d961de8b10c21f7ade459f131e7c4fbdb5",
+    "size_bytes": 65718
+  },
+  "independently_recounted_rows": {
+    "categorical": 432,
+    "continuous": 72,
+    "transitions": 396,
+    "admission": 152,
+    "observation_band_transitions": 1980,
+    "observed_forecast_bins": 3300
+  },
+  "checked_arrays": [
+    "5ab0cc484b1bd47c587e9f710a8d19072b383447b8a7aa4c0c0d8f22a2ae5354",
+    "309706609edb4f40c6063aacabf86cea2a28aafff39d73d584cc41336e0941f9",
+    "6ccac20f2d141b9ff270e5dde8bf219378e456ae073614f783d41d0d1abc8510",
+    "0fa329fc68ece6ce1334d168b8eeb92c8c3404cbdae3a5db274aae3194052852",
+    "b4e2c8bf84daee247ba632c53ebd556e3d40313a91e1ad144340f6c5c6fab982",
+    "5b29e885d50be1fb306a1f1f16d5961a87650f76b3432ebb12c4bd835728090a"
+  ],
+  "limitations": "Recounts saved paired point arrays; runtime histories are separately hash-bound by receipts."
+}

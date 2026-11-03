@@ -1,0 +1,126 @@
+{
+  "blocking_findings": [],
+  "conclusion": "No blocker found for the scoped recount correction and dated KG update. This review does not approve a rain-number policy or claim C2 forecast completion.",
+  "kg_review": {
+    "all_13_target_hashes_verified": true,
+    "all_active_worktree_graph_and_5_wiki_copy_hashes_verified": true,
+    "graph_deltas": {
+      "Cloud-BAL": {
+        "communities_after": 1546,
+        "communities_before": 1548,
+        "edges": 58,
+        "integrity_zero": true,
+        "nodes": 22
+      },
+      "KLAPS50": {
+        "communities_after": 3496,
+        "communities_before": 3524,
+        "edges": 58,
+        "integrity_zero": true,
+        "nodes": 22
+      }
+    },
+    "independent_stage_review_sha256": "db8870cf95273d60e1fe5b0460632d6f90f697ca96a904e933f55a2868f9c3f4",
+    "independent_stage_review_status": "GO",
+    "limitations": [
+      "Fortran cross-file CALL extraction is partial.",
+      "Graph freshness does not establish runtime behavior or scientific validity."
+    ],
+    "postpublish_copy_status": "PASS_ACTIVE_WORKTREE_AND_WIKI_READBACK",
+    "prior_dated_snapshots_preserved": 230,
+    "prior_snapshot_files_preserved": 858,
+    "publish_status": "PUBLISHED_AND_READBACK_PASS",
+    "published_target_count": 13,
+    "selection_lock_sha256": "0d6bc7d65873e2c8def313f8d40b5e9327f01f6e6010b73b51999346b6fe94d3",
+    "snapshot_totals_after": {
+      "Cloud-BAL": 118,
+      "KLAPS50": 114
+    },
+    "stage_receipt_sha256": "0d4f5ca9ee77c070539309845d3f41d67f18b3b9322289ef511ee9d7f4842d83",
+    "stage_validation_sha256": "e98c022955c9670e162fb979e7e37d7299c2115e5a44b818b5963e8dfc10673d",
+    "stage_validation_status": "PASS_STAGED_ONLY",
+    "structural_scope": "Only the two recount files and the KG helper were structurally extracted; other new dated evidence is hash-only. No corpus scan or prune.",
+    "unrelated_dirty_state": "KLAPS50 exact pre-state unchanged; Cloud-BAL original dirty lines unchanged with only the expected untracked new dated snapshot directory."
+  },
+  "recount_review": {
+    "final_fix": "Freezes exact threshold list, checks raw counts of all mandatory CSV tables, checks the complete admission key set, then reuses the key index for ranking.",
+    "original_bug": "Original recount accepted an appended duplicate continuous score row after receipt size/hash refresh; 73 physical rows passed the 72-row contract.",
+    "reproductions": {
+      "duplicate_admission_key": "interim recount PASS at 152 physical / 151 unique rows; final recount rejects",
+      "empty_threshold_and_transition_archive": "old CLI exit 0 / PASS; final CLI rejects without audit output",
+      "extra_continuous_row": "old recount PASS at 73 rows; final recount rejects"
+    },
+    "second_bug": "An interim fix accepted 152 admission rows with 151 unique keys when a missing gate row was replaced by a duplicate and ranking short-circuited.",
+    "validation": {
+      "focused_tests": "6 passed",
+      "normal_saved_array_recount": "PASS before and after with unchanged receipt and all expected row counts",
+      "related_clean_export_suite": "152 passed in 55.09 s"
+    }
+  },
+  "reviewed_at_utc": "2026-11-03T07:44:10.630611+00:00",
+  "reviewer": "independent source/data/KG reviewer",
+  "schema": "recount-contract-final-team-review-v1",
+  "scope": {
+    "branch_head": "83804668a02e20eeac686d00ff5b2ff6b9a71154",
+    "hash_only_paths": 34,
+    "main_pr": 137,
+    "maintained_snapshot": "2026-11-03-recount-contract",
+    "research_pr": 142,
+    "selected_python_sources": [
+      "docs/evidence/recount_contract_20261103/kg/prepare_kg.py",
+      "tests/test_recount_cp02_weak_strong_balance.py",
+      "tools/recount_cp02_weak_strong_balance.py"
+    ]
+  },
+  "source_and_evidence_sha256": {
+    "README.md": "c57409d9a78214be8dbce3332df32f651fbb1939fb570932003f110bb18500f2",
+    "c2/validation.json": "e007e263198f62f576f07a6b8e441d7bf322222c504ce287fed73c57cdbe1b17",
+    "docs/CURRENT_RESEARCH_STATUS.md": "a214f09eef0085622adf59701bb0734dea9126ada1f77d5d99de2592d43d2024",
+    "kg/baseline.json": "8272a6e765a3f15f442a8ca15943f10e5e04ad31b5a9a9c1afd212bd34d7fd45",
+    "kg/postpublish_copy_receipt.json": "2ee80559adaae21fe3c3522e2a0dfd4d4595631f7fa1253e1990e8bf56c554f0",
+    "kg/prepare_kg.py": "0e2f308a9857e7dbf1e54ffb89fb54f1330990310f20c70016998b2a556cc22c",
+    "kg/publish_receipt.json": "b3cc9393ff6f3dd897fbcea7b13e8a12a0c262cc50ca0dd4c7912d2299758154",
+    "kg/selection_lock.json": "0d6bc7d65873e2c8def313f8d40b5e9327f01f6e6010b73b51999346b6fe94d3",
+    "kg/stage_receipt.json": "0d4f5ca9ee77c070539309845d3f41d67f18b3b9322289ef511ee9d7f4842d83",
+    "kg/stage_review.json": "db8870cf95273d60e1fe5b0460632d6f90f697ca96a904e933f55a2868f9c3f4",
+    "kg/stage_validation.json": "e98c022955c9670e162fb979e7e37d7299c2115e5a44b818b5963e8dfc10673d",
+    "physics/rain_number_lineage.json": "a30e514058737d3076d509088831cf8803a43f4d32198b5b51614cfacee26693",
+    "physics/rain_number_lineage.md": "6e8b34c4f52a4c06f988a9e0c705094a5f745fc5633c03fa4c7755a4314583c6",
+    "review/independent_review.json": "0ab3b13d51382e5e7164131710956a0573e4e5f3d72388db824d01d26a0d4116",
+    "status/source_hashes.json": "e73d3bbc1af0cc4f5e8ac45f56211106b09dbd8f7786609c3c7a03a9b7744b91",
+    "tests/test_recount_cp02_weak_strong_balance.py": "cf6dfbaf434c3f66ea8da63ffed9108c47275e4efeef8c7ec09648664dc91e86",
+    "tools/recount_cp02_weak_strong_balance.py": "f264425741b8ef69f8d372ed1992898185a709d53c14a14c32fb1fc7b18fcdf1",
+    "validation/clean_export_tests.json": "1f14e63a1398e4b2c3dabf24530c4f8ac0a75843b7f8afb9d79b39fb6866e876",
+    "validation/clean_export_tests.txt": "32c019ca740f34f3b954dbdb8807298f21709f0baf855878b1c940455f4a4efb",
+    "validator/duplicate_admission_manifest.json": "9f5017bb8fa9d5b9fab7f34a82eb3b4f5063ea89cd134922ff65727cb91ceef8",
+    "validator/duplicate_row_manifest.json": "8a1f2e1ea2c4f961079058cd088237c1631b97acfb5901d5a8e62b94ac26e624",
+    "validator/manifest.json": "1278f1aeed4f7d86000cd9581e9bd7367d228db24c35577f35399e3a7ff3dcea",
+    "validator/normal_saved_arrays_before_after.json": "68ae52419962cdfe551777047d31b88cbcc928f93c23b3f92d21c7e704df8fbc"
+  },
+  "status": "PASS_SCOPED_CHANGE_AND_KG_READBACK",
+  "status_and_science_review": {
+    "c2_bounded_replays": {
+      "O0_O2_reproduced": true,
+      "changed_numeric_policy": false,
+      "copied_artifact_hashes_checked": 9,
+      "full_han_forecast": false,
+      "producer_stencil_captured": false,
+      "source_hashes_checked": 4,
+      "status": "PASS_BOUNDED_PINNED_INTEL_REPLAYS"
+    },
+    "current_b1_input": "ORIGINAL_B1_100 whole retained file: QRAIN positive in 202569/2573532 cells, QNRAIN zero in 2573532/2573532. Input state does not establish writer or KDM6 call-entry policy.",
+    "experiment_separation": "CP02 B1 six-hour scores, PR142 QSNOW gate selection, and C2 H/A/N stability histories remain distinct experiments and rules.",
+    "open_items": [
+      "C2 first producer stencil and H/A/N completion",
+      "B1 OLD/FIX 0\u20132 h comparison is planned and not run",
+      "RN1 upstream timing/coverage and independent cases",
+      "rain-number authoritative writer and runtime density/call-entry",
+      "full water and energy budgets"
+    ],
+    "rain_number_lineage": "Historical CP02 arms are distinguished from B1. Retained `met_em` has QR but no QNR; Thompson-only initializer source candidate is not bound to the pinned executable; host density algebra is qualified as source inspection without exact executable binding or same-timestep KDM6 PRE capture.",
+    "repository_identity": "PR142 research tree equals commit 5e3bba43 tree; PR142 is not in main (main PR137).",
+    "status_hash_mismatches": 0,
+    "status_source_files_pinned": 19
+  },
+  "validation_receipt_note": "The root consolidated validation.json is written after this readback and is not part of the frozen prepublication lock to avoid a self-reference cycle."
+}

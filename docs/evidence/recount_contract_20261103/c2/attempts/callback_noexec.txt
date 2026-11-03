@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/var/tmp/cloudbal-recount-contract/docs/evidence/t39_closed_replay_20261027/callback_replay/run_callback_replay.py", line 303, in <module>
+    if __name__=='__main__': main()
+                             ^^^^^^
+  File "/var/tmp/cloudbal-recount-contract/docs/evidence/t39_closed_replay_20261027/callback_replay/run_callback_replay.py", line 248, in main
+    if run.returncode: raise RuntimeError(f'{opt} {kind} failed; see {log}:\n{run.stdout}')
+                       ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+RuntimeError: O0 native failed; see /tmp/recount-c2-callback-20261103/O0/native.log:
+bash: line 1: /tmp/recount-c2-callback-20261103/O0/native.exe: Permission denied
+

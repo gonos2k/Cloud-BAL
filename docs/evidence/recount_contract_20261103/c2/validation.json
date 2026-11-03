@@ -1,0 +1,127 @@
+{
+  "status": "PASS_BOUNDED_PINNED_INTEL_REPLAYS",
+  "commands": [
+    [
+      "python",
+      "tools/pr107_t39_first_group_replay.py",
+      "--output",
+      "docs/evidence/recount_contract_20261103/c2/first_group_replay.json"
+    ],
+    [
+      "python",
+      "docs/evidence/t39_closed_replay_20261027/callback_replay/run_callback_replay.py",
+      "--run-dir",
+      "/var/tmp/recount-c2-callback-20261103"
+    ]
+  ],
+  "source_sha256": {
+    "tools/pr107_t39_first_group_replay.py": "959d9f0ea9569180b1a3551fa9913fd4dddd1794da9359a7730ce58b867b1571",
+    "tools/pr99_group_failure_scalar_replay.py": "b7efb752ca36ef62daaa31fd33bea44948e569bd42100e136e761daab1708a55",
+    "docs/evidence/t39_closed_replay_20261027/callback_replay/run_callback_replay.py": "7d66daac3e512f18a978eb14f666b38ededbbaf39048a7c543fe263ade63ba6a",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+  "compiler": "ifx 2026.0.0",
+  "optimization_levels": [
+    "O0",
+    "O2"
+  ],
+  "source_tree_build_performed": false,
+  "fresh_scratch_builds": true,
+  "model_forecast_run_performed": false,
+  "group_cell_ijk": [
+    199,
+    52,
+    21
+  ],
+  "group_failure_stage": [
+    2,
+    2
+  ],
+  "group_candidate_bits": [
+    [
+      "3DC0321C9E375C92",
+      "3D226D5A966EC69E"
+    ],
+    [
+      "3DC0321C9E375C92",
+      "3D226D5A966EC69E"
+    ]
+  ],
+  "group_exact_classification_matches_retained": true,
+  "callback_cell_ijk": [
+    2,
+    219,
+    13
+  ],
+  "callback_status": "PASS_O0_O2_NATIVE_AND_PROBE",
+  "callback_exact_rounding_matches_retained": true,
+  "callback_capture_bits_match_retained": true,
+  "first_producer_stencil_for_group": "STILL_NOT_CAPTURED",
+  "correction_policy_changed": false,
+  "C2_1h_completion": "NOT_ACHIEVED",
+  "attempts": [
+    {
+      "path": "docs/evidence/recount_contract_20261103/c2/attempts/callback_noexec.txt",
+      "cause": "The first callback command chose /tmp, a non-executable scratch mount. Native executable launch returned Permission denied. Reran unchanged helper in fresh /var/tmp scratch; no compiler/profile/source changes.",
+      "retained_scratch": "/tmp/recount-c2-callback-20261103"
+    }
+  ],
+  "copied_evidence": [
+    {
+      "source": "/var/tmp/recount-c2-callback-20261103/O0/native.log",
+      "path": "docs/evidence/recount_contract_20261103/c2/callback/O0/native.log.txt",
+      "sha256": "6a1f5c0cd6ef902ced884cd7096c430f3306f6fa4049e4232f56f62b2e274eb7",
+      "size": 92
+    },
+    {
+      "source": "/var/tmp/recount-c2-callback-20261103/O0/probe.log",
+      "path": "docs/evidence/recount_contract_20261103/c2/callback/O0/probe.log.txt",
+      "sha256": "8c8ddd3793106616e2ba92a8fafd154ff4464141f7abad1e28462977861b686a",
+      "size": 344
+    },
+    {
+      "source": "/var/tmp/recount-c2-callback-20261103/O2/native.log",
+      "path": "docs/evidence/recount_contract_20261103/c2/callback/O2/native.log.txt",
+      "sha256": "6a1f5c0cd6ef902ced884cd7096c430f3306f6fa4049e4232f56f62b2e274eb7",
+      "size": 92
+    },
+    {
+      "source": "/var/tmp/recount-c2-callback-20261103/O2/probe.log",
+      "path": "docs/evidence/recount_contract_20261103/c2/callback/O2/probe.log.txt",
+      "sha256": "8c8ddd3793106616e2ba92a8fafd154ff4464141f7abad1e28462977861b686a",
+      "size": 344
+    },
+    {
+      "source": "/var/tmp/recount-c2-callback-20261103/driver_native.f90",
+      "path": "docs/evidence/recount_contract_20261103/c2/callback/driver_native.f90",
+      "sha256": "f879fd2a48f6d078b850f0b0a417cd91f6226a5e7f592980e4650ff0c324ad8b",
+      "size": 4473
+    },
+    {
+      "source": "/var/tmp/recount-c2-callback-20261103/driver_probe.f90",
+      "path": "docs/evidence/recount_contract_20261103/c2/callback/driver_probe.f90",
+      "sha256": "dad71f2a103ad0ae2d49b84f9154edab295b3035a8f77be48787a860d4faf069",
+      "size": 4791
+    },
+    {
+      "source": "/var/tmp/recount-c2-callback-20261103/horizontal_diffusion64.f90",
+      "path": "docs/evidence/recount_contract_20261103/c2/callback/horizontal_diffusion64.f90",
+      "sha256": "c2ec28215b34deb788ddea604b41869755c4b99f00a261d898d7f3b3399fe5fb",
+      "size": 3544
+    },
+    {
+      "source": "/var/tmp/recount-c2-callback-20261103/horizontal_diffusion64_probe.f90",
+      "path": "docs/evidence/recount_contract_20261103/c2/callback/horizontal_diffusion64_probe.f90",
+      "sha256": "9b0115637fb650d464e500e14bf0bcd234d242feeb622199134d73fc786ba339",
+      "size": 3684
+    },
+    {
+      "source": "/var/tmp/recount-c2-callback-20261103/receipt.json",
+      "path": "docs/evidence/recount_contract_20261103/c2/callback/receipt.json",
+      "sha256": "6964626fde497c66e8ac4602a360672feeec7b81063104b4b1baeec35f2f0444",
+      "size": 9654
+    }
+  ],
+  "limitations": "Local replay of already captured values only. Separate cells retained. Does not supply the first producer stencil, fix the strict coupled constraint, close budgets or complete H/A/N forecasts."
+}

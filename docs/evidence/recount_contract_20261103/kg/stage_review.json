@@ -1,0 +1,109 @@
+{
+  "baseline_sha256": "8272a6e765a3f15f442a8ca15943f10e5e04ad31b5a9a9c1afd212bd34d7fd45",
+  "findings": [
+    "Independent review passed: stage receipt, frozen selection lock, baseline, and independent validation hashes bind exactly.",
+    "Independent review passed: all 3 selected Python sources and 34 hash-only evidence paths match their frozen SHA-256 pins.",
+    "Independent review passed: all 13 staged targets match their declared hashes; both staged corpora preserve all prior node IDs and have zero missing/dangling endpoints, self-loops, duplicate links, or duplicate endpoint groups.",
+    "Independent review passed: all 230 prior snapshots (858 files) remain byte-identical; active graph/report/manifest files, exact dirty states, and 5 maintained wiki mirrors match the baseline before publication.",
+    "Scope audit passed: manifest changes are limited to the three selected paths in each corpus; no broad corpus scan or prune occurs; other evidence is hash-only.",
+    "Scientific-status audit passed: 152 related tests are recorded as passing; normal saved-array recount remains PASS with unchanged rows; C2 evidence is local bounded replay only and no forecast; the separate phase-2 native trace remains planned, not complete.",
+    "Limitations retained: only the selected three Python files are structurally extracted; Fortran cross-file extraction is partial; graph freshness does not establish runtime or scientific validation."
+  ],
+  "independent_checks": {
+    "graphs": {
+      "Cloud-BAL": {
+        "after": {
+          "communities": 1546,
+          "edges": 31096,
+          "nodes": 17395
+        },
+        "before": {
+          "communities": 1548,
+          "edges": 31038,
+          "nodes": 17373
+        },
+        "integrity": {
+          "dangling_endpoint_edges": 0,
+          "exact_duplicate_edges": 0,
+          "missing_endpoint_edges": 0,
+          "same_endpoint_group_count": 0,
+          "self_loop_edges": 0
+        },
+        "new_node_ids": 22,
+        "preserved_prior_nodes": 17373,
+        "snapshot_hashes": {
+          "GRAPH_REPORT.md": "aa727ecf20bb5872af9cc52d35d4dfcda07ae248ac03d198f950c0e3a8b02d4f",
+          "graph.json": "a905da739a79e1129b42dca90c55a98814e7c1f61ed36a05a2461318af81e257",
+          "manifest.json": "0b4682e0695c4d32db466a194f2d5656d397c7a11c39177883e33234d73ed2ad"
+        }
+      },
+      "KLAPS50": {
+        "after": {
+          "communities": 3496,
+          "edges": 89597,
+          "nodes": 43223
+        },
+        "before": {
+          "communities": 3524,
+          "edges": 89539,
+          "nodes": 43201
+        },
+        "integrity": {
+          "dangling_endpoint_edges": 0,
+          "exact_duplicate_edges": 0,
+          "missing_endpoint_edges": 0,
+          "same_endpoint_group_count": 0,
+          "self_loop_edges": 0
+        },
+        "new_node_ids": 22,
+        "preserved_prior_nodes": 43201,
+        "snapshot_hashes": {
+          "GRAPH_REPORT.md": "9871e5e84ba383cc6f2ca384a75ef46cb06ff2374a4c0939b1c6f076b6e2b30a",
+          "graph.json": "a304a349a7f793e59426cd74583a74511189ce7f339e35e8acbe0fcfde62a8ba",
+          "manifest.json": "5839c8fb2568cb3e6be4c176b70057b6582f874c53b22230d1917d1df223d10f"
+        }
+      }
+    },
+    "hash_only_count": 34,
+    "hash_only_mismatches": 0,
+    "maintained_prior_snapshot_count": 230,
+    "maintained_prior_snapshot_file_count": 858,
+    "maintained_root_current_graph_files_changed": false,
+    "maintained_roots_written": false,
+    "maintained_wiki_mirror_mismatches": 0,
+    "manifest_subset_checks": {
+      "Cloud-BAL": {
+        "changed_keys": [
+          "docs/evidence/recount_contract_20261103/kg/prepare_kg.py",
+          "tests/test_recount_cp02_weak_strong_balance.py",
+          "tools/recount_cp02_weak_strong_balance.py"
+        ],
+        "new_entries": 1,
+        "old_entries_preserved": 5956
+      },
+      "KLAPS50": {
+        "changed_keys": [
+          "Cloud-BAL/docs/evidence/recount_contract_20261103/kg/prepare_kg.py",
+          "Cloud-BAL/tests/test_recount_cp02_weak_strong_balance.py",
+          "Cloud-BAL/tools/recount_cp02_weak_strong_balance.py"
+        ],
+        "new_entries": 1,
+        "old_entries_preserved": 5596
+      }
+    },
+    "prior_snapshot_hash_mismatches": 0,
+    "selected_source_count": 3,
+    "selected_source_mismatches": 0,
+    "staged_file_hash_checks": 17,
+    "staged_target_hash_mismatches": 0,
+    "staged_targets": 13
+  },
+  "review_status": "GO",
+  "reviewer": "Independent Codex reviewer",
+  "selection_lock_sha256": "0d6bc7d65873e2c8def313f8d40b5e9327f01f6e6010b73b51999346b6fe94d3",
+  "snapshot": "2026-11-03-recount-contract",
+  "source_commit": "83804668a02e20eeac686d00ff5b2ff6b9a71154",
+  "stage_receipt_sha256": "0d4f5ca9ee77c070539309845d3f41d67f18b3b9322289ef511ee9d7f4842d83",
+  "stage_validation_sha256": "e98c022955c9670e162fb979e7e37d7299c2115e5a44b818b5963e8dfc10673d",
+  "status": "GO"
+}
