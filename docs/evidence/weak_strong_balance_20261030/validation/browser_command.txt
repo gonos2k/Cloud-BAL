@@ -1,0 +1,16 @@
+import json,re,html,hashlib
+from pathlib import Path
+from playwright.sync_api import sync_playwright
+root=Path('/var/tmp/cloudbal-weak-strong');bundle=root/'docs/evidence/weak_strong_balance_20261030/validation';document=root/'docs/WEAK_STRONG_BALANCE_FIGURES_20261030.md'
+urls=[u.strip('<>') for u in re.findall(r'!\[[^\]]*\]\(([^)]+)\)',document.read_text())];assert len(urls)==38
+with sync_playwright() as p:
+ b=p.chromium.launch(headless=True,args=['--no-sandbox','--disable-gpu','--disable-dev-shm-usage'])
+ page=b.new_page(viewport={'width':1440,'height':1000});errors=[]
+ page.on('requestfailed',lambda r:errors.append({'url':r.url,'failure':r.failure}))
+ page.set_content('<!doctype html><meta charset="utf-8"><style>img{max-width:100%}</style>'+''.join(f'<img src="{html.escape(url)}">' for url in urls),wait_until='load',timeout=120000)
+ decoded=page.locator('img').evaluate_all('xs=>xs.map(x=>({src:x.src,complete:x.complete,width:x.naturalWidth,height:x.naturalHeight}))')
+ assert len(decoded)==38 and all(x['width']>0 and x['height']>0 for x in decoded),(decoded,errors)
+ assert not errors,errors
+ version=b.version;b.close()
+r={'status':'PASS','document':str(document.relative_to(root)),'document_sha256':hashlib.sha256(document.read_bytes()).hexdigest(),'asset_commit':'bd645348fd444a0721134f97e3043515231fc914','browser':'Headless Chromium','browser_version':version,'expected':38,'loaded_with_intrinsic_dimensions':len(decoded),'images':decoded,'failed_requests':errors,'scope':'Published immutable PNG proxy URLs loaded as browser HTML; not a deployed-page screenshot or independent user-network guarantee.'}
+(bundle/'browser_images.json').write_text(json.dumps(r,indent=2)+'\n');print('PASS 38/38 browser images',version)

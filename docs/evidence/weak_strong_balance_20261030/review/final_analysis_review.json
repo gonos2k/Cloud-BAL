@@ -1,0 +1,82 @@
+{
+  "review": "independent final analysis and report review",
+  "result": "PASS",
+  "reviewer": "tradeoff_audit",
+  "source_pins": {
+    "selection_plan_sha256": "17e8833f2f28da76e1474f82440a88889bd55ba723ef9cd6618d06a0eb786248",
+    "common_plan_sha256": "a2d06679ea3a9b24a04f9ff359c842172f06fd7ec0f402f802c91399b2ad6a3a",
+    "gate_manifest_sha256": "07e95e73af040e4388c6636634e334606ad1292bab7f30340d5148e90841b29c",
+    "gate_maps_sha256": "40b8b1d2fd772a1fbf462824ab77f958f31be19f86733d09e7504ff4630e4909",
+    "scorer_sha256": "7ce0a9537a6585fda7d89cdc9c582cfc73d3a298a614bde0ed423e01c40b6d20",
+    "recount_sha256": "8f19da021b44149f7a7034e8d2a42c802b538f38ddeb0e343e3ba4666b81b762",
+    "test_source_sha256": "c7cfb03181fc53dbbabba4c6be13e492d2a082373b85c54a1d8463fe5025c283",
+    "analysis_receipt_sha256": "01da50b3efbb077d88c49f11052377b3bc5e6016f9b4ac8baeace8c489b8fc7d",
+    "runtime_batch_receipt_sha256": "2716f7376d20575c4cf015434266dcdb4e4050ce12e2d203c13beb317a66aa4a",
+    "runtime_history_validation_sha256": "8d912c0c05940d3cd9dfe8d84048381e7e87abab4e47741d094744f00c1eae52",
+    "runtime_final_receipt_sha256": "4322b9de5a4490a3f874c6cdb826889a1f721185f907aa6383e07f9c113f3f58",
+    "independent_recount_and_replay_sha256": "96ce0f12d13ed9c2d6b082093fcc2ae7f1d5f9a1a021f72b23e7ecf84c62ed17",
+    "main_report_sha256": "4db29d2c2bda625c91daf82446066495113b1a923579e98683656b0cae45b4ee",
+    "main_report_receipt_sha256": "a87d7289412bcdb4d373a424d6c9492e4757d4d52a8ee1047f342f645cec6ead",
+    "full_score_report_sha256": "fcba7f45a140d552fa1f26dda532891477578b21927fa18c053a81e3b4ac4da8",
+    "full_score_receipt_sha256": "79cfcd06b6b34df8ba5a5a3a6292198d50ec05a20b9ccf273b141729de9c41e8",
+    "figure_manifest_sha256": "825df4048788d0eff229137c31065a0875780427b7c020a016c4a0f017d80973"
+  },
+  "runtime_and_recount": {
+    "all_eight_forecasts_and_56_histories_validated": true,
+    "independent_recount_status": "PASS",
+    "absolute_path_full_byte_replay_status": "PASS",
+    "byte_identical_output_count": 29,
+    "rows_recounted": {
+      "categorical": 432,
+      "continuous": 72,
+      "point_transitions": 396,
+      "admission_constraints": 152,
+      "observation_band_transitions": 1980,
+      "observed_forecast_bin_counts": 3300
+    },
+    "selection_status": "NO_QUALIFIED_CANDIDATE",
+    "selected_case": null
+  },
+  "admission_and_diagnostic_findings": {
+    "weak_CSI_floor_failures_of_18": {
+      "GATE_G50_90": 9,
+      "EQ_G50_90": 5,
+      "GATE_G75_95": 8,
+      "EQ_G75_95": 6,
+      "GATE_G90_99": 10,
+      "EQ_G90_99": 7,
+      "FIXED_ORIGINAL_100": 13,
+      "ORIGINAL_B1_100": 8
+    },
+    "ORIGINAL_B1_100_strong_condition": "FAIL",
+    "lead1_CSI10": {
+      "GATE_G50_90": 0.12903225806451613,
+      "EQ_G50_90": 0.1118421052631579,
+      "CONTROL_SNOW_300_context": 0.12738853503184713,
+      "ORIGINAL": 0.04929577464788732
+    },
+    "GATE_G50_90_interpretation": "It has the highest new-case lead-1 CSI@10 among these diagnostics, but fails 9 of 18 weak CSI floors; EQ_G50_90 fails 5. It is not admitted or selected.",
+    "lead1_low_threshold_CSI_delta_vs_ORIGINAL": {
+      "FIXED_ORIGINAL_100_at_0_1_by_lead_1_to_6": [0.04004578641525286, -0.01617823584857525, -0.00921001417947609, -0.012694512694512716, -0.0036723697691781743, -0.017529436098143336],
+      "ORIGINAL_B1_100_at_0_1_by_lead_1_to_6": [0.0009770633278511354, -0.00320322214413149, -0.0055746595445697045, 0.0005495662638519416, -0.000425688790246459, 0.00010124674774253384]
+    },
+    "interpretation_limit": "The crossed executable/input cases show different score associations under this single case; their factorial differences are diagnostic, nonlinear score contrasts, not single-process causal attribution. Weak-threshold CSI aggregates hits at all observed intensities above its cutoff and is not a light-rain-only score."
+  },
+  "report_and_asset_review": {
+    "main_report_and_full_score_receipts_bind_analysis_and_final_figure_manifest": true,
+    "asset_batch_review_sha256": "da81718450d05d78bf652701299783eb26a8603a88386542df968f375bdcd8d5",
+    "all_38_png_assets_and_manifest_independently_replayed_byte_exact": true,
+    "report_claims_no_qualifier_and_does_not_select_strong_only_leader": true,
+    "same_event_and_RN1_limits_are_explicit": true,
+    "total_precipitation_not_snowfall_only_is_explicit": true,
+    "mass_match_is_diagnostic_QSNOW_only_no_conservation_claim": true,
+    "gate_uses_initial_input_only_no_future_or_observation_leak": true
+  },
+  "next_step": "Do not claim a universal weak-versus-strong direction or expand a blind snow-factor grid. Use the observed strong-only/weak-floor conflict and the executable/input cross sensitivity to prioritize process-budget and guard qualification; any rain-number initializer must first be tied to an authoritative PSD or observation constraint.",
+  "scope_limits": [
+    "One initialization case and event; same paired RN1 points over six one-hour windows.",
+    "Results do not establish independent-event or operational forecast skill.",
+    "Initial equal-mass matching is not full water/energy or microphysical-state conservation.",
+    "The stage-1 scorer hash was an interim source pin; exact prior source bytes were not archived. See separate version reconciliation note."
+  ]
+}

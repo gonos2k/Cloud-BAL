@@ -1,0 +1,46 @@
+{
+  "review": "stage-3 rain-number initialization probe scope and evidence review",
+  "result": "PASS",
+  "reviewer": "tradeoff_audit",
+  "probe_artifacts": {
+    "json_path": "docs/evidence/weak_strong_balance_20261030/review/stage3_probe.json",
+    "json_sha256": "f2583c72a6f3ac386c0c01b8e3a2ed4b3d32cca412c770ddfe7ecede6c48507a",
+    "markdown_path": "docs/evidence/weak_strong_balance_20261030/review/stage3_probe.md",
+    "markdown_sha256": "1fa4c9dbf8d323ec0304b5cfb4b0847adc468b31b65c95415f2316a057c30fe2"
+  },
+  "independent_verification": {
+    "base_compiled_source_sha256": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b",
+    "base_source_matches_host_sha256": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b",
+    "fixed_compiled_source_sha256": "0b468be19f7dd66ad2f6e65a53b42f10391a4565831a96c80dddddf21934cf79",
+    "build_receipt_sha256": "50fb6bf97114cccbb170404b927aa54fc0fa83c72f64f23d2c3c107472c1afc7",
+    "capture_context_sha256": "bb4063b3437b986f330cbb3dffbc6414789a3adfd5e38bc29aee2ee75e58c5f5",
+    "capture_receipt_sha256": "88d85dddc1e92d630218d3a6027aae4db1b57af1f07b5e985d5085e68261a215",
+    "raw_capture_sha256": "c8cd7c7d2f03437a7a020cc1a97f5476a48be816e3f53532b33b9d4994741e21",
+    "independent_capture_recount_sha256": "80437478e601cf8e5478ae6473a9ab1a1150ca34e76cbe6c50f9d0837d904b7a",
+    "initial_field_extract_sha256": "522fc8600eb32e7c96baed296f57342fbfb51c5c5bad40e81dbd11aae2147c32",
+    "input_copy_manifest_sha256": "01e00d732b1f983f55247e3ce97568a536a3aa6465059c864a0f292b93ca2f7e"
+  },
+  "checks": {
+    "all_referenced_source_and_evidence_hashes_verified": true,
+    "base_source_matches_retained_host_source": true,
+    "base_executable_matches_retained_historical_identity_per_bound_build_receipt": true,
+    "only_base_to_fixed_source_change_is_zero_guard_limiter_branch": true,
+    "rain_mass_and_number_are_loaded_as_distinct_moments": true,
+    "fallback_slope_branch_does_not_initialize_missing_rain_number": true,
+    "zero_rate_guard_effect_is_limited_to_evaporation_rate_limiter": true,
+    "report_preserves_raw_operand_to_n0r_mapping_as_inference": true,
+    "input_sample_counts_recomputed": {
+      "OFF": "210/624",
+      "HYDRO": "210/624",
+      "LIQUID": "210/624"
+    },
+    "sample_is_explicitly_not_described_as_whole_domain_census": true,
+    "probe_does_not_claim_forecast_skill_or_validated_initializer": true,
+    "next_step_requires_authoritative_mass_number_distribution_constraint": true
+  },
+  "scientific_limits": [
+    "The selected-cell machine operand identity remains inferred because the binary lacks debug symbols.",
+    "The initial-field sample covers four mapped points, four native corners, and 39 levels, not the whole domain or full first-call consumption.",
+    "No native source edit, build, new model run, skill test, or rain-number initializer validation is part of this probe."
+  ]
+}

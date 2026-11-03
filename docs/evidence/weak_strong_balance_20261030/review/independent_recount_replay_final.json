@@ -1,0 +1,94 @@
+{
+  "status": "PASS",
+  "analysis_receipt_sha256": "c04e2e6002d043ec1624d7bc2145e78fed9a4173487251e4ce472c963094c0ae",
+  "recount_tool": {
+    "path": "/var/tmp/cloudbal-weak-strong/tools/recount_cp02_weak_strong_balance.py",
+    "sha256": "39fa26c634d9de36d92d3d63f0b0c79d332c90a27e6bb77169331eec0b399926",
+    "size_bytes": 33717
+  },
+  "scoring_tool": {
+    "path": "/var/tmp/cloudbal-weak-strong/tools/cp02_weak_strong_balance.py",
+    "sha256": "2572d41d352c70d72d8488fe9f0dc9d961de8b10c21f7ade459f131e7c4fbdb5",
+    "size_bytes": 65718
+  },
+  "independently_recounted_rows": {
+    "categorical": 432,
+    "continuous": 72,
+    "transitions": 396,
+    "admission": 152,
+    "observation_band_transitions": 1980,
+    "observed_forecast_bins": 3300
+  },
+  "checked_arrays": [
+    "5ab0cc484b1bd47c587e9f710a8d19072b383447b8a7aa4c0c0d8f22a2ae5354",
+    "309706609edb4f40c6063aacabf86cea2a28aafff39d73d584cc41336e0941f9",
+    "6ccac20f2d141b9ff270e5dde8bf219378e456ae073614f783d41d0d1abc8510",
+    "0fa329fc68ece6ce1334d168b8eeb92c8c3404cbdae3a5db274aae3194052852",
+    "b4e2c8bf84daee247ba632c53ebd556e3d40313a91e1ad144340f6c5c6fab982",
+    "5b29e885d50be1fb306a1f1f16d5961a87650f76b3432ebb12c4bd835728090a"
+  ],
+  "limitations": "Recounts saved paired point arrays; runtime histories are separately hash-bound by receipts.",
+  "replay": {
+    "status": "PASS",
+    "analysis_receipt_sha256": "c04e2e6002d043ec1624d7bc2145e78fed9a4173487251e4ce472c963094c0ae",
+    "replayed_outputs": 29,
+    "byte_identical_outputs": [
+      "admission_constraints.csv",
+      "categorical_scores.csv",
+      "continuous_scores.csv",
+      "csi_change_exact_counts.csv",
+      "factorial_difference_in_differences.csv",
+      "gate_equal_mass_comparison.csv",
+      "hour_13_arrays.npz",
+      "hour_13_difference_vs_original.npz",
+      "hour_13_transitions_vs_original.npz",
+      "hour_14_arrays.npz",
+      "hour_14_difference_vs_original.npz",
+      "hour_14_transitions_vs_original.npz",
+      "hour_15_arrays.npz",
+      "hour_15_difference_vs_original.npz",
+      "hour_15_transitions_vs_original.npz",
+      "hour_16_arrays.npz",
+      "hour_16_difference_vs_original.npz",
+      "hour_16_transitions_vs_original.npz",
+      "hour_17_arrays.npz",
+      "hour_17_difference_vs_original.npz",
+      "hour_17_transitions_vs_original.npz",
+      "hour_18_arrays.npz",
+      "hour_18_difference_vs_original.npz",
+      "hour_18_transitions_vs_original.npz",
+      "observation_band_transitions.csv",
+      "observed_forecast_bin_counts.csv",
+      "receipt.json",
+      "transitions_vs_original.csv",
+      "winner.json"
+    ],
+    "winner": {
+      "admission": "all 18 weak cells CSI >= ORIGINAL and strict lead-1 CSI@10 > ORIGINAL; zero tolerance",
+      "averaging": "No aggregation across thresholds, leads, or experiments.",
+      "comparison_baseline": "ORIGINAL",
+      "constraints": "weak thresholds 0.1/0.5/1.0 mm at each lead 1-6, plus lead-1 10.0 mm CSI",
+      "eligible_cases": [
+        "GATE_G50_90",
+        "EQ_G50_90",
+        "GATE_G75_95",
+        "EQ_G75_95",
+        "GATE_G90_99",
+        "EQ_G90_99",
+        "FIXED_ORIGINAL_100",
+        "ORIGINAL_B1_100"
+      ],
+      "qualified_cases": [],
+      "ranking_order": [
+        "descending lead-1 CSI at 10 mm",
+        "descending lead-1 CSI at 5 mm",
+        "ascending lead-1 FAR at 10 mm",
+        "ascending lead-1 RMSE",
+        "ascending case ID"
+      ],
+      "selected_case": null,
+      "status": "NO_QUALIFIED_CANDIDATE",
+      "weak_threshold_interpretation": "These CSI floors include hits at all observed intensities above each cutoff, including heavy-rain hits; they are not light-rain-only scores."
+    }
+  }
+}

@@ -1,0 +1,74 @@
+{
+  "purpose": "Preserve scorer CLI failures and successful pre-final postprocessing for audit; these directories are not final analysis outputs.",
+  "attempts": [
+    {
+      "attempt": 1,
+      "failure": "AttributeError: pinned_six_hour_scorer has no DEFAULT_REFERENCE_DIR.",
+      "action": "Load the pinned lower sensitivity wrapper for reference directories and its six-hour scorer; bind the wrapper hash."
+    },
+    {
+      "attempt": 2,
+      "failure": "ValueError writing gate_equal_mass_comparison.csv: heterogeneous categorical/continuous row keys.",
+      "action": "Use deterministic union CSV headers and explicit row_type/metric/unit; blank fields remain blank."
+    },
+    {
+      "attempt": 3,
+      "status": "SCORING_AND_RECEIPT_WRITE_COMPLETED",
+      "scorer_source": {
+        "path": "/var/tmp/cloudbal-weak-strong/tools/cp02_weak_strong_balance.py",
+        "sha256": "0b7a2c7719b070a31613db1e6c535432a8ca0da802e29bcfb213c0404152a740",
+        "size_bytes": 65395
+      },
+      "failure": "CLI final display failed: TypeError: tuple indices must be integers or slices, not str. A trailing comma formed a one-element tuple around the receipt dict.",
+      "artifact_receipt_shape": "one-element JSON array, therefore archived as a failed postprocess attempt.",
+      "action": "Remove trailing comma; add full no-winner postprocessing fixture; rerun and verify plain-object receipt."
+    },
+    {
+      "attempt": 4,
+      "status": "SCORING_CLI_COMPLETE_BUT_INDEPENDENT_RECOUNT_REJECTED",
+      "scorer_source": {
+        "path": "/var/tmp/cloudbal-weak-strong/tools/cp02_weak_strong_balance.py",
+        "sha256": "f1e204ef77ee91d26db817e6af5207e1550f4164d124709377e7a72b26dd2258",
+        "size_bytes": 65394
+      },
+      "failure": "Independent recount ValueError: hour 13 array archive keys differ from receipt. NPZ persisted all 39 prior contexts plus 8 new cases; contract requires only the frozen 12 contexts plus reference/coordinates.",
+      "action": "Filter prior context arrays to the frozen context set when constructing the canonical archive, then rescore/recount/replay.",
+      "preserved_artifacts": "review/attempts/recount_scope_failure/"
+    },
+    {
+      "attempt": 5,
+      "status": "REPLAY_RECEIPT_BYTES_DIFFERED_DUE_TO_PATH_SPELLING",
+      "scorer_source_sha256": "3d454cadb85fc17d63cc4380020691ce7b35fc2a8d89a064d5e72f5cffde7796",
+      "failure": "Earlier replay compared receipts created with relative runtime/plan argument spellings against the canonical receipt created with absolute default paths. identity() preserves the supplied path string. A same-seed absolute-path replay showed raw receipt equality; no nondeterminism was found.",
+      "preserved_artifacts": "review/attempts/noncanonical_receipt/",
+      "action": "Normalize analysis/runtime/plan arguments with Path.resolve() in replay and rerun with the canonical absolute paths under two distinct PYTHONHASHSEED values."
+    },
+    {
+      "attempt": 6,
+      "status": "DIAGNOSIS_CONFIRMED_AND_TWO_SEED_REPLAYS_PASSED",
+      "cause": "Canonical scoring used default absolute runtime and plan paths; earlier replay invocations supplied relative paths. identity() binds the supplied path spelling, so receipt.json alone differed even though parsed analysis fields and all data outputs matched.",
+      "fix": "replay() resolves analysis, runtime, and plan paths before invoking the scorer; a regression test confirms relative arguments are normalized. Final seed 0 and seed 1 replays passed all 29 outputs byte-for-byte with absolute canonical arguments.",
+      "final_recount_source_sha256": "8f19da021b44149f7a7034e8d2a42c802b538f38ddeb0e343e3ba4666b81b762",
+      "evidence": "review/independent_recount_replay_seed0.json and seed1.json both report 29 byte-identical outputs and the same canonical receipt SHA."
+    },
+    {
+      "attempt": 7,
+      "status": "CLEAN_EXPORT_RELOCATION_CHECK_FAILED_ARCHIVED",
+      "analysis_receipt_sha256": "01da50b3efbb077d88c49f11052377b3bc5e6016f9b4ac8baeace8c489b8fc7d",
+      "scorer_source_sha256": "7ce0a9537a6585fda7d89cdc9c582cfc73d3a298a614bde0ed423e01c40b6d20",
+      "failure": "Copied-checkout test rejected a path equality between the frozen absolute selection-plan runtime_directory and checkout-derived RUNTIME_DIR.",
+      "action": "Remove only the redundant location comparison from selection-plan validation; exact selection plan hash remains pinned, and runtime common-plan/source/history validation remains required. Then rescore once and strict replay."
+    },
+    {
+      "attempt": 8,
+      "status": "FINAL_RELOCATION_SAFE_RESCORE_AND_STRICT_REPLAY_PASS",
+      "analysis_receipt_sha256": "c04e2e6002d043ec1624d7bc2145e78fed9a4173487251e4ce472c963094c0ae",
+      "scorer_source_sha256": "2572d41d352c70d72d8488fe9f0dc9d961de8b10c21f7ade459f131e7c4fbdb5",
+      "recount_source_sha256": "39fa26c634d9de36d92d3d63f0b0c79d332c90a27e6bb77169331eec0b399926",
+      "recount_replay_sha256": "8bf9ac77f4bfc8fc7b63ac0f9d33857379547897095b77a9a56f41543bdd485c",
+      "comparison": "All 28 data output artifacts byte-identical to the prior accepted run; receipt source binding updated.",
+      "winner": "NO_QUALIFIED_CANDIDATE"
+    }
+  ],
+  "cleanup": "Attempts 1 and 2 used score() exception cleanup and removed their output directories. Attempt 3 files are preserved in this directory."
+}

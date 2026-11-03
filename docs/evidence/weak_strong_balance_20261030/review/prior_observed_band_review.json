@@ -1,0 +1,49 @@
+{
+  "review": "independent recount of prior observed-intensity band audit",
+  "result": "PASS",
+  "reviewer": "tradeoff_audit",
+  "source_receipt_sha256": "a9b8fa97e12d85bd49ce91b42f5126c8fc727ef0846eba1eeddc6a552a044602",
+  "source_array_sha256": {
+    "hour_13_arrays.npz": "db3c69de36fe7d82ff3223dc92f849031fe5bb68bb7118592526e65fa6501048",
+    "hour_14_arrays.npz": "5b3411c6b03fc1a9fdad78dd05fa04d5181b18e28adb8de6f96a11a220e3a983",
+    "hour_15_arrays.npz": "2dcbd2c0960c75fc18b1932e37187ad1b53079ca245ad2e225b0c0157ce44bba",
+    "hour_16_arrays.npz": "902b55a65837f64a1ae78fab0d8a59f3ce40906e82fa0aa0eab7c88d115765e5",
+    "hour_17_arrays.npz": "f48d9b98e6cdf6acb48466bb9e3669739ecdc148bc751a64e2ecc2f1af3222e7",
+    "hour_18_arrays.npz": "91732db992aa3936946d789dae7445f5d9b29c10ee8da03dcb72d922b5841130"
+  },
+  "reviewed_artifacts": {
+    "audit_script_sha256": "99160862cc6a17468f677fb0102373eca0e9723fdd8d8b7295ababa7705b057d",
+    "audit_csv_sha256": "13a8ee9988dc9a30501de905984f59806b867010f623b6341624b2d3271c1cf6",
+    "producer_receipt_sha256": "ff96adedcdf811dc312651a92e66c22d3261c9b76125e012a0a47196f203e1a6"
+  },
+  "checks": {
+    "input_prior_receipt_and_all_six_arrays_match_sealed_hashes": true,
+    "540_unique_case_lead_threshold_band_rows": true,
+    "independent_point_array_recount_matches_each_band_cell": true,
+    "every_band_partition_sums_to_all_3688_points_and_full_contingency_transitions": true,
+    "all_three_cases_and_six_leads_and_six_thresholds_covered": true,
+    "bands_are_disjoint_half_open_intervals_with_top_band_inclusive": true
+  },
+  "independent_rows_recounted": 540,
+  "specific_improved_snow_080_lead1_threshold_0_1": {
+    "lead4_net_hit_change_by_observed_band": {
+      "dry_below_0_1": 0,
+      "light_0_1_to_below_1": 2,
+      "moderate_1_to_below_5": 2,
+      "strong_5_to_below_10": -20,
+      "very_strong_10_or_more": -14
+    },
+    "lead4_false_alarm_change_in_dry_bin": -1,
+    "lead4_combined_strong_and_very_strong_hit_change": -34,
+    "lead6_net_hit_change_by_observed_band": {
+      "dry_below_0_1": 0,
+      "light_0_1_to_below_1": -12,
+      "moderate_1_to_below_5": -31,
+      "strong_5_to_below_10": 2,
+      "very_strong_10_or_more": 5
+    },
+    "lead6_false_alarm_change_in_dry_bin": -19,
+    "lead6_combined_strong_and_very_strong_hit_change": 7
+  },
+  "interpretation_limit": "These are descriptive point transitions partitioned by verifying observed intensity. Per-band hit and false-alarm deltas do not themselves equal additive per-band CSI contributions because CSI uses a shared contingency denominator; no causal or initialization-gate inference is made."
+}

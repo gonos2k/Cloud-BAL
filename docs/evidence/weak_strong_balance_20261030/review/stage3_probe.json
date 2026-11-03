@@ -1,0 +1,89 @@
+{
+  "schema": "weak-strong-balance-stage3-source-probe-v1",
+  "status": "READ_ONLY_SOURCE_AND_PROVENANCE_PROBE",
+  "created_utc": "2026-10-30",
+  "scope": {
+    "source_tree": "/var/tmp/firsthour-runtime-plan-20261030/experiment",
+    "question": "Can the zero-rate rain-evaporation guard be distinguished from a physically consistent initialization of QRAIN/QNRAIN?",
+    "actions": ["source inspection", "receipt/hash inspection", "read-only review of retained captures and input samples"],
+    "native_source_edited": false,
+    "build_performed": false,
+    "model_run_performed": false
+  },
+  "build_lineage": {
+    "receipt": {
+      "path": "docs/evidence/first_hour_zero_rate_20261030/runtime/build_receipt.json",
+      "sha256": "50fb6bf97114cccbb170404b927aa54fc0fa83c72f64f23d2c3c107472c1afc7",
+      "host_unchanged": true,
+      "intel_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+      "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+      "compiler_and_linker": "Intel ifx 2026.0 with Intel MPI mpif90 2021.18; receipt records -O2, -fp-model strict, -no-ftz, -fpe0 and exact argv."
+    },
+    "base": {
+      "preprocessed_source": {"path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/build_BASE/module_mp_kdm6.F", "sha256": "49cf8b0e3905a8d584073fdf3345ddfa64a0b0bac178676584505f7c4d7187ca"},
+      "compiled_source": {"path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/build_BASE/module_mp_kdm6.f90", "sha256": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b"},
+      "host_source_same_bytes": {"path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/host/phys/module_mp_kdm6.f90", "sha256": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b"},
+      "executable_sha256": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+      "rebuild_match": "BASE executable hash equals the retained historical executable hash."
+    },
+    "fixed": {
+      "preprocessed_source": {"path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/build_FIX/module_mp_kdm6.F", "sha256": "7a27a584ce396355440c8be4473a8c7fa8a3bf1d55c239f81d8eef755dd8f762"},
+      "compiled_source": {"path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/build_FIX/module_mp_kdm6.f90", "sha256": "0b468be19f7dd66ad2f6e65a53b42f10391a4565831a96c80dddddf21934cf79"},
+      "executable_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+      "candidate_patch": {"path": "docs/evidence/first_hour_zero_rate_20261030/runtime/candidate.patch", "sha256": "1f0d23555c4409bedcadaac3ff07276a1f1c779b9a8c48217f9500bf9f9b4d4a", "change": "Only the rain evaporation limiter's final else changes to else if (prevp(i,k).ne.0.)."}
+    },
+    "build_limits": [
+      "The retained private build recompiles the KDM6 object and relinks copies of the same archived host artifacts; it is a partial rebuild, not a clean full-host rebuild.",
+      "The build receipt says external dependencies and symlink targets were sealed after compilation, not before it.",
+      "Full historical source provenance is unresolved. The binary has no DWARF debug sections; source-to-stack-slot mapping is not independently symbolized."
+    ]
+  },
+  "source_mechanics": {
+    "exact_source": {"path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/build_BASE/module_mp_kdm6.f90", "sha256": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b"},
+    "source_locations": [
+      {"lines": "310-318, 351-355", "finding": "The driver copies qr to qrs and converts QNRAIN nr to internal nrs=nr*den; on return it writes nr=nrs/den. The wrapper does not seed rain number when QRAIN is positive and QNRAIN is zero."},
+      {"lines": "60-92, 126, 1360-1375, 3424-3434", "finding": "Rain PSD closure is two-moment: qcrmin=1e-9 and nrmin=1e-2 guard the q/n-dependent lambda reconstruction. slope_kdm6 falls back to maximum inverse-lambda values when mass or number is below its threshold; it does not create nrs. n0r is computed from nrs and the rain slope, so nrs=0 yields n0r=0."},
+      {"lines": "1649-1654", "finding": "Cloud autoconversion creates rain number as 3.5e9*den*praut, except when existing qrain exceeds lenconcr, where nraut is reset to (nrs/qrs)*praut. Positive qrain with zero nrs therefore supplies zero number through that branch too."},
+      {"lines": "703, 760-761, 842, 1614-1632, 1714-1736", "finding": "Rain evaporation/condensation uses rh=q/qs, satdt=(max(q,qmin)-qs)/dtcld, diffac and venfac terms, and prevp proportional to (rh-1)*n0r. The raw rate is limited by rain mass and saturation. When raw prevp is either signed zero, prevp<0 is false, so the baseline else can replace it with min(prevp,satdt/2); for satdt<0 this produces a negative rate. The fixed else-if skips that limiter when prevp compares equal to zero."},
+      {"lines": "2534-2535, 2584-2587, 2607-2609, 2666-2691", "finding": "The rate enters vapor and rain mass updates with opposite signs. Temperature uses xl=xlv0-xlv1*(T-t0c), cpm=cpmcal(q), and -xl*prevp in the enthalpy tendency. Thus negative prevp transfers rain to vapor and cools; positive prevp condenses vapor into rain and warms, subject to other simultaneous processes and limiters."}
+    ],
+    "source_interpretation": "The zero-guard patch changes when a rate is limited; it does not initialize QNRAIN, reconstruct a rain number moment, or repair the QRAIN/QNRAIN state. It is not a substitute for a number-distribution initialization policy."
+  },
+  "runtime_capture": {
+    "capture_scope": "Retained first KDM6 inner-call diagnostic stop, HYDRO arm, 8 ranks; not a forecast completion.",
+    "context": {"path": "docs/evidence/cp02_zero_candidate_20261029/captures/HYDRO/context.json", "sha256": "bb4063b3437b986f330cbb3dffbc6414789a3adfd5e38bc29aee2ee75e58c5f5", "binary_sha256": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168"},
+    "capture_receipt": {"path": "docs/evidence/cp02_zero_candidate_20261029/captures/HYDRO/receipt.json", "sha256": "88d85dddc1e92d630218d3a6027aae4db1b57af1f07b5e985d5085e68261a215", "input_wrfinput_sha256": "7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126", "input_files_unchanged": 88},
+    "raw_capture": {"path": "docs/evidence/cp02_zero_candidate_20261029/captures/HYDRO/raw_hydro_first_inner_rank1_pid402065.json.gz", "sha256": "c8cd7c7d2f03437a7a020cc1a97f5476a48be816e3f53532b33b9d4994741e21"},
+    "independent_raw_recount": {"path": "docs/evidence/cp02_zero_candidate_20261029/review/independent_raw.json", "sha256": "80437478e601cf8e5478ae6473a9ab1a1150ca34e76cbe6c50f9d0837d904b7a", "status": "PASS", "captured_zero_candidates": 6},
+    "selected_hydro_cell": {
+      "point": "P05_00", "rank": 1, "tile": [163, 70, 8],
+      "inner_entry_qrs_kg_kg": 0.00028401799499988556,
+      "inner_entry_nrs_internal_raw_hex": "00000000",
+      "inner_entry_vapor_q_kg_kg": 0.015838367864489555,
+      "inner_entry_temperature_K": 293.9305419921875,
+      "candidate_humidity_array_0x1b8_raw_f32": 0.9141017198562622,
+      "candidate_humidity_factor_rh_minus_1_f32": -0.08589828014373779,
+      "candidate_weight_array_0xe8_raw_f64": 0.0,
+      "candidate_weight_array_0xe8_raw_hex": "0000000000000000",
+      "candidate_result_raw_f32_hex": "00000080",
+      "interpretation": "The selected compiled path produced negative zero after multiplying a negative humidity factor by a positive-zero REAL64 array value. Source ordering makes n0r a plausible identity for this array operand because n0r immediately follows (rh-1) in the source formula and is zero when nrs is zero; this operand-to-symbol assignment remains an inference because the binary lacks debug symbols."
+    }
+  },
+  "initial_input_samples": {
+    "field_extract": {"path": "docs/evidence/cp02_kdm6_controls_20261029/inputs/selected_initial_fields.csv", "sha256": "522fc8600eb32e7c96baed296f57342fbfb51c5c5bad40e81dbd11aae2147c32", "rows_per_arm": 624, "selection": "4 mapped points × 4 native corners × 39 levels; selected sample only, not a whole-grid census."},
+    "input_manifest": {"path": "docs/evidence/cp02_kdm6_controls_20261029/inputs/copy_manifest.json", "sha256": "01e00d732b1f983f55247e3ce97568a536a3aa6465059c864a0f292b93ca2f7e", "source_verification_sha256": "db6d7df43dbc6fc182b8a8089fff2f06c7a5bd478150c2b65e96214ada0af432"},
+    "native_variable_metadata": {
+      "QRAIN": {"shape": [1, 39, 282, 234], "dtype": "float32", "units": "kg kg-1"},
+      "QNRAIN": {"shape": [1, 39, 282, 234], "dtype": "float32", "units": "kg(-1)"},
+      "temperature": {"variable": "T", "units": "K"}
+    },
+    "sample_counts_where_qrain_positive_and_qnrain_zero": {"OFF_original_wrfinput_5d6b2bdce4121642dea994f3e953cca690ad7c9f52f6f8feb01bb6c2f0b9b6bc": "210/624", "HYDRO_wrfinput_7fd13466f8e19d0f8d88ce0499bcb249aa9803bb8ad7df9eee39c757bc315126": "210/624", "LIQUID_wrfinput_1dae2480a9ff4c4a386abf9ff5210f36ad3162330e2dc579d870d64b37be4470": "210/624"},
+    "caveat": "The sampled wrfinput values are source-bound initial-array samples. Their own evidence README correctly says they do not prove the full arrays were consumed unchanged at the first physics call; the separate capture provides call-entry values for selected HYDRO cells."
+  },
+  "conclusion_and_next_question": {
+    "source_supported": "This KDM6 path consumes two separate moments. The existing rain-slope fallback avoids invalid q/n closure but does not generate number for positive rain mass with zero rain number. The zero-rate guard suppresses a spurious saturation-limiter rate from signed zero but leaves the absent-number state unresolved.",
+    "not_identifiable_from_mass_alone": "QRAIN alone does not determine QNRAIN: a mass value is compatible with many particle size distributions. The source contains no unique physically justified number seed for this case.",
+    "next_research_step": "Trace the authoritative initialization/analysis writer for QRAIN and QNRAIN and identify its intended rain PSD or observation constraint. Any number initialization proposal should preserve the chosen mass-number distribution closure and be evaluated with coupled rain/vapor/temperature budgets; do not substitute nrmin as a physical seed without a documented distribution rationale.",
+    "not_claimed": ["forecast skill improvement", "whole-domain prevalence", "complete executable source provenance", "full-host clean rebuild", "a validated rain-number initializer", "a new native source change"]
+  }
+}

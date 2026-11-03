@@ -1,0 +1,1 @@
+Preserved pre-review staging attempt. No forecasts were launched. Root review found two context-only history references pointed at non-existent folders, so those paths were corrected in the frozen selection plan and the plan digest changed. This staged plan/map/scratch is preserved as pre-correction provenance; fresh staging is required to bind the corrected plan digest.

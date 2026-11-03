@@ -1,0 +1,20 @@
+{
+  "review": "final scorer source and historical prelaunch approval reconciliation",
+  "prior_reconciliation_receipt": "docs/evidence/weak_strong_balance_20261030/review/prior_versions/scorer_version_reconciliation.json",
+  "prior_reconciliation_sha256": "e964eb431c72da0d26dd72f238908f9fb0c2b08d49bae89005245864db65a5ea",
+  "stage1_receipt_path": "docs/evidence/weak_strong_balance_20261030/review/stage1_prelaunch_review.json",
+  "stage1_receipt_sha256": "df042e11687d5afde0dc5eb0bdde0ebb2b2776fda69e580a9bfdd156aaf4dc30",
+  "stage1_recorded_scorer_sha256": "77116d08ee24f050a7d0ed856aa866e572178835c78421ddc871e27c1374f64d",
+  "stage1_scorer_source_bytes_archived": false,
+  "stage1_source_limit": "The interim scorer source matching the stage-1 scorer hash is not present as a separate retained file. The stage-1 receipt remains an unchanged historical record and is not represented as approval of the later scorer bytes.",
+  "final_scorer_sha256": "2572d41d352c70d72d8488fe9f0dc9d961de8b10c21f7ade459f131e7c4fbdb5",
+  "final_recount_sha256": "39fa26c634d9de36d92d3d63f0b0c79d332c90a27e6bb77169331eec0b399926",
+  "final_selection_plan_sha256": "17e8833f2f28da76e1474f82440a88889bd55ba723ef9cd6618d06a0eb786248",
+  "unchanged_native_prelaunch_pins": {
+    "common_plan_sha256": "a2d06679ea3a9b24a04f9ff359c842172f06fd7ec0f402f802c91399b2ad6a3a",
+    "frozen_map_sha256": "40b8b1d2fd772a1fbf462824ab77f958f31be19f86733d09e7504ff4630e4909",
+    "gate_manifest_sha256": "07e95e73af040e4388c6636634e334606ad1292bab7f30340d5148e90841b29c"
+  },
+  "relocation_fix_review": "The only scoring-contract change after the prior scorer review removes equality between the plan's frozen original absolute runtime_directory string and the checkout-derived RUNTIME_DIR. The exact selection plan hash remains pinned; score() still uses the chosen runtime directory and check_runtime() validates the full frozen common plan and final receipts. A relocation regression covers the copied-checkout case.",
+  "final_provenance": "The final scorer hash above generated the final analysis receipt. The final recount hash independently verified all score rows and 29-output replay. The same frozen selection plan, common runtime plan, hybrid-geometry helper, gate manifest and frozen maps were used throughout."
+}

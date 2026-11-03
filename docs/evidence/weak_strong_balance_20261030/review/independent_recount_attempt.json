@@ -1,0 +1,12 @@
+{
+  "status": "RECOUNT_REJECTED_ARCHIVED",
+  "analysis_receipt_sha256": "5ca0b4b2ef7c2b64f0af1a08424ea0ffab9be59b9c25b069f300016b66c2b2fb",
+  "scorer_source": {
+    "path": "/var/tmp/cloudbal-weak-strong/tools/cp02_weak_strong_balance.py",
+    "sha256": "f1e204ef77ee91d26db817e6af5207e1550f4164d124709377e7a72b26dd2258",
+    "size_bytes": 65394
+  },
+  "failure": "Independent recount ValueError: hour 13 array archive keys differ from receipt. NPZ persisted all 39 prior contexts plus 8 new cases; contract requires only the frozen 12 contexts plus reference/coordinates.",
+  "effect": "Scoring functions used only the frozen 12 contexts, but archive scope violated the output contract. Not accepted as final analysis.",
+  "action": "Filter prior context arrays to the frozen context set when constructing the canonical archive, then rescore/recount/replay."
+}

@@ -1,0 +1,64 @@
+Running 146 items in this shard
+........................................................................ [ 49%]
+...........................................................F............ [ 98%]
+..                                                                       [100%]
+=================================== FAILURES ===================================
+______________ test_plan_is_pinned_and_lead_one_rmse_is_explicit _______________
+
+    def test_plan_is_pinned_and_lead_one_rmse_is_explicit():
+>       record, plan = balance.check_selection_plan()
+
+tests/test_cp02_weak_strong_balance.py:60: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+path = PosixPath('/tmp/weak-strong-clean-wbazu4zu/docs/evidence/weak_strong_balance_20261030/selection_plan.json')
+expected_sha256 = '17e8833f2f28da76e1474f82440a88889bd55ba723ef9cd6618d06a0eb786248'
+
+    def check_selection_plan(path: Path = PLAN_PATH, expected_sha256: str = PLAN_SHA256):
+        record = identity(path)
+        if record['sha256'] != expected_sha256:
+            raise ValueError('frozen weak/strong selection plan hash mismatch')
+        plan = json.loads(Path(path).read_text(encoding='utf-8'))
+        expected_cases = list(CASE_IDS)
+        if (plan.get('status') != 'FROZEN_BEFORE_NEW_FORECAST_OUTPUTS'
+            or plan.get('forecast_output_or_observation_used_for_gate') is not False
+            or [row.get('case') for row in plan.get('experiment', {}).get('cases', [])] != expected_cases
+            or plan.get('evaluation', {}).get('baseline') != 'ORIGINAL alpha=1.0 existing native history'
+            or plan.get('evaluation', {}).get('leads_hours') != list(range(1, 7))
+            or plan.get('evaluation', {}).get('thresholds_mm') != list(THRESHOLDS)
+            or plan.get('evaluation', {}).get('paired_points_per_hour') != POINTS
+            or plan.get('evaluation', {}).get('eligible_new_cases') !=
+            'all eight completed identity-validated cases; crossed executable/input cases remain diagnostics and no single-process physical attribution is inferred'
+            or plan.get('evaluation', {}).get('known_context_only_references') !=
+            ['CONTROL_SNOW_300', 'IMPROVED_BG_FIXED', 'IMPROVED_SNOW_080']):
+            raise ValueError('frozen weak/strong plan contract mismatch')
+        selection = plan.get('evaluation', {})
+        if ('18 CSI cells' not in selection.get('weak_qualification_cells', '')
+            or 'strictly greater' not in selection.get('strong_qualification_cell', '')
+            or 'NO_QUALIFIED_CANDIDATE' not in selection.get('candidate_admission', '')
+            or 'No averages across thresholds, leads, or experiments' != selection.get('no_averaging')):
+            raise ValueError('frozen admission or aggregation contract mismatch')
+        if selection.get('ranking_order_after_admission') != [
+            'descending lead-1 CSI at 10 mm', 'descending lead-1 CSI at 5 mm',
+            'ascending lead-1 FAR at 10 mm', 'ascending lead-1 RMSE', 'ascending case ID']:
+            raise ValueError('frozen candidate ranking contract mismatch')
+        expected_parents = {
+            'original_executable_sha256': ORIGINAL_EXECUTABLE_SHA256,
+            'fixed_executable_sha256': FIXED_EXECUTABLE_SHA256,
+            'original_wrfinput_sha256': ORIGINAL_INPUT_SHA256,
+            'b1_wrfinput_sha256': B1_INPUT_SHA256,
+            'common_wrfbdy_sha256': BOUNDARY_SHA256,
+            'common_namelist_input_sha256': NAMELIST_SHA256,
+        }
+        if plan.get('parents') != {**plan.get('parents', {}), **expected_parents}:
+            raise ValueError('frozen parent executable/input identity pins changed')
+        if (selection.get('runtime_directory') != str(RUNTIME_DIR)
+            or selection.get('reference_score_archives', {}).get('analysis_receipt', {}).get('sha256') != PRIOR_RECEIPT_SHA256
+            or list(selection.get('expected_contexts', {})) != list(CASE_IDS)):
+>           raise ValueError('frozen runtime, source archive, or case context pins changed')
+E           ValueError: frozen runtime, source archive, or case context pins changed
+
+tools/cp02_weak_strong_balance.py:280: ValueError
+=========================== short test summary info ============================
+FAILED tests/test_cp02_weak_strong_balance.py::test_plan_is_pinned_and_lead_one_rmse_is_explicit
+1 failed, 145 passed in 48.94s
