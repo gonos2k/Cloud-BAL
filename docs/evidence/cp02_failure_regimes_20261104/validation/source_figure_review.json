@@ -1,0 +1,30 @@
+{
+  "status": "GO",
+  "scope": "independent review of native state features and plotter; transition author self-review explicitly distinguished",
+  "files": {
+    "tools/cp02_failure_state_features.py": "92c4c302700491587a8faa29bc40dffa89a6d1b0f79f0616f74fdf5963e1754c",
+    "tests/test_cp02_failure_state_features.py": "5aa067881ae3f69ff6ec019c76d0331a5e7bdc8f8a79814655a24c0dd55a64d5",
+    "tools/plot_cp02_failure_regimes.py": "fee03d8abc86ec8651551031baea6e801a14dfb5781752761e9c90f4399c92cf",
+    "tests/test_plot_cp02_failure_regimes.py": "d9d16046df5b7e709879d7948cba18ccbdeeb8dfde2cf9fddb00a8ecd3adf5a6",
+    "docs/evidence/cp02_failure_regimes_20261104/state/protocol.json": "5f44ad36d60e3443f7da7bbf7253359160114e954d3015ed8cef6ca059237690",
+    "docs/evidence/cp02_failure_regimes_20261104/state/independent_review.json": "5aefdde96797b14dcadbec226286afd26f24d2d2d4560fb76e20078eba5c9c3b",
+    "docs/evidence/cp02_failure_regimes_20261104/validation/figure_transition_crosscheck.json": "6895dabe4eb75e6d8a7f4df988f6161d87c2b0a45db92e9183f5f0bbc3ab861e",
+    "docs/evidence/cp02_failure_regimes_20261104/validation/clean_export_final_pytest.json": "c9c3f411086acf9e2dcd6b0bd03b5c114a05ff4226f255175b597f26dd85a983"
+  },
+  "checks": [
+    "Registry T is dry theta perturbation, THM is not used directly as dry theta",
+    "KDM6 constants and RH formulas match, f64 snapshot diagnostics not bit-identical",
+    "253x149 mapping to native offsets j+5,i+74, all target coordinates checked",
+    "nonlinear RH and Dm calculated at native corners before weighting; positive-weight invalid Dm remains missing",
+    "24 source/result identities, Dm masks/layer coverage and independently computed native scalar samples verified",
+    "final plot source diff changes Korean labels only; 108 transition groups independently recounted by separate agent",
+    "local unchanged-initial focus IDs/corner amplitudes independently checked by separate agent",
+    "clean exported 47-file related suite and two real CLI replays pass"
+  ],
+  "limits": [
+    "State values are Eulerian snapshots, not trajectories or causal transport.",
+    "Group membership is retrospective diagnostic only, not an initialization rule.",
+    "Transition implementation was authored by this reviewer; the separate agent full 398304-row audit is the independent check."
+  ],
+  "findings": []
+}

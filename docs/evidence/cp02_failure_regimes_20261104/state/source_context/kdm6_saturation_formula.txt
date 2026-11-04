@@ -1,0 +1,32 @@
+
+     hsub = xls
+     hvap = xlv0
+     cvap = cpv
+     ttp = t0c+0.01
+     dldt = cvap-cliq
+     xa = -dldt/rv
+     xb = xa+hvap/(rv*ttp)
+     dldti = cvap-cice
+     xai = -dldti/rv
+     xbi = xai+hsub/(rv*ttp)
+
+     do k = kts,kte_in
+       do i = its,ite
+         tr = ttp/t(i,k)
+         qs(i,k,1) = psat*exp(log(tr)*(xa))*exp(xb*(1.-tr))
+         qs(i,k,1) = min(qs(i,k,1),0.99*p(i,k))
+         qs(i,k,1) = ep2*qs(i,k,1)/(p(i,k)-qs(i,k,1))
+         qs(i,k,1) = max(qs(i,k,1),qmin)
+         rh(i,k,1) = max(q(i,k)/qs(i,k,1),qmin)
+         sw(i,k) = (rh(i,k,1)-1.)*100.
+         tr=ttp/t(i,k)
+         if(t(i,k).lt.ttp) then
+           qs(i,k,2) = psat*exp(log(tr)*(xai))*exp(xbi*(1.-tr))
+         else
+           qs(i,k,2) = psat*exp(log(tr)*(xa))*exp(xb*(1.-tr))
+         endif
+         qs(i,k,2) = min(qs(i,k,2),0.99*p(i,k))
+         qs(i,k,2) = ep2*qs(i,k,2)/(p(i,k)-qs(i,k,2))
+         qs(i,k,2) = max(qs(i,k,2),qmin)
+         rh(i,k,2) = max(q(i,k)/qs(i,k,2),qmin)
+         if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &

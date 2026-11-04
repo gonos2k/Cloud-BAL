@@ -1,0 +1,107 @@
+{
+  "baseline_sha256": "caf364b41c832c3d432e39fb486c5a296bce90da2e83e4821f698a13c8e4f078",
+  "checks": {
+    "agents_terra_proof": {
+      "detail": "Maintained AGENTS hash unchanged from captured baseline and Terra/high instruction present.",
+      "pass": true
+    },
+    "baseline_238_and_git_state": {
+      "detail": "All 117+121 prior snapshot trees, both maintained active trios and dirty-status hashes unchanged.",
+      "pass": true
+    },
+    "five_wiki_files_and_old_content": {
+      "detail": "Both staged report mirrors match graphs; all other report/index content preserved and old log is exact byte prefix.",
+      "pass": true
+    },
+    "graph_integrity_and_deltas": {
+      "detail": "{\"Cloud-BAL\": {\"after\": {\"communities\": 1599, \"edges\": 32531, \"nodes\": 18080}, \"before\": {\"communities\": 1599, \"edges\": 32369, \"nodes\": 17989}, \"communities_delta\": 0, \"edges_delta\": 162, \"nodes_delta\": 91, \"prior_nodes_preserved\": 17989, \"removed_selected_nodes\": 0, \"snapshot_sha256\": {\"GRAPH_REPORT.md\": \"73fa8acba8ff531c58203a399a1803db1f78dbf4080cd6cc1d2ce59e2fadab19\", \"graph.json\": \"9a44d75f86595ac0a668db886593c5990485ea37108024adc6bb7c09b6a6f93b\", \"manifest.json\": \"8b91278565545dfe4c54598caebb312c62acba2df86888554e94656cba0b9815\"}}, \"KLAPS50\": {\"after\": {\"communities\": 3558, \"edges\": 91049, \"nodes\": 43908}, \"before\": {\"communities\": 3548, \"edges\": 90883, \"nodes\": 43817}, \"communities_delta\": 10, \"edges_delta\": 166, \"nodes_delta\": 91, \"prior_nodes_preserved\": 43817, \"removed_selected_nodes\": 0, \"snapshot_sha256\": {\"GRAPH_REPORT.md\": \"fa5c320e66bcac5653555e285eacd265c2353649769debe8f64efdbb3906c0ee\", \"graph.json\": \"8ca7515ce29752d1ffde6565909ab6035c0dbffbe6671b813b585b3d882556b4\", \"manifest.json\": \"c0f1300b289eec8332b8ac8ab7e1100b6206b58d0424aa590b112f2c3d8f1a9a\"}}}",
+      "pass": true
+    },
+    "manifest_subset_no_prune": {
+      "detail": "Every old manifest row retained; only frozen selected keys may differ, for each corpus.",
+      "pass": true
+    },
+    "narrow_fixture_artifact_suppression": {
+      "detail": "One selected-source Graphify self-edge per corpus suppressed. AST proves line 16 is pytest.fixture decorating a same-named function; preserved failed KLAPS50 merged edge matches all raw fields and adds confidence_score. No source/test bytes changed.",
+      "pass": true
+    },
+    "publisher_13_and_four_targets": {
+      "detail": "13 maintained targets and four source-worktree mirror targets are unique; all staged source hashes read back.",
+      "pass": true
+    },
+    "source_and_evidence_pins": {
+      "detail": "10 reviewed Python AST paths and 125 hash-only artifacts match; both gallery packager files included.",
+      "pass": true
+    },
+    "source_worktree_mirror": {
+      "detail": "Three active source-worktree graph files match maintained baseline; dated destination absent.",
+      "pass": true
+    },
+    "stage_and_scope": {
+      "detail": "Receipt binds current baseline and selection lock; 10-path extraction and manifest scope match exactly; stage-only status.",
+      "pass": true
+    }
+  },
+  "graph_deltas": {
+    "Cloud-BAL": {
+      "after": {
+        "communities": 1599,
+        "edges": 32531,
+        "nodes": 18080
+      },
+      "before": {
+        "communities": 1599,
+        "edges": 32369,
+        "nodes": 17989
+      },
+      "communities_delta": 0,
+      "edges_delta": 162,
+      "nodes_delta": 91,
+      "prior_nodes_preserved": 17989,
+      "removed_selected_nodes": 0,
+      "snapshot_sha256": {
+        "GRAPH_REPORT.md": "73fa8acba8ff531c58203a399a1803db1f78dbf4080cd6cc1d2ce59e2fadab19",
+        "graph.json": "9a44d75f86595ac0a668db886593c5990485ea37108024adc6bb7c09b6a6f93b",
+        "manifest.json": "8b91278565545dfe4c54598caebb312c62acba2df86888554e94656cba0b9815"
+      }
+    },
+    "KLAPS50": {
+      "after": {
+        "communities": 3558,
+        "edges": 91049,
+        "nodes": 43908
+      },
+      "before": {
+        "communities": 3548,
+        "edges": 90883,
+        "nodes": 43817
+      },
+      "communities_delta": 10,
+      "edges_delta": 166,
+      "nodes_delta": 91,
+      "prior_nodes_preserved": 43817,
+      "removed_selected_nodes": 0,
+      "snapshot_sha256": {
+        "GRAPH_REPORT.md": "fa5c320e66bcac5653555e285eacd265c2353649769debe8f64efdbb3906c0ee",
+        "graph.json": "8ca7515ce29752d1ffde6565909ab6035c0dbffbe6671b813b585b3d882556b4",
+        "manifest.json": "c0f1300b289eec8332b8ac8ab7e1100b6206b58d0424aa590b112f2c3d8f1a9a"
+      }
+    }
+  },
+  "hash_only_pin_count": 125,
+  "limits": [
+    "Selected Python AST extraction only; remaining evidence hash-only.",
+    "Each raw AST extraction has 77 imports/imports_from edges to missing external target nodes omitted by normal graph merge; custom suppression removes only one false fixture edge per corpus.",
+    "Fortran cross-file extraction is partial; graph freshness does not establish runtime or scientific validation."
+  ],
+  "maintained_roots_written": false,
+  "maintained_snapshot_count": 238,
+  "schema": "cp02_failure_regimes_independent_kg_stage_validation_v1",
+  "selection_lock_sha256": "751412125f1856d9ddec7418687a2f59a8aa6cc6bed2701eab90e4a89e55d680",
+  "source_pin_count": 10,
+  "source_worktree_target_count": 4,
+  "stage": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_regimes_20261104/kg_stage/stage-7a397985aafe0ef8",
+  "stage_receipt_sha256": "ae56899a4355702425ae6201128261965cd7030e607905a1bad11001d2ff84f5",
+  "status": "PASS_STAGED_ONLY",
+  "target_count": 13
+}

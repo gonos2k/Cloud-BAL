@@ -1,0 +1,22 @@
+{
+  "status": "PASS",
+  "scope": "24 existing initial/history files; no WRF run or candidate",
+  "source_and_receipt_sha256": {
+    "tools/cp02_failure_state_features.py": "92c4c302700491587a8faa29bc40dffa89a6d1b0f79f0616f74fdf5963e1754c",
+    "tests/test_cp02_failure_state_features.py": "5aa067881ae3f69ff6ec019c76d0331a5e7bdc8f8a79814655a24c0dd55a64d5",
+    "docs/evidence/cp02_failure_regimes_20261104/state/protocol.json": "5f44ad36d60e3443f7da7bbf7253359160114e954d3015ed8cef6ca059237690",
+    "docs/evidence/cp02_failure_regimes_20261104/state/results/receipt.json": "9e6a4cea51bdd88ae45a6052e6818a07ee5003de7dfc5dc2050c048075277d8c",
+    "docs/evidence/cp02_failure_regimes_20261104/state/independent_review.json": "5aefdde96797b14dcadbec226286afd26f24d2d2d4560fb76e20078eba5c9c3b",
+    "docs/evidence/cp02_failure_regimes_20261104/state/initial_input_comparison.json": "95958f2b60bfd1fd6391d36d4a53dde5c0fe6f2602ffd4939a6e3519681fc6fe",
+    "docs/evidence/cp02_failure_regimes_20261104/state/source_context/manifest.json": "ba9d77a3eb61eed40501b539f434cdc9231f9dbe061f4c18e95bb412c8b6757f",
+    "docs/evidence/cp02_failure_regimes_20261104/state/README.md": "7d6dba5356f66671ee5f59bc85a0e57ed13e1d85c6f2450983ffcc1d4ccaec5d"
+  },
+  "targeted_tests": {
+    "command": "PYTHONDONTWRITEBYTECODE=1 taskset -c 48-55 python -m pytest -q tests/test_cp02_failure_state_features.py",
+    "passed": 6
+  },
+  "independent_review": "GO, all 24 input/output identities and masks, 24 representative scalar calculations",
+  "data_bytes": 129556079,
+  "largest_npz_bytes": 5841833,
+  "interpretation": "Eulerian snapshots, nonlinear corners before weighting, explicit missing masks; not bit-exact internal diagnostics or a budget."
+}
