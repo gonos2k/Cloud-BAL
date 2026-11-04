@@ -1,0 +1,12 @@
+{
+  "attempt": "corrected_pair_prerequisite_failure",
+  "invalid_attempt_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/failed_private_payload_attempt1",
+  "source_hashes": {
+    "OLD": "8262e5e22316c69f5faa20a3f4e434b6319c642fd48efde7f28f3e3c60820d90",
+    "FIX": "181759a75efbf02b31a460c8a422b870f5bd1b8d0f1c49e47f6e24be59b687ee"
+  },
+  "precise_format_issue": "Only wrapper-side KDM62D_RETURN used the kdm6 REAL(16) cloud_bal_state_values buffer and passed all 16 values to a state-row helper while the block header declared field_count=15. This produced one extra uninitialized value per row and shifted subsequent block framing in that stage.",
+  "unaffected_by_that_specific_width_issue": "PRE_UPDATE and POST_PROCESS execute inside KDM62D with a separate REAL(15) cloud_bal_state_values buffer; their whole-array writer arguments matched the 15-field header. Public 14-field writers passed slices. The corrected source makes the three private writers explicit at 1:15.",
+  "disposition": "Exclude the prior full pair from any validated state-path analysis. Histories were not compared after discovering the format issue. No physical interpretation was made from those malformed records.",
+  "first_corrected_build_receipt": "build_attempt4_receipt.json"
+}

@@ -1,0 +1,42 @@
+{
+  "status": "SUCCESS_FORMAT_VALIDATION_ONLY",
+  "arm": "FIX",
+  "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX",
+  "argv": [
+    "taskset",
+    "--cpu-list",
+    "40,41,42,43,44,45,46,47",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpirun",
+    "-np",
+    "8",
+    "./wrf.exe"
+  ],
+  "launch_command": "source runtime/tooling/runtime_env.sh; cd runtime/quick_FIX; export OMP_NUM_THREADS=1 OMP_DYNAMIC=FALSE I_MPI_PIN=1 I_MPI_PIN_DOMAIN=core I_MPI_PIN_RESPECT_CPUSET=1 I_MPI_PIN_PROCESSOR_LIST=40,41,42,43,44,45,46,47; taskset --cpu-list 40,41,42,43,44,45,46,47 /NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpirun -np 8 ./wrf.exe",
+  "run_seconds": 20,
+  "mpi_ranks": 8,
+  "cpu_set": [
+    40,
+    41,
+    42,
+    43,
+    44,
+    45,
+    46,
+    47
+  ],
+  "executable_sha256": "6706f6162d37c057b2699afd03ae7c0b4dbf94fe97b925c0369916ba6c708661",
+  "build_receipt_sha256": "b5746dbff47e22be635a6609972ca46713b29f9a3c3e145c7df70d6ea312f6d2",
+  "prepared_case_receipt_sha256": "52905b649d01fc3e223b487d3f1625aa446da4eae4ea6688aa93e3bcea3d7713",
+  "scan_receipt": "quick_FIX/quick_binary_scan.json",
+  "scan_receipt_sha256": "141c884e589f4314e369b03fd00724c44780060022f4e5add6872bf1e2bd5c65",
+  "scanner_sha256": "b516563b6498ec48e73130993471de4894c5443d4f3328e351f262e5f02fc288",
+  "scanner_status": "PASS",
+  "rank_success_markers": 8,
+  "all_89_input_hashes_unchanged": true,
+  "first_setup_attempt": "quick_FIX/quick_setup_attempt1.log (external /usr/bin/time missing; no model launched)",
+  "walltime_log": "quick_FIX/quick_walltime.txt",
+  "walltime_log_sha256": "b6c49bbc48a616e080facd1f44e71e8a87a0369064a73b6a2ec3d66644e34a03",
+  "launcher_log": "quick_FIX/quick_launcher.log",
+  "launcher_log_sha256": "172e0f9cd9e5c7479bb18b77e5ada65fa6445594139a90bc68eb012f67c4d3c9",
+  "created_utc": "2026-11-04T02:26:20Z"
+}

@@ -1,0 +1,63 @@
+{
+  "bound_artifacts": {
+    "candidate_preflight": {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/candidate_preflight.json",
+      "sha256": "4d51c8bf0214dff43a0e1862ab25eebd1bf552f51556a5ae44d57f1657e6949b",
+      "size_bytes": 14950
+    },
+    "initialization": {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/initialization.json",
+      "sha256": "546eeb48f4913e67bedc277e85a5f290364a940e74c4d5db749438b8c49e8a7a",
+      "size_bytes": 2031
+    },
+    "policy": {
+      "path": "docs/evidence/cp02_state_path_20261104/lineage/B1_RAIN_PSD_PRIOR_POLICY_20261104.json",
+      "sha256": "25387970de9685e3024af7983d47650ab6b6068188f765df58243d6ebefa7601",
+      "size_bytes": 8205
+    }
+  },
+  "boundary_sha256": "74102ac2063f17a9007f3352e6e6c2f52629055bdf3f05b4f4d6d77aef835f45",
+  "candidate": "B1_RAIN_NUMBER_PRIOR",
+  "constraint_count": 26,
+  "control_gate": "Final state-path interpretation/admission also requires corrected full OLD/FIX 0\u20132 h same-arm history reproduction PASS; preflight was distinct 20s source-guard validation.",
+  "created_utc": "2026-11-04T02:41:55.876298+00:00",
+  "declared_before_six_hour_forecast": true,
+  "executable_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+  "input_sha256": "ad030e8bbfca319c4594dcfa5b0656b9bc387d9fcbe23372fd6ed8808aaf0f21",
+  "leads_hours": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "namelist_sha256": "eced598028b71b996c0c22cf7bd4bacb067087575ec06c4b65d71ab4913156df",
+  "policy_sha256": "25387970de9685e3024af7983d47650ab6b6068188f765df58243d6ebefa7601",
+  "schema": "b1_rain_number_evaluation_v1",
+  "scope": "Single 2026-08-16 12 UTC case; one-hour increments, same 3688 frozen RN1 samples; RMSE diagnostic only; no independent-event or budget closure claim",
+  "selection": {
+    "adopt_only_if_all_26_satisfied": true,
+    "candidates": 1,
+    "metric": "CSI",
+    "protection": {
+      "baseline": "IMPROVED_BG_FIXED",
+      "cells": "lead +1 all six thresholds; all six leads at 5 mm; overlap deduplicated = 11",
+      "require": "candidate_CSI >= baseline_CSI per cell"
+    },
+    "recovery": {
+      "baseline": "ORIGINAL",
+      "cells": "leads +2..+6 at 0.1, 0.5, 1 mm = 15",
+      "require": "candidate_CSI >= baseline_CSI per cell"
+    },
+    "reduction_across_experiments_leads_thresholds": "none"
+  },
+  "thresholds_mm": [
+    0.1,
+    0.5,
+    1.0,
+    2.5,
+    5.0,
+    10.0
+  ]
+}

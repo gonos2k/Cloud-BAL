@@ -1,0 +1,155 @@
+{
+  "schema": "cp02_state_path_final_independent_review_v1",
+  "created_utc": "2026-11-04T03:52:48.259599+00:00",
+  "status": "GO",
+  "blockers": [],
+  "non_blocking_findings": [
+    {
+      "id": "package_receipt_member_inventory",
+      "severity": "minor_metadata_mismatch",
+      "detail": "The offline ZIP is intact and has the declared SHA-256, CRC passes, and its 30 unique members include all 22 PNGs. The receipt zip_members array has 31 entries because SHA256SUMS.json appears twice; its member set matches the archive, but its multiset/count does not.",
+      "archive_sha256": "1aecec8ebfc40183e8b328352cb2540033b7d894b048b733c41ccde746bae16f",
+      "actual_member_count": 30,
+      "receipt_member_count": 31,
+      "duplicate_receipt_members": [
+        "SHA256SUMS.json"
+      ]
+    },
+    {
+      "id": "evidence_volume",
+      "severity": "review_note",
+      "detail": "The frozen evidence subtree excluding this self-referential final review totals 1,437,348,097 bytes. Its largest files are compressed runtime captures and selected analysis arrays; all selection-lock hashes validate. No file is at least 100 MiB.",
+      "files_over_20MiB": [
+        {
+          "path": "docs/evidence/cp02_state_path_20261104/native/capture/FIX/kdm6_trace_rank3.bits_steps181-360.gz",
+          "size_bytes": 56339908
+        },
+        {
+          "path": "docs/evidence/cp02_state_path_20261104/native/capture/OLD/kdm6_trace_rank3.bits_steps181-360.gz",
+          "size_bytes": 55934562
+        },
+        {
+          "path": "docs/evidence/cp02_state_path_20261104/cli/final_analysis/selected_history.npz",
+          "size_bytes": 54879236
+        },
+        {
+          "path": "docs/evidence/cp02_state_path_20261104/native/capture/FIX/kdm6_trace_rank3.bits_steps001-180.gz",
+          "size_bytes": 54717960
+        },
+        {
+          "path": "docs/evidence/cp02_state_path_20261104/native/capture/OLD/kdm6_trace_rank3.bits_steps001-180.gz",
+          "size_bytes": 53234752
+        },
+        {
+          "path": "docs/evidence/cp02_state_path_20261104/cli/final_analysis/selected_raw_FIX.npz",
+          "size_bytes": 29280652
+        },
+        {
+          "path": "docs/evidence/cp02_state_path_20261104/cli/final_analysis/selected_raw_OLD.npz",
+          "size_bytes": 28975189
+        }
+      ],
+      "files_at_least_100MiB": 0,
+      "total_bytes_excluding_this_review": 1437348097
+    }
+  ],
+  "current_bindings": {
+    "source_commit": "ad454711995610457ec2efd918b2b39dfae6b879",
+    "freeze_id": "55e0e8b2a5e9f142",
+    "selection_lock_sha256": "778193eb03bec94a624bfc84d56a4543b7f13dd002dc4ba5dcff7aa831a38487",
+    "selected_source_pins": {
+      "checked": 19,
+      "matching": 19
+    },
+    "hash_only_pins": {
+      "checked": 403,
+      "matching": 403
+    },
+    "paper": {
+      "path": "docs/CP02_STATE_PATH_AND_RAIN_NUMBER_20261104.md",
+      "sha256": "5deab0f93390f237621300dd3e96d78e8b2c727ac066c00fa558dfca886ad67d"
+    },
+    "current_report_review": {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/review/current_report_review.json",
+      "sha256": "eec7f11a23e298513bedbc6a8fa4e99fc8242323aab9e0b4f531e8b840489448",
+      "status": "PASS",
+      "findings": []
+    },
+    "independent_analysis_review": {
+      "path": "docs/evidence/cp02_state_path_20261104/review/independent_analysis_review.json",
+      "sha256": "8558a5fb16c986977e8e434b022639df19843df093477b2ba82abba978bf9190",
+      "status": "PASS_SOURCE_AND_EVIDENCE_REVIEW"
+    },
+    "pytest": {
+      "path": "docs/evidence/cp02_state_path_20261104/validation/clean_export_v2_pytest.json",
+      "sha256": "36bf4a8f08831aebc8ad1efaaaf31a8a62eb7c9a6d1ad4e0f4e84887aa7357eb",
+      "passed": 237,
+      "exit_code": 0,
+      "elapsed_seconds": 54.3,
+      "source_test_overlays_unchanged": "19/19",
+      "pytest_rerun": false
+    },
+    "scores": {
+      "categorical_rows": 108,
+      "threshold_leads": 36,
+      "full_scores_rows_checked": 108,
+      "hmf_csi_mismatches": 0,
+      "candidate_minus_b1_delta_csi_cells": 36,
+      "delta_mismatches": 0,
+      "common_points_each_lead": 3688,
+      "constraints": 26,
+      "passed": 12,
+      "failed": 14,
+      "selection": "NO_QUALIFIED_CANDIDATE; keep current B1"
+    },
+    "key_cases": {
+      "P01_plus2h_0p1mm": {
+        "candidate_mm": 0.31762323119404023,
+        "current_b1_mm": 0.08058245592120747,
+        "observed_mm": 0.2,
+        "assessment": "candidate recovers this hit"
+      },
+      "FA03_plus2h_5mm": {
+        "candidate_mm": 5.036231173594939,
+        "current_b1_mm": 4.981935680778647,
+        "observed_mm": 0.6,
+        "candidate_contingency_H_M_F": [
+          59,
+          159,
+          106
+        ],
+        "current_b1_contingency_H_M_F": [
+          59,
+          159,
+          105
+        ],
+        "assessment": "candidate reintroduces one false alarm; CSI falls from 0.182663 to 0.182099"
+      }
+    },
+    "figures_and_package": {
+      "figure_count": 22,
+      "render_receipts_pinned": {
+        "figures/candidate": "a6b8303b3e5a8d1e9a0c77d02cfadd1c6ee7153e5481ac28428ecfe6731fdfbc",
+        "figures/native": "a90a43f7c0dbae7910774be82e56d86aa566acaa114eda168bc112103c7a2026"
+      },
+      "markdown_local_link_check": {
+        "status": "PASS",
+        "checked": 49
+      },
+      "offline_archive_sha256": "1aecec8ebfc40183e8b328352cb2540033b7d894b048b733c41ccde746bae16f",
+      "archive_crc": "PASS",
+      "actual_zip_members": 30,
+      "actual_png_members": 22,
+      "offline_html_external_resources": false
+    },
+    "scientific_limits": [
+      "RN1 upstream time-window, coverage, and QC provenance remains unresolved.",
+      "Exact compiled-real internal writer-to-source mapping remains incomplete.",
+      "A complete same-time mass-basis and precipitation-flux water/energy budget is not available.",
+      "Independent cases remain outstanding.",
+      "Separate C2 T39 and H/A/N one-hour completion remains outstanding; the CP02 six-hour run does not establish C2 stability.",
+      "Graph extraction is limited to the selected Python AST paths; Fortran cross-file CALL extraction is partial. Graph freshness does not establish runtime or scientific validation."
+    ]
+  },
+  "scope": "Read-only final pre-PR review of frozen source/evidence, existing test and replay receipts, report/score consistency, figures, and offline package. No source, science artifact, test, or KG file changed."
+}

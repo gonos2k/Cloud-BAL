@@ -1,0 +1,154 @@
+{
+  "format": "CBSP0001",
+  "encoding": "Pinned Intel unformatted stream with `-convert big_endian`; default REAL and INTEGER are each 4 bytes under `-real-size 32 -i4`",
+  "file_pattern": "runtime/<arm>/<fresh_run_id>/state_<stage>_rank<wrf_rank>.bin",
+  "arm_is_bound_by": "distinct fresh OLD and FIX current working directories; state filenames are not shared across arms",
+  "preflight": "reject any pre-existing state_*.bin, state_calls_*.txt, or kdm6_trace_rank*.bits in either case directory",
+  "block_header": [
+    "magic: 8-byte ASCII CBSP0001",
+    "stage_id, rank, call_id, timestep: big-endian int32",
+    "ilo, ihi, jlo, jhi, klo, khi: big-endian int32",
+    "istride, jstride, kstride: big-endian int32 (all 1)",
+    "field_count, record_count: big-endian int32"
+  ],
+  "global_stages": {
+    "entry": {
+      "stage_id": 1,
+      "timestep": 1,
+      "field_count": 14,
+      "fields_float32": [
+        "TH_PUBLIC_RAW",
+        "QV_PUBLIC_RAW",
+        "QC_PUBLIC_RAW",
+        "QR_PUBLIC_RAW",
+        "QI_PUBLIC_RAW",
+        "QS_PUBLIC_RAW",
+        "QG_PUBLIC_RAW",
+        "NN_PUBLIC_RAW",
+        "NC_PUBLIC_RAW",
+        "NI_PUBLIC_RAW",
+        "NR_PUBLIC_RAW",
+        "BG_PUBLIC_RAW",
+        "DEN_ARGUMENT_RAW",
+        "T_K_DERIVED_TH_TIMES_PII"
+      ]
+    },
+    "pre_update": {
+      "stage_id": 2,
+      "timestep": 1,
+      "field_count": 15,
+      "fields_float32": [
+        "QV_INTERNAL_RAW",
+        "T_K_INTERNAL",
+        "DEN_ARGUMENT_RAW",
+        "QC_INTERNAL",
+        "QI_INTERNAL",
+        "QR_INTERNAL",
+        "QS_INTERNAL",
+        "QG_INTERNAL",
+        "NC_INTERNAL",
+        "NI_INTERNAL",
+        "NN_INTERNAL",
+        "NR_INTERNAL",
+        "NS_INTERNAL",
+        "NG_INTERNAL",
+        "BG_INTERNAL"
+      ]
+    },
+    "post_process": {
+      "stage_id": 3,
+      "timestep": 1,
+      "field_count": 15,
+      "fields_same_as": "pre_update",
+      "capture": "after first internal-loop process state update"
+    },
+    "kdm62d_return": {
+      "stage_id": 4,
+      "timestep": 1,
+      "field_count": 15,
+      "fields_same_as": "pre_update",
+      "capture": "private KDM62D output before public host-field copyback"
+    },
+    "wrapper_return": {
+      "stage_id": 5,
+      "timestep": 1,
+      "field_count": 14,
+      "fields_same_as": "entry",
+      "capture": "public KDM6 exit fields after number conversion"
+    }
+  },
+  "selected_stages": {
+    "selected_entry": {
+      "stage_id": 6,
+      "timesteps": "1..360",
+      "field_count": 14,
+      "fields_same_as": "entry",
+      "row_layout": ["i:int32", "j:int32", "k:int32", "14 x float32"],
+      "cells": 32,
+      "levels": 39,
+      "block_record_count": "number of selected corners in tile times (kte-kts+1)"
+    },
+    "selected_return": {
+      "stage_id": 7,
+      "timesteps": "1..360",
+      "field_count": 14,
+      "fields_same_as": "wrapper_return",
+      "row_layout": ["i:int32", "j:int32", "k:int32", "14 x float32"],
+      "cells": 32,
+      "levels": 39,
+      "block_record_count": "number of selected corners in tile times (kte-kts+1)"
+    }
+  },
+  "coverage": {
+    "history_shape_yxz": [282, 234, 39],
+    "expected_scope": "union of actual KDM6 runtime core-tile bounds clipped to history interior",
+    "halo_policy": "excluded",
+    "outside_observed_call_mask": "UNCALLED; never zero-filled",
+    "ownership": "rank and local call ID plus actual tile bounds recorded in block header; reject duplicate owners and OLD/FIX mask mismatch",
+    "full_grid_row_order": "j,k,i",
+    "stride_ijk": [1, 1, 1]
+  },
+  "invocation_manifest": {
+    "file_pattern": "state_calls_rank<rank>.txt",
+    "format": "21 whitespace-separated decimal integers per row",
+    "columns": [
+      "itimestep", "rank", "call_id", "ids", "ide", "jds", "jde", "kds", "kde",
+      "ims", "ime", "jms", "jme", "kms", "kme", "its", "ite", "jts", "jte", "kts", "kte"
+    ],
+    "block_inventory": {
+      "one_per_call": ["entry", "wrapper_return", "selected_entry", "selected_return"],
+      "one_per_actual_j_row_at_timestep_1": ["pre_update", "post_process", "kdm62d_return"]
+    },
+    "expected_private_mask": "for every actual step-1 KDM6 call and each j in jts..jte: i=its..ite, k=kts..kte",
+    "expected_global_mask": "union of actual call tile bounds clipped to history interior"
+  },
+  "field_units_and_representation": {
+    "TH_PUBLIC_RAW": "potential temperature, K",
+    "T_K_DERIVED_TH_TIMES_PII": "actual temperature, K, stored separately from TH",
+    "QV_PUBLIC_RAW_QC_PUBLIC_RAW_QR_PUBLIC_RAW_QI_PUBLIC_RAW_QS_PUBLIC_RAW_QG_PUBLIC_RAW": "KDM6 public mass-mixing-ratio values (kg kg-1 convention); host denominator convention not independently bound",
+    "NN_PUBLIC_RAW_NC_PUBLIC_RAW_NI_PUBLIC_RAW_NR_PUBLIC_RAW": "raw public host number-field values; no number unit assigned; KDM6 source multiplies them by DEN on entry",
+    "BG_PUBLIC_RAW_BG_INTERNAL": "raw graupel diagnostic state; no unit assigned",
+    "DEN_ARGUMENT_RAW": "exact DEN argument values; density unit basis and dry/moist basis unclaimed",
+    "QV_INTERNAL_RAW_QC_INTERNAL_QI_INTERNAL_QR_INTERNAL_QS_INTERNAL_QG_INTERNAL": "same KDM6 mixing-ratio representation as public Q fields",
+    "NC_INTERNAL_NI_INTERNAL_NN_INTERNAL_NR_INTERNAL_NS_INTERNAL_NG_INTERNAL": "raw KDM6 nci/nrs values; public number fields multiplied by DEN on entry; physical density basis unclaimed"
+  },
+  "payload_bounds_bytes": {
+    "global_full_history_grid_one_arm": 751849776,
+    "global_full_history_pair": 1503699552,
+    "selected_public_state_pair_including_keys": 122204160,
+    "selected_parent_trace_bytes_old": 484154377,
+    "selected_parent_trace_bytes_fix": 488254065,
+    "selected_32_corner_text_projection_pair": 1944816884,
+    "selected_text_plus_binary_projection_pair": 2067021044,
+    "global_cap_gib": 1.75,
+    "selected_binary_plus_existing_text_cap_gib": 2.75,
+    "all_instrument_output_cap_gib": 4.5
+  },
+  "unit_limits": [
+    "TH_PUBLIC_RAW and T_K_DERIVED_TH_TIMES_PII are distinct fields",
+    "public number fields are retained as raw values; no unit label is inferred",
+    "DEN_ARGUMENT_RAW is the exact DEN argument; AL/ALB/ALT are not captured or inferred",
+    "private NCI/NRS arrays are retained in their actual KDM6 internal representation",
+    "do not compare values across public/private fields without an explicit, source-backed conversion"
+  ]
+}

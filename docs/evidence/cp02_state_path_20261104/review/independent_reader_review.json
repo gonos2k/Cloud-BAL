@@ -1,0 +1,80 @@
+{
+  "format": "CP02_STATE_PATH_INDEPENDENT_READER_REVIEW_v1",
+  "created_date": "2026-11-04",
+  "reviewer_role": "independent read-only source and contract review",
+  "review_status": "GO_READER_CONTRACT_ONLY",
+  "reviewed_source": {
+    "path": "tools/cp02_state_path.py",
+    "sha256": "6858480197f367b9d0b100b5f1ac20cf3e24c1cd691dfe7d6b525603ad59b050"
+  },
+  "reviewed_tests": {
+    "path": "tests/test_cp02_state_path.py",
+    "sha256": "d5b20553e7e9175aaa977193ebb3f3d7e2a6b0255e6d312a08d1a94a45c79856",
+    "reported_result": "22 passed, reported by cohort author; not rerun during this review turn",
+    "expected_rank_manifest_fixture": {
+      "path": "tests/fixtures/cp02_state_path/expected_rank_manifest.json",
+      "sha256": "fd7873a5adcaa3940f35c03c587da5b4e233ee58013c6e7aab4087bda84fa67d",
+      "matches_runtime_manifest": true,
+      "positive_pin_test_added": true
+    }
+  },
+  "native_contract_bindings": {
+    "plan": {
+      "path": "docs/evidence/cp02_state_path_20261104/native/diagnostic_plan.md",
+      "sha256": "57b3f90a0de8b81a496162a26bc23f9c82730b6489aed4c23813a5f2b486ee9f"
+    },
+    "schema": {
+      "path": "docs/evidence/cp02_state_path_20261104/native/state_schema.json",
+      "sha256": "96207bce9553f94f0457f1daaea0afb534fd34a07a107f24973adc87141afced"
+    },
+    "patch_receipt": {
+      "path": "docs/evidence/cp02_state_path_20261104/native/patch_receipt.json",
+      "sha256": "203593d99ddd6b0a1713ddde7197db01e7e4aa089b873d3731d3b855fd343f4b"
+    },
+    "extension_patch_sha256": "cdb6891152d59080357650422eb056940b84ce34e607d05c4630642c3364cf09",
+    "generator": {
+      "path": "docs/evidence/cp02_state_path_20261104/native/extend_state_patch.py",
+      "sha256": "01e38fe7f0a6e38df07fd8b128ceed8ee12391c25267200fa46de8389efaf0a9"
+    }
+  },
+  "runtime_format_probe": {
+    "path_outside_repo": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/probe/probe_receipt.json",
+    "receipt_sha256": "326d36d9a631d77bafeda8cc337a7949c40c33dba659983d093d52d72b5b0c7a",
+    "status": "PASS",
+    "format": "Intel ifx pinned strict profile; big-endian stream; 4-byte int32 and IEEE REAL32",
+    "observed_bytes_hex": "4342535030303031000000013f800000",
+    "environment_endian_overrides_absent": true
+  },
+  "runtime_manifest_binding": {
+    "expected_rank_manifest_path_outside_repo": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/expected_rank_manifest.json",
+    "expected_rank_manifest_sha256": "fd7873a5adcaa3940f35c03c587da5b4e233ee58013c6e7aab4087bda84fa67d",
+    "reader_constant_matches_manifest": true,
+    "quick_scan_path_outside_repo": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/quick_binary_scan.json",
+    "quick_scan_sha256": "141c884e589f4314e369b03fd00724c44780060022f4e5add6872bf1e2bd5c65",
+    "quick_scan_status": "PASS",
+    "quick_scan_scope": "20-second FIX quick run; 56 stage/rank files, eight ranks, exact header/payload offsets, finite values, and no trailing bytes; selected rows on rank 3 and zero selected rows on other ranks"
+  },
+  "reviewed_contracts": [
+    "Requires exactly rank inventory files 0 through 7; allows empty per-rank files while requiring global invocation coverage for steps 1 through 360.",
+    "Binds expected and observed rank sidecars, each arm's per-rank call inventory and launch receipt, schema, and every archived arm file by raw and archive hashes and byte counts.",
+    "Independently compares actual OLD/FIX inventory SHA-256 values by rank, rather than relying only on observed-manifest equality flags.",
+    "Checks OLD/FIX call keys and every call metadata/bounds field for exact equality.",
+    "Clips capture to each invocation's tile and domain interior; rank-local memory/domain bounds prevent halo cells from being assigned as owned state.",
+    "Derives exact expected block sets from call inventory, including required zero-record selected blocks; rejects missing/extra blocks, duplicate owners, incomplete selected rows, and differing OLD/FIX masks.",
+    "Uses big-endian 32-bit integers and REAL32 fields; rejects non-finite physical values; compares raw words and numeric equality separately, preserving signed-zero distinctions.",
+    "Selected public ENTRY/RETURN coverage is checked at every timestep, level, and selected cell; duplicate keys are guarded by the composite (level, cell) key.",
+    "Writes five deterministic compressed ownership sidecars for the global checkpoint stages. Each stores OLD/FIX called masks and exact int64 owner tokens, with -1 for uncalled cells, (rank<<32)|call_id encoding, shape and axis metadata; OLD/FIX owner-token equality is enforced and each output is hash-listed in the receipt.",
+    "The selected ledger separates incoming, within-call, and between-call deltas, labels between-call change as net change from all non-KDM6 operations rather than pure transport, and preserves temperature in kelvin separately from potential temperature."
+  ],
+  "scientific_scope_and_limits": {
+    "scope": "Diagnostic state-path comparison for 8 selected cohorts (32 native corners): global first-step checkpoints plus selected public ENTRY/RETURN over steps 1 through 360 and 39 levels.",
+    "not_established": [
+      "No prognostic physics or model arithmetic is changed by the diagnostic patch.",
+      "No full-run scientific result is reviewed here; corrected OLD/FIX six-hour outputs and full-history gates remain pending.",
+      "The reader's deterministic checkpoint ordering does not establish MPI-rank or wall-clock causal chronology.",
+      "Graph freshness or source tests do not establish runtime or scientific validation."
+    ]
+  },
+  "remaining_audit_limitation": null,
+  "review_boundary": "GO applies only to the reviewed reader contract and current manifest pin. It is not a GO for full-history interpretation, scientific conclusions, PR, or publication."
+}

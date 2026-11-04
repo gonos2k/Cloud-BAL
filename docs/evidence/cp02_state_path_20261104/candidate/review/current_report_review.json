@@ -1,0 +1,431 @@
+{
+  "claim_checks": {
+    "P01_max_abs_process_increment": 7.382094610076939e-12,
+    "P01_max_increment_q_ulp": 0.015852927463129163,
+    "P01_q_and_T_numeric_change_events": {
+      "T": 0,
+      "q": 0
+    },
+    "P01_zero_rate_events": 190,
+    "P02_zero_event_bilinear_weighted_latent_T_K": -0.03281969116691235,
+    "P02_zero_event_subset_count": 15,
+    "candidate_plus2_5mm_HMF": {
+      "FIX": {
+        "false_alarm": 105,
+        "hit": 59,
+        "miss": 159
+      },
+      "candidate": {
+        "false_alarm": 106,
+        "hit": 59,
+        "miss": 159
+      }
+    },
+    "candidate_plus2_transition_counts": {
+      "false_alarm_gains": 21,
+      "false_alarm_losses": 14,
+      "hit_gains": 12,
+      "hit_losses": 7
+    },
+    "candidate_qualified": false,
+    "candidate_weak_band_974_points": {
+      "detection_cut_mm": 0.1,
+      "gained": 8,
+      "lead_hour": 2,
+      "lost": 6,
+      "net_change": 2,
+      "new_detected_candidate": 232,
+      "observed_band_mm": "[0.1,1)",
+      "old_detected_IMPROVED_BG_FIXED": 230,
+      "points": 974
+    },
+    "earliest_global_numeric_difference": {
+      "field": "QV_INTERNAL_RAW",
+      "field_index": 0,
+      "fix": 0.020872177556157112,
+      "fix_word": "0x3caafc21",
+      "i": 101,
+      "j": 2,
+      "k": 1,
+      "numeric_equal": false,
+      "old": 0.02087217941880226,
+      "old_word": "0x3caafc22",
+      "signed_zero_only": false,
+      "stage": "post_process",
+      "stage_id": 3,
+      "timestep": 1
+    },
+    "eight_cohort_values_count": 8,
+    "ledger_identity_and_errorbound": {
+      "bound_violation_count": 0,
+      "identity": "D_return = D_entry + [(FIX_return-FIX_entry)-(OLD_return-OLD_entry)]"
+    }
+  },
+  "criteria_audit": {
+    "csv_constraint_rows": 26,
+    "failed_rows": [
+      {
+        "goal": "preserve_current_B1",
+        "lead": 1,
+        "threshold": 2.5
+      },
+      {
+        "goal": "recover_low_threshold_vs_ORIGINAL",
+        "lead": 2,
+        "threshold": 0.1
+      },
+      {
+        "goal": "recover_low_threshold_vs_ORIGINAL",
+        "lead": 2,
+        "threshold": 0.5
+      },
+      {
+        "goal": "recover_low_threshold_vs_ORIGINAL",
+        "lead": 2,
+        "threshold": 1.0
+      },
+      {
+        "goal": "preserve_current_B1",
+        "lead": 2,
+        "threshold": 5.0
+      },
+      {
+        "goal": "recover_low_threshold_vs_ORIGINAL",
+        "lead": 3,
+        "threshold": 0.1
+      },
+      {
+        "goal": "recover_low_threshold_vs_ORIGINAL",
+        "lead": 3,
+        "threshold": 0.5
+      },
+      {
+        "goal": "recover_low_threshold_vs_ORIGINAL",
+        "lead": 3,
+        "threshold": 1.0
+      },
+      {
+        "goal": "recover_low_threshold_vs_ORIGINAL",
+        "lead": 4,
+        "threshold": 0.1
+      },
+      {
+        "goal": "recover_low_threshold_vs_ORIGINAL",
+        "lead": 4,
+        "threshold": 0.5
+      },
+      {
+        "goal": "recover_low_threshold_vs_ORIGINAL",
+        "lead": 4,
+        "threshold": 1.0
+      },
+      {
+        "goal": "recover_low_threshold_vs_ORIGINAL",
+        "lead": 6,
+        "threshold": 0.1
+      },
+      {
+        "goal": "recover_low_threshold_vs_ORIGINAL",
+        "lead": 6,
+        "threshold": 0.5
+      },
+      {
+        "goal": "recover_low_threshold_vs_ORIGINAL",
+        "lead": 6,
+        "threshold": 1.0
+      }
+    ],
+    "passed": 12,
+    "plan_constraint_count": 26,
+    "plan_matches_prose": true,
+    "protection_rows": 11,
+    "recovery_rows": 15
+  },
+  "documents": {
+    "full_scores": {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/FULL_SCORES.md",
+      "sha256": "4bf1ee79fbe86b5733979df23e08eb5f32049adc55e0b9341b644862f55363cd",
+      "size_bytes": 5178
+    },
+    "main_paper": {
+      "path": "docs/CP02_STATE_PATH_AND_RAIN_NUMBER_20261104.md",
+      "sha256": "5deab0f93390f237621300dd3e96d78e8b2c727ac066c00fa558dfca886ad67d",
+      "size_bytes": 19846
+    }
+  },
+  "figure_audit": {
+    "linked_figure_bindings": [
+      {
+        "path": "docs/evidence/cp02_state_path_20261104/figures/p01_event_amplitude.png",
+        "sha256": "f453aac04bda7a59f5bd6227c188fecf4d2e3d9da3f2d95ee50e4c1f221ff826",
+        "size_bytes": 132520
+      },
+      {
+        "path": "docs/evidence/cp02_state_path_20261104/figures/candidate/rain_number_prior_math.png",
+        "sha256": "95612e80eef0e97376db8739dda6ec4c4154979ac6c213993dedb6fb9271b56e",
+        "size_bytes": 142843
+      },
+      {
+        "path": "docs/evidence/cp02_state_path_20261104/figures/native/native_path_qv_public_raw.png",
+        "sha256": "2b54b00d1342b05458802cf37ba232181fb892f629bbcddda1b6c0e8307454b0",
+        "size_bytes": 817003
+      },
+      {
+        "path": "docs/evidence/cp02_state_path_20261104/figures/candidate/rain_number_hour_14_maps.png",
+        "sha256": "3fa500f046083e6a899219446962fd00c562114afd3fc226b9c7dfbecbf173a6",
+        "size_bytes": 372519
+      },
+      {
+        "path": "docs/evidence/cp02_state_path_20261104/figures/candidate/rain_number_csi_threshold_0.1mm.png",
+        "sha256": "be1a599e850ea291ca3161e52187f0fa774147252122fc763e935bb84e644a2e",
+        "size_bytes": 152507
+      },
+      {
+        "path": "docs/evidence/cp02_state_path_20261104/figures/candidate/rain_number_csi_threshold_5mm.png",
+        "sha256": "ac615812d6ab0731e8d49a2203ce278c725468ace93967f357b71239f736cb73",
+        "size_bytes": 174975
+      }
+    ],
+    "missing_links": [],
+    "paper_figure_links": 6,
+    "render_receipts": [
+      {
+        "path": "docs/evidence/cp02_state_path_20261104/figures/render_receipt.json",
+        "sha256": "5069a782de55bace6186a82711d549e729c247b0425c1c67f754d1f31b6fdbcf",
+        "size_bytes": 1182
+      },
+      {
+        "path": "docs/evidence/cp02_state_path_20261104/figures/native/render_receipt.json",
+        "sha256": "5de1c3abd75620648f74f62e034eb8a13dd93166beedd3129241ef2498ece658",
+        "size_bytes": 61771
+      },
+      {
+        "path": "docs/evidence/cp02_state_path_20261104/figures/candidate/render_receipt.json",
+        "sha256": "86ac8181f50a09d37f6b4d72954b26724e585f911ca5283929f83a6466c74d80",
+        "size_bytes": 13543
+      }
+    ]
+  },
+  "figure_links_missing_at_review_time": [],
+  "findings": [],
+  "limitations": [
+    "The displayed CSI differences are rounded to five decimal places; source comparisons use full-precision categorical CSVs.",
+    "Figure and source bindings describe the current snapshot and should be refreshed if the paper or figures change."
+  ],
+  "recount_receipt_scope": {
+    "outputs": [
+      "categorical_recount.csv",
+      "cohort_plus2_recount.csv",
+      "constraints_recount.csv",
+      "continuous_recount.csv",
+      "observed_band_detection_cut_0p1.csv",
+      "recount_summary.json"
+    ],
+    "receipt_sha256": "912ca37b2fc9eac6d0f0c13692cf069688e1af738d9d5f666b0ff75d2ec89727",
+    "scope": "only files written directly by independent recount script; excludes this report review JSON and other review files",
+    "script_sha256": "4b31fd9e6f3138c8b67000e2537922c653454f40b967805bbcdd08aa632f8c2c"
+  },
+  "reviewed_utc": "2026-11-04",
+  "schema": "cp02_current_report_review_v1",
+  "score_audit": {
+    "HMF_CSI_mismatches": 0,
+    "all_3688_sample_scope": true,
+    "delta_mismatches": 0,
+    "full_scores_parsed_rows": 108,
+    "paper_candidate_minus_FIX_delta_cells": 36,
+    "source_csv_rows": 108
+  },
+  "source_bindings": [
+    {
+      "path": "docs/CP02_STATE_PATH_AND_RAIN_NUMBER_20261104.md",
+      "sha256": "5deab0f93390f237621300dd3e96d78e8b2c727ac066c00fa558dfca886ad67d",
+      "size_bytes": 19846
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/FULL_SCORES.md",
+      "sha256": "4bf1ee79fbe86b5733979df23e08eb5f32049adc55e0b9341b644862f55363cd",
+      "size_bytes": 5178
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/categorical_scores.csv",
+      "sha256": "20f42c44bf8805e26369dad7b83946f49ec49fa5b97a76d82da174d4923ed3be",
+      "size_bytes": 6420
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/continuous_scores.csv",
+      "sha256": "cf055dd183b9613e9a328680fca281289a385730deb990f7a519fcd8bd8c49dc",
+      "size_bytes": 1034
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/admission_constraints.csv",
+      "sha256": "2847e8c14ae9334ff1ecad15079f9ad27b750875573f0a3adc123fe4a28cf314",
+      "size_bytes": 2470
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/receipt.json",
+      "sha256": "282eace0d651db6f9dda21657b04bd0c032c84588e3d9a09281d61f0eb517286",
+      "size_bytes": 11954
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/evaluation_plan.json",
+      "sha256": "073a2805e1ff4e184fbfb67aa1d8f61899d8decbd8c4bc0c7e701a1aa6a7d964",
+      "size_bytes": 2438
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/runtime_evaluation_gate.json",
+      "sha256": "3162d8c176608c382abd0f2e3ac24138743993c46312df6b772d97771a5434ce",
+      "size_bytes": 2114
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/review/recount_receipt.json",
+      "sha256": "912ca37b2fc9eac6d0f0c13692cf069688e1af738d9d5f666b0ff75d2ec89727",
+      "size_bytes": 4051
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/cli/final_analysis/receipt.json",
+      "sha256": "e278ccb6b65a0d711549911b222b6fc92c1cefecf6375a339c7b068c09f957c5",
+      "size_bytes": 172761
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/cli/final_analysis/earliest_divergence.json",
+      "sha256": "1b971c1d6042dd3ee5bdf6c41a63e9f9d26b8c0d8e0bffbb02d7ddc234e1b3ef",
+      "size_bytes": 24995
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/cli/final_analysis/ledger_summary.json",
+      "sha256": "968adcd08185bb41ed215d27a54c05340db782692109d1730615ebebfed807c6",
+      "size_bytes": 5899
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/cohorts/zero_rate_state_path_summary.json",
+      "sha256": "150c8661aa1a551af31c2d7b8080645352a5f8b1c265c947649ff16e3b05a8bb",
+      "size_bytes": 12653
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_13_arrays.npz",
+      "sha256": "2938a3da2d07dd735ff127fa0b9d56601394a38259efe7e0a2adf6a0f6cd14fa",
+      "size_bytes": 101845
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_14_arrays.npz",
+      "sha256": "e0471f78381bc566157cc4498fa6253969833ddc8b4d2766381137be785b3736",
+      "size_bytes": 102613
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_15_arrays.npz",
+      "sha256": "50211ca4d6f86fade72959cf33c6f940f08f24efe36a880c4c8442587101dca1",
+      "size_bytes": 110815
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_16_arrays.npz",
+      "sha256": "22703532513390758665973627c56fd1d7ef5159b765c358307ad8b1de3174a2",
+      "size_bytes": 111190
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_17_arrays.npz",
+      "sha256": "5286e04e47c562c6257693b23627f3a917e564b342d828307863be2a39194a7e",
+      "size_bytes": 108065
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_18_arrays.npz",
+      "sha256": "554458020d7753bce7a10f44c0e41eff49644b8a9a04528273055d7daa325336",
+      "size_bytes": 111790
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/figures/render_receipt.json",
+      "sha256": "5069a782de55bace6186a82711d549e729c247b0425c1c67f754d1f31b6fdbcf",
+      "size_bytes": 1182
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/figures/native/render_receipt.json",
+      "sha256": "a90a43f7c0dbae7910774be82e56d86aa566acaa114eda168bc112103c7a2026",
+      "size_bytes": 62131
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/figures/candidate/render_receipt.json",
+      "sha256": "a6b8303b3e5a8d1e9a0c77d02cfadd1c6ee7153e5481ac28428ecfe6731fdfbc",
+      "size_bytes": 14133
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/cli/final_analysis/selected_ledger_summary.csv",
+      "sha256": "c3dd037df6aa10d97ff3d2a023c28646fda3598bbe997a0b929cd9582938f214",
+      "size_bytes": 74265
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/cli/final_analysis/selected_raw_OLD.npz",
+      "sha256": "71bf9ea7f4fb4b9ec2a3b9534256332b4f5acd9915737cc8470d2934660849b3",
+      "size_bytes": 28975189
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/cli/final_analysis/selected_raw_FIX.npz",
+      "sha256": "56079dda95af16ab549065d106d8f6405b382c0a7bf87a726ad4cedd9b9d187c",
+      "size_bytes": 29280652
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/cohorts/point_corners.csv",
+      "sha256": "c32694fbcdd1fbe85c7b37c4bfb6978f43a1efc417aef0052db7e4ce62bb4618",
+      "size_bytes": 11857
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/first_call_comparison.json",
+      "sha256": "7095a7e752038fa7338638fc12852686a7196546c8274df788ab5182688ab43f",
+      "size_bytes": 101311
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/first_call_comparison.csv",
+      "sha256": "a16ad30339e6703bb01bfacbfb2d39311954526155d1e51c542fd37df8b752b2",
+      "size_bytes": 38646
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/lineage/B1_RAIN_PSD_PRIOR_POLICY_20261104.json",
+      "sha256": "25387970de9685e3024af7983d47650ab6b6068188f765df58243d6ebefa7601",
+      "size_bytes": 8205
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/native/capture/state_schema.json",
+      "sha256": "96207bce9553f94f0457f1daaea0afb534fd34a07a107f24973adc87141afced",
+      "size_bytes": 6369
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/figures/p01_event_amplitude.png",
+      "sha256": "f453aac04bda7a59f5bd6227c188fecf4d2e3d9da3f2d95ee50e4c1f221ff826",
+      "size_bytes": 132520
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/figures/candidate/rain_number_prior_math.png",
+      "sha256": "60b638397f395ef7526da7002535f7c18d86eebf7455ad84971a09e6694f9c59",
+      "size_bytes": 127236
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/figures/native/native_path_qv_public_raw.png",
+      "sha256": "2879efcb1c6c2814920590137af22e80b67ac60e826cc45e3916275cf29ca292",
+      "size_bytes": 786686
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/figures/candidate/rain_number_hour_14_maps.png",
+      "sha256": "b94ff0b659ffc14cb4ed5492745568ccfd81fade771ac38d946e6922ab9500db",
+      "size_bytes": 450845
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/figures/candidate/rain_number_csi_threshold_0.1mm.png",
+      "sha256": "be1a599e850ea291ca3161e52187f0fa774147252122fc763e935bb84e644a2e",
+      "size_bytes": 152507
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/figures/candidate/rain_number_csi_threshold_5mm.png",
+      "sha256": "ac615812d6ab0731e8d49a2203ce278c725468ace93967f357b71239f736cb73",
+      "size_bytes": 174975
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/review/recount_b1_rain_number.py",
+      "sha256": "4b31fd9e6f3138c8b67000e2537922c653454f40b967805bbcdd08aa632f8c2c",
+      "size_bytes": 15636
+    }
+  ],
+  "status": "PASS",
+  "temperature_field_audit": {
+    "clarification_status": "ADDRESSED",
+    "paper_text": "P01 paragraph now identifies KDM6 temperature as T_mp = TH \u00d7 PII, gives first entry difference t=2,k=5 and within-call difference t=4,k=27, and distinguishes TH_PUBLIC_RAW first within-call difference t=2,k=9.",
+    "source_check": "Recomputed from selected_raw_OLD/FIX paired arrays using the same four bilinear corners and weights."
+  }
+}

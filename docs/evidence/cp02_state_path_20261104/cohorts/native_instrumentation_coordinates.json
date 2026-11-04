@@ -1,0 +1,327 @@
+{
+  "description": "8 canonical RN1 cells for native instrumentation; four actual WRF bilinear corners each",
+  "mapping": {
+    "algorithm": "build_curvilinear_mapping from pinned cp02_precip_control_mapping tool and archived mapper",
+    "analysis_coordinate_file": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/DFSD/20260816/klps_lc05_anal_20260816_1300",
+    "analysis_coordinate_sha256": "bfa8e9d050244166ee53973be9593cdcad0e322d9b69209084c8dd19d159b23e",
+    "analysis_crop": "lat/lon[6:259,75:224]",
+    "analysis_crop_shape_yx": [
+      253,
+      149
+    ],
+    "archived_mapper": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/Cloud-BAL/docs/evidence/precip_hourly_20261027/rn1_recovery/archived_compare_six_hour_csi.py",
+    "archived_mapper_sha256": "1cfa4965155ec273e8e1ca9f963bd79a5ece3bc47beb4ae3db4e8b8f5e21b2c0",
+    "ibase": 74,
+    "jbase": 5,
+    "mapping_tool": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/Cloud-BAL/tools/cp02_precip_control_mapping.py",
+    "mapping_tool_sha256": "87269145385973d66d5e945e1f43860e3560055460341d3cb1c43647cb218198",
+    "max_mapping_residual_deg": 2.842170943040401e-14,
+    "native_crop": "[j=5:259,i=74:224]",
+    "wrf_history": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100/wrfout_d01_2026-08-16_12:00:00",
+    "wrf_history_sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6"
+  },
+  "points": [
+    {
+      "FIX_plus1_mm": "9.264834050478842e-08",
+      "FIX_plus1_t0p1_FA": "False",
+      "FIX_plus1_t0p1_hit": "False",
+      "FIX_plus1_t5_hit": "False",
+      "FIX_plus2_mm": "0.08058245592120747",
+      "FIX_plus2_t0p1_FA": "False",
+      "FIX_plus2_t0p1_hit": "False",
+      "FIX_plus2_t5_hit": "False",
+      "OLD_plus1_mm": "6.387428111965087e-05",
+      "OLD_plus1_t0p1_FA": "False",
+      "OLD_plus1_t0p1_hit": "False",
+      "OLD_plus1_t5_hit": "False",
+      "OLD_plus2_mm": "0.33377015703293156",
+      "OLD_plus2_t0p1_FA": "False",
+      "OLD_plus2_t0p1_hit": "True",
+      "OLD_plus2_t5_hit": "False",
+      "RN1_plus1_mm": "0.0",
+      "RN1_plus2_mm": "0.2",
+      "delta_P_plus2_mm": "-0.25318770111172406",
+      "diagnostic_group": "weak_hit_lost",
+      "eligible_group_counts": "{'weak_hit_lost': 10, 'weak_new_false_alarm': 31, 'weak_stable_hit': 143, 'strong_hit_gain': 0, 'strong_stable_hit_fallback': 59}",
+      "latitude": "35.139495849609375",
+      "longitude": "127.28880310058594",
+      "point_id": "P01",
+      "reference_plus2_mm": "0.2",
+      "rn1_sample_index_zero_based": "476",
+      "selection_note": "weak_hit_lost",
+      "selection_rule": "within the declared group, maximize abs(FIX\u2212OLD) one-hour precipitation at +2; tie-break smallest target_flat_index_yx; posthoc diagnostic, not performance holdout or physics/input mask",
+      "target_flat_index_yx": "10942"
+    },
+    {
+      "FIX_plus1_mm": "0.013397517054424667",
+      "FIX_plus1_t0p1_FA": "False",
+      "FIX_plus1_t0p1_hit": "False",
+      "FIX_plus1_t5_hit": "False",
+      "FIX_plus2_mm": "0.8299988137145277",
+      "FIX_plus2_t0p1_FA": "True",
+      "FIX_plus2_t0p1_hit": "False",
+      "FIX_plus2_t5_hit": "False",
+      "OLD_plus1_mm": "9.614187232954989e-05",
+      "OLD_plus1_t0p1_FA": "False",
+      "OLD_plus1_t0p1_hit": "False",
+      "OLD_plus1_t5_hit": "False",
+      "OLD_plus2_mm": "0.023861743426123086",
+      "OLD_plus2_t0p1_FA": "False",
+      "OLD_plus2_t0p1_hit": "False",
+      "OLD_plus2_t5_hit": "False",
+      "RN1_plus1_mm": "0.0",
+      "RN1_plus2_mm": "0.0",
+      "delta_P_plus2_mm": "0.8061370702884045",
+      "diagnostic_group": "weak_new_false_alarm",
+      "eligible_group_counts": "{'weak_hit_lost': 10, 'weak_new_false_alarm': 31, 'weak_stable_hit': 143, 'strong_hit_gain': 0, 'strong_stable_hit_fallback': 59}",
+      "latitude": "35.465721130371094",
+      "longitude": "126.78839111328125",
+      "point_id": "P02",
+      "reference_plus2_mm": "0.0",
+      "rn1_sample_index_zero_based": "819",
+      "selection_note": "weak_new_false_alarm",
+      "selection_rule": "within the declared group, maximize abs(FIX\u2212OLD) one-hour precipitation at +2; tie-break smallest target_flat_index_yx; posthoc diagnostic, not performance holdout or physics/input mask",
+      "target_flat_index_yx": "11976"
+    },
+    {
+      "FIX_plus1_mm": "2.8156021491151447e-07",
+      "FIX_plus1_t0p1_FA": "False",
+      "FIX_plus1_t0p1_hit": "False",
+      "FIX_plus1_t5_hit": "False",
+      "FIX_plus2_mm": "0.4277010804788892",
+      "FIX_plus2_t0p1_FA": "False",
+      "FIX_plus2_t0p1_hit": "True",
+      "FIX_plus2_t5_hit": "False",
+      "OLD_plus1_mm": "0.005683648361931779",
+      "OLD_plus1_t0p1_FA": "False",
+      "OLD_plus1_t0p1_hit": "False",
+      "OLD_plus1_t5_hit": "False",
+      "OLD_plus2_mm": "0.6933360042513304",
+      "OLD_plus2_t0p1_FA": "False",
+      "OLD_plus2_t0p1_hit": "True",
+      "OLD_plus2_t5_hit": "False",
+      "RN1_plus1_mm": "0.0",
+      "RN1_plus2_mm": "0.5",
+      "delta_P_plus2_mm": "-0.26563492377244113",
+      "diagnostic_group": "weak_stable_hit",
+      "eligible_group_counts": "{'weak_hit_lost': 10, 'weak_new_false_alarm': 31, 'weak_stable_hit': 143, 'strong_hit_gain': 0, 'strong_stable_hit_fallback': 59}",
+      "latitude": "35.09214782714844",
+      "longitude": "127.39987182617188",
+      "point_id": "P03",
+      "reference_plus2_mm": "0.5",
+      "rn1_sample_index_zero_based": "439",
+      "selection_note": "weak_stable_hit",
+      "selection_rule": "within the declared group, maximize abs(FIX\u2212OLD) one-hour precipitation at +2; tie-break smallest target_flat_index_yx; posthoc diagnostic, not performance holdout or physics/input mask",
+      "target_flat_index_yx": "10795"
+    },
+    {
+      "FIX_plus1_mm": "13.322852500857554",
+      "FIX_plus1_t0p1_FA": "False",
+      "FIX_plus1_t0p1_hit": "True",
+      "FIX_plus1_t5_hit": "False",
+      "FIX_plus2_mm": "62.83795731256127",
+      "FIX_plus2_t0p1_FA": "False",
+      "FIX_plus2_t0p1_hit": "True",
+      "FIX_plus2_t5_hit": "True",
+      "OLD_plus1_mm": "13.511116050582897",
+      "OLD_plus1_t0p1_FA": "False",
+      "OLD_plus1_t0p1_hit": "True",
+      "OLD_plus1_t5_hit": "False",
+      "OLD_plus2_mm": "60.44618882247576",
+      "OLD_plus2_t0p1_FA": "False",
+      "OLD_plus2_t0p1_hit": "True",
+      "OLD_plus2_t5_hit": "True",
+      "RN1_plus1_mm": "1.6",
+      "RN1_plus2_mm": "9.4",
+      "delta_P_plus2_mm": "2.3917684900855107",
+      "diagnostic_group": "strong_stable_hit_fallback",
+      "eligible_group_counts": "{'weak_hit_lost': 10, 'weak_new_false_alarm': 31, 'weak_stable_hit': 143, 'strong_hit_gain': 0, 'strong_stable_hit_fallback': 59}",
+      "latitude": "35.16273880004883",
+      "longitude": "128.46669006347656",
+      "point_id": "P04",
+      "reference_plus2_mm": "9.4",
+      "rn1_sample_index_zero_based": "544",
+      "selection_note": "predeclared fallback: threshold-5 hit-gain cohort empty",
+      "selection_rule": "within the declared group, maximize abs(FIX\u2212OLD) one-hour precipitation at +2; tie-break smallest target_flat_index_yx; posthoc diagnostic, not performance holdout or physics/input mask",
+      "target_flat_index_yx": "11112"
+    },
+    {
+      "FIX_plus2_mm": 4.678401029127486,
+      "OLD_plus2_mm": 5.290057612968806,
+      "diagnostic_group": "threshold5_removed_false_alarm",
+      "latitude": 35.22419738769531,
+      "longitude": 127.73938751220703,
+      "point_id": "FA01",
+      "reference_plus2_mm": 1.4,
+      "rn1_sample_index_zero_based": 582,
+      "selection_rule": "explicitly requested threshold-5 transition; instrumentation point only; full-array scores remain authoritative",
+      "target_flat_index_yx": 11248
+    },
+    {
+      "FIX_plus2_mm": 4.87973529851223,
+      "OLD_plus2_mm": 5.112056682063479,
+      "diagnostic_group": "threshold5_removed_false_alarm",
+      "latitude": 35.4820671081543,
+      "longitude": 128.53514099121094,
+      "point_id": "FA02",
+      "reference_plus2_mm": 0.6,
+      "rn1_sample_index_zero_based": 899,
+      "selection_rule": "explicitly requested threshold-5 transition; instrumentation point only; full-array scores remain authoritative",
+      "target_flat_index_yx": 12156
+    },
+    {
+      "FIX_plus2_mm": 4.981935680778647,
+      "OLD_plus2_mm": 5.187318521730036,
+      "diagnostic_group": "threshold5_removed_false_alarm",
+      "latitude": 36.430992126464844,
+      "longitude": 126.68589782714844,
+      "point_id": "FA03",
+      "reference_plus2_mm": 0.6,
+      "rn1_sample_index_zero_based": 1870,
+      "selection_rule": "explicitly requested threshold-5 transition; instrumentation point only; full-array scores remain authoritative",
+      "target_flat_index_yx": 15103
+    },
+    {
+      "FIX_plus2_mm": 5.948182418550052,
+      "OLD_plus2_mm": 4.818453054762302,
+      "diagnostic_group": "threshold5_new_false_alarm",
+      "latitude": 36.338626861572266,
+      "longitude": 126.74199676513672,
+      "point_id": "FA04",
+      "reference_plus2_mm": 0.3,
+      "rn1_sample_index_zero_based": 1772,
+      "selection_rule": "explicitly requested threshold-5 transition; instrumentation point only; full-array scores remain authoritative",
+      "target_flat_index_yx": 14806
+    }
+  ],
+  "unique_global_native_cells": [
+    [
+      77,
+      141
+    ],
+    [
+      77,
+      142
+    ],
+    [
+      78,
+      139
+    ],
+    [
+      78,
+      140
+    ],
+    [
+      78,
+      141
+    ],
+    [
+      78,
+      142
+    ],
+    [
+      79,
+      139
+    ],
+    [
+      79,
+      140
+    ],
+    [
+      79,
+      160
+    ],
+    [
+      79,
+      161
+    ],
+    [
+      80,
+      147
+    ],
+    [
+      80,
+      148
+    ],
+    [
+      80,
+      160
+    ],
+    [
+      80,
+      161
+    ],
+    [
+      81,
+      147
+    ],
+    [
+      81,
+      148
+    ],
+    [
+      85,
+      130
+    ],
+    [
+      85,
+      131
+    ],
+    [
+      86,
+      130
+    ],
+    [
+      86,
+      131
+    ],
+    [
+      86,
+      161
+    ],
+    [
+      86,
+      162
+    ],
+    [
+      87,
+      161
+    ],
+    [
+      87,
+      162
+    ],
+    [
+      104,
+      129
+    ],
+    [
+      104,
+      130
+    ],
+    [
+      105,
+      129
+    ],
+    [
+      105,
+      130
+    ],
+    [
+      106,
+      128
+    ],
+    [
+      106,
+      129
+    ],
+    [
+      107,
+      128
+    ],
+    [
+      107,
+      129
+    ]
+  ]
+}

@@ -1,0 +1,39 @@
+{
+  "schema": "b1_rain_prior_pre_entry_attempt_v1",
+  "status": "SUPERSEDED_BEFORE_ANY_CANDIDATE_INPUT_OR_FORECAST",
+  "initial_attempt_hashes_captured_before_correction": {
+    "policy_sha256": "319a637a8c6e646c53e580c08dd833addd1763b8caf77d059d9edff3b8cf83cc",
+    "initializer_sha256": "31bf9b44b167600559bee5316163c40a5a7e47b7308744542fd96cabfc651733",
+    "tests_sha256": "828e8c855c4275802d6d34871b6fc4dac43e609820093da612c38ebdf8420079"
+  },
+  "source_hash_reconciliation": {
+    "B1_wrf_exe": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+    "B1_kdm6_preprocessed": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b",
+    "B1_kdm6_object": "64aa9ba9d65c501993f0bb425492e288f4869f22412a6b97cb0e82cbc10937b7",
+    "build_receipt": "/var/tmp/firsthour-runtime-plan-20261030/experiment/build_receipt.json",
+    "build_receipt_sha256": "50fb6bf97114cccbb170404b927aa54fc0fa83c72f64f23d2c3c107472c1afc7",
+    "reconciled_constants": "mur=1; dmr=3; lambda=[961,35000] m-1; qcrmin=1e-9; nrmin=1e-2; nrmax=5e7; pidnr=(pi*rhowater/6)*Gamma(5)/Gamma(2)."
+  },
+  "superseded_assumption": "The initial helper required baseline first-KDM6 ENTRY QRAIN/QNRAIN to equal initial wrfinput values. This is invalid as a general stage identity because startup dynamics can change fields before first KDM6. Baseline capture is now used only for DEN cap screening and called coordinates. Candidate first-ENTRY QRAIN/QNRAIN/DEN must be captured separately after startup.",
+  "physical_prior_unchanged": "Rain-only geometric-center lambda prior, exact-zero QNRAIN fill, initial QRAIN>source qcrmin, no nrmin floor, no bound relaxation.",
+  "run_state": {
+    "baseline_metgrid_real_replay_completed": true,
+    "candidate_input_created": false,
+    "candidate_forecast_launched": false
+  },
+  "current_corrected_artifacts": {
+    "policy": {
+      "path": "docs/evidence/cp02_state_path_20261104/lineage/B1_RAIN_PSD_PRIOR_POLICY_20261104.json",
+      "sha256": "a629eebb15eca6d292152aa531db875c109aaa19162d3edceebea2e2d2ee87a1"
+    },
+    "initializer": {
+      "path": "tools/initialize_b1_rain_psd_prior.py",
+      "sha256": "1248a844d4225fee81e45784fb834d3d16b99ecdd96076ccf20b85d2b9177028"
+    },
+    "tests": {
+      "path": "tests/test_initialize_b1_rain_psd_prior.py",
+      "sha256": "4e6759485229eb171fce78b729d86d39bcc45c942f9943f7496a82bd9f6532da"
+    }
+  },
+  "archive_limitation": "The pre-correction versions were captured by SHA-256 in the live handoff but their exact file bytes were not copied before the implementation correction. This record preserves their hashes and the superseded assumption; it does not claim byte-for-byte source snapshots."
+}

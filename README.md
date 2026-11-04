@@ -1,5 +1,7 @@
 # Cloud-BAL
 
+**2026-11-04 CP02 비 입자수 검증:** [학회논문 형식 보고서](docs/CP02_STATE_PATH_AND_RAIN_NUMBER_20261104.md)와 [전체 시간·임계값별 점수](docs/evidence/cp02_state_path_20261104/candidate/FULL_SCORES.md), [그림 22장 모음](docs/evidence/cp02_state_path_20261104/FIGURES.md)을 추가했습니다. 동일 B1 상태 차이의 첫 발생 경계를 추적하고 QNRAIN만 바꾼 후보의 6시간 예보를 완료했습니다. P01의 +2시간 적중은 회복했으나 사전 조건 12/26으로 **후보 미채택·현재 B1 유지**입니다. 아래 업데이트는 각 작성 시점의 기록입니다.
+
 **2026-11-03 CP02 진단 업데이트:** 동일 B1 초기장의 기존/수정 KDM6를 2시간 재실행해 +0·+1·+2시간 전체 출력의 보관본 일치를 확인했습니다. [과정 진단 보고서](docs/CP02_B1_TWO_HOUR_PROCESS_20261103.md)는 비 증발률·수증기·냉각의 국지 연결을 다룹니다. 새 개선 후보나 강수 성능 개선을 채택한 단계는 아닙니다. 아래 PR143 현황은 당시 기록으로 보존됩니다.
 
 Focused KLAPS baseline for improving cloud-derived vertical motion, balance

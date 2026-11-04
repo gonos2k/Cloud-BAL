@@ -1,0 +1,157 @@
+{
+  "baseline_sha256": "cd49f188f8852e5da9feb69ec7669864c0a598b683065b6152eb7bfb7b0ede91",
+  "checks": {
+    "baseline_exact_234_preserved": {
+      "detail": "All old dated snapshot inventories, active graph trios, exact HEAD/porcelain state, and five wiki mirrors match the pinned baseline.",
+      "pass": true
+    },
+    "freeze_receipt_baseline_bindings": {
+      "detail": "baseline cd49f188f8852e5da9feb69ec7669864c0a598b683065b6152eb7bfb7b0ede91 and selection lock 778193eb03bec94a624bfc84d56a4543b7f13dd002dc4ba5dcff7aa831a38487 bind the stage receipt.",
+      "pass": true
+    },
+    "frozen_hash_only_pins": {
+      "detail": "403/403 hash-only artifact hashes match.",
+      "pass": true
+    },
+    "frozen_selected_source_pins": {
+      "detail": "19/19 selected source hashes match.",
+      "pass": true
+    },
+    "frozen_selection_scope": {
+      "detail": "freeze 55e0e8b2a5e9f142; 19 selected sources; extraction and manifest update lists exactly match.",
+      "pass": true
+    },
+    "graph_integrity_and_old_node_preservation": {
+      "detail": "{\"Cloud-BAL\": {\"after\": {\"communities\": 1583, \"edges\": 32006, \"nodes\": 17769}, \"before\": {\"communities\": 1552, \"edges\": 31394, \"nodes\": 17514}, \"dangling_edges\": 0, \"exact_duplicate_edges\": 0, \"prior_nodes_preserved\": 17514, \"receipt_integrity_zero_counts\": {\"dangling_endpoint_edges\": 0, \"exact_duplicate_edges\": 0, \"missing_endpoint_edges\": 0, \"same_endpoint_group_count\": 0, \"self_loop_edges\": 0}, \"same_endpoint_groups\": 0, \"self_loops\": 0}, \"KLAPS50\": {\"after\": {\"communities\": 3533, \"edges\": 90515, \"nodes\": 43597}, \"before\": {\"communities\": 3504, \"edges\": 89897, \"nodes\": 43342}, \"dangling_edges\": 0, \"exact_duplicate_edges\": 0, \"prior_nodes_preserved\": 43342, \"receipt_integrity_zero_counts\": {\"dangling_endpoint_edges\": 0, \"exact_duplicate_edges\": 0, \"missing_endpoint_edges\": 0, \"same_endpoint_group_count\": 0, \"self_loop_edges\": 0}, \"same_endpoint_groups\": 0, \"self_loops\": 0}}",
+      "pass": true
+    },
+    "isolated_stage_receipt": {
+      "detail": "stage /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/kg_stage/stage-55e0e8b2a5e9f142; status=STAGED_ONLY_NO_MAINTAINED_WRITES; maintained_roots_written=false; existing snapshots preserved=234.",
+      "pass": true
+    },
+    "isolated_target_13_readback": {
+      "detail": "13 publisher targets verified: 8 graph/trio snapshot targets + 5 wiki files; errors=[].",
+      "pass": true
+    },
+    "maintained_inventory_growth_bound": {
+      "detail": "The maintained baseline has 115 KLAPS50 + 119 Cloud-BAL dated snapshots (234). The 13 bounded targets append one new snapshot per root, yielding 116 + 120 = 236 after publication; scratch-only dated folders are outside the target list.",
+      "pass": true
+    },
+    "selected_manifest_only": {
+      "detail": "{\"Cloud-BAL\": {\"changed_key_count\": 19, \"missing_selected_keys\": 0, \"removed_keys\": 0, \"selected_key_count\": 19, \"unselected_changed_key_count\": 0}, \"KLAPS50\": {\"changed_key_count\": 19, \"missing_selected_keys\": 0, \"removed_keys\": 0, \"selected_key_count\": 19, \"unselected_changed_key_count\": 0}}",
+      "pass": true
+    },
+    "wiki_five_file_history_preservation": {
+      "detail": "Five mirrors hash-match; report rows and Graph snapshot section are scoped; old log is byte-exact prefix plus one append.",
+      "pass": true
+    }
+  },
+  "freeze_id": "55e0e8b2a5e9f142",
+  "graph_deltas": {
+    "Cloud-BAL": {
+      "communities_after": 1583,
+      "communities_before": 1552,
+      "edge_delta": 612,
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "node_delta": 255,
+      "prior_node_ids_preserved": 17514
+    },
+    "KLAPS50": {
+      "communities_after": 3533,
+      "communities_before": 3504,
+      "edge_delta": 618,
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "node_delta": 255,
+      "prior_node_ids_preserved": 43342
+    }
+  },
+  "hash_only_pin_count": 403,
+  "limitations": [
+    "Only the selected Python tools, their tests, the patch generator, and this KG helper are structurally extracted.",
+    "All other new evidence, including native source copies and compressed traces, is hash-only.",
+    "Manifest updates are selected-path-only; no corpus scan or prune occurs.",
+    "Fortran cross-file CALL extraction is partial.",
+    "Graph freshness does not establish runtime behavior, physical assumptions, or scientific approval."
+  ],
+  "maintained_roots_written": false,
+  "maintained_snapshot_count": 234,
+  "manifest_diff": {
+    "Cloud-BAL": {
+      "changed_key_count": 19,
+      "missing_selected_keys": 0,
+      "removed_keys": 0,
+      "selected_key_count": 19,
+      "unselected_changed_key_count": 0
+    },
+    "KLAPS50": {
+      "changed_key_count": 19,
+      "missing_selected_keys": 0,
+      "removed_keys": 0,
+      "selected_key_count": 19,
+      "unselected_changed_key_count": 0
+    }
+  },
+  "manifest_update_scope": [
+    "docs/evidence/cp02_state_path_20261104/kg/prepare_kg.py",
+    "docs/evidence/cp02_state_path_20261104/native/extend_state_patch.py",
+    "tests/test_cp02_rain_number_evaluation.py",
+    "tests/test_cp02_state_path.py",
+    "tests/test_cp02_state_path_cohorts.py",
+    "tests/test_cp02_state_path_figure_renderers.py",
+    "tests/test_initialize_b1_rain_psd_prior.py",
+    "tests/test_plot_cp02_rain_number_evaluation.py",
+    "tests/test_plot_cp02_state_path.py",
+    "tests/test_plot_cp02_state_path_native.py",
+    "tests/test_recount_cp02_weak_strong_balance.py",
+    "tools/cp02_rain_number_evaluation.py",
+    "tools/cp02_state_path.py",
+    "tools/cp02_state_path_cohorts.py",
+    "tools/initialize_b1_rain_psd_prior.py",
+    "tools/plot_cp02_rain_number_evaluation.py",
+    "tools/plot_cp02_state_path.py",
+    "tools/plot_cp02_state_path_native.py",
+    "tools/recount_cp02_weak_strong_balance.py"
+  ],
+  "postpublication_snapshot_count_expected": 236,
+  "schema": "cp02_state_path_kg_stage_validation_v1",
+  "selection_lock_sha256": "778193eb03bec94a624bfc84d56a4543b7f13dd002dc4ba5dcff7aa831a38487",
+  "snapshot": "2026-11-04-b1-state-path",
+  "source_extraction_scope": [
+    "docs/evidence/cp02_state_path_20261104/kg/prepare_kg.py",
+    "docs/evidence/cp02_state_path_20261104/native/extend_state_patch.py",
+    "tests/test_cp02_rain_number_evaluation.py",
+    "tests/test_cp02_state_path.py",
+    "tests/test_cp02_state_path_cohorts.py",
+    "tests/test_cp02_state_path_figure_renderers.py",
+    "tests/test_initialize_b1_rain_psd_prior.py",
+    "tests/test_plot_cp02_rain_number_evaluation.py",
+    "tests/test_plot_cp02_state_path.py",
+    "tests/test_plot_cp02_state_path_native.py",
+    "tests/test_recount_cp02_weak_strong_balance.py",
+    "tools/cp02_rain_number_evaluation.py",
+    "tools/cp02_state_path.py",
+    "tools/cp02_state_path_cohorts.py",
+    "tools/initialize_b1_rain_psd_prior.py",
+    "tools/plot_cp02_rain_number_evaluation.py",
+    "tools/plot_cp02_state_path.py",
+    "tools/plot_cp02_state_path_native.py",
+    "tools/recount_cp02_weak_strong_balance.py"
+  ],
+  "source_pin_count": 19,
+  "stage": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/kg_stage/stage-55e0e8b2a5e9f142",
+  "stage_receipt_sha256": "6a5f5ea36b88807456e141f9f1c6c65dd1bb87473be8b2ef5c0428867816f52f",
+  "status": "PASS_STAGED_ONLY",
+  "target_count": 13
+}
