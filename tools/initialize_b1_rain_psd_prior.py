@@ -57,8 +57,12 @@ def initialize_qnrain(
     qnrain: np.ndarray,
     baseline_entry_den: np.ndarray,
     called: np.ndarray,
+    *,
+    lambda_center: float = LAMBDA_CENTER,
 ) -> tuple[np.ndarray, dict[str, Any]]:
     """Fill input-state zeros where baseline first-call geometry is active."""
+    if not math.isfinite(lambda_center) or not LAMBDA_MIN <= lambda_center <= LAMBDA_MAX:
+        raise PriorError("LAMBDA_OUTSIDE_SOURCE_RANGE")
     arrays = (qrain, qnrain, baseline_entry_den, called)
     if any(np.shape(array) != EXPECTED_SHAPE for array in arrays):
         raise PriorError("ENTRY_OR_INPUT_SHAPE_MISMATCH")
@@ -81,7 +85,7 @@ def initialize_qnrain(
 
     active_missing = called[0] & (qrain[0] > QCRMIN) & (qnrain[0] == 0.0)
     candidate = np.array(qnrain, copy=True)
-    proposed = (qrain.astype(np.float64) * NR_PER_QRAIN).astype(qnrain.dtype)
+    proposed = (qrain.astype(np.float64) * (lambda_center**D / PIDNR)).astype(qnrain.dtype)
     candidate[0][active_missing] = proposed[0][active_missing]
     # Baseline ENTRY density is only a planning proxy. Candidate first-ENTRY
     # QRAIN/QNRAIN/DEN must be captured separately after the forecast starts.
@@ -100,8 +104,8 @@ def initialize_qnrain(
         "input_qrain_sha256": _array_sha256(qrain),
         "input_qnrain_sha256": _array_sha256(qnrain),
         "baseline_entry_den_sha256": _array_sha256(baseline_entry_den),
-        "lambda_center_m-1": LAMBDA_CENTER,
-        "mean_particle_mass_kg": PIDNR / LAMBDA_CENTER**D,
+        "lambda_center_m-1": lambda_center,
+        "mean_particle_mass_kg": PIDNR / lambda_center**D,
     }
     return candidate, diagnostics
 
@@ -136,12 +140,14 @@ def validate_candidate_entry(
     internal_nr = np.multiply(nr, den, dtype=np.float32)
     if np.any(internal_nr[called] > np.float32(NRMAX)):
         raise PriorError("CANDIDATE_ENTRY_SOURCE_NUMBER_CAP_EXCEEDED")
-    source_active = called & (q > np.float32(QCRMIN)) & (internal_nr > np.float32(NRMIN))
+    # KDM6's PSD path uses inclusive lower bounds for both fields.
+    source_active = called & (q >= np.float32(QCRMIN)) & (internal_nr >= np.float32(NRMIN))
     raw_lambda = np.full(EXPECTED_SHAPE, np.nan, dtype=np.float64)
     pidnr_f32 = np.float32(PIDNR)
     numerator = np.multiply(pidnr_f32, internal_nr, dtype=np.float32)
     denominator = np.multiply(q, den, dtype=np.float32)
-    ratio = np.divide(numerator, denominator, dtype=np.float32)
+    ratio = np.full(EXPECTED_SHAPE, np.nan, dtype=np.float32)
+    np.divide(numerator, denominator, out=ratio, where=source_active)
     raw_lambda[source_active] = np.exp(
         np.multiply(np.log(ratio[source_active], dtype=np.float32), np.float32(1.0 / D), dtype=np.float32),
         dtype=np.float32,
@@ -156,12 +162,13 @@ def validate_candidate_entry(
     ratios[valid_prior] = nr[valid_prior] / prior_nr[valid_prior]
     active_lambda = raw_lambda[source_active]
     return {
-        "schema": "b1_rain_psd_candidate_entry_preflight_v1",
+        "schema": "b1_rain_psd_candidate_entry_preflight_v2",
         "status": "PASS",
         "called_cells": int(np.count_nonzero(called)),
         "source_active_candidate_entry_cells": int(np.count_nonzero(source_active)),
-        "entry_below_or_at_source_nrmin_cells": int(np.count_nonzero(called & (q > QCRMIN) & (internal_nr <= NRMIN))),
-        "entry_below_or_at_source_qcrmin_cells": int(np.count_nonzero(called & (q <= QCRMIN))),
+        "entry_source_guard_inactive_cells": int(np.count_nonzero(called & ~source_active)),
+        "entry_below_source_nrmin_cells": int(np.count_nonzero(called & (q >= np.float32(QCRMIN)) & (internal_nr < np.float32(NRMIN)))),
+        "entry_below_source_qcrmin_cells": int(np.count_nonzero(called & (q < np.float32(QCRMIN)))),
         "entry_negative_qrain_cells_source_guard_inactive": int(np.count_nonzero(called & (q < 0.0))),
         "entry_negative_qnrain_cells_source_guard_inactive": int(np.count_nonzero(called & (nr < 0.0))),
         "candidate_entry_cells_exceeding_nrmax": 0,
@@ -170,7 +177,9 @@ def validate_candidate_entry(
             "median": float(np.median(active_lambda)) if active_lambda.size else None,
             "max": float(np.max(active_lambda)) if active_lambda.size else None,
             "within_1pct_center_cells": int(np.count_nonzero(np.abs(active_lambda / LAMBDA_CENTER - 1.0) <= 0.01)),
-            "below_source_slope_floor_1000_cells": int(np.count_nonzero(active_lambda < 1000.0)),
+            "source_slope_floor_m-1": LAMBDA_MIN,
+            "lambda_reconstruction_dtype": "float32",
+            "below_source_slope_floor_cells": int(np.count_nonzero(active_lambda < LAMBDA_MIN)),
             "above_source_fallback_lambda_35000_cells": int(np.count_nonzero(active_lambda > LAMBDA_MAX)),
         },
         "entry_number_over_initial_prior_number_ratio": {

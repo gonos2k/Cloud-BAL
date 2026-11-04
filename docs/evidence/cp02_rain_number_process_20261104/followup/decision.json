@@ -1,0 +1,31 @@
+{
+  "status": "ONE_DIAGNOSTICALLY_MOTIVATED_CONTRAST_DECLARED_BEFORE_FORECAST",
+  "created_utc": "2026-11-04T05:42:44.447784+00:00",
+  "candidate": "B1_RAIN_NUMBER_DM065",
+  "basis_sha256": {
+    "docs/evidence/cp02_rain_number_process_20261104/analysis/coverage_receipt.json": "31511ebda0a05dfff63f08b95233c715a230754b35a9bd2c92ba063a357c2d43",
+    "docs/evidence/cp02_rain_number_process_20261104/analysis/point_history.npz": "c5b5cc0f56de523f04665b528bf57e1c960c5dbec7fa35408acc51794fcbcf8a",
+    "docs/evidence/cp02_rain_number_process_20261104/science/precipitation_components.csv": "4d05efa23389ba04a2dd8600e8ce00d474663dd25a5a1194840a1a8654770c05"
+  },
+  "observations": [
+    "P01: prior-minus-B1 hourly rain is +0.2370407753 mm at +2h and -0.0527746973 mm at +3h; both differences are RAINNC.",
+    "H3_L05: prior-minus-B1 hourly rain is +0.1213348391 mm at +2h and -0.4083107803 mm at +3h; both differences are RAINNC.",
+    "H3_FA01 changes in the opposite temporal direction; the same timing explanation is not asserted for every point.",
+    "At P01 native level12 during hour2, summed rain/snow/graupel sedimentation QR-increment difference is -2.2397465339e-4 kg/kg versus whole-call QR-increment difference -2.4579877780e-4 kg/kg. These are point-weighted local algebraic sums, not a column mass or causal fraction."
+  ],
+  "hypothesis": "Test a smaller prescribed input mass-weighted rain diameter to reduce nominal mass-weighted settling speed and change the temporal release of grid-scale rain. Evaporation is coupled and may increase; this is a controlled physical sensitivity, not a proven remedy.",
+  "adjusted_assumptions": [
+    "Only the common input Dm changes from about0.862133mm to0.65mm."
+  ],
+  "fixed_state_gamma_scalings": {
+    "prior_Dm_mm": 0.8621330384271754,
+    "new_Dm_mm": 0.65,
+    "lambda_m-1": 7692.307692307692,
+    "Nr_ratio_new_over_prior": 2.3333656221676535,
+    "mean_fall_speed_ratio_new_over_prior_at_b_0p8": 0.7977581591044929,
+    "diffusion_limited_evaporation_coefficient_ratio_at_fixed_thermodynamics": 1.759226925319937,
+    "ventilated_term_coefficient_ratio_at_fixed_thermodynamics": 1.3643538629176
+  },
+  "rationale_limit": "The0.65mm contrast is a declared exploratory choice targeting approximately20% slower nominal settling under fixed shape/density/air state, not an observed or optimized diameter. Actual WRF rates and scores must be measured. No geographic or observed-rain gate is used.",
+  "selection": "Same26conditions: currentB1 protection11 and ORIGINAL recovery15; no averaging, no retuning after seeing new6h scores."
+}

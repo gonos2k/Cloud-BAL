@@ -1,0 +1,47 @@
+{
+  "review_type": "implementer self-review, not independent team review",
+  "status": "NO_BLOCKING_FINDINGS",
+  "scope": [
+    "rain-number initializer and contrast producer",
+    "CP03 stage schema, ownership, substep coverage and REAL32 arithmetic",
+    "four-case scoring and independent scalar recount",
+    "NPZ part reconstruction and packaging"
+  ],
+  "findings": [
+    {
+      "severity": "information",
+      "finding": "The inclusive source-active guard describes the P3 reconstruction; other KDM6 slope routines use their own <= fallback guards."
+    },
+    {
+      "severity": "information",
+      "finding": "Conditional surface absence remains unknown; KDM6 rain is RAINNC and does not include separate RAINC."
+    },
+    {
+      "severity": "information",
+      "finding": "The full-process publisher uses an advisory lock and existing-path check; an unrelated noncooperating writer could race the final rename."
+    },
+    {
+      "severity": "information",
+      "finding": "Producer normal-exception cleanup checks path inode before unlink; POSIX unlink has a narrow non-atomic check/unlink race, and abrupt termination may leave temporary artifacts."
+    }
+  ],
+  "results": {
+    "dm065_constraints_passed": 10,
+    "dm065_constraints_total": 26,
+    "protection_passed": 8,
+    "protection_total": 11,
+    "recovery_passed": 2,
+    "recovery_total": 15,
+    "categorical_rows": 144,
+    "continuous_rows": 24,
+    "selected_points": 3688,
+    "independent_scalar_recount": "PASS",
+    "clean_export_related_tests_passed": 289
+  },
+  "limits": [
+    "single forecast case and 3688 paired samples; no independent-event generalization",
+    "selected process observations do not establish a full water or energy budget",
+    "graph freshness is not runtime or scientific validation",
+    "an additional agent must review independently because this reviewer implemented these components"
+  ]
+}

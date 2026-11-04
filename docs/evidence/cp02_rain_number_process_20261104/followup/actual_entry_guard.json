@@ -1,0 +1,78 @@
+{
+  "status": "PASS",
+  "wrfinput_sha256": "e6ed0750f88cb36e2600fd38c05e75513e8267dca72d9ee095cd5340a24ed175",
+  "baseline_wrfinput_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+  "source_unchanged": true,
+  "unchanged_netcdf_variables_except_QNRAIN": 207,
+  "called_cells": 2533440,
+  "conversion_max0_matches_all_actual_pre_update_cells": true,
+  "rain_number_cap_pass": true,
+  "maximum_internal_nr": 71388.0625,
+  "source_active_cells": 246252,
+  "inactive_cells": 2287188,
+  "q_below_qcrmin_cells": 2286549,
+  "nr_below_nrmin_when_q_active_cells": 639,
+  "policy_sha256": "c9afca77f42c0e3bba6d7f421f1e612a82ddd8912a722414d892918d4773ad7a",
+  "policy_target_lambda_m-1": 7692.307692307692,
+  "policy_target_Dm_mass_weighted_mm": 0.65,
+  "active_within_1pct_policy_lambda_cells": 243843,
+  "entry_lambda_m-1": {
+    "count": 246252,
+    "min": 113.93326568603516,
+    "median": 7692.314453125,
+    "max": 35137.484375
+  },
+  "below_or_equal_961_cells": 282,
+  "above_or_equal_35000_cells": 1,
+  "Dm_mass_weighted_mm": {
+    "count": 246252,
+    "min": 0.14229817688465118,
+    "median": 0.6499994397163391,
+    "max": 43.885337829589844
+  },
+  "Dm_definition": "M4/M3=(mur+4)/raw lambda, mur=1; 5000/lambda in mm",
+  "Dn_number_mean_mm": {
+    "count": 246252,
+    "min": 0.05691927298903465,
+    "median": 0.2599997818470001,
+    "max": 17.554136276245117
+  },
+  "Dn_definition": "M1/M0=(mur+1)/raw lambda, mur=1; 2000/lambda in mm",
+  "input_schema_sha256": "96207bce9553f94f0457f1daaea0afb534fd34a07a107f24973adc87141afced",
+  "quick_launch_receipt_sha256": "4f1a37923e699b75aa5933d0d63c886409e43737a8070b54f8691ac96c0d983e",
+  "quick_schema_receipt_sha256": "39e81ba2c41b35acd8f4a15437c93415ee5138b01b3dd67d268208520c0ee218",
+  "entry_capture_info": {
+    "blocks": 8,
+    "observed_cells": 2533440,
+    "field_count": 14,
+    "owner_cells_by_rank_call": {
+      "rank0_call1": 316680,
+      "rank1_call1": 316680,
+      "rank2_call1": 316680,
+      "rank3_call1": 316680,
+      "rank4_call1": 321204,
+      "rank5_call1": 321204,
+      "rank6_call1": 312156,
+      "rank7_call1": 312156
+    }
+  },
+  "pre_update_capture_info": {
+    "blocks": 560,
+    "observed_cells": 2533440,
+    "field_count": 15,
+    "owner_cells_by_rank_call": {
+      "rank0_call1": 316680,
+      "rank1_call1": 316680,
+      "rank2_call1": 316680,
+      "rank3_call1": 316680,
+      "rank4_call1": 321204,
+      "rank5_call1": 321204,
+      "rank6_call1": 312156,
+      "rank7_call1": 312156
+    }
+  },
+  "limitations": [
+    "First-call source reconstruction from actual capture; lambda bounds count source branch conditions, not asserted constraints on raw lambda.",
+    "This is not a forecast-score or full-trajectory validation."
+  ]
+}
