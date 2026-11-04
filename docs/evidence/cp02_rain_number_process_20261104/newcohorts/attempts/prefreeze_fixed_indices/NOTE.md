@@ -1,0 +1,1 @@
+Superseded pre-freeze output from fixed-index selection. H3_L05 was index 2666 before the ranking audit established that index 575 is the next eligible point with a disjoint corner stencil after index 574 overlaps H3_L01. These artifacts are retained for audit; canonical outputs live one directory above.

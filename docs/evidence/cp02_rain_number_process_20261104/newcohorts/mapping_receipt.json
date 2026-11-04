@@ -1,0 +1,64 @@
+{
+  "selection": "9 diagnostic locations; not a forecast-score subset or postselected candidate winner",
+  "points": 9,
+  "point_corner_rows": 36,
+  "unique_global_corner_cells": 36,
+  "transition_rows": 972,
+  "preserved_ids": [
+    "P01",
+    "P02",
+    "FA03"
+  ],
+  "history_geometry": {
+    "source_shape_yxz": [
+      282,
+      234,
+      39
+    ],
+    "source_interior_j_zero_based_half_open": [
+      1,
+      281
+    ],
+    "source_interior_i_zero_based_half_open": [
+      1,
+      233
+    ],
+    "source_interior_shape_yx": [
+      280,
+      232
+    ]
+  },
+  "sample_index_contract": "NPZ RN1 sample index is zero based; flat_index_yx indexes the 253x149 ODAM crop. Native WRF j/i columns include explicit zero and Fortran one based indices.",
+  "mapping": {
+    "algorithm": "build_curvilinear_mapping from pinned cp02_precip_control_mapping tool and archived mapper",
+    "jbase": 5,
+    "ibase": 74,
+    "analysis_crop_shape_yx": [
+      253,
+      149
+    ],
+    "analysis_crop": "lat/lon[6:259,75:224]",
+    "native_crop": "[j=5:259,i=74:224]",
+    "wrf_history": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/B1_RAIN_NUMBER_PRIOR_6H/wrfout_d01_2026-08-16_12:00:00",
+    "wrf_history_sha256": "caec8afdb9cd62cff30c7bb30111c30217794dcc2a158522c28b174261e92f16",
+    "analysis_coordinate_file": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DAOU/DFSD/20260816/klps_lc05_anal_20260816_1300",
+    "analysis_coordinate_sha256": "bfa8e9d050244166ee53973be9593cdcad0e322d9b69209084c8dd19d159b23e",
+    "mapping_tool": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/Cloud-BAL/tools/cp02_precip_control_mapping.py",
+    "mapping_tool_sha256": "87269145385973d66d5e945e1f43860e3560055460341d3cb1c43647cb218198",
+    "archived_mapper": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/Cloud-BAL/docs/evidence/precip_hourly_20261027/rn1_recovery/archived_compare_six_hour_csi.py",
+    "archived_mapper_sha256": "1cfa4965155ec273e8e1ca9f963bd79a5ece3bc47beb4ae3db4e8b8f5e21b2c0",
+    "max_mapping_residual_deg": 1.4210854715202004e-14
+  },
+  "inputs": {
+    "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_13_arrays.npz": "2938a3da2d07dd735ff127fa0b9d56601394a38259efe7e0a2adf6a0f6cd14fa",
+    "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_14_arrays.npz": "e0471f78381bc566157cc4498fa6253969833ddc8b4d2766381137be785b3736",
+    "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_15_arrays.npz": "50211ca4d6f86fade72959cf33c6f940f08f24efe36a880c4c8442587101dca1",
+    "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_16_arrays.npz": "22703532513390758665973627c56fd1d7ef5159b765c358307ad8b1de3174a2",
+    "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_17_arrays.npz": "5286e04e47c562c6257693b23627f3a917e564b342d828307863be2a39194a7e",
+    "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_18_arrays.npz": "554458020d7753bce7a10f44c0e41eff49644b8a9a04528273055d7daa325336",
+    "docs/evidence/cp02_state_path_20261104/candidate/analysis/bilinear_mapping.npz": "a57aab4e1c226f91cbb2ef2dfd3516f84de4446273c5abacdf91e9679c577b29",
+    "tools/cp02_state_path_cohorts.py": "8fd67dc3abfb91866d31923a4d713ecefdc0d4b5ed6f9a96e2deba5c1e6b620c",
+    "tools/cp02_precip_control_mapping.py": "87269145385973d66d5e945e1f43860e3560055460341d3cb1c43647cb218198",
+    "docs/evidence/precip_hourly_20261027/rn1_recovery/archived_compare_six_hour_csi.py": "1cfa4965155ec273e8e1ca9f963bd79a5ece3bc47beb4ae3db4e8b8f5e21b2c0"
+  }
+}

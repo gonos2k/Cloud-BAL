@@ -1,0 +1,19 @@
+{
+  "schema": "b1_rain_number_prior_versions_reconciliation_v1",
+  "purpose": "Retain the pre-fix Python artifacts so hash-pinned historical manifests, including the 450-entry PR145 manifest, can resolve their original tool and test bytes after the current files change.",
+  "historical_manifests_modified": false,
+  "frozen_receipts_and_captures_modified": false,
+  "artifacts": [
+    {
+      "historical_path": "tools/initialize_b1_rain_psd_prior.py",
+      "preserved_path": "docs/evidence/cp02_rain_number_process_20261104/prior_versions/initialize_b1_rain_psd_prior.py",
+      "sha256": "c81f9281d719b2692209a039c028cb4c917fd01a96be0dd9f443d70332642c85"
+    },
+    {
+      "historical_path": "tests/test_initialize_b1_rain_psd_prior.py",
+      "preserved_path": "docs/evidence/cp02_rain_number_process_20261104/prior_versions/test_initialize_b1_rain_psd_prior.py",
+      "sha256": "a40f2eb26fb219cf98831274f1eebe04aa20221d46a16b556004bdc0dd890650"
+    }
+  ],
+  "reconciliation": "The preserved copies are byte-identical to the pre-fix HEAD versions. Historical reports, receipts, captures, policy, candidate input, and frozen manifests remain at their original paths and are not rewritten by this change. New helper diagnostics use schema b1_rain_psd_candidate_entry_preflight_v2 and are emitted separately from the archived v1 diagnostics."
+}

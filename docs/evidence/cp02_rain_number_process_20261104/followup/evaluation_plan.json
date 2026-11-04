@@ -1,0 +1,150 @@
+{
+  "schema": "b1_rain_dm065_evaluation_v1",
+  "candidate": "B1_RAIN_NUMBER_DM065",
+  "created_utc": "2026-11-04T05:54:10.749884+00:00",
+  "declared_before_six_hour_forecast": true,
+  "input_sha256": "e6ed0750f88cb36e2600fd38c05e75513e8267dca72d9ee095cd5340a24ed175",
+  "policy_sha256": "c9afca77f42c0e3bba6d7f421f1e612a82ddd8912a722414d892918d4773ad7a",
+  "executable_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+  "boundary_sha256": "74102ac2063f17a9007f3352e6e6c2f52629055bdf3f05b4f4d6d77aef835f45",
+  "namelist_sha256": "eced598028b71b996c0c22cf7bd4bacb067087575ec06c4b65d71ab4913156df",
+  "leads_hours": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "thresholds_mm": [
+    0.1,
+    0.5,
+    1.0,
+    2.5,
+    5.0,
+    10.0
+  ],
+  "constraint_count": 26,
+  "selection": {
+    "adopt_only_if_all_26_satisfied": true,
+    "candidates": 1,
+    "metric": "CSI",
+    "protection": {
+      "baseline": "IMPROVED_BG_FIXED",
+      "cells": "lead +1 all six thresholds; all six leads at 5 mm; overlap deduplicated = 11",
+      "require": "candidate_CSI >= baseline_CSI per cell"
+    },
+    "recovery": {
+      "baseline": "ORIGINAL",
+      "cells": "leads +2..+6 at 0.1, 0.5, 1 mm = 15",
+      "require": "candidate_CSI >= baseline_CSI per cell"
+    },
+    "reduction_across_experiments_leads_thresholds": "none"
+  },
+  "bound_artifacts": {
+    "policy": {
+      "path": "docs/evidence/cp02_rain_number_process_20261104/followup/policy.json",
+      "sha256": "c9afca77f42c0e3bba6d7f421f1e612a82ddd8912a722414d892918d4773ad7a",
+      "size_bytes": 1140
+    },
+    "initialization": {
+      "path": "docs/evidence/cp02_rain_number_process_20261104/followup/initialization_receipt_v3.json",
+      "sha256": "ebe2bbd207f3d9de87312009078874b1c51354f63a27ad7acee856f8cd753c39",
+      "size_bytes": 2115
+    },
+    "candidate_preflight": {
+      "path": "docs/evidence/cp02_rain_number_process_20261104/followup/actual_entry_guard.json",
+      "sha256": "59e94aab5fe4bf132302dafd7cbb4aff577ee3f0575653b5ba8c58621ef832dc",
+      "size_bytes": 2755
+    },
+    "prior_receipt": {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/receipt.json",
+      "sha256": "282eace0d651db6f9dda21657b04bd0c032c84588e3d9a09281d61f0eb517286",
+      "size_bytes": 11954
+    },
+    "hour_13_arrays": {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_13_arrays.npz",
+      "sha256": "2938a3da2d07dd735ff127fa0b9d56601394a38259efe7e0a2adf6a0f6cd14fa",
+      "size_bytes": 101845
+    },
+    "hour_14_arrays": {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_14_arrays.npz",
+      "sha256": "e0471f78381bc566157cc4498fa6253969833ddc8b4d2766381137be785b3736",
+      "size_bytes": 102613
+    },
+    "hour_15_arrays": {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_15_arrays.npz",
+      "sha256": "50211ca4d6f86fade72959cf33c6f940f08f24efe36a880c4c8442587101dca1",
+      "size_bytes": 110815
+    },
+    "hour_16_arrays": {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_16_arrays.npz",
+      "sha256": "22703532513390758665973627c56fd1d7ef5159b765c358307ad8b1de3174a2",
+      "size_bytes": 111190
+    },
+    "hour_17_arrays": {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_17_arrays.npz",
+      "sha256": "5286e04e47c562c6257693b23627f3a917e564b342d828307863be2a39194a7e",
+      "size_bytes": 108065
+    },
+    "hour_18_arrays": {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_18_arrays.npz",
+      "sha256": "554458020d7753bce7a10f44c0e41eff49644b8a9a04528273055d7daa325336",
+      "size_bytes": 111790
+    }
+  },
+  "frozen_sources": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/Cloud-BAL/tools/initialize_b1_rain_psd_prior.py": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/Cloud-BAL/tools/initialize_b1_rain_psd_prior.py",
+      "sha256": "92cd6440619e984f75d6aebad8a741b23efdf173766d2f2894579b79650b011e",
+      "size_bytes": 17014
+    },
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/Cloud-BAL/tools/initialize_b1_rain_psd_contrast.py": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/Cloud-BAL/tools/initialize_b1_rain_psd_contrast.py",
+      "sha256": "a100867e5bdf7ebb5d79bddff47dc5cffc589bfd4708013d5eab1147fed5a009",
+      "size_bytes": 5079
+    },
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/Cloud-BAL/tools/cp02_rain_dm065_evaluation.py": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/Cloud-BAL/tools/cp02_rain_dm065_evaluation.py",
+      "sha256": "9821ea0cb692ce36ac65b6741b64430c9f1f30301ea17b34fee0b98a81b50206",
+      "size_bytes": 12471
+    },
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/Cloud-BAL/tools/cp02_rain_number_evaluation.py": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/Cloud-BAL/tools/cp02_rain_number_evaluation.py",
+      "sha256": "426fad4aa6fccf71c35bafb7a9b006fa59fb4b3ea05bd5baec49d41cf6a546cf",
+      "size_bytes": 10031
+    },
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/runtime/prepare_next_case.py": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/runtime/prepare_next_case.py",
+      "sha256": "4b5431550e6d186b896de63c4c82c4aecd4e94e592f9df52aa7c5b6032a76f9b",
+      "size_bytes": 5466
+    },
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/runtime/gate_next_quick.py": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/runtime/gate_next_quick.py",
+      "sha256": "cad72940ab5285b3941a6115738160b932fcc80db39b25f118c990dcc24b5430",
+      "size_bytes": 2741
+    },
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/runtime/next_entry_guard.py": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/runtime/next_entry_guard.py",
+      "sha256": "c4d219baee86468623b9aeb23585f63681c8a20f40d0d94a9df1ace15bd9c5cd",
+      "size_bytes": 6686
+    }
+  },
+  "probe_plan": {
+    "path": "docs/evidence/cp02_rain_number_process_20261104/followup/probe_plan.json",
+    "sha256": "1859aea6cfa1281e8a1cd2dfb559f7e0517b171df8b9f52e74b06bdc0159d044",
+    "size_bytes": 3848
+  },
+  "probe_freeze": {
+    "path": "docs/evidence/cp02_rain_number_process_20261104/followup/probe_freeze.json",
+    "sha256": "04c39682854454368131d817543b644f4680df5946eaa045e43a16a00dfa9e91",
+    "size_bytes": 944
+  },
+  "physics_review": {
+    "path": "docs/evidence/cp02_rain_number_process_20261104/followup/policy_review.json",
+    "sha256": "c788469a54766d849cc5308518bac5a3b835d21cb20398fb3404cc7e3f536c24",
+    "size_bytes": 4328
+  },
+  "source_transition": "Producer I/O rollback handling was improved after the20s probe; v3 re-created a byte-identical wrfinput. Physics/policy/input/probe are unchanged; prior producers and receipts are retained.",
+  "scope": "Single 2026-08-16 12 UTC case; one-hour increments, same 3688 frozen RN1 samples; RMSE diagnostic only; no independent-event or budget closure claim"
+}

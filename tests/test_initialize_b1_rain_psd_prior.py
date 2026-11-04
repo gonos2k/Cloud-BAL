@@ -108,6 +108,48 @@ def test_candidate_entry_preflight_reports_startup_stage_changes():
     assert result["entry_lambda_float32_formula_reconstruction_m-1"]["median"] != LAMBDA_CENTER
 
 
+def _candidate_entry(qrain_value, nr_value):
+    initial_qrain = np.zeros(EXPECTED_SHAPE, dtype=np.float32)
+    entry_qrain = np.zeros_like(initial_qrain)
+    entry_qnrain = np.zeros_like(initial_qrain)
+    density = np.ones_like(initial_qrain)
+    called = np.zeros(EXPECTED_SHAPE, dtype=bool)
+    entry_qrain.flat[0] = np.float32(qrain_value)
+    entry_qnrain.flat[0] = np.float32(nr_value)
+    called.flat[0] = True
+    return validate_candidate_entry(initial_qrain, entry_qrain, entry_qnrain, density, called)
+
+
+def test_candidate_entry_uses_inclusive_source_activation_thresholds():
+    qcrmin_result = _candidate_entry(np.float32(prior.QCRMIN), 1.0)
+    nrmin_result = _candidate_entry(1.0e-6, np.float32(prior.NRMIN))
+
+    assert qcrmin_result["schema"] == "b1_rain_psd_candidate_entry_preflight_v2"
+    assert qcrmin_result["source_active_candidate_entry_cells"] == 1
+    assert qcrmin_result["entry_source_guard_inactive_cells"] == 0
+    assert qcrmin_result["entry_below_source_qcrmin_cells"] == 0
+    assert nrmin_result["source_active_candidate_entry_cells"] == 1
+    assert nrmin_result["entry_below_source_nrmin_cells"] == 0
+
+
+def test_slope_floor_diagnostic_uses_961_and_exposes_float32_rounding():
+    near_floor = _candidate_entry(1.0e-6, 0.07062508)  # reconstructs about 960.999
+    nominal_floor = _candidate_entry(1.0e-6, 0.07062530)  # reconstructs about 961.0004
+    between_old_diagnostic_and_floor = _candidate_entry(1.0e-6, 0.07489768)  # about 980
+
+    near_stats = near_floor["entry_lambda_float32_formula_reconstruction_m-1"]
+    nominal_stats = nominal_floor["entry_lambda_float32_formula_reconstruction_m-1"]
+    between_stats = between_old_diagnostic_and_floor["entry_lambda_float32_formula_reconstruction_m-1"]
+    assert near_stats["source_slope_floor_m-1"] == 961.0
+    assert near_stats["lambda_reconstruction_dtype"] == "float32"
+    assert near_stats["min"] < 961.0
+    assert near_stats["below_source_slope_floor_cells"] == 1
+    assert nominal_stats["min"] == pytest.approx(961.000366, abs=1e-6)
+    assert nominal_stats["below_source_slope_floor_cells"] == 0
+    assert between_stats["min"] == pytest.approx(980.00067, abs=1e-4)
+    assert between_stats["below_source_slope_floor_cells"] == 0
+
+
 def test_candidate_entry_reports_negative_values_as_source_guard_inactive():
     qrain, qnrain, density, called = _state()
     entry_qrain = qrain.copy()
@@ -155,3 +197,38 @@ def test_cli_receipt_guard_does_not_overwrite_existing_path(tmp_path):
 
     assert status == 2
     assert receipt.read_text() == "retained\n"
+
+
+def test_optional_lambda_keeps_default_exact_and_applies_cube_law():
+    qrain, qnrain, density, called = _state()
+    baseline, diagnostics = initialize_qnrain(qrain, qnrain, density, called)
+    same, same_diagnostics = initialize_qnrain(qrain, qnrain, density, called, lambda_center=LAMBDA_CENTER)
+    assert baseline.tobytes() == same.tobytes()
+    assert diagnostics == same_diagnostics
+    selected = 5000.0 / 0.65
+    contrast, info = initialize_qnrain(qrain, qnrain, density, called, lambda_center=selected)
+    expected = np.float32(float(qrain[0, 0, 0, 0]) * selected**3 / prior.PIDNR)
+    assert contrast[0, 0, 0, 0] == expected
+    assert contrast.ravel()[1:].tobytes() == baseline.ravel()[1:].tobytes()
+    assert info['lambda_center_m-1'] == selected
+    assert np.isclose(float(contrast[0, 0, 0, 0] / baseline[0, 0, 0, 0]), (selected / LAMBDA_CENTER)**3, rtol=1e-6)
+
+
+@pytest.mark.parametrize('value', [np.nan, np.inf, -np.inf, 960.999, 35000.001])
+def test_optional_lambda_rejects_nonfinite_or_outside_source_range(value):
+    with pytest.raises(PriorError, match='LAMBDA_OUTSIDE_SOURCE_RANGE'):
+        initialize_qnrain(*_state(), lambda_center=value)
+
+
+def test_optional_lambda_respects_cap_without_clipping():
+    qrain, qnrain, density, called = _state()
+    density[0, 0, 0, 0] = 1e12
+    with pytest.raises(PriorError, match='SOURCE_NUMBER_CAP_EXCEEDED'):
+        initialize_qnrain(qrain, qnrain, density, called, lambda_center=5000.0 / 0.65)
+
+
+@pytest.mark.parametrize('value', [961.0, 35000.0])
+def test_source_lambda_limits_are_inclusive(value):
+    output, info = initialize_qnrain(*_state(), lambda_center=value)
+    assert info['lambda_center_m-1'] == value
+    assert np.isfinite(output).all()

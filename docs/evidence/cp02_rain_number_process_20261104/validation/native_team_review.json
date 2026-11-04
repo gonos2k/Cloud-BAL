@@ -1,0 +1,64 @@
+{
+  "status": "GO",
+  "review_type": "Native evidence and independent analysis/scoring source team review",
+  "reviewer_independence": "Reviewer authored native instrumentation and runtime but independently reread and reconstructed their outputs; reviewer did not author scientific analyzer, scorer, independent recount, contrast initializer, or selected-NPZ packer.",
+  "blockers": [],
+  "resolved_findings": [
+    {
+      "severity": "medium",
+      "finding": "Unexpected TypeError/KeyboardInterrupt while writing initializer receipt previously left published candidate and partial receipt.",
+      "resolution": "Current source performs inode-owned cleanup and re-raises; independently injected both failures and verified cleanup. The forecast source is byte-preserved at the frozen hash; prepare-function AST is unchanged, with main exception handling the sole function AST change."
+    }
+  ],
+  "checks": {
+    "capture_archive": "PASS: reconstructed all 56 original streams from gzip chunks; compressed/raw chunk hashes and full stream hashes match frozen inventory and coverage receipt",
+    "native_size": "PASS: 181 files below 100 MiB; maximum 25193208 bytes",
+    "three_hour": "PASS: rehashed 89 staged inputs in each arm, 88 common inputs with only intended wrfinput difference, same instrumented FIX executable, and all eight 0/1/2/3h histories equal corresponding standard same-arm histories by whole-file SHA256",
+    "six_hour": "PASS: rehashed all 89 staged inputs; standard FIX executable pin; all seven histories independently hashed and checked timestamps, dimensions and finite RAINNC/XLAT/XLONG",
+    "coverage_and_arithmetic": "PASS: 540 steps, 36 disjoint cells and 39 levels = 758160 per arm; 216 rain-history bit checks; source REAL32 residual checks and conditional-absence masks reviewed",
+    "report": "PASS: no placeholders and all local links resolve; recomputed P01 sedimentation, whole-call QR and PREVP vapor/latent sums from point_history; verified Dm=M4/M3=5000/lambda mm and Dn=M1/M0=2000/lambda mm; 3h comparison and separate 6h follow-up correctly distinguished",
+    "scoring": "PASS: 36 printed CSI deltas and quoted hit/false-alarm counts reproduce CSV, 8/11 protection plus 2/15 recovery = 10/26; prior 9/11 plus 3/15 = 12/26; scalar independent recount PASS",
+    "parts": "PASS: both 33-member selected-NPZ archives reconstructed from checked parts, original file hash matched frozen external original and each original NPY payload hash verified",
+    "rollback": "PASS: reproduced old unhandled failures; new source independently tested TypeError and KeyboardInterrupt cleanup, and preserves unrelated files per tests",
+    "targeted_tests": "PASS: 50 tests across process analyzer, 6h scorer, independent recount, prior and contrast initializers, and NPZ packer"
+  },
+  "tested_command": "taskset -c 48-55 python -m pytest -q tests/test_cp02_rain_number_process.py tests/test_cp02_rain_dm065_evaluation.py tests/test_recount_cp02_rain_dm065.py tests/test_initialize_b1_rain_psd_prior.py tests/test_initialize_b1_rain_psd_contrast.py tests/test_pack_cp02_selected_npz.py",
+  "source_and_evidence_sha256": {
+    "tools/cp02_rain_number_process.py": "04e7ded6d014fb892a6a8ffa6e009599a413281b4bab55a239ec1a588387524b",
+    "tools/cp02_rain_dm065_evaluation.py": "9821ea0cb692ce36ac65b6741b64430c9f1f30301ea17b34fee0b98a81b50206",
+    "tools/recount_cp02_rain_dm065.py": "3ee5de79ebde37f39c3fbeeb31ba668ce6b44c38c961fef5f5a6e4e38008bb66",
+    "tools/initialize_b1_rain_psd_prior.py": "92cd6440619e984f75d6aebad8a741b23efdf173766d2f2894579b79650b011e",
+    "tools/initialize_b1_rain_psd_contrast.py": "016571e43bd17dfdad31a2188c5e9c1071fa7c2e5d65daca30281986d06b6eff",
+    "tools/pack_cp02_selected_npz.py": "3c929e783856119daebf5b35487a0b10330d368db201024e5e57e7b37c34fb4d",
+    "tests/test_cp02_rain_number_process.py": "c7cef7fa69d1914a7b456503316cf2e8941b516d8d78a3f7a0b4c7ae382149fe",
+    "tests/test_cp02_rain_dm065_evaluation.py": "9ade7e00c0b6f1af161ba625a555ccd3a40a97d268528c52c5ee67652a83918e",
+    "tests/test_recount_cp02_rain_dm065.py": "0cca4a02b58f79d6713cd1cd8f7415fc7f7f75f2c84a7affb058a3da96bb2ff4",
+    "tests/test_initialize_b1_rain_psd_prior.py": "0f426faabfdb9e50067cd177d30a6c1b3f0a3400da66df57c29f705365358199",
+    "tests/test_initialize_b1_rain_psd_contrast.py": "1497cf5c04bf7a62d085455452e9aa83c0f1a15ae6123071a819bd21742f652e",
+    "tests/test_pack_cp02_selected_npz.py": "6bbf4c025165ece489a23c55a7daa994c690391e9b7456d165fe42f2db1e925b",
+    "docs/CP02_RAIN_NUMBER_PROCESS_20261104.md": "9951cf6b4d2d0cc509c5ddbdf5ee539ad0ebe16127ebfc5d9146c175a5505587",
+    "docs/evidence/cp02_rain_number_process_20261104/analysis/coverage_receipt.json": "31511ebda0a05dfff63f08b95233c715a230754b35a9bd2c92ba063a357c2d43",
+    "docs/evidence/cp02_rain_number_process_20261104/analysis/point_history.npz": "c5b5cc0f56de523f04665b528bf57e1c960c5dbec7fa35408acc51794fcbcf8a",
+    "docs/evidence/cp02_rain_number_process_20261104/science/precipitation_components.csv": "4d05efa23389ba04a2dd8600e8ce00d474663dd25a5a1194840a1a8654770c05",
+    "docs/evidence/cp02_rain_number_process_20261104/newcohorts/selected_points.csv": "a3835b8abfe754139212714373182d183a05fce1d6fef2fef31b08ca59ce2d94",
+    "docs/evidence/cp02_rain_number_process_20261104/native/capture/publication_receipt.json": "fe796aa8483aa58044a14bd6423c2f2d27d24e7565155761761ee079276e6e36",
+    "docs/evidence/cp02_rain_number_process_20261104/native/capture/verification.json": "3cffc90d2a0eda17d6ae5d3ad3f41c4831a6b0d9e2467467fe69d04c341fba3f",
+    "docs/evidence/cp02_rain_number_process_20261104/native/capture/B1/manifest.json": "6d1d6b4bf8543e7ba2db5655b0b252c48fde00d2801d65c045570735720e5277",
+    "docs/evidence/cp02_rain_number_process_20261104/native/capture/NR_PRIOR/manifest.json": "0bb1049679c7e934dc7046124a65f411bddc26f8ced1537d79826579c4b6b987",
+    "docs/evidence/cp02_rain_number_process_20261104/native/build/build_cp03_receipt.json": "0c09d76b6cd792027ccb76f6099bdfd5b39c9a491f48377e1bc4dc1e34173aab",
+    "docs/evidence/cp02_rain_number_process_20261104/native/runs/history_byte_comparison.json": "f8e782f71617ababc3a05d6266b9918ab5e5910254f817dc8e60d628a9870334",
+    "docs/evidence/cp02_rain_number_process_20261104/followup/forecast_freeze.json": "1856f29f03444c1dd011012b20dcd1e7f43e60ae9701b7cce48a40b99a2c321b",
+    "docs/evidence/cp02_rain_number_process_20261104/followup/evaluation_plan.json": "bf57b08377138a7e0e3554a6f314e8f8a58bb4dcf722fc30c9c1a046d76e31fe",
+    "docs/evidence/cp02_rain_number_process_20261104/followup/actual_entry_guard.json": "59e94aab5fe4bf132302dafd7cbb4aff577ee3f0575653b5ba8c58621ef832dc",
+    "docs/evidence/cp02_rain_number_process_20261104/followup/runtime/runtime_gate.json": "257a07e557a8f3fd1791bdb0602ca0e82fdcc8069328a9a70998b73bb8273e6d",
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/winner.json": "c5d67c74740e87399523385bee933511843162856cd03a3761b59a98a9d3990b",
+    "docs/evidence/cp02_rain_number_process_20261104/followup/independent_recount.json": "7af52048ac20591e0d499b56e3be592aa8844d413490ad303779e44eef83bd06",
+    "docs/evidence/cp02_rain_number_process_20261104/followup/postforecast_rollback_reconciliation.json": "a393e72c48b93ff2b839008653e8d00b670da6e4f24b47da16a977a0a55894b2",
+    "docs/evidence/cp02_rain_number_process_20261104/followup/prior_versions/postforecast_rollbackfix/initialize_b1_rain_psd_contrast.py": "a100867e5bdf7ebb5d79bddff47dc5cffc589bfd4708013d5eab1147fed5a009"
+  },
+  "limits": [
+    "Single case and selected diagnostic cells; local arithmetic reproduction is not full mass/energy closure or operational validation.",
+    "First-step full-domain snapshot streams remain external and hash-bound only.",
+    "Atomic publication remains subject to the unrelated-writer race documented in ANALYSIS_METHOD.md."
+  ]
+}

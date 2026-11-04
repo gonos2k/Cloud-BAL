@@ -1,0 +1,49 @@
+{
+  "status": "GO",
+  "scope": "Independent source/equation and decision review only; no forecast, initialization, or admission outcome asserted.",
+  "reviewed_utc": "2026-11-04T05:45:57.200457+00:00",
+  "policy_sha256": "c9afca77f42c0e3bba6d7f421f1e612a82ddd8912a722414d892918d4773ad7a",
+  "decision_sha256": "474b12cff073a333cff7f4439dacee003c62d9bfb6cebe52d241321348f37fdb",
+  "basis_sha256": {
+    "docs/evidence/cp02_rain_number_process_20261104/analysis/coverage_receipt.json": "31511ebda0a05dfff63f08b95233c715a230754b35a9bd2c92ba063a357c2d43",
+    "docs/evidence/cp02_rain_number_process_20261104/analysis/point_history.npz": "c5b5cc0f56de523f04665b528bf57e1c960c5dbec7fa35408acc51794fcbcf8a",
+    "docs/evidence/cp02_rain_number_process_20261104/science/precipitation_components.csv": "4d05efa23389ba04a2dd8600e8ce00d474663dd25a5a1194840a1a8654770c05"
+  },
+  "source_and_build": {
+    "instrumented_kdm6_sha256": "605b2d6895229f287dd6dc675b84dea0596f7a247a18bf80e3615635defb0295",
+    "build_receipt_sha256": "0c09d76b6cd792027ccb76f6099bdfd5b39c9a491f48377e1bc4dc1e34173aab",
+    "instrumented_executable_sha256": "728bd543a47dcd78ac0b0ceff6ceceedc84ae502332658537c6310ff7543de46",
+    "historical_prior_policy_sha256": "25387970de9685e3024af7983d47650ab6b6068188f765df58243d6ebefa7601",
+    "prior_evaluation_plan_sha256": "073a2805e1ff4e184fbfb67aa1d8f61899d8decbd8c4bc0c7e701a1aa6a7d964",
+    "history_byte_comparison_sha256": "f8e782f71617ababc3a05d6266b9918ab5e5910254f817dc8e60d628a9870334",
+    "note": "Actual FIX source is linked by the instrumented build receipt; same-arm diagnostic and standard forecast output histories are byte-identical for hours 0\u20133. Historical prior policy pins the standard FIX compile/link lineage. Driver-object closure is not separately established by the historical source record."
+  },
+  "checks": {
+    "gamma_relation": "PASS: mu=1 and cubic mass law give pidnr=(pi*rho_w/6)*Gamma(5)/Gamma(2)=4000*pi for rho_w=1000 kg m-3; KDM6 multiplies public QNRAIN by DEN and the same density cancels in the slope inversion. Public number is per model air mass, internal number per volume.",
+    "source_constants": "PASS: source mur=1, dmr=3, bvtr=0.8, avtr=841.9, lamdarmin=961, lamdarmax=35000 m-1, nrmax=5e7 m-3; source includes fall-speed and PREVP equations.",
+    "ratios": {
+      "lambda_m-1": 7692.307692307692,
+      "Nr_ratio_new_over_prior": 2.3333656221676535,
+      "mean_fall_speed_ratio_new_over_prior_at_b_0p8": 0.797758159104493,
+      "diffusion_limited_evaporation_coefficient_ratio_at_fixed_thermodynamics": 1.759226925319937,
+      "ventilated_term_coefficient_ratio_at_fixed_thermodynamics": 1.3643538629176
+    },
+    "observed_prior_minus_b1_RAINNC_mm": {
+      "P01_hour2": 0.23704077527283274,
+      "P01_hour3": -0.05277469725323419,
+      "H3_L05_hour2": 0.12133483914566334,
+      "H3_L05_hour3": -0.4083107802791052,
+      "H3_FA01_hour2": -0.4305945714916555,
+      "H3_FA01_hour3": 0.14583015704575664
+    },
+    "p01_hour2_level12_local_sedimentation_qr_increment_difference_kg_per_kg": -0.0002239746533929366,
+    "p01_hour2_level12_whole_call_qr_increment_difference_kg_per_kg": -0.00024579877779912126,
+    "admission": "PASS: previous frozen evaluation plan specifies 11 B1 protection and 15 ORIGINAL recovery cells, all CSI comparisons individually >= with no averaging."
+  },
+  "limits": [
+    "Ratios describe unconstrained fixed-state gamma coefficients; model threshold branches, source caps, density, thermodynamics and coupling can change the actual response. PREVP is limited and coupled, so coefficient ratios are not actual evaporation ratios.",
+    "The two QR increment sums are point-weighted local algebraic quantities, not column mass, causal attribution, or a percentage. The opposite-sign H3_FA01 pattern precludes a universal timing explanation.",
+    "The chosen diameter is exploratory and neither observed nor optimized. The source check does not establish forecast skill, conservation, budget closure or operational suitability.",
+    "Before a six-hour forecast, verify candidate input changes only eligible QNRAIN, preserve other fields, and pass actual first-entry cap/PSD checks; a planning cap screen is not actual candidate-entry proof. The evaluator must use the unchanged 26 separately checked conditions."
+  ]
+}

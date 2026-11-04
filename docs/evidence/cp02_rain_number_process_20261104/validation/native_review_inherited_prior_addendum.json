@@ -1,0 +1,10 @@
+{
+  "status": "NONBLOCKING_INHERITED_LIMITATION",
+  "severity": "low",
+  "finding": "Legacy prior initializer CLI may leave its own candidate and partial receipt if an unexpected TypeError or interruption occurs during receipt serialization. Independently reproduced with a mocked prepare_candidate and non-JSON-serializable object; no source or existing output was modified.",
+  "provenance": "Both main and prepare_candidate function ASTs match the a275ebb baseline exactly.",
+  "scope": "DM065 uses the corrected contrast initializer CLI and calls only the prior pure initialize_qnrain function. The verified DM065 input, run, frozen prior evidence and existing native team GO are unaffected.",
+  "recommended_follow_up": "Harden ownership-aware cleanup in the legacy CLI in a separate change.",
+  "source_sha256": "92cd6440619e984f75d6aebad8a741b23efdf173766d2f2894579b79650b011e",
+  "review_test": "Temporary-directory injection confirmed candidate and partial receipt remain after unexpected TypeError; no production file was written."
+}

@@ -1,0 +1,22 @@
+{
+  "schema": "B1_RAIN_DM_CONTRAST_V1",
+  "candidate": "B1_RAIN_NUMBER_DM065",
+  "declared_utc": "2026-11-04T05:42:44.447784+00:00",
+  "input_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+  "reference_prior_policy_sha256": "25387970de9685e3024af7983d47650ab6b6068188f765df58243d6ebefa7601",
+  "mu": 1.0,
+  "rho_water_kg_m-3": 1000.0,
+  "Dm_mass_weighted_mm": 0.65,
+  "lambda_m-1": 7692.307692307692,
+  "lambda_min_m-1": 961.0,
+  "lambda_max_m-1": 35000.0,
+  "moment_relation": "Nr=qr*lambda^3/(4000*pi), same model air-mass basis; Dm=5000/lambda in mm",
+  "eligibility": "Unchanged: called interior, initial QRAIN>1e-9 and initial QNRAIN exactly0",
+  "changed_field": "QNRAIN only",
+  "preserve": "All other variables, metadata, globals, QRAIN/QVAPOR/T exactly unchanged",
+  "number_cap_internal_m-3": 50000000.0,
+  "floor_or_clipping_added": false,
+  "one_new_candidate_only": true,
+  "decision_sha256": "474b12cff073a333cff7f4439dacee003c62d9bfb6cebe52d241321348f37fdb",
+  "interpretation": "Research input PSD assumption. It does not reconstruct observed particle sizes or certify water/energy closure."
+}
