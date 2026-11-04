@@ -1,0 +1,29 @@
+{
+  "status": "PASS",
+  "reviewer": "root, independent of transition/state/plot implementers",
+  "checks": {
+    "paper_placeholders_absent": true,
+    "paper_README_gallery_local_links": true,
+    "canonical_pngs_in_zip_byte_exact": 28,
+    "zip_crc": true,
+    "state_artifacts_rehashed": 24,
+    "scope": "No new forecast; B1 retained; no newly recovered B1 deficit; observation groups diagnostic only",
+    "visual_review": [
+      "initial_corner_changes.png fullsize",
+      "layers_weak_plus3.png fullsize"
+    ]
+  },
+  "inputs": {
+    "report": "d3fd9fa1821c36597c2dccd63dae832fe0e8881fb765d9326b2810b680ea52bd",
+    "README": "9c87fc38b4ae094eb055d01cbd115d7552f969a95ff54879d97269d3c0c2639a",
+    "gallery": "96eebb369b614f5622afb418a09be4e1dca61f7985a2653c09f5355be6858b4d",
+    "zip": "f4fa7cb1788b690c502ef2f39c750aa1dfd49892695b4b8ce1d71dbe7377c3cf",
+    "state_receipt": "9e6a4cea51bdd88ae45a6052e6818a07ee5003de7dfc5dc2050c048075277d8c",
+    "population_summaries": "780d2e5bd6bccb769be4d520393f39f1f1e0497dddf220a45eb4b3f55786002b"
+  },
+  "limitations": [
+    "Snapshot differences are not trajectories or the true first divergence",
+    "Liquid RH is reconstructed with float64 functions and stored float32; no internal IEEE bit reproduction",
+    "Layer arithmetic means are not mass weighted; population IQRs are descriptive of one case"
+  ]
+}

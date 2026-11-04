@@ -1,0 +1,7 @@
+{
+  "status": "INITIAL_AUDIT_ASSERTION_CORRECTED",
+  "initial_assertion": "The preserved failed-stage merged edge was compared as a whole dictionary against the raw extractor edge.",
+  "observed_difference": "The merge adds confidence_score=1.0; every field of the raw extractor edge matches the preserved merged edge.",
+  "correction": "Compare every raw extractor field to the preserved merged edge, then separately verify both raw extraction files, the exact fixture AST and all other omitted edges.",
+  "scope": "No graph, source, runtime or maintained-root data was changed by this audit correction."
+}

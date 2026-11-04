@@ -1,0 +1,1970 @@
+{
+  "status": "PASS",
+  "scope": "Initial wrfinput only, source fields compared directly before any startup; all variables other than QNRAIN equal exactly as raw stored values; all dimensions, variable and global attributes match.",
+  "input_sha256": {
+    "B1": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+    "NR_PRIOR": "ad030e8bbfca319c4594dcfa5b0656b9bc387d9fcbe23372fd6ed8808aaf0f21",
+    "DM065": "e6ed0750f88cb36e2600fd38c05e75513e8267dca72d9ee095cd5340a24ed175"
+  },
+  "nontarget_variables_exact": 207,
+  "attributes_and_dimensions_exact": true,
+  "nontarget_values": [
+    {
+      "name": "Times",
+      "dimensions": [
+        "Time",
+        "DateStrLen"
+      ],
+      "dtype": "|S1",
+      "value_sha256": "ecc3708411068cd1c26fa07db1cd55cfbab44683bc2ce78cb62d72a2d1e3db01"
+    },
+    {
+      "name": "XLAT",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "ab20c8d1df861b00bf430873ee3841ef4a99f69e95c22d1c4a637f68193d90ab"
+    },
+    {
+      "name": "XLONG",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "0c872e6f666de336a7beff19ee96d54155fb92f5b055591258623654a6634b0b"
+    },
+    {
+      "name": "LU_INDEX",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "9f50766f22fa80af244c99326855a5a850c665e696f4cd10b4871cb89779e13f"
+    },
+    {
+      "name": "ZNU",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "3b1205c9ed6903096264740daf7370c6292cad9cbbe26cbde5cbe2a2f4c4c751"
+    },
+    {
+      "name": "ZNW",
+      "dimensions": [
+        "Time",
+        "bottom_top_stag"
+      ],
+      "dtype": "float32",
+      "value_sha256": "87efef2dcc651d92b6181236d22fd31813a0358fd16bbcef1383036a335ec644"
+    },
+    {
+      "name": "ZS",
+      "dimensions": [
+        "Time",
+        "soil_layers_stag"
+      ],
+      "dtype": "float32",
+      "value_sha256": "b0566e2e24903b8df96ba8498abbd0df477321dc4f4f9e538cf4b6bef5e0f920"
+    },
+    {
+      "name": "DZS",
+      "dimensions": [
+        "Time",
+        "soil_layers_stag"
+      ],
+      "dtype": "float32",
+      "value_sha256": "7352f92997dc4b4f8549c1db992c2f644f0d6d7f330defbb536e28107aa5de38"
+    },
+    {
+      "name": "VAR_SSO",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "c071461e3908e2f0238bd92fbcec2855481212edf1f28f109e622cdf337652c6"
+    },
+    {
+      "name": "EROD",
+      "dimensions": [
+        "Time",
+        "dust_erosion_dimension",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "97f0cd91c7be0ff0075b714dad917fdc076c52cb06776110dbe330cfe7e75be0"
+    },
+    {
+      "name": "BATHYMETRY_FLAG",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "int32",
+      "value_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450"
+    },
+    {
+      "name": "U",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east_stag"
+      ],
+      "dtype": "float32",
+      "value_sha256": "5902dbbb094ffa036941872cf7a3a7a0cfe656a3e07cf1b2e36ee34d8bdfab88"
+    },
+    {
+      "name": "V",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north_stag",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "b5855e674efa09e9784dd3397f4c8c9fd88c63c7e60ca2251c0d42b90602eded"
+    },
+    {
+      "name": "W",
+      "dimensions": [
+        "Time",
+        "bottom_top_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "2a82733b5fc973eb267174f599b70434d99c1c9a27e8cc1ebf475bda9c11719b"
+    },
+    {
+      "name": "PH",
+      "dimensions": [
+        "Time",
+        "bottom_top_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "1d84e823afa160b866ea9c1ec2ac726d75a014f4eeba8f851097957b27701c09"
+    },
+    {
+      "name": "PHB",
+      "dimensions": [
+        "Time",
+        "bottom_top_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "45087a38d07020dbbf966d39334818fe1962621141fa7061994407e38453dcfd"
+    },
+    {
+      "name": "T",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "98982ca944077104ff5e08e44d25e6c69f80e4bfc4594e4bdb3e2b88c3407592"
+    },
+    {
+      "name": "THM",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "16f0d3f0cca540e3e8df6e8116edc82e0e4c4373973d9d96316c5e08f36aaa2f"
+    },
+    {
+      "name": "T_INIT",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "6f68f5e3a5a74fa36210fd3ff2b70105a3eeeab70057c5f5ba53b4803f803e44"
+    },
+    {
+      "name": "MU",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "2b15cae26bd54078da7961d16235a9b7a53b794c2a7df13074b8ef3acd290a84"
+    },
+    {
+      "name": "MUB",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "430c48a8bea96978e7e1a67addc4d4cf5d5cc830c51dae7ea6fb9bca2e3f1da2"
+    },
+    {
+      "name": "P",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "d96ce1371025fb6da52e5adf1e4a6ecc54900a89a31295117ace609368639dee"
+    },
+    {
+      "name": "AL",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "9b232db977bc580e90da2eca176f96b388ed62ef2e392274334bd93be28ce081"
+    },
+    {
+      "name": "ALB",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "11d5d4aeb073459ad0dd26f414f999934518d9dc5fb4cddf65098d4fa227aba2"
+    },
+    {
+      "name": "PB",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "2cd151cdf23cfd39955ec9e0aa4b440466b00482d7818d2e81e7e968cd50e21c"
+    },
+    {
+      "name": "FNM",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "5ad3a65c91273f3add5d995801d3ef6cf221e967988033fb6b99efe70820c783"
+    },
+    {
+      "name": "FNP",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "da2afb4b44503845bfb5b01ce665d5bb31022a58f33f7bc0805bbaa20b6ea303"
+    },
+    {
+      "name": "RDNW",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "5710355cd68e0d8be11f7b1bc1796ba5017b35e37f38a499cf9bc4f9854af14c"
+    },
+    {
+      "name": "RDN",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "0c33a73261dc2dca6be094c96349c8a9aac45117512dde99465902cf71eb3849"
+    },
+    {
+      "name": "DNW",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "e61f94e8d663a4701244a71fde7225a3fc42ce4fa83ad4ca585f9c9bd82fe4d8"
+    },
+    {
+      "name": "DN",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "f5520cd330a1af02a508e6361147234122985b45d73e6ffd56a673889ff3383a"
+    },
+    {
+      "name": "T_BASE",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "59bf9091f4cbbd2a8796bfe086a501c57226c42739dcf8ad323e7493ad51e38f"
+    },
+    {
+      "name": "CFN",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "a6606f99357bcb765db2536eb3e6ff054a85c124863f3176e66a0c32c2e920e4"
+    },
+    {
+      "name": "CFN1",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "b7e13f793fff07f79382975edb59394d3303258016d14d51bb69965dabf6e71e"
+    },
+    {
+      "name": "STEP_NUMBER",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "int32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "THIS_IS_AN_IDEAL_RUN",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "int32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "P_HYD",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "1a4ae001df0b74b0e54c45cc7a8e75331ce316490e11746c7cd5fb05327fa1a3"
+    },
+    {
+      "name": "Q2",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "f4626ca72fe0bdda2859d7dd5c01043101e7f8a7276afc3e811918e97b86899d"
+    },
+    {
+      "name": "T2",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "65e0256caa136b40c053272c60297c8ad320ec8419c0449d70f526f95c7a4e6a"
+    },
+    {
+      "name": "TH2",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "0b369e5bb9dc6e3bbceec8623c93034677f6485d007803a008281f124198ac3a"
+    },
+    {
+      "name": "PSFC",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "fe0c761fed1c98987ae8a3dc5a1d810ee8d36e3cab59c14f1bf37b3bc5814c9b"
+    },
+    {
+      "name": "U10",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "f261eb97273995390a4eed00cef741f61e94fb62c70b078c131ed1a40801295d"
+    },
+    {
+      "name": "U80",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "U140",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "U220",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "V10",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "d41739ba36e4fd993719aca7b4ab0b208da1f0b5b98f4e12c231fcba8a93ca2e"
+    },
+    {
+      "name": "V80",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "V140",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "V220",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "TREE_HGT",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "54d8ae8a7b4e0fbb3fe4f6c5c6b66b26dde0a0e13aa17352964f26aaa4fb9201"
+    },
+    {
+      "name": "CHARNOCK",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "d4e6d6b90b123f1d969415f1c6ed47a97f9281e193bf1f02abe905bd5eda503a"
+    },
+    {
+      "name": "RDX",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "a3a67dc1400650a8c96aa033a13d9313dccf9ea678b58bb9ba164c81f6afe782"
+    },
+    {
+      "name": "RDY",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "a3a67dc1400650a8c96aa033a13d9313dccf9ea678b58bb9ba164c81f6afe782"
+    },
+    {
+      "name": "DTS",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "DTSEPS",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "RESM",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "ZETATOP",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "CF1",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "7f21f0ff73773a47f17b8cfbdd3f8afcf06e3072342da2b330adedf1c2c9bfb8"
+    },
+    {
+      "name": "CF2",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "f9cea9c7a7e0b940ba55633e1c0690632bdbaf9fdc20e77d23e1f3837e636019"
+    },
+    {
+      "name": "CF3",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "8b5795d7379fc83e2f45c4417536d3be69eba3c3d308df5b39c1da5e761d9663"
+    },
+    {
+      "name": "QVAPOR",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "6f5627d2a5533c465328b9f41c81cf1c4209178155896ae90ac6d0338775ed04"
+    },
+    {
+      "name": "QCLOUD",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "eaeca5138ead399b1196fbee58a66a82fbfffd2b2c77b728a78c7f55758a5790"
+    },
+    {
+      "name": "QRAIN",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "5ba635a37d56abc6785195ac9ee7982017e4be7b3778a4fa48bc9e35860bf82b"
+    },
+    {
+      "name": "QICE",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "7887baf164007d8842e908c984689c70cfa81914ef480d9e3684e4112bd9fda6"
+    },
+    {
+      "name": "QSNOW",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "95ca35258fa959febc2962d52e3652435fafe3e2f45809c7f13762a77e07700c"
+    },
+    {
+      "name": "QGRAUP",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "8f70e4a19d5ad4511e70963b26ea976542a9dcde36ddc493324b2b42ab9328e5"
+    },
+    {
+      "name": "QNCCN",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95"
+    },
+    {
+      "name": "QNCLOUD",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95"
+    },
+    {
+      "name": "QNICE",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95"
+    },
+    {
+      "name": "QIB",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95"
+    },
+    {
+      "name": "FCX",
+      "dimensions": [
+        "Time",
+        "DIM0010"
+      ],
+      "dtype": "float32",
+      "value_sha256": "de47c9b27eb8d300dbb5f2c353e632c393262cf06340c4fa7f1b40c4cbd36f90"
+    },
+    {
+      "name": "GCX",
+      "dimensions": [
+        "Time",
+        "DIM0010"
+      ],
+      "dtype": "float32",
+      "value_sha256": "de47c9b27eb8d300dbb5f2c353e632c393262cf06340c4fa7f1b40c4cbd36f90"
+    },
+    {
+      "name": "TOPOSLPX",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "TOPOSLPY",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "SHDMAX",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "324560518b615bbdd228ad86bfc7136efdb8c3615230685b8c10fa7cf5df4e1f"
+    },
+    {
+      "name": "SHDMIN",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "533881d6127188bd14e55ddb817485dc4a454b388fe694a497e0a8b5921ff8d5"
+    },
+    {
+      "name": "SHDAVG",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "1855e33a1c567d7bb5e2d4ecbdb0ea6661d0b0a27f310c750896b1440b5c0030"
+    },
+    {
+      "name": "SNOALB",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "ca952d1084a6d8891f6bc2760074ea91898bc699acfa2da252042196f4239004"
+    },
+    {
+      "name": "LANDUSEF",
+      "dimensions": [
+        "Time",
+        "land_cat_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "65d0be795ad929eb839f8905a0f97869bebea17d22a676e69eb55402ffafca73"
+    },
+    {
+      "name": "SOILCTOP",
+      "dimensions": [
+        "Time",
+        "soil_cat_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "10cef1ffbba283f91274f0c8c4220536c8f2f8567fba7eda1709f285d64b7078"
+    },
+    {
+      "name": "SOILCBOT",
+      "dimensions": [
+        "Time",
+        "soil_cat_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "a2d450df8cad15cb7997d00b8063fce7c5faeeb5cf001d7879b08c34559c1d6a"
+    },
+    {
+      "name": "TSLB",
+      "dimensions": [
+        "Time",
+        "soil_layers_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "9537e13f97bd767c6c1d5914715c6620f7f188a9bc45aea701900ff260502fa3"
+    },
+    {
+      "name": "BUILD_AREA_FRACTION",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "BUILD_SURF_RATIO",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "BUILD_HEIGHT",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "MH_URB2D",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "STDH_URB2D",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "LF_URB2D",
+      "dimensions": [
+        "Time",
+        "urban_wind_directions_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "9fe4e991aafb2c6e3de290b63952a1e45f7f119aa2a35c25d441b47eb4faaa24"
+    },
+    {
+      "name": "Z0_URB2D",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "LF_URB2D_S",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "AHE",
+      "dimensions": [
+        "Time",
+        "month_hour",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "0947cbc1ec5f4b48bc36567da2e34ac80c732c0b13b5404b86ce5dbeff0ef1a9"
+    },
+    {
+      "name": "SMOIS",
+      "dimensions": [
+        "Time",
+        "soil_layers_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "55c2f23ee722d5ae5809255d293bb3cd101e0c5abe054893cdaa6ad496020c60"
+    },
+    {
+      "name": "SH2O",
+      "dimensions": [
+        "Time",
+        "soil_layers_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "a80fd808d9b882f066729ace147f53a997b683a2082edf871cf896fa1bc5afe5"
+    },
+    {
+      "name": "SMCREL",
+      "dimensions": [
+        "Time",
+        "soil_layers_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "9fe4e991aafb2c6e3de290b63952a1e45f7f119aa2a35c25d441b47eb4faaa24"
+    },
+    {
+      "name": "SEAICE",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "IVGTYP",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "int32",
+      "value_sha256": "0ecfefd09c008e113778b8dc1e5d18c0751eafcbe0f2cb3391abe686f80cb560"
+    },
+    {
+      "name": "ISLTYP",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "int32",
+      "value_sha256": "9ccf692ef104f5475214da250a682d54079a0bad588c49db776390ff9fa80081"
+    },
+    {
+      "name": "VEGFRA",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "c32fc3548a695f38d04cdb7dd88abda295fb7a1c735913d3fde192c41e4ae9a0"
+    },
+    {
+      "name": "SNOW",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "SNOWH",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "CANWAT",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "FNDSNOWH",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "int32",
+      "value_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450"
+    },
+    {
+      "name": "FNDSOILW",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "int32",
+      "value_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450"
+    },
+    {
+      "name": "FNDALBSI",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "int32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "FNDSNOWSI",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "int32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "FNDICEDEPTH",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "int32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAKE_DEPTH",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "658ed1af363580cea815be77cf23eebd6d6df5b383a1d2d9a3af56129d2c6f55"
+    },
+    {
+      "name": "WATER_DEPTH",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "43a657174e063198769efe71c12081a34bef85609aee1f74f9ba4187045057ac"
+    },
+    {
+      "name": "UOCE",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "VOCE",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "FRC_URB2D",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "ed9a1d566acb795e5774792e4aa1d3244be39e1911e2103c37f685412cf8b2c8"
+    },
+    {
+      "name": "LAI",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "5987d37277fb56e4166e9a7a937b657b92f883ea80c8bc81071765d2ee28afb6"
+    },
+    {
+      "name": "VAR",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "702f7c8c2d3b65be72a1ab66cb2ab479cfa26544fb5f5930f3224272fc40c077"
+    },
+    {
+      "name": "O3_GFS_DU",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "MAPFAC_M",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "e535f9b97eb209c187121e8e7d5d717641aae33b9ec7f0f0723311ea08c6794c"
+    },
+    {
+      "name": "MAPFAC_U",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east_stag"
+      ],
+      "dtype": "float32",
+      "value_sha256": "dd2d231a0fffbc94c1ea310fbacece979efbdfb14349cca485cd5b4f96ca9e25"
+    },
+    {
+      "name": "MAPFAC_V",
+      "dimensions": [
+        "Time",
+        "south_north_stag",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "7a103cfc189e0020feae7d1759b66cc0cb29a86b385cd3e028ee2882cf8a7247"
+    },
+    {
+      "name": "MAPFAC_MX",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "e535f9b97eb209c187121e8e7d5d717641aae33b9ec7f0f0723311ea08c6794c"
+    },
+    {
+      "name": "MAPFAC_MY",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "e535f9b97eb209c187121e8e7d5d717641aae33b9ec7f0f0723311ea08c6794c"
+    },
+    {
+      "name": "MAPFAC_UX",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east_stag"
+      ],
+      "dtype": "float32",
+      "value_sha256": "dd2d231a0fffbc94c1ea310fbacece979efbdfb14349cca485cd5b4f96ca9e25"
+    },
+    {
+      "name": "MAPFAC_UY",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east_stag"
+      ],
+      "dtype": "float32",
+      "value_sha256": "dd2d231a0fffbc94c1ea310fbacece979efbdfb14349cca485cd5b4f96ca9e25"
+    },
+    {
+      "name": "MAPFAC_VX",
+      "dimensions": [
+        "Time",
+        "south_north_stag",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "7a103cfc189e0020feae7d1759b66cc0cb29a86b385cd3e028ee2882cf8a7247"
+    },
+    {
+      "name": "MF_VX_INV",
+      "dimensions": [
+        "Time",
+        "south_north_stag",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "ea022610ec84818ab640a214c42412130faf77546206048b3234ce29007e8cea"
+    },
+    {
+      "name": "MAPFAC_VY",
+      "dimensions": [
+        "Time",
+        "south_north_stag",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "7a103cfc189e0020feae7d1759b66cc0cb29a86b385cd3e028ee2882cf8a7247"
+    },
+    {
+      "name": "F",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "e27d4a5eb5c31f9f0a68d1fd2a42fe132637cb0bfdc1c3b51103df286243d31a"
+    },
+    {
+      "name": "E",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "82cd9fce54156bfd0ac82993a390cfe9f794253bbd5de5bf5273f490a1b7a43d"
+    },
+    {
+      "name": "SINALPHA",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "c0fa9be6689c575126e8c5e420c55c30e5d1183a51febc52ecc315164252bc6e"
+    },
+    {
+      "name": "COSALPHA",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "74ce009bfbd0f3479eb280291369b6c9eaae86a989daf79e9f5f0826c57e50b3"
+    },
+    {
+      "name": "HGT",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "0fd4d612796c884801050854900b284c8cd8cd16b66374cd0bef1fe8977816a5"
+    },
+    {
+      "name": "TSK",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "43552878f9b3a15453b06b38052fe81c9816a85586d28819e170f731ef908442"
+    },
+    {
+      "name": "U_BASE",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "59bf9091f4cbbd2a8796bfe086a501c57226c42739dcf8ad323e7493ad51e38f"
+    },
+    {
+      "name": "V_BASE",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "59bf9091f4cbbd2a8796bfe086a501c57226c42739dcf8ad323e7493ad51e38f"
+    },
+    {
+      "name": "QV_BASE",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "59bf9091f4cbbd2a8796bfe086a501c57226c42739dcf8ad323e7493ad51e38f"
+    },
+    {
+      "name": "Z_BASE",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "59bf9091f4cbbd2a8796bfe086a501c57226c42739dcf8ad323e7493ad51e38f"
+    },
+    {
+      "name": "U_FRAME",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "V_FRAME",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "P_TOP",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "8894c65262f29d789d8a8edd57197d3909daba8a60e794fcfc1acc0672cf722b"
+    },
+    {
+      "name": "GOT_VAR_SSO",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "int32",
+      "value_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450"
+    },
+    {
+      "name": "LAT_LL_T",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_UL_T",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_UR_T",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_LR_T",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_LL_U",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_UL_U",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_UR_U",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_LR_U",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_LL_V",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_UL_V",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_UR_V",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_LR_V",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_LL_D",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_UL_D",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_UR_D",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LAT_LR_D",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_LL_T",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_UL_T",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_UR_T",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_LR_T",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_LL_U",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_UL_U",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_UR_U",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_LR_U",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_LL_V",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_UL_V",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_UR_V",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_LR_V",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_LL_D",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_UL_D",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_UR_D",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "LON_LR_D",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "T00",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "e40d18baf0d1d32b8511000e7133462ff0298f51f83d781be5c5bf593f89dff9"
+    },
+    {
+      "name": "P00",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "79570bd9722fc4a8f0f0b8db6aa3c9ed1b4e3b0f9e28e7b6a0aecc641249c31a"
+    },
+    {
+      "name": "TLP",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "0c05e73c2748cbfd2e38c0afaf9cb594f78e14fefa3c24190ebc121d45dbee4f"
+    },
+    {
+      "name": "TISO",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "531ad685bf4dd31ed89c6b99e76c2b9451d6a6d04d82de7d4b1a73217f55e551"
+    },
+    {
+      "name": "TLP_STRAT",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "c7b72ee82c3552e92022bbc0cc1d6a4f7f5b21f4ec2d9dfda8ae5604b48262cc"
+    },
+    {
+      "name": "P_STRAT",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "float32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "CLDFRA",
+      "dimensions": [
+        "Time",
+        "bottom_top",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95"
+    },
+    {
+      "name": "XLAT_U",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east_stag"
+      ],
+      "dtype": "float32",
+      "value_sha256": "bb5d80c357dea4db01705bd69bdf0567f5843a4adcac43b1fb849f837683d3c9"
+    },
+    {
+      "name": "XLONG_U",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east_stag"
+      ],
+      "dtype": "float32",
+      "value_sha256": "2d4ca29debd562462544bc0a3b54f5e8795da84b515d0bbd5332ba7934a2ff0f"
+    },
+    {
+      "name": "XLAT_V",
+      "dimensions": [
+        "Time",
+        "south_north_stag",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "2c02fed3583b69ecbc05d62d827c2f80203feb771409c753e4eef1fbc2bcc7ab"
+    },
+    {
+      "name": "XLONG_V",
+      "dimensions": [
+        "Time",
+        "south_north_stag",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "62b8cbd57855a5d40d83d9c02df953df1722abd37561d102f8474f97401af3e0"
+    },
+    {
+      "name": "CLAT",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "ab20c8d1df861b00bf430873ee3841ef4a99f69e95c22d1c4a637f68193d90ab"
+    },
+    {
+      "name": "ALBBCK",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "b88f50b4bb62a3e300376d529f2176bb11f91310745df2b92dffb2d26d3afbaf"
+    },
+    {
+      "name": "TMN",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "bae4dff3cf31b69fa4358c475d6414af0902ecd4a0e4ea60bba177bd0b5c03af"
+    },
+    {
+      "name": "XLAND",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "3b8ccc3bd236319dea5f79c9dcc1fffaeeab5448b1e3ddcfb89778530387b870"
+    },
+    {
+      "name": "CPLMASK",
+      "dimensions": [
+        "Time",
+        "num_ext_model_couple_dom_stag",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "SNOWC",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "SR",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "SAVE_TOPO_FROM_REAL",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "int32",
+      "value_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450"
+    },
+    {
+      "name": "H0ML",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "TMOML",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "AOD_SFC",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "LAKEFLAG",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "int32",
+      "value_sha256": "67abdd721024f0ff4e0b3f4c2fc13bc5bad42d0b7851d456d88d203d15aaa450"
+    },
+    {
+      "name": "LAKE_DEPTH_FLAG",
+      "dimensions": [
+        "Time"
+      ],
+      "dtype": "int32",
+      "value_sha256": "df3f619804a92fdb4057192dc43dd748ea778adc52bc498ce80524c014b81119"
+    },
+    {
+      "name": "C1H",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "dd0a16da9f0a428b47c970af3b2225457864668e2512d283ba8fec4db1486e6d"
+    },
+    {
+      "name": "C2H",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "53f65f20c0cdced9c320369eda6dd46c575f0570924d36aec45aafb9e69c64cc"
+    },
+    {
+      "name": "C1F",
+      "dimensions": [
+        "Time",
+        "bottom_top_stag"
+      ],
+      "dtype": "float32",
+      "value_sha256": "7729080dae4bec1d85efcf5f080bb2b56fa6c9dd7586e32b0dc1d77310a469f5"
+    },
+    {
+      "name": "C2F",
+      "dimensions": [
+        "Time",
+        "bottom_top_stag"
+      ],
+      "dtype": "float32",
+      "value_sha256": "c50c114d66d6826f29ac64685656cb5793ea0e203b623c6e8f263e6c7fe4d3ff"
+    },
+    {
+      "name": "C3H",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "7c665778c8ae825f0b5e60826328f8516a9973749e83ff30fa303c830e4bf53f"
+    },
+    {
+      "name": "C4H",
+      "dimensions": [
+        "Time",
+        "bottom_top"
+      ],
+      "dtype": "float32",
+      "value_sha256": "d478cbc4b0fc4a02df2bcd9a616944f8c483ccc338ce8450392d75bf600c51b0"
+    },
+    {
+      "name": "C3F",
+      "dimensions": [
+        "Time",
+        "bottom_top_stag"
+      ],
+      "dtype": "float32",
+      "value_sha256": "de3343e3e3add77c299daa690d55368f5a95bb49258da36f2517c4dc2fb3859b"
+    },
+    {
+      "name": "C4F",
+      "dimensions": [
+        "Time",
+        "bottom_top_stag"
+      ],
+      "dtype": "float32",
+      "value_sha256": "ae20d94e6bdd658821107c560892f92d534a8c1a68ab6bae83ef52df961e4756"
+    },
+    {
+      "name": "PCB",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "PC",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "696813e02cee1a4b8d4309e6c1f55221e37693b27faf16c03949578569b6efe5"
+    },
+    {
+      "name": "LANDMASK",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "63da943bee55b14e3e3db4b9e09e226c4cdad522a18e0751c4cf4239964bc8bf"
+    },
+    {
+      "name": "LAKEMASK",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "8f6190bf99cf10272f052193268f404bd29be225f15f153f8960cf41a9aab938"
+    },
+    {
+      "name": "SST",
+      "dimensions": [
+        "Time",
+        "south_north",
+        "west_east"
+      ],
+      "dtype": "float32",
+      "value_sha256": "9fe49b862a9b982a670eadf8c005be693c99a1b0718683cd4207f35a6a10e12f"
+    }
+  ],
+  "QNRAIN_raw_value_sha256": {
+    "B1": "ac94a207aa7aac89de2884d5a030079be00395e78b8e1f3bde381aa809ec8c95",
+    "NR_PRIOR": "06de5f8ea59ffcb6608c296a781aa3e02ae6facf87ad5c2f0d26f1a8fa8de3bf",
+    "DM065": "ea84f00e4c3a7a4a2b9f7304a27179f6bf32c81adc2143d033971dbb210843d2"
+  },
+  "protocol_sha256": "5f44ad36d60e3443f7da7bbf7253359160114e954d3015ed8cef6ca059237690"
+}

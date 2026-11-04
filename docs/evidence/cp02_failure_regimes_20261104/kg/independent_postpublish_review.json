@@ -1,0 +1,23 @@
+{
+  "status": "PASS",
+  "scope": "read-only independent published target and prior snapshot hash verification",
+  "maintained_targets_verified": 13,
+  "source_worktree_targets_verified": 4,
+  "wiki_evidence_copies_verified": 5,
+  "prior_snapshots_preserved": 238,
+  "snapshot_counts": {
+    "KLAPS50": 118,
+    "Cloud-BAL": 122
+  },
+  "publish_receipt_sha256": "e71c1b2559a36bc4069c7e523041dbccfc0335be7a1af93aad7864d64d6df87d",
+  "copy_receipt_sha256": "187440b929c44f770a90d0d1e11eabc17016c7099c8cb99a6c3102acf5a17bcf",
+  "stage_receipt_sha256": "ae56899a4355702425ae6201128261965cd7030e607905a1bad11001d2ff84f5",
+  "agents_current_sha256": "0fde2cdca9181e19318b9b3b2170944ab4dc17faa72f97284222441cd09796be",
+  "limits": [
+    "selected Python AST extraction only, other evidence hash-only",
+    "one false pytest.fixture self-edge per corpus suppressed and raw extractions retained",
+    "77 raw external import edges per corpus omitted by normal merge because target nodes absent",
+    "Fortran cross-file extraction partial",
+    "graph freshness does not establish runtime or scientific validation"
+  ]
+}

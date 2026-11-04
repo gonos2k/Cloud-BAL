@@ -1,0 +1,172 @@
+{
+  "admission": "exact count fractions, no CSI averaging; compare prior and DM065 recovery conditions against ORIGINAL",
+  "base_commit": "9eab6784c595c5a935acc4a42762b34276fde3a5",
+  "baseline": "IMPROVED_BG_FIXED",
+  "comparisons": [
+    "ORIGINAL",
+    "B1_RAIN_NUMBER_PRIOR",
+    "B1_RAIN_NUMBER_DM065"
+  ],
+  "event_rule": "amount >= threshold",
+  "flat_index_order": "C y-major then x",
+  "focus_groups": {
+    "false_alarm": {
+      "leads": [
+        2,
+        3
+      ],
+      "observed_band": "[0,0.1)",
+      "threshold_mm": 0.1,
+      "transitions": [
+        "new_false_alarm",
+        "removed_false_alarm",
+        "retained_false_alarm"
+      ]
+    },
+    "heavy": {
+      "leads": [
+        5
+      ],
+      "observed_band": "[5,infinity)",
+      "threshold_mm": 5.0,
+      "transitions": [
+        "lost_hit",
+        "gained_hit",
+        "retained_hit"
+      ]
+    },
+    "weak": {
+      "leads": [
+        2,
+        3
+      ],
+      "observed_band": "[0.1,1)",
+      "threshold_mm": 0.1,
+      "transitions": [
+        "lost_hit",
+        "gained_hit",
+        "retained_hit",
+        "both_miss"
+      ]
+    }
+  },
+  "forecast_event": "2026-08-16 12 UTC",
+  "full_ledger_rows": 398304,
+  "inputs": {
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/admission_constraints.csv": {
+      "sha256": "17ab9e799e2a348ff238895362a8322fe2aa417d27e99503debed6940130b10b",
+      "size_bytes": 2476
+    },
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/bilinear_mapping.npz": {
+      "sha256": "a57aab4e1c226f91cbb2ef2dfd3516f84de4446273c5abacdf91e9679c577b29",
+      "size_bytes": 57526
+    },
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/categorical_scores.csv": {
+      "sha256": "62e62867a4be7dbadbe5fad35dd48297e5f11811d34858e9256d2a21d432c1d4",
+      "size_bytes": 8731
+    },
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/continuous_scores.csv": {
+      "sha256": "07ec9628a80d578a62edb7979b38514ed1f32dd556e84822cadf23ae31f375cc",
+      "size_bytes": 1398
+    },
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/hour_13_arrays.npz": {
+      "sha256": "8269ccdb6d7c9bdd0ccfc84137c8af78610bbdc6b2b88ad5db0fd548acc91eb6",
+      "size_bytes": 125905
+    },
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/hour_14_arrays.npz": {
+      "sha256": "2b3de1fba4ebd1401458447006c9b12a6e871cc3f4210c7a786b7a1d958beee1",
+      "size_bytes": 125918
+    },
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/hour_15_arrays.npz": {
+      "sha256": "4f781536ff26c201a670765080a96ba052ad0b4ac180f5c5d64ecff0465ea1e7",
+      "size_bytes": 137138
+    },
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/hour_16_arrays.npz": {
+      "sha256": "e9d36493ccebe68cb3198ffed034bd4ccc067f71b846712a2d58a1709a84d1f7",
+      "size_bytes": 137944
+    },
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/hour_17_arrays.npz": {
+      "sha256": "aca9857864516caed76c3abc029279e5f043eec0f0b45f35aafd106e32c132dc",
+      "size_bytes": 133965
+    },
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/hour_18_arrays.npz": {
+      "sha256": "32e07df2d23d15c429dd50311371f20250bb15871789819c6bbb2e25a83b0226",
+      "size_bytes": 138820
+    },
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/receipt.json": {
+      "sha256": "600d2cd041ea24f538af8ac477322b46393c2ab154ebbf2629c3eda2f15f3812",
+      "size_bytes": 14650
+    },
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/winner.json": {
+      "sha256": "c5d67c74740e87399523385bee933511843162856cd03a3761b59a98a9d3990b",
+      "size_bytes": 249
+    },
+    "docs/evidence/cp02_state_path_20261104/candidate/analysis/admission_constraints.csv": {
+      "sha256": "2847e8c14ae9334ff1ecad15079f9ad27b750875573f0a3adc123fe4a28cf314",
+      "size_bytes": 2470
+    },
+    "docs/evidence/cp02_state_path_20261104/candidate/analysis/receipt.json": {
+      "sha256": "282eace0d651db6f9dda21657b04bd0c032c84588e3d9a09281d61f0eb517286",
+      "size_bytes": 11954
+    }
+  },
+  "leads_hours": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "no_new_forecast": true,
+  "observed_bands_mm": [
+    "[0,0.1)",
+    "[0.1,1)",
+    "[1,5)",
+    "[5,infinity)"
+  ],
+  "paired_reference": "reference",
+  "row_columns": [
+    "lead_hour",
+    "threshold_mm",
+    "comparison",
+    "flat_index_yx",
+    "latitude",
+    "longitude",
+    "reference_mm",
+    "original_mm",
+    "b1_mm",
+    "prior_mm",
+    "dm065_mm",
+    "observed_band",
+    "reference_event",
+    "baseline_event",
+    "candidate_event",
+    "transition"
+  ],
+  "sample_count": 3688,
+  "schema": "cp02_failure_regimes_protocol_v1",
+  "status": "FROZEN_BEFORE_TRANSITION_OUTPUT",
+  "target_grid_yx": [
+    253,
+    149
+  ],
+  "thresholds_mm": [
+    0.1,
+    0.5,
+    1.0,
+    2.5,
+    5.0,
+    10.0
+  ],
+  "transition_labels": [
+    "retained_hit",
+    "lost_hit",
+    "gained_hit",
+    "both_miss",
+    "retained_false_alarm",
+    "removed_false_alarm",
+    "new_false_alarm",
+    "retained_correct_negative"
+  ]
+}

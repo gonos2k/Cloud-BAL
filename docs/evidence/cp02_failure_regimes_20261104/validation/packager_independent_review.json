@@ -1,0 +1,25 @@
+{
+  "status": "GO",
+  "checks": [
+    "staged ZIP and receipt precede single directory publication",
+    "new/existing/dangling destinations fail closed",
+    "28 PNG input hashes checked against frozen figure metadata",
+    "receipt failure cleans temporary stage; existing outputs preserved",
+    "fresh package replays byte-for-byte",
+    "independent ZIP readback: 37 unique members, CRC and member SHA, 28 metadata-matching PNGs, 47 resolved local links",
+    "three external links intentionally remain online"
+  ],
+  "tests": "3 additional clean-export tests pass, 310 unique tests across 48 files in two commands",
+  "files": {
+    "tools/package_cp02_failure_gallery.py": "8f504bf517c53f745a054bcb7fe83febc35bee6ba098796aef54e42f018497d2",
+    "tests/test_package_cp02_failure_gallery.py": "9a64441187cb4833b81950f9840fb98a1e6c4d1adc19a75a7f8745cfca1d5bdb",
+    "docs/evidence/cp02_failure_regimes_20261104/offline/report_figures.zip": "f4fa7cb1788b690c502ef2f39c750aa1dfd49892695b4b8ce1d71dbe7377c3cf",
+    "docs/evidence/cp02_failure_regimes_20261104/offline/receipt.json": "5d4d2903265c74827452e48ddb16fc71fbc94de5f01fc7e6ca66603764adcf70",
+    "docs/evidence/cp02_failure_regimes_20261104/figures/metadata.json": "3729affc23e09e9cc10f9c97e95c944397906ce59e75d214d7b2c833c51f717c",
+    "docs/evidence/cp02_failure_regimes_20261104/validation/clean_export_package_pytest.json": "b4fc49039812e84c635daaaf2e47292aff906719461d4bb445456c3adffd1f94"
+  },
+  "limitations": [
+    "same-filesystem rename is atomic; unrelated noncooperating process could race the final existing-path check",
+    "external URLs still require network"
+  ]
+}

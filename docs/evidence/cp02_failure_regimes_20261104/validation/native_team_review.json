@@ -1,0 +1,72 @@
+{
+  "status": "GO",
+  "review_scope": "Independent review of transition analyzer, local initial-change audit, final plotter/package and report; reviewer authored state extractor, which has separate independent analysis-peer review.",
+  "blockers": [],
+  "resolved_findings": [
+    {
+      "severity": "low",
+      "finding": "Four report RH median cells differed by 0.01 percentage point from saved float64 population-summary rounding.",
+      "resolution": "Report corrected to CSV-first values 93.07, 98.17, 94.72 and 91.01."
+    },
+    {
+      "severity": "medium",
+      "finding": "Original ZIP publisher could leave or overwrite an unbound ZIP when receipt write failed.",
+      "resolution": "Fresh destination directory stages and validates ZIP plus receipt before publication; independent injected receipt failure preserved existing directory and left no output or staging."
+    }
+  ],
+  "checks": {
+    "transition_ledger": "PASS: independently rederived every one of 398304 rows against frozen NPZ values, labels, bands, thresholds and coordinates; all 3456 frequency rows and 9471 focus keys matched",
+    "local_change": "PASS: independently recomputed raw 39-level positive-weight-corner maxima and changed masks for all 3155 DM065 focus rows across all eight input/history times; 15 initially unchanged new false alarms, of which 10 show both QR and NR differences at +1h and all 15 at +2h",
+    "report": "PASS: wet-loss/new-FA/heavy-loss and recovery counts, all eight humidity rows and temperature statements recomputed; no placeholder or unresolved local report links; 0\u20133h prior diagnostics distinguished from 6h DM065 forecasts; snapshots not described as trajectories or proved causal paths",
+    "thermodynamics": "PASS: KDM6 liquid RH source constants/formula and dry-theta vs THM conversion reviewed; diagnostics computed at native corners before interpolation, float64 calculations stored float32, undefined Dm retained as missing",
+    "state_extraction_independence": "PASS: separate peer independently validated all 24 source/output identities and masks and 24 representative scalar thermodynamic/diameter/layer computations",
+    "initial_fields": "PASS: directly reverified 207 non-QNRAIN variables and all metadata/dimensions across the three initial inputs; input and h00 remain separate",
+    "figures": "PASS: 28 PNG hashes match frozen metadata; 6320 population summary rows separately rechecked; visual review of source schematic, weak-layer panel and 15-point local-corner panel; final label revision AST identical after normalizing Korean string constants",
+    "offline_bundle": "PASS: 37 members including 28 byte-identical PNGs, all CRC/member hashes and all packaged local Markdown links; previous PR146 external links intentionally remain online",
+    "tests": "PASS: 19 targeted tests across transition, state, figure and package source; recorded clean-export commands independently report 307 and 3 passes respectively, 310 total across 48 files",
+    "provenance": "PASS: no new forecast or new candidate; source/metadata and state snapshots hash-bound in protocol and receipts"
+  },
+  "targeted_test_command": "PYTHONDONTWRITEBYTECODE=1 taskset -c 48-55 python -m pytest -q tests/test_cp02_failure_regimes.py tests/test_cp02_failure_state_features.py tests/test_plot_cp02_failure_regimes.py tests/test_package_cp02_failure_gallery.py",
+  "source_and_evidence_sha256": {
+    "tools/cp02_failure_regimes.py": "7967547adc95ad32825b216782808c6def3cbc19822d9c99cb95b0a16ccae72a",
+    "tools/cp02_failure_state_features.py": "92c4c302700491587a8faa29bc40dffa89a6d1b0f79f0616f74fdf5963e1754c",
+    "tools/plot_cp02_failure_regimes.py": "fee03d8abc86ec8651551031baea6e801a14dfb5781752761e9c90f4399c92cf",
+    "tools/package_cp02_failure_gallery.py": "8f504bf517c53f745a054bcb7fe83febc35bee6ba098796aef54e42f018497d2",
+    "tests/test_cp02_failure_regimes.py": "82cee9197b8d073b28691151938a1c245a376d00c9df2f0e2dd842efcca00dd4",
+    "tests/test_cp02_failure_state_features.py": "5aa067881ae3f69ff6ec019c76d0331a5e7bdc8f8a79814655a24c0dd55a64d5",
+    "tests/test_plot_cp02_failure_regimes.py": "d9d16046df5b7e709879d7948cba18ccbdeeb8dfde2cf9fddb00a8ecd3adf5a6",
+    "tests/test_package_cp02_failure_gallery.py": "9a64441187cb4833b81950f9840fb98a1e6c4d1adc19a75a7f8745cfca1d5bdb",
+    "docs/CP02_FAILURE_REGIMES_20261104.md": "d3fd9fa1821c36597c2dccd63dae832fe0e8881fb765d9326b2810b680ea52bd",
+    "docs/evidence/cp02_failure_regimes_20261104/README.md": "9c87fc38b4ae094eb055d01cbd115d7552f969a95ff54879d97269d3c0c2639a",
+    "docs/evidence/cp02_failure_regimes_20261104/FIGURES.md": "96eebb369b614f5622afb418a09be4e1dca61f7985a2653c09f5355be6858b4d",
+    "docs/evidence/cp02_failure_regimes_20261104/transitions/protocol.json": "7951cec54525031d949a11204ffa11a793a0fa745545cb9835005c53f2c73753",
+    "docs/evidence/cp02_failure_regimes_20261104/transitions/results/receipt.json": "10643ef606714df93385cdb82be75542584af41f7400d4fced73512f96f0db38",
+    "docs/evidence/cp02_failure_regimes_20261104/transitions/results/focus_membership.csv": "05c557bae2e5d4702f6c377a17d78f48eaee289e8a65abbd745f85a74c8c08e3",
+    "docs/evidence/cp02_failure_regimes_20261104/transitions/results/transition_counts.csv": "e00a695bfa1e50f6b1bc83ec57755a2d716f2439dc577ccd4d031cf59849c610",
+    "docs/evidence/cp02_failure_regimes_20261104/science/recount_local_initial_change.py": "60fa6de0d7a0186b4e8620823809efa410d83fe7d173a6ebe962cd0f2dd92a42",
+    "docs/evidence/cp02_failure_regimes_20261104/science/local_initial_change.csv": "658c18fa55ed6b3a12ff6ecd03fff845a8628ee160a49fe5ba57ea30577d541c",
+    "docs/evidence/cp02_failure_regimes_20261104/science/local_initial_change.json": "226fd600a92fd6a9193573ead356a9b2c7af7f768bfb154d1a0661307b0de10d",
+    "docs/evidence/cp02_failure_regimes_20261104/science/local_initial_change_replay.json": "375542a2d525ba2e9cfb46b97d7399f56fe0618ace7b038cb5ff9b07e71640c4",
+    "docs/evidence/cp02_failure_regimes_20261104/state/protocol.json": "5f44ad36d60e3443f7da7bbf7253359160114e954d3015ed8cef6ca059237690",
+    "docs/evidence/cp02_failure_regimes_20261104/state/results/receipt.json": "9e6a4cea51bdd88ae45a6052e6818a07ee5003de7dfc5dc2050c048075277d8c",
+    "docs/evidence/cp02_failure_regimes_20261104/state/independent_review.json": "5aefdde96797b14dcadbec226286afd26f24d2d2d4560fb76e20078eba5c9c3b",
+    "docs/evidence/cp02_failure_regimes_20261104/state/initial_input_comparison.json": "95958f2b60bfd1fd6391d36d4a53dde5c0fe6f2602ffd4939a6e3519681fc6fe",
+    "docs/evidence/cp02_failure_regimes_20261104/state/input_startup_comparison.json": "bca6578af3ec03d38743e80aeba581c4f805a0fbc6f41c7d806283bc9f19eb80",
+    "docs/evidence/cp02_failure_regimes_20261104/state/source_context/manifest.json": "ba9d77a3eb61eed40501b539f434cdc9231f9dbe061f4c18e95bb412c8b6757f",
+    "docs/evidence/cp02_failure_regimes_20261104/figures/metadata.json": "3729affc23e09e9cc10f9c97e95c944397906ce59e75d214d7b2c833c51f717c",
+    "docs/evidence/cp02_failure_regimes_20261104/figures/population_summaries.csv": "780d2e5bd6bccb769be4d520393f39f1f1e0497dddf220a45eb4b3f55786002b",
+    "docs/evidence/cp02_failure_regimes_20261104/validation/figure_transition_crosscheck.json": "6895dabe4eb75e6d8a7f4df988f6161d87c2b0a45db92e9183f5f0bbc3ab861e",
+    "docs/evidence/cp02_failure_regimes_20261104/validation/clean_export_final_pytest.json": "c9c3f411086acf9e2dcd6b0bd03b5c114a05ff4226f255175b597f26dd85a983",
+    "docs/evidence/cp02_failure_regimes_20261104/validation/clean_export_final_pytest.log": "e720d7e5ead6d0d7f1ad7b6372edeecabd63fe24234ae9c5561055d97caf8918",
+    "docs/evidence/cp02_failure_regimes_20261104/validation/clean_export_package_pytest.json": "b4fc49039812e84c635daaaf2e47292aff906719461d4bb445456c3adffd1f94",
+    "docs/evidence/cp02_failure_regimes_20261104/validation/clean_export_package_pytest.log": "4b46aa64d8d89f405d4b347be87b0339d4bb104f791f8ab1865c72088683a9c4",
+    "docs/evidence/cp02_failure_regimes_20261104/offline/receipt.json": "5d4d2903265c74827452e48ddb16fc71fbc94de5f01fc7e6ca66603764adcf70",
+    "docs/evidence/cp02_failure_regimes_20261104/offline/report_figures.zip": "f4fa7cb1788b690c502ef2f39c750aa1dfd49892695b4b8ce1d71dbe7377c3cf"
+  },
+  "limitations": [
+    "Single meteorological case and 3688 dependent spatial samples; no independent-case generalization.",
+    "Eulerian hourly snapshots cannot determine true first divergence, trajectory, transport route, causal mechanism or column-water/energy closure.",
+    "Native-corner diagnostic calculation uses float64 source-coupled formulas and stores float32; it is not bit-identical model-internal state.",
+    "Reviewer authored state extraction; separate peer review binds all 24 inputs/outputs and sampled scalar calculations."
+  ]
+}
