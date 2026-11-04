@@ -1,0 +1,49 @@
+{
+  "format": "CBSP_PLAN_VERSION_RECONCILIATION_v1",
+  "reason": "After the corrected pair was archived, the current diagnostic plan was updated to record completed validation and the exact scope of the excluded prior format attempt. The canonical capture archive remains immutable at its prelaunch plan/receipt versions.",
+  "preserved_prelaunch_versions": {
+    "diagnostic_plan": {
+      "path": "prior_versions/diagnostic_plan_prelaunch.md",
+      "sha256": "57b3f90a0de8b81a496162a26bc23f9c82730b6489aed4c23813a5f2b486ee9f"
+    },
+    "patch_receipt": {
+      "path": "prior_versions/patch_receipt_prelaunch.json",
+      "sha256": "203593d99ddd6b0a1713ddde7197db01e7e4aa089b873d3731d3b855fd343f4b"
+    },
+    "capture_plan_copy": {
+      "path": "capture/diagnostic_plan.md",
+      "sha256": "57b3f90a0de8b81a496162a26bc23f9c82730b6489aed4c23813a5f2b486ee9f"
+    },
+    "capture_patch_receipt_copy": {
+      "path": "capture/patch_receipt.json",
+      "sha256": "203593d99ddd6b0a1713ddde7197db01e7e4aa089b873d3731d3b855fd343f4b"
+    },
+    "capture_manifest": {
+      "path": "capture/capture_archive_manifest.json",
+      "sha256": "be68d0f147f25d96aee77c784273624273084802682b49ac0d54c63c5ce681e4"
+    }
+  },
+  "current_versions": {
+    "diagnostic_plan": {
+      "path": "diagnostic_plan.md",
+      "sha256": "3c11ebd6764586e57c9b664b3d1840fe03a87f075a810d52eb7eed4d4c3c42a7"
+    },
+    "patch_receipt": {
+      "path": "patch_receipt.json",
+      "sha256": "6bdebcd0056b6c75a19891f52c538738734a39dae6be136935d558755dadc7cf",
+      "embedded_plan_sha256": "3c11ebd6764586e57c9b664b3d1840fe03a87f075a810d52eb7eed4d4c3c42a7"
+    },
+    "extension_patch": {
+      "path": "state_path_extension.patch",
+      "sha256": "cdb6891152d59080357650422eb056940b84ce34e607d05c4630642c3364cf09",
+      "same_as_prelaunch": true
+    }
+  },
+  "runtime_bindings": {
+    "prelaunch_gate": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/prelaunch_gate_attempt4.json",
+    "prelaunch_gate_sha256": "3e42f0029176b5dca1d570b0d40fd51db7527d4576ec1941cef61311dd2a322b",
+    "build_attempt4_receipt_sha256": "b5746dbff47e22be635a6609972ca46713b29f9a3c3e145c7df70d6ea312f6d2",
+    "quick_format_gate_sha256": "abaf22916d4c80fd225a85eb7720c438363227a963fd236ae0639fd412fecf37",
+    "corrected_pair_history_gate": "capture/history_gate.json"
+  }
+}

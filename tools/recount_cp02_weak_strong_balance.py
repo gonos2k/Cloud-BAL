@@ -555,15 +555,22 @@ def replay(runtime_dir: Path, analysis_dir: Path, plan_path: Path, plan_sha256: 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--analysis', type=Path, default=ROOT / 'docs/evidence/weak_strong_balance_20261030/analysis')
-    parser.add_argument('--runtime-dir', type=Path, default=ROOT / 'docs/evidence/weak_strong_balance_20261030/runtime')
-    parser.add_argument('--plan', type=Path, default=ROOT / 'docs/evidence/weak_strong_balance_20261030/selection_plan.json')
-    parser.add_argument('--plan-sha256', required=True)
-    parser.add_argument('--replay', action='store_true')
+    parser.add_argument('--replay', action='store_true', help='also regenerate all analysis outputs from runtime files')
+    replay_options = parser.add_argument_group('full replay options (require --replay)')
+    replay_options.add_argument('--runtime-dir', type=Path)
+    replay_options.add_argument('--plan', type=Path)
+    replay_options.add_argument('--plan-sha256', help='expected plan SHA-256; required with --replay')
     parser.add_argument('--output', type=Path, help='write audit JSON to this path')
     args = parser.parse_args()
+    if args.replay and not args.plan_sha256:
+        parser.error('--plan-sha256 is required with --replay')
+    if not args.replay and any(value is not None for value in (args.runtime_dir, args.plan, args.plan_sha256)):
+        parser.error('--runtime-dir, --plan and --plan-sha256 require --replay')
     result = recount(args.analysis)
     if args.replay:
-        result['replay'] = replay(args.runtime_dir, args.analysis, args.plan, args.plan_sha256)
+        runtime_dir = args.runtime_dir or ROOT / 'docs/evidence/weak_strong_balance_20261030/runtime'
+        plan = args.plan or ROOT / 'docs/evidence/weak_strong_balance_20261030/selection_plan.json'
+        result['replay'] = replay(runtime_dir, args.analysis, plan, args.plan_sha256)
     text = json.dumps(result, indent=2, allow_nan=False) + '\n'
     if args.output:
         args.output.write_text(text, encoding='utf-8')

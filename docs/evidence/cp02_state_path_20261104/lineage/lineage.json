@@ -1,0 +1,1270 @@
+{
+  "schema": "cp02-b1-qnrain-state-path-v1",
+  "created_utc": "2026-11-04",
+  "scope": "Read-only provenance trace for exact current recount B1 initial input through its retained WPS, metgrid, and real generation chain. No source, binary, input, or model run was changed or launched.",
+  "graphify": {
+    "used": true,
+    "query": "B1 input 9f8b494d current B1 POLICY_BG producer through metgrid real to first KDM6 QRAIN and QNRAIN initialization, including effective namelist Registry",
+    "graph": "worktree graphify-out/graph.json",
+    "graph_nodes": 17514,
+    "query_result": "398 nodes found; result truncated at the 1800-token budget",
+    "limitation": "Graph guided file discovery only; graph edges do not establish runtime lineage or source-to-binary binding. Receipt hashes, source text, and direct NetCDF reads are authoritative here."
+  },
+  "exact_b1_input": {
+    "case": "ORIGINAL_B1_100",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100/wrfinput_d01",
+    "sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+    "bytes": 376278396,
+    "state": {
+      "QRAIN": {
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "dtype": "float32",
+        "units": "kg kg-1",
+        "positive_cells": 202569
+      },
+      "QNRAIN": {
+        "shape": [
+          1,
+          39,
+          282,
+          234
+        ],
+        "dtype": "float32",
+        "units": "kg(-1)",
+        "zero_cells": 2573532,
+        "positive_cells": 0
+      },
+      "count_scope": "Whole exact file; no same-point KDM6 call-entry inference."
+    }
+  },
+  "producer_chain": {
+    "identity": "HYDRO_BACKGROUND_PRECIP",
+    "meaning": "POLICY_BG is the downstream forecast case label. The staged wrfinput is produced by the HYDRO_BACKGROUND_PRECIP producer/WPS-shadow-to-metgrid-to-real chain, then copied unchanged into forecast/run_POLICY_BG and the ORIGINAL_B1_100 run.",
+    "producer_run": {
+      "path": "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/run_HYDRO_BACKGROUND_PRECIP",
+      "receipt": "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/run_HYDRO_BACKGROUND_PRECIP/receipt.json",
+      "receipt_sha256": "1e419ad83a3fbaa28f56d152a8d6b76235abd41279fbf5b2197c6ade83e5f8eb",
+      "wps_output_sha256": "ab0406fc71ec7c62cf63d7240bbfc36ee133902639b538472f52fedb5d720fb6",
+      "shadow_output_sha256": "821543471d9d9540b77ddc9cee58cb74dfc32f6679b0bb233af56aaeedae9d07",
+      "producer_scripts": {
+        "run_producer.py": "dc70fb9bd39bdc86903c4c47a832c264d616e34b9438768755a9b7d950bcc8ce",
+        "prepare_inputs.py": "aa7acf79340c67b99568600dfaf55ad281676c6e08b3523dea21fe75c17ca241",
+        "replay_wps_hydrometeors.py": "bf26392ab73abc9a73245abd333c6f2015f3561ddd25c4c490634c2253a0fb97",
+        "run_native.py": "eeaa04564f24f4707105676523cd31cc58f3fb9bea7c58c834af8b046b1e5c1a"
+      },
+      "source_and_build": {
+        "build_receipt": "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/build_receipt.json",
+        "build_receipt_sha256": "6888d79adb8b684c3883cbbcac937ee76cc304e51fe42848a34013630a8b75bd",
+        "scope": "Fresh O2 LAPSPREP producer build; source pins include lapsprep.f90 and the shadow adapters. It does not build or bind WRF real.exe.",
+        "lapsprep_f90_sha256": "5191fcf222485a7db0ea5784a93d6774a92e46ef99e4dce8a940a0e6b1646eaf",
+        "cloud_bal_column_physics_f90_sha256": "0c2cdbf4379814a2fa720ad387591c9396c9a959eb0cf383132bda910bd66ecf",
+        "cloud_bal_pressure_analysis_f90_sha256": "3959566091c36ea59f1dafa5eea04ea3125c7989f8c1f9f49fd9ab0b91d81807",
+        "cloud_bal_real_netcdf_f90_sha256": "4c73b8cabce3fd8c0a6af235f54733ea7cc339455aabf0d677062534bfa6336b"
+      }
+    },
+    "metgrid": {
+      "receipt": "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/native_HYDRO_BACKGROUND_PRECIP/receipt.json",
+      "receipt_sha256": "98ccbd08cd355f32c2d5b09a24b1a76af92c51911c5f328948d52ae057fc4577",
+      "exit": 0,
+      "metgrid_executable_sha256": "3107306ad0f8702e818eb84d8d4f9c96561b3632ffbaf2b157b5e284e1a18afe",
+      "metgrid_table_sha256": "44f1a43af35441957d0bef3a6220831aad1cf56ebc765d64d08e20f439a63b44",
+      "metgrid_namelist_sha256": "cab994050d70f1c56a5ea6e7b1e6d3b61dbadd02be3024552c4b7e8afec56edd",
+      "met_em_path": "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/native_HYDRO_BACKGROUND_PRECIP/metgrid/met_em.d01.2026-08-16_12:00:00.nc",
+      "met_em_sha256": "3a40b3e5363138691863470b379908c9b3a89c682e0662cd8c43fca5d766852e",
+      "fields": {
+        "QR": {
+          "shape": [
+            1,
+            21,
+            282,
+            234
+          ],
+          "dtype": "float32",
+          "units": "kg kg-1"
+        },
+        "present_species": [
+          "QC",
+          "QI",
+          "QR",
+          "QS",
+          "QG"
+        ],
+        "absent_number_fields": [
+          "QNR",
+          "QRAIN",
+          "QNRAIN"
+        ]
+      },
+      "table_entries": {
+        "QR": 709,
+        "QNR": 758
+      }
+    },
+    "real": {
+      "receipt": "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/native_HYDRO_BACKGROUND_PRECIP/receipt.json",
+      "exit": 0,
+      "real_executable_sha256": "58118b30f35f1e817cd500fc0047ee3e0b334975a3231faf3a46b3a5728c5c10",
+      "real_namelist_sha256": "054560901f3e4375b1500104e6387f9abba37b418ce29a83c2fa7a27234fa6ac",
+      "effective_namelist": {
+        "mp_physics": 37,
+        "start_time": "2026-08-16_12:00:00",
+        "run_hours": 0,
+        "source": "real/namelist.input used by the successful real.exe invocation, not the downstream forecast namelist"
+      },
+      "output_wrfinput_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+      "output_is_exact_b1_input": true,
+      "source_before_input_after_receipt_check": "real inputs unchanged; source unchanged; real completion marker SUCCESS COMPLETE REAL_EM INIT"
+    },
+    "downstream_policy_bg": {
+      "path": "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/forecast/run_POLICY_BG",
+      "forecast_receipt_sha256": "ad3b2209cf462285ff0794f01d3ebab2240b81d8e989171c240b804c38873517b3",
+      "wrf_executable_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+      "forecast_namelist_sha256": "23f5c3cb94d44831c22d86a754fa30d242456d8d14cd70a72d89b00cdec4f3a3",
+      "forecast_namelist": {
+        "mp_physics": 37,
+        "start_time": "2026-08-16_12:00:00",
+        "run_hours": 1
+      },
+      "staged_wrfinput_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+      "forecast_receipt_input_hash_entry": "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/native_HYDRO_BACKGROUND_PRECIP/real/wrfinput_d01"
+    }
+  },
+  "zero_origin_assessment": {
+    "directly_established": [
+      "The successful metgrid product lacks QNR/QNRAIN; only rain mass QR is present.",
+      "The successful real.exe stage wrote the exact current B1 input hash, whose QNRAIN array is zero in every cell despite 202569 positive-QRAIN cells.",
+      "The effective real namelist selects mp_physics=37. The retained Registry source candidate maps 37 to kdm6scheme and allocates qnr as a scalar.",
+      "The Registry source candidate has QNRAIN with units '# kg(-1)' (line 546), and its KDM6 package declaration includes qnr (line 3238)."
+    ],
+    "source_candidate": {
+      "real_source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_process_domain_fm547n5i/host/dyn_em/module_initialize_real.F",
+      "real_source_sha256": "a4bb2497d0c70588f45da06fe9754b56597245033fec7b4bb51beba05901ce2c",
+      "source_behavior": "The retained make_RainNumber initialization block is gated to THOMPSON or THOMPSONAERO, and fills positive QR with nonpositive QNR only inside that gate (source lines 4789-4790 and 4835-4838). If this source matches the executed binary, it is inactive for mp_physics=37.",
+      "registry_source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_host_process_domain_fm547n5i/host/Registry/Registry.EM_COMMON",
+      "registry_sha256": "b01855ed80569be04bbd99e43ea1672a60e35590db00145c839b8f74cfd9b07f",
+      "source_to_binary_status": "UNRESOLVED. The B1 producer receipt pins the real.exe hash but carries no source closure/build receipt binding that binary to these Registry or real source files."
+    },
+    "retained_build_artifacts": {
+      "preprocessed_f90_sha256": "0288bf53e2dc35f0f10f45640c0aae640471a7bb513907dabbbea80952d61986",
+      "module_initialize_real_object_sha256": "36cbbfc04e256fa4318d694c4bdfb1d82d0f24184f7b444786badbecb0dd2272",
+      "real_em_object_sha256": "3b4b0e1fbbc671dff759c9402d77bf77535a0609d4c07542d75bbc949538fa39",
+      "real_executable_sha256": "58118b30f35f1e817cd500fc0047ee3e0b334975a3231faf3a46b3a5728c5c10",
+      "compile_log_sha256": "c605acfa8f5326f4b19ff1a9d40fbc0c9114380d133713936fba8fa63362b176",
+      "compile_log_contains": "A module_initialize_real.F preprocessing/compile command labeled mpiifort, module_initialize_real.o link argument for real.exe, and compiler flags.",
+      "binding_gap": "Files are co-located with the pinned executable and the log contains the relevant command sequence, but no hash-indexed build receipt ties the retained .F, generated .f90, object, Registry, and executable into one build. The log's recorded 2025 build completion predates the retained 2026 source/object/executable mtimes. The command label does not establish which compiler backend a wrapper invoked. Treat these as a build reconstruction opportunity, not a completed binding."
+    }
+  },
+  "first_kdm6_call": {
+    "reached_by_provenance": "The exact B1 input is staged into a downstream POLICY_BG run with mp_physics=37 and wrf.exe SHA-256 68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f.",
+    "entry_values_status": "No B1 same-point, same-step capture of QRAIN/QNRAIN at the first KDM6 call was established in this lineage trace. Input values do not by themselves prove values consumed at call entry.",
+    "executed_kdm6_source_binding": "Unresolved for this forecast executable; the PR61/PR83 policy's private KDM6 source SHA is not an executable/source binding for B1."
+  },
+  "other_input_policy_applicability": {
+    "PR61": {
+      "policy_sha256": "20fd53ec626cbb4e192583f99777b5f7f56d580959171c240b804c38873517b3",
+      "source_input_sha256": "397daf0387d522243167f5e48831f7415bea07f00c22e5674ef89f73db1a2c0c",
+      "scope": "Copied PR60 2026-08-16 12 UTC WRF input; one 20-second diagnostic run."
+    },
+    "PR83": {
+      "policy_sha256": "dde8df58f840d2fb11579876450749964ea2a54e36a68856c92bc979f46bae2a",
+      "source_input_sha256": "dce4a2633521639a4195babc461a45427f669dc808cb7b2d99d321b153b77afb",
+      "scope": "Interior same-time research moment-prior construction on a copied 2026-08-16 13:00 UTC native WRF input."
+    },
+    "comparison": "PR61/PR83 input-specific policies are not transferable. However, independent source comparison confirms the PR61 rain PSD parameters and formula match B1\u2019s pinned WRF KDM6 source c4a7d1e9\u2026d5e52b: mur=1, dmr=3, lambda bounds 961\u201335000 m-1, qcrmin=1e-9, internal nrmax=5e7, pidnr=(pi*rhowater/6)*Gamma(5)/Gamma(2), and public NR=QRAIN*lambda^3/pidnr. This supports a possible B1-specific, explicitly declared PSD research prior at the geometric midpoint (lambda=5799.56895 m-1; mean particle mass=6.44203e-8 kg), not an arbitrary Nrmin seed and not a policy transfer. The exact B1 WRF build receipt hashes the compiled KDM6 source/object and wrf.exe, but application remains contingent on first-call density/cap and source-active-cell validation from the actual B1 trace. No initialization or forecast was run."
+  },
+  "remaining_conditions": [
+    "Historical real.exe source-to-binary closure remains unresolved despite the exact black-box metgrid/real output replay.",
+    "Capture B1 baseline KDM6 ENTRY state and actual candidate FIX-executable first ENTRY QRAIN/QNRAIN/DEN after startup; do not substitute initial wrfinput values for runtime entry.",
+    "Pass and hash-bind the candidate-specific actual ENTRY cap/PSD preflight; freeze the policy/input/FIX executable/common boundary/namelist/evaluation plan before the six-hour run."
+  ],
+  "actions": {
+    "wrf_model_source_changed": false,
+    "producer_input_changed": false,
+    "compile_performed": false,
+    "metgrid_and_real_baseline_replay_performed": true,
+    "wrf_forecast_run_performed": false,
+    "prior_input_created": false
+  },
+  "boundary_lineage": {
+    "scope": "Read-only comparison of the exact real-stage boundary output against the boundary staged by POLICY_BG and ORIGINAL_B1_100; variables are present, so value claims use the arrays rather than field absence.",
+    "namelist_time_scopes": {
+      "real_generation": {
+        "start": "2026-08-16_12:00:00",
+        "end": "2026-08-16_15:00:00",
+        "run_hours": 0,
+        "interval_seconds": 10800,
+        "note": "Real namelist effective values; the generated boundary file contains only one Time record."
+      },
+      "policy_bg_forecast": {
+        "start": "2026-08-16_12:00:00",
+        "end": "2026-08-16_13:00:00",
+        "run_hours": 1,
+        "mp_physics": 37
+      },
+      "current_b1_forecast": {
+        "start": "2026-08-16_12:00:00",
+        "end": "2026-08-16_18:00:00",
+        "run_hours": 6,
+        "mp_physics": 37
+      }
+    },
+    "files": {
+      "new_real_output_3h": {
+        "path": "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/native_HYDRO_BACKGROUND_PRECIP/real/wrfbdy_d01",
+        "sha256": "b32cfabe2d634eb553de4b80df4e1a01b7a939feb97f8f36a176366700ac3ce3",
+        "bytes": 26008396,
+        "dimensions": {
+          "Time": 1,
+          "DateStrLen": 19,
+          "south_north": 282,
+          "bottom_top": 39,
+          "bdy_width": 5,
+          "west_east_stag": 235,
+          "south_north_stag": 283,
+          "west_east": 234,
+          "bottom_top_stag": 40
+        },
+        "times": [
+          "2026-08-16_12:00:00"
+        ],
+        "start_date": "2026-08-16_12:00:00",
+        "qrain_qnrain_variables": {
+          "QNRAIN_BTXE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              282
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 54990,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BTXS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              282
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 54990,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BTYE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              234
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 45630,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BTYS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              234
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 45630,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BXE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              282
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 54990,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BXS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              282
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 54990,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BYE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              234
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 45630,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BYS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              234
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 45630,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BTXE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              282
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 54990,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BTXS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              282
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 54990,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BTYE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              234
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 45630,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BTYS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              234
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 45630,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BXE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              282
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 54990,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BXS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              282
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 54990,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BYE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              234
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 45630,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BYS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              1,
+              5,
+              39,
+              234
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 45630,
+            "min": 0.0,
+            "max": 0.0
+          }
+        },
+        "all_qrain_boundary_values_zero": true,
+        "all_qnrain_boundary_values_zero": true
+      },
+      "forecast_policy_bg_boundary": {
+        "path": "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/forecast/run_POLICY_BG/wrfbdy_d01",
+        "sha256": "74102ac2063f17a9007f3352e6e6c2f52629055bdf3f05b4f4d6d77aef835f45",
+        "bytes": 51979816,
+        "dimensions": {
+          "Time": 2,
+          "DateStrLen": 19,
+          "south_north": 282,
+          "bottom_top": 39,
+          "bdy_width": 5,
+          "west_east_stag": 235,
+          "south_north_stag": 283,
+          "west_east": 234,
+          "bottom_top_stag": 40
+        },
+        "times": [
+          "2026-08-16_12:00:00",
+          "2026-08-16_15:00:00"
+        ],
+        "start_date": "2026-08-16_12:00:00",
+        "qrain_qnrain_variables": {
+          "QNRAIN_BTXE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BTXS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BTYE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BTYS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BXE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BXS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BYE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BYS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BTXE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BTXS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BTYE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BTYS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BXE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BXS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BYE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BYS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          }
+        },
+        "all_qrain_boundary_values_zero": true,
+        "all_qnrain_boundary_values_zero": true
+      },
+      "current_b1_boundary": {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100/wrfbdy_d01",
+        "sha256": "74102ac2063f17a9007f3352e6e6c2f52629055bdf3f05b4f4d6d77aef835f45",
+        "bytes": 51979816,
+        "dimensions": {
+          "Time": 2,
+          "DateStrLen": 19,
+          "south_north": 282,
+          "bottom_top": 39,
+          "bdy_width": 5,
+          "west_east_stag": 235,
+          "south_north_stag": 283,
+          "west_east": 234,
+          "bottom_top_stag": 40
+        },
+        "times": [
+          "2026-08-16_12:00:00",
+          "2026-08-16_15:00:00"
+        ],
+        "start_date": "2026-08-16_12:00:00",
+        "qrain_qnrain_variables": {
+          "QNRAIN_BTXE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BTXS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BTYE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BTYS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BXE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BXS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BYE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QNRAIN_BYS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "  kg(-1)",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BTXE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BTXS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BTYE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BTYS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BXE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BXS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "south_north"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              282
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 109980,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BYE": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          },
+          "QRAIN_BYS": {
+            "dimensions": [
+              "Time",
+              "bdy_width",
+              "bottom_top",
+              "west_east"
+            ],
+            "shape": [
+              2,
+              5,
+              39,
+              234
+            ],
+            "units": "kg kg-1",
+            "positive": 0,
+            "zero": 91260,
+            "min": 0.0,
+            "max": 0.0
+          }
+        },
+        "all_qrain_boundary_values_zero": true,
+        "all_qnrain_boundary_values_zero": true
+      }
+    },
+    "interval_interpretation": "Times labels identify interval starts; thisbdytime/nextbdytime confirm 12Z\u219215Z for b32 real output and 12Z\u219215Z plus 15Z\u219218Z for downstream 741 boundary. No end-of-coverage inference is made from Times alone."
+  },
+  "replay_preparation": {
+    "workspace": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime_real",
+    "status": "EXACT_METGRID_REAL_BASELINE_REPLAY_COMPLETED",
+    "plan_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime_real/plan.md",
+    "stage_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime_real/stage_receipt.json",
+    "stage_receipt_sha256": "275233d60d25a9279a82dbefb933b80a3b15e5cf5e40a13a7abe8c8e904a9dfd",
+    "boundary_comparison_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime_real/boundary_comparison.json",
+    "boundary_comparison_sha256": "8f315b98479a835e86e714a7e93d494e32ed19e54a1d46fecc06535de8cd5352",
+    "runtime_preflight_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime_real/env_preflight.txt",
+    "runtime_preflight_sha256": "ac76e2e4550ce4aee31c98266b675256e08c8d83a8c902d632b8d6f93432d92d",
+    "input_staging": "12 metgrid receipt rows representing 11 unique staged files (duplicate LAPS row is producer alias); 93 real-manifest entries (89 non-README + four README); all hashes checked on source and copies.",
+    "launch": "Native and real-team plan review GO; direct metgrid and real execution completed exit 0; no WRF forecast launched.",
+    "plan_sha256": "4a7fc33c5728b6f7d2235866bab81e0967b77bd2e6a8deee6130122da38cd76c",
+    "replay_receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime_real/runlogs/replay_receipt.json",
+    "replay_receipt_sha256": "b74aa5fa66424c564e9a395b60bad9714b45c95b6f2d1650a885a755dcac4ad4",
+    "outputs": {
+      "met_em_12z_sha256": "3a40b3e5363138691863470b379908c9b3a89c682e0662cd8c43fca5d766852e",
+      "wrfinput_d01_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+      "wrfbdy_d01_sha256": "b32cfabe2d634eb553de4b80df4e1a01b7a939feb97f8f36a176366700ac3ce3",
+      "wrfbdy_exact_retained_real_match": true
+    },
+    "metgrid_rows_unique_files": 11,
+    "metgrid_manifest_rows": 12
+  },
+  "rain_psd_candidate": {
+    "status": "SOURCE_COMPATIBLE_RESEARCH_PRIOR_ONLY_PENDING_CANDIDATE_FIRST_ENTRY_VALIDATION",
+    "B1_WRF_EXE_SHA256": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+    "build_receipt": "/var/tmp/firsthour-runtime-plan-20261030/experiment/build_receipt.json",
+    "build_receipt_SHA256": "50fb6bf97114cccbb170404b927aa54fc0fa83c72f64f23d2c3c107472c1afc7",
+    "compiled_kdm6_preprocessed_sha256": "0b468be19f7dd66ad2f6e65a53b42f10391a4565831a96c80dddddf21934cf79",
+    "compiled_kdm6_object_sha256": "f04e113df954b01cf7f09ea50240d5e7550a725367a42702eea658df9a39cfcc",
+    "source_parameters": {
+      "mur": 1.0,
+      "dmr": 3.0,
+      "lambda_min_m-1": 961.0,
+      "lambda_max_m-1": 35000.0,
+      "qcrmin_kg_kg-1": 1e-09,
+      "nrmax_internal_m-3": 50000000.0,
+      "nrmin_internal_m-3": 0.01,
+      "rho_water_kg_m-3": 1000.0
+    },
+    "source_formula": "FIX candidate KDM6 uses lambda^3=(pidnr*nrs)/(qrs*DEN); driver passes nrs=public_QNRAIN*DEN and qrs=public_QRAIN, so same-frame DEN cancels algebraically. Registry labels QNRAIN kg(-1); no external dry-air basis is asserted.",
+    "candidate_assumption": "For eligible QRAIN>qcrmin cells with exactly zero QNRAIN, set NR=QRAIN*lambda_center^3/pidnr, where lambda_center=sqrt(lambda_min*lambda_max)=5799.5689495 m-1. Preserve QRAIN,QVAPOR,T and all other fields. Keep values below nrmin if they occur; do not add an Nrmin floor or relax bounds.",
+    "center_lambda_m-1": 5799.5689494996095,
+    "mean_particle_mass_kg": 6.442029599975884e-08,
+    "density_cap_gate": "Baseline entry DEN is only a planning proxy for candidate input Nr. Do not require baseline ENTRY QRAIN/QNRAIN to equal initial fields. Candidate first-ENTRY must be separately captured after startup; validate actual finite QRAIN/QNRAIN/DEN, source nrmax cap, and report source qcrmin/nrmin/slope-floor behavior and reconstructed lambda deviations.",
+    "scope": "Separate short candidate FIX-executable first-entry validation, then frozen six-hour 12Z-18Z candidate forecast only after actual candidate-entry cap/PSD preflight PASS. Six-hour evaluation is not yet performed.",
+    "initialization_conditions": "Use bound input QRAIN>qcrmin and exactly-zero initial QNRAIN only at active coordinates called by the baseline first-KDM6 trace; preserve all other input fields.",
+    "one_run_scope": "A two-hour diagnostic only after actual candidate first-entry PSD/cap preflight and frozen evaluation plan; cannot imply six-hour performance.",
+    "policy_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/Cloud-BAL/docs/evidence/cp02_state_path_20261104/lineage/B1_RAIN_PSD_PRIOR_POLICY_20261104.json",
+    "policy_sha256": "78ea65547238229c280fe09a0ad03084ca173bfeb4342419bab6eea2cbb5f3da",
+    "baseline_WRF_EXE_SHA256": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+    "candidate_FIX_WRF_EXE_SHA256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+    "candidate_FIX_KDM6_preprocessed_sha256": "0b468be19f7dd66ad2f6e65a53b42f10391a4565831a96c80dddddf21934cf79",
+    "candidate_FIX_KDM6_object_sha256": "f04e113df954b01cf7f09ea50240d5e7550a725367a42702eea658df9a39cfcc"
+  },
+  "candidate_runtime_state": {
+    "input_created": false,
+    "candidate_forecast_launched": false,
+    "candidate_preflight_status": "WAITING_FOR_BASELINE_FIRST_ENTRY_CAPTURE_AND_CANDIDATE_SHORT_ENTRY_RUN",
+    "case_id": "B1_RAIN_NUMBER_PRIOR",
+    "display_name": "B1 \ube44 \uc785\uc790\uc218 \uc0ac\uc804\ubd84\ud3ec \ud6c4\ubcf4",
+    "evaluation_plan": "Root will bind policy, initializer receipt, actual candidate preflight, 7 histories and fixed score constraints before any six-hour candidate forecast."
+  }
+}

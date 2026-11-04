@@ -1,0 +1,102 @@
+{
+  "inputs": [
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/evaluation_plan.json",
+      "sha256": "073a2805e1ff4e184fbfb67aa1d8f61899d8decbd8c4bc0c7e701a1aa6a7d964",
+      "size_bytes": 2438
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/runtime_evaluation_gate.json",
+      "sha256": "3162d8c176608c382abd0f2e3ac24138743993c46312df6b772d97771a5434ce",
+      "size_bytes": 2114
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/receipt.json",
+      "sha256": "282eace0d651db6f9dda21657b04bd0c032c84588e3d9a09281d61f0eb517286",
+      "size_bytes": 11954
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/categorical_scores.csv",
+      "sha256": "20f42c44bf8805e26369dad7b83946f49ec49fa5b97a76d82da174d4923ed3be",
+      "size_bytes": 6420
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/continuous_scores.csv",
+      "sha256": "cf055dd183b9613e9a328680fca281289a385730deb990f7a519fcd8bd8c49dc",
+      "size_bytes": 1034
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/admission_constraints.csv",
+      "sha256": "2847e8c14ae9334ff1ecad15079f9ad27b750875573f0a3adc123fe4a28cf314",
+      "size_bytes": 2470
+    },
+    {
+      "path": "tools/cp02_rain_number_evaluation.py",
+      "sha256": "426fad4aa6fccf71c35bafb7a9b006fa59fb4b3ea05bd5baec49d41cf6a546cf",
+      "size_bytes": 10031
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_13_arrays.npz",
+      "sha256": "2938a3da2d07dd735ff127fa0b9d56601394a38259efe7e0a2adf6a0f6cd14fa",
+      "size_bytes": 101845
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_14_arrays.npz",
+      "sha256": "e0471f78381bc566157cc4498fa6253969833ddc8b4d2766381137be785b3736",
+      "size_bytes": 102613
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_15_arrays.npz",
+      "sha256": "50211ca4d6f86fade72959cf33c6f940f08f24efe36a880c4c8442587101dca1",
+      "size_bytes": 110815
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_16_arrays.npz",
+      "sha256": "22703532513390758665973627c56fd1d7ef5159b765c358307ad8b1de3174a2",
+      "size_bytes": 111190
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_17_arrays.npz",
+      "sha256": "5286e04e47c562c6257693b23627f3a917e564b342d828307863be2a39194a7e",
+      "size_bytes": 108065
+    },
+    {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/analysis/hour_18_arrays.npz",
+      "sha256": "554458020d7753bce7a10f44c0e41eff49644b8a9a04528273055d7daa325336",
+      "size_bytes": 111790
+    }
+  ],
+  "method": "standalone Python point-loop recount with exact Fraction comparisons",
+  "outputs": {
+    "categorical_recount.csv": {
+      "sha256": "20f42c44bf8805e26369dad7b83946f49ec49fa5b97a76d82da174d4923ed3be",
+      "size_bytes": 6420
+    },
+    "cohort_plus2_recount.csv": {
+      "sha256": "f374dd5c9bc455aa92060ecde0323cd93d25eb5c0708eb9fb8cf675ad3f986ef",
+      "size_bytes": 739
+    },
+    "constraints_recount.csv": {
+      "sha256": "4b1edeed913ff82af9c17b0186aa2d9187f8530af7257aac7c870f53eda80bb7",
+      "size_bytes": 2607
+    },
+    "continuous_recount.csv": {
+      "sha256": "55768cce5fe149308de17885e13155c92cce24c3bbfeb64cd9a9c98b1c6eaed2",
+      "size_bytes": 1035
+    },
+    "observed_band_detection_cut_0p1.csv": {
+      "sha256": "d349f7061d7f0dd25c93b5afb1dd687cf3d922b7bc7eb363667445e4c52a2918",
+      "size_bytes": 993
+    },
+    "recount_summary.json": {
+      "sha256": "c0eeb7590b2f83f78d54a795075b3079313b5ec412a54222fc118cbc62bddbb0",
+      "size_bytes": 4357
+    }
+  },
+  "script": {
+    "path": "docs/evidence/cp02_state_path_20261104/candidate/review/recount_b1_rain_number.py",
+    "sha256": "4b31fd9e6f3138c8b67000e2537922c653454f40b967805bbcdd08aa632f8c2c",
+    "size_bytes": 15636
+  },
+  "status": "PASS"
+}

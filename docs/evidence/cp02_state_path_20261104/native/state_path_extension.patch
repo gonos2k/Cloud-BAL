@@ -1,0 +1,706 @@
+--- a/BASE/module_mp_kdm6.f90
++++ b/BASE/module_mp_kdm6.f90
+@@ -187,23 +187,70 @@
+       implicit none
+       integer, intent(in) :: trace_i, trace_j
+       found = .false.
++      if (trace_i == 129 .and. trace_j == 107) found = .true.
++      if (trace_i == 129 .and. trace_j == 108) found = .true.
++      if (trace_i == 130 .and. trace_j == 105) found = .true.
++      if (trace_i == 130 .and. trace_j == 106) found = .true.
++      if (trace_i == 130 .and. trace_j == 107) found = .true.
++      if (trace_i == 130 .and. trace_j == 108) found = .true.
++      if (trace_i == 131 .and. trace_j == 86) found = .true.
++      if (trace_i == 131 .and. trace_j == 87) found = .true.
++      if (trace_i == 131 .and. trace_j == 105) found = .true.
++      if (trace_i == 131 .and. trace_j == 106) found = .true.
++      if (trace_i == 132 .and. trace_j == 86) found = .true.
++      if (trace_i == 132 .and. trace_j == 87) found = .true.
+       if (trace_i == 140 .and. trace_j == 79) found = .true.
++      if (trace_i == 140 .and. trace_j == 80) found = .true.
+       if (trace_i == 141 .and. trace_j == 79) found = .true.
+-      if (trace_i == 140 .and. trace_j == 80) found = .true.
+       if (trace_i == 141 .and. trace_j == 80) found = .true.
+-      if (trace_i == 131 .and. trace_j == 86) found = .true.
+-      if (trace_i == 132 .and. trace_j == 86) found = .true.
+-      if (trace_i == 131 .and. trace_j == 87) found = .true.
+-      if (trace_i == 132 .and. trace_j == 87) found = .true.
+       if (trace_i == 142 .and. trace_j == 78) found = .true.
++      if (trace_i == 142 .and. trace_j == 79) found = .true.
+       if (trace_i == 143 .and. trace_j == 78) found = .true.
+-      if (trace_i == 142 .and. trace_j == 79) found = .true.
+       if (trace_i == 143 .and. trace_j == 79) found = .true.
++      if (trace_i == 148 .and. trace_j == 81) found = .true.
++      if (trace_i == 148 .and. trace_j == 82) found = .true.
++      if (trace_i == 149 .and. trace_j == 81) found = .true.
++      if (trace_i == 149 .and. trace_j == 82) found = .true.
+       if (trace_i == 161 .and. trace_j == 80) found = .true.
++      if (trace_i == 161 .and. trace_j == 81) found = .true.
+       if (trace_i == 162 .and. trace_j == 80) found = .true.
+-      if (trace_i == 161 .and. trace_j == 81) found = .true.
+       if (trace_i == 162 .and. trace_j == 81) found = .true.
++      if (trace_i == 162 .and. trace_j == 87) found = .true.
++      if (trace_i == 162 .and. trace_j == 88) found = .true.
++      if (trace_i == 163 .and. trace_j == 87) found = .true.
++      if (trace_i == 163 .and. trace_j == 88) found = .true.
+    end function cloud_bal_trace_cell
++
++   subroutine cloud_bal_state_open(unit, stage, stage_id, rank, call_id, timestep, &
++                                   ilo, ihi, jlo, jhi, klo, khi, nfields, nrecords)
++      implicit none
++      integer, intent(out) :: unit
++      character(len=*), intent(in) :: stage
++      integer, intent(in) :: stage_id, rank, call_id, timestep
++      integer, intent(in) :: ilo, ihi, jlo, jhi, klo, khi, nfields, nrecords
++      character(len=16) :: rank_text
++      character(len=96) :: filename
++      write(rank_text,'(i0)') rank
++      filename = 'state_'//trim(stage)//'_rank'//trim(rank_text)//'.bin'
++      open(newunit=unit,file=trim(filename),status='unknown',position='append', &
++           access='stream',form='unformatted',action='write')
++      write(unit) 'CBSP0001', stage_id, rank, call_id, timestep, &
++                  ilo, ihi, jlo, jhi, klo, khi, 1, 1, 1, nfields, nrecords
++   end subroutine cloud_bal_state_open
++
++   subroutine cloud_bal_state_row(unit, values)
++      implicit none
++      integer, intent(in) :: unit
++      real, intent(in) :: values(:)
++      write(unit) values
++   end subroutine cloud_bal_state_row
++
++   subroutine cloud_bal_state_keyed_row(unit, i, j, k, values)
++      implicit none
++      integer, intent(in) :: unit, i, j, k
++      real, intent(in) :: values(:)
++      write(unit) i, j, k, values
++   end subroutine cloud_bal_state_keyed_row
+ 
+     subroutine kdm6(th, q, qc, qr, qi, qs, qg,             &
+                     nn, nc, ni, nr, bg, diag_rhog,         &
+@@ -303,6 +350,11 @@
+    integer                            :: i,j,k
+    integer                            :: cloud_bal_trace_rank, cloud_bal_trace_call_id
+    integer                            :: cloud_bal_trace_unit
++   integer                            :: cloud_bal_state_unit, cloud_bal_call_unit
++   integer                            :: cloud_bal_state_i
++   integer                            :: cloud_bal_state_j, cloud_bal_state_k
++   integer                            :: cloud_bal_state_records
++   real, dimension(16)                 :: cloud_bal_state_values
+    character(len=16)                  :: cloud_bal_trace_rank_text
+    character(len=64)                  :: cloud_bal_trace_file
+    real, dimension(its:ite,kts:kte) :: brs
+@@ -334,6 +386,86 @@
+    cloud_bal_trace_call_id = cloud_bal_trace_next_call
+    write(cloud_bal_trace_rank_text,'(i0)') cloud_bal_trace_rank
+    cloud_bal_trace_file = 'kdm6_trace_rank'//trim(cloud_bal_trace_rank_text)//'.bits'
++
++   if (itimestep >= 1 .and. itimestep <= 360) then
++     open(newunit=cloud_bal_call_unit, &
++          file='state_calls_rank'//trim(cloud_bal_trace_rank_text)//'.txt', &
++          status='unknown',position='append',action='write')
++     write(cloud_bal_call_unit,'(21(i0,1x))') itimestep, cloud_bal_trace_rank, &
++          cloud_bal_trace_call_id, ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme, &
++          its,ite,jts,jte,kts,kte
++     close(cloud_bal_call_unit)
++   endif
++
++   if (itimestep >= 1 .and. itimestep <= 360) then
++     cloud_bal_state_records = 0
++     do cloud_bal_state_j = max(jts,jds),min(jte,jde-1)
++       do cloud_bal_state_i = max(its,ids),min(ite,ide-1)
++         if (cloud_bal_trace_cell(cloud_bal_state_i,cloud_bal_state_j)) &
++           cloud_bal_state_records = cloud_bal_state_records + kte-kts+1
++       enddo
++     enddo
++     call cloud_bal_state_open(cloud_bal_state_unit,'selected_entry',6,cloud_bal_trace_rank, &
++          cloud_bal_trace_call_id,itimestep,max(its,ids),min(ite,ide-1), &
++          max(jts,jds),min(jte,jde-1),kts,kte,14,cloud_bal_state_records)
++     do cloud_bal_state_j = max(jts,jds),min(jte,jde-1)
++       do cloud_bal_state_k = kts,kte
++         do cloud_bal_state_i = max(its,ids),min(ite,ide-1)
++           if (cloud_bal_trace_cell(cloud_bal_state_i,cloud_bal_state_j)) then
++             cloud_bal_state_values(1:14) = (/ th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               q(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qi(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qs(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               nn(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               nc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               ni(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               nr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               bg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               den(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j)* &
++                 pii(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j) /)
++             call cloud_bal_state_keyed_row(cloud_bal_state_unit,cloud_bal_state_i, &
++                  cloud_bal_state_j,cloud_bal_state_k,cloud_bal_state_values(1:14))
++           endif
++         enddo
++       enddo
++     enddo
++     close(cloud_bal_state_unit)
++   endif
++
++   if (itimestep == 1) then
++     call cloud_bal_state_open(cloud_bal_state_unit,'entry',1,cloud_bal_trace_rank, &
++          cloud_bal_trace_call_id,itimestep,max(its,ids),min(ite,ide-1), &
++          max(jts,jds),min(jte,jde-1),kts,kte,14, &
++          max(0,min(ite,ide-1)-max(its,ids)+1)* &
++          max(0,min(jte,jde-1)-max(jts,jds)+1)*(kte-kts+1))
++     do cloud_bal_state_j = max(jts,jds),min(jte,jde-1)
++       do cloud_bal_state_k = kts,kte
++         do cloud_bal_state_i = max(its,ids),min(ite,ide-1)
++           cloud_bal_state_values(1:14) = (/ th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             q(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qi(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qs(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             nn(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             nc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             ni(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             nr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             bg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             den(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j)* &
++               pii(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j) /)
++           call cloud_bal_state_row(cloud_bal_state_unit,cloud_bal_state_values(1:14))
++         enddo
++       enddo
++     enddo
++     close(cloud_bal_state_unit)
++   endif
+ 
+    do j = jts,jte
+      do k = kts,kte
+@@ -399,9 +531,30 @@
+        enddo
+      endif
+ 
++     if (itimestep == 1) then
++       call cloud_bal_state_open(cloud_bal_state_unit,'kdm62d_return',4,cloud_bal_trace_rank, &
++            cloud_bal_trace_call_id,itimestep,its,ite,j,j,kts,kte,15, &
++            (ite-its+1)*(kte-kts+1))
++       do cloud_bal_state_k = kts,kte
++         do cloud_bal_state_i = its,ite
++           cloud_bal_state_values(1:15) = (/ q(cloud_bal_state_i,cloud_bal_state_k,j), &
++             t(cloud_bal_state_i,cloud_bal_state_k), den(cloud_bal_state_i,cloud_bal_state_k,j), &
++             qci(cloud_bal_state_i,cloud_bal_state_k,1), qci(cloud_bal_state_i,cloud_bal_state_k,2), &
++             qrs(cloud_bal_state_i,cloud_bal_state_k,1), qrs(cloud_bal_state_i,cloud_bal_state_k,2), &
++             qrs(cloud_bal_state_i,cloud_bal_state_k,3), nci(cloud_bal_state_i,cloud_bal_state_k,1), &
++             nci(cloud_bal_state_i,cloud_bal_state_k,2), nci(cloud_bal_state_i,cloud_bal_state_k,3), &
++             nrs(cloud_bal_state_i,cloud_bal_state_k,1), nrs(cloud_bal_state_i,cloud_bal_state_k,2), &
++             nrs(cloud_bal_state_i,cloud_bal_state_k,3), brs(cloud_bal_state_i,cloud_bal_state_k) /)
++           call cloud_bal_state_row(cloud_bal_state_unit,cloud_bal_state_values(1:15))
++         enddo
++       enddo
++       close(cloud_bal_state_unit)
++     endif
++
+      do k = kts,kte
+        do i = its,ite
+          th(i,k,j) = t(i,k)/pii(i,k,j)
++
+          qc(i,k,j) = qci(i,k,1)
+          qi(i,k,j) = qci(i,k,2)
+          qr(i,k,j) = qrs(i,k,1)
+@@ -471,6 +624,76 @@
+        enddo
+      endif
+    enddo        
++
++   if (itimestep >= 1 .and. itimestep <= 360) then
++     cloud_bal_state_records = 0
++     do cloud_bal_state_j = max(jts,jds),min(jte,jde-1)
++       do cloud_bal_state_i = max(its,ids),min(ite,ide-1)
++         if (cloud_bal_trace_cell(cloud_bal_state_i,cloud_bal_state_j)) &
++           cloud_bal_state_records = cloud_bal_state_records + kte-kts+1
++       enddo
++     enddo
++     call cloud_bal_state_open(cloud_bal_state_unit,'selected_return',7,cloud_bal_trace_rank, &
++          cloud_bal_trace_call_id,itimestep,max(its,ids),min(ite,ide-1), &
++          max(jts,jds),min(jte,jde-1),kts,kte,14,cloud_bal_state_records)
++     do cloud_bal_state_j = max(jts,jds),min(jte,jde-1)
++       do cloud_bal_state_k = kts,kte
++         do cloud_bal_state_i = max(its,ids),min(ite,ide-1)
++           if (cloud_bal_trace_cell(cloud_bal_state_i,cloud_bal_state_j)) then
++             cloud_bal_state_values(1:14) = (/ th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               q(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qi(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qs(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               nn(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               nc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               ni(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               nr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               bg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               den(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j)* &
++                 pii(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j) /)
++             call cloud_bal_state_keyed_row(cloud_bal_state_unit,cloud_bal_state_i, &
++                  cloud_bal_state_j,cloud_bal_state_k,cloud_bal_state_values(1:14))
++           endif
++         enddo
++       enddo
++     enddo
++     close(cloud_bal_state_unit)
++   endif
++
++   if (itimestep == 1) then
++     call cloud_bal_state_open(cloud_bal_state_unit,'wrapper_return',5,cloud_bal_trace_rank, &
++          cloud_bal_trace_call_id,itimestep,max(its,ids),min(ite,ide-1), &
++          max(jts,jds),min(jte,jde-1),kts,kte,14, &
++          max(0,min(ite,ide-1)-max(its,ids)+1)* &
++          max(0,min(jte,jde-1)-max(jts,jds)+1)*(kte-kts+1))
++     do cloud_bal_state_j = max(jts,jds),min(jte,jde-1)
++       do cloud_bal_state_k = kts,kte
++         do cloud_bal_state_i = max(its,ids),min(ite,ide-1)
++           cloud_bal_state_values(1:14) = (/ th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             q(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qi(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qs(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             nn(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             nc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             ni(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             nr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             bg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             den(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j)* &
++               pii(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j) /)
++           call cloud_bal_state_row(cloud_bal_state_unit,cloud_bal_state_values(1:14))
++         enddo
++       enddo
++     enddo
++     close(cloud_bal_state_unit)
++   endif
+ 
+    end subroutine kdm6
+ 
+@@ -694,6 +917,9 @@
+    integer                            :: kte_in
+    integer                            :: diagnostic_trace_unit, diagnostic_i
+    integer                            :: diagnostic_trace_active
++   integer                            :: cloud_bal_pre_unit, cloud_bal_process_unit
++   integer                            :: cloud_bal_state_i, cloud_bal_state_k
++   real, dimension(15)                 :: cloud_bal_state_values
+    character(len=16)                  :: diagnostic_rank_text
+    character(len=64)                  :: diagnostic_trace_file
+ 
+@@ -891,7 +1117,32 @@
+ 
+    do loop = 1,loops
+ 
+-
++     if (diagnostic_itimestep == 1 .and. loop == 1) then
++       call cloud_bal_state_open(cloud_bal_process_unit,'post_process',3,diagnostic_rank, &
++            diagnostic_call_id,diagnostic_itimestep,its,ite,lat,lat,kts,kte,15, &
++            (ite-its+1)*(kte-kts+1))
++     endif
++
++
++     if (diagnostic_itimestep == 1 .and. loop == 1) then
++       call cloud_bal_state_open(cloud_bal_pre_unit,'pre_update',2,diagnostic_rank, &
++            diagnostic_call_id,diagnostic_itimestep,its,ite,lat,lat,kts,kte,15, &
++            (ite-its+1)*(kte-kts+1))
++       do cloud_bal_state_k = kts,kte
++         do cloud_bal_state_i = its,ite
++           cloud_bal_state_values(1:15) = (/ q(cloud_bal_state_i,cloud_bal_state_k), &
++             t(cloud_bal_state_i,cloud_bal_state_k), den(cloud_bal_state_i,cloud_bal_state_k), &
++             qci(cloud_bal_state_i,cloud_bal_state_k,1), qci(cloud_bal_state_i,cloud_bal_state_k,2), &
++             qrs(cloud_bal_state_i,cloud_bal_state_k,1), qrs(cloud_bal_state_i,cloud_bal_state_k,2), &
++             qrs(cloud_bal_state_i,cloud_bal_state_k,3), nci(cloud_bal_state_i,cloud_bal_state_k,1), &
++             nci(cloud_bal_state_i,cloud_bal_state_k,2), nci(cloud_bal_state_i,cloud_bal_state_k,3), &
++             nrs(cloud_bal_state_i,cloud_bal_state_k,1), nrs(cloud_bal_state_i,cloud_bal_state_k,2), &
++             nrs(cloud_bal_state_i,cloud_bal_state_k,3), brs(cloud_bal_state_i,cloud_bal_state_k) /)
++           call cloud_bal_state_row(cloud_bal_pre_unit,cloud_bal_state_values(1:15))
++         enddo
++       enddo
++       close(cloud_bal_pre_unit)
++     endif
+ 
+      do i = its,ite
+        mstep(i) = 1
+@@ -2851,6 +3102,12 @@
+                 transfer(xl(i,k),0), transfer(xlf,0)
+             t(i,k) = t(i,k)-xlwork2/cpm(i,k)*dtcld
+           endif
++          if (diagnostic_itimestep == 1 .and. loop == 1) then
++            cloud_bal_state_values(1:15) = (/ q(i,k), t(i,k), den(i,k), qci(i,k,1), qci(i,k,2), &
++              qrs(i,k,1), qrs(i,k,2), qrs(i,k,3), nci(i,k,1), nci(i,k,2), nci(i,k,3), &
++              nrs(i,k,1), nrs(i,k,2), nrs(i,k,3), brs(i,k) /)
++            call cloud_bal_state_row(cloud_bal_process_unit,cloud_bal_state_values(1:15))
++          endif
+           if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
+             write(diagnostic_trace_unit,*) 'POST_STEP', diagnostic_rank, diagnostic_call_id, &
+               diagnostic_itimestep, loop, lat, i, k, transfer(q(i,k),0), transfer(t(i,k),0), &
+@@ -3122,6 +3379,8 @@
+    enddo                  
+ 
+    if (diagnostic_trace_active == 1) close(diagnostic_trace_unit)
++
++   if (diagnostic_itimestep == 1 .and. loops >= 1) close(cloud_bal_process_unit)
+ 
+    end subroutine kdm62d
+ 
+--- a/FIX/module_mp_kdm6.f90
++++ b/FIX/module_mp_kdm6.f90
+@@ -187,23 +187,70 @@
+       implicit none
+       integer, intent(in) :: trace_i, trace_j
+       found = .false.
++      if (trace_i == 129 .and. trace_j == 107) found = .true.
++      if (trace_i == 129 .and. trace_j == 108) found = .true.
++      if (trace_i == 130 .and. trace_j == 105) found = .true.
++      if (trace_i == 130 .and. trace_j == 106) found = .true.
++      if (trace_i == 130 .and. trace_j == 107) found = .true.
++      if (trace_i == 130 .and. trace_j == 108) found = .true.
++      if (trace_i == 131 .and. trace_j == 86) found = .true.
++      if (trace_i == 131 .and. trace_j == 87) found = .true.
++      if (trace_i == 131 .and. trace_j == 105) found = .true.
++      if (trace_i == 131 .and. trace_j == 106) found = .true.
++      if (trace_i == 132 .and. trace_j == 86) found = .true.
++      if (trace_i == 132 .and. trace_j == 87) found = .true.
+       if (trace_i == 140 .and. trace_j == 79) found = .true.
++      if (trace_i == 140 .and. trace_j == 80) found = .true.
+       if (trace_i == 141 .and. trace_j == 79) found = .true.
+-      if (trace_i == 140 .and. trace_j == 80) found = .true.
+       if (trace_i == 141 .and. trace_j == 80) found = .true.
+-      if (trace_i == 131 .and. trace_j == 86) found = .true.
+-      if (trace_i == 132 .and. trace_j == 86) found = .true.
+-      if (trace_i == 131 .and. trace_j == 87) found = .true.
+-      if (trace_i == 132 .and. trace_j == 87) found = .true.
+       if (trace_i == 142 .and. trace_j == 78) found = .true.
++      if (trace_i == 142 .and. trace_j == 79) found = .true.
+       if (trace_i == 143 .and. trace_j == 78) found = .true.
+-      if (trace_i == 142 .and. trace_j == 79) found = .true.
+       if (trace_i == 143 .and. trace_j == 79) found = .true.
++      if (trace_i == 148 .and. trace_j == 81) found = .true.
++      if (trace_i == 148 .and. trace_j == 82) found = .true.
++      if (trace_i == 149 .and. trace_j == 81) found = .true.
++      if (trace_i == 149 .and. trace_j == 82) found = .true.
+       if (trace_i == 161 .and. trace_j == 80) found = .true.
++      if (trace_i == 161 .and. trace_j == 81) found = .true.
+       if (trace_i == 162 .and. trace_j == 80) found = .true.
+-      if (trace_i == 161 .and. trace_j == 81) found = .true.
+       if (trace_i == 162 .and. trace_j == 81) found = .true.
++      if (trace_i == 162 .and. trace_j == 87) found = .true.
++      if (trace_i == 162 .and. trace_j == 88) found = .true.
++      if (trace_i == 163 .and. trace_j == 87) found = .true.
++      if (trace_i == 163 .and. trace_j == 88) found = .true.
+    end function cloud_bal_trace_cell
++
++   subroutine cloud_bal_state_open(unit, stage, stage_id, rank, call_id, timestep, &
++                                   ilo, ihi, jlo, jhi, klo, khi, nfields, nrecords)
++      implicit none
++      integer, intent(out) :: unit
++      character(len=*), intent(in) :: stage
++      integer, intent(in) :: stage_id, rank, call_id, timestep
++      integer, intent(in) :: ilo, ihi, jlo, jhi, klo, khi, nfields, nrecords
++      character(len=16) :: rank_text
++      character(len=96) :: filename
++      write(rank_text,'(i0)') rank
++      filename = 'state_'//trim(stage)//'_rank'//trim(rank_text)//'.bin'
++      open(newunit=unit,file=trim(filename),status='unknown',position='append', &
++           access='stream',form='unformatted',action='write')
++      write(unit) 'CBSP0001', stage_id, rank, call_id, timestep, &
++                  ilo, ihi, jlo, jhi, klo, khi, 1, 1, 1, nfields, nrecords
++   end subroutine cloud_bal_state_open
++
++   subroutine cloud_bal_state_row(unit, values)
++      implicit none
++      integer, intent(in) :: unit
++      real, intent(in) :: values(:)
++      write(unit) values
++   end subroutine cloud_bal_state_row
++
++   subroutine cloud_bal_state_keyed_row(unit, i, j, k, values)
++      implicit none
++      integer, intent(in) :: unit, i, j, k
++      real, intent(in) :: values(:)
++      write(unit) i, j, k, values
++   end subroutine cloud_bal_state_keyed_row
+ 
+     subroutine kdm6(th, q, qc, qr, qi, qs, qg,             &
+                     nn, nc, ni, nr, bg, diag_rhog,         &
+@@ -303,6 +350,11 @@
+    integer                            :: i,j,k
+    integer                            :: cloud_bal_trace_rank, cloud_bal_trace_call_id
+    integer                            :: cloud_bal_trace_unit
++   integer                            :: cloud_bal_state_unit, cloud_bal_call_unit
++   integer                            :: cloud_bal_state_i
++   integer                            :: cloud_bal_state_j, cloud_bal_state_k
++   integer                            :: cloud_bal_state_records
++   real, dimension(16)                 :: cloud_bal_state_values
+    character(len=16)                  :: cloud_bal_trace_rank_text
+    character(len=64)                  :: cloud_bal_trace_file
+    real, dimension(its:ite,kts:kte) :: brs
+@@ -334,6 +386,86 @@
+    cloud_bal_trace_call_id = cloud_bal_trace_next_call
+    write(cloud_bal_trace_rank_text,'(i0)') cloud_bal_trace_rank
+    cloud_bal_trace_file = 'kdm6_trace_rank'//trim(cloud_bal_trace_rank_text)//'.bits'
++
++   if (itimestep >= 1 .and. itimestep <= 360) then
++     open(newunit=cloud_bal_call_unit, &
++          file='state_calls_rank'//trim(cloud_bal_trace_rank_text)//'.txt', &
++          status='unknown',position='append',action='write')
++     write(cloud_bal_call_unit,'(21(i0,1x))') itimestep, cloud_bal_trace_rank, &
++          cloud_bal_trace_call_id, ids,ide,jds,jde,kds,kde,ims,ime,jms,jme,kms,kme, &
++          its,ite,jts,jte,kts,kte
++     close(cloud_bal_call_unit)
++   endif
++
++   if (itimestep >= 1 .and. itimestep <= 360) then
++     cloud_bal_state_records = 0
++     do cloud_bal_state_j = max(jts,jds),min(jte,jde-1)
++       do cloud_bal_state_i = max(its,ids),min(ite,ide-1)
++         if (cloud_bal_trace_cell(cloud_bal_state_i,cloud_bal_state_j)) &
++           cloud_bal_state_records = cloud_bal_state_records + kte-kts+1
++       enddo
++     enddo
++     call cloud_bal_state_open(cloud_bal_state_unit,'selected_entry',6,cloud_bal_trace_rank, &
++          cloud_bal_trace_call_id,itimestep,max(its,ids),min(ite,ide-1), &
++          max(jts,jds),min(jte,jde-1),kts,kte,14,cloud_bal_state_records)
++     do cloud_bal_state_j = max(jts,jds),min(jte,jde-1)
++       do cloud_bal_state_k = kts,kte
++         do cloud_bal_state_i = max(its,ids),min(ite,ide-1)
++           if (cloud_bal_trace_cell(cloud_bal_state_i,cloud_bal_state_j)) then
++             cloud_bal_state_values(1:14) = (/ th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               q(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qi(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qs(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               nn(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               nc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               ni(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               nr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               bg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               den(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j)* &
++                 pii(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j) /)
++             call cloud_bal_state_keyed_row(cloud_bal_state_unit,cloud_bal_state_i, &
++                  cloud_bal_state_j,cloud_bal_state_k,cloud_bal_state_values(1:14))
++           endif
++         enddo
++       enddo
++     enddo
++     close(cloud_bal_state_unit)
++   endif
++
++   if (itimestep == 1) then
++     call cloud_bal_state_open(cloud_bal_state_unit,'entry',1,cloud_bal_trace_rank, &
++          cloud_bal_trace_call_id,itimestep,max(its,ids),min(ite,ide-1), &
++          max(jts,jds),min(jte,jde-1),kts,kte,14, &
++          max(0,min(ite,ide-1)-max(its,ids)+1)* &
++          max(0,min(jte,jde-1)-max(jts,jds)+1)*(kte-kts+1))
++     do cloud_bal_state_j = max(jts,jds),min(jte,jde-1)
++       do cloud_bal_state_k = kts,kte
++         do cloud_bal_state_i = max(its,ids),min(ite,ide-1)
++           cloud_bal_state_values(1:14) = (/ th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             q(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qi(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qs(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             nn(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             nc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             ni(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             nr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             bg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             den(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j)* &
++               pii(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j) /)
++           call cloud_bal_state_row(cloud_bal_state_unit,cloud_bal_state_values(1:14))
++         enddo
++       enddo
++     enddo
++     close(cloud_bal_state_unit)
++   endif
+ 
+    do j = jts,jte
+      do k = kts,kte
+@@ -399,9 +531,30 @@
+        enddo
+      endif
+ 
++     if (itimestep == 1) then
++       call cloud_bal_state_open(cloud_bal_state_unit,'kdm62d_return',4,cloud_bal_trace_rank, &
++            cloud_bal_trace_call_id,itimestep,its,ite,j,j,kts,kte,15, &
++            (ite-its+1)*(kte-kts+1))
++       do cloud_bal_state_k = kts,kte
++         do cloud_bal_state_i = its,ite
++           cloud_bal_state_values(1:15) = (/ q(cloud_bal_state_i,cloud_bal_state_k,j), &
++             t(cloud_bal_state_i,cloud_bal_state_k), den(cloud_bal_state_i,cloud_bal_state_k,j), &
++             qci(cloud_bal_state_i,cloud_bal_state_k,1), qci(cloud_bal_state_i,cloud_bal_state_k,2), &
++             qrs(cloud_bal_state_i,cloud_bal_state_k,1), qrs(cloud_bal_state_i,cloud_bal_state_k,2), &
++             qrs(cloud_bal_state_i,cloud_bal_state_k,3), nci(cloud_bal_state_i,cloud_bal_state_k,1), &
++             nci(cloud_bal_state_i,cloud_bal_state_k,2), nci(cloud_bal_state_i,cloud_bal_state_k,3), &
++             nrs(cloud_bal_state_i,cloud_bal_state_k,1), nrs(cloud_bal_state_i,cloud_bal_state_k,2), &
++             nrs(cloud_bal_state_i,cloud_bal_state_k,3), brs(cloud_bal_state_i,cloud_bal_state_k) /)
++           call cloud_bal_state_row(cloud_bal_state_unit,cloud_bal_state_values(1:15))
++         enddo
++       enddo
++       close(cloud_bal_state_unit)
++     endif
++
+      do k = kts,kte
+        do i = its,ite
+          th(i,k,j) = t(i,k)/pii(i,k,j)
++
+          qc(i,k,j) = qci(i,k,1)
+          qi(i,k,j) = qci(i,k,2)
+          qr(i,k,j) = qrs(i,k,1)
+@@ -471,6 +624,76 @@
+        enddo
+      endif
+    enddo        
++
++   if (itimestep >= 1 .and. itimestep <= 360) then
++     cloud_bal_state_records = 0
++     do cloud_bal_state_j = max(jts,jds),min(jte,jde-1)
++       do cloud_bal_state_i = max(its,ids),min(ite,ide-1)
++         if (cloud_bal_trace_cell(cloud_bal_state_i,cloud_bal_state_j)) &
++           cloud_bal_state_records = cloud_bal_state_records + kte-kts+1
++       enddo
++     enddo
++     call cloud_bal_state_open(cloud_bal_state_unit,'selected_return',7,cloud_bal_trace_rank, &
++          cloud_bal_trace_call_id,itimestep,max(its,ids),min(ite,ide-1), &
++          max(jts,jds),min(jte,jde-1),kts,kte,14,cloud_bal_state_records)
++     do cloud_bal_state_j = max(jts,jds),min(jte,jde-1)
++       do cloud_bal_state_k = kts,kte
++         do cloud_bal_state_i = max(its,ids),min(ite,ide-1)
++           if (cloud_bal_trace_cell(cloud_bal_state_i,cloud_bal_state_j)) then
++             cloud_bal_state_values(1:14) = (/ th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               q(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qi(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qs(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               qg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               nn(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               nc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               ni(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               nr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               bg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               den(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++               th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j)* &
++                 pii(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j) /)
++             call cloud_bal_state_keyed_row(cloud_bal_state_unit,cloud_bal_state_i, &
++                  cloud_bal_state_j,cloud_bal_state_k,cloud_bal_state_values(1:14))
++           endif
++         enddo
++       enddo
++     enddo
++     close(cloud_bal_state_unit)
++   endif
++
++   if (itimestep == 1) then
++     call cloud_bal_state_open(cloud_bal_state_unit,'wrapper_return',5,cloud_bal_trace_rank, &
++          cloud_bal_trace_call_id,itimestep,max(its,ids),min(ite,ide-1), &
++          max(jts,jds),min(jte,jde-1),kts,kte,14, &
++          max(0,min(ite,ide-1)-max(its,ids)+1)* &
++          max(0,min(jte,jde-1)-max(jts,jds)+1)*(kte-kts+1))
++     do cloud_bal_state_j = max(jts,jds),min(jte,jde-1)
++       do cloud_bal_state_k = kts,kte
++         do cloud_bal_state_i = max(its,ids),min(ite,ide-1)
++           cloud_bal_state_values(1:14) = (/ th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             q(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qi(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qs(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             qg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             nn(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             nc(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             ni(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             nr(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             bg(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             den(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j), &
++             th(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j)* &
++               pii(cloud_bal_state_i,cloud_bal_state_k,cloud_bal_state_j) /)
++           call cloud_bal_state_row(cloud_bal_state_unit,cloud_bal_state_values(1:14))
++         enddo
++       enddo
++     enddo
++     close(cloud_bal_state_unit)
++   endif
+ 
+    end subroutine kdm6
+ 
+@@ -694,6 +917,9 @@
+    integer                            :: kte_in
+    integer                            :: diagnostic_trace_unit, diagnostic_i
+    integer                            :: diagnostic_trace_active
++   integer                            :: cloud_bal_pre_unit, cloud_bal_process_unit
++   integer                            :: cloud_bal_state_i, cloud_bal_state_k
++   real, dimension(15)                 :: cloud_bal_state_values
+    character(len=16)                  :: diagnostic_rank_text
+    character(len=64)                  :: diagnostic_trace_file
+ 
+@@ -891,7 +1117,32 @@
+ 
+    do loop = 1,loops
+ 
+-
++     if (diagnostic_itimestep == 1 .and. loop == 1) then
++       call cloud_bal_state_open(cloud_bal_process_unit,'post_process',3,diagnostic_rank, &
++            diagnostic_call_id,diagnostic_itimestep,its,ite,lat,lat,kts,kte,15, &
++            (ite-its+1)*(kte-kts+1))
++     endif
++
++
++     if (diagnostic_itimestep == 1 .and. loop == 1) then
++       call cloud_bal_state_open(cloud_bal_pre_unit,'pre_update',2,diagnostic_rank, &
++            diagnostic_call_id,diagnostic_itimestep,its,ite,lat,lat,kts,kte,15, &
++            (ite-its+1)*(kte-kts+1))
++       do cloud_bal_state_k = kts,kte
++         do cloud_bal_state_i = its,ite
++           cloud_bal_state_values(1:15) = (/ q(cloud_bal_state_i,cloud_bal_state_k), &
++             t(cloud_bal_state_i,cloud_bal_state_k), den(cloud_bal_state_i,cloud_bal_state_k), &
++             qci(cloud_bal_state_i,cloud_bal_state_k,1), qci(cloud_bal_state_i,cloud_bal_state_k,2), &
++             qrs(cloud_bal_state_i,cloud_bal_state_k,1), qrs(cloud_bal_state_i,cloud_bal_state_k,2), &
++             qrs(cloud_bal_state_i,cloud_bal_state_k,3), nci(cloud_bal_state_i,cloud_bal_state_k,1), &
++             nci(cloud_bal_state_i,cloud_bal_state_k,2), nci(cloud_bal_state_i,cloud_bal_state_k,3), &
++             nrs(cloud_bal_state_i,cloud_bal_state_k,1), nrs(cloud_bal_state_i,cloud_bal_state_k,2), &
++             nrs(cloud_bal_state_i,cloud_bal_state_k,3), brs(cloud_bal_state_i,cloud_bal_state_k) /)
++           call cloud_bal_state_row(cloud_bal_pre_unit,cloud_bal_state_values(1:15))
++         enddo
++       enddo
++       close(cloud_bal_pre_unit)
++     endif
+ 
+      do i = its,ite
+        mstep(i) = 1
+@@ -2851,6 +3102,12 @@
+                 transfer(xl(i,k),0), transfer(xlf,0)
+             t(i,k) = t(i,k)-xlwork2/cpm(i,k)*dtcld
+           endif
++          if (diagnostic_itimestep == 1 .and. loop == 1) then
++            cloud_bal_state_values(1:15) = (/ q(i,k), t(i,k), den(i,k), qci(i,k,1), qci(i,k,2), &
++              qrs(i,k,1), qrs(i,k,2), qrs(i,k,3), nci(i,k,1), nci(i,k,2), nci(i,k,3), &
++              nrs(i,k,1), nrs(i,k,2), nrs(i,k,3), brs(i,k) /)
++            call cloud_bal_state_row(cloud_bal_process_unit,cloud_bal_state_values(1:15))
++          endif
+           if (diagnostic_trace_active == 1 .and. cloud_bal_trace_cell(i,lat)) &
+             write(diagnostic_trace_unit,*) 'POST_STEP', diagnostic_rank, diagnostic_call_id, &
+               diagnostic_itimestep, loop, lat, i, k, transfer(q(i,k),0), transfer(t(i,k),0), &
+@@ -3122,6 +3379,8 @@
+    enddo                  
+ 
+    if (diagnostic_trace_active == 1) close(diagnostic_trace_unit)
++
++   if (diagnostic_itimestep == 1 .and. loops >= 1) close(cloud_bal_process_unit)
+ 
+    end subroutine kdm62d
+ 

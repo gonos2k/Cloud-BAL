@@ -1,0 +1,171 @@
+{
+  "aggregation": "four bilinear corners weighted per point; levels/timesteps are scanned without averaging or pooling points",
+  "between_identity": "D_entry(t+1)-D_return(t); net between-call change from every non-KDM6 operation, not pure transport",
+  "binary64_unit_roundoff": 1.1102230246251565e-16,
+  "gamma8": 8.88178419700126e-16,
+  "ledger_identity": "D_return = D_entry + [(FIX_return-FIX_entry)-(OLD_return-OLD_entry)]",
+  "max_abs_same_call_ledger_residual": 2.384185791015625e-07,
+  "same_call_residual_bound_violation_count": 0,
+  "same_call_residual_by_field": {
+    "BG_PUBLIC_RAW": {
+      "bound_violation_count": 0,
+      "max_abs_residual": 3.308722450212111e-24,
+      "max_gamma8_bound": 2.2866300923185014e-20,
+      "max_residual_over_bound": 0.23993376751038567,
+      "worst_location": {
+        "gamma8_bound": 2.0548923600001027e-31,
+        "k": 13,
+        "point_id": "P04",
+        "residual": 4.930380657631324e-32,
+        "timestep": 193
+      }
+    },
+    "DEN_ARGUMENT_RAW": {
+      "bound_violation_count": 0,
+      "max_abs_residual": 0.0,
+      "max_gamma8_bound": 4.018875635951283e-15,
+      "max_residual_over_bound": 0.0,
+      "worst_location": null
+    },
+    "NC_PUBLIC_RAW": {
+      "bound_violation_count": 0,
+      "max_abs_residual": 2.384185791015625e-07,
+      "max_gamma8_bound": 2.504811451652852e-05,
+      "max_residual_over_bound": 0.2468913063904919,
+      "worst_location": {
+        "gamma8_bound": 1.508878685493229e-08,
+        "k": 18,
+        "point_id": "FA02",
+        "residual": 3.725290298461914e-09,
+        "timestep": 313
+      }
+    },
+    "NI_PUBLIC_RAW": {
+      "bound_violation_count": 0,
+      "max_abs_residual": 4.656612873077393e-10,
+      "max_gamma8_bound": 1.3659263206127587e-07,
+      "max_residual_over_bound": 0.22164589388097714,
+      "worst_location": {
+        "gamma8_bound": 1.313077808351475e-10,
+        "k": 24,
+        "point_id": "FA01",
+        "residual": -2.9103830456733704e-11,
+        "timestep": 62
+      }
+    },
+    "NN_PUBLIC_RAW": {
+      "bound_violation_count": 0,
+      "max_abs_residual": 2.384185791015625e-07,
+      "max_gamma8_bound": 1.492733181291421e-05,
+      "max_residual_over_bound": 0.06883595378787322,
+      "worst_location": {
+        "gamma8_bound": 1.7317881570747155e-06,
+        "k": 14,
+        "point_id": "P02",
+        "residual": 1.1920928955078125e-07,
+        "timestep": 348
+      }
+    },
+    "NR_PUBLIC_RAW": {
+      "bound_violation_count": 0,
+      "max_abs_residual": 1.4551915228366852e-11,
+      "max_gamma8_bound": 1.7717693159188275e-10,
+      "max_residual_over_bound": 0.23945752827177727,
+      "worst_location": {
+        "gamma8_bound": 4.636408939146344e-16,
+        "k": 12,
+        "point_id": "FA02",
+        "residual": 1.1102230246251565e-16,
+        "timestep": 3
+      }
+    },
+    "QC_PUBLIC_RAW": {
+      "bound_violation_count": 0,
+      "max_abs_residual": 1.0842021724855044e-19,
+      "max_gamma8_bound": 6.3804819818854644e-18,
+      "max_residual_over_bound": 0.2979834090200864,
+      "worst_location": {
+        "gamma8_bound": 3.28849189425749e-23,
+        "k": 19,
+        "point_id": "P04",
+        "residual": -9.799160251857683e-24,
+        "timestep": 318
+      }
+    },
+    "QG_PUBLIC_RAW": {
+      "bound_violation_count": 0,
+      "max_abs_residual": 8.470329472543003e-22,
+      "max_gamma8_bound": 7.308526901821942e-18,
+      "max_residual_over_bound": 0.22637826920804,
+      "worst_location": {
+        "gamma8_bound": 1.826987668575323e-24,
+        "k": 18,
+        "point_id": "FA01",
+        "residual": -4.1359030627651384e-25,
+        "timestep": 317
+      }
+    },
+    "QI_PUBLIC_RAW": {
+      "bound_violation_count": 0,
+      "max_abs_residual": 5.833691270030228e-22,
+      "max_gamma8_bound": 9.530662458460933e-20,
+      "max_residual_over_bound": 0.21658543850456757,
+      "worst_location": {
+        "gamma8_bound": 1.2221403149011176e-22,
+        "k": 25,
+        "point_id": "P04",
+        "residual": 2.6469779601696886e-23,
+        "timestep": 92
+      }
+    },
+    "QR_PUBLIC_RAW": {
+      "bound_violation_count": 0,
+      "max_abs_residual": 5.421010862427522e-20,
+      "max_gamma8_bound": 1.1952655064554814e-17,
+      "max_residual_over_bound": 0.20861397430894352,
+      "worst_location": {
+        "gamma8_bound": 4.956407014997158e-25,
+        "k": 8,
+        "point_id": "FA01",
+        "residual": -1.0339757656912846e-25,
+        "timestep": 136
+      }
+    },
+    "QS_PUBLIC_RAW": {
+      "bound_violation_count": 0,
+      "max_abs_residual": 1.3552527156068805e-20,
+      "max_gamma8_bound": 9.351247562374214e-18,
+      "max_residual_over_bound": 0.22188021669726446,
+      "worst_location": {
+        "gamma8_bound": 9.320125796542296e-25,
+        "k": 17,
+        "point_id": "FA01",
+        "residual": -2.0679515313825692e-25,
+        "timestep": 299
+      }
+    },
+    "QV_PUBLIC_RAW": {
+      "bound_violation_count": 0,
+      "max_abs_residual": 0.0,
+      "max_gamma8_bound": 6.554835705307172e-17,
+      "max_residual_over_bound": 0.0,
+      "worst_location": null
+    },
+    "TH_PUBLIC_RAW": {
+      "bound_violation_count": 0,
+      "max_abs_residual": 0.0,
+      "max_gamma8_bound": 1.7583280500585969e-12,
+      "max_residual_over_bound": 0.0,
+      "worst_location": null
+    },
+    "T_K_DERIVED_TH_TIMES_PII": {
+      "bound_violation_count": 0,
+      "max_abs_residual": 0.0,
+      "max_gamma8_bound": 1.058092780446846e-12,
+      "max_residual_over_bound": 0.0,
+      "worst_location": null
+    }
+  },
+  "same_call_residual_roundoff_model": "gamma8 bound on eight binary64 operations: gamma8*(|OLD_entry|+|FIX_entry|+|OLD_return|+|FIX_return|); zero scale requires zero residual",
+  "ulp_scale": "incoming/within use ULP of OLD entry REAL32 state; between uses ULP of OLD return REAL32 state; relative differences use the same old state value as denominator"
+}

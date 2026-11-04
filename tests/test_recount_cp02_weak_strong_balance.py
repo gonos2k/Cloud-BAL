@@ -42,7 +42,7 @@ def refresh_receipt(analysis, *names):
 def run_cli(analysis, output):
     return subprocess.run(
         [sys.executable, str(ROOT / 'tools/recount_cp02_weak_strong_balance.py'),
-         '--analysis', str(analysis), '--plan-sha256', 'fixture', '--output', str(output)],
+         '--analysis', str(analysis), '--output', str(output)],
         capture_output=True, text=True, check=False)
 
 
@@ -179,3 +179,24 @@ def test_replay_resolves_relative_runtime_and_plan_before_scoring(monkeypatch):
     assert seen['plan'] == plan
     assert seen['output'].is_absolute()
     assert seen['plan_sha256'] == 'frozen-plan'
+
+
+def test_cli_recounts_without_replay_only_arguments(tmp_path):
+    output = tmp_path / 'audit.json'
+    result = run_cli(ANALYSIS, output)
+    assert result.returncode == 0, result.stderr
+    assert json.loads(output.read_text())['status'] == 'PASS'
+
+
+def test_cli_rejects_replay_only_options_without_replay_and_missing_plan_hash(tmp_path):
+    for index, options in enumerate((
+            ['--plan-sha256', 'unused'], ['--plan', 'unused.json'],
+            ['--runtime-dir', 'unused'], ['--replay'])):
+        output = tmp_path / f'audit_{index}.json'
+        result = subprocess.run(
+            [sys.executable, str(ROOT / 'tools/recount_cp02_weak_strong_balance.py'),
+             '--analysis', str(ANALYSIS), '--output', str(output), *options],
+            capture_output=True, text=True, check=False)
+        assert result.returncode == 2
+        assert ('required with --replay' if options == ['--replay'] else 'require --replay') in result.stderr
+        assert not output.exists()

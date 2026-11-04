@@ -1,0 +1,61 @@
+{
+  "baseline_sha256": "cd49f188f8852e5da9feb69ec7669864c0a598b683065b6152eb7bfb7b0ede91",
+  "checks": {
+    "234_old_snapshots_preserved_and_236_total": {
+      "detail": "{\"Cloud-BAL\": {\"current_count\": 120, \"expected_current_count\": 120, \"mismatched_prior_snapshots\": [], \"new_snapshot_labels\": [\"2026-11-04-b1-state-path\"], \"preserved_exact_count\": 119, \"prior_count\": 119}, \"KLAPS50\": {\"current_count\": 116, \"expected_current_count\": 116, \"mismatched_prior_snapshots\": [], \"new_snapshot_labels\": [\"2026-11-04-b1-state-path\"], \"preserved_exact_count\": 115, \"prior_count\": 115}}",
+      "pass": true
+    },
+    "active_graph_and_snapshot_consistency": {
+      "detail": "All three corpus active graph trios match their dated snapshot files; errors=[].",
+      "pass": true
+    },
+    "five_wiki_mirror_readback": {
+      "detail": "All five maintained wiki files and evidence copies read back against published hashes.",
+      "pass": true
+    },
+    "maintained_13_targets": {
+      "detail": "Exact target set of 8 active graph/snapshot targets and 5 wiki mirrors; errors=[].",
+      "pass": true
+    },
+    "publication_receipt_chain": {
+      "detail": "status=PUBLISHED_AND_READBACK_PASS; receipt sha=be348b94b82ced6e0348f91e26d621fb9f5a6070979de6b6461e5dc4c2d1ee85",
+      "pass": true
+    },
+    "source_worktree_4_targets": {
+      "detail": "4 exact active graph/snapshot source-worktree copies plus 5 wiki mirrors; copy status=PASS_ACTIVE_WORKTREE_AND_WIKI_READBACK; errors=[].",
+      "pass": true
+    },
+    "unrelated_dirty_state_preserved": {
+      "detail": "Publisher exact pre/post unrelated-path guards cover both maintained roots and source worktree; successful receipt is present. Current status counts: {'KLAPS50': {'porcelain_short_entries': 52, 'unrelated_entries_after_target_filter': 52, 'baseline_porcelain_z_entry_count': 52}, 'Cloud-BAL': {'porcelain_short_entries': 720, 'unrelated_entries_after_target_filter': 716, 'baseline_porcelain_z_entry_count': 719}}.",
+      "pass": true
+    },
+    "wiki_append_and_scope_preserved": {
+      "detail": "Old log exact byte-prefix; index outside Graph snapshot/date and report index non-corpus rows preserved; errors=[].",
+      "pass": true
+    }
+  },
+  "findings": [],
+  "freeze_id": "55e0e8b2a5e9f142",
+  "maintained_roots_written": true,
+  "maintained_target_count": 13,
+  "postpublish_copy_receipt_sha256": "e43ea573eea64f89ba9fd5d6e388b31cc63931e150c12b2aa3f1e239eb6d76c7",
+  "prior_snapshot_count": 234,
+  "publish_receipt_sha256": "be348b94b82ced6e0348f91e26d621fb9f5a6070979de6b6461e5dc4c2d1ee85",
+  "published_snapshot_count": 236,
+  "published_snapshot_counts_by_root": {
+    "Cloud-BAL": 120,
+    "KLAPS50": 116
+  },
+  "review_note": "Independent read-only readback confirms the publication receipt targets, source worktree copies, five wiki mirrors, exact preservation of all 234 prior dated snapshots, and the expected 236 total. The publisher reports success only after its exact unrelated-dirty-path preservation guards pass. No maintained files were changed during this review.",
+  "review_status": "GO",
+  "schema": "cp02_state_path_independent_kg_postpublication_review_v1",
+  "selection_lock_sha256": "778193eb03bec94a624bfc84d56a4543b7f13dd002dc4ba5dcff7aa831a38487",
+  "snapshot": "2026-11-04-b1-state-path",
+  "source_pin_count": 19,
+  "source_worktree_target_count": 4,
+  "stage_receipt_sha256": "6a5f5ea36b88807456e141f9f1c6c65dd1bb87473be8b2ef5c0428867816f52f",
+  "stage_review_sha256": "12d5921196f427702e9c625a58962f40b0a5ca49834e61471cf29d0a8b143b15",
+  "stage_validation_sha256": "b3879799fb7d1c44bb6593a51354b33d7d4ffaf39603a506c50d576264b5a83c",
+  "status": "GO",
+  "wiki_mirror_count": 5
+}

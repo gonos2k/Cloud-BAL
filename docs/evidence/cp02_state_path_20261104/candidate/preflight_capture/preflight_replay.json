@@ -1,0 +1,107 @@
+{
+  "schema": "b1_candidate_preflight_replay_v1",
+  "status": "PASS",
+  "case_id": "B1_RAIN_NUMBER_PRIOR",
+  "capture_manifest_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/Cloud-BAL/docs/evidence/cp02_state_path_20261104/candidate/preflight_capture/capture_manifest.json",
+  "capture_manifest_sha256": "6b6e425c181b1da0bfcc5173de61e759bde50278da2d76fbf60a933355094871",
+  "previous_frozen_preflight_sha256": "4d51c8bf0214dff43a0e1862ab25eebd1bf552f51556a5ae44d57f1657e6949b",
+  "previous_frozen_preflight_copy_sha256": "4d51c8bf0214dff43a0e1862ab25eebd1bf552f51556a5ae44d57f1657e6949b",
+  "policy_sha256": "25387970de9685e3024af7983d47650ab6b6068188f765df58243d6ebefa7601",
+  "candidate_input_sha256": "ad030e8bbfca319c4594dcfa5b0656b9bc387d9fcbe23372fd6ed8808aaf0f21",
+  "fixed_forecast_executable_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+  "probe_executable_sha256": "6706f6162d37c057b2699afd03ae7c0b4dbf94fe97b925c0369916ba6c708661",
+  "state_schema_sha256": "96207bce9553f94f0457f1daaea0afb534fd34a07a107f24973adc87141afced",
+  "current_state_reader_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/Cloud-BAL/tools/cp02_state_path.py",
+  "current_state_reader_sha256": "2c059d17ab43b9955307278d3ea0ae4eed1b4b0d541f2fa1574fce78a89c8ec3",
+  "current_initializer_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/Cloud-BAL/tools/initialize_b1_rain_psd_prior.py",
+  "current_initializer_sha256": "c81f9281d719b2692209a039c028cb4c917fd01a96be0dd9f443d70332642c85",
+  "retained_fix_source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/Cloud-BAL/docs/evidence/cp02_state_path_20261104/lineage/sourcepins/module_mp_kdm6_FIX.f90",
+  "retained_fix_source_sha256": "0b468be19f7dd66ad2f6e65a53b42f10391a4565831a96c80dddddf21934cf79",
+  "source_guards": {
+    "qrain_clip_source_line_718": "qrs=max(qrs,0)",
+    "nrs_clip_source_line_722": "nrs=max(nrs,0)",
+    "psd_activation_source_lines_1364_1366": "qrs>=qcrmin and nrs>=nrmin before lambda reconstruction",
+    "lambda_bound_clamps_source_lines_1368_1375": "clamp lambda to [lamdarmin,lamdarmax] and recompute nrs",
+    "entry_to_pre_update_numeric_mismatches": 0
+  },
+  "metrics": {
+    "entry_called_cells": 2533440,
+    "raw_entry_qrain_negative_cells": 1698,
+    "raw_entry_qnrain_negative_cells": 1774,
+    "qr_clip_numeric_mismatch_cells": 0,
+    "nr_clip_numeric_mismatch_cells": 0,
+    "den_numeric_mismatch_cells": 0,
+    "pre_update_source_active_cells": 246132,
+    "pre_update_nrs_max": 30594.462890625,
+    "pre_update_nrmax_exceeding_cells": 0,
+    "lambda_reconstruction_min_m-1": 104.22953033447266,
+    "lambda_reconstruction_median_m-1": 5799.568359375,
+    "lambda_reconstruction_max_m-1": 26491.71875,
+    "lambda_below_source_min_cells": 437,
+    "lambda_above_source_max_cells": 0
+  },
+  "raw_entry_validator_metrics": {
+    "schema": "b1_rain_psd_candidate_entry_preflight_v1",
+    "status": "PASS",
+    "called_cells": 2533440,
+    "source_active_candidate_entry_cells": 246132,
+    "entry_below_or_at_source_nrmin_cells": 759,
+    "entry_below_or_at_source_qcrmin_cells": 2286549,
+    "entry_negative_qrain_cells_source_guard_inactive": 1698,
+    "entry_negative_qnrain_cells_source_guard_inactive": 1774,
+    "candidate_entry_cells_exceeding_nrmax": 0,
+    "entry_lambda_float32_formula_reconstruction_m-1": {
+      "min": 104.22953033447266,
+      "median": 5799.568359375,
+      "max": 26491.71875,
+      "within_1pct_center_cells": 243838,
+      "below_source_slope_floor_1000_cells": 476,
+      "above_source_fallback_lambda_35000_cells": 0
+    },
+    "entry_number_over_initial_prior_number_ratio": {
+      "median": 0.0,
+      "min": -2.750992801750913e-09,
+      "max": 132691.01430177645
+    },
+    "startup_fields_are_distinct_stage": true,
+    "initial_qrain_sha256": "5ba635a37d56abc6785195ac9ee7982017e4be7b3778a4fa48bc9e35860bf82b",
+    "candidate_entry_qrain_sha256": "e447bb354163de8f5f55ffb7517bb4df57d9980486b9609d1bd9f272d5a3cd44",
+    "candidate_entry_qnrain_sha256": "1538011195c5894803f3385de9b60e4830018264b8c752205791c5d8ebaa4b04",
+    "candidate_entry_den_sha256": "7a73980bd4188b6c52f7ff5f87e913d42b9d968487bed2e402a308c5aeeec423"
+  },
+  "entry_reader_info": {
+    "blocks": 8,
+    "observed_cells": 2533440,
+    "field_count": 14,
+    "owner_cells_by_rank_call": {
+      "rank0_call1": 316680,
+      "rank1_call1": 316680,
+      "rank2_call1": 316680,
+      "rank3_call1": 316680,
+      "rank4_call1": 321204,
+      "rank5_call1": 321204,
+      "rank6_call1": 312156,
+      "rank7_call1": 312156
+    }
+  },
+  "pre_update_reader_info": {
+    "blocks": 560,
+    "observed_cells": 2533440,
+    "field_count": 15,
+    "owner_cells_by_rank_call": {
+      "rank0_call1": 316680,
+      "rank1_call1": 316680,
+      "rank2_call1": 316680,
+      "rank3_call1": 316680,
+      "rank4_call1": 321204,
+      "rank5_call1": 321204,
+      "rank6_call1": 312156,
+      "rank7_call1": 312156
+    }
+  },
+  "limitations": [
+    "The saved lambda values are float32 equation reconstructions from PRE_UPDATE operands, not a direct trace of the local lambda variable.",
+    "This replay validates only the candidate first-call source state; it is not a forecast score or scientific admission result.",
+    "The archived 20-second executable is the instrumented probe; the later six-hour forecast uses the distinct fixed executable hash recorded above."
+  ]
+}

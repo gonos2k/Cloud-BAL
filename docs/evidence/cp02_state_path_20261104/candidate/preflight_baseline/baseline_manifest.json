@@ -1,0 +1,554 @@
+{
+  "schema": "CP02_QUICK_FIX_BASELINE_PREFLIGHT_ARCHIVE_v1",
+  "status": "PASS",
+  "scope": "20-second quick FIX timestep-1 global snapshots; all 40 raw stream hashes matched corresponding full FIX archive raw hashes before packaging",
+  "archive_sources": {
+    "full_capture_manifest": "../../native/capture/capture_archive_manifest.json",
+    "full_capture_manifest_sha256": "be68d0f147f25d96aee77c784273624273084802682b49ac0d54c63c5ce681e4",
+    "arm": "FIX"
+  },
+  "quick_provenance": {
+    "quick_case_receipt": "quick_case_receipt.json",
+    "quick_case_receipt_sha256": "52905b649d01fc3e223b487d3f1625aa446da4eae4ea6688aa93e3bcea3d7713",
+    "quick_run_receipt": "quick_run_receipt.json",
+    "quick_run_receipt_sha256": "13e3eedb6df78c687f76b8b1f4a3f82393175fe8ad46c840efea52b61a3fcac9",
+    "quick_binary_scan": "quick_binary_scan.json",
+    "quick_binary_scan_sha256": "141c884e589f4314e369b03fd00724c44780060022f4e5add6872bf1e2bd5c65",
+    "executable_sha256": "6706f6162d37c057b2699afd03ae7c0b4dbf94fe97b925c0369916ba6c708661",
+    "run_seconds": 20,
+    "mpi_ranks": 8
+  },
+  "raw_quick_vs_full_fix_equal_streams": 40,
+  "streams": [
+    {
+      "stage": "entry",
+      "rank": 0,
+      "archive_name": "state_entry_rank0.bin.gz",
+      "archive_sha256": "b1087f2b58f0c9c94bbd5a1566d16a6fe49767e5f5a60e3fbcba072bfeef698e",
+      "archive_bytes": 6727038,
+      "raw_sha256": "b85b94ca4d9c8a57d8e0359e543779b5ec1e30d9bde81ad850f00f551c571507",
+      "raw_bytes": 17734148,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "b1087f2b58f0c9c94bbd5a1566d16a6fe49767e5f5a60e3fbcba072bfeef698e",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_entry_rank0.bin"
+    },
+    {
+      "stage": "entry",
+      "rank": 1,
+      "archive_name": "state_entry_rank1.bin.gz",
+      "archive_sha256": "ca43acc86435cf19f8b7687da66082540c74fcdfed1c6bbcd9c0707497ec780c",
+      "archive_bytes": 8368292,
+      "raw_sha256": "da0f0cc75502f1eaf3f0d1bd0df99c4c4800249a0b3237797a3c68087bc0c558",
+      "raw_bytes": 17734148,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "ca43acc86435cf19f8b7687da66082540c74fcdfed1c6bbcd9c0707497ec780c",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_entry_rank1.bin"
+    },
+    {
+      "stage": "entry",
+      "rank": 2,
+      "archive_name": "state_entry_rank2.bin.gz",
+      "archive_sha256": "f5de3fea0c722eeb2b9251155a6451b60919b350d6377b38b8e1bd8484bf522c",
+      "archive_bytes": 7243470,
+      "raw_sha256": "284f097ea02b0cd0f0719bb868d41a6b691e6168e21c316197640632232a615e",
+      "raw_bytes": 17734148,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "f5de3fea0c722eeb2b9251155a6451b60919b350d6377b38b8e1bd8484bf522c",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_entry_rank2.bin"
+    },
+    {
+      "stage": "entry",
+      "rank": 3,
+      "archive_name": "state_entry_rank3.bin.gz",
+      "archive_sha256": "b3d26be08537a30fe1b499132a4c150df6838c3e56345209677d52769c233cfc",
+      "archive_bytes": 8551321,
+      "raw_sha256": "71bdf730c63c4fbd791875956b3b5cfdde77776fab5cdf5a5ec1269de4650c43",
+      "raw_bytes": 17734148,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "b3d26be08537a30fe1b499132a4c150df6838c3e56345209677d52769c233cfc",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_entry_rank3.bin"
+    },
+    {
+      "stage": "entry",
+      "rank": 4,
+      "archive_name": "state_entry_rank4.bin.gz",
+      "archive_sha256": "c9a9f551c5c58a343f97ba75b5006fd412520bc2060774179012e2d240e6f7f3",
+      "archive_bytes": 7929959,
+      "raw_sha256": "ab7ff9f49c6bd9e1f996d6c4bad5bf77e3f1e888619e3d385a21660b479ccfa1",
+      "raw_bytes": 17987492,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "c9a9f551c5c58a343f97ba75b5006fd412520bc2060774179012e2d240e6f7f3",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_entry_rank4.bin"
+    },
+    {
+      "stage": "entry",
+      "rank": 5,
+      "archive_name": "state_entry_rank5.bin.gz",
+      "archive_sha256": "76b6af8110ed9ab9d9daff9fca8c146300a7b19fe29c26242ed16662e7d8a7ba",
+      "archive_bytes": 8227112,
+      "raw_sha256": "ea8211a55acbcc92ed6143679ae5e3a3e56aadf735a8e28584d2f2ccfcc29b43",
+      "raw_bytes": 17987492,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "76b6af8110ed9ab9d9daff9fca8c146300a7b19fe29c26242ed16662e7d8a7ba",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_entry_rank5.bin"
+    },
+    {
+      "stage": "entry",
+      "rank": 6,
+      "archive_name": "state_entry_rank6.bin.gz",
+      "archive_sha256": "52a93121f439e5ed3247a1259f68d6b32bb84ecfa7eedc2e921b2c9a7425a0c9",
+      "archive_bytes": 8375313,
+      "raw_sha256": "c5689c8e7f7fca6c5567637de11d474c1e9500acaa7b3f4ca53c5be925080acb",
+      "raw_bytes": 17480804,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "52a93121f439e5ed3247a1259f68d6b32bb84ecfa7eedc2e921b2c9a7425a0c9",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_entry_rank6.bin"
+    },
+    {
+      "stage": "entry",
+      "rank": 7,
+      "archive_name": "state_entry_rank7.bin.gz",
+      "archive_sha256": "18a533c4b800b2d963ccc9e090ed2d33db1b89a3f535f7bb4c35dd98ce9c38ff",
+      "archive_bytes": 7845694,
+      "raw_sha256": "2d78acebf2870c19c17babdb524b89047be5fea1a5b4b01c35f4aa4c0c49ad9e",
+      "raw_bytes": 17480804,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "18a533c4b800b2d963ccc9e090ed2d33db1b89a3f535f7bb4c35dd98ce9c38ff",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_entry_rank7.bin"
+    },
+    {
+      "stage": "pre_update",
+      "rank": 0,
+      "archive_name": "state_pre_update_rank0.bin.gz",
+      "archive_sha256": "f2f47e3ed4fa70c72db063fe9267c8eac8d72602172f696ea744403fdc6204ea",
+      "archive_bytes": 4591259,
+      "raw_sha256": "fefd079423658b9813b7e4eeaab4dc038b5f3265950ba81dbf6c2d8aa8192341",
+      "raw_bytes": 19005560,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "f2f47e3ed4fa70c72db063fe9267c8eac8d72602172f696ea744403fdc6204ea",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_pre_update_rank0.bin"
+    },
+    {
+      "stage": "pre_update",
+      "rank": 1,
+      "archive_name": "state_pre_update_rank1.bin.gz",
+      "archive_sha256": "bd76cb7e3c7f0416a2e2d66a80f5192a5960129c7d8def12954ac472eb00b9ce",
+      "archive_bytes": 6034579,
+      "raw_sha256": "b5f5e873f4f0b28a88b94c96b8483f8b40940ce62bbac893192d5913db10623e",
+      "raw_bytes": 19005560,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "bd76cb7e3c7f0416a2e2d66a80f5192a5960129c7d8def12954ac472eb00b9ce",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_pre_update_rank1.bin"
+    },
+    {
+      "stage": "pre_update",
+      "rank": 2,
+      "archive_name": "state_pre_update_rank2.bin.gz",
+      "archive_sha256": "c4ee2549fbbaa13e4d093e55823ea27f619e6e1cc118415f5078aa3a3f4c392b",
+      "archive_bytes": 4987579,
+      "raw_sha256": "62e14f8c0c01a40a1807a5a6d2345dda7219f356dc2a53308633b5686eaf9b18",
+      "raw_bytes": 19005560,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "c4ee2549fbbaa13e4d093e55823ea27f619e6e1cc118415f5078aa3a3f4c392b",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_pre_update_rank2.bin"
+    },
+    {
+      "stage": "pre_update",
+      "rank": 3,
+      "archive_name": "state_pre_update_rank3.bin.gz",
+      "archive_sha256": "915ff137e70728552a302e15b8197abeec0e4fb62406a0647316571aac854fb6",
+      "archive_bytes": 6277062,
+      "raw_sha256": "732c78b57770a5186d5c871a65f42bfac8fe319a50eac5d22f365ef9e6084efb",
+      "raw_bytes": 19005560,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "915ff137e70728552a302e15b8197abeec0e4fb62406a0647316571aac854fb6",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_pre_update_rank3.bin"
+    },
+    {
+      "stage": "pre_update",
+      "rank": 4,
+      "archive_name": "state_pre_update_rank4.bin.gz",
+      "archive_sha256": "fe33e70eb8f127a7b01d2e41e6000f3acf962bbd33cd03b16b786e6df846a4f5",
+      "archive_bytes": 5628528,
+      "raw_sha256": "3c9aa3545357a436d2fa48573b7755c1f1d5a12b9a6a3f032b8cec6e483f62d4",
+      "raw_bytes": 19277068,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "fe33e70eb8f127a7b01d2e41e6000f3acf962bbd33cd03b16b786e6df846a4f5",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_pre_update_rank4.bin"
+    },
+    {
+      "stage": "pre_update",
+      "rank": 5,
+      "archive_name": "state_pre_update_rank5.bin.gz",
+      "archive_sha256": "4c0ae200e61425e67a14dce53027f29ac8252ef3a39b6a078267e0128293b77f",
+      "archive_bytes": 5928459,
+      "raw_sha256": "c78629a3af5e3ac25a6616bdd5f467f883bff6a21d3cdd4efa302967b2c9f9a0",
+      "raw_bytes": 19277068,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "4c0ae200e61425e67a14dce53027f29ac8252ef3a39b6a078267e0128293b77f",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_pre_update_rank5.bin"
+    },
+    {
+      "stage": "pre_update",
+      "rank": 6,
+      "archive_name": "state_pre_update_rank6.bin.gz",
+      "archive_sha256": "2a6ccd949471b439a89b170f17484c9e41e545c40ded1e942d31dd28760be107",
+      "archive_bytes": 6279345,
+      "raw_sha256": "27cedcdf0b8d927602b89014dd9d66328a7fcd5274d1ee8a1448ef2a36ecf710",
+      "raw_bytes": 18734052,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "2a6ccd949471b439a89b170f17484c9e41e545c40ded1e942d31dd28760be107",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_pre_update_rank6.bin"
+    },
+    {
+      "stage": "pre_update",
+      "rank": 7,
+      "archive_name": "state_pre_update_rank7.bin.gz",
+      "archive_sha256": "3bedc6deb1e57ce14ec910830c46ab7897209bd39b773c7cfb8fbfbaa8dc02f6",
+      "archive_bytes": 5686640,
+      "raw_sha256": "4b9cd7a789a3773694459c6a851361bb3ea20669726c7bc758ba6760bbdf3691",
+      "raw_bytes": 18734052,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "3bedc6deb1e57ce14ec910830c46ab7897209bd39b773c7cfb8fbfbaa8dc02f6",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_pre_update_rank7.bin"
+    },
+    {
+      "stage": "post_process",
+      "rank": 0,
+      "archive_name": "state_post_process_rank0.bin.gz",
+      "archive_sha256": "9e15733f08fcace219e33680c1316e0613795d84feb6cb1c4c5f70699f69b22b",
+      "archive_bytes": 4573511,
+      "raw_sha256": "e860418c50aac193fcde187eab23a40b6f80686f026a68678f7b0ced779ed87e",
+      "raw_bytes": 19005560,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "9e15733f08fcace219e33680c1316e0613795d84feb6cb1c4c5f70699f69b22b",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_post_process_rank0.bin"
+    },
+    {
+      "stage": "post_process",
+      "rank": 1,
+      "archive_name": "state_post_process_rank1.bin.gz",
+      "archive_sha256": "91a431c60560bd9d165505d61e8f0694e302d8ceadbc4b1b6772e9f0eb675109",
+      "archive_bytes": 5952448,
+      "raw_sha256": "8c005a070a511fc61a9a08968179fd5d122a191354029507b474783f94ec1ef2",
+      "raw_bytes": 19005560,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "91a431c60560bd9d165505d61e8f0694e302d8ceadbc4b1b6772e9f0eb675109",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_post_process_rank1.bin"
+    },
+    {
+      "stage": "post_process",
+      "rank": 2,
+      "archive_name": "state_post_process_rank2.bin.gz",
+      "archive_sha256": "25c61607feb2ff6b8db447dd867215992b69c80d1d0cba255a175eb415424a18",
+      "archive_bytes": 4720517,
+      "raw_sha256": "57a8109289e6564995c9bfecddc8e3ad1f7055ede1ddc0ab16a7635a8a5e52cd",
+      "raw_bytes": 19005560,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "25c61607feb2ff6b8db447dd867215992b69c80d1d0cba255a175eb415424a18",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_post_process_rank2.bin"
+    },
+    {
+      "stage": "post_process",
+      "rank": 3,
+      "archive_name": "state_post_process_rank3.bin.gz",
+      "archive_sha256": "e32be6382cecf3d9032b897d981cd8064e39646b5f39e05163eaf4fd8be23da0",
+      "archive_bytes": 6166294,
+      "raw_sha256": "15c31714d26dda35084b8211989e5a0e30966cb78441d2b3a158058162aeac70",
+      "raw_bytes": 19005560,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "e32be6382cecf3d9032b897d981cd8064e39646b5f39e05163eaf4fd8be23da0",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_post_process_rank3.bin"
+    },
+    {
+      "stage": "post_process",
+      "rank": 4,
+      "archive_name": "state_post_process_rank4.bin.gz",
+      "archive_sha256": "dcbaffbf3cf60e9a4907a4eef244f3b0d16d6acac85f29702147e64f3bbc4936",
+      "archive_bytes": 5400347,
+      "raw_sha256": "9a86ee191e150b44322b7da058e07458ad77c5d9c2bb1dfb1f386d7b42076a29",
+      "raw_bytes": 19277068,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "dcbaffbf3cf60e9a4907a4eef244f3b0d16d6acac85f29702147e64f3bbc4936",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_post_process_rank4.bin"
+    },
+    {
+      "stage": "post_process",
+      "rank": 5,
+      "archive_name": "state_post_process_rank5.bin.gz",
+      "archive_sha256": "83881b774cdb50d2807c09f780c8065887074dfb48cc65128a5b12d2ffcd1a00",
+      "archive_bytes": 5698907,
+      "raw_sha256": "a00dc75798342d674a7186ac46670e603f93a945d180acd53a50533ef3871ca5",
+      "raw_bytes": 19277068,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "83881b774cdb50d2807c09f780c8065887074dfb48cc65128a5b12d2ffcd1a00",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_post_process_rank5.bin"
+    },
+    {
+      "stage": "post_process",
+      "rank": 6,
+      "archive_name": "state_post_process_rank6.bin.gz",
+      "archive_sha256": "fbb39d35f46d2b89bbbe21c491c9002d57bebe16d27cd295d66db2619edd1eb3",
+      "archive_bytes": 6074065,
+      "raw_sha256": "6b11f77364c1f5c84944acf7b0d4b7d6141465a5e12e9d3e2e3a6bd4019e2074",
+      "raw_bytes": 18734052,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "fbb39d35f46d2b89bbbe21c491c9002d57bebe16d27cd295d66db2619edd1eb3",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_post_process_rank6.bin"
+    },
+    {
+      "stage": "post_process",
+      "rank": 7,
+      "archive_name": "state_post_process_rank7.bin.gz",
+      "archive_sha256": "9999177f81b733aaf7e815e91fc5c207f443a4d0957e7bdd6904c243dc07cd56",
+      "archive_bytes": 5401506,
+      "raw_sha256": "c6f64cb9e5b862ba9e6c800cd374e4b4ca5d5194c47c1f8ba9639f213797abd3",
+      "raw_bytes": 18734052,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "9999177f81b733aaf7e815e91fc5c207f443a4d0957e7bdd6904c243dc07cd56",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_post_process_rank7.bin"
+    },
+    {
+      "stage": "kdm62d_return",
+      "rank": 0,
+      "archive_name": "state_kdm62d_return_rank0.bin.gz",
+      "archive_sha256": "b45cd32b617605e6ef6f6ab888a721007ae31dc0ffac6b9b8487268ba9ed76bc",
+      "archive_bytes": 3939897,
+      "raw_sha256": "6aa2d0da63f261bb3b6dfe6744bc38dcc988061749a5717897f814096a52353b",
+      "raw_bytes": 19005560,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "b45cd32b617605e6ef6f6ab888a721007ae31dc0ffac6b9b8487268ba9ed76bc",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_kdm62d_return_rank0.bin"
+    },
+    {
+      "stage": "kdm62d_return",
+      "rank": 1,
+      "archive_name": "state_kdm62d_return_rank1.bin.gz",
+      "archive_sha256": "4c62b7720c9b5e0fd5dc1b3f5fd4cc04939bbe249c552f477d741f1a7d3329dd",
+      "archive_bytes": 5129445,
+      "raw_sha256": "97888ec557c9c880394e6210e040f265e18860dc3f1ddb11475cdaa10813524a",
+      "raw_bytes": 19005560,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "4c62b7720c9b5e0fd5dc1b3f5fd4cc04939bbe249c552f477d741f1a7d3329dd",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_kdm62d_return_rank1.bin"
+    },
+    {
+      "stage": "kdm62d_return",
+      "rank": 2,
+      "archive_name": "state_kdm62d_return_rank2.bin.gz",
+      "archive_sha256": "37c442dd377303c9377028561463cfa3250491cd28d331f4417f58be8ebe8566",
+      "archive_bytes": 4003741,
+      "raw_sha256": "d5d9dcf83e85328faaf59aa33e7e6e35056e7c62a34ea5fe9f1478c4161c53ae",
+      "raw_bytes": 19005560,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "37c442dd377303c9377028561463cfa3250491cd28d331f4417f58be8ebe8566",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_kdm62d_return_rank2.bin"
+    },
+    {
+      "stage": "kdm62d_return",
+      "rank": 3,
+      "archive_name": "state_kdm62d_return_rank3.bin.gz",
+      "archive_sha256": "c11b5a31cdb5c0b180e98554c8f4a3683375cd9504a491abe0c0144b5b44816b",
+      "archive_bytes": 5440635,
+      "raw_sha256": "adc8cad25d895d5aa50e9ef2f6e903503c6095436ebb6014c3eaf4ee7f55e69d",
+      "raw_bytes": 19005560,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "c11b5a31cdb5c0b180e98554c8f4a3683375cd9504a491abe0c0144b5b44816b",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_kdm62d_return_rank3.bin"
+    },
+    {
+      "stage": "kdm62d_return",
+      "rank": 4,
+      "archive_name": "state_kdm62d_return_rank4.bin.gz",
+      "archive_sha256": "46a8db679222a4da0eea7b1712104551ad05e92233fc689b8c3093fb9beba0fc",
+      "archive_bytes": 4626779,
+      "raw_sha256": "c4a29be4e52b8435b40e84aec5a67b15a30056de8251773ae96968db358ece50",
+      "raw_bytes": 19277068,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "46a8db679222a4da0eea7b1712104551ad05e92233fc689b8c3093fb9beba0fc",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_kdm62d_return_rank4.bin"
+    },
+    {
+      "stage": "kdm62d_return",
+      "rank": 5,
+      "archive_name": "state_kdm62d_return_rank5.bin.gz",
+      "archive_sha256": "0566b6ff4e8ae0fcb90f1ffc90dc4cfa6180e11876aeaab2a9cafe59289a48ca",
+      "archive_bytes": 4973987,
+      "raw_sha256": "e247b9de0c6bebd9dfc90ed94ab91ca74b03d834213524a45ea63b73ce55a69c",
+      "raw_bytes": 19277068,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "0566b6ff4e8ae0fcb90f1ffc90dc4cfa6180e11876aeaab2a9cafe59289a48ca",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_kdm62d_return_rank5.bin"
+    },
+    {
+      "stage": "kdm62d_return",
+      "rank": 6,
+      "archive_name": "state_kdm62d_return_rank6.bin.gz",
+      "archive_sha256": "3ff7f9b652c635e254612321ff96be5f982e7410402f16bf9fdb736803b4f4fb",
+      "archive_bytes": 5228103,
+      "raw_sha256": "83fef343a5a4aebb059408fb7b980ff417dec9211b17f085f16c5bc03f3ffc74",
+      "raw_bytes": 18734052,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "3ff7f9b652c635e254612321ff96be5f982e7410402f16bf9fdb736803b4f4fb",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_kdm62d_return_rank6.bin"
+    },
+    {
+      "stage": "kdm62d_return",
+      "rank": 7,
+      "archive_name": "state_kdm62d_return_rank7.bin.gz",
+      "archive_sha256": "0a27b35f30459fa92cfa04c4cfe7665863fa9cfbd39143e02ce46538b187fd55",
+      "archive_bytes": 4778838,
+      "raw_sha256": "a0fd3bc5214122f623d27d8cc261b70ff88fb017c47c4b59ba0ef70d53a8fe18",
+      "raw_bytes": 18734052,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "0a27b35f30459fa92cfa04c4cfe7665863fa9cfbd39143e02ce46538b187fd55",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_kdm62d_return_rank7.bin"
+    },
+    {
+      "stage": "wrapper_return",
+      "rank": 0,
+      "archive_name": "state_wrapper_return_rank0.bin.gz",
+      "archive_sha256": "34a19515ff2393a44c751285489e0726305129d80e563f9fdee494ea564e374d",
+      "archive_bytes": 6113273,
+      "raw_sha256": "7f4b936aa8d4916f689a8d5c4777ec0d02dc9fb1e13379d7b958ab8e66cfcd5c",
+      "raw_bytes": 17734148,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "34a19515ff2393a44c751285489e0726305129d80e563f9fdee494ea564e374d",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_wrapper_return_rank0.bin"
+    },
+    {
+      "stage": "wrapper_return",
+      "rank": 1,
+      "archive_name": "state_wrapper_return_rank1.bin.gz",
+      "archive_sha256": "a52c451363e92a8c24458653fd84cf2045fe492b36be3076c662c9659e205c3d",
+      "archive_bytes": 7301500,
+      "raw_sha256": "7b15dfc65b5d5d78dc49a67c72a943e89c99027cac549ab8db5cdb2b221e0a2b",
+      "raw_bytes": 17734148,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "a52c451363e92a8c24458653fd84cf2045fe492b36be3076c662c9659e205c3d",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_wrapper_return_rank1.bin"
+    },
+    {
+      "stage": "wrapper_return",
+      "rank": 2,
+      "archive_name": "state_wrapper_return_rank2.bin.gz",
+      "archive_sha256": "0fe43b9a3fed815f34a8d6082895d04752fad2af1ad41ab8a0b5d53b9524011a",
+      "archive_bytes": 6202616,
+      "raw_sha256": "167df451f11b2f472f58f873550641ec389cc6c527036394462d85f582bb7234",
+      "raw_bytes": 17734148,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "0fe43b9a3fed815f34a8d6082895d04752fad2af1ad41ab8a0b5d53b9524011a",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_wrapper_return_rank2.bin"
+    },
+    {
+      "stage": "wrapper_return",
+      "rank": 3,
+      "archive_name": "state_wrapper_return_rank3.bin.gz",
+      "archive_sha256": "8956adebbb40b96cdf6f76d2bd5c20fc727cac98e624ac6c21b1dde807bf32fe",
+      "archive_bytes": 7508999,
+      "raw_sha256": "12d98c247dcdab8379841d7ecb5d3d45e81a276d502d54ced82d348f5360b36a",
+      "raw_bytes": 17734148,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "8956adebbb40b96cdf6f76d2bd5c20fc727cac98e624ac6c21b1dde807bf32fe",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_wrapper_return_rank3.bin"
+    },
+    {
+      "stage": "wrapper_return",
+      "rank": 4,
+      "archive_name": "state_wrapper_return_rank4.bin.gz",
+      "archive_sha256": "9beef2abcc4e780522ef668d95d9f885f9b9e1e4b2962860a5c36313c2022b0d",
+      "archive_bytes": 6771367,
+      "raw_sha256": "b7f6c243e149ad1690b294de9569d310d9c84228a6f072859aa563a41993d2c4",
+      "raw_bytes": 17987492,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "9beef2abcc4e780522ef668d95d9f885f9b9e1e4b2962860a5c36313c2022b0d",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_wrapper_return_rank4.bin"
+    },
+    {
+      "stage": "wrapper_return",
+      "rank": 5,
+      "archive_name": "state_wrapper_return_rank5.bin.gz",
+      "archive_sha256": "3f6384ad624813b81b35d7a68295dc6cacf131f5ad03f54a3f96b06ab4669d07",
+      "archive_bytes": 7135428,
+      "raw_sha256": "8dae6cb5cd792e2c5ba6e4a001fe73d3046e9a3ff62b98f53ce53f35aa1c2fcf",
+      "raw_bytes": 17987492,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "3f6384ad624813b81b35d7a68295dc6cacf131f5ad03f54a3f96b06ab4669d07",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_wrapper_return_rank5.bin"
+    },
+    {
+      "stage": "wrapper_return",
+      "rank": 6,
+      "archive_name": "state_wrapper_return_rank6.bin.gz",
+      "archive_sha256": "6cb23a5a85bba24659b29dbdfa21463c09eb532c12279a576f05b3baeb083737",
+      "archive_bytes": 7111134,
+      "raw_sha256": "1dcb566aeae35e12d684b684f9ef5e30c13e8222db42eebc77f1461920868a45",
+      "raw_bytes": 17480804,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "6cb23a5a85bba24659b29dbdfa21463c09eb532c12279a576f05b3baeb083737",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_wrapper_return_rank6.bin"
+    },
+    {
+      "stage": "wrapper_return",
+      "rank": 7,
+      "archive_name": "state_wrapper_return_rank7.bin.gz",
+      "archive_sha256": "830840bb2ccca06ce66d84c800a5e45168d97306a0d53aae3b0a4012d45a92a3",
+      "archive_bytes": 6730692,
+      "raw_sha256": "7dab81c799d7d9805a537d38cfa478d94da0c888872e4c160b4f9309011c66bb",
+      "raw_bytes": 17480804,
+      "raw_sha256_equals_full_FIX_archive": true,
+      "full_FIX_archive_sha256": "830840bb2ccca06ce66d84c800a5e45168d97306a0d53aae3b0a4012d45a92a3",
+      "source_runtime_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_state_path_20261104/runtime/quick_FIX/state_wrapper_return_rank7.bin"
+    }
+  ],
+  "support_files": {
+    "quick_binary_scan.json": {
+      "sha256": "141c884e589f4314e369b03fd00724c44780060022f4e5add6872bf1e2bd5c65",
+      "bytes": 677508
+    },
+    "quick_case_receipt.json": {
+      "sha256": "52905b649d01fc3e223b487d3f1625aa446da4eae4ea6688aa93e3bcea3d7713",
+      "bytes": 9445
+    },
+    "quick_run_receipt.json": {
+      "sha256": "13e3eedb6df78c687f76b8b1f4a3f82393175fe8ad46c840efea52b61a3fcac9",
+      "bytes": 1917
+    },
+    "state_calls_rank0.txt": {
+      "sha256": "ba4937f34d298b64c1c037b0c2f3e315b92db9474b36c5e54d5b69ca945b2e9a",
+      "bytes": 57
+    },
+    "state_calls_rank1.txt": {
+      "sha256": "0d063ad4b7a89dc436488c29817d0ded95e03f389ecf6227ddb8f8599ee727ac",
+      "bytes": 60
+    },
+    "state_calls_rank2.txt": {
+      "sha256": "65350b09c8cadf5f4fca49a6cea2bd84c57c618cfdc8330b9bafc241685356cd",
+      "bytes": 60
+    },
+    "state_calls_rank3.txt": {
+      "sha256": "ab7a5de10b93149baf95c89f6e8c88eff61f77069780b14d00309ff6c77444ca",
+      "bytes": 63
+    },
+    "state_calls_rank4.txt": {
+      "sha256": "9dd06e78e702c31f7e3b1bf0b3a208e75ecfac065ce7fcee8c21340d4d444b53",
+      "bytes": 62
+    },
+    "state_calls_rank5.txt": {
+      "sha256": "ab79c73f8b45b294647e8719748a09294c34a95899014afb641d5121b51a58af",
+      "bytes": 65
+    },
+    "state_calls_rank6.txt": {
+      "sha256": "dcf0df284d60388c21ff985add5f2499ff165458534f2ee41af8185dda425f84",
+      "bytes": 62
+    },
+    "state_calls_rank7.txt": {
+      "sha256": "549fe7ccc0497c79ae60b87dc1ca5a5d89e48b4f20df4e2f2ee603a9a8331c68",
+      "bytes": 65
+    },
+    "state_schema.json": {
+      "sha256": "96207bce9553f94f0457f1daaea0afb534fd34a07a107f24973adc87141afced",
+      "bytes": 6369
+    }
+  }
+}

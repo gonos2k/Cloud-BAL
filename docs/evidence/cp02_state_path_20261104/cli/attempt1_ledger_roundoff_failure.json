@@ -1,0 +1,13 @@
+{
+  "archive_manifest_sha256": "be68d0f147f25d96aee77c784273624273084802682b49ac0d54c63c5ce681e4",
+  "attempt": "state_path_analysis_attempt1",
+  "command": "python tools/cp02_state_path.py --old docs/evidence/cp02_state_path_20261104/native/capture/OLD --fix docs/evidence/cp02_state_path_20261104/native/capture/FIX --schema docs/evidence/cp02_state_path_20261104/native/capture/state_schema.json --corners docs/evidence/cp02_state_path_20261104/cohorts/point_corners.csv --expected-ranks docs/evidence/cp02_state_path_20261104/native/capture/expected_rank_manifest.json --observed-ranks docs/evidence/cp02_state_path_20261104/native/capture/observed_rank_manifest.json --archive-manifest docs/evidence/cp02_state_path_20261104/native/capture/capture_archive_manifest.json --output docs/evidence/cp02_state_path_20261104/cli/state_path_analysis_attempt1",
+  "corners_sha256": "c32694fbcdd1fbe85c7b37c4bfb6978f43a1efc417aef0052db7e4ce62bb4618",
+  "error": "StatePathError: selected public same-call ledger does not close: 2.384185791015625e-07",
+  "interpretation": "The attempted absolute 1e-10 closure gate was not scale-aware for binary64 subtraction at large state magnitudes. No output directory was committed; temporary work was removed by the analyzer rollback.",
+  "output_path_exists": false,
+  "schema_sha256": "96207bce9553f94f0457f1daaea0afb534fd34a07a107f24973adc87141afced",
+  "source_sha256_after_ledger_gate_revision": "364fb572271eebfed8553ca110c44ffb21774f8de589c3bf09434f204c324cfb",
+  "source_sha256_at_attempt": "NOT_RECORDED_BEFORE_EXECUTION",
+  "status": "FAILED_BEFORE_OUTPUT_COMMIT"
+}

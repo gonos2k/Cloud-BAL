@@ -1,0 +1,80 @@
+{
+  "schema": "b1_rain_psd_prior_policy_v1",
+  "policy_id": "B1_RAIN_GAMMA_PSD_CENTER_PRIOR_20261104",
+  "status": "RESEARCH_PRIOR_PENDING_FIRST_CALL_CAP_VALIDATION_NOT_APPROVED_FOR_OPERATIONAL_USE",
+  "declared_before_candidate_forecast": true,
+  "scope": {
+    "input_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+    "valid_time": "2026-08-16_12:00:00",
+    "fixed_executable_sha256": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+    "diagnostic_hours": 2,
+    "no_six_hour_performance_claim_from_this_run": true
+  },
+  "source_binding": {
+    "build_receipt_path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/build_receipt.json",
+    "build_receipt_sha256": "50fb6bf97114cccbb170404b927aa54fc0fa83c72f64f23d2c3c107472c1afc7",
+    "kdm6_preprocessed_sha256": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b",
+    "kdm6_object_sha256": "64aa9ba9d65c501993f0bb425492e288f4869f22412a6b97cb0e82cbc10937b7",
+    "driver_source_sha256": "bcac98180bfb5e260271a5836d71c5936d47ab167e2164c37b328f37ec2c03f4",
+    "density_basis": "Public QNRAIN is kg-1 dry air, driver internal number is QNRAIN*DEN, KDM6 uses qrs=QRAIN and lambda^3=pidnr*nrs/(qrs*DEN); DEN cancels from the inversion.",
+    "source_parameters": {
+      "mu": 1.0,
+      "mass_exponent_d": 3.0,
+      "lambda_min_m-1": 961.0,
+      "lambda_max_m-1": 35000.0,
+      "qcrmin_kg_kg-1": 1e-09,
+      "nrmin_internal_m-3": 0.01,
+      "nrmax_internal_m-3": 50000000.0,
+      "water_density_kg_m-3": 1000.0,
+      "pidnr": 12566.370614359173
+    }
+  },
+  "prior": {
+    "kind": "declared_gamma_PSD_shape_prior",
+    "observed_number_claim": false,
+    "lambda_policy": "geometric midpoint of source lambda bounds",
+    "lambda_center_m-1": 5799.5689494996095,
+    "mean_particle_mass_kg": 6.442029599975884e-08,
+    "target": "QNRAIN",
+    "fill_condition": "captured baseline first-KDM6 call cell AND QRAIN > qcrmin AND QNRAIN exactly zero",
+    "number_formula": "QNRAIN = QRAIN * lambda_center^3 / pidnr",
+    "below_nrmin_policy": "retain candidate values below nrmin and report their count; do not add a floor",
+    "cap_policy": "reject before forecast if candidate QNRAIN*actual first-entry DEN exceeds source nrmax on any called cell; do not clip",
+    "preserve": [
+      "QRAIN",
+      "QVAPOR",
+      "T",
+      "all other variables and metadata"
+    ]
+  },
+  "required_first_call_capture": {
+    "baseline_capture_format": "NPZ, allow_pickle=false",
+    "baseline_capture_fields": [
+      "DEN_ENTRY",
+      "CALLED"
+    ],
+    "shape": [
+      1,
+      39,
+      282,
+      234
+    ],
+    "capture_sha256": "MUST_BE_PINNED_AFTER_NATIVE_BASELINE_CAPTURE",
+    "purpose": "Use baseline full-global first-KDM6 ENTRY density only as a cap-screening proxy at cells actually called by the fixed B1 executable.",
+    "stage_boundary": "Do not require baseline ENTRY QRAIN/QNRAIN to equal initial wrfinput QRAIN/QNRAIN; startup dynamics can change them.",
+    "baseline_cap_screen": "Candidate input QNRAIN multiplied by captured baseline ENTRY DEN must be <= source nrmax at all called cells; reject on exceedance. This is a planning screen, not proof of candidate first-call state.",
+    "unresolved_until_capture": true
+  },
+  "implementation": {
+    "path": "tools/initialize_b1_rain_psd_prior.py",
+    "status": "PREPARED_NOT_EXECUTED",
+    "changes_wrf_source": false,
+    "runs_forecast": false
+  },
+  "candidate_runtime_gate": {
+    "status": "REQUIRED_BEFORE_SCIENCE_EVALUATION",
+    "capture": "Actual candidate first-KDM6 ENTRY QRAIN, QNRAIN, and DEN at the same called cells after startup.",
+    "validation": "Reconstruct source-consumed lambda only where source-active and internal Nr exceeds nrmin; report source branches/clamps separately and verify candidate entry cap. Do not require the exact prior center when source Q/QN startup transformations or nrmin/lambda guards alter the consumed state.",
+    "preservation": "The prior changes initial QNRAIN only. Candidate ENTRY values are observations of the later runtime stage and must not be relabeled as input values."
+  }
+}

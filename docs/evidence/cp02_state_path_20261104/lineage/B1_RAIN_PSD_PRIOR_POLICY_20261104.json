@@ -1,0 +1,114 @@
+{
+  "schema": "b1_rain_psd_prior_policy_v1",
+  "policy_id": "B1_RAIN_GAMMA_PSD_CENTER_PRIOR_20261104",
+  "status": "RESEARCH_PRIOR_PENDING_FIRST_CALL_CAP_VALIDATION_NOT_APPROVED_FOR_OPERATIONAL_USE",
+  "declared_before_candidate_forecast": true,
+  "scope": {
+    "input_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+    "valid_time": "2026-08-16_12:00:00",
+    "candidate_fixed_executable_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+    "baseline_reference_executable_sha256": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+    "forecast_start": "2026-08-16_12:00:00",
+    "forecast_end": "2026-08-16_18:00:00",
+    "forecast_hours": 6,
+    "preflight_scope": "A separate short fixed-executable candidate run must capture actual first KDM6 ENTRY QRAIN/QNRAIN/DEN and pass cap/PSD stage checks before freezing the six-hour evaluation plan.",
+    "no_performance_claim_before_six_hour_histories": true
+  },
+  "source_binding": {
+    "build_receipt_path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/build_receipt.json",
+    "build_receipt_sha256": "50fb6bf97114cccbb170404b927aa54fc0fa83c72f64f23d2c3c107472c1afc7",
+    "kdm6_preprocessed_sha256": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b",
+    "kdm6_object_sha256": "64aa9ba9d65c501993f0bb425492e288f4869f22412a6b97cb0e82cbc10937b7",
+    "driver_source_sha256": "bcac98180bfb5e260271a5836d71c5936d47ab167e2164c37b328f37ec2c03f4",
+    "density_basis": "Registry labels QNRAIN kg(-1), while the exact B1 driver multiplies the public number by its DEN argument on KDM6 entry; the exact basis behind DEN is not asserted here. KDM6 uses qrs=QRAIN and lambda^3=pidnr*nrs/(qrs*DEN), so the same DEN factor cancels algebraically for same-frame source inversion. This supports a same-host mass-to-number PSD relation and makes no dry-air density claim.",
+    "source_parameters": {
+      "mu": 1.0,
+      "mass_exponent_d": 3.0,
+      "lambda_min_m-1": 961.0,
+      "lambda_max_m-1": 35000.0,
+      "qcrmin_kg_kg-1": 1e-09,
+      "nrmin_internal_m-3": 0.01,
+      "nrmax_internal_m-3": 50000000.0,
+      "water_density_kg_m-3": 1000.0,
+      "pidnr": 12566.370614359173
+    },
+    "baseline_kdm6_preprocessed_sha256": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b",
+    "baseline_kdm6_object_sha256": "64aa9ba9d65c501993f0bb425492e288f4869f22412a6b97cb0e82cbc10937b7",
+    "candidate_fix_kdm6_source_f90_sha256": "0b468be19f7dd66ad2f6e65a53b42f10391a4565831a96c80dddddf21934cf79",
+    "candidate_fix_kdm6_object_sha256": "f04e113df954b01cf7f09ea50240d5e7550a725367a42702eea658df9a39cfcc",
+    "candidate_fix_kdm6_source_f_sha256": "7a27a584ce396355440c8be4473a8c7fa8a3bf1d55c239f81d8eef755dd8f762",
+    "candidate_fix_kdm6_archive_sha256": "fbb908b69da24a3474547a2a5216b4764cc8a1b03c0e15b3201af61546e7a1f4",
+    "model_constants_source_sha256": "5b80377fecdc18a5f0ad38d3b6c15cfc86ad5d76701adbbbb08a08698d0f7062",
+    "candidate_binding": "Retained build receipt pins FIX preprocessed source, object, archive and executable. BASE and FIX KDM6 preprocessing differ in one unrelated prevp branch; compared rain PSD constants, pidnr definition, and lamdar inversion are identical.",
+    "build_receipt_fix_object_link": "build_receipt.json compile record binds build_FIX/module_mp_kdm6.f90 -> object f04e113df954b01cf7f09ea50240d5e7550a725367a42702eea658df9a39cfcc; FIX link argv includes that object/library archive and produces executable 68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f.",
+    "evidence_source_directory": "docs/evidence/cp02_state_path_20261104/lineage/sourcepins/",
+    "pinned_source_copies": {
+      "build_receipt": "build_receipt.json",
+      "build_receipt_sha256": "50fb6bf97114cccbb170404b927aa54fc0fa83c72f64f23d2c3c107472c1afc7",
+      "baseline_preprocessed_source": "module_mp_kdm6_BASE.f90",
+      "baseline_preprocessed_sha256": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b",
+      "candidate_fix_preprocessed_source": "module_mp_kdm6_FIX.f90",
+      "candidate_fix_preprocessed_sha256": "0b468be19f7dd66ad2f6e65a53b42f10391a4565831a96c80dddddf21934cf79"
+    },
+    "closure_note": "KDM6 BASE and FIX source/object/executable compile/link chains are hash recorded in the exact build receipt. The driver source hash is pinned, but this evidence does not separately establish the driver object closure for the candidate FIX link; no stronger driver claim is made."
+  },
+  "prior": {
+    "kind": "declared_gamma_PSD_shape_prior",
+    "observed_number_claim": false,
+    "lambda_policy": "geometric midpoint of source lambda bounds",
+    "lambda_center_m-1": 5799.5689494996095,
+    "mean_particle_mass_kg": 6.442029599975884e-08,
+    "target": "QNRAIN",
+    "fill_condition": "captured baseline first-KDM6 call cell AND QRAIN > qcrmin AND QNRAIN exactly zero",
+    "number_formula": "QNRAIN = QRAIN * lambda_center^3 / pidnr",
+    "below_nrmin_policy": "retain candidate values below nrmin and report their count; do not add a floor",
+    "cap_policy": "reject before forecast if candidate QNRAIN*actual first-entry DEN exceeds source nrmax on any called cell; do not clip",
+    "preserve": [
+      "QRAIN",
+      "QVAPOR",
+      "T",
+      "all other variables and metadata"
+    ]
+  },
+  "required_first_call_capture": {
+    "baseline_capture_format": "NPZ, allow_pickle=false",
+    "baseline_capture_fields": [
+      "DEN_ENTRY",
+      "CALLED"
+    ],
+    "shape": [
+      1,
+      39,
+      282,
+      234
+    ],
+    "purpose": "Use baseline first-KDM6 ENTRY DEN only as a provisional cap screen for candidate input numbers at baseline-called coordinates; bind the actual capture separately in the candidate preflight receipt.",
+    "stage_boundary": "Do not require baseline ENTRY QRAIN/QNRAIN to equal initial wrfinput QRAIN/QNRAIN; startup dynamics can change them.",
+    "baseline_cap_screen": "Candidate input QNRAIN multiplied by captured baseline ENTRY DEN is a planning screen, not actual candidate ENTRY proof.",
+    "unresolved_until_capture": true
+  },
+  "implementation": {
+    "path": "tools/initialize_b1_rain_psd_prior.py",
+    "status": "PREPARED_NOT_EXECUTED",
+    "changes_wrf_source": false,
+    "runs_forecast": false
+  },
+  "candidate_runtime_gate": {
+    "status": "REQUIRED_BEFORE_SIX_HOUR_EVALUATION",
+    "capture": "Actual candidate first-KDM6 ENTRY QRAIN, QNRAIN, and DEN at the same called cells after startup.",
+    "validation": "Check finite actual ENTRY values, source internal number cap, source threshold/guard branch counts, and reconstructed PSD lambda from the same-frame QRAIN/QNRAIN pair. Report deviations from lambda_center; do not require exact center when source guards or startup transformations change the consumed state.",
+    "preservation": "The prior changes initial QNRAIN only. Candidate ENTRY values are observations of the later runtime stage and must not be relabeled as input values.",
+    "diagnostic_run": "Use the same corrected FIX instrumentation probe (6706f616\u2026c708661) and candidate input for a fresh 20-second first-call capture; this traced probe is a state preflight tool and does not substitute for the fixed forecast executable.",
+    "forecast_run": "After preflight PASS, freeze the evaluation plan and run the unchanged fixed FIX executable 68ed2833\u2026bf1c1f for the full 12Z\u201318Z six-hour candidate forecast."
+  },
+  "preflight_probe": {
+    "purpose": "Capture candidate first-KDM6 ENTRY fields only; this is a traced diagnostic executable, not the six-hour forecast executable and not performance evidence.",
+    "executable_sha256": "6706f6162d37c057b2699afd03ae7c0b4dbf94fe97b925c0369916ba6c708661",
+    "build_receipt_path": "runtime/build_attempt4_receipt.json",
+    "build_receipt_sha256": "b5746dbff47e22be635a6609972ca46713b29f9a3c3e145c7df70d6ea312f6d2",
+    "baseline_probe_run_receipt_sha256": "13e3eedb6df78c687f76b8b1f4a3f82393175fe8ad46c840efea52b61a3fcac9",
+    "mpi_ranks": 8,
+    "run_seconds": 20,
+    "role_limit": "State-entry capture and cap/PSD preflight only; six-hour performance run must use fixed candidate executable 68ed2833\u2026bf1c1f."
+  }
+}

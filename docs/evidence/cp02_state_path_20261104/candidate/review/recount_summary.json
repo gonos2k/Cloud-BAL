@@ -1,0 +1,163 @@
+{
+  "cohort_values": [
+    {
+      "B1_RAIN_NUMBER_PRIOR_mm": 0.31762323119404023,
+      "IMPROVED_BG_FIXED_mm": 0.08058245592120747,
+      "ORIGINAL_mm": 0.3849921125559987,
+      "flat_index_yx": 10942,
+      "lead_hour": 2,
+      "point_id": "P01",
+      "reference_mm": 0.2,
+      "sample_index": 476
+    },
+    {
+      "B1_RAIN_NUMBER_PRIOR_mm": 0.8264717424583687,
+      "IMPROVED_BG_FIXED_mm": 0.8299988137145277,
+      "ORIGINAL_mm": 2.6182222650278586e-05,
+      "flat_index_yx": 11976,
+      "lead_hour": 2,
+      "point_id": "P02",
+      "reference_mm": 0.0,
+      "sample_index": 819
+    },
+    {
+      "B1_RAIN_NUMBER_PRIOR_mm": 0.42474852783928035,
+      "IMPROVED_BG_FIXED_mm": 0.4277010804788892,
+      "ORIGINAL_mm": 0.7026399449899429,
+      "flat_index_yx": 10795,
+      "lead_hour": 2,
+      "point_id": "P03",
+      "reference_mm": 0.5,
+      "sample_index": 439
+    },
+    {
+      "B1_RAIN_NUMBER_PRIOR_mm": 63.08584493478118,
+      "IMPROVED_BG_FIXED_mm": 62.83795731256127,
+      "ORIGINAL_mm": 60.615509842148725,
+      "flat_index_yx": 11112,
+      "lead_hour": 2,
+      "point_id": "P04",
+      "reference_mm": 9.4,
+      "sample_index": 544
+    },
+    {
+      "B1_RAIN_NUMBER_PRIOR_mm": 4.769897603895656,
+      "IMPROVED_BG_FIXED_mm": 4.678401029127486,
+      "ORIGINAL_mm": 5.292661980205896,
+      "flat_index_yx": 11248,
+      "lead_hour": 2,
+      "point_id": "FA01",
+      "reference_mm": 1.4,
+      "sample_index": 582
+    },
+    {
+      "B1_RAIN_NUMBER_PRIOR_mm": 4.738231978504146,
+      "IMPROVED_BG_FIXED_mm": 4.87973529851223,
+      "ORIGINAL_mm": 5.1510905967159974,
+      "flat_index_yx": 12156,
+      "lead_hour": 2,
+      "point_id": "FA02",
+      "reference_mm": 0.6,
+      "sample_index": 899
+    },
+    {
+      "B1_RAIN_NUMBER_PRIOR_mm": 5.036231173594939,
+      "IMPROVED_BG_FIXED_mm": 4.981935680778647,
+      "ORIGINAL_mm": 5.161449232733549,
+      "flat_index_yx": 15103,
+      "lead_hour": 2,
+      "point_id": "FA03",
+      "reference_mm": 0.6,
+      "sample_index": 1870
+    },
+    {
+      "B1_RAIN_NUMBER_PRIOR_mm": 5.962333572674393,
+      "IMPROVED_BG_FIXED_mm": 5.948182418550052,
+      "ORIGINAL_mm": 4.85115760170521,
+      "flat_index_yx": 14806,
+      "lead_hour": 2,
+      "point_id": "FA04",
+      "reference_mm": 0.3,
+      "sample_index": 1772
+    }
+  ],
+  "constraints_passed": 12,
+  "lead1_threshold2p5_candidate_vs_IMPROVED_BG_FIXED_transitions": {
+    "false_alarm_gains": 1,
+    "false_alarm_losses": 0,
+    "hit_gains": 0,
+    "hit_losses": 0
+  },
+  "lead1_threshold2p5_sample223": {
+    "B1_RAIN_NUMBER_PRIOR": {
+      "detected_at_2p5": true,
+      "prediction_mm": 2.531328819109465,
+      "reference_mm": 0.1
+    },
+    "IMPROVED_BG_FIXED": {
+      "detected_at_2p5": false,
+      "prediction_mm": 2.4777868227420163,
+      "reference_mm": 0.1
+    },
+    "ORIGINAL": {
+      "detected_at_2p5": true,
+      "prediction_mm": 2.740093528307294,
+      "reference_mm": 0.1
+    }
+  },
+  "lead2_actual_weak_band_0p1_to_1mm_at_detection_cut_0p1": {
+    "detection_cut_mm": 0.1,
+    "gained": 8,
+    "lead_hour": 2,
+    "lost": 6,
+    "net_change": 2,
+    "new_detected_candidate": 232,
+    "observed_band_mm": "[0.1,1)",
+    "old_detected_IMPROVED_BG_FIXED": 230,
+    "points": 974
+  },
+  "lead2_t0p1_candidate_minus_ORIGINAL": {
+    "false_alarm": 36,
+    "hit": -17,
+    "miss": 17
+  },
+  "lead2_t0p1_candidate_vs_IMPROVED_BG_FIXED_transitions": {
+    "false_alarm_gains": 21,
+    "false_alarm_losses": 14,
+    "hit_gains": 12,
+    "hit_losses": 7
+  },
+  "lead2_t5_candidate_minus_IMPROVED_BG_FIXED": {
+    "false_alarm": 1,
+    "hit": 0,
+    "miss": 0
+  },
+  "lead2_t5_candidate_vs_FIX_F": {
+    "FIX_F": 0.3089005235602094,
+    "candidate_F": 0.30809399477806787
+  },
+  "lead2_t5_candidate_vs_IMPROVED_BG_FIXED_transitions": {
+    "false_alarm_gains": 1,
+    "false_alarm_losses": 0,
+    "hit_gains": 0,
+    "hit_losses": 0
+  },
+  "lead2_t5_contingency_IMPROVED_BG_FIXED": {
+    "false_alarm": 105,
+    "hit": 59,
+    "miss": 159
+  },
+  "lead2_t5_contingency_candidate": {
+    "false_alarm": 106,
+    "hit": 59,
+    "miss": 159
+  },
+  "scope": {
+    "calculation": "independent explicit point loops; Fraction exact CSI/constraint comparisons",
+    "categorical_rows": 108,
+    "common_points_each_lead": 3688,
+    "constraint_rows": 26,
+    "continuous_rows": 18,
+    "leads": 6
+  }
+}
