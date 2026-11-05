@@ -1,0 +1,22 @@
+{
+  "schema": "cp02_grouped_independent_recount_attempt_v1",
+  "status": "FAILED_READER_PREFLIGHT_NO_SCORE_COMPARISONS",
+  "command": "python3 docs/evidence/cp02_grouped_forecast_20261105/review/independent_score_recount.py --result-dir docs/evidence/cp02_grouped_forecast_20261105/analysis --output-dir docs/evidence/cp02_grouped_forecast_20261105/review/score_recount",
+  "evaluation_plan_sha256": "583c4eb95a5bf2939bd3a40fa640cc3e6bad615f04bb3f903386840cbb1ccb8c",
+  "result_receipt_sha256": "53cdf3da71cd47114f8e0806b47987b0b1d9b15128a91a127ce873cd921c8839",
+  "script_sha256_at_attempt": "9dee2e68be9160f1a62bad2019a2095685ae555eb2805a875c8c63953491f0e9",
+  "failure": {
+    "type": "ValueError",
+    "message": "B1_oldsum_cache_receipt path differs from plan",
+    "cause": "The reader compared relative receipt input paths directly with an absolute worktree-prefixed plan path. Receipt and plan both declare the same relative path and SHA-256.",
+    "score_rows_compared": false,
+    "recount_output_created": false
+  },
+  "reproduction_evidence": {
+    "receipt_path": "docs/evidence/six_hour_improvement_20261030/analysis/receipt.json",
+    "result_receipt_path_value": "docs/evidence/six_hour_improvement_20261030/analysis/receipt.json",
+    "plan_path_value": "docs/evidence/six_hour_improvement_20261030/analysis/receipt.json",
+    "sha256": "0db2f02ceece4d2f12cec459f5af26ca589b2f70c53c3d559b596b10828d8826"
+  },
+  "next_action": "Normalize only this reader path comparison to the frozen relative source_refs path; preserve all score inputs and formulas."
+}

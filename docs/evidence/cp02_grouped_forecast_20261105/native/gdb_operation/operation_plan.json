@@ -1,0 +1,247 @@
+{
+  "archive_lineage": {
+    "baseline_archive": "/var/tmp/firsthour-runtime-plan-20261030/experiment/build_BASE/libwrflib.a",
+    "baseline_archive_sha256": "ef3f25b9f1ccbb899bd91d7fed1f8af2ece170a21e912f08a1d959aeb35eaec1",
+    "linked_archive": "/var/tmp/firsthour-runtime-plan-20261030/experiment/build_FIX/libwrflib.a",
+    "linked_archive_sha256": "fbb908b69da24a3474547a2a5216b4764cc8a1b03c0e15b3201af61546e7a1f4",
+    "member_diff": "371 member names match; only module_mp_kdm6.o differs, consistent with the separately rebuilt KDM control; calc_p_rho_phi is carried in all other byte-identical members.",
+    "original_build_receipt": {
+      "path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/build_receipt.json",
+      "sha256": "50fb6bf97114cccbb170404b927aa54fc0fa83c72f64f23d2c3c107472c1afc7"
+    },
+    "original_standard_executable_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f"
+  },
+  "attribution_gates": [
+    "The complete target PH/PHnext/PHB/PHBnext addresses are independently derived from Fortran argument bases and validated against vector effective addresses/lane.",
+    "Every breakpoint checks exact instruction bytes from that variant disassembly.",
+    "All four operands, sub/add/div vector words and pre/post target AL word are recorded for the same lane.",
+    "The runner verifies all 89 frozen case inputs unchanged before and after each launch and requires eight rank SUCCESS COMPLETE WRF markers.",
+    "Each run emits the corresponding h00 history and requires byte equality to its matching B1 or DM065 reference history.",
+    "No forecast improvement or scientific admission is inferred from this operation capture.",
+    "Build lineage readback matched 371 archive member names; only module_mp_kdm6.o differs between BASE and FIX archive, so the baseline 68ed executable source is the FIX archive copied for both sham and grouped relinks."
+  ],
+  "builds": {
+    "GROUPED": {
+      "build_receipt_sha256": "a210478d6a06b393d2687421ccdb6fd13806536b70c4e0ff9feaf3e2af405e92",
+      "disassembly": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/runtime/native_build/variants/GROUPED/calc_p_rho_phi.disasm.txt",
+      "disassembly_sha256": "538f0a76de318b415ce9dd33743bde6f11adebae67dff529fd4c78d5b5826536",
+      "executable_sha256": "4c01fd93a117a82789f564fd8557d9cab3e85ace23a400acfb84384e48eaf60f",
+      "index_register": "r14",
+      "opcode": {
+        "after_add": "0f5ee0",
+        "after_div": "0f296330",
+        "after_sub1": "488b8300020000",
+        "after_sub2": "0f58e2",
+        "store_after": "4983c604",
+        "store_before": "430f110cb4",
+        "vector_entry": "420f1014b0"
+      },
+      "operand_bases": [
+        "rax",
+        "r13",
+        "0x200",
+        "0x290"
+      ],
+      "operation_order": [
+        "after_sub1",
+        "after_sub2",
+        "after_add",
+        "after_div",
+        "store_before",
+        "store_after"
+      ],
+      "pc": {
+        "after_add": "0x1434f9b",
+        "after_div": "0x1434f9e",
+        "after_sub1": "0x1434f7d",
+        "after_sub2": "0x1434f98",
+        "store_after": "0x1435017",
+        "store_before": "0x1435012",
+        "vector_entry": "0x1434f6f"
+      },
+      "store_base_register": "r12",
+      "symbol": "module_big_step_utilities_em_mp_calc_p_rho_phi_",
+      "symbol_base": "0x1433770",
+      "vector_entry": "0x1434f6f"
+    },
+    "OLD_SHAM_RETRY1": {
+      "build_receipt_sha256": "3df24327b492ad77acf0b7908e8b4ce20537d0db28ce6109952bf1a46acf3c61",
+      "disassembly": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/runtime/native_build/variants/OLD_SHAM_RETRY1/calc_p_rho_phi.disasm.txt",
+      "disassembly_sha256": "07ba7765944173c5cf4198adf5b838133b3f3e3314ab2ba70db7e913f9019bfc",
+      "executable_sha256": "a18b5bcacf287531b5fb9366be0ff0e2fd13911c4f44b0a739ab9e565f678308",
+      "index_register": "r15",
+      "opcode": {
+        "after_add": "430f1054bd00",
+        "after_div": "0f295b30",
+        "after_sub1": "488b83a0020000",
+        "after_sub2": "0f5ed8",
+        "store_after": "4983c704",
+        "store_before": "430f110cbc",
+        "vector_entry": "420f1014b8"
+      },
+      "operand_bases": [
+        "rax",
+        "0x200",
+        "0x2a0",
+        "r13"
+      ],
+      "operation_order": [
+        "after_sub1",
+        "after_add",
+        "after_sub2",
+        "after_div",
+        "store_before",
+        "store_after"
+      ],
+      "pc": {
+        "after_add": "0x1434fa9",
+        "after_div": "0x1434fb5",
+        "after_sub1": "0x1434f9a",
+        "after_sub2": "0x1434fb2",
+        "store_after": "0x1435027",
+        "store_before": "0x1435022",
+        "vector_entry": "0x1434f86"
+      },
+      "store_base_register": "r12",
+      "symbol": "module_big_step_utilities_em_mp_calc_p_rho_phi_",
+      "symbol_base": "0x1433770",
+      "vector_entry": "0x1434f86"
+    }
+  },
+  "case_attempt": "operation_20261105_03",
+  "case_controls": {
+    "end_hour": 12,
+    "end_minute": 1,
+    "end_second": 20,
+    "gdb_rank": 5,
+    "history_end_s": 80,
+    "mpi_ranks": 8,
+    "run_hours": 0,
+    "run_minutes": 1,
+    "run_seconds": 20,
+    "time_step": 20
+  },
+  "case_schedule": {
+    "GROUPED_B1": {
+      "case_receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/runtime/native_build/operation_capture/operation_20261105_03/GROUPED_B1/case_receipt.json",
+      "case_receipt_sha256": "08b538f8ec5f254a57024a419ed535f48686ab2765c31db49a8942f2483ef9ec",
+      "cpus": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63
+      ],
+      "launch_group": "parallel_batch_1",
+      "reference_h00_path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_12:00:00",
+      "reference_h00_sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6"
+    },
+    "GROUPED_DM065": {
+      "case_receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/runtime/native_build/operation_capture/operation_20261105_03/GROUPED_DM065/case_receipt.json",
+      "case_receipt_sha256": "c98d51b414282a622388d968c89f5aa20ce8e0270c0c1bff1920261e93323b86",
+      "cpus": [
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "launch_group": "parallel_batch_2_after_batch_1",
+      "reference_h00_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/runtime/next_candidate/full/wrfout_d01_2026-08-16_12:00:00",
+      "reference_h00_sha256": "7ee4712fd13fe1e4c5ee1620d50c61625b8c4574a5927b09e9f1e3b3e5d40a70"
+    },
+    "OLD_SHAM_RETRY1_B1": {
+      "case_receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/runtime/native_build/operation_capture/operation_20261105_03/OLD_SHAM_RETRY1_B1/case_receipt.json",
+      "case_receipt_sha256": "731b80f5e5c6265bd9debc42c4165e57695e1c9288b0a47cd4ac34a5fb7ec11f",
+      "cpus": [
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ],
+      "launch_group": "parallel_batch_1",
+      "reference_h00_path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_12:00:00",
+      "reference_h00_sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6"
+    }
+  },
+  "event_encoding_test": {
+    "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/gdb_operation/operation_event_test_receipt.json",
+    "receipt_sha256": "0a2d0029c9ccb79ea641e6c08d881204ed4d3483077a5901ab4bbf365e32e365",
+    "status": "PASS_4_TESTS"
+  },
+  "launcher_attempts": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/runtime/native_build/operation_capture/attempts/operation_launcher_failures_20261105.json",
+    "sha256": "8c69727670119d5904188e784d933710f213723d07d28af2e12856bc7238c211",
+    "status": "Two prelaunch path-resolution failures; no model processes started; preserved."
+  },
+  "limitations": [
+    "One target cell and one matched phi call per case; no 123-cell/39-level cohort capture.",
+    "The capture requires runtime reviewer GO and explicit root GO; this file alone does not authorize launch.",
+    "No preinstruction replay beyond the instruction-address breakpoints; the exact event records raw vector state and executed instruction bytes."
+  ],
+  "operation_failures": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/runtime/native_build/operation_capture/attempts/operation_gdb_serialization_failures_20261105.json",
+    "sha256": "f555901baa315287513cd524d0896bf66b544337b0f928c7bb9879488e328a71",
+    "status": "Two B1 captures reached the correct target phi/vector and operation through division; fail-closed GDB event serialization at AL store; no PASS receipt."
+  },
+  "operation_validation_failures": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/runtime/native_build/operation_capture/attempts/operation_validator_failures_20261105.json",
+    "sha256": "23eb3cf566ff8d4c0d1b25e31338a2f89307ed5d0acd5748208768f6846aaaa4",
+    "status": "Two full 80s captures completed; only the first retrospective validation attempt had a dictionary-shape error. Raw captures and runner logs preserved."
+  },
+  "preparation_attempts": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/gdb_operation/preparation_attempts.json",
+    "scope": "Failed preparation-only attempts preserved; no WRF launch.",
+    "sha256": "9e6e7d82190731083b76e462757bb0e29a751dba8ad7118048e12debaa68e462"
+  },
+  "preserved_capture_identities": {
+    "GROUPED_B1": {
+      "event_helper_sha256": "39f5bca531eb4d70887cfd9405d32467ebf352cacf28dada56534572bc0c4862",
+      "freeze_sha256": "f1b15d9fd5ad2d340ddf97a669e3d02b5e37bbad42390f7e90ee1da0a028ba20",
+      "plan_sha256": "fbf6d2499cfe98b0ec1f5e92a3320d4eab9a674224ec1fd226d6bb5520d5b2e9",
+      "probe_sha256": "46e450ecc57e2b08016453fa235e94b7830b1c5319c9d2ce3981d2aeba53a21c",
+      "runner_sha256": "4a4bcc07019fb23ceb12b0424514981b2a404eb04f6a5afa41d76b02a1a119b1"
+    },
+    "OLD_SHAM_RETRY1_B1": {
+      "event_helper_sha256": "39f5bca531eb4d70887cfd9405d32467ebf352cacf28dada56534572bc0c4862",
+      "freeze_sha256": "f1b15d9fd5ad2d340ddf97a669e3d02b5e37bbad42390f7e90ee1da0a028ba20",
+      "plan_sha256": "fbf6d2499cfe98b0ec1f5e92a3320d4eab9a674224ec1fd226d6bb5520d5b2e9",
+      "probe_sha256": "46e450ecc57e2b08016453fa235e94b7830b1c5319c9d2ce3981d2aeba53a21c",
+      "runner_sha256": "4a4bcc07019fb23ceb12b0424514981b2a404eb04f6a5afa41d76b02a1a119b1"
+    }
+  },
+  "runtime_environment": {
+    "gdb": "/usr/bin/gdb",
+    "mpi_environment_script": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh",
+    "mpi_environment_sha256": "1f807842591f742c0e285df3769b4a07e8944536cbd0b0905e88520ae07dbcf8",
+    "mpirun": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpirun",
+    "must_set_netcdf": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/deps/netcdf-intel",
+    "must_set_unlimited_stack": true,
+    "must_source_mpi_env": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh",
+    "must_source_profile": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/tests/intel_toolchain.sh",
+    "netcdf_prefix": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KIM-meso/deps/netcdf-intel",
+    "shell": "/bin/bash -lc; ulimit -s unlimited; source pinned Cloud-BAL IFX profile; source pinned Intel MPI vars; prepend NETCDF/lib; taskset; mpirun -np 8",
+    "stack_limit": "unlimited before sourcing/launch"
+  },
+  "schema": "cp02_grouped_native_operation_plan_v1",
+  "scope": "Actual 32-bit SIMD operation capture for target i=144,j=142,k=4 on rank 5, one matching hypsometric_opt=2, use_theta_m=1, nonhydrostatic calc_p_rho_phi call. Cases are OLD_SHAM_RETRY1/B1, GROUPED/B1, GROUPED/DM065. Capture the four source operands, machine arithmetic lane, first division, and AL store lane. Each case is capped at 80 simulated seconds.",
+  "source": {
+    "change_count": 1,
+    "expression_line": 1039,
+    "grouped": "((ph(i,k+1,j)-ph(i,k,j))+(phb(i,k+1,j)-phb(i,k,j)))",
+    "old": "(ph(i,k+1,j)-ph(i,k,j)+phb(i,k+1,j)-phb(i,k,j))",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/runtime/native_build/inputs/source/GROUPED/module_big_step_utilities_em.f90",
+    "sha256": "95107a8dc7150202ae22e62f5965fd4f8814a39d0b37b3965d7e0b1a00bf70b9"
+  },
+  "status": "PREPARED_PENDING_INDEPENDENT_REVIEW_AND_ROOT_GO"
+}

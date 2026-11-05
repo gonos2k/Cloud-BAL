@@ -1,0 +1,213 @@
+{
+  "schema": "grouped_forecast_oldsum_comparability_v1",
+  "status": "PASS",
+  "oldsum_receipts": {
+    "A": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/six_hour_improvement_20261030/analysis/receipt.json",
+      "sha256": "0db2f02ceece4d2f12cec459f5af26ca589b2f70c53c3d559b596b10828d8826",
+      "size_bytes": 61837
+    },
+    "B": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/receipt.json",
+      "sha256": "600d2cd041ea24f538af8ac477322b46393c2ab154ebbf2629c3eda2f15f3812",
+      "size_bytes": 14650
+    }
+  },
+  "checks": {
+    "same_initialization": true,
+    "same_valid_time_bounds": true,
+    "same_precip_fields": true,
+    "same_RN1_mapping": true,
+    "same_hourly_increment_definition": true
+  },
+  "verification": {
+    "scope": "Each OLD_SHAM run independently matches its own historical 89-input control and all seven complete history files byte-for-byte.",
+    "run_details": {
+      "A": {
+        "case": "SHAM_A",
+        "run_receipt": "../runtime/forecasts/SHAM_A/run_receipt.json",
+        "run_receipt_sha256": "94ca6884284a253dc9594a87b47f6845c6e405b7baf7e3d50b01c8952aae35dd",
+        "prepared_sha256": "8fb3eb0580e84e5814f2e8e0f4025d0a71e11287e558fdda71517cf78af0339f",
+        "build_receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/runtime/native_build/variants/OLD_SHAM_RETRY1/build_receipt.json",
+        "build_receipt_sha256": "3df24327b492ad77acf0b7908e8b4ce20537d0db28ce6109952bf1a46acf3c61",
+        "input_count": 89,
+        "historical_executable_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+        "private_executable_sha256": "a18b5bcacf287531b5fb9366be0ff0e2fd13911c4f44b0a739ab9e565f678308",
+        "target_object_sha256": "632f8562fc87e5c4dd124966c99d951090022bbd3cd241a3c833010c81553ba1",
+        "histories": [
+          {
+            "name": "wrfout_d01_2026-08-16_12:00:00",
+            "sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+            "size_bytes": 328253340,
+            "valid_time": "2026-08-16_12:00:00",
+            "precip_fields": [
+              "RAINC",
+              "RAINNC",
+              "RAINSH"
+            ]
+          },
+          {
+            "name": "wrfout_d01_2026-08-16_13:00:00",
+            "sha256": "8b4ead8741dff7284b1de140038d85ba48a474d6b8b98e1905e10ddbac165702",
+            "size_bytes": 328253340,
+            "valid_time": "2026-08-16_13:00:00",
+            "precip_fields": [
+              "RAINC",
+              "RAINNC",
+              "RAINSH"
+            ]
+          },
+          {
+            "name": "wrfout_d01_2026-08-16_14:00:00",
+            "sha256": "e4c2ef230a1e3574390a015945fdc051673c345156e9360bc8a54a3922561208",
+            "size_bytes": 328253340,
+            "valid_time": "2026-08-16_14:00:00",
+            "precip_fields": [
+              "RAINC",
+              "RAINNC",
+              "RAINSH"
+            ]
+          },
+          {
+            "name": "wrfout_d01_2026-08-16_15:00:00",
+            "sha256": "d18f896ef731e6f50e88f51c794a70968b9c1a49bb89bb9d1ee45e1154b9a989",
+            "size_bytes": 328253340,
+            "valid_time": "2026-08-16_15:00:00",
+            "precip_fields": [
+              "RAINC",
+              "RAINNC",
+              "RAINSH"
+            ]
+          },
+          {
+            "name": "wrfout_d01_2026-08-16_16:00:00",
+            "sha256": "079e93d0799f31632f7246041e31d0a81aa45882852f776d5e5f9e948ec0f99c",
+            "size_bytes": 328253340,
+            "valid_time": "2026-08-16_16:00:00",
+            "precip_fields": [
+              "RAINC",
+              "RAINNC",
+              "RAINSH"
+            ]
+          },
+          {
+            "name": "wrfout_d01_2026-08-16_17:00:00",
+            "sha256": "b65652da14f58f352ae52f2126eaaff6c48b822ebc54dc64a2238c6b835a8114",
+            "size_bytes": 328253340,
+            "valid_time": "2026-08-16_17:00:00",
+            "precip_fields": [
+              "RAINC",
+              "RAINNC",
+              "RAINSH"
+            ]
+          },
+          {
+            "name": "wrfout_d01_2026-08-16_18:00:00",
+            "sha256": "4f29b8a13fb3620f82728a95f76047d6b27e91ca75852be977d439732111f0ec",
+            "size_bytes": 328253340,
+            "valid_time": "2026-08-16_18:00:00",
+            "precip_fields": [
+              "RAINC",
+              "RAINNC",
+              "RAINSH"
+            ]
+          }
+        ]
+      },
+      "B": {
+        "case": "SHAM_B",
+        "run_receipt": "../runtime/forecasts/SHAM_B/run_receipt.json",
+        "run_receipt_sha256": "f3e1a7291c1f159f16b61da781202113da6e41ad7340b2851d63c22e281259d9",
+        "prepared_sha256": "7245dc7c0b7370122518261f3e68849e1f2d54a22da3e396f84790511cd87a79",
+        "build_receipt": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/runtime/native_build/variants/OLD_SHAM_RETRY1/build_receipt.json",
+        "build_receipt_sha256": "3df24327b492ad77acf0b7908e8b4ce20537d0db28ce6109952bf1a46acf3c61",
+        "input_count": 89,
+        "historical_executable_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+        "private_executable_sha256": "a18b5bcacf287531b5fb9366be0ff0e2fd13911c4f44b0a739ab9e565f678308",
+        "target_object_sha256": "632f8562fc87e5c4dd124966c99d951090022bbd3cd241a3c833010c81553ba1",
+        "histories": [
+          {
+            "name": "wrfout_d01_2026-08-16_12:00:00",
+            "sha256": "7ee4712fd13fe1e4c5ee1620d50c61625b8c4574a5927b09e9f1e3b3e5d40a70",
+            "size_bytes": 328253340,
+            "valid_time": "2026-08-16_12:00:00",
+            "precip_fields": [
+              "RAINC",
+              "RAINNC",
+              "RAINSH"
+            ]
+          },
+          {
+            "name": "wrfout_d01_2026-08-16_13:00:00",
+            "sha256": "152686a383594eec8fcb51d52e70f608286b7573429048e4032da2d4f2c05306",
+            "size_bytes": 328253340,
+            "valid_time": "2026-08-16_13:00:00",
+            "precip_fields": [
+              "RAINC",
+              "RAINNC",
+              "RAINSH"
+            ]
+          },
+          {
+            "name": "wrfout_d01_2026-08-16_14:00:00",
+            "sha256": "5cbe69e6f17253464fab64fc23f907b7880e8c3cf391ae11aefe019011b0a44c",
+            "size_bytes": 328253340,
+            "valid_time": "2026-08-16_14:00:00",
+            "precip_fields": [
+              "RAINC",
+              "RAINNC",
+              "RAINSH"
+            ]
+          },
+          {
+            "name": "wrfout_d01_2026-08-16_15:00:00",
+            "sha256": "eb286085085b00c3ca28069ec02d0854d2d3cd596aacba473de149a9b3cf3677",
+            "size_bytes": 328253340,
+            "valid_time": "2026-08-16_15:00:00",
+            "precip_fields": [
+              "RAINC",
+              "RAINNC",
+              "RAINSH"
+            ]
+          },
+          {
+            "name": "wrfout_d01_2026-08-16_16:00:00",
+            "sha256": "7be8ad573db861eb63f4cc2773542e66ef1ec54cf0f45407584bab5ac7b45638",
+            "size_bytes": 328253340,
+            "valid_time": "2026-08-16_16:00:00",
+            "precip_fields": [
+              "RAINC",
+              "RAINNC",
+              "RAINSH"
+            ]
+          },
+          {
+            "name": "wrfout_d01_2026-08-16_17:00:00",
+            "sha256": "f861d6a4872824155409010ecc66c2e8b6a2f35855bec5cfff621c767de28fec",
+            "size_bytes": 328253340,
+            "valid_time": "2026-08-16_17:00:00",
+            "precip_fields": [
+              "RAINC",
+              "RAINNC",
+              "RAINSH"
+            ]
+          },
+          {
+            "name": "wrfout_d01_2026-08-16_18:00:00",
+            "sha256": "bed0c8547b88b2a305c1d9d839e18a8622c8dbf543f5f0d9bd71d84a26445d07",
+            "size_bytes": 328253340,
+            "valid_time": "2026-08-16_18:00:00",
+            "precip_fields": [
+              "RAINC",
+              "RAINNC",
+              "RAINSH"
+            ]
+          }
+        ]
+      }
+    },
+    "shared_interpretation": "A and B retain distinct historical wrfinput_d01 fields; same_initialization means both use the same 12Z initialization time and 18Z end time, not byte-identical initial states.",
+    "RN1_mapping_basis": "The rebuilt OLD_SHAM target object and archive member are byte-identical to the pinned original object; all staged inputs other than the arm-specific wrfinput_d01 and rebuilt executable are byte-identical.",
+    "hourly_increment_basis": "Both arms use byte-identical namelist.input and the same seven hourly valid times."
+  }
+}

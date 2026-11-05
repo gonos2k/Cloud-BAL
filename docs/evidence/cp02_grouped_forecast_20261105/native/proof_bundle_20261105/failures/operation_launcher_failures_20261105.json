@@ -1,0 +1,27 @@
+{
+  "failed_attempts": [
+    {
+      "arm": "B1",
+      "command": "GROUPED_OPERATION_FREEZE_SHA=495df7dde201478e287b780da13dfd066739582d4e6fe268e6511c856aca0002 python3 run_operation_case.py OLD_SHAM_RETRY1 B1",
+      "error": "runner case root used HERE.parents[5] for a directory, one parent above Cloud-BAL; FileNotFoundError while opening prepared case_receipt.json. No MPI/GDB/WRF processes were started.",
+      "session_id": 45319,
+      "status": "FAILED_PRELAUNCH",
+      "variant": "OLD_SHAM_RETRY1"
+    },
+    {
+      "arm": "B1",
+      "command": "GROUPED_OPERATION_FREEZE_SHA=495df7dde201478e287b780da13dfd066739582d4e6fe268e6511c856aca0002 python3 run_operation_case.py GROUPED B1",
+      "error": "same runner case-root error, before MPI/GDB/WRF launch.",
+      "session_id": 22466,
+      "status": "FAILED_PRELAUNCH",
+      "variant": "GROUPED"
+    }
+  ],
+  "model_processes_started": false,
+  "prepared_cases_preserved": {
+    "GROUPED_B1": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/runtime/native_build/operation_capture/operation_20261105_02/GROUPED_B1/case_receipt.json",
+    "GROUPED_DM065": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/runtime/native_build/operation_capture/operation_20261105_02/GROUPED_DM065/case_receipt.json",
+    "OLD_SHAM_RETRY1_B1": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/runtime/native_build/operation_capture/operation_20261105_02/OLD_SHAM_RETRY1_B1/case_receipt.json"
+  },
+  "schema": "cp02_grouped_operation_launcher_attempts_v1"
+}

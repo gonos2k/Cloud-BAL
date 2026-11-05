@@ -1,0 +1,71 @@
+{
+  "schema": "cp02_grouped_forecast_final_science_report_review_v1",
+  "status": "PASS",
+  "review_scope": "Independent numeric, mathematical, source-attribution, and visual review of the final grouped-forecast report and figures.",
+  "bindings": {
+    "report": {
+      "path": "docs/CP02_GROUPED_FORECAST_20261105.md",
+      "sha256": "936d08b41b42a43eb25f6e46ab49a40eac4c28300493d7fbbc2c2f65c900839b"
+    },
+    "renderer": {
+      "path": "tools/plot_cp02_grouped_forecast.py",
+      "sha256": "d4cd96787fb075d1631716fcae6b92330d4ab937348003f36ac1247b86716631"
+    },
+    "figure_manifest": {
+      "path": "docs/evidence/cp02_grouped_forecast_20261105/figures/rendered/figure_manifest.json",
+      "sha256": "eae3078088d1ead1303185581c7baecec29e8f58997336b6a0c101be93daea3c"
+    },
+    "render_receipt": {
+      "path": "docs/evidence/cp02_grouped_forecast_20261105/figures/rendered/render_receipt.json",
+      "sha256": "3714d65028362c1c62a4f871aca78471359316a1964541257a934cb399dba5b3"
+    },
+    "analysis_receipt": {
+      "path": "docs/evidence/cp02_grouped_forecast_20261105/analysis/receipt.json",
+      "sha256": "53cdf3da71cd47114f8e0806b47987b0b1d9b15128a91a127ce873cd921c8839"
+    },
+    "independent_score_recount": {
+      "path": "docs/evidence/cp02_grouped_forecast_20261105/review/score_recount/recount_receipt.json",
+      "sha256": "2203ba6290d8f02f24689bbc279ea0689e853ba0df5c9110e115bedb96b1d885",
+      "status": "PASS"
+    },
+    "native_proof_bundle_manifest": {
+      "path": "docs/evidence/cp02_grouped_forecast_20261105/native/proof_bundle_20261105/bundle_manifest.json",
+      "sha256": "1fe5986b7cfa38c5be819d8bb842e59f9a6deb7878ac5f9ee8140cd2188b5b7b"
+    },
+    "actual_operation_review": {
+      "path": "docs/evidence/cp02_grouped_forecast_20261105/review/actual_operation_review.json",
+      "sha256": "64f5fa743dfaab1cf8bfbe98e76b9e527cbc415a7cb0a6928c83f91108e7e7ab"
+    },
+    "evaluation_plan": {
+      "path": "docs/evidence/cp02_grouped_forecast_20261105/evaluation_plan.json",
+      "sha256": "583c4eb95a5bf2939bd3a40fa640cc3e6bad615f04bb3f903386840cbb1ccb8c"
+    }
+  },
+  "findings": [
+    {
+      "status": "RESOLVED",
+      "finding": "Grouped-history contrasts are C-A and D-B. The report and figures now distinguish D-B from D-A, which is explicitly labeled as the joint DM065-plus-grouped candidate versus current B1 comparison."
+    },
+    {
+      "status": "PASS",
+      "finding": "Independent recount agrees with the report: C passes 8/11 protection and 2/15 recovery cells (10/26); D passes 9/11 and 2/15 (11/26); neither has a new recovery against A. The reported +2 h, 0.1 mm CSI changes are C-A +0.002826, D-A +0.001566, and D-B +0.003718."
+    },
+    {
+      "status": "PASS",
+      "finding": "The weak-rain and dry-transition counts reconcile with the frozen paired arrays. At +2 h, C gains three weak-observation hits, loses none, and has six dry false alarms both added and resolved; D-B gains six and loses four weak hits, with five dry false alarms added and fourteen resolved."
+    },
+    {
+      "status": "PASS",
+      "finding": "The pressure/Exner/temperature equations are mathematically consistent. The added relation δT/T ≃ δθ/θ + κδp/p is correctly scoped as a first-order continuous approximation and explicitly separated from the REAL32 replay. The report avoids attributing rainfall changes to a single physical process."
+    },
+    {
+      "status": "PASS",
+      "finding": "Visual review confirms the schematic shows the actual old left-associated expression and the grouped expression; CSI legends distinguish C-A, D-B, and joint D-A; maps show six absolute and six labeled comparison panels on shared binned-rain and symmetric-log difference scales. The final map colorbar uses ASCII minus signs, and no spatial interpolation is claimed."
+    },
+    {
+      "status": "SCOPE_LIMIT",
+      "finding": "The native operation receipt supports attribution at the captured target cell, lane, and calls only. Forecast evaluation covers one event and does not establish held-out generalization or isolated microphysical causality; these limits are stated in the report."
+    }
+  ],
+  "reviewer_conclusion": "No unresolved substantive numeric, mathematical, source-attribution, or figure issue found. B1 retention is consistent with the frozen all-cell gate rule and independently recounted scores."
+}

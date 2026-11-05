@@ -1,0 +1,74 @@
+{
+  "schema": "cp02_grouped_operation_capture_review_v1",
+  "status": "PLAN_GO_PARTIAL_CAPTURE_BLOCKED",
+  "operation_plan": {
+    "path": "docs/evidence/cp02_grouped_forecast_20261105/native/gdb_operation/operation_plan.json",
+    "sha256": "28f7f4c82cb287005138c58b0b9de4c3db8c3e6f6045ce769f2b888bed999281"
+  },
+  "operation_freeze": {
+    "path": "docs/evidence/cp02_grouped_forecast_20261105/native/gdb_operation/operation_freeze.json",
+    "sha256": "9d5df9f001738c5ac6c8b0d84e9e39cd4924b5d25f8b366a54fbb7dce15e50a1",
+    "frozen_artifacts_checked": 479,
+    "hash_mismatches": 0
+  },
+  "runner": {
+    "path": "docs/evidence/cp02_grouped_forecast_20261105/native/gdb_operation/run_operation_case.py",
+    "sha256": "a2b0148ddd5c888c57861bd0f88d79955508a681cc9f8d99c3aa220902fe06fd",
+    "worktree_root_resolution": "HERE.parents[4] resolves to the Cloud-BAL worktree; pinned profile and three prepared case receipt hashes resolve correctly."
+  },
+  "prelaunch_review": {
+    "status": "GO",
+    "checks": [
+      "All 479 frozen plan, source, executable, disassembly, script and case-input bindings matched.",
+      "All three case receipts were PREPARED_NOT_RUN, each with 89 input files and the exact frozen executable and 80-second controls.",
+      "The explicit-shape Fortran ABI has 46 by-reference arguments; scalar and array argument positions used by the probe match the source signature.",
+      "Fortran (i,k,j) storage offsets and vector lane offsets match the source bounds and the disassembled effective addresses.",
+      "Both executable PCs, instruction bytes, operation order, operand base registers, index registers and AL store base match their linked disassemblies.",
+      "The runner checks binary32 replay, exact rank success, unchanged inputs and h00 byte parity; it does not claim forecast admission."
+    ],
+    "scope_limit": "One cell and one matching call per case; operation attribution only."
+  },
+  "first_launch_attempts": {
+    "GROUPED_B1_event_sha256": "c04d3a41c8f280a0cfa55ce02f0e6204b2f6fdbd49a3059d046257ba03d431a8",
+    "GROUPED_B1_gdb_log_sha256": "4549012085c650e3d1acb0cb7ab1e97a346232413dc78e21886245d689bd51bb",
+    "OLD_SHAM_RETRY1_B1_event_sha256": "b48c9feb99ad0bd104fac17e7a578a7083b3a8047e45befaecc0a1e464ae0ed9",
+    "OLD_SHAM_RETRY1_B1_gdb_log_sha256": "856643ca0bd28c7ba3adb395635dbbcb0c39ad436c8047450f43db55bde0708c",
+    "failure": "The GDB probe reached the target store breakpoint but failed to JSON encode al_candidate_word because lane_word returned bytes. MPI ranks were then terminated; no complete operation receipt or eight-rank success gate exists.",
+    "partial_independent_binary32_replay": {
+      "target": [144, 142, 4],
+      "lane": 2,
+      "input_words": {
+        "ph": "4f2cab42",
+        "ph_next": "23080543",
+        "phb": "4c280546",
+        "phb_next": "39751446"
+      },
+      "old_sham": {
+        "sub1": "eec73d42",
+        "add": "01331546",
+        "sub2_numerator": "a8558044",
+        "first_division": "55863a3c"
+      },
+      "grouped": {
+        "sub1": "eec73d42",
+        "sub2": "d0ce7444",
+        "numerator": "a7558044",
+        "first_division": "54863a3c"
+      },
+      "interpretation": "The captured machine registers match independent binary32 replay through the first division. The event serialization failure prevented AL store logging and all run completion gates, so this is partial operation evidence, not a passing operation capture."
+    }
+  },
+  "c_d_review": {
+    "controller_sha256": "fef36b4c786d64da4ac7d4c9881c4185e37eecc40ade3fbbe4a0b618e8b8e9fe",
+    "rank_wrapper_sha256": "933d4496a8c3b0aed240364ef08c3b1db5d8219b348b71b9c3db5b1ab3135938",
+    "status": "PREPARATION_GO_RUNS_STARTED",
+    "checks": [
+      "C and D each bind the same GROUPED executable and current build receipt.",
+      "Each case has 89 private inputs; all destination hashes match the prepared receipt and all non-executable inputs match its A or B baseline receipt.",
+      "C uses A initialization and CPUs 32–39; D uses B initialization and CPUs 40–47; both span 2026-08-16 12:00–18:00 UTC.",
+      "The existing controller requires all seven exact hourly histories, finite core fields, eight rank success markers, exact affinity, unchanged inputs and zero surviving descendants."
+    ],
+    "limitation": "Prepared-run approval does not approve score/gate outcomes or forecast/scientific admission."
+  },
+  "reviewer_changes_to_runtime": false
+}

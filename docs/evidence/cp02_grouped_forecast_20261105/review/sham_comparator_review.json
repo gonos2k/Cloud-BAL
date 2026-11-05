@@ -1,0 +1,38 @@
+{
+  "schema": "cp02_grouped_sham_comparator_review_v1",
+  "review_status": "SOURCE_REVIEW_PASS_RUNTIME_PENDING",
+  "source_identities": {
+    "controller": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/runtime/forecast.py",
+      "sha256": "fef36b4c786d64da4ac7d4c9881c4185e37eecc40ade3fbbe4a0b618e8b8e9fe",
+      "size_bytes": 12876
+    },
+    "rank_wrapper": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/runtime/rank_wrapper.sh",
+      "sha256": "933d4496a8c3b0aed240364ef08c3b1db5d8219b348b71b9c3db5b1ab3135938",
+      "size_bytes": 721
+    },
+    "comparator": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/runtime/compare_sham.py",
+      "sha256": "bbdfb6baa8de62e86851faba6f9b6a5d9e02264c1ca4a3390f0063e09cd64c89",
+      "size_bytes": 13230
+    },
+    "tests": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/tests/test_grouped_forecast_comparability.py",
+      "sha256": "e49bb3a36e1c4865ed1e7874e35f548bb8ec782ef65da1e4d5b927a3b68487f0",
+      "size_bytes": 4633
+    }
+  },
+  "review_findings": [
+    "Comparator requires both completed SHAM run receipts, their exact historical 89-input source maps, staged non-executable identity, and private executable/build identity.",
+    "Pinned OLD_SHAM target source and object/archive-member hashes are checked; rebuilt executable identity is kept distinct from historical executable identity.",
+    "Each run must bind exactly seven named history files, matching the original per-arm whole-file hashes and valid Times; required core and precipitation fields must be present and finite.",
+    "A/B times, fixed CPU ranges, runner/wrapper identities, common rebuilt executable/build, and frozen scorer cache receipt identities are checked before PASS is emitted."
+  ],
+  "validation": {
+    "command": "pytest -q tests/test_grouped_forecast_comparability.py",
+    "result": "3 passed",
+    "py_compile": "passed"
+  },
+  "runtime_result": "PENDING; both SHAM runs were active at review time. No comparability PASS asserted."
+}

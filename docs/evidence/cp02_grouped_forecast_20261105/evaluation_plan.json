@@ -1,0 +1,278 @@
+{
+  "schema": "cp02_grouped_forecast_evaluation_v1",
+  "status": "FROZEN_BEFORE_GROUPED_SCORE",
+  "created_utc": "2026-11-05",
+  "scope": "One 2026-08-16 12 UTC six-hour forecast; hourly precipitation increments at +1..+6 h over the frozen 3,688 RN1 points.",
+  "design": {
+    "factorial_2x2": {
+      "A": {
+        "meaning": "current B1 configuration, oldsum history",
+        "historical_cache": "B1_oldsum_cache"
+      },
+      "B": {
+        "meaning": "DM065 configuration, oldsum history",
+        "historical_cache": "DM065_oldsum_cache"
+      },
+      "C": {
+        "meaning": "current B1 configuration, grouped history",
+        "input_required": "new actual B1 grouped six-hour history"
+      },
+      "D": {
+        "meaning": "DM065 configuration, grouped history",
+        "input_required": "new actual DM065 grouped six-hour history"
+      }
+    },
+    "benchmark": {
+      "name": "ORIGINAL",
+      "meaning": "immutable 규준실험 benchmark, outside the factorial 2x2; never relabel as an arm or rerun/modify"
+    },
+    "historical_comparability": "A/B cache reuse is conditional on native owner verifying identical source identity, initialization/input lineage, valid-time bounds, precip fields, domain/mapping, and one-hour differencing; until verified, A/B rows are labeled historical cache / comparability pending.",
+    "grouped_history_boundary": {
+      "initial_valid_utc": "2026-08-16T12:00:00Z",
+      "required_history_valid_utc": [
+        "2026-08-16T12:00:00Z",
+        "2026-08-16T13:00:00Z",
+        "2026-08-16T14:00:00Z",
+        "2026-08-16T15:00:00Z",
+        "2026-08-16T16:00:00Z",
+        "2026-08-16T17:00:00Z",
+        "2026-08-16T18:00:00Z"
+      ],
+      "scored_windows": [
+        "12–13 UTC (+1 h)",
+        "13–14 UTC (+2 h)",
+        "14–15 UTC (+3 h)",
+        "15–16 UTC (+4 h)",
+        "16–17 UTC (+5 h)",
+        "17–18 UTC (+6 h)"
+      ],
+      "precipitation": "Per-window increment of RAINC + RAINNC; never cumulative 12–lead total. Check RAINSH/bucket/reset contracts as bound by the canonical scorer."
+    }
+  },
+  "evaluation": {
+    "points": 3688,
+    "paired_mask": "exact frozen RN1 mask and point order; reject any empty/partial/misaligned threshold or lead cohort; all five arms must share the same 3,688 sample keys at every lead.",
+    "thresholds_mm": [
+      0.1,
+      0.5,
+      1.0,
+      2.5,
+      5.0,
+      10.0
+    ],
+    "score_grid": "Every case x lead_hour 1..6 x threshold_mm: H, M, F, correct_dry, N, exact CSI numerator=H and denominator=H+M+F plus float CSI, POD, FAR, frequency_bias, ETS; continuous mean forecast/reference/error, MAE, RMSE by case and lead.",
+    "exact_CSI": "Compute only from integer H/M/F for each individual lead-threshold cell. Never average CSI across thresholds or leads for gates or factorial contrasts.",
+    "frozen_gates": {
+      "protection": {
+        "baseline": "A",
+        "candidate": "C",
+        "cells": "lead +1 at all six thresholds plus all six leads at 5 mm; deduplicate overlap to 11 unique cells",
+        "rule": "Both grouped candidates are separately compared with the same immutable A oldsum current-B1 baseline in each cell using exact integer-ratio comparison.",
+        "candidates": [
+          "C",
+          "D"
+        ]
+      },
+      "recovery": {
+        "baseline": "ORIGINAL",
+        "candidate": "C",
+        "cells": "leads +2..+6 at 0.1, 0.5, 1.0 mm (15 cells)",
+        "rule": "Both grouped candidates are separately compared with the same immutable ORIGINAL benchmark in each cell using exact integer-ratio comparison.",
+        "candidates": [
+          "C",
+          "D"
+        ]
+      },
+      "scope": "Each candidate has its own 26-cell pass/fail result. No averaging and no gate movement. If neither passes, retain current B1."
+    },
+    "contrasts": {
+      "C_minus_A": "Grouped-history contrast under current B1 configuration.",
+      "D_minus_B": "Grouped-history contrast under DM065 configuration.",
+      "B_minus_A": "DM065-vs-current-B1 contrast on oldsum histories.",
+      "D_minus_C": "DM065-vs-current-B1 contrast on grouped histories.",
+      "difference_in_differences": "(D-B)-(C-A), per lead/threshold for each score/count, diagnostic interaction on the score scale; not causal process attribution or percent contribution.",
+      "contrast_measure": "Report exact H/M/F deltas, exact CSI cell values and differences; derive CSI differences from cell ratios, not averaged CSI."
+    },
+    "transition_audit": {
+      "primary_pairs": [
+        "C-A",
+        "D-B"
+      ],
+      "weak_observation": "0.1 <= RN1 < 1.0 mm; for the >=0.1 mm detection decision report hits gained/lost, all conditional on weak-observation cells.",
+      "dry_observation": "RN1 < 0.1 mm; report newly introduced and resolved >=0.1 mm false alarms.",
+      "scope": "Per lead and paired point; these population-specific transitions supplement full-cohort H/M/F and do not redefine CSI."
+    },
+    "candidate_selection": {
+      "eligible_only_after": "all 26 frozen cells pass for that candidate",
+      "priority": "lexicographically maximize exact per-cell CSI at +1 h/10 mm, then +2..+6 h/10 mm in chronological order, then +1..+6 h/5 mm in chronological order",
+      "tie_break": "complete tie prefers C (current B1 grouped; preserves B1 initial rain-number field)",
+      "no_qualified_candidate": "retain current B1",
+      "forbidden": "CSI averages or composite mean scores"
+    }
+  },
+  "input_contract": {
+    "new_histories": "Require all arms C,D histories at exact 12–18 UTC boundaries with identity/hash receipts; strict date/time, one-hour windows, precipitation accumulation monotonicity/reset, dimensions/grid and field validation.",
+    "existing_cache_reuse": "Historical arrays may be loaded only after native owner comparability receipt is attached; source cache hash and the full original source receipt must remain bound.",
+    "canonical_RN1": "Verify all six unique lead-time files by exact SHA-256; the filenames and hashes below are canonical inputs, not substitutes for observations.",
+    "atomic_output": "Refuse an existing output path; write staged outputs in a same-filesystem temporary directory and atomically publish all outputs; clean staging on failure.",
+    "provenance": "Receipts include source input identity/hash, scorer version hash, canonical references, point-key hash/order, history boundary, model fields and output hashes."
+  },
+  "output_schema": {
+    "tables": [
+      "categorical_scores.csv (5 cases x 6 leads x 6 thresholds = 180 rows)",
+      "continuous_scores.csv (5 cases x 6 leads = 30 rows)",
+      "contrasts.csv (C-A,D-B,B-A,D-C,DiD x 6 leads x 6 thresholds; count and exact CSI deltas)",
+      "weak_transition_counts.csv (lead x C-A,D-B,B-A,D-C; weak hit gains/losses and dry new/resolved FAs)",
+      "gate_results.csv (52 rows: 26 frozen cells separately for C and D against shared A/ORIGINAL baselines)",
+      "winner.json (exact cellwise eligible-candidate tie policy and retain-B1 outcome)",
+      "receipt.json (all source and output identities)"
+    ],
+    "hour_arrays": "One archive per lead with reference and all five arms, geographic/key arrays, and point keys; all vectors are length 3688 and finite."
+  },
+  "source_refs": {
+    "scoring_contract": {
+      "path": "docs/evidence/current_forecast_paper_20261029/score_forecasts.py",
+      "sha256": "73d4ddd8d6b8c4c6eb7903eff000c2c1e1330a2d50a6692ee7e0eaf77d51d539",
+      "size_bytes": 12403
+    },
+    "archived_rn1_decoder": {
+      "path": "docs/evidence/precip_hourly_20261027/rn1_recovery/archived_compare_six_hour_csi.py",
+      "sha256": "1cfa4965155ec273e8e1ca9f963bd79a5ece3bc47beb4ae3db4e8b8f5e21b2c0",
+      "size_bytes": 29031
+    },
+    "factorial_scoring_reference": {
+      "path": "tools/cp02_weak_strong_balance.py",
+      "sha256": "2572d41d352c70d72d8488fe9f0dc9d961de8b10c21f7ade459f131e7c4fbdb5",
+      "size_bytes": 65718
+    },
+    "frozen_26_gate_plan": {
+      "path": "docs/evidence/cp02_state_path_20261104/candidate/evaluation_plan.json",
+      "sha256": "073a2805e1ff4e184fbfb67aa1d8f61899d8decbd8c4bc0c7e701a1aa6a7d964",
+      "size_bytes": 2438
+    },
+    "B1_oldsum_cache_receipt": {
+      "path": "docs/evidence/six_hour_improvement_20261030/analysis/receipt.json",
+      "sha256": "0db2f02ceece4d2f12cec459f5af26ca589b2f70c53c3d559b596b10828d8826",
+      "size_bytes": 61837
+    },
+    "DM065_oldsum_cache_receipt": {
+      "path": "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/receipt.json",
+      "sha256": "600d2cd041ea24f538af8ac477322b46393c2ab154ebbf2629c3eda2f15f3812",
+      "size_bytes": 14650
+    },
+    "B1_oldsum_cache": [
+      {
+        "path": "docs/evidence/six_hour_improvement_20261030/analysis/hour_13_arrays.npz",
+        "sha256": "2d2662f63a8d723435f56b1c462f111f0a05fd230d75f62277422be342c3a054",
+        "size_bytes": 100632
+      },
+      {
+        "path": "docs/evidence/six_hour_improvement_20261030/analysis/hour_14_arrays.npz",
+        "sha256": "3fe19b298b363220b8702b5d4d8ca0bd21b9447f6061bcac3797e1762edf7229",
+        "size_bytes": 103337
+      },
+      {
+        "path": "docs/evidence/six_hour_improvement_20261030/analysis/hour_15_arrays.npz",
+        "sha256": "0849753f7c66734b38ce2bfb5fd83bbda6fdac6def8906125fdb55c5cae60c68",
+        "size_bytes": 111031
+      },
+      {
+        "path": "docs/evidence/six_hour_improvement_20261030/analysis/hour_16_arrays.npz",
+        "sha256": "06002ab4cec80168a6f13d46039c9ab696f1cdb36b3109ec5ddc7995e5a0feb9",
+        "size_bytes": 111087
+      },
+      {
+        "path": "docs/evidence/six_hour_improvement_20261030/analysis/hour_17_arrays.npz",
+        "sha256": "8e8f42ae3d98f4745201207a8a1415913a712f2d188100cedf9773c2f2dd1b5f",
+        "size_bytes": 107152
+      },
+      {
+        "path": "docs/evidence/six_hour_improvement_20261030/analysis/hour_18_arrays.npz",
+        "sha256": "8c67e4ca27ac0c3ce0cc0ab4aee0f4b024854a208e1590a02793e167be2cfef0",
+        "size_bytes": 111507
+      }
+    ],
+    "DM065_oldsum_cache": [
+      {
+        "path": "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/hour_13_arrays.npz",
+        "sha256": "8269ccdb6d7c9bdd0ccfc84137c8af78610bbdc6b2b88ad5db0fd548acc91eb6",
+        "size_bytes": 125905
+      },
+      {
+        "path": "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/hour_14_arrays.npz",
+        "sha256": "2b3de1fba4ebd1401458447006c9b12a6e871cc3f4210c7a786b7a1d958beee1",
+        "size_bytes": 125918
+      },
+      {
+        "path": "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/hour_15_arrays.npz",
+        "sha256": "4f781536ff26c201a670765080a96ba052ad0b4ac180f5c5d64ecff0465ea1e7",
+        "size_bytes": 137138
+      },
+      {
+        "path": "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/hour_16_arrays.npz",
+        "sha256": "e9d36493ccebe68cb3198ffed034bd4ccc067f71b846712a2d58a1709a84d1f7",
+        "size_bytes": 137944
+      },
+      {
+        "path": "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/hour_17_arrays.npz",
+        "sha256": "aca9857864516caed76c3abc029279e5f043eec0f0b45f35aafd106e32c132dc",
+        "size_bytes": 133965
+      },
+      {
+        "path": "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/hour_18_arrays.npz",
+        "sha256": "32e07df2d23d15c429dd50311371f20250bb15871789819c6bbb2e25a83b0226",
+        "size_bytes": 138820
+      }
+    ],
+    "canonical_RN1": [
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161300",
+        "valid_utc": "2026-08-16T13:00:00Z",
+        "sha256": "5f435e9e7845860636b8ac6d4a982563f1d709f4340dadb7828df2f2cda8e9a1",
+        "size_bytes": 267686
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161400",
+        "valid_utc": "2026-08-16T14:00:00Z",
+        "sha256": "54ba0fe609630eec8366b9f4a21fddd29baabbd1ad89e8a2ac4e769900887497",
+        "size_bytes": 267686
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161500",
+        "valid_utc": "2026-08-16T15:00:00Z",
+        "sha256": "00219ebc741da5bbdc79b408a1363e4a920d4f58d41118978234d2cbe089f346",
+        "size_bytes": 267686
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161600",
+        "valid_utc": "2026-08-16T16:00:00Z",
+        "sha256": "74f2b96af4e0686b15dc1c8a75e337f964a9e25841540a61b3d3546e22187af6",
+        "size_bytes": 267686
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161700",
+        "valid_utc": "2026-08-16T17:00:00Z",
+        "sha256": "77145a0b095203e452cc029cf56a97f1ff10a5485b69f76ab1d21219c15fa2d5",
+        "size_bytes": 267686
+      },
+      {
+        "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161800",
+        "valid_utc": "2026-08-16T18:00:00Z",
+        "sha256": "f0b6834a27449904efb7f6242e47a6246d75ad1403d6eb24ce82c689f00557bc",
+        "size_bytes": 267686
+      }
+    ]
+  },
+  "graphify_navigation": {
+    "snapshot": "graphify-out/graph.json",
+    "query": "Hourly precip scoring arrays from WRF history and RN1, exact count gates and transition summaries",
+    "authority_note": "Navigation only; implementation and numeric validation must follow source, exact input receipts, and tests."
+  },
+  "limitations": [
+    "Single event / single case; RN1 is a processed analysis with no coverage bitmap and upstream input freshness is unverified.",
+    "The 2x2 contrasts compare score patterns and do not establish isolated microphysical causality.",
+    "Do not present the difference-in-differences as causal attribution or a percent contribution.",
+    "The historical A/B factorial identities remain unverified until the designated native owner signs the comparability evidence.",
+    "Eligibility is evaluated separately for C and D against the same frozen current-B1 and ORIGINAL baselines; D-vs-B is diagnostic factorial contrast, not the preservation gate."
+  ]
+}
