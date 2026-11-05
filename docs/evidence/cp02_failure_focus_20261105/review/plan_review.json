@@ -1,0 +1,58 @@
+{
+  "design_review": [
+    "The batch diagnoses existing B1 weaknesses and rejected grouped-C failures without changing adoption thresholds or assigning a new initialization/model rule.",
+    "Pointwise temporal amount sums are kept distinct from aggregate event gain/loss totals.",
+    "Controls are constrained by observed band and deterministic nearest-unused matching; matching is not asserted to make physical conditions identical.",
+    "The state protocol remains a separate gate before extraction; temperature/RH are diagnostics and invalid Dm remains undefined."
+  ],
+  "independent_baseline_crosschecks": {
+    "fixed_h05_weak_loss_17_ids_have_lead4_to6_amount_delta_positive_5_negative_12": true,
+    "h02_A_vs_ORIGINAL_new_and_resolved_false_alarms_53_and_24": true,
+    "h02_A_vs_ORIGINAL_weak_hit_losses_10_and_gains_2": true,
+    "h02_C_recovers_ids_10942_11093_11242_and_7_remain": true,
+    "h05_C_vs_A_5mm_hit_loss_id_12299_and_no_hit_gain": true,
+    "h05_C_vs_A_5mm_new_false_alarms_12_bands_6_2_4_and_resolved_1": true,
+    "h05_C_vs_A_weak_losses_17_and_gains_6": true,
+    "h06_C_vs_A_weak_losses_8_and_gains_2": true
+  },
+  "independent_recount_sha256": "027ed504a9b189afd5632012872ddd52b174e0f443085e9d2da5e9fefbfde415",
+  "limits": [
+    "GO applies only to the frozen analysis plan and arithmetic from the prior six-hour score bundle.",
+    "It does not authorize or review the separate state extraction protocol/implementation.",
+    "It does not establish physical mechanism, causation, flux closure, runtime validation, or forecast adoption."
+  ],
+  "plan_sha256": "bc33612e6d719791034d72a7de3e4ddfa09b81d66a9c1b73a8a7fffe668eb0d2",
+  "plan_status": "FROZEN_DIAGNOSTIC_SCOPE",
+  "schema": "cp02_failure_focus_independent_plan_review_v1",
+  "status": "GO_PLAN_ONLY",
+  "verified_scope": {
+    "fixed_cases": [
+      "ORIGINAL",
+      "A",
+      "C",
+      "B1_OLD_KDM6"
+    ],
+    "no_flux_or_causal_budget_claim": true,
+    "no_gate_change": true,
+    "no_new_candidate": true,
+    "points_per_hour": 3688,
+    "score_leads": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "snapshots_utc": [
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
+    "state_extraction_requires_separate_frozen_protocol_and_code_review": true
+  }
+}

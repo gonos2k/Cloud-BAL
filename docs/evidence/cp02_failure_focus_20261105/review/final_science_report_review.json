@@ -1,0 +1,77 @@
+{
+  "schema": "cp02_b1_failure_focus_final_science_report_review_v1",
+  "status": "PASS_FINAL_REPORT_SCIENCE_REVIEW",
+  "result": "GO",
+  "source_worktree": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL",
+  "reviewed_artifacts": {
+    "README.md": "8a691bd851030c8b01708b19525ca13405457dcd54c758d498cc8127092ebe55",
+    "docs/CURRENT_RESEARCH_STATUS.md": "1801c87c02de77d721873e3a34cd223865fc1b495fdfbb95af55138c1ec30fd2",
+    "docs/CP02_B1_FAILURE_FOCUS_20261105.md": "161e9f4b68798511dd6ad3c8550a67bcb9fccd167e265176b19fe6e43e669ddb",
+    "docs/evidence/cp02_failure_focus_20261105/README.md": "66412b3484073b947ca69bad0b3cc1e720b28eb007cd059eb6eaed3c05e5acd8",
+    "docs/evidence/cp02_failure_focus_20261105/analysis_plan.json": "bc33612e6d719791034d72a7de3e4ddfa09b81d66a9c1b73a8a7fffe668eb0d2",
+    "docs/evidence/cp02_failure_focus_20261105/targets/bundle_receipt.json": "3ea1a834f61fa7a88c8f199c5ef8710298c489abc83c3c11965241d5dd7a420f",
+    "docs/evidence/cp02_failure_focus_20261105/targets/source_receipt.json": "19ae04f9a8c3c6e485124674f4b93d7022ed4c20e5bfec6fb90dbdd6c839c4fb",
+    "docs/evidence/cp02_failure_focus_20261105/state/extraction_plan.json": "c3961eee66da7e1979d47baad64df15e75701ea586462b6b4a634c184d798c27",
+    "docs/evidence/cp02_failure_focus_20261105/state/extracted/receipt.json": "39f1cede1e47b173491a47e5f4f0182ef7f682be834fbea0f0e1ab37889e23ba",
+    "docs/evidence/cp02_failure_focus_20261105/context/bundle_receipt.json": "a63d4b0d43f94b7456a9ebd8dde68b1616aec521f28bab04e73ee8d48c3e014e",
+    "docs/evidence/cp02_failure_focus_20261105/figures/package_receipt.json": "bc4bb7dc209e15c6e6fa38cddb2ff15f9484d79637771ba09f1413ae3d9b690d",
+    "docs/evidence/cp02_failure_focus_20261105/review/independent_failure_recount.json": "027ed504a9b189afd5632012872ddd52b174e0f443085e9d2da5e9fefbfde415",
+    "docs/evidence/cp02_failure_focus_20261105/review/independent_target_review.json": "bd68bf423208f3d8aea13860a2e49703276e096b157b034e6b4598a624641057",
+    "docs/evidence/cp02_failure_focus_20261105/review/independent_state_review.json": "1d3bdd346bccdbb687313867f767beb5c8b279dd957e93ed4aeedec862a69ca0",
+    "docs/evidence/cp02_failure_focus_20261105/review/independent_context_review.json": "77a8679fcd11ad7afd35f30d9c0c4161cf600506c954d45867d661f92c3496f9",
+    "docs/evidence/cp02_failure_focus_20261105/figures/h2_transition_maps.png": "a0728d30942790d633bd1cded30f97af5304681af26bb794cbb63335c4f79d57",
+    "docs/evidence/cp02_failure_focus_20261105/figures/h5_transition_maps.png": "582192d860ad1298a2c60c862a1e479e6747ba876adfc00df7e41bf5de1bc79f",
+    "docs/evidence/cp02_failure_focus_20261105/figures/csi_algebra_h5_5mm.png": "418b52b687cef881ddac60a8bb77bc9d48f0ff2597b2f731f786c3e011b3eb55",
+    "docs/evidence/cp02_failure_focus_20261105/figures/selected_point_hourly_paths.png": "d2eb1ea2def08a45057a2cecacb89765a30a5dd3566c81443209b896fbe0d0ff",
+    "docs/evidence/cp02_failure_focus_20261105/figures/conditional_layer_contrasts.png": "854340cc48b90c451b258a39196a5f1834018fae152ab5b8445dc24f187b9ece"
+  },
+  "checks": {
+    "report_claims_match_independent_recounts": true,
+    "physical_table_medians_match_context_rows": true,
+    "five_canonical_figures_visually_inspected": true,
+    "current_status_and_readme_consistent": true,
+    "transition_column_semantics_documented": true,
+    "new_forecast_or_candidate_claimed": false,
+    "causal_or_domain_budget_claimed": false
+  },
+  "recounted_findings": {
+    "h02_weak_hit_losses_crossed_by_B1_OLD_KDM6": "9/10",
+    "h02_new_false_alarms_where_B1_OLD_KDM6_missed_and_A_hit": "32/53",
+    "h05_C_new_5mm_false_alarms": 12,
+    "h05_new_5mm_FA_already_ge_5mm_in_both_ORIGINAL_and_B1_OLD_KDM6": 7,
+    "h05_new_5mm_FA_below_5mm_in_all_old_cases": 5,
+    "weak_hit_count_C_minus_A_h02_to_h06": [3, 0, -1, -11, -6],
+    "weak_hit_count_D_minus_A_h02_to_h06": [-2, -4, -1, 15, -1],
+    "h05_new_5mm_FA_lower_layer_medians": {
+      "C_minus_A_QVAPOR_target_kgkg": -2.375116243126009e-6,
+      "C_minus_A_QVAPOR_matched_control_kgkg": -2.0789981786594955e-6,
+      "C_minus_A_RH_liquid_target_fraction": -0.00021211695339867775,
+      "C_minus_A_RH_liquid_control_fraction": -0.00013039942103770796,
+      "C_minus_A_QRAIN_target_kgkg": 2.0083730367915728e-6,
+      "C_minus_A_QRAIN_control_kgkg": -9.40594695369773e-9
+    }
+  },
+  "figure_review": {
+    "figures": [
+      "h2_transition_maps.png",
+      "h5_transition_maps.png",
+      "csi_algebra_h5_5mm.png",
+      "selected_point_hourly_paths.png",
+      "conditional_layer_contrasts.png"
+    ],
+    "notes": [
+      "Transition maps distinguish target events, resolved false alarms, and matched controls.",
+      "The CSI decomposition is arithmetic with the fixed observed-event count and does not attribute physical causes.",
+      "Hourly paths are fixed-point one-hour increments, shown on a symlog axis and not interpreted as trajectories.",
+      "Layer contrast plots label the antecedent valid time and show individual points, medians and interquartile ranges."
+    ]
+  },
+  "validation_summary": "Independent target, state and context recounts pass; all five canonical figures and report tables were reviewed. Root clean-export suite is running and will be recorded in the independent KG review before any KG freeze/stage.",
+  "science_open_items": [
+    "Single event; RN1 upstream valid time, coverage and QC remain unresolved.",
+    "Independent-case skill and domain water/energy budgets remain unverified.",
+    "Eulerian state snapshots are not captured process rates or trajectories; no causal process attribution follows.",
+    "Separate C2 T39 and H/A/N one-hour completion remain open."
+  ],
+  "kg_status": "No selection lock, stage or maintained-root publication performed by this reviewer."
+}

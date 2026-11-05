@@ -1,0 +1,48 @@
+{
+  "analyzer_sha256": "fb8bc9a09b674077c8ca888f2fa6acfc3c22073e3305012a2562afcc8a54bc14",
+  "context_bundle_sha256": "a63d4b0d43f94b7456a9ebd8dde68b1616aec521f28bab04e73ee8d48c3e014e",
+  "coverage": {
+    "cohort_count": 16,
+    "cohort_physical_contrast_rows_recomputed": 3072,
+    "cohort_surface_context_rows_recomputed": 316,
+    "cohort_surface_summary_rows_recomputed": 160,
+    "cross_checks": {
+      "h02_new_false_alarm": "32/53 B1_OLD_KDM6 misses became A hits",
+      "h02_weak_loss": "9/10 B1_OLD_KDM6 crossed role threshold",
+      "h05_new_5mm_false_alarm": {
+        "B1_OLD_KDM6": 7,
+        "ORIGINAL": 7,
+        "all_old_cases_below_5mm": 5
+      }
+    },
+    "event_rows": 158,
+    "focus_points": 270,
+    "layer_feature_rows_recomputed": 15120,
+    "layer_field_rows_recomputed": 120960,
+    "layer_invalid_field_rows": 0,
+    "layer_valid_field_rows": 120960,
+    "matched_control_ids_reused_across_roles": 21,
+    "matched_control_rows": 158,
+    "surface_case_hour_point_paths": 6480,
+    "surface_path_rows_recomputed": 6480,
+    "unique_matched_control_ids": 136,
+    "within_role_control_reuse": false
+  },
+  "limits": [
+    "Layer summaries were recomputed as unweighted per-corner model-level means, followed by the stored fixed bilinear weights; no renormalization or mass weighting.",
+    "Medians and quantiles are descriptive summaries of event-defined target/control groups; repeated controls across roles do not imply independent samples.",
+    "The inputs are sealed Eulerian history snapshots and one-hour surface increments, not captured process rates; no causal or budget claim follows."
+  ],
+  "output_sha256": {
+    "cohort_physical_contrasts.csv": "77518c2415f33c0ec1185369b348167c178c464c0e8ae121022fbc8d1af78fb9",
+    "cohort_surface_context.csv": "a0ed07209c87791eccb77bf0dbf666ca1769fb6286eb61cf4b2e335b02e39f3c",
+    "cohort_surface_context_summary.csv": "1ec81cff556ebed14f5db055f6cdeded0a6f837de9bb425a32bc507a7787045c",
+    "layer_features.csv": "e803b41412a1ce2963d9f25b2582c5ae32cc9f8b3e3b0a66f827d53d09db5778",
+    "point_surface_paths.csv": "1cdbc58119ec50221f239f841b35fb84bf49686fcf68aeb3728c9288bd0b999b"
+  },
+  "schema": "cp02_b1_failure_context_independent_review_v1",
+  "state_plan_sha256": "c3961eee66da7e1979d47baad64df15e75701ea586462b6b4a634c184d798c27",
+  "state_receipt_sha256": "39f1cede1e47b173491a47e5f4f0182ef7f682be834fbea0f0e1ab37889e23ba",
+  "status": "PASS_CONTEXT_RECOUNT",
+  "target_receipt_sha256": "3ea1a834f61fa7a88c8f199c5ef8710298c489abc83c3c11965241d5dd7a420f"
+}

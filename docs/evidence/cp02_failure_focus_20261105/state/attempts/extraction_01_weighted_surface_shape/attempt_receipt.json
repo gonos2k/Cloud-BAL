@@ -1,0 +1,35 @@
+{
+  "attempt_id": "extraction_01_weighted_surface_shape",
+  "command": [
+    "python3",
+    "tools/cp02_b1_failure_state.py",
+    "--plan",
+    "docs/evidence/cp02_failure_focus_20261105/state/extraction_plan.json",
+    "--output",
+    "docs/evidence/cp02_failure_focus_20261105/state/extracted"
+  ],
+  "exit_code": 1,
+  "extractor": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/tools/cp02_b1_failure_state.py",
+    "sha256": "b892d3ed4e8c138530638292a9c2889f204d41f0e3b0881c46a352ffb789d406"
+  },
+  "failure": "ValueError at ORIGINAL h13 surface score check: actual weighted increment had shape (270,270) due broadcasting a (270,4) component increment with existing weighted() expecting (point,level,corner). Atomic output was removed; state/extracted was not published.",
+  "independent_reproduction": "Read-only direct recomputation from original h12/h13 histories gives correctly shaped per-point weighted increments and maximum difference 1.734723475976807e-18 mm versus canonical paired score. Correct fix is increment[:,None,:] followed by [:,0].",
+  "plan": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/state/extraction_plan.json",
+    "sha256": "aa26eb699ccbde575c97c750a60b8c4d1d062056ae2881c4bfb4db610f88044e"
+  },
+  "retry_policy": "Preserve this plan and logs; correct the reproducible array-shape defect, review new source hash and plan, then retry into a fresh output path.",
+  "schema": "cp02_b1_failure_state_attempt_v1",
+  "status": "FAILED_PRESERVED_FOR_REVIEW",
+  "stderr": {
+    "path": "stderr.log",
+    "sha256": "d9ab92814c8bc519f598ebef9b88bb2541536368b58c4baac83d2eb12e14d40e",
+    "size_bytes": 779
+  },
+  "stdout": {
+    "path": "stdout.log",
+    "sha256": "892311e64c0e764aedede20e96d86b7ccabec9f6018838097f257e87ea09991a",
+    "size_bytes": 18
+  }
+}

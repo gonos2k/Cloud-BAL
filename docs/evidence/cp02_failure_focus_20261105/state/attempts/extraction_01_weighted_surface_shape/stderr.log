@@ -1,0 +1,9 @@
+Traceback (most recent call last):
+  File "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/tools/cp02_b1_failure_state.py", line 608, in <module>
+    main()
+  File "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/tools/cp02_b1_failure_state.py", line 604, in main
+    print(json.dumps(run(args.plan, args.output), sort_keys=True))
+                     ^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/tools/cp02_b1_failure_state.py", line 542, in run
+    raise ValueError(f'{case}/h{hour:02d}: surface increment differs from paired scores')
+ValueError: ORIGINAL/h13: surface increment differs from paired scores
