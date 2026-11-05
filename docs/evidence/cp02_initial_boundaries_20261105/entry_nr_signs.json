@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "scope": "Only first-entry NR cells numerically changed between arms; no claim for unchanged cells.",
+  "global_receipt_sha256": "f76b74141410d5b287c554467fd0f3803fe9a8c8debceb6e33dd30639aa69681",
+  "source_sha256": "0d060320250be36f6251adb9c6e1647216a75bd85a0987f37dcb3b8a10a06936",
+  "all_entry_changed": {
+    "n": 353417,
+    "B1_negative": 0,
+    "B1_zero": 353417,
+    "B1_positive": 0,
+    "DM_negative": 1695,
+    "DM_zero": 0,
+    "DM_positive": 351722,
+    "negative_difference_and_DM_negative": 1695
+  },
+  "initial_equal_entry_changed": {
+    "n": 154317,
+    "B1_negative": 0,
+    "B1_zero": 154317,
+    "B1_positive": 0,
+    "DM_negative": 1687,
+    "DM_zero": 0,
+    "DM_positive": 152630,
+    "negative_difference_and_DM_negative": 1687
+  },
+  "limitations": [
+    "Raw pre-clamp values; not final NR or an error claim.",
+    "Unchanged-called cells are absent from the sparse file and their B1 values cannot be inferred from it."
+  ]
+}

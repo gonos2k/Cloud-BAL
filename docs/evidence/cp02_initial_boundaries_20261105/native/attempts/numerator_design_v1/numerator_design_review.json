@@ -1,0 +1,64 @@
+{
+  "status": "BLOCKED_NO_GO",
+  "decision": "Do not execute the bounded numerator replay until the read-watch/prepoint timing is corrected and the revised plan, probe, and gate are re-reviewed.",
+  "scope": "Independent read-only design review of the p20183 rank-5 phi7 numerator probe for B1 and DM065. No model run, probe edits, source edits, or model-data writes were performed.",
+  "review_method": [
+    "Queried the existing Cloud-BAL Graphify graph for numerator probe, raw bindings, and related code relationships; graph used only for navigation.",
+    "Inspected numerator_plan.json, numerator_probe.py, numerator_case.py, test_numerator_gate.py, existing paired raw phi captures, frozen source, and bridge audit.",
+    "Disassembled the actual original executable around 0x2156e80..0x2157088; SHA256 matched the pinned binary."
+  ],
+  "evidence_sha256": {
+    "plan": "0c7f1d41dd041d2138dfeb53229554c4277f75f6002f9379a354c62d17e55109",
+    "probe": "8d3b23b482fa5c4868470f678f3d2c175055543976af879ee1e41c1f7b30e3c1",
+    "gate": "ff22307da9c8672668bc8ebe008d70ad64ce4a95b6d76baa69aaa14d4c94bb53",
+    "synthetic_test": "70fac01c8d491cfa46958bfe036a05748013b74facf687cc03af5fe5e4ea8394",
+    "phi_probe": "3662b5eae597953ab8f1380e04fab09f4bbf2b152df666c535804fda6a93bbb0",
+    "phi_source": "d8c11bd9b3dd0fd717c14899c53ffe7ca37c4d768128c4dac750429f7fb4bf3a",
+    "phi_B1_raw": "8fa745a544f2367ed68ce741bd9f534fadda6f44737dedd06e085f9cb147c614",
+    "phi_DM065_raw": "cce811a1d165f1061eb512b3e5da096c36bb4dc0a3e5bbac134ffd5050217f14",
+    "bridge_audit": "5e8c8093bf6c3bbbb4d94485c2a7b9ac8ffe23edfd538c05f75ae3f17ba6a49a",
+    "executable": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f"
+  },
+  "binary_check": {
+    "sha256_matches_plan": true,
+    "relevant_instruction_bytes": {
+      "0x2156fd6": "420f1014b8 (movups (%rax,%r15,4),%xmm2)",
+      "0x2156fe7": "0f5cd3 (subps %xmm3,%xmm2)",
+      "0x2156fea": "488b83a0020000 (load next operand base)",
+      "0x2156ff6": "0f58da (addps %xmm2,%xmm3)",
+      "0x2156ff9": "430f1054bd00 (movups 0x0(%r13,%r15,4),%xmm2)",
+      "0x2156fff": "0f5cda (subps %xmm2,%xmm3)",
+      "0x2157002": "0f5ed8 (divps %xmm0,%xmm3)",
+      "0x2157067": "0f5ec8 (divps %xmm0,%xmm1)",
+      "0x215706a": "430f1004be (movups (%r14,%r15,4),%xmm0)",
+      "0x215706f": "0f5cc8 (subps %xmm0,%xmm1)",
+      "0x2157072": "430f110cbc (movups %xmm1,(%r12,%r15,4))",
+      "0x2157077": "4983c704 (add $4,%r15)"
+    },
+    "assessment": "The planned arithmetic PC/opcode sequence after the prepoint matches the original binary. The prepoint instruction itself is the PH vector load and is not opcode-checked or event-logged by the probe."
+  },
+  "raw_binding_check": {
+    "status": "PASS_EXISTING_CAPTURE_BINDINGS",
+    "details": "Existing p20183 B1 and DM065 raw phi captures each contain 15 owning entries; entry 7 caller is 0x13eb579 and exact PH/PH-next/PHB/PHB-next words match numerator_plan.json. Existing capture contains ALB, bounds, and actual AL/P base pointers; independent bridge audit records last-phi-to-prep and prep-to-KDM word/pointer matches."
+  },
+  "blockers": [
+    {
+      "id": "READ_WATCH_ARMS_AFTER_TARGET_PREPOINT_INSTRUCTION",
+      "severity": "BLOCKER",
+      "detail": "At this source path, PH(k) is first read for the vector arithmetic by the instruction at 0x2156fd6. ReadWatch.stop explicitly treats the hardware read-watch stop PC as after the access, disables the watchpoint, then enables Prepoint at that same address. The triggering load has already executed, so GDB cannot hit the newly enabled breakpoint for the current vector. On the next loop iteration the candidate AL vector range has advanced beyond the target, so Prepoint rejects it and the intended phi7 lane is missed. The replay will reach the fail-closed missing-sequence gate after running without a numerator capture.",
+      "recommendation": "Arm a conditional candidate check at the loop header before the watched vector load (0x2156f80) and leave it enabled until its computed AL vector range contains the target, or use another preinstruction hook proven to precede this load. Update the plan and add a synthetic timing test that models a post-access watchpoint PC."
+    },
+    {
+      "id": "GATE_DOES_NOT_ASSERT_ALL_DECLARED_PHI7_GUARDS",
+      "severity": "FOLLOW_UP",
+      "detail": "validate_numerator checks event identity, ordering, input words, lane and arithmetic, but not caller_pc, kdm_completed, phi7 bounds, or branch/hypso/use_theta values on the numerator event. The probe performs those runtime checks, and the paired phi capture has its own validation, but the emitted numerator receipt does not independently preserve/check all fields claimed in the plan mandatory gates.",
+      "recommendation": "Emit the branch/hypso/use_theta values and assert caller_pc, kdm_completed, owning bounds and those branch values in validate_numerator."
+    }
+  ],
+  "limitations": [
+    "Graphify index is a navigation aid; binary disassembly, source and captures were checked directly.",
+    "Existing raw phi bindings establish input identity and bridge parity; they do not prove which SIMD lane or machine operation produced AL.",
+    "No execution was performed; runtime GDB read-watch PC behavior was reviewed from x86 instruction ordering and the probe\u2019s explicit post-access semantics, not experimentally replayed."
+  ],
+  "reviewer_note": "Fix the read-watch timing before asking for root GO. The current design fail-closes eventually, but it is expected to miss the target lane."
+}

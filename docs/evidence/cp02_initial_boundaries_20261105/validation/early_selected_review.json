@@ -1,0 +1,33 @@
+{
+  "status": "GO",
+  "reviewer": "independent from producer",
+  "sha256": {
+    "baseline/recount_early_selected.py": "6136b40f9ace6501a504da6a81ee421a6fc547344b7a11512b93334aa89b4cb8",
+    "baseline/results/receipt.json": "d93b979f455c7ff07a38deb04af3c6ea1ae8196b01f9775bd7a0420ed2b76219",
+    "baseline/results/early_selected.npz": "803c398b178db89271976b941a74db7e3a9010ffe16091c94749f5d1feb5ab1c",
+    "baseline/results/entry_frontier.csv": "43c429a7628a5245d90046620a39b8b9d757edd60edfc53829f32bd2f49ecdeb"
+  },
+  "checks": {
+    "fresh_output_replay_byte_equal": true,
+    "native_cells": 123,
+    "all_156_corner_coordinates_and_weights_checked": true,
+    "frontier_rows_independently_recomputed": 64,
+    "TK_float32_TH_times_PII_checks": 76752,
+    "fixed_schema_field_order": true,
+    "window": "steps 1 through 4 only",
+    "NFA12_native_frontier": {
+      "TH_step": 3,
+      "TK_step": 2,
+      "P_step": 2,
+      "PII_step": 2,
+      "NR_step": 2,
+      "NR_level_1based": 10
+    },
+    "original_CP04_return_semantics": "TK includes the t/PII then TH*PII wrapper mapping; intercall gap starts at return"
+  },
+  "limitations": [
+    "Blank first-step cells mean no numerical difference within the first four calls only.",
+    "Fixed sampled Eulerian states do not establish a cause or original writer.",
+    "The RETURN TK observation includes the wrapper conversion roundtrip."
+  ]
+}

@@ -1,0 +1,38 @@
+{
+  "status": "PASS",
+  "scope": "Four synthetic native capture gate scripts on the research host; writer/phi tests use the preserved phase0 runtime fixture. No model integration or compilation.",
+  "scripts": [
+    {
+      "name": "test_parity_layout.py",
+      "chunk_id": "3eef5f",
+      "wall_time_seconds": 0.199405979,
+      "exit_code": 0,
+      "original_token_count": 15,
+      "output": "synthetic global/selected raw layout and core-only TK PASS\n"
+    },
+    {
+      "name": "test_writer_gate.py",
+      "chunk_id": "b2f588",
+      "wall_time_seconds": 0.114271015,
+      "exit_code": 0,
+      "original_token_count": 20,
+      "output": "writer gate baseline, corruptions and paired raw Fortran logical guards PASS\n"
+    },
+    {
+      "name": "test_phi_gate.py",
+      "chunk_id": "013c81",
+      "wall_time_seconds": 0.076072057,
+      "exit_code": 0,
+      "original_token_count": 15,
+      "output": "nested phi/vspow/bridge gate and corruption rejection PASS\n"
+    },
+    {
+      "name": "test_numerator_gate.py",
+      "chunk_id": "90e5a0",
+      "wall_time_seconds": 0.136722587,
+      "exit_code": 0,
+      "original_token_count": 15,
+      "output": "numerator machine-order, lane and AL corruption gates PASS\n"
+    }
+  ]
+}

@@ -1,0 +1,46 @@
+{
+  "status": "DRAFT_REQUIRES_TEAM_REVIEW_AND_ROOT_GO",
+  "format": "JSONL; field words are exact 4-byte little-endian raw hex. GDB installs debugger breakpoints/watchpoints; the probe does not assign model-data values or alter source or executable files.",
+  "targets": {
+    "p20183": {
+      "rank": 5,
+      "ijk_1based": [
+        144,
+        142,
+        4
+      ]
+    },
+    "p17051": {
+      "rank": 3,
+      "ijk_1based": [
+        140,
+        120,
+        38
+      ]
+    }
+  },
+  "common": [
+    "event",
+    "sequence",
+    "rank",
+    "target",
+    "i",
+    "j",
+    "k",
+    "kdm_entered",
+    "kdm_completed"
+  ],
+  "chronology": "The number of completed KDM calls, not a presumed next timestep, accompanies every event. Caller return PC 0x13eb579 and 0x13ffdd4 are classified as the two linked solve_em call sites; any other site remains explicitly unclassified. Verify the exact symbol/PC bytes against the frozen original executable before trusting these labels.",
+  "phi_guard": "Emitted before nonhydrostatic/hypsometric/moisture guards: signed and raw four-byte nonhydrostatic LOGICAL, its actual machine low-bit branch, hypsometric_opt, n_moist, runtime P_QV, use_theta_m, k+1 and kme. Unsupported branch or index aborts rather than manufacturing values.",
+  "phi_entry": "Record caller PC/class, actual arg pointers, 4D moisture QV slice and its runtime index, use_theta_m, actual bounds and source operands ALB, MU/MUTS, hybrid C1/C2/C3/C4, PH/PHB at k and k+1, PB, T, P0/T0/PTOP, grid vertical coefficients and QV. AL and P are INTENT(OUT): no pre-call AL/P is interpreted as a phi input.",
+  "phi_return": "Record actual AL/P and PH(k,k+1), maintaining function entry/return association. The EOS source uses vspow and p=p*p0-pb on the actual nonhydro moist branch; source equations alone do not establish bit-exact vendor power rounding.",
+  "vspow": "While inside the target phi invocation, breakpoint its actual vspow_ call and match its output row pointer to the target j/k and active phi P base. Record target row index/count and actual input/exponent words before the call, actual result word after. No full-domain vspow dump. If no matching call occurs, fail the planned coverage gate rather than use a generic power value.",
+  "gap_watch": "Install a hardware P watch after the completed final acoustic-iteration-4 calc_p_rho return and retain it until corresponding moist-prep entry. Record initial P, changed-word sequence, post-store PC/bytes/registers and final P. A value-stable write need not trigger; observed final must equal the last watched word. Last phi return and prep input are separately compared by word, not only by pointer. Watch stop PCs are provisional until separately authorized preinstruction/lane replay.",
+  "prep_and_kdm": "Record prep inputs/outputs and target first-four KDM ENTRY/RETURN words; compare observed prep TH/PII/PF/QV values and pointers to later KDM arguments and compare all target wrapper fields to the prior phase0 parity record. Conversion th*pii and th=t/pii inside KDM remain within-call.",
+  "gates": [
+    "Same original exe and resolved runtime profile hashes, 89 staged/source input hashes before and after, exact h00 history parity, per-rank success and bounded stop/cleanup.",
+    "Exact four-step target ENTRY/RETURN parity with phase0 and valid owner/call bounds; no direct physics changes or recompilation.",
+    "At least one verified target-row vspow input/exponent/output for each phi call in the RK path, ordered nested entry/return events, and raw branch/4D moisture pointer checks.",
+    "Record rather than assume value bridge last-calc\u2192watched gap\u2192last phi\u2192prep\u2192KDM; unobserved stores or writer PCs are not inferred."
+  ]
+}

@@ -1,0 +1,165 @@
+{
+  "status": "DRAFT_REQUIRES_PEER_REVIEW_AND_ROOT_GO",
+  "format": "UTF-8 JSON Lines, one event per line; finite-width source REAL words are little-endian IEEE-754 raw hex bytes, not decimal approximations.",
+  "scope": "Original pinned standard executable, one debugger process on the owning rank, normal original executable on seven other ranks, 80 seconds/four KDM calls; no physics or executable changes.",
+  "targets": {
+    "nr20330": {
+      "rank": 5,
+      "ijk_1based": [
+        141,
+        142,
+        2
+      ]
+    },
+    "nr20330max": {
+      "rank": 5,
+      "ijk_1based": [
+        141,
+        143,
+        11
+      ]
+    },
+    "p20183": {
+      "rank": 5,
+      "ijk_1based": [
+        144,
+        142,
+        4
+      ]
+    },
+    "p17051": {
+      "rank": 3,
+      "ijk_1based": [
+        140,
+        120,
+        38
+      ]
+    }
+  },
+  "common_fields": [
+    "event",
+    "sequence",
+    "rank",
+    "target",
+    "i",
+    "j",
+    "k"
+  ],
+  "function_entry_return": {
+    "fields": "raw 4-byte words keyed by physical operand name",
+    "metadata": "actual bounds, KDM timestep or provisional next KDM timestep, RK or acoustic iteration where available; pointer base addresses, scs/sce checked against runtime P_QNR and spec_zone",
+    "semantics": "provisional timestep is counted from previous completed KDM entry; do not infer a finer model timestamp. Source and absolute PC binds require unchanged executable SHA."
+  },
+  "nr_operator": {
+    "function": "module_em_mp_rk_update_scalar_",
+    "entry_fields": [
+      "scalar_old only after witnessed RK1 for same old-array target",
+      "scalar_current",
+      "scalar_tendency",
+      "advection_tendency",
+      "msfty",
+      "c1",
+      "c2",
+      "mu_old",
+      "mu_new",
+      "mu_base",
+      "dt"
+    ],
+    "return_fields": [
+      "scalar_old",
+      "scalar_current"
+    ],
+    "source_semantics": "For RK1 the routine first copies scalar_current to scalar_old; numerator uses that copy, not the pre-call scalar_old. Later stages use stored scalar_old. Tendency combines the recorded advection and scalar tendency on source-defined ranges; scalar_tendency is not assumed zero. Actual dt and spec_zone are recorded.",
+    "pointer_gate": "Each candidate RK event records scs, sce and runtime P_QNR independently; all must agree. Equal numeric index can identify different array namespaces. For each timestep, only candidates whose provisional qnr_base_pointer equals the same-timestep KDM6 NR base are QNR-bound; all other same-index candidates remain explicitly unclassified. Exactly RK stages 1,2,3 are required for the bound slice. This establishes pointer identity, not the absence of intervening writes.",
+    "initialization": "RK1 entry scalar_old is not read; it is recorded after return and later RK entries are accepted only after a witnessed RK1 for the same address."
+  },
+  "pressure_operator": {
+    "function": "module_small_step_em_mp_calc_p_rho_",
+    "entry_fields": [
+      "ph_k",
+      "ph_kplus1",
+      "alt",
+      "t2",
+      "t_save",
+      "c2a",
+      "mu",
+      "mut",
+      "c1h",
+      "c2h",
+      "t0",
+      "rdnw",
+      "smdiv",
+      "pm1 only when acoustic_iteration > 0"
+    ],
+    "return_fields": [
+      "al",
+      "p",
+      "pm1"
+    ],
+    "initialization": "al and p are INTENT(OUT), so pre-call values are not interpreted; pm1 is not read at step 0 and later reads require a witnessed completed step 0 for that exact target pointer. GDB watchpoint setup necessarily samples an opaque old word; the first watch event does not report it. Nonhydrostatic must be true and k+1 inside allocated bounds.",
+    "source_semantics": "When step>0, p_final=p_raw+smdiv*(p_raw-pm1_old); pm1_new=p_raw. Input producers earlier than this routine remain unresolved until explicitly traced."
+  },
+  "preparation_operator": {
+    "function": "module_big_step_utilities_em_mp_moist_physics_prep_em_",
+    "entry_fields": [
+      "t_new",
+      "t0",
+      "al",
+      "alb",
+      "p",
+      "p0",
+      "pb",
+      "qv",
+      "qc"
+    ],
+    "return_fields": [
+      "rho",
+      "th",
+      "pii",
+      "pf"
+    ],
+    "source_semantics": "PF=P+PB and PII=((P+PB)/P0)**RCP; TH is dry theta formed from t_new and qv according to use_theta_m. Do not claim bit-exact source arithmetic until actual instruction/rounding checked.",
+    "pointer_gate": "Within each timestep prep p input must equal a preceding calc_p_rho p pointer, and TH, PII and PF outputs must match KDM6 arguments. Pointer identity alone does not prove no intervening writes."
+  },
+  "kdm_boundary": {
+    "fields": [
+      "th",
+      "qv",
+      "qc",
+      "qr",
+      "qi",
+      "qs",
+      "qg",
+      "nn",
+      "nc",
+      "ni",
+      "nr",
+      "bg",
+      "den",
+      "pii",
+      "p"
+    ],
+    "timing": "Entry and return around the original KDM6 call, first four actual calls. TK is reconstructed for target parity as rounded float32 TH*PII; this is not a separately observed memory field. t=th*pii on ingress and th=t/pii before return are within-call transformations and not external interval E."
+  },
+  "watch_after": {
+    "fields": [
+      "owner",
+      "watch_address",
+      "pre_word",
+      "post_word",
+      "reported_pc",
+      "pc_symbol",
+      "instruction_bytes_around_pc",
+      "registers",
+      "pc_semantics"
+    ],
+    "interpretation": "Hardware write watchpoint reports after a changed store; address and actual post-state are observed. The reported PC may be after the store and must not be asserted as the exact writer without independent disassembly and a separately approved pre-instruction replay. Vector-lane inputs are not necessarily recoverable from post-store registers. Zero watch events mean no observed value-changing store and do not establish no stores."
+  },
+  "gates": [
+    "phase0_03 full all-rank global14 and selected16 first-four parity plus h00 passed on the same executable",
+    "each job must recheck all 89 inputs, executable and runtime profile before/after, h00 byte equality, and owner-target KDM ENTRY/RETURN parity for all four steps",
+    "require all pointer bindings, runtime P_QNR identity, owner/bounds and actual event coverage",
+    "no source-only causal attribution, no absence-as-zero, no pre-instruction result claimed from post-watch state",
+    "freeze scripts, schema, target and command; independent review and explicit root GO required before execution"
+  ]
+}

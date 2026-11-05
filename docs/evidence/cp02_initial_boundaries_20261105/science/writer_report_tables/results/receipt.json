@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "analysis_pins": {
+    "nr20330": "81136f351c4804be078761cbfc57a715ccd58bf24ffd1537cb4c180a1b3d475b",
+    "nr20330max": "ae60a061371e6fae99ff352a61d4ae3f541e7d73422d2b81ee9853b4f7d58735",
+    "p20183": "cd31c0400f17d7cdd94e9c4e91767f75ef25ed6bbab6959891cda767cc9576cd",
+    "p17051": "c98855bfa798a6ed9e2cb007921f0a01f961dda12ab49caded34b65b395fa462"
+  },
+  "source_sha256": "c8de371ec335dd3609b43271dbbd07c08dd1fcd10dca9d626cc00ce7cf69adef",
+  "rows": {
+    "producer_calls": 272,
+    "bridges": 80,
+    "first_differences": 6
+  },
+  "outputs": {
+    "first_sampled_operator_differences.csv": "dd7cd3747916684a32e1af49098858b1a0b8ed28764f08dca75e07b4fc0e5578",
+    "pointer_value_bridges.csv": "6b4454743b476f37b67b99cf64fff3fba614ead2307805afa649a5fb2a067d82",
+    "producer_calls.csv": "fbc4761f340a7a29693beea78a7d5a6b02aac56cc50e9ee41b49df6c6bcc6a9a"
+  },
+  "limitations": [
+    "All records are bounded same-target sampled events, not a complete budget.",
+    "Source-order float32 candidates and signed residuals do not establish compiled instruction or rounding equivalence.",
+    "The prep runtime theta branch remains unresolved; t_new is a captured model input, not labeled physical temperature.",
+    "Same pointer may carry changed values between producer return and consumer entry; compare words, never infer continuity from pointer alone.",
+    "Other index-6 namespaces are unclassified. Watch PCs are post-store; no event does not prove no write."
+  ]
+}

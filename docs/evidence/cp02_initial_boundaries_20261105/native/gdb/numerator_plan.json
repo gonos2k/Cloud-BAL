@@ -1,0 +1,44 @@
+{
+  "status": "DRAFT_REQUIRES_PEER_REVIEW_AND_ROOT_GO",
+  "scope": "Two original-executable 80 s runs, B1 and DM065, p20183 (i=144,j=142,k=4, owner rank 5), bounded to the seventh target calc_p_rho_phi call. No source/executable modifications, no physics policy change and no pre-emptive claim of source association.",
+  "original_executable_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+  "input_binding": {
+    "phi_ordinal": 7,
+    "caller_return_pc": "0x13eb579",
+    "kdm_completed": 1,
+    "hypso": 2,
+    "use_theta_m": 1,
+    "B1": {
+      "ph": "7de0a842",
+      "ph_next": "5ef20143",
+      "phb": "4c280546",
+      "phb_next": "39751446"
+    },
+    "DM065": {
+      "ph": "7ce0a842",
+      "ph_next": "5ef20143",
+      "phb": "4c280546",
+      "phb_next": "39751446"
+    }
+  },
+  "candidate_machine_sequence": {
+    "0x2156fe7": "subps, pre-operation snapshot",
+    "0x2156fea": "after subps",
+    "0x2156ff6": "addps, pre-operation snapshot",
+    "0x2156ff9": "after addps",
+    "0x2156fff": "subps, pre-operation snapshot",
+    "0x2157002": "after subps, before first division",
+    "0x2157072": "candidate AL vector store, pre-store snapshot",
+    "0x2157077": "post-store snapshot",
+    "0x2156f80": "conditional vector loop header, prospective target AL effective address"
+  },
+  "bounded_strategy": "At the seventh target phi entry verify caller, branch, bounds and four recorded target input words. Watch the earlier PH(k\u22121) word, which source loop order can read as the upper interface for level k\u22122, then arm the vector loop header at 0x2156f80. Accept only the iteration whose prospective AL store range contains the exact target AL address; bound rejected vector stops at 500. Capture the target vector operations only after this prepoint. If the earlier watch, target vector, event ordering or machine path does not occur as expected, fail closed rather than infer.",
+  "event_contract": "For each stop record ordinal, target coordinates, raw register/vector lanes and memory effective addresses, exact executable bytes, PH/PHB words, numerator results after each operation and pre/post AL store word. Recompute each observed operation in source and actual instruction order as float32; verify final selected vector lane equals stored AL. The active breakpoint is for a single matching target vector and disarms afterward.",
+  "mandatory_gates": [
+    "Original executable/source/runtime profile and 89 inputs unchanged; each h00 history byte-identical to frozen phase0.",
+    "Four target KDM ENTRY/RETURN 16-field byte checks and phi event/boundary checks against existing verified target capture.",
+    "Expected seventh target phi caller/branch/inputs and arithmetic PC sequence verified; no missing records or assumed lane.",
+    "AL effective store address and four-byte selected lane prove the captured arithmetic belongs to target AL; before-store OUT AL is not interpreted.",
+    "No change to frozen phi source/probe/receipt; candidate grouping remains source-replay hypothesis until actual machine observations and independent arithmetic review."
+  ]
+}

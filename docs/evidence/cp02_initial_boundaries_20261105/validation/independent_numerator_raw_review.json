@@ -1,0 +1,88 @@
+{
+  "status": "PASS_INDEPENDENT_RAW_NUMERATOR_REVIEW",
+  "scope": "Independent postrun verification of the paired p20183 rank-5 phi7 SIMD numerator, lane, input words, and stored AL address for B1 and DM065.",
+  "decision": "The raw streams support the bounded machine-arithmetic observation for one target lane in phi call seven per arm. This is mechanism evidence only; no alternate grouping or forecast effect was evaluated.",
+  "sha256": {
+    "design_review_v2": "94a7dce1afde492bc57bd2535f5af57f9717ab2897623775d2bdfcca92b8cf8a",
+    "freeze": "d0be9873a563197eb7a2b5615b2de988fb73e82b6060a5bb96a3ea9ce548045b",
+    "paired_closure": "15a5ffdde46d24358af3d9815fa7ff0a63d9bf4ce381cbffa1e0df6ee9f6c300",
+    "source": "d8c11bd9b3dd0fd717c14899c53ffe7ca37c4d768128c4dac750429f7fb4bf3a",
+    "executable": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+    "B1_receipt": "8fa8cfdc075a6e3ba941572b93ae156cf5268576180cc8a034327a1b6afc3992",
+    "B1_raw_numerator_gzip": "22c4f973cce3a84611a1094cbeb34aceccb8ad93875f8e7fe2ec48ebd2b5e3d5",
+    "B1_raw_phi_gzip": "5e4409c9bfcd1228aec49624febdfa706fba4f0ed9665d6bc0e3b559188d177b",
+    "B1_gdb_log": "f401d64d85a7e52b452422d9375e9ec526dc0eb97df50fd46c7ac4bddf9efddc",
+    "DM065_receipt": "88a217d936f8ee98c39bc2a954e44b81cf3e0268431009b61063897fdf416a0c",
+    "DM065_raw_numerator_gzip": "c92998e180c439e51e577e875df6faadcc18079e3b0e2acfe4283815fb209fd7",
+    "DM065_raw_phi_gzip": "8be71609e3b6ef7c6d14965082b7663ddb7692e18035be2e09b851669eeda635",
+    "DM065_gdb_log": "0e36b1db21c837d32bd93ec2b77b499584e5afbbf85e4f6f2242e9e8c0258f62",
+    "B1_case_receipt": "409597e3dade14ace9a8cc959f8349b64509ec5a66591f4ccaaf33741f91915d",
+    "B1_launcher_log": "d5c4234f531e8910fe937dc4818bd46713baa386146a89121b65b9312d6755b2",
+    "B1_descendant_record": "2ac3748392997334c2adfc31f8bcc3d25231aa226e853a2ef92a393ce5b8c22a",
+    "DM065_case_receipt": "af556738e7034f46f7f14da8f09f51f98477bfce0be9dc83740cfb7701acfc22",
+    "DM065_launcher_log": "c2a1c4579792cc94a9a51eb90523b4b866b836bad6db63d920941e69f146caca",
+    "DM065_descendant_record": "68120aba53fcbbddc850abec7b787ab13d47d0067f830aeabd29e501c9a96775"
+  },
+  "checks": [
+    "The final design review hash is bound by the run freeze; all 28 frozen inputs match the worktree and executable hashes at review time.",
+    "Paired exit file reports B1=0 and DM065=0. Archived receipts, gzip artifacts, and decompressed bytes match the paired closure hashes and the live raw streams byte-for-byte.",
+    "Each raw numerator stream has contiguous event sequence and one phi7 entry, one earlier-PH read watch, one matching prepoint, twelve ordered instruction stops, and a captured phi return.",
+    "Both arms report target p20183 at (144,142,4), caller 0x13eb579, completed KDM count 1, hypsometric option 2, use_theta_m 1, and the recorded raw nonhydrostatic LOGICAL word. The phi7 inputs equal both the frozen plan and seventh companion phi entry.",
+    "Reconstructed target AL, PH(k), PH(k+1), PHB(k), PHB(k+1), and neighbor PH(k−1) addresses from the raw bases and bounds. Target store, lane mapping, and read-watch address agree.",
+    "Re-decoded the selected lane from every raw XMM snapshot and independently recomputed all three numerator operations, both divisions, and final AL using binary32 rounding. The final word equals the post-store target memory word and phi7 returned AL.",
+    "Each arm staged input map equals the case receipt, all 89 source files still match their recorded hashes, and h00 SHA equals its frozen phase0 parity receipt.",
+    "Independently decoded phase0 selected-target binary captures and compared all eight target KDM ENTRY/RETURN records (four per stage per arm) with the companion phi trace; every 16-field record matched exactly."
+  ],
+  "observed": {
+    "common_lane": 2,
+    "slot_mapping": {
+      "ph_next": 0,
+      "ph": 1,
+      "phb_next": 2,
+      "phb": 3
+    },
+    "instruction_expression": "(PH(k+1) - PH(k)) + PHB(k+1) - PHB(k), in the observed SIMD instruction order",
+    "B1": {
+      "inputs": {
+        "ph": "7de0a842",
+        "ph_next": "5ef20143",
+        "phb": "4c280546",
+        "phb_next": "39751446"
+      },
+      "after_first_sub": "7e083642",
+      "after_add": "412b1546",
+      "numerator": "a8178044",
+      "first_division": "eff53a3c",
+      "log_operand": "8489443c",
+      "second_division": "af86733f",
+      "alb": "5032693f",
+      "stored_al": "f045253d",
+      "read_watch_pc": "0x2156fdb",
+      "rejected_vector_headers": 57
+    },
+    "DM065": {
+      "inputs": {
+        "ph": "7ce0a842",
+        "ph_next": "5ef20143",
+        "phb": "4c280546",
+        "phb_next": "39751446"
+      },
+      "after_first_sub": "80083642",
+      "after_add": "422b1546",
+      "numerator": "b0178044",
+      "first_division": "fbf53a3c",
+      "log_operand": "8489443c",
+      "second_division": "bf86733f",
+      "alb": "5032693f",
+      "stored_al": "f046253d",
+      "read_watch_pc": "0x2156fdb",
+      "rejected_vector_headers": 57
+    }
+  },
+  "limitations": [
+    "One selected lane in one phi call per arm; lane 2 means the third float of the observed four-lane vector.",
+    "No alternate grouping was run; this does not show whether another grouping would improve the model or forecast.",
+    "No causal attribution from the numerator difference to forecast skill, and no physics policy change is justified by this capture alone.",
+    "Full four-step KDM parity is recorded by the runner and its raw companion capture; this independent review focused on numerator and AL binding."
+  ]
+}

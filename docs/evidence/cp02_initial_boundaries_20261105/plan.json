@@ -1,0 +1,73 @@
+{
+  "status": "FROZEN_BEFORE_ANALYSIS",
+  "base_commit": "4e193057538840c47631761ac22e70169fbfc0c3",
+  "scope": "first-call global 14-field wrapper entry and return and frozen initial input QNRAIN, both arms; no new forecast or native build",
+  "arms": [
+    "B1",
+    "DM065"
+  ],
+  "shape_yxz": [
+    282,
+    234,
+    39
+  ],
+  "axes": "j,i,k, 1-based native coordinates in CSV; raw core records are j,k,i",
+  "entry_stage_id": 1,
+  "return_stage_id": 5,
+  "fields": [
+    "TH",
+    "QV",
+    "QC",
+    "QR",
+    "QI",
+    "QS",
+    "QG",
+    "NN",
+    "NC",
+    "NI",
+    "NR",
+    "BG",
+    "DEN",
+    "TK"
+  ],
+  "compared_fields": [
+    "NR",
+    "QV",
+    "QC",
+    "TH",
+    "TK"
+  ],
+  "input_variable": "QNRAIN",
+  "comparison": "numeric unequal; signed zeros equal, nonfinite fail closed; record signed deltas and exact float32 words",
+  "domain": "only independently reconstructed first-call core ownership; halo/unowned cells are missing, never zero",
+  "anchors_flat_index_yx": [
+    20330,
+    16454,
+    20183,
+    17051
+  ],
+  "anchor_mapping": "read all four actual native corners and weights from pinned cohort CSV; never treat GC labels as coordinate ordinals",
+  "derived_outputs": [
+    "complete input and entry/return difference counts and cross-tabulation",
+    "per-cell input/entry/return NR and entry QV/QC/TH/TK sparse changed records with exact raw fields",
+    "per-anchor all four corners and 39 levels direct raw values with core and owner metadata",
+    "input and entry-change horizontal support masks plus complete receipt and input inventory"
+  ],
+  "sources": {
+    "native/runs/external_global_streams.json": "41980ab8e0d2d58aca41ca73833825b69973b7d905f4c1340b0e1396049732e2",
+    "analysis/input_manifest.json": "71a9b13753244693fd543587a81695c14c1ad019a5972948005a44e155df7c8d",
+    "analysis/full_capture_receipt.json": "e41105c152b55991784f1fcf0b8c8e1c75fe03fc3d33160b897160adadd33245",
+    "native/runs/B1_case_receipt.json": "578c9e681d01c6fbe9dd130da59b64afb1c77d5d5b460fe8b95b69e7d9ca300e",
+    "native/runs/DM065_case_receipt.json": "fa31b2c710dd917b038ecd300fea55867cb85c9b11e3bc0368483b4845c4b731",
+    "native/runs/history_parity_gate.json": "cddfd19c707dcb73139121e28b5faf417770999d8e2761eb4364fcc227723d1c",
+    "cohorts/results/point_corners.csv": "b5d4de1d9209048e6e157ec8d5fe801f8464ee0b9fe307f5656cff32e09923fa",
+    "cohorts/results/selected_points.csv": "3343201b904a9b9874fea8f174715e37f1d642871f371bf1f378ed8a13a62197"
+  },
+  "reader_sha256": "4caa267fccf1c4b1f4ebcb03564a636a3412a75f344edeeec79eb9e9b7e403db",
+  "limitations": [
+    "Input and wrapper entry use model-air number mixing ratio, not internal volumetric number.",
+    "Global 14-field stages contain no pressure or Exner field.",
+    "First wrapper difference is a sampled state, not proof of causal transport or source origin.",
+    "Full raw streams remain external; compact derivatives retain changed cell values and explicitly identify missing domain cells."
+  ]
+}

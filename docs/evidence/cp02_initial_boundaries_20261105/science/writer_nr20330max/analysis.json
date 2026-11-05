@@ -1,0 +1,6100 @@
+{
+  "status": "PASS_ACTUAL_WRITER_ANALYSIS",
+  "target": "nr20330max",
+  "target_rank_ijk_1based": [
+    5,
+    141,
+    143,
+    11
+  ],
+  "inputs": {
+    "B1": {
+      "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/Cloud-BAL/docs/evidence/cp02_initial_boundaries_20261105/native/discovery/nr20330max/B1/writer_receipt.json",
+      "receipt_sha256": "d95a8745022b2f1c57a9c4a227bbd780122f602ae5484da691118a65832d3ecd",
+      "event_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/runtime/gdb_parity/writer_nr20330max_01/B1/writer_capture/writer_rank5.jsonl",
+      "event_sha256": "c7ad7b0e30a2f3358aaaf85ef1bf8a5771331904e8bb26781171c61c3d0154e8"
+    },
+    "DM065": {
+      "receipt_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/Cloud-BAL/docs/evidence/cp02_initial_boundaries_20261105/native/discovery/nr20330max/DM065/writer_receipt.json",
+      "receipt_sha256": "b2bbe8c0c6ccc90584d33c7a316b1f4bc0b3b761229df7e99fc470263c546c3b",
+      "event_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/runtime/gdb_parity/writer_nr20330max_01/DM065/writer_capture/writer_rank5.jsonl",
+      "event_sha256": "06818b8307eff810ae90566da733f9be08e3c549bd423d4762b6d3620be9f5cc"
+    }
+  },
+  "schema_sha256": "b7d97f129617a1424dece45658ed623e0b3a0a52144ff96486e9e471b5028bee",
+  "capture_freeze_sha256": "e8cf740ca1826f9f82f82fbdd74e7da9d728e127a3a9e3a9b728df116c26d12e",
+  "capture_closure_sha256": "4c31314baab4bb3ca3d6572b77ed2b041168e8fe6a8625dc0879209e7a5efb09",
+  "selected_baseline_sha256": "803c398b178db89271976b941a74db7e3a9010ffe16091c94749f5d1feb5ab1c",
+  "source_sha256": "789e34a8a41669cc9117affe386941bea1bd1bc16a529cb22bb7ed56174e4d46",
+  "paired_calls": [
+    {
+      "identity": [
+        "rk",
+        1,
+        null,
+        1,
+        null
+      ],
+      "classification": {
+        "B1": "other_index6_candidate_unclassified",
+        "DM065": "other_index6_candidate_unclassified"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 1,
+        "return_sequence": 2,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "f6ac0ac2",
+          "mu_old": "00189fc2",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 1,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9eb5f228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 1,
+        "return_sequence": 2,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "f6ac0ac2",
+          "mu_old": "00189fc2",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 1,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa459148d228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "5555d540",
+            "DM065_word": "5555d540",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "f6ac0ac2",
+            "DM065_word": "f6ac0ac2",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_old": {
+            "B1_word": "00189fc2",
+            "DM065_word": "00189fc2",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        1,
+        null,
+        1,
+        null
+      ],
+      "classification": {
+        "B1": "KDM_NR_pointer_bound",
+        "DM065": "KDM_NR_pointer_bound"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 3,
+        "return_sequence": 4,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "f6ac0ac2",
+          "mu_old": "00189fc2",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 1,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9d435228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 3,
+        "return_sequence": 5,
+        "watch_events": 1,
+        "entry_fields_raw": {
+          "advection_tendency": "d818bec1",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "f6ac0ac2",
+          "mu_old": "00189fc2",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "1b77e8ba",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [
+          {
+            "sequence": 4,
+            "pre_word": "00000000",
+            "post_word": "1b77e8ba",
+            "reported_pc": "0x21a08c6",
+            "pc_symbol": "module_em_mp_rk_update_scalar_ + 4038 in section .text of /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/runtime/gdb_parity/writer_nr20330max_01/DM065/wrf.exe"
+          }
+        ],
+        "candidate_timestep": 1,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa458fd63228",
+        "source_order_reference": {
+          "reference_nr": -0.001773569150827825,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "d818bec1",
+            "DM065_minus_B1": -23.762130737304688
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "5555d540",
+            "DM065_word": "5555d540",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "f6ac0ac2",
+            "DM065_word": "f6ac0ac2",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_old": {
+            "B1_word": "00189fc2",
+            "DM065_word": "00189fc2",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "1b77e8ba",
+            "DM065_minus_B1": -0.001773569150827825
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        1,
+        null,
+        2,
+        null
+      ],
+      "classification": {
+        "B1": "other_index6_candidate_unclassified",
+        "DM065": "other_index6_candidate_unclassified"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 5,
+        "return_sequence": 6,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "141c5bc1",
+          "mu_old": "00189fc2",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 1,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9eb5f228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 6,
+        "return_sequence": 7,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "141c5bc1",
+          "mu_old": "00189fc2",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 1,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa459148d228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "00002041",
+            "DM065_word": "00002041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "141c5bc1",
+            "DM065_word": "141c5bc1",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_old": {
+            "B1_word": "00189fc2",
+            "DM065_word": "00189fc2",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        1,
+        null,
+        2,
+        null
+      ],
+      "classification": {
+        "B1": "KDM_NR_pointer_bound",
+        "DM065": "KDM_NR_pointer_bound"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 7,
+        "return_sequence": 8,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "141c5bc1",
+          "mu_old": "00189fc2",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 1,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9d435228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 8,
+        "return_sequence": 10,
+        "watch_events": 1,
+        "entry_fields_raw": {
+          "advection_tendency": "49888ac1",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "141c5bc1",
+          "mu_old": "00189fc2",
+          "scalar_current": "1b77e8ba",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "7a03feba",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [
+          {
+            "sequence": 9,
+            "pre_word": "1b77e8ba",
+            "post_word": "7a03feba",
+            "reported_pc": "0x21a1780",
+            "pc_symbol": "module_em_mp_rk_update_scalar_ + 7808 in section .text of /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/runtime/gdb_parity/writer_nr20330max_01/DM065/wrf.exe"
+          }
+        ],
+        "candidate_timestep": 1,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa458fd63228",
+        "source_order_reference": {
+          "reference_nr": -0.001937969820573926,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "49888ac1",
+            "DM065_minus_B1": -17.316545486450195
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "00002041",
+            "DM065_word": "00002041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "141c5bc1",
+            "DM065_word": "141c5bc1",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_old": {
+            "B1_word": "00189fc2",
+            "DM065_word": "00189fc2",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "1b77e8ba",
+            "DM065_minus_B1": -0.001773569150827825
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "7a03feba",
+            "DM065_minus_B1": -0.001937969820573926
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        1,
+        null,
+        3,
+        null
+      ],
+      "classification": {
+        "B1": "other_index6_candidate_unclassified",
+        "DM065": "other_index6_candidate_unclassified"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 9,
+        "return_sequence": 10,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "a7ff7142",
+          "mu_old": "00189fc2",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 1,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9eb5f228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 11,
+        "return_sequence": 12,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "a7ff7142",
+          "mu_old": "00189fc2",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 1,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa459148d228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "0000a041",
+            "DM065_word": "0000a041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "a7ff7142",
+            "DM065_word": "a7ff7142",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_old": {
+            "B1_word": "00189fc2",
+            "DM065_word": "00189fc2",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        1,
+        null,
+        3,
+        null
+      ],
+      "classification": {
+        "B1": "KDM_NR_pointer_bound",
+        "DM065": "KDM_NR_pointer_bound"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 11,
+        "return_sequence": 12,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "a7ff7142",
+          "mu_old": "00189fc2",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 1,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9d435228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 13,
+        "return_sequence": 15,
+        "watch_events": 1,
+        "entry_fields_raw": {
+          "advection_tendency": "5cedf042",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "a7ff7142",
+          "mu_old": "00189fc2",
+          "scalar_current": "7a03feba",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "9f94dc3c",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [
+          {
+            "sequence": 14,
+            "pre_word": "7a03feba",
+            "post_word": "9f94dc3c",
+            "reported_pc": "0x21a1780",
+            "pc_symbol": "module_em_mp_rk_update_scalar_ + 7808 in section .text of /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/runtime/gdb_parity/writer_nr20330max_01/DM065/wrf.exe"
+          }
+        ],
+        "candidate_timestep": 1,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa458fd63228",
+        "source_order_reference": {
+          "reference_nr": 0.02692633680999279,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "5cedf042",
+            "DM065_minus_B1": 120.46359252929688
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "0000a041",
+            "DM065_word": "0000a041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "a7ff7142",
+            "DM065_word": "a7ff7142",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_old": {
+            "B1_word": "00189fc2",
+            "DM065_word": "00189fc2",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "7a03feba",
+            "DM065_minus_B1": -0.001937969820573926
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "9f94dc3c",
+            "DM065_minus_B1": 0.02692633680999279
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "kdm",
+        null,
+        1,
+        null,
+        null
+      ],
+      "classification": {},
+      "B1": {
+        "function": "kdm",
+        "entry_sequence": 13,
+        "return_sequence": 14,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "bg": "00000000",
+          "den": "e5de6a3f",
+          "nc": "00000000",
+          "ni": "00000000",
+          "nn": "0fd5a44d",
+          "nr": "00000000",
+          "p": "a52f9647",
+          "pii": "ae7c6d3f",
+          "qc": "25ef9239",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "81574c30",
+          "qs": "00000000",
+          "qv": "3e72463c",
+          "th": "ec639a43"
+        },
+        "return_fields_raw": {
+          "bg": "00000000",
+          "den": "e5de6a3f",
+          "nc": "00000000",
+          "ni": "00000000",
+          "nn": "0fd5a44d",
+          "nr": "00000000",
+          "p": "a52f9647",
+          "pii": "ae7c6d3f",
+          "qc": "9c2f0539",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "00000000",
+          "qs": "00000000",
+          "qv": "f9f4483c",
+          "th": "7b309a43"
+        },
+        "watch_after": [],
+        "timestep": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 233,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 39,
+          "kts": 1
+        },
+        "derived_TK_entry_float32": 286.4507751464844,
+        "derived_TK_return_float32": 286.07794189453125,
+        "KDM_within_call_TK_change": -0.372833251953125,
+        "KDM_TK_semantics": "Both reconstructed TK products include the wrapper mapping; return includes within-call t/PII then TH*PII roundtrip.",
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "kdm",
+        "entry_sequence": 16,
+        "return_sequence": 17,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "bg": "00000000",
+          "den": "e5de6a3f",
+          "nc": "00000000",
+          "ni": "00000000",
+          "nn": "0fd5a44d",
+          "nr": "9f94dc3c",
+          "p": "a52f9647",
+          "pii": "ae7c6d3f",
+          "qc": "25ef9239",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "81574c30",
+          "qs": "00000000",
+          "qv": "3e72463c",
+          "th": "ec639a43"
+        },
+        "return_fields_raw": {
+          "bg": "00000000",
+          "den": "e5de6a3f",
+          "nc": "00000000",
+          "ni": "00000000",
+          "nn": "0fd5a44d",
+          "nr": "00000000",
+          "p": "a52f9647",
+          "pii": "ae7c6d3f",
+          "qc": "9c2f0539",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "00000000",
+          "qs": "00000000",
+          "qv": "f9f4483c",
+          "th": "7b309a43"
+        },
+        "watch_after": [],
+        "timestep": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 233,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 39,
+          "kts": 1
+        },
+        "derived_TK_entry_float32": 286.4507751464844,
+        "derived_TK_return_float32": 286.07794189453125,
+        "KDM_within_call_TK_change": -0.372833251953125,
+        "KDM_TK_semantics": "Both reconstructed TK products include the wrapper mapping; return includes within-call t/PII then TH*PII roundtrip.",
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "bg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "den": {
+            "B1_word": "e5de6a3f",
+            "DM065_word": "e5de6a3f",
+            "DM065_minus_B1": 0.0
+          },
+          "nc": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "ni": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "nn": {
+            "B1_word": "0fd5a44d",
+            "DM065_word": "0fd5a44d",
+            "DM065_minus_B1": 0.0
+          },
+          "nr": {
+            "B1_word": "00000000",
+            "DM065_word": "9f94dc3c",
+            "DM065_minus_B1": 0.02692633680999279
+          },
+          "p": {
+            "B1_word": "a52f9647",
+            "DM065_word": "a52f9647",
+            "DM065_minus_B1": 0.0
+          },
+          "pii": {
+            "B1_word": "ae7c6d3f",
+            "DM065_word": "ae7c6d3f",
+            "DM065_minus_B1": 0.0
+          },
+          "qc": {
+            "B1_word": "25ef9239",
+            "DM065_word": "25ef9239",
+            "DM065_minus_B1": 0.0
+          },
+          "qg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qi": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qr": {
+            "B1_word": "81574c30",
+            "DM065_word": "81574c30",
+            "DM065_minus_B1": 0.0
+          },
+          "qs": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qv": {
+            "B1_word": "3e72463c",
+            "DM065_word": "3e72463c",
+            "DM065_minus_B1": 0.0
+          },
+          "th": {
+            "B1_word": "ec639a43",
+            "DM065_word": "ec639a43",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "bg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "den": {
+            "B1_word": "e5de6a3f",
+            "DM065_word": "e5de6a3f",
+            "DM065_minus_B1": 0.0
+          },
+          "nc": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "ni": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "nn": {
+            "B1_word": "0fd5a44d",
+            "DM065_word": "0fd5a44d",
+            "DM065_minus_B1": 0.0
+          },
+          "nr": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "p": {
+            "B1_word": "a52f9647",
+            "DM065_word": "a52f9647",
+            "DM065_minus_B1": 0.0
+          },
+          "pii": {
+            "B1_word": "ae7c6d3f",
+            "DM065_word": "ae7c6d3f",
+            "DM065_minus_B1": 0.0
+          },
+          "qc": {
+            "B1_word": "9c2f0539",
+            "DM065_word": "9c2f0539",
+            "DM065_minus_B1": 0.0
+          },
+          "qg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qi": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qr": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qs": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qv": {
+            "B1_word": "f9f4483c",
+            "DM065_word": "f9f4483c",
+            "DM065_minus_B1": 0.0
+          },
+          "th": {
+            "B1_word": "7b309a43",
+            "DM065_word": "7b309a43",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        2,
+        null,
+        1,
+        null
+      ],
+      "classification": {
+        "B1": "other_index6_candidate_unclassified",
+        "DM065": "other_index6_candidate_unclassified"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 15,
+        "return_sequence": 16,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "320f8242",
+          "mu_old": "a7ff7142",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 2,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9eb5f228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 18,
+        "return_sequence": 19,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "320f8242",
+          "mu_old": "a7ff7142",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 2,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa459148d228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "5555d540",
+            "DM065_word": "5555d540",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "320f8242",
+            "DM065_word": "320f8242",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_old": {
+            "B1_word": "a7ff7142",
+            "DM065_word": "a7ff7142",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        2,
+        null,
+        1,
+        null
+      ],
+      "classification": {
+        "B1": "KDM_NR_pointer_bound",
+        "DM065": "KDM_NR_pointer_bound"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 17,
+        "return_sequence": 18,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "320f8242",
+          "mu_old": "a7ff7142",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 2,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9d435228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 20,
+        "return_sequence": 22,
+        "watch_events": 1,
+        "entry_fields_raw": {
+          "advection_tendency": "b8968241",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "320f8242",
+          "mu_old": "a7ff7142",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "85669f3a",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [
+          {
+            "sequence": 21,
+            "pre_word": "00000000",
+            "post_word": "85669f3a",
+            "reported_pc": "0x21a08c6",
+            "pc_symbol": "module_em_mp_rk_update_scalar_ + 4038 in section .text of /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/runtime/gdb_parity/writer_nr20330max_01/DM065/wrf.exe"
+          }
+        ],
+        "candidate_timestep": 2,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa458fd63228",
+        "source_order_reference": {
+          "reference_nr": 0.001216129050590098,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "b8968241",
+            "DM065_minus_B1": 16.323593139648438
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "5555d540",
+            "DM065_word": "5555d540",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "320f8242",
+            "DM065_word": "320f8242",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_old": {
+            "B1_word": "a7ff7142",
+            "DM065_word": "a7ff7142",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "85669f3a",
+            "DM065_minus_B1": 0.001216129050590098
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        2,
+        null,
+        2,
+        null
+      ],
+      "classification": {
+        "B1": "other_index6_candidate_unclassified",
+        "DM065": "other_index6_candidate_unclassified"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 19,
+        "return_sequence": 20,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "09dc7342",
+          "mu_old": "a7ff7142",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 2,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9eb5f228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 23,
+        "return_sequence": 24,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "4ddd7342",
+          "mu_old": "a7ff7142",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 2,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa459148d228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "00002041",
+            "DM065_word": "00002041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "09dc7342",
+            "DM065_word": "4ddd7342",
+            "DM065_minus_B1": 0.0012359619140625
+          },
+          "mu_old": {
+            "B1_word": "a7ff7142",
+            "DM065_word": "a7ff7142",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        2,
+        null,
+        2,
+        null
+      ],
+      "classification": {
+        "B1": "KDM_NR_pointer_bound",
+        "DM065": "KDM_NR_pointer_bound"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 21,
+        "return_sequence": 22,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "09dc7342",
+          "mu_old": "a7ff7142",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 2,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9d435228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 25,
+        "return_sequence": 27,
+        "watch_events": 1,
+        "entry_fields_raw": {
+          "advection_tendency": "1d4ff141",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "4ddd7342",
+          "mu_old": "a7ff7142",
+          "scalar_current": "85669f3a",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "a2ed5c3b",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [
+          {
+            "sequence": 26,
+            "pre_word": "85669f3a",
+            "post_word": "a2ed5c3b",
+            "reported_pc": "0x21a1780",
+            "pc_symbol": "module_em_mp_rk_update_scalar_ + 7808 in section .text of /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/runtime/gdb_parity/writer_nr20330max_01/DM065/wrf.exe"
+          }
+        ],
+        "candidate_timestep": 2,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa458fd63228",
+        "source_order_reference": {
+          "reference_nr": 0.0033710976131260395,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "1d4ff141",
+            "DM065_minus_B1": 30.16362953186035
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "00002041",
+            "DM065_word": "00002041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "09dc7342",
+            "DM065_word": "4ddd7342",
+            "DM065_minus_B1": 0.0012359619140625
+          },
+          "mu_old": {
+            "B1_word": "a7ff7142",
+            "DM065_word": "a7ff7142",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "85669f3a",
+            "DM065_minus_B1": 0.001216129050590098
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "a2ed5c3b",
+            "DM065_minus_B1": 0.0033710976131260395
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        2,
+        null,
+        3,
+        null
+      ],
+      "classification": {
+        "B1": "other_index6_candidate_unclassified",
+        "DM065": "other_index6_candidate_unclassified"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 23,
+        "return_sequence": 24,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "745ddf41",
+          "mu_old": "a7ff7142",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 2,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9eb5f228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 28,
+        "return_sequence": 29,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "6a55df41",
+          "mu_old": "a7ff7142",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 2,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa459148d228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "0000a041",
+            "DM065_word": "0000a041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "745ddf41",
+            "DM065_word": "6a55df41",
+            "DM065_minus_B1": -0.003925323486328125
+          },
+          "mu_old": {
+            "B1_word": "a7ff7142",
+            "DM065_word": "a7ff7142",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        2,
+        null,
+        3,
+        null
+      ],
+      "classification": {
+        "B1": "KDM_NR_pointer_bound",
+        "DM065": "KDM_NR_pointer_bound"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 25,
+        "return_sequence": 26,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "745ddf41",
+          "mu_old": "a7ff7142",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 2,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9d435228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 30,
+        "return_sequence": 32,
+        "watch_events": 1,
+        "entry_fields_raw": {
+          "advection_tendency": "aebef742",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "6a55df41",
+          "mu_old": "a7ff7142",
+          "scalar_current": "a2ed5c3b",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "71f5e23c",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [
+          {
+            "sequence": 31,
+            "pre_word": "a2ed5c3b",
+            "post_word": "71f5e23c",
+            "reported_pc": "0x21a1780",
+            "pc_symbol": "module_em_mp_rk_update_scalar_ + 7808 in section .text of /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/runtime/gdb_parity/writer_nr20330max_01/DM065/wrf.exe"
+          }
+        ],
+        "candidate_timestep": 2,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa458fd63228",
+        "source_order_reference": {
+          "reference_nr": 0.02770492620766163,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "aebef742",
+            "DM065_minus_B1": 123.87242126464844
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "0000a041",
+            "DM065_word": "0000a041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "745ddf41",
+            "DM065_word": "6a55df41",
+            "DM065_minus_B1": -0.003925323486328125
+          },
+          "mu_old": {
+            "B1_word": "a7ff7142",
+            "DM065_word": "a7ff7142",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "a2ed5c3b",
+            "DM065_minus_B1": 0.0033710976131260395
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "71f5e23c",
+            "DM065_minus_B1": 0.02770492620766163
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "kdm",
+        null,
+        2,
+        null,
+        null
+      ],
+      "classification": {},
+      "B1": {
+        "function": "kdm",
+        "entry_sequence": 27,
+        "return_sequence": 28,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "bg": "00000000",
+          "den": "e8156b3f",
+          "nc": "00000000",
+          "ni": "00000000",
+          "nn": "1464a44d",
+          "nr": "00000000",
+          "p": "3b299647",
+          "pii": "c8796d3f",
+          "qc": "44bd0639",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "497e5630",
+          "qs": "00000000",
+          "qv": "bae2483c",
+          "th": "ce319a43"
+        },
+        "return_fields_raw": {
+          "bg": "00000000",
+          "den": "e8156b3f",
+          "nc": "00000000",
+          "ni": "00000000",
+          "nn": "1464a44d",
+          "nr": "00000000",
+          "p": "3b299647",
+          "pii": "c8796d3f",
+          "qc": "36960639",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "00000000",
+          "qs": "00000000",
+          "qv": "56e3483c",
+          "th": "c1319a43"
+        },
+        "watch_after": [],
+        "timestep": 2,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 233,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 39,
+          "kts": 1
+        },
+        "derived_TK_entry_float32": 286.07391357421875,
+        "derived_TK_return_float32": 286.07354736328125,
+        "KDM_within_call_TK_change": -0.0003662109375,
+        "KDM_TK_semantics": "Both reconstructed TK products include the wrapper mapping; return includes within-call t/PII then TH*PII roundtrip.",
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "kdm",
+        "entry_sequence": 33,
+        "return_sequence": 34,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "bg": "00000000",
+          "den": "e8156b3f",
+          "nc": "00000000",
+          "ni": "00000000",
+          "nn": "1664a44d",
+          "nr": "71f5e23c",
+          "p": "3b299647",
+          "pii": "c8796d3f",
+          "qc": "41bd0639",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "5bb44430",
+          "qs": "00000000",
+          "qv": "bce2483c",
+          "th": "ce319a43"
+        },
+        "return_fields_raw": {
+          "bg": "00000000",
+          "den": "e8156b3f",
+          "nc": "00000000",
+          "ni": "00000000",
+          "nn": "1664a44d",
+          "nr": "00000000",
+          "p": "3b299647",
+          "pii": "c8796d3f",
+          "qc": "5e960639",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "00000000",
+          "qs": "00000000",
+          "qv": "58e3483c",
+          "th": "c1319a43"
+        },
+        "watch_after": [],
+        "timestep": 2,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 233,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 39,
+          "kts": 1
+        },
+        "derived_TK_entry_float32": 286.07391357421875,
+        "derived_TK_return_float32": 286.07354736328125,
+        "KDM_within_call_TK_change": -0.0003662109375,
+        "KDM_TK_semantics": "Both reconstructed TK products include the wrapper mapping; return includes within-call t/PII then TH*PII roundtrip.",
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "bg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "den": {
+            "B1_word": "e8156b3f",
+            "DM065_word": "e8156b3f",
+            "DM065_minus_B1": 0.0
+          },
+          "nc": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "ni": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "nn": {
+            "B1_word": "1464a44d",
+            "DM065_word": "1664a44d",
+            "DM065_minus_B1": 64.0
+          },
+          "nr": {
+            "B1_word": "00000000",
+            "DM065_word": "71f5e23c",
+            "DM065_minus_B1": 0.02770492620766163
+          },
+          "p": {
+            "B1_word": "3b299647",
+            "DM065_word": "3b299647",
+            "DM065_minus_B1": 0.0
+          },
+          "pii": {
+            "B1_word": "c8796d3f",
+            "DM065_word": "c8796d3f",
+            "DM065_minus_B1": 0.0
+          },
+          "qc": {
+            "B1_word": "44bd0639",
+            "DM065_word": "41bd0639",
+            "DM065_minus_B1": -4.3655745685100555e-11
+          },
+          "qg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qi": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qr": {
+            "B1_word": "497e5630",
+            "DM065_word": "5bb44430",
+            "DM065_minus_B1": -6.471523317230776e-11
+          },
+          "qs": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qv": {
+            "B1_word": "bae2483c",
+            "DM065_word": "bce2483c",
+            "DM065_minus_B1": 1.862645149230957e-09
+          },
+          "th": {
+            "B1_word": "ce319a43",
+            "DM065_word": "ce319a43",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "bg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "den": {
+            "B1_word": "e8156b3f",
+            "DM065_word": "e8156b3f",
+            "DM065_minus_B1": 0.0
+          },
+          "nc": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "ni": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "nn": {
+            "B1_word": "1464a44d",
+            "DM065_word": "1664a44d",
+            "DM065_minus_B1": 64.0
+          },
+          "nr": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "p": {
+            "B1_word": "3b299647",
+            "DM065_word": "3b299647",
+            "DM065_minus_B1": 0.0
+          },
+          "pii": {
+            "B1_word": "c8796d3f",
+            "DM065_word": "c8796d3f",
+            "DM065_minus_B1": 0.0
+          },
+          "qc": {
+            "B1_word": "36960639",
+            "DM065_word": "5e960639",
+            "DM065_minus_B1": 5.820766091346741e-10
+          },
+          "qg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qi": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qr": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qs": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qv": {
+            "B1_word": "56e3483c",
+            "DM065_word": "58e3483c",
+            "DM065_minus_B1": 1.862645149230957e-09
+          },
+          "th": {
+            "B1_word": "c1319a43",
+            "DM065_word": "c1319a43",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        3,
+        null,
+        1,
+        null
+      ],
+      "classification": {
+        "B1": "other_index6_candidate_unclassified",
+        "DM065": "other_index6_candidate_unclassified"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 29,
+        "return_sequence": 30,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "3ef4b641",
+          "mu_old": "745ddf41",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 3,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9eb5f228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 35,
+        "return_sequence": 36,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "25e6b641",
+          "mu_old": "6a55df41",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 3,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa459148d228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "5555d540",
+            "DM065_word": "5555d540",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "3ef4b641",
+            "DM065_word": "25e6b641",
+            "DM065_minus_B1": -0.0068836212158203125
+          },
+          "mu_old": {
+            "B1_word": "745ddf41",
+            "DM065_word": "6a55df41",
+            "DM065_minus_B1": -0.003925323486328125
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        3,
+        null,
+        1,
+        null
+      ],
+      "classification": {
+        "B1": "KDM_NR_pointer_bound",
+        "DM065": "KDM_NR_pointer_bound"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 31,
+        "return_sequence": 32,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "3ef4b641",
+          "mu_old": "745ddf41",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 3,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9d435228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 37,
+        "return_sequence": 39,
+        "watch_events": 1,
+        "entry_fields_raw": {
+          "advection_tendency": "0c6f7142",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "25e6b641",
+          "mu_old": "6a55df41",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "1777933b",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [
+          {
+            "sequence": 38,
+            "pre_word": "00000000",
+            "post_word": "1777933b",
+            "reported_pc": "0x21a08c6",
+            "pc_symbol": "module_em_mp_rk_update_scalar_ + 4038 in section .text of /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/runtime/gdb_parity/writer_nr20330max_01/DM065/wrf.exe"
+          }
+        ],
+        "candidate_timestep": 3,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa458fd63228",
+        "source_order_reference": {
+          "reference_nr": 0.004500280600041151,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "0c6f7142",
+            "DM065_minus_B1": 60.35844421386719
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "5555d540",
+            "DM065_word": "5555d540",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "3ef4b641",
+            "DM065_word": "25e6b641",
+            "DM065_minus_B1": -0.0068836212158203125
+          },
+          "mu_old": {
+            "B1_word": "745ddf41",
+            "DM065_word": "6a55df41",
+            "DM065_minus_B1": -0.003925323486328125
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "1777933b",
+            "DM065_minus_B1": 0.004500280600041151
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        3,
+        null,
+        2,
+        null
+      ],
+      "classification": {
+        "B1": "other_index6_candidate_unclassified",
+        "DM065": "other_index6_candidate_unclassified"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 33,
+        "return_sequence": 34,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "8ddad641",
+          "mu_old": "745ddf41",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 3,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9eb5f228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 40,
+        "return_sequence": 41,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "0de7d641",
+          "mu_old": "6a55df41",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 3,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa459148d228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "00002041",
+            "DM065_word": "00002041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "8ddad641",
+            "DM065_word": "0de7d641",
+            "DM065_minus_B1": 0.006103515625
+          },
+          "mu_old": {
+            "B1_word": "745ddf41",
+            "DM065_word": "6a55df41",
+            "DM065_minus_B1": -0.003925323486328125
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        3,
+        null,
+        2,
+        null
+      ],
+      "classification": {
+        "B1": "KDM_NR_pointer_bound",
+        "DM065": "KDM_NR_pointer_bound"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 35,
+        "return_sequence": 36,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "8ddad641",
+          "mu_old": "745ddf41",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 3,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9d435228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 42,
+        "return_sequence": 44,
+        "watch_events": 1,
+        "entry_fields_raw": {
+          "advection_tendency": "2a110e42",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "0de7d641",
+          "mu_old": "6a55df41",
+          "scalar_current": "1777933b",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "6526823b",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [
+          {
+            "sequence": 43,
+            "pre_word": "1777933b",
+            "post_word": "6526823b",
+            "reported_pc": "0x21a1780",
+            "pc_symbol": "module_em_mp_rk_update_scalar_ + 7808 in section .text of /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/runtime/gdb_parity/writer_nr20330max_01/DM065/wrf.exe"
+          }
+        ],
+        "candidate_timestep": 3,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa458fd63228",
+        "source_order_reference": {
+          "reference_nr": 0.003971862141042948,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "2a110e42",
+            "DM065_minus_B1": 35.516761779785156
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "00002041",
+            "DM065_word": "00002041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "8ddad641",
+            "DM065_word": "0de7d641",
+            "DM065_minus_B1": 0.006103515625
+          },
+          "mu_old": {
+            "B1_word": "745ddf41",
+            "DM065_word": "6a55df41",
+            "DM065_minus_B1": -0.003925323486328125
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "1777933b",
+            "DM065_minus_B1": 0.004500280600041151
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "6526823b",
+            "DM065_minus_B1": 0.003971862141042948
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        3,
+        null,
+        3,
+        null
+      ],
+      "classification": {
+        "B1": "other_index6_candidate_unclassified",
+        "DM065": "other_index6_candidate_unclassified"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 37,
+        "return_sequence": 38,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "96233b42",
+          "mu_old": "745ddf41",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 3,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9eb5f228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 45,
+        "return_sequence": 46,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "42123b42",
+          "mu_old": "6a55df41",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 3,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa459148d228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "0000a041",
+            "DM065_word": "0000a041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "96233b42",
+            "DM065_word": "42123b42",
+            "DM065_minus_B1": -0.0169219970703125
+          },
+          "mu_old": {
+            "B1_word": "745ddf41",
+            "DM065_word": "6a55df41",
+            "DM065_minus_B1": -0.003925323486328125
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        3,
+        null,
+        3,
+        null
+      ],
+      "classification": {
+        "B1": "KDM_NR_pointer_bound",
+        "DM065": "KDM_NR_pointer_bound"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 39,
+        "return_sequence": 40,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "96233b42",
+          "mu_old": "745ddf41",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 3,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9d435228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 47,
+        "return_sequence": 49,
+        "watch_events": 1,
+        "entry_fields_raw": {
+          "advection_tendency": "d780da42",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "42123b42",
+          "mu_old": "6a55df41",
+          "scalar_current": "6526823b",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "dd19c83c",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [
+          {
+            "sequence": 48,
+            "pre_word": "6526823b",
+            "post_word": "dd19c83c",
+            "reported_pc": "0x21a1780",
+            "pc_symbol": "module_em_mp_rk_update_scalar_ + 7808 in section .text of /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/runtime/gdb_parity/writer_nr20330max_01/DM065/wrf.exe"
+          }
+        ],
+        "candidate_timestep": 3,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa458fd63228",
+        "source_order_reference": {
+          "reference_nr": 0.024426395073533058,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "d780da42",
+            "DM065_minus_B1": 109.25164031982422
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "0000a041",
+            "DM065_word": "0000a041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "96233b42",
+            "DM065_word": "42123b42",
+            "DM065_minus_B1": -0.0169219970703125
+          },
+          "mu_old": {
+            "B1_word": "745ddf41",
+            "DM065_word": "6a55df41",
+            "DM065_minus_B1": -0.003925323486328125
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "6526823b",
+            "DM065_minus_B1": 0.003971862141042948
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "dd19c83c",
+            "DM065_minus_B1": 0.024426395073533058
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "kdm",
+        null,
+        3,
+        null,
+        null
+      ],
+      "classification": {},
+      "B1": {
+        "function": "kdm",
+        "entry_sequence": 41,
+        "return_sequence": 42,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "bg": "00000000",
+          "den": "0b026b3f",
+          "nc": "93b07e4a",
+          "ni": "00000000",
+          "nn": "824aa24d",
+          "nr": "00000000",
+          "p": "2c199647",
+          "pii": "86726d3f",
+          "qc": "c4990839",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "d6bf4030",
+          "qs": "00000000",
+          "qv": "44d0483c",
+          "th": "56339a43"
+        },
+        "return_fields_raw": {
+          "bg": "00000000",
+          "den": "0b026b3f",
+          "nc": "503bd24c",
+          "ni": "00000000",
+          "nn": "ae705f4d",
+          "nr": "00000000",
+          "p": "2c199647",
+          "pii": "86726d3f",
+          "qc": "81b40b39",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "00000000",
+          "qs": "00000000",
+          "qv": "d9c3483c",
+          "th": "55349a43"
+        },
+        "watch_after": [],
+        "timestep": 3,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 233,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 39,
+          "kts": 1
+        },
+        "derived_TK_entry_float32": 286.05084228515625,
+        "derived_TK_return_float32": 286.0580749511719,
+        "KDM_within_call_TK_change": 0.007232666015625,
+        "KDM_TK_semantics": "Both reconstructed TK products include the wrapper mapping; return includes within-call t/PII then TH*PII roundtrip.",
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "kdm",
+        "entry_sequence": 50,
+        "return_sequence": 51,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "bg": "00000000",
+          "den": "38026b3f",
+          "nc": "fab27e4a",
+          "ni": "00000000",
+          "nn": "794aa24d",
+          "nr": "dd19c83c",
+          "p": "54199647",
+          "pii": "98726d3f",
+          "qc": "f9990839",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "48fd2230",
+          "qs": "00000000",
+          "qv": "43d0483c",
+          "th": "56339a43"
+        },
+        "return_fields_raw": {
+          "bg": "00000000",
+          "den": "38026b3f",
+          "nc": "5df8ce4c",
+          "ni": "00000000",
+          "nn": "1f12614d",
+          "nr": "00000000",
+          "p": "54199647",
+          "pii": "98726d3f",
+          "qc": "ffa00b39",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "00000000",
+          "qs": "00000000",
+          "qv": "27c4483c",
+          "th": "4f349a43"
+        },
+        "watch_after": [],
+        "timestep": 3,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 233,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 39,
+          "kts": 1
+        },
+        "derived_TK_entry_float32": 286.0511779785156,
+        "derived_TK_return_float32": 286.0582275390625,
+        "KDM_within_call_TK_change": 0.007049560546875,
+        "KDM_TK_semantics": "Both reconstructed TK products include the wrapper mapping; return includes within-call t/PII then TH*PII roundtrip.",
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "bg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "den": {
+            "B1_word": "0b026b3f",
+            "DM065_word": "38026b3f",
+            "DM065_minus_B1": 2.682209014892578e-06
+          },
+          "nc": {
+            "B1_word": "93b07e4a",
+            "DM065_word": "fab27e4a",
+            "DM065_minus_B1": 153.75
+          },
+          "ni": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "nn": {
+            "B1_word": "824aa24d",
+            "DM065_word": "794aa24d",
+            "DM065_minus_B1": -288.0
+          },
+          "nr": {
+            "B1_word": "00000000",
+            "DM065_word": "dd19c83c",
+            "DM065_minus_B1": 0.024426395073533058
+          },
+          "p": {
+            "B1_word": "2c199647",
+            "DM065_word": "54199647",
+            "DM065_minus_B1": 0.3125
+          },
+          "pii": {
+            "B1_word": "86726d3f",
+            "DM065_word": "98726d3f",
+            "DM065_minus_B1": 1.0728836059570312e-06
+          },
+          "qc": {
+            "B1_word": "c4990839",
+            "DM065_word": "f9990839",
+            "DM065_minus_B1": 7.712515071034431e-10
+          },
+          "qg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qi": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qr": {
+            "B1_word": "d6bf4030",
+            "DM065_word": "48fd2230",
+            "DM065_minus_B1": -1.082661738038837e-10
+          },
+          "qs": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qv": {
+            "B1_word": "44d0483c",
+            "DM065_word": "43d0483c",
+            "DM065_minus_B1": -9.313225746154785e-10
+          },
+          "th": {
+            "B1_word": "56339a43",
+            "DM065_word": "56339a43",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "bg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "den": {
+            "B1_word": "0b026b3f",
+            "DM065_word": "38026b3f",
+            "DM065_minus_B1": 2.682209014892578e-06
+          },
+          "nc": {
+            "B1_word": "503bd24c",
+            "DM065_word": "5df8ce4c",
+            "DM065_minus_B1": -1709976.0
+          },
+          "ni": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "nn": {
+            "B1_word": "ae705f4d",
+            "DM065_word": "1f12614d",
+            "DM065_minus_B1": 1709840.0
+          },
+          "nr": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "p": {
+            "B1_word": "2c199647",
+            "DM065_word": "54199647",
+            "DM065_minus_B1": 0.3125
+          },
+          "pii": {
+            "B1_word": "86726d3f",
+            "DM065_word": "98726d3f",
+            "DM065_minus_B1": 1.0728836059570312e-06
+          },
+          "qc": {
+            "B1_word": "81b40b39",
+            "DM065_word": "ffa00b39",
+            "DM065_minus_B1": -7.267226465046406e-08
+          },
+          "qg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qi": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qr": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qs": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qv": {
+            "B1_word": "d9c3483c",
+            "DM065_word": "27c4483c",
+            "DM065_minus_B1": 7.264316082000732e-08
+          },
+          "th": {
+            "B1_word": "55349a43",
+            "DM065_word": "4f349a43",
+            "DM065_minus_B1": -0.00018310546875
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        4,
+        null,
+        1,
+        null
+      ],
+      "classification": {
+        "B1": "other_index6_candidate_unclassified",
+        "DM065": "other_index6_candidate_unclassified"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 43,
+        "return_sequence": 44,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "9f6b2542",
+          "mu_old": "96233b42",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 4,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9eb5f228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 52,
+        "return_sequence": 53,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "e3632542",
+          "mu_old": "42123b42",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 4,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa459148d228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "5555d540",
+            "DM065_word": "5555d540",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "9f6b2542",
+            "DM065_word": "e3632542",
+            "DM065_minus_B1": -0.0075531005859375
+          },
+          "mu_old": {
+            "B1_word": "96233b42",
+            "DM065_word": "42123b42",
+            "DM065_minus_B1": -0.0169219970703125
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        4,
+        null,
+        1,
+        null
+      ],
+      "classification": {
+        "B1": "KDM_NR_pointer_bound",
+        "DM065": "KDM_NR_pointer_bound"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 45,
+        "return_sequence": 46,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "9f6b2542",
+          "mu_old": "96233b42",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 4,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9d435228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 54,
+        "return_sequence": 56,
+        "watch_events": 1,
+        "entry_fields_raw": {
+          "advection_tendency": "e4a98ec2",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "5555d540",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "e3632542",
+          "mu_old": "42123b42",
+          "scalar_current": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "2a37aebb",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [
+          {
+            "sequence": 55,
+            "pre_word": "00000000",
+            "post_word": "2a37aebb",
+            "reported_pc": "0x21a08c6",
+            "pc_symbol": "module_em_mp_rk_update_scalar_ + 4038 in section .text of /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/runtime/gdb_parity/writer_nr20330max_01/DM065/wrf.exe"
+          }
+        ],
+        "candidate_timestep": 4,
+        "rk_step": 1,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa458fd63228",
+        "source_order_reference": {
+          "reference_nr": -0.00531663466244936,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "e4a98ec2",
+            "DM065_minus_B1": -71.33181762695312
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "5555d540",
+            "DM065_word": "5555d540",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "9f6b2542",
+            "DM065_word": "e3632542",
+            "DM065_minus_B1": -0.0075531005859375
+          },
+          "mu_old": {
+            "B1_word": "96233b42",
+            "DM065_word": "42123b42",
+            "DM065_minus_B1": -0.0169219970703125
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "2a37aebb",
+            "DM065_minus_B1": -0.00531663466244936
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        4,
+        null,
+        2,
+        null
+      ],
+      "classification": {
+        "B1": "other_index6_candidate_unclassified",
+        "DM065": "other_index6_candidate_unclassified"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 47,
+        "return_sequence": 48,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "3d38dc41",
+          "mu_old": "96233b42",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 4,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9eb5f228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 57,
+        "return_sequence": 58,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "bd20dc41",
+          "mu_old": "42123b42",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 4,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa459148d228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "00002041",
+            "DM065_word": "00002041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "3d38dc41",
+            "DM065_word": "bd20dc41",
+            "DM065_minus_B1": -0.011474609375
+          },
+          "mu_old": {
+            "B1_word": "96233b42",
+            "DM065_word": "42123b42",
+            "DM065_minus_B1": -0.0169219970703125
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        4,
+        null,
+        2,
+        null
+      ],
+      "classification": {
+        "B1": "KDM_NR_pointer_bound",
+        "DM065": "KDM_NR_pointer_bound"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 49,
+        "return_sequence": 50,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "3d38dc41",
+          "mu_old": "96233b42",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 4,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9d435228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 59,
+        "return_sequence": 61,
+        "watch_events": 1,
+        "entry_fields_raw": {
+          "advection_tendency": "2ef579c2",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "00002041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "bd20dc41",
+          "mu_old": "42123b42",
+          "scalar_current": "2a37aebb",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "d9fce4bb",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [
+          {
+            "sequence": 60,
+            "pre_word": "2a37aebb",
+            "post_word": "d9fce4bb",
+            "reported_pc": "0x21a1780",
+            "pc_symbol": "module_em_mp_rk_update_scalar_ + 7808 in section .text of /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/runtime/gdb_parity/writer_nr20330max_01/DM065/wrf.exe"
+          }
+        ],
+        "candidate_timestep": 4,
+        "rk_step": 2,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa458fd63228",
+        "source_order_reference": {
+          "reference_nr": -0.006988149601966143,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "2ef579c2",
+            "DM065_minus_B1": -62.48943328857422
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "00002041",
+            "DM065_word": "00002041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "3d38dc41",
+            "DM065_word": "bd20dc41",
+            "DM065_minus_B1": -0.011474609375
+          },
+          "mu_old": {
+            "B1_word": "96233b42",
+            "DM065_word": "42123b42",
+            "DM065_minus_B1": -0.0169219970703125
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "2a37aebb",
+            "DM065_minus_B1": -0.00531663466244936
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "d9fce4bb",
+            "DM065_minus_B1": -0.006988149601966143
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        4,
+        null,
+        3,
+        null
+      ],
+      "classification": {
+        "B1": "other_index6_candidate_unclassified",
+        "DM065": "other_index6_candidate_unclassified"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 51,
+        "return_sequence": 52,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "621933c2",
+          "mu_old": "96233b42",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 4,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9eb5f228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 62,
+        "return_sequence": 63,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "8e1033c2",
+          "mu_old": "42123b42",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 4,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa459148d228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "0000a041",
+            "DM065_word": "0000a041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "621933c2",
+            "DM065_word": "8e1033c2",
+            "DM065_minus_B1": 0.0086212158203125
+          },
+          "mu_old": {
+            "B1_word": "96233b42",
+            "DM065_word": "42123b42",
+            "DM065_minus_B1": -0.0169219970703125
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "rk",
+        4,
+        null,
+        3,
+        null
+      ],
+      "classification": {
+        "B1": "KDM_NR_pointer_bound",
+        "DM065": "KDM_NR_pointer_bound"
+      },
+      "B1": {
+        "function": "rk",
+        "entry_sequence": 53,
+        "return_sequence": 54,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "advection_tendency": "00000000",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "621933c2",
+          "mu_old": "96233b42",
+          "scalar_current": "00000000",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "00000000",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [],
+        "candidate_timestep": 4,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xeae9d435228",
+        "source_order_reference": {
+          "reference_nr": 0.0,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "rk",
+        "entry_sequence": 64,
+        "return_sequence": 66,
+        "watch_events": 1,
+        "entry_fields_raw": {
+          "advection_tendency": "965ae942",
+          "c1": "7f9acd3f",
+          "c2": "59fc60c7",
+          "dt": "0000a041",
+          "msfty": "6552793f",
+          "mu_base": "cfdfaf47",
+          "mu_new": "8e1033c2",
+          "mu_old": "42123b42",
+          "scalar_current": "d9fce4bb",
+          "scalar_old": "00000000",
+          "scalar_tendency": "00000000"
+        },
+        "return_fields_raw": {
+          "scalar_current": "e70fd63c",
+          "scalar_old": "00000000"
+        },
+        "watch_after": [
+          {
+            "sequence": 65,
+            "pre_word": "d9fce4bb",
+            "post_word": "e70fd63c",
+            "reported_pc": "0x21a1780",
+            "pc_symbol": "module_em_mp_rk_update_scalar_ + 7808 in section .text of /NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_initial_boundaries_20261105/runtime/gdb_parity/writer_nr20330max_01/DM065/wrf.exe"
+          }
+        ],
+        "candidate_timestep": 4,
+        "rk_step": 3,
+        "scs": 6,
+        "sce": 6,
+        "runtime_p_qnr": 6,
+        "qnr_species_index": 6,
+        "spec_zone": 1,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 235,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 40,
+          "kts": 1
+        },
+        "target_pointer": "0xa458fd63228",
+        "source_order_reference": {
+          "reference_nr": 0.02613062970340252,
+          "return_minus_reference": 0.0
+        },
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "advection_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "965ae942",
+            "DM065_minus_B1": 116.67692565917969
+          },
+          "c1": {
+            "B1_word": "7f9acd3f",
+            "DM065_word": "7f9acd3f",
+            "DM065_minus_B1": 0.0
+          },
+          "c2": {
+            "B1_word": "59fc60c7",
+            "DM065_word": "59fc60c7",
+            "DM065_minus_B1": 0.0
+          },
+          "dt": {
+            "B1_word": "0000a041",
+            "DM065_word": "0000a041",
+            "DM065_minus_B1": 0.0
+          },
+          "msfty": {
+            "B1_word": "6552793f",
+            "DM065_word": "6552793f",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_base": {
+            "B1_word": "cfdfaf47",
+            "DM065_word": "cfdfaf47",
+            "DM065_minus_B1": 0.0
+          },
+          "mu_new": {
+            "B1_word": "621933c2",
+            "DM065_word": "8e1033c2",
+            "DM065_minus_B1": 0.0086212158203125
+          },
+          "mu_old": {
+            "B1_word": "96233b42",
+            "DM065_word": "42123b42",
+            "DM065_minus_B1": -0.0169219970703125
+          },
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "d9fce4bb",
+            "DM065_minus_B1": -0.006988149601966143
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "scalar_tendency": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        },
+        "return": {
+          "scalar_current": {
+            "B1_word": "00000000",
+            "DM065_word": "e70fd63c",
+            "DM065_minus_B1": 0.02613062970340252
+          },
+          "scalar_old": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          }
+        }
+      }
+    },
+    {
+      "identity": [
+        "kdm",
+        null,
+        4,
+        null,
+        null
+      ],
+      "classification": {},
+      "B1": {
+        "function": "kdm",
+        "entry_sequence": 55,
+        "return_sequence": 56,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "bg": "00000000",
+          "den": "0cc96a3f",
+          "nc": "8520d74c",
+          "ni": "00000000",
+          "nn": "bcdc5e4d",
+          "nr": "00000000",
+          "p": "57e79547",
+          "pii": "fd5b6d3f",
+          "qc": "25370c39",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "2e7e5130",
+          "qs": "00000000",
+          "qv": "aac4483c",
+          "th": "55349a43"
+        },
+        "return_fields_raw": {
+          "bg": "00000000",
+          "den": "0cc96a3f",
+          "nc": "bd35a54d",
+          "ni": "00000000",
+          "nn": "1ff8cf4c",
+          "nr": "00000000",
+          "p": "57e79547",
+          "pii": "fd5b6d3f",
+          "qc": "83442539",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "00000000",
+          "qs": "00000000",
+          "qv": "7560483c",
+          "th": "5c3c9a43"
+        },
+        "watch_after": [],
+        "timestep": 4,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 233,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 39,
+          "kts": 1
+        },
+        "derived_TK_entry_float32": 285.9520263671875,
+        "derived_TK_return_float32": 286.0101623535156,
+        "KDM_within_call_TK_change": 0.058135986328125,
+        "KDM_TK_semantics": "Both reconstructed TK products include the wrapper mapping; return includes within-call t/PII then TH*PII roundtrip.",
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "DM065": {
+        "function": "kdm",
+        "entry_sequence": 67,
+        "return_sequence": 68,
+        "watch_events": 0,
+        "entry_fields_raw": {
+          "bg": "00000000",
+          "den": "f0c86a3f",
+          "nc": "d6e0d34c",
+          "ni": "00000000",
+          "nn": "d57a604d",
+          "nr": "e70fd63c",
+          "p": "37e79547",
+          "pii": "ef5b6d3f",
+          "qc": "82230c39",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "06fc2330",
+          "qs": "00000000",
+          "qv": "fbc4483c",
+          "th": "4e349a43"
+        },
+        "return_fields_raw": {
+          "bg": "00000000",
+          "den": "f0c86a3f",
+          "nc": "df34a54d",
+          "ni": "00000000",
+          "nn": "38f8cf4c",
+          "nr": "00000000",
+          "p": "37e79547",
+          "pii": "ef5b6d3f",
+          "qc": "62552539",
+          "qg": "00000000",
+          "qi": "00000000",
+          "qr": "00000000",
+          "qs": "00000000",
+          "qv": "3460483c",
+          "th": "613c9a43"
+        },
+        "watch_after": [],
+        "timestep": 4,
+        "bounds": {
+          "ide": 235,
+          "ids": 1,
+          "ime": 240,
+          "ims": 111,
+          "ite": 233,
+          "its": 118,
+          "jde": 283,
+          "jds": 1,
+          "jme": 219,
+          "jms": 135,
+          "jte": 212,
+          "jts": 142,
+          "kde": 40,
+          "kds": 1,
+          "kme": 40,
+          "kms": 1,
+          "kte": 39,
+          "kts": 1
+        },
+        "derived_TK_entry_float32": 285.9515686035156,
+        "derived_TK_return_float32": 286.0100402832031,
+        "KDM_within_call_TK_change": 0.0584716796875,
+        "KDM_TK_semantics": "Both reconstructed TK products include the wrapper mapping; return includes within-call t/PII then TH*PII roundtrip.",
+        "reference_limitation": "Source-order float32 candidate; compiled instruction/rounding equivalence is not asserted."
+      },
+      "paired_operands": {
+        "entry": {
+          "bg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "den": {
+            "B1_word": "0cc96a3f",
+            "DM065_word": "f0c86a3f",
+            "DM065_minus_B1": -1.6689300537109375e-06
+          },
+          "nc": {
+            "B1_word": "8520d74c",
+            "DM065_word": "d6e0d34c",
+            "DM065_minus_B1": -1703288.0
+          },
+          "ni": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "nn": {
+            "B1_word": "bcdc5e4d",
+            "DM065_word": "d57a604d",
+            "DM065_minus_B1": 1696144.0
+          },
+          "nr": {
+            "B1_word": "00000000",
+            "DM065_word": "e70fd63c",
+            "DM065_minus_B1": 0.02613062970340252
+          },
+          "p": {
+            "B1_word": "57e79547",
+            "DM065_word": "37e79547",
+            "DM065_minus_B1": -0.25
+          },
+          "pii": {
+            "B1_word": "fd5b6d3f",
+            "DM065_word": "ef5b6d3f",
+            "DM065_minus_B1": -8.344650268554688e-07
+          },
+          "qc": {
+            "B1_word": "25370c39",
+            "DM065_word": "82230c39",
+            "DM065_minus_B1": -7.315247785300016e-08
+          },
+          "qg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qi": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qr": {
+            "B1_word": "2e7e5130",
+            "DM065_word": "06fc2330",
+            "DM065_minus_B1": -1.655586778781526e-10
+          },
+          "qs": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qv": {
+            "B1_word": "aac4483c",
+            "DM065_word": "fbc4483c",
+            "DM065_minus_B1": 7.543712854385376e-08
+          },
+          "th": {
+            "B1_word": "55349a43",
+            "DM065_word": "4e349a43",
+            "DM065_minus_B1": -0.000213623046875
+          }
+        },
+        "return": {
+          "bg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "den": {
+            "B1_word": "0cc96a3f",
+            "DM065_word": "f0c86a3f",
+            "DM065_minus_B1": -1.6689300537109375e-06
+          },
+          "nc": {
+            "B1_word": "bd35a54d",
+            "DM065_word": "df34a54d",
+            "DM065_minus_B1": -7104.0
+          },
+          "ni": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "nn": {
+            "B1_word": "1ff8cf4c",
+            "DM065_word": "38f8cf4c",
+            "DM065_minus_B1": 200.0
+          },
+          "nr": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "p": {
+            "B1_word": "57e79547",
+            "DM065_word": "37e79547",
+            "DM065_minus_B1": -0.25
+          },
+          "pii": {
+            "B1_word": "fd5b6d3f",
+            "DM065_word": "ef5b6d3f",
+            "DM065_minus_B1": -8.344650268554688e-07
+          },
+          "qc": {
+            "B1_word": "83442539",
+            "DM065_word": "62552539",
+            "DM065_minus_B1": 6.284972187131643e-08
+          },
+          "qg": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qi": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qr": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qs": {
+            "B1_word": "00000000",
+            "DM065_word": "00000000",
+            "DM065_minus_B1": 0.0
+          },
+          "qv": {
+            "B1_word": "7560483c",
+            "DM065_word": "3460483c",
+            "DM065_minus_B1": -6.05359673500061e-08
+          },
+          "th": {
+            "B1_word": "5c3c9a43",
+            "DM065_word": "613c9a43",
+            "DM065_minus_B1": 0.000152587890625
+          }
+        }
+      }
+    }
+  ],
+  "bridges": {
+    "B1": [
+      {
+        "step": 1,
+        "bridge": "last matching RK return to KDM entry NR",
+        "producer_return_word": "00000000",
+        "consumer_entry_word": "00000000",
+        "same_word": true,
+        "pointer": "0xeae9d40b360"
+      },
+      {
+        "step": 2,
+        "bridge": "last matching RK return to KDM entry NR",
+        "producer_return_word": "00000000",
+        "consumer_entry_word": "00000000",
+        "same_word": true,
+        "pointer": "0xeae9d40b360"
+      },
+      {
+        "step": 3,
+        "bridge": "last matching RK return to KDM entry NR",
+        "producer_return_word": "00000000",
+        "consumer_entry_word": "00000000",
+        "same_word": true,
+        "pointer": "0xeae9d40b360"
+      },
+      {
+        "step": 4,
+        "bridge": "last matching RK return to KDM entry NR",
+        "producer_return_word": "00000000",
+        "consumer_entry_word": "00000000",
+        "same_word": true,
+        "pointer": "0xeae9d40b360"
+      }
+    ],
+    "DM065": [
+      {
+        "step": 1,
+        "bridge": "last matching RK return to KDM entry NR",
+        "producer_return_word": "9f94dc3c",
+        "consumer_entry_word": "9f94dc3c",
+        "same_word": true,
+        "pointer": "0xa458fd39360"
+      },
+      {
+        "step": 2,
+        "bridge": "last matching RK return to KDM entry NR",
+        "producer_return_word": "71f5e23c",
+        "consumer_entry_word": "71f5e23c",
+        "same_word": true,
+        "pointer": "0xa458fd39360"
+      },
+      {
+        "step": 3,
+        "bridge": "last matching RK return to KDM entry NR",
+        "producer_return_word": "dd19c83c",
+        "consumer_entry_word": "dd19c83c",
+        "same_word": true,
+        "pointer": "0xa458fd39360"
+      },
+      {
+        "step": 4,
+        "bridge": "last matching RK return to KDM entry NR",
+        "producer_return_word": "e70fd63c",
+        "consumer_entry_word": "e70fd63c",
+        "same_word": true,
+        "pointer": "0xa458fd39360"
+      }
+    ]
+  },
+  "limitations": [
+    "Only actual bounded observations at this target and the first four calls.",
+    "Source-order float32 references do not assert compiler-equivalent arithmetic, FMA, PC or exact writer instruction.",
+    "Reported watch PC is after a changed store; absent watch events do not prove no writes.",
+    "Prep dry/moist theta source branch remains unresolved until runtime configuration or instruction path is observed.",
+    "Intercall changes are not a pure transport or complete budget attribution."
+  ]
+}

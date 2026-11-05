@@ -1,0 +1,57 @@
+{
+  "status": "PASS",
+  "reviewer": "independent from phase-0 producer",
+  "artifacts": {
+    "native/phase0/B1_parity_receipt.json": "e7e9aefd5e53e190847a7aac2f554f068f24097595db0a1cd5230ac3273434b4",
+    "native/phase0/DM065_parity_receipt.json": "e96fb0fba641de73e7fbbaef64aac6a8dc3d5390b813abf310d9954ee397fa14",
+    "native/phase0/B1_case_receipt.json": "409597e3dade14ace9a8cc959f8349b64509ec5a66591f4ccaaf33741f91915d",
+    "native/phase0/DM065_case_receipt.json": "af556738e7034f46f7f14da8f09f51f98477bfce0be9dc83740cfb7701acfc22",
+    "native/phase0/B1_selected_first4.tar.gz": "10fa6b633512d5ea77affceaf5b4fe112131213df0075a9c3db950a405cab4b8",
+    "native/phase0/DM065_selected_first4.tar.gz": "14a6e8449dc44800419bbc80b20a898ca4fcfd8a93d0823ff7ec141bf0222d76",
+    "native/phase0/pair_exit.txt": "d54e1528dd1f10e0dc86aa18169c0cc748628ccec99ed20ac2794789dee9a016",
+    "native/phase0/external_capture_inventory.json": "3aab44b9bf5bd7ce93b55522033f966542350b158af7834cc09826cca3685b65",
+    "native/phase0/archive_readback.json": "b13f8584bc988fca8039ae157a7aeb79d28952b2c9b6fbbf6080db0ea8a19252",
+    "native/gdb/parity_freeze.json": "3dd168c2c431d062a27045ba559740040901dcc537587cd6199796f94162de6b"
+  },
+  "checks": {
+    "paired_exit_codes": {
+      "pass": true,
+      "B1": 0,
+      "DM065": 0
+    },
+    "global_first_entry_return_actual_bytes": {
+      "pass": true,
+      "streams": 32,
+      "prior_source": "PR148 external global inventory"
+    },
+    "selected_first_four_actual_prefix_and_tar_bytes": {
+      "pass": true,
+      "rank_stage_streams": 32,
+      "steps": 4,
+      "fields": 16
+    },
+    "actual_postrun_case_inputs": {
+      "pass": true,
+      "arms": 2,
+      "hashes_per_arm": 89
+    },
+    "runtime_profile_libraries": {
+      "pass": true,
+      "checks": 10
+    },
+    "executable_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+    "h00_whole_history_sha_matches_prior": {
+      "pass": true,
+      "arms": 2
+    },
+    "observed_process_list_sha_and_success_marker": {
+      "pass": true,
+      "arms": 2
+    }
+  },
+  "limits": [
+    "Only the KDM6 wrapper entry/return boundaries and selected first-four prefixes are shown equivalent.",
+    "This phase-0 parity does not establish rk_tendency scalar ABI correctness or identify any pre-entry writer.",
+    "No model integration was rerun for this independent readback."
+  ]
+}

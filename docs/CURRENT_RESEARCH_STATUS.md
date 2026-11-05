@@ -1,5 +1,10 @@
 # 현재 연구 상태
 
+## 2026-11-05: 초기 QNRAIN과 첫 KDM6 NR 경계 및 작성자 추적
+
+[보고서](CP02_INITIAL_BOUNDARIES_20261105.md)는 기존 ORIGINAL·B1·미채택 DM065 자료에서 실제 첫 wrapper 입력을 전역 집계하고 제한 표본의 첫 네 호출을 연결했다. 호출 코어 2,533,440개 중 두 구성의 초기 `QNRAIN`은 199,111개, 첫 진입 `NR`은 353,417개에서 달랐다. 이 중 154,317개는 초기 입자수 혼합비가 같아도 진입 `NR`이 달랐다. 전역 첫 진입 `QV/QC/TH/TK`에는 차이가 없다. 20330에서는 포인터 결속한 RK 반환 NR이 같은 단계 KDM 진입 NR과 이어졌고, DM065의 첫 NR은 질량 결합 RK 이류 갱신에서 만들어졌다. 20183 pressure/EOS 표본은 활성 `ph_k`와 섭동압 차이 −0.1328125 Pa를 연결했으며, acoustic `calc_p_rho` 뒤 실제 마지막 압력 작성자는 `non_hydrostatic=-1`, `hypsometric_opt=2` 설정의 `calc_p_rho_phi`였다. 이 표본에서 활성 EOS 입력 `ph_k`의 차이는 −7.62939453125×10⁻⁶ m² s⁻²이고 반환 섭동압은 −0.1328125 Pa 달랐다.
+
+관측 경로는 [기제 그림](evidence/cp02_initial_boundaries_20261105/mechanism_figures/gallery.md)에 정리했다. 이 결과는 제한된 작성자·피연산자 연결이며 전역 모든 차이의 원인 귀속, 전체 격자·단계로의 SIMD 순서 일반화, 물·에너지 수지, 궤적 또는 강수 인과성을 확정하지 않는다. 20183의 `phi7` lane 2, arm별 한 native 사례에서 `(PH(k+1)−PH(k))+PHB(k+1)−PHB(k)` 순서를 캡처했고 독립 raw-review를 통과했다. grouped 식은 60개 입력의 오프라인 비교만 있으며 native 실행·예보 평가는 하지 않았다. [독립 raw numerator 검토](evidence/cp02_initial_boundaries_20261105/validation/independent_numerator_raw_review.json)와 [clean-export 검증 receipt](evidence/cp02_initial_boundaries_20261105/validation/clean_export_suite.json)를 보존한다. 새 수정·후보·예보 성능은 없다. DM065의 기존 결과는 보호 8/11·회복 2/15, 10/26 미채택이고 B1 미달 조건의 새 회복은 0개다. 현재 B1을 유지한다. 전역 원시 자료는 외부 scratch에 있으며 증거 번들은 해시 영수증·희소 파생물을 보존한다.
 
 ## 2026-11-05: B1–DM065 열역학·구름 과정의 실제 2시간 대조
 
