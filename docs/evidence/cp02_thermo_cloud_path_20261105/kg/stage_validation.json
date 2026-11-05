@@ -1,0 +1,76 @@
+{
+  "status": "PASS_STAGED_ONLY",
+  "stage": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/kg_stage/stage-795d7977dc4b0dfa",
+  "maintained_roots_written": false,
+  "baseline_sha256": "121856890def556e78a602eed376f8342112e996916b2b3ab9a05e45fea09b4b",
+  "stage_receipt_sha256": "efcae7d1cc136581b57e9324921fc516b7fc586c3a0ed45413953ffe7fada1ab",
+  "selection_lock_sha256": "ddc647ca2f95d78aa83a7efd08e1306e6263463b6834c21cc37b905ac1a8fb69",
+  "maintained_snapshot_count": 240,
+  "source_pin_count": 28,
+  "target_count": 13,
+  "source_worktree_target_count": 4,
+  "checks": {
+    "source_scope_and_hashes": {
+      "pass": true,
+      "selected": 28,
+      "hash_only": 305
+    },
+    "maintained_baseline": {
+      "pass": true,
+      "dated_snapshots": 240,
+      "active_graphs_wiki_git_status": "exact"
+    },
+    "staged_maintained_targets": {
+      "pass": true,
+      "count": 13
+    },
+    "staged_source_worktree_targets": {
+      "pass": true,
+      "count": 4
+    },
+    "graph_nodes_and_edges": {
+      "pass": true,
+      "KLAPS50": {
+        "before_nodes": 43908,
+        "after_nodes": 44077,
+        "before_edges": 91049,
+        "after_edges": 91366,
+        "before_communities": 3558,
+        "after_communities": 3598
+      },
+      "Cloud-BAL": {
+        "before_nodes": 18080,
+        "after_nodes": 18249,
+        "before_edges": 32531,
+        "after_edges": 32840,
+        "before_communities": 1599,
+        "after_communities": 1625
+      }
+    },
+    "raw_extraction": {
+      "pass": true,
+      "raw_nodes_per_corpus": 170,
+      "raw_edges_per_corpus": 488,
+      "external_import_edges_with_missing_targets_per_corpus": 185,
+      "eligible_edges_per_corpus": 303,
+      "eligible_edges_missing_after_merge": 0,
+      "intentional_suppression": 0
+    },
+    "graph_integrity": {
+      "pass": true,
+      "duplicate_node_ids": 0,
+      "missing_or_self_edge_endpoints": 0,
+      "same_endpoint_groups": 0,
+      "all_prior_node_ids_preserved": true
+    },
+    "wiki_scope_and_report_mirrors": {
+      "pass": true,
+      "count": 5
+    }
+  },
+  "limitations": [
+    "Only 28 reviewed Python sources were structurally extracted; 305 files are hash-only.",
+    "Each raw extraction has 185 import edges to missing external targets, excluded during graph merge.",
+    "Fortran cross-file extraction is partial; graph freshness is not runtime or scientific validation."
+  ]
+}

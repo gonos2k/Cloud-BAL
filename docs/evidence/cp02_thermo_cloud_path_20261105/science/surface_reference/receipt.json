@@ -1,0 +1,75 @@
+{
+  "status": "PASS",
+  "source_sha256": "f7f7d7d49c2115e6d76587b921deebd60d54607f00190bac38cad0151a265381",
+  "prior_protocol_sha256": "5f44ad36d60e3443f7da7bbf7253359160114e954d3015ed8cef6ca059237690",
+  "cohort_sha256": {
+    "selected_points.csv": "3343201b904a9b9874fea8f174715e37f1d642871f371bf1f378ed8a13a62197",
+    "point_corners.csv": "b5d4de1d9209048e6e157ec8d5fe801f8464ee0b9fe307f5656cff32e09923fa",
+    "unique_global_corners.csv": "c2ba19be993cd82dfeac0ff1b3a02659d6c137b733903e563da91f4024aa65b9"
+  },
+  "history_inputs": [
+    {
+      "arm": "B1",
+      "hour": 0,
+      "path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_12:00:00",
+      "sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+      "size_bytes": 328253340,
+      "dry_theta_vs_moist_theta_max_abs_K": 4.49338620569506e-05
+    },
+    {
+      "arm": "B1",
+      "hour": 1,
+      "path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "8b4ead8741dff7284b1de140038d85ba48a474d6b8b98e1905e10ddbac165702",
+      "size_bytes": 328253340,
+      "dry_theta_vs_moist_theta_max_abs_K": 5.9808494142998825e-05
+    },
+    {
+      "arm": "B1",
+      "hour": 2,
+      "path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_14:00:00",
+      "sha256": "e4c2ef230a1e3574390a015945fdc051673c345156e9360bc8a54a3922561208",
+      "size_bytes": 328253340,
+      "dry_theta_vs_moist_theta_max_abs_K": 5.7033260418393183e-05
+    },
+    {
+      "arm": "DM065",
+      "hour": 0,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/runtime/next_candidate/full/wrfout_d01_2026-08-16_12:00:00",
+      "sha256": "7ee4712fd13fe1e4c5ee1620d50c61625b8c4574a5927b09e9f1e3b3e5d40a70",
+      "size_bytes": 328253340,
+      "dry_theta_vs_moist_theta_max_abs_K": 4.49338620569506e-05
+    },
+    {
+      "arm": "DM065",
+      "hour": 1,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/runtime/next_candidate/full/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "152686a383594eec8fcb51d52e70f608286b7573429048e4032da2d4f2c05306",
+      "size_bytes": 328253340,
+      "dry_theta_vs_moist_theta_max_abs_K": 5.9808494142998825e-05
+    },
+    {
+      "arm": "DM065",
+      "hour": 2,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/runtime/next_candidate/full/wrfout_d01_2026-08-16_14:00:00",
+      "sha256": "5cbe69e6f17253464fab64fc23f907b7880e8c3cf391ae11aefe019011b0a44c",
+      "size_bytes": 328253340,
+      "dry_theta_vs_moist_theta_max_abs_K": 5.7033260418393183e-05
+    }
+  ],
+  "native_rows": 738,
+  "point_component_rows": 156,
+  "max_total_residual_mm": 2.220446049250313e-16,
+  "units": "Cumulative and hourly precipitation mm; raw words explicit IEEE float32 little-endian hex",
+  "scope": "RAINNC for KDM6 surface check; RAINC separate; scalar component projection not a full water budget",
+  "outputs": {
+    "point_components.csv": {
+      "sha256": "de81cd987b12c32ea84a240af17b5edd7391bd26e2e500f47e93b4ebb81137e2",
+      "size_bytes": 17207
+    },
+    "native_surface.csv": {
+      "sha256": "19bf49cd1a673a1a9b3064669d2740455d750b51e224eec0bb1cecaf26fdd3aa",
+      "size_bytes": 37839
+    }
+  }
+}

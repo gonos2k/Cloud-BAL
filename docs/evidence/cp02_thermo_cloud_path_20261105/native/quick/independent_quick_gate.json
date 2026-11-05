@@ -1,0 +1,415 @@
+{
+  "analyzer_sha256": "c0e3de9333f8a7f668fa587cd20313038bb189e298cdc1bb9cdf660675699339",
+  "assertions": [
+    "all actual mandatory phases and owning cores",
+    "all actual sedimentation substeps",
+    "conditional surface pairs and source arithmetic",
+    "wrapper TH*PII and P/PII call invariance",
+    "wrapper/internal density conversions and clamping",
+    "liquid SATDT",
+    "REAL32 QV/T process and condensation arithmetic"
+  ],
+  "cases": {
+    "B1": {
+      "RAINNC_history_word_matches": null,
+      "coverage_cell_steps": 4797,
+      "native_wrapper_bytes": 284433,
+      "native_wrapper_sha256": "6ce8e732eae259a852c5697b113c7d20fd483729adf5f22a8fd7076ab58b33fb",
+      "output_bytes": 892358,
+      "output_sha256": "3288647379a3683dedcc90a1e22b281ebe8b3278a7992dfdd3eeaba9c578b76b",
+      "phase_counts": {
+        "1": 4797,
+        "2": 4797,
+        "3": 4797,
+        "4": 4797,
+        "5": 4797,
+        "6": 4797,
+        "7": 4797,
+        "8": 4797,
+        "9": 4797,
+        "10": 4797,
+        "11": 4797,
+        "12": 4797,
+        "13": 56,
+        "14": 56,
+        "15": 892,
+        "16": 9,
+        "17": 9
+      },
+      "source_constants": [
+        1.0000000036274937e-15,
+        273.1499938964844,
+        461.6000061035156,
+        1846.4000244140625,
+        4190.0,
+        610.780029296875,
+        0.6217504143714905,
+        2500000.0,
+        2850000.0,
+        2106.0
+      ]
+    },
+    "DM065": {
+      "RAINNC_history_word_matches": null,
+      "coverage_cell_steps": 4797,
+      "native_wrapper_bytes": 292407,
+      "native_wrapper_sha256": "216628cf126eaaea2125f8623758cb8f42b551f36e26c7d6f95ad997c51cf162",
+      "output_bytes": 935585,
+      "output_sha256": "6fa5df2eabc223f9d8287d395d2f046a310f20d7fbb3c3c03fa0d72d94d89faf",
+      "phase_counts": {
+        "1": 4797,
+        "2": 4797,
+        "3": 4797,
+        "4": 4797,
+        "5": 4797,
+        "6": 4797,
+        "7": 4797,
+        "8": 4797,
+        "9": 5499,
+        "10": 5499,
+        "11": 4797,
+        "12": 4797,
+        "13": 56,
+        "14": 56,
+        "15": 892,
+        "16": 861,
+        "17": 892
+      },
+      "source_constants": [
+        1.0000000036274937e-15,
+        273.1499938964844,
+        461.6000061035156,
+        1846.4000244140625,
+        4190.0,
+        610.780029296875,
+        0.6217504143714905,
+        2500000.0,
+        2850000.0,
+        2106.0
+      ]
+    }
+  },
+  "corners_sha256": "b5d4de1d9209048e6e157ec8d5fe801f8464ee0b9fe307f5656cff32e09923fa",
+  "inputs": {
+    "B1": [
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_calls_rank0.txt",
+        "sha256": "ba4937f34d298b64c1c037b0c2f3e315b92db9474b36c5e54d5b69ca945b2e9a",
+        "size_bytes": 57
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_calls_rank1.txt",
+        "sha256": "0d063ad4b7a89dc436488c29817d0ded95e03f389ecf6227ddb8f8599ee727ac",
+        "size_bytes": 60
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_calls_rank2.txt",
+        "sha256": "65350b09c8cadf5f4fca49a6cea2bd84c57c618cfdc8330b9bafc241685356cd",
+        "size_bytes": 60
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_calls_rank3.txt",
+        "sha256": "ab7a5de10b93149baf95c89f6e8c88eff61f77069780b14d00309ff6c77444ca",
+        "size_bytes": 63
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_calls_rank4.txt",
+        "sha256": "9dd06e78e702c31f7e3b1bf0b3a208e75ecfac065ce7fcee8c21340d4d444b53",
+        "size_bytes": 62
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_calls_rank5.txt",
+        "sha256": "ab79c73f8b45b294647e8719748a09294c34a95899014afb641d5121b51a58af",
+        "size_bytes": 65
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_calls_rank6.txt",
+        "sha256": "dcf0df284d60388c21ff985add5f2499ff165458534f2ee41af8185dda425f84",
+        "size_bytes": 62
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_calls_rank7.txt",
+        "sha256": "549fe7ccc0497c79ae60b87dc1ca5a5d89e48b4f20df4e2f2ee603a9a8331c68",
+        "size_bytes": 65
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_entry_rank0.bin",
+        "sha256": "c75d3b698ca3db8453c085e8ffbe937e2d657579ee86e08278c44224bed34c88",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_entry_rank1.bin",
+        "sha256": "6416dcc29f7b1b166295279c9eb77176227db86b0e86cc13f6188081b84fb4f8",
+        "size_bytes": 11924
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_entry_rank2.bin",
+        "sha256": "c84c5d428d02e0cc63fe1e2b51403afe971e65b535bd473972b00d4e201bbcd4",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_entry_rank3.bin",
+        "sha256": "76cba2612ea10900164f6a0b6b26feb68adb867f19a0d2416f5fcf3d3231cdf5",
+        "size_bytes": 299432
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_entry_rank4.bin",
+        "sha256": "9f5278727a21d5c627d573480989f902ffcbfeaec599eeafbf379a95c78b93d1",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_entry_rank5.bin",
+        "sha256": "f5468a5190d423068ec8a963e2e34ee8cc42edd322975e2edbf3ec8f7a1bf8cc",
+        "size_bytes": 53420
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_entry_rank6.bin",
+        "sha256": "be16b8fd05c9e41b0e2a83b6625608dbafaa2859c74e7538ff418d6978449834",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_entry_rank7.bin",
+        "sha256": "6e7e6360d6146822fd307c15b8548bfad8d7c0fa12ffce865864ecd9b784b114",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_return_rank0.bin",
+        "sha256": "e68cef5b98b2f74485c5938a0343676b93a06d3fb8bac0e65cd38541cec4aac1",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_return_rank1.bin",
+        "sha256": "5a89f7b126a8de8737d2e1914b7986457ed39dc64891b61aa0a1f67ba83750d8",
+        "size_bytes": 11924
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_return_rank2.bin",
+        "sha256": "4f1aceddc4b8ee6d47f134ee3212b94f54f932fcebd1e8d60f0e126cc41a557e",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_return_rank3.bin",
+        "sha256": "f6135478fbf91d35ce7a6127a326122fae06e4a108aa0ea726af41b066189ad4",
+        "size_bytes": 299432
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_return_rank4.bin",
+        "sha256": "6cca8040fda7ef656fb86d3cdeacddb02b08f0708a396df3ffe75aadbf288c4c",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_return_rank5.bin",
+        "sha256": "392def71ce262ba4e01aacae59f7aa17dc11bd100a3746121956ba3bbd0ee3e7",
+        "size_bytes": 53420
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_return_rank6.bin",
+        "sha256": "f2cad0b1de2e37a29c99ad6b46970d770fdc7aacd1b0f5bbf2b33ff5d5ffb84e",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/state_selected_return_rank7.bin",
+        "sha256": "4e1291bf59a407a1ecd58e1e45150edc5a94a50fe9f0522475d685f0197fe8b8",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/cp04_rank1.bin",
+        "sha256": "f43fe09aefe472cecbb61805aa3d3a5489a268f30d03db9f7baa5a23c3352f27",
+        "size_bytes": 191256
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/cp04_rank3.bin",
+        "sha256": "cc1d53b2da73e3c6267a0d087556c52798226d2bc18bae82d48029c6c48b8288",
+        "size_bytes": 4802312
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/cp04_rank5.bin",
+        "sha256": "7415ea2996ec324e439878da90996fd18b04eb3d83b2c5cf79dc0cf63ee1dc79",
+        "size_bytes": 856068
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/surface_cp04_rank1.bin",
+        "sha256": "eacfa058232b0339de4a021f6d93f4e9902bd0f92736ce3ec5342bc2f5d9be97",
+        "size_bytes": 160
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/surface_cp04_rank3.bin",
+        "sha256": "19302ec0706e379a942c9ac79855f82a1c151eae9c04420f0315a9796fd351ed",
+        "size_bytes": 4040
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/surface_cp04_rank5.bin",
+        "sha256": "9f834dc1d5725d1e12b6f752bc68b8ebe0b2b2f0c4e099ab28eea1e565df4cf8",
+        "size_bytes": 720
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/B1/launch_receipt.json",
+        "sha256": "93050219bc15c8cf64f12fad5f1a772aab8fea8c5e116c4fa8ba42a0558b2b4b",
+        "size_bytes": 8967
+      }
+    ],
+    "DM065": [
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_calls_rank0.txt",
+        "sha256": "ba4937f34d298b64c1c037b0c2f3e315b92db9474b36c5e54d5b69ca945b2e9a",
+        "size_bytes": 57
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_calls_rank1.txt",
+        "sha256": "0d063ad4b7a89dc436488c29817d0ded95e03f389ecf6227ddb8f8599ee727ac",
+        "size_bytes": 60
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_calls_rank2.txt",
+        "sha256": "65350b09c8cadf5f4fca49a6cea2bd84c57c618cfdc8330b9bafc241685356cd",
+        "size_bytes": 60
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_calls_rank3.txt",
+        "sha256": "ab7a5de10b93149baf95c89f6e8c88eff61f77069780b14d00309ff6c77444ca",
+        "size_bytes": 63
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_calls_rank4.txt",
+        "sha256": "9dd06e78e702c31f7e3b1bf0b3a208e75ecfac065ce7fcee8c21340d4d444b53",
+        "size_bytes": 62
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_calls_rank5.txt",
+        "sha256": "ab79c73f8b45b294647e8719748a09294c34a95899014afb641d5121b51a58af",
+        "size_bytes": 65
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_calls_rank6.txt",
+        "sha256": "dcf0df284d60388c21ff985add5f2499ff165458534f2ee41af8185dda425f84",
+        "size_bytes": 62
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_calls_rank7.txt",
+        "sha256": "549fe7ccc0497c79ae60b87dc1ca5a5d89e48b4f20df4e2f2ee603a9a8331c68",
+        "size_bytes": 65
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_entry_rank0.bin",
+        "sha256": "c75d3b698ca3db8453c085e8ffbe937e2d657579ee86e08278c44224bed34c88",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_entry_rank1.bin",
+        "sha256": "4bda7ad312ccbce95520bedd62f6532f38ea9f6a3418e43de9aadbb700213d5c",
+        "size_bytes": 11924
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_entry_rank2.bin",
+        "sha256": "c84c5d428d02e0cc63fe1e2b51403afe971e65b535bd473972b00d4e201bbcd4",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_entry_rank3.bin",
+        "sha256": "d7e4e87c1c64dcd196c40a62568fc3f1c582d4b0ebfd9ff67cc212db0ffc564c",
+        "size_bytes": 299432
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_entry_rank4.bin",
+        "sha256": "9f5278727a21d5c627d573480989f902ffcbfeaec599eeafbf379a95c78b93d1",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_entry_rank5.bin",
+        "sha256": "fb9a74b8c6e0f5ec8d8a9188b8a2ca22559207d325abf8132cd2500e8b3dded5",
+        "size_bytes": 53420
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_entry_rank6.bin",
+        "sha256": "be16b8fd05c9e41b0e2a83b6625608dbafaa2859c74e7538ff418d6978449834",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_entry_rank7.bin",
+        "sha256": "6e7e6360d6146822fd307c15b8548bfad8d7c0fa12ffce865864ecd9b784b114",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_return_rank0.bin",
+        "sha256": "e68cef5b98b2f74485c5938a0343676b93a06d3fb8bac0e65cd38541cec4aac1",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_return_rank1.bin",
+        "sha256": "685f7b8d8190adc7de9c56d1479725a9887abe83b6ce33a469f7c098c758d355",
+        "size_bytes": 11924
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_return_rank2.bin",
+        "sha256": "4f1aceddc4b8ee6d47f134ee3212b94f54f932fcebd1e8d60f0e126cc41a557e",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_return_rank3.bin",
+        "sha256": "0ba3539804d1443acf5dc48a5e5a253c72efb08ab5e7ec0426f2aff76c86637a",
+        "size_bytes": 299432
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_return_rank4.bin",
+        "sha256": "6cca8040fda7ef656fb86d3cdeacddb02b08f0708a396df3ffe75aadbf288c4c",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_return_rank5.bin",
+        "sha256": "93078be0b7f4fdb5256d00e8a92407ff4d352681e9d7849a58ea5bad74497e48",
+        "size_bytes": 53420
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_return_rank6.bin",
+        "sha256": "f2cad0b1de2e37a29c99ad6b46970d770fdc7aacd1b0f5bbf2b33ff5d5ffb84e",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/state_selected_return_rank7.bin",
+        "sha256": "4e1291bf59a407a1ecd58e1e45150edc5a94a50fe9f0522475d685f0197fe8b8",
+        "size_bytes": 68
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/cp04_rank1.bin",
+        "sha256": "e1aafe3baedcb2b77e4692d43da25068641033290be358728487b7282efa7fb5",
+        "size_bytes": 194496
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/cp04_rank3.bin",
+        "sha256": "934be56cc6fcf4b2357c172b1d83fe378dec1e66ac8d1f6e5a8d955abf2f8720",
+        "size_bytes": 5034764
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/cp04_rank5.bin",
+        "sha256": "c58723aadd455b37e16fc5c00021719eba66646f7a74e0299da06a0e175c6f88",
+        "size_bytes": 865356
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/surface_cp04_rank1.bin",
+        "sha256": "eacfa058232b0339de4a021f6d93f4e9902bd0f92736ce3ec5342bc2f5d9be97",
+        "size_bytes": 160
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/surface_cp04_rank3.bin",
+        "sha256": "2cd903c94ee3e9398b63ebf7b71ef0b7cdc5d7819be0a7da8935a682a78f8ec5",
+        "size_bytes": 4040
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/surface_cp04_rank5.bin",
+        "sha256": "9f834dc1d5725d1e12b6f752bc68b8ebe0b2b2f0c4e099ab28eea1e565df4cf8",
+        "size_bytes": 720
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_thermo_cloud_path_20261105/runtime/quick/DM065/launch_receipt.json",
+        "sha256": "2a4c3415a4160996327a1542aa74f4312dda67e7271d7a3799eb510d24c94d43",
+        "size_bytes": 8967
+      }
+    ]
+  },
+  "levels": 39,
+  "native_cells": 123,
+  "schema_sha256": "64496e9f19ec0042762a7b8fa7d4f8006ea617a45433434242706c223db2210c",
+  "script_sha256": "c60ae6482e769f6e2abf171694f286d3b47882d6cca85a4e7e97ae1e712196e5",
+  "status": "PASS",
+  "steps": 1
+}

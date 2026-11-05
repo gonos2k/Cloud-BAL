@@ -1,0 +1,71 @@
+{
+  "csv_sha256": "fd8d83c6524ba4127d75f559ccca679fd79b6f1ec3ec7bd1ca1d7ea83d9aa762",
+  "five_h01_both_qrain_qnrain_zero": [
+    16606,
+    17051,
+    17199,
+    17792,
+    20183
+  ],
+  "groups": {
+    "new_false_alarm": {
+      "h01_0to1km_rh_liquid_delta_median": -3.874301910400391e-06,
+      "h01_0to1km_rh_liquid_delta_n": 15,
+      "h01_0to1km_temperature_K_delta_median": 0.000213623046875,
+      "h01_0to1km_temperature_K_delta_n": 15,
+      "h01_k2_rh_liquid_delta_median": 5.602836608886719e-05,
+      "h01_k2_rh_liquid_delta_n": 15,
+      "h01_k2_temperature_K_delta_median": -0.0009765625,
+      "h01_k2_temperature_K_delta_n": 15,
+      "points": 15
+    },
+    "removed_false_alarm": {
+      "h01_0to1km_rh_liquid_delta_median": 8.52346420288086e-05,
+      "h01_0to1km_rh_liquid_delta_n": 12,
+      "h01_0to1km_temperature_K_delta_median": -0.000823974609375,
+      "h01_0to1km_temperature_K_delta_n": 12,
+      "h01_k2_rh_liquid_delta_median": 1.615285873413086e-05,
+      "h01_k2_rh_liquid_delta_n": 12,
+      "h01_k2_temperature_K_delta_median": -6.103515625e-05,
+      "h01_k2_temperature_K_delta_n": 12,
+      "points": 12
+    },
+    "retained_false_alarm": {
+      "h01_0to1km_rh_liquid_delta_median": 4.3272972106933594e-05,
+      "h01_0to1km_rh_liquid_delta_n": 252,
+      "h01_0to1km_temperature_K_delta_median": -0.0005035400390625,
+      "h01_0to1km_temperature_K_delta_n": 252,
+      "h01_k2_rh_liquid_delta_median": -1.2814998626708984e-06,
+      "h01_k2_rh_liquid_delta_n": 252,
+      "h01_k2_temperature_K_delta_median": -0.0001678466796875,
+      "h01_k2_temperature_K_delta_n": 252,
+      "points": 252
+    }
+  },
+  "id20183_qv_max_level_1based": 4,
+  "id20183_t_max_level_1based": 4,
+  "initial_15_all_corners_all_levels_zero": true,
+  "input_pins": {
+    "science/local_initial_change.csv": "658c18fa55ed6b3a12ff6ecd03fff845a8628ee160a49fe5ba57ea30577d541c",
+    "state/protocol.json": "5f44ad36d60e3443f7da7bbf7253359160114e954d3015ed8cef6ca059237690",
+    "state/results/receipt.json": "9e6a4cea51bdd88ae45a6052e6818a07ee5003de7dfc5dc2050c048075277d8c"
+  },
+  "limitations": "Eulerian fixed-location snapshots, not trajectories or source attribution; sampled h01 is not first divergence; RH/T medians use saved rounded f32 snapshots and are descriptive.",
+  "raw_history_pins": {
+    "B1": {
+      "dry_theta_vs_moist_theta_max_abs_K": 5.9808494142998825e-05,
+      "path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "8b4ead8741dff7284b1de140038d85ba48a474d6b8b98e1905e10ddbac165702",
+      "size_bytes": 328253340
+    },
+    "DM065": {
+      "dry_theta_vs_moist_theta_max_abs_K": 5.9808494142998825e-05,
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_rain_number_process_20261104/runtime/next_candidate/full/wrfout_d01_2026-08-16_13:00:00",
+      "sha256": "152686a383594eec8fcb51d52e70f608286b7573429048e4032da2d4f2c05306",
+      "size_bytes": 328253340
+    }
+  },
+  "rows": 279,
+  "source_sha256": "33b7c6eb9eb7d8fdc68eee520849fe8bdf09704d8faf12b9d7b368c54a4a4df9",
+  "status": "PASS"
+}

@@ -1,0 +1,53 @@
+{
+  "status": "PASS",
+  "scope": "All NPZ members; original NPY header and payload SHA, shape, dtype and storage order; loader reconstruction and every part SHA/size.",
+  "full_capture_receipt_sha256": "e41105c152b55991784f1fcf0b8c8e1c75fe03fc3d33160b897160adadd33245",
+  "packer_sha256": "3c929e783856119daebf5b35487a0b10330d368db201024e5e57e7b37c34fb4d",
+  "arrays": {
+    "B1_native_wrapper.npz": {
+      "source_sha256": "c4102be3835fea8ddf9c40a9c0efbd993cd9de63b2d6d39f87494de08f680460",
+      "manifest_path": "analysis/B1_native_wrapper_parts/B1_native_wrapper.parts.json",
+      "manifest_sha256": "2d6a6fb716de26f7abb4428d85137c92b33a242e7d35b1e83c796e21163dff09",
+      "member_count": 2,
+      "part_count": 2,
+      "max_part_bytes": 62093418,
+      "loader_selected_member": "entry"
+    },
+    "DM065_native_wrapper.npz": {
+      "source_sha256": "c7ef18999d517b0b8fefca0de47d1393cfe733c792286a04ae39051dadcf5715",
+      "manifest_path": "analysis/DM065_native_wrapper_parts/DM065_native_wrapper.parts.json",
+      "manifest_sha256": "5bc658ead82af6b75984c7c5af365ecb0c3fad80afcdd0209b51c0ff44b209fd",
+      "member_count": 2,
+      "part_count": 2,
+      "max_part_bytes": 61811679,
+      "loader_selected_member": "entry"
+    },
+    "B1_point_timeseries.npz": {
+      "source_sha256": "9abb898aff76f76f56fc1916bb6d8a7fcdabc3fbe29b669a7d65ed3d72561d36",
+      "manifest_path": "analysis/B1_point_timeseries_parts/B1_point_timeseries.parts.json",
+      "manifest_sha256": "6e01155be21deff6070ee609185f1a87f9766caa51d905e96397546248ceb324",
+      "member_count": 31,
+      "part_count": 31,
+      "max_part_bytes": 41032153,
+      "loader_selected_member": "between_exner"
+    },
+    "DM065_point_timeseries.npz": {
+      "source_sha256": "b9b2880567be483c822ca1b2a27d5776a1b50131049c708ddc10252a4684bdd7",
+      "manifest_path": "analysis/DM065_point_timeseries_parts/DM065_point_timeseries.parts.json",
+      "manifest_sha256": "2965aa78547d1cd58c47cbd5efdc080a67b2187bd734f1c907602777915b36d0",
+      "member_count": 31,
+      "part_count": 31,
+      "max_part_bytes": 40835982,
+      "loader_selected_member": "between_exner"
+    },
+    "paired_differences.npz": {
+      "source_sha256": "3a2fb0c6d7230830b82239aa9498276ae13d6ef115a8d6087c05fe54f24488e9",
+      "manifest_path": "analysis/paired_differences_parts/paired_differences.parts.json",
+      "manifest_sha256": "ecc4729ce321510e93aaef118e9b578464cb46776b8f5c3fbca74c55dd851440",
+      "member_count": 24,
+      "part_count": 24,
+      "max_part_bytes": 38053505,
+      "loader_selected_member": "between_call_difference"
+    }
+  }
+}

@@ -1,0 +1,31 @@
+{
+  "status": "GO",
+  "reviewer_role": "independent from renderer author",
+  "sha256": {
+    "renderer": "aea4bfe6c55a254c7a5ba71b57edda5d381a0c63f6ad934023c62ebb25959ff7",
+    "tests": "e507bb6ba0edd86a2f027bff9f9c136ba7b578962f19f83ccbaf98f9f341c8c3",
+    "schema": "64496e9f19ec0042762a7b8fa7d4f8006ea617a45433434242706c223db2210c",
+    "metadata": "a4fdf4c9cae5cfc84b945e283a15dd960d3d6c165b1e9a15e95c7c230e28ec6e",
+    "publication_receipt": "989d2febc04b32594ca04bafa3dcc27e6fe5a660f91a36ebcf1daa4239853d8e",
+    "package": "3e0ecaebe7757e02cb686516bdbcd08dfab2efe9e706a8a34fe8fda1233815ba",
+    "group_data": "c7e533bcff0d5f9f963afb5be9929796f0221c1c6664cdfc9e8d697442efc87a"
+  },
+  "checks": {
+    "science_field_units_and_stage_order": "PASS",
+    "first_sampled_positive_vs_difference_and_tiny_values": "PASS",
+    "group_data_468_exact_against_paired_arrays": "PASS",
+    "focused_renderer_tests": "6 passed",
+    "input_pin_and_mutation_rejection": "PASS",
+    "fresh_output_and_injected_receipt_failure_cleanup": "PASS",
+    "metadata_receipt_and_seven_png_sha256": "PASS",
+    "zip_crc_exact_member_inventory_and_bytes": "PASS",
+    "markdown_html_links_local_and_present": "PASS",
+    "schema_field_order_guard": "PASS",
+    "reviewed_final_pngs": "PASS"
+  },
+  "limits": [
+    "Rendered appearance and byte identity require the pinned Nanum font and recorded Matplotlib environment.",
+    "Fresh publication refuses existing or dangling destinations and uses sibling staging; unrelated writer races against an empty destination are outside the cooperative contract.",
+    "Values are sampled Eulerian differences and do not establish causation or exact within-step event times."
+  ]
+}
