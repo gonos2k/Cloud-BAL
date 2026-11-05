@@ -1,0 +1,88 @@
+{
+  "schema": "cp02_grouped_forecast_runtime_review_v1",
+  "status": "GO_SHAM_RETRY_ONLY",
+  "created_at_utc": "2026-11-05T07:35:25.232910+00:00",
+  "source_worktree_head": "76a70db52d4813cccad8ad0c098ca1d1c91df518",
+  "review_scope": {
+    "controller_path": "docs/evidence/cp02_grouped_forecast_20261105/runtime/forecast.py",
+    "controller_sha256": "fef36b4c786d64da4ac7d4c9881c4185e37eecc40ade3fbbe4a0b618e8b8e9fe",
+    "expected_controller_sha256": "fef36b4c786d64da4ac7d4c9881c4185e37eecc40ade3fbbe4a0b618e8b8e9fe",
+    "rank_wrapper_path": "docs/evidence/cp02_grouped_forecast_20261105/runtime/rank_wrapper.sh",
+    "rank_wrapper_sha256": "933d4496a8c3b0aed240364ef08c3b1db5d8219b348b71b9c3db5b1ab3135938",
+    "expected_rank_wrapper_sha256": "933d4496a8c3b0aed240364ef08c3b1db5d8219b348b71b9c3db5b1ab3135938",
+    "source_hashes_match_reviewed_delta": true
+  },
+  "decision": {
+    "approved_cases": [
+      "SHAM_A",
+      "SHAM_B"
+    ],
+    "not_approved_cases": [
+      "C",
+      "D"
+    ],
+    "model_executions_or_preparations_by_reviewer": false,
+    "runtime_source_edits_by_reviewer": false,
+    "blocking_findings": []
+  },
+  "prior_failed_attempt": {
+    "preserved_under": "docs/evidence/cp02_grouped_forecast_20261105/runtime/attempts/stack_8192_before/",
+    "failed_cases": [
+      "SHAM_A",
+      "SHAM_B"
+    ],
+    "failure": "Both pre-physics launches exited 174 in wrf_global_to_patch after about 1.4 seconds; no histories or timestep completion. The parent process inherited an 8192 KB stack soft limit because the legacy env.sh unlimited-stack setting was omitted.",
+    "interpretation": "Environment/setup failure, not a forecast or physics result. The old failed receipts/logs and copied sources are preserved."
+  },
+  "checks": {
+    "six_hour_namelist_contract": {
+      "pass": true,
+      "detail": "One exact value each is required for run 12\u201318 UTC, 20 s timestep, and hourly history outputs; wrong and duplicate settings reject."
+    },
+    "private_89_input_copy": {
+      "pass": true,
+      "detail": "Test confirms exact 89-file input set copied to distinct inodes, each hash matches, and repeated prepare refuses existing case without changing prepared.json."
+    },
+    "existing_launcher_guard": {
+      "pass": true,
+      "detail": "Test confirms an existing launcher.log rejects run before launch and leaves it unchanged; no run receipt is written."
+    },
+    "limited_hard_stack_refusal": {
+      "pass": true,
+      "detail": "Controller refuses a finite stack hard limit before opening launcher.log or launching MPI; no setrlimit mutation is attempted."
+    },
+    "unlimited_stack_in_rank_wrapper": {
+      "pass": true,
+      "detail": "The success fixture enters the rank wrapper with both stack limits unlimited; the wrapper records and accepts the setting before exec."
+    },
+    "rank_affinity_guard": {
+      "pass": true,
+      "detail": "Wrapper accepts a single correctly pinned rank and refuses rank 8 before executing wrf.exe."
+    },
+    "case_cpu_sets": {
+      "pass": true,
+      "detail": "SHAM_A 0\u20137 and SHAM_B 8\u201315 are disjoint; grouped cases use separate 32\u201339 and 40\u201347 sets."
+    },
+    "rank_wrapper_bash_syntax": {
+      "pass": true,
+      "command": "bash -n docs/evidence/cp02_grouped_forecast_20261105/runtime/rank_wrapper.sh"
+    },
+    "focused_tests": {
+      "pass": true,
+      "command": "pytest -q tests/test_grouped_forecast_runtime.py",
+      "result": "5 passed",
+      "test_sha256": "d6a3809e420e220859b2ea0df1eb0e7bc9091198acf1413af239b0913a4ef62d"
+    }
+  },
+  "review_observations": [
+    "The controller checks the pinned IFX executable and runtime libraries, frozen build receipt, MPI binary, source receipts, private input hashes, per-rank affinity, all-rank success markers, and seven exact finite histories before passing a run.",
+    "The controller now requires an unlimited stack hard limit, sets both soft and hard stack limits unlimited before MPI launch, and records before/launch limits in the run receipt. Each rank wrapper independently requires an unlimited soft stack before exec.",
+    "Process tracking records PID start ticks to avoid PID-reuse confusion and attempts process-group cleanup on timeout/interruption and when sampled descendants remain.",
+    "Run receipt does not itself hash launcher.log, rsl.out.* or affinity_rank*.json. The final evidence manifest should bind those files if they are retained as run evidence."
+  ],
+  "limitations": [
+    "Review and tests did not prepare or launch either retry model run.",
+    "GO applies only to OLD_SHAM controls SHAM_A/SHAM_B; it does not authorize grouped C/D runs or establish forecast/scientific validity.",
+    "The actual grouped operation and compiled WRF instruction ordering remain separate native-owner gates."
+  ]
+}

@@ -1,0 +1,201 @@
+{
+  "baseline_sha256": "6f2c341aface4c1ac2167cc3df3004dc0e95dff26dc74286c46329eabc91feb0",
+  "checks": {
+    "baseline_244_snapshots_and_dirty_roots": true,
+    "dated_snapshots_and_deltas": true,
+    "five_wiki_mirrors_and_old_content": true,
+    "graph_integrity_prior_nodes_and_manifest_subset": true,
+    "publisher_target_inventory": true,
+    "raw_extraction_hashes": true,
+    "source_worktree_mirror_and_no_writes": true,
+    "stage_scope_and_source_pins": true
+  },
+  "findings": [],
+  "graph_deltas": {
+    "Cloud-BAL": {
+      "after": {
+        "communities": 1653,
+        "edges": 34072,
+        "nodes": 18814
+      },
+      "before": {
+        "communities": 1634,
+        "edges": 33501,
+        "nodes": 18553
+      },
+      "delta": {
+        "communities": 19,
+        "edges": 571,
+        "nodes": 261
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "manifest_changed_keys": 25,
+      "prior_node_ids_preserved": 18553,
+      "removed_prior_node_ids": 0,
+      "snapshot_sha256": {
+        "GRAPH_REPORT.md": "860285d3840861366f316f58ee89a448d8e1c8a8df4026c610a9d3b97be6d85b",
+        "graph.json": "c93c28cffa7b17c0d0d90b03e03df6a30e9398ca300ab8726988a7538eb13cf2",
+        "manifest.json": "462405359213dfc8a087b08dfac36fd66ff755fb05becb467b9d46f529c47585"
+      }
+    },
+    "KLAPS50": {
+      "after": {
+        "communities": 3654,
+        "edges": 92635,
+        "nodes": 44642
+      },
+      "before": {
+        "communities": 3624,
+        "edges": 92054,
+        "nodes": 44381
+      },
+      "delta": {
+        "communities": 30,
+        "edges": 581,
+        "nodes": 261
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "manifest_changed_keys": 25,
+      "prior_node_ids_preserved": 44381,
+      "removed_prior_node_ids": 0,
+      "snapshot_sha256": {
+        "GRAPH_REPORT.md": "a76191b4cb3a45827008bb548f8dc12887012e8ab5b1090787fdd642bcd2247b",
+        "graph.json": "aad4ea3201061a2259dd9e10ee66eb75fa5aec073f07848efcdb753994daa8fc",
+        "manifest.json": "dacace46ec1f5c43adbd5685d6b2685972be79ca0282a2e26c33b6d4e19a2cb2"
+      }
+    }
+  },
+  "hash_only_pin_count": 150,
+  "limits": [
+    "Only reviewed Python source paths are structurally extracted; other new evidence is hash-only.",
+    "External import targets may be absent; Fortran cross-file CALL extraction is partial.",
+    "Graph freshness does not establish runtime behavior, physical correctness, conservation or scientific validity."
+  ],
+  "maintained_roots_written": false,
+  "maintained_snapshot_count": 244,
+  "review_note": "Baseline validation confirms 120 KLAPS50 and 124 Cloud-BAL prior dated snapshots (244 total) remain unchanged. The two independently recomputed graphs preserve all prior node IDs, have zero integrity counters, and update only reviewed selected-source manifest keys. Wiki report mirrors/index/log checks passed. Graph deltas describe structural extraction only and do not establish forecast or scientific validation.",
+  "review_scope": "Independent read-only audit of the isolated Graphify selected-path stage and all prepublication targets. No maintained-root writes performed.",
+  "review_status": "GO",
+  "schema": "cp02_grouped_forecast_independent_kg_stage_review_v1",
+  "selection_lock_sha256": "3ee488d702be0b3c51642c43f865456ff7b8756a5ffc34a92e135eedf0e3c2e3",
+  "source_pin_count": 25,
+  "source_worktree_mirror_targets": [
+    {
+      "kind": "file",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/Cloud-BAL/graphify-out/graph.json",
+      "sha256": "c93c28cffa7b17c0d0d90b03e03df6a30e9398ca300ab8726988a7538eb13cf2"
+    },
+    {
+      "kind": "file",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/Cloud-BAL/graphify-out/GRAPH_REPORT.md",
+      "sha256": "860285d3840861366f316f58ee89a448d8e1c8a8df4026c610a9d3b97be6d85b"
+    },
+    {
+      "kind": "file",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/Cloud-BAL/graphify-out/manifest.json",
+      "sha256": "462405359213dfc8a087b08dfac36fd66ff755fb05becb467b9d46f529c47585"
+    },
+    {
+      "file_sha256": {
+        "GRAPH_REPORT.md": "860285d3840861366f316f58ee89a448d8e1c8a8df4026c610a9d3b97be6d85b",
+        "graph.json": "c93c28cffa7b17c0d0d90b03e03df6a30e9398ca300ab8726988a7538eb13cf2",
+        "manifest.json": "462405359213dfc8a087b08dfac36fd66ff755fb05becb467b9d46f529c47585"
+      },
+      "kind": "directory",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/Cloud-BAL/graphify-out/2026-11-05-grouped-forecast"
+    }
+  ],
+  "source_worktree_target_count": 4,
+  "stage": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c",
+  "stage_receipt_sha256": "2e78c85909c944af723c0b0dc21bf6340aa91d8f7e61a74aa71a15babd59d3c8",
+  "stage_validation_sha256": "a6ffced8529fd5321cc74dbd418efd965a0dd8469f4322a5fc5fdf6d7c126783",
+  "staged_target_count": 13,
+  "staged_targets": [
+    {
+      "kind": "file",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/KLAPS50/graphify-out/graph.json",
+      "sha256": "aad4ea3201061a2259dd9e10ee66eb75fa5aec073f07848efcdb753994daa8fc"
+    },
+    {
+      "kind": "file",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/KLAPS50/graphify-out/GRAPH_REPORT.md",
+      "sha256": "a76191b4cb3a45827008bb548f8dc12887012e8ab5b1090787fdd642bcd2247b"
+    },
+    {
+      "kind": "file",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/KLAPS50/graphify-out/manifest.json",
+      "sha256": "dacace46ec1f5c43adbd5685d6b2685972be79ca0282a2e26c33b6d4e19a2cb2"
+    },
+    {
+      "file_sha256": {
+        "GRAPH_REPORT.md": "a76191b4cb3a45827008bb548f8dc12887012e8ab5b1090787fdd642bcd2247b",
+        "graph.json": "aad4ea3201061a2259dd9e10ee66eb75fa5aec073f07848efcdb753994daa8fc",
+        "manifest.json": "dacace46ec1f5c43adbd5685d6b2685972be79ca0282a2e26c33b6d4e19a2cb2"
+      },
+      "kind": "directory",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/KLAPS50/graphify-out/2026-11-05-grouped-forecast"
+    },
+    {
+      "kind": "file",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/Cloud-BAL/graphify-out/graph.json",
+      "sha256": "c93c28cffa7b17c0d0d90b03e03df6a30e9398ca300ab8726988a7538eb13cf2"
+    },
+    {
+      "kind": "file",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/Cloud-BAL/graphify-out/GRAPH_REPORT.md",
+      "sha256": "860285d3840861366f316f58ee89a448d8e1c8a8df4026c610a9d3b97be6d85b"
+    },
+    {
+      "kind": "file",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/Cloud-BAL/graphify-out/manifest.json",
+      "sha256": "462405359213dfc8a087b08dfac36fd66ff755fb05becb467b9d46f529c47585"
+    },
+    {
+      "file_sha256": {
+        "GRAPH_REPORT.md": "860285d3840861366f316f58ee89a448d8e1c8a8df4026c610a9d3b97be6d85b",
+        "graph.json": "c93c28cffa7b17c0d0d90b03e03df6a30e9398ca300ab8726988a7538eb13cf2",
+        "manifest.json": "462405359213dfc8a087b08dfac36fd66ff755fb05becb467b9d46f529c47585"
+      },
+      "kind": "directory",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/Cloud-BAL/graphify-out/2026-11-05-grouped-forecast"
+    },
+    {
+      "kind": "file",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/wiki/graph-report-cloud-bal.md",
+      "sha256": "860285d3840861366f316f58ee89a448d8e1c8a8df4026c610a9d3b97be6d85b"
+    },
+    {
+      "kind": "file",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/wiki/graph-report-klaps50.md",
+      "sha256": "a76191b4cb3a45827008bb548f8dc12887012e8ab5b1090787fdd642bcd2247b"
+    },
+    {
+      "kind": "file",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/wiki/graph-report.md",
+      "sha256": "95551bf41ba0eb321be05895b59e9ce472b7d8b88fc04279f34fe5157773a555"
+    },
+    {
+      "kind": "file",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/wiki/index.md",
+      "sha256": "66d61dd29392b5ba9ee76204abf0b285ce32b53661044ce078e6647def715ebb"
+    },
+    {
+      "kind": "file",
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/kg_stage/stage-9f4246324d7d831c/wiki/log.md",
+      "sha256": "9d4002be590998334542a1e6c5c3475b3dbd6dd22b3790254404d2d3099daf74"
+    }
+  ],
+  "status": "GO"
+}

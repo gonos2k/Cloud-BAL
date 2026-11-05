@@ -1,0 +1,19 @@
+{
+  "schema": "cp02_grouped_independent_recount_attempt_v1",
+  "status": "FAILED_READER_PREFLIGHT_NO_SCORE_COMPARISONS",
+  "script_sha256_at_attempt": "8a264514d0d330e0856aa956f4f957be8573116c6055e49aa70a5c6a4d1b0341",
+  "failure": {
+    "type": "ValueError",
+    "message": "scored source identity changed: /NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161300",
+    "cause": "Legacy canonical RN1 receipt rows use `size`; the independent reader expected `size_bytes`. On-disk file size and SHA-256 both match the canonical evaluation plan.",
+    "score_rows_compared": false,
+    "recount_output_created": false
+  },
+  "reproduction_evidence": {
+    "path": "/NHNHOME/DATA/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161300",
+    "receipt_size_field": 267686,
+    "actual_size_bytes": 267686,
+    "sha256": "5f435e9e7845860636b8ac6d4a982563f1d709f4340dadb7828df2f2cda8e9a1"
+  },
+  "next_action": "Allow identity verification to read size_bytes or legacy size, then rerun the full independent recount."
+}

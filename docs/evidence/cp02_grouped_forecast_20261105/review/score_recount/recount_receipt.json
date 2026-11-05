@@ -1,0 +1,57 @@
+{
+  "evaluation_plan_sha256": "583c4eb95a5bf2939bd3a40fa640cc3e6bad615f04bb3f903386840cbb1ccb8c",
+  "points_per_hour": 3688,
+  "recount_output_hashes": {
+    "categorical_scores.csv": "8d07e546840972016dea846ac6b6a12e823da51214c3ff6a1c2b30dc44a178a9",
+    "continuous_scores.csv": "4e81a0f6b431a384bf4f153885a4a87502db1f890dbbce0eff7187d25087d3c4",
+    "contrasts.csv": "77c73fdd0cbf0e1cc66c20a638b1f929ef9e97bb85ed3e2df97423f1ae626256",
+    "gate_results.csv": "681e790911b2b38a678709603831df0ed12a3b27c38308dc4a1691052b9fee0b",
+    "weak_transition_counts.csv": "67d333a93c4880fd844849159048e939fd2d1eb14e7629a5d2d4e6e3b2e41f49",
+    "winner.json": "fac5c29550ef194885391cbcdb8297b90ccd7835201b13446ac88b26ab769bd3"
+  },
+  "result_arrays_verified": 6,
+  "result_inputs_verified": 62,
+  "result_receipt_sha256": "53cdf3da71cd47114f8e0806b47987b0b1d9b15128a91a127ce873cd921c8839",
+  "rows": {
+    "categorical": 180,
+    "continuous": 30,
+    "contrasts": 180,
+    "gates": 52,
+    "weak_transitions": 24
+  },
+  "schema": "cp02_grouped_independent_recount_v1",
+  "source_table_comparisons": {
+    "categorical_scores.csv": {
+      "mismatches": 0,
+      "rows": 180,
+      "sha256": "8d07e546840972016dea846ac6b6a12e823da51214c3ff6a1c2b30dc44a178a9"
+    },
+    "continuous_scores.csv": {
+      "mismatches": 0,
+      "rows": 30,
+      "sha256": "4e81a0f6b431a384bf4f153885a4a87502db1f890dbbce0eff7187d25087d3c4"
+    },
+    "contrasts.csv": {
+      "mismatches": 0,
+      "rows": 180,
+      "sha256": "77c73fdd0cbf0e1cc66c20a638b1f929ef9e97bb85ed3e2df97423f1ae626256"
+    },
+    "gate_results.csv": {
+      "mismatches": 0,
+      "rows": 52,
+      "sha256": "681e790911b2b38a678709603831df0ed12a3b27c38308dc4a1691052b9fee0b"
+    },
+    "weak_transition_counts.csv": {
+      "mismatches": 0,
+      "rows": 24,
+      "sha256": "67d333a93c4880fd844849159048e939fd2d1eb14e7629a5d2d4e6e3b2e41f49"
+    }
+  },
+  "status": "PASS",
+  "winner_independent": {
+    "qualified_candidates": [],
+    "selection_rule": "No candidate passed all 26 frozen cells; retain current B1.",
+    "winner": "B1_RETAINED"
+  },
+  "winner_source_matches": true
+}

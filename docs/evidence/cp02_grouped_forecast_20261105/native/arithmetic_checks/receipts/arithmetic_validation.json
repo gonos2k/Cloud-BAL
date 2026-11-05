@@ -1,0 +1,743 @@
+{
+  "schema": "cp02_grouped_forecast_arithmetic_check_v1",
+  "status": "PASS",
+  "created_at_utc": "2026-11-05T07:03:32.567192+00:00",
+  "scope": "REAL32 unit comparison of source-order old and grouped four-term numerator only",
+  "source_expression": "(ph(k+1)-ph(k)+phb(k+1)-phb(k))",
+  "grouped_expression": "((ph(k+1)-ph(k))+(phb(k+1)-phb(k)))",
+  "row_count": 60,
+  "pair_count": 30,
+  "target_pair_counts": {
+    "p20183": 15,
+    "p17051": 15
+  },
+  "statuses": {
+    "o0_compile": 0,
+    "o2_compile": 0,
+    "o0_run": 0,
+    "o2_run": 0,
+    "validate": 0
+  },
+  "validation_summary": {
+    "status": "PASS",
+    "row_count": 60,
+    "paired_calls": 30,
+    "pairs_per_target": {
+      "p20183": 15,
+      "p17051": 15
+    },
+    "o0_matches_independent_binary32_references": true,
+    "o2_matches_independent_binary32_references": true,
+    "o0_equals_o2_for_all_rows": true,
+    "old_grouped_results_differ_count": 60,
+    "exact_once_differs_from_old_count": 60,
+    "exact_once_differs_from_grouped_count": 0,
+    "interarm_delta_pair_count": 30,
+    "nonzero_old_interarm_delta_count": 7,
+    "nonzero_grouped_interarm_delta_count": 9,
+    "interarm_deltas": [
+      {
+        "target": "p17051",
+        "pair": 1,
+        "B1_entry_sequence": 2,
+        "DM065_entry_sequence": 2,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p17051",
+        "pair": 2,
+        "B1_entry_sequence": 7,
+        "DM065_entry_sequence": 7,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p17051",
+        "pair": 3,
+        "B1_entry_sequence": 15,
+        "DM065_entry_sequence": 15,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p17051",
+        "pair": 4,
+        "B1_entry_sequence": 27,
+        "DM065_entry_sequence": 27,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p17051",
+        "pair": 5,
+        "B1_entry_sequence": 32,
+        "DM065_entry_sequence": 32,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p17051",
+        "pair": 6,
+        "B1_entry_sequence": 37,
+        "DM065_entry_sequence": 37,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p17051",
+        "pair": 7,
+        "B1_entry_sequence": 45,
+        "DM065_entry_sequence": 45,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p17051",
+        "pair": 8,
+        "B1_entry_sequence": 57,
+        "DM065_entry_sequence": 57,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p17051",
+        "pair": 9,
+        "B1_entry_sequence": 62,
+        "DM065_entry_sequence": 62,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p17051",
+        "pair": 10,
+        "B1_entry_sequence": 67,
+        "DM065_entry_sequence": 67,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p17051",
+        "pair": 11,
+        "B1_entry_sequence": 75,
+        "DM065_entry_sequence": 75,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p17051",
+        "pair": 12,
+        "B1_entry_sequence": 87,
+        "DM065_entry_sequence": 87,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p17051",
+        "pair": 13,
+        "B1_entry_sequence": 92,
+        "DM065_entry_sequence": 92,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "-1/1024",
+        "exact_once_interarm_delta_exact": "-1/1024",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "-0.0009765625"
+      },
+      {
+        "target": "p17051",
+        "pair": 14,
+        "B1_entry_sequence": 97,
+        "DM065_entry_sequence": 97,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "-1/1024",
+        "exact_once_interarm_delta_exact": "-1/1024",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "-0.0009765625"
+      },
+      {
+        "target": "p17051",
+        "pair": 15,
+        "B1_entry_sequence": 105,
+        "DM065_entry_sequence": 105,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p20183",
+        "pair": 1,
+        "B1_entry_sequence": 2,
+        "DM065_entry_sequence": 2,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p20183",
+        "pair": 2,
+        "B1_entry_sequence": 7,
+        "DM065_entry_sequence": 7,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p20183",
+        "pair": 3,
+        "B1_entry_sequence": 15,
+        "DM065_entry_sequence": 15,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p20183",
+        "pair": 4,
+        "B1_entry_sequence": 27,
+        "DM065_entry_sequence": 27,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p20183",
+        "pair": 5,
+        "B1_entry_sequence": 32,
+        "DM065_entry_sequence": 32,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p20183",
+        "pair": 6,
+        "B1_entry_sequence": 37,
+        "DM065_entry_sequence": 37,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p20183",
+        "pair": 7,
+        "B1_entry_sequence": 45,
+        "DM065_entry_sequence": 45,
+        "old_interarm_delta_exact": "1/1024",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0.0009765625",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p20183",
+        "pair": 8,
+        "B1_entry_sequence": 57,
+        "DM065_entry_sequence": 57,
+        "old_interarm_delta_exact": "1/1024",
+        "grouped_interarm_delta_exact": "0/1",
+        "exact_once_interarm_delta_exact": "0/1",
+        "old_interarm_delta_f64_display": "0.0009765625",
+        "grouped_interarm_delta_f64_display": "0"
+      },
+      {
+        "target": "p20183",
+        "pair": 9,
+        "B1_entry_sequence": 62,
+        "DM065_entry_sequence": 62,
+        "old_interarm_delta_exact": "-1/1024",
+        "grouped_interarm_delta_exact": "-7/8192",
+        "exact_once_interarm_delta_exact": "-7/8192",
+        "old_interarm_delta_f64_display": "-0.0009765625",
+        "grouped_interarm_delta_f64_display": "-0.0008544921875"
+      },
+      {
+        "target": "p20183",
+        "pair": 10,
+        "B1_entry_sequence": 67,
+        "DM065_entry_sequence": 67,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "7/16384",
+        "exact_once_interarm_delta_exact": "7/16384",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "0.00042724609375"
+      },
+      {
+        "target": "p20183",
+        "pair": 11,
+        "B1_entry_sequence": 75,
+        "DM065_entry_sequence": 75,
+        "old_interarm_delta_exact": "1/1024",
+        "grouped_interarm_delta_exact": "1/1024",
+        "exact_once_interarm_delta_exact": "1/1024",
+        "old_interarm_delta_f64_display": "0.0009765625",
+        "grouped_interarm_delta_f64_display": "0.0009765625"
+      },
+      {
+        "target": "p20183",
+        "pair": 12,
+        "B1_entry_sequence": 87,
+        "DM065_entry_sequence": 87,
+        "old_interarm_delta_exact": "1/1024",
+        "grouped_interarm_delta_exact": "1/1024",
+        "exact_once_interarm_delta_exact": "1/1024",
+        "old_interarm_delta_f64_display": "0.0009765625",
+        "grouped_interarm_delta_f64_display": "0.0009765625"
+      },
+      {
+        "target": "p20183",
+        "pair": 13,
+        "B1_entry_sequence": 92,
+        "DM065_entry_sequence": 92,
+        "old_interarm_delta_exact": "-1/1024",
+        "grouped_interarm_delta_exact": "-7/4096",
+        "exact_once_interarm_delta_exact": "-7/4096",
+        "old_interarm_delta_f64_display": "-0.0009765625",
+        "grouped_interarm_delta_f64_display": "-0.001708984375"
+      },
+      {
+        "target": "p20183",
+        "pair": 14,
+        "B1_entry_sequence": 97,
+        "DM065_entry_sequence": 97,
+        "old_interarm_delta_exact": "1/512",
+        "grouped_interarm_delta_exact": "1/512",
+        "exact_once_interarm_delta_exact": "1/512",
+        "old_interarm_delta_f64_display": "0.001953125",
+        "grouped_interarm_delta_f64_display": "0.001953125"
+      },
+      {
+        "target": "p20183",
+        "pair": 15,
+        "B1_entry_sequence": 105,
+        "DM065_entry_sequence": 105,
+        "old_interarm_delta_exact": "0/1",
+        "grouped_interarm_delta_exact": "-7/16384",
+        "exact_once_interarm_delta_exact": "-7/16384",
+        "old_interarm_delta_f64_display": "0",
+        "grouped_interarm_delta_f64_display": "-0.00042724609375"
+      }
+    ]
+  },
+  "inputs": {
+    "analysis_json": [
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_initial_boundaries_20261105/science/phi_p20183/analysis.json",
+        "exists": true,
+        "bytes": 167759,
+        "sha256": "47bd19bf23651971ed63f27f13a4a9b8553f7d366771134d7811bcaee794dcc4"
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_initial_boundaries_20261105/science/phi_p17051/analysis.json",
+        "exists": true,
+        "bytes": 166049,
+        "sha256": "699474b149f4fb37bda809194f5f044929fa3741708149458edaeffd52d3b3ef"
+      }
+    ],
+    "sourcepin": [
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_initial_boundaries_20261105/native/sourcepins/module_big_step_utilities_em.f90",
+        "exists": true,
+        "bytes": 189569,
+        "sha256": "d8c11bd9b3dd0fd717c14899c53ffe7ca37c4d768128c4dac750429f7fb4bf3a"
+      }
+    ],
+    "normalized_terms": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/inputs/phi_terms.hex",
+      "exists": true,
+      "bytes": 2160,
+      "sha256": "2b1b04ef581eaeb77b12256dc530220993f42e4c27a148fc8a1df3d0fcc61190"
+    },
+    "row_provenance": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/inputs/phi_rows.json",
+      "exists": true,
+      "bytes": 16604,
+      "sha256": "c9fe717f44515889ecc44898cc27b3b2c15a8cbaa73722b8b531fca3daa9469f"
+    },
+    "input_provenance": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/inputs/input_provenance.json",
+      "exists": true,
+      "bytes": 1205,
+      "sha256": "d14194334f44a9a96cb6dc7cc866d26f3d314ae8411325deb43b734f23cde1de"
+    }
+  },
+  "sources": {
+    "fortran": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/source/rounding_check.f90",
+      "exists": true,
+      "bytes": 1655,
+      "sha256": "5f21ebe5d3cf5fdf952e67b538a7281adc61ee80eb4bc2beb0a51b5864c3599d"
+    },
+    "input_extractor": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/runner/extract_inputs.py",
+      "exists": true,
+      "bytes": 4100,
+      "sha256": "00ff918823346e6f1b07d59c6852ad5222df2597fe000a981390ffe528f45037"
+    },
+    "validator": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/runner/validate_results.py",
+      "exists": true,
+      "bytes": 8619,
+      "sha256": "565ac3bc7813bb9afed0ceb7929561031c10d0b3024b0645c67707d99a961e64"
+    },
+    "runner": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/runner/run_checks.sh",
+      "exists": true,
+      "bytes": 3495,
+      "sha256": "a20636405d6411c4f96e3f8b3257e3b450a506e6cdb74d0a76e1f0c572c3b389"
+    },
+    "receipt_writer": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/runner/write_receipt.py",
+      "exists": true,
+      "bytes": 7000,
+      "sha256": "fc9504ba587627d90b16ad1f43982658ae8ae9b4c802ba3c71a809cae69663d1"
+    }
+  },
+  "compiler": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "version": "ifx (IFX) 2026.0.0 20260331",
+    "sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "profile": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/tests/intel_toolchain.sh",
+      "exists": true,
+      "bytes": 3470,
+      "sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+    },
+    "environment_script": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/setvars.sh",
+      "exists": true,
+      "bytes": 29170,
+      "sha256": "26084d08db985eadb61adc43c7f18821be9e75156b60f920de363ea51c70887e"
+    },
+    "pinned_libraries": [
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so",
+        "exists": true,
+        "bytes": 4865192,
+        "sha256": "31f0ab1dcce74417de63e5c6876b5bb078c15efea4c49ca9afc233abbe80fda8"
+      },
+      {
+        "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libintlc.so.5",
+        "exists": true,
+        "bytes": 415824,
+        "sha256": "2722b7aba08edf1d37c45b8f90070c87b499404b0888bd1b4150f34e123ef120"
+      }
+    ],
+    "o0_flags": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-check",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O0",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ],
+    "o2_flags": [
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz"
+    ],
+    "dynamic_link_readbacks": {
+      "O0": {
+        "ldd_status": 0,
+        "ldd_output": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/logs/ldd_O0.txt",
+          "exists": true,
+          "bytes": 321,
+          "sha256": "e62b042b8beddaa330ec0879f11e21e3cb13c1f1b9e299860e542976d2ac1d40"
+        },
+        "resolved_libraries": [
+          {
+            "path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+            "exists": true,
+            "bytes": 236616,
+            "sha256": "6222a16be7f2d458d6870efe6e715fc0c8d45766fb79cf7dcc3125538d703e28"
+          },
+          {
+            "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "exists": true,
+            "bytes": 2125328,
+            "sha256": "511f825ee075610ac9c0f7f91e2c13de2000d0f7b859f6461137e809a0a009d0"
+          },
+          {
+            "path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+            "exists": true,
+            "bytes": 183024,
+            "sha256": "02f3f192bf5f79b811f1e34a650fea443d407408703448906585232383957f60"
+          },
+          {
+            "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+            "exists": true,
+            "bytes": 952616,
+            "sha256": "f06f2ce1f1833df5f41cf13b6447ff07bea993ad9b27297d3428c2f70ab3f0e7"
+          }
+        ]
+      },
+      "O2": {
+        "ldd_status": 0,
+        "ldd_output": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/logs/ldd_O2.txt",
+          "exists": true,
+          "bytes": 321,
+          "sha256": "f92745ab778278ab0da787f0cdba118f77e0e52987634042e2948436c4571de9"
+        },
+        "resolved_libraries": [
+          {
+            "path": "/usr/lib/x86_64-linux-gnu/ld-linux-x86-64.so.2",
+            "exists": true,
+            "bytes": 236616,
+            "sha256": "6222a16be7f2d458d6870efe6e715fc0c8d45766fb79cf7dcc3125538d703e28"
+          },
+          {
+            "path": "/usr/lib/x86_64-linux-gnu/libc.so.6",
+            "exists": true,
+            "bytes": 2125328,
+            "sha256": "511f825ee075610ac9c0f7f91e2c13de2000d0f7b859f6461137e809a0a009d0"
+          },
+          {
+            "path": "/usr/lib/x86_64-linux-gnu/libgcc_s.so.1",
+            "exists": true,
+            "bytes": 183024,
+            "sha256": "02f3f192bf5f79b811f1e34a650fea443d407408703448906585232383957f60"
+          },
+          {
+            "path": "/usr/lib/x86_64-linux-gnu/libm.so.6",
+            "exists": true,
+            "bytes": 952616,
+            "sha256": "f06f2ce1f1833df5f41cf13b6447ff07bea993ad9b27297d3428c2f70ab3f0e7"
+          }
+        ]
+      }
+    }
+  },
+  "executables": {
+    "O0": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/runtime/arithmetic_check/attempt_20261105T070236Z_3368103/rounding_check_o0",
+      "exists": true,
+      "bytes": 657560,
+      "sha256": "76b5242e6bf2b4eae5a217085817d43dc938e37b9506f778131a01aabbdfba50"
+    },
+    "O2": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/runtime/arithmetic_check/attempt_20261105T070236Z_3368103/rounding_check_o2",
+      "exists": true,
+      "bytes": 657496,
+      "sha256": "693ac91ff7b5c2083c6feb72112c396916f60f8f070fb7294bf7eb9c6ca2671e"
+    }
+  },
+  "logs": {
+    "toolchain.txt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/logs/toolchain.txt",
+      "exists": true,
+      "bytes": 827,
+      "sha256": "71fba57cc90eb4bf16388b73421511dca692902ac51e516556a9e6af0477de83"
+    },
+    "compile_o0.log": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/logs/compile_o0.log",
+      "exists": true,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "compile_o2.log": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/logs/compile_o2.log",
+      "exists": true,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "o0.stdout": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/logs/o0.stdout",
+      "exists": true,
+      "bytes": 1251,
+      "sha256": "c1075392824d625549d6b09eb7ec55d013134e6599c8bc7853de5ede2e11cd5b"
+    },
+    "o0.stderr": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/logs/o0.stderr",
+      "exists": true,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "o2.stdout": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/logs/o2.stdout",
+      "exists": true,
+      "bytes": 1251,
+      "sha256": "c1075392824d625549d6b09eb7ec55d013134e6599c8bc7853de5ede2e11cd5b"
+    },
+    "o2.stderr": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/logs/o2.stderr",
+      "exists": true,
+      "bytes": 0,
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    },
+    "validation.log": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/logs/validation.log",
+      "exists": true,
+      "bytes": 525,
+      "sha256": "a4669f7ec69b77de562145b3ff5e9f2094eb86134a958b71d95764c7fcd0d14f"
+    },
+    "status.txt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/logs/status.txt",
+      "exists": true,
+      "bytes": 251,
+      "sha256": "179d1be08e7071d7d6d54695f05df6e8c8e1195e14b73ce8e757288cdef70773"
+    },
+    "ldd_O0.txt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/logs/ldd_O0.txt",
+      "exists": true,
+      "bytes": 321,
+      "sha256": "e62b042b8beddaa330ec0879f11e21e3cb13c1f1b9e299860e542976d2ac1d40"
+    },
+    "ldd_O2.txt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/logs/ldd_O2.txt",
+      "exists": true,
+      "bytes": 321,
+      "sha256": "f92745ab778278ab0da787f0cdba118f77e0e52987634042e2948436c4571de9"
+    }
+  },
+  "outputs": {
+    "arithmetic_results": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/results/arithmetic_results.csv",
+      "exists": true,
+      "bytes": 8620,
+      "sha256": "265233c8600411b25c695e64a8135cdc0ea0481a050700e52ea5bec0924723dc"
+    },
+    "arithmetic_summary": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/results/arithmetic_summary.json",
+      "exists": true,
+      "bytes": 11282,
+      "sha256": "5e76cfab87fe4427953fae3aa5ae82278efe3fdd90139049ed28b089a1960d4f"
+    }
+  },
+  "source_worktree_head": "76a70db52d4813cccad8ad0c098ca1d1c91df518",
+  "commands": {
+    "o0_compile": [
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-check",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O0",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/runtime/arithmetic_check/attempt_20261105T070236Z_3368103/rounding_check.f90",
+      "-o",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/runtime/arithmetic_check/attempt_20261105T070236Z_3368103/rounding_check_o0"
+    ],
+    "o2_compile": [
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+      "-stand",
+      "f08",
+      "-warn",
+      "all",
+      "-fpe0",
+      "-traceback",
+      "-O2",
+      "-fp-model",
+      "strict",
+      "-fimf-arch-consistency=true",
+      "-no-ftz",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/runtime/arithmetic_check/attempt_20261105T070236Z_3368103/rounding_check.f90",
+      "-o",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/runtime/arithmetic_check/attempt_20261105T070236Z_3368103/rounding_check_o2"
+    ],
+    "o0_run": [
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/runtime/arithmetic_check/attempt_20261105T070236Z_3368103/rounding_check_o0"
+    ],
+    "o2_run": [
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/runtime/arithmetic_check/attempt_20261105T070236Z_3368103/rounding_check_o2"
+    ],
+    "validation": [
+      "python3",
+      "-B",
+      "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/docs/evidence/cp02_grouped_forecast_20261105/native/arithmetic_checks/runner/validate_results.py"
+    ]
+  },
+  "scratch_inputs": {
+    "fortran_source_copy": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/runtime/arithmetic_check/attempt_20261105T070236Z_3368103/rounding_check.f90",
+      "exists": true,
+      "bytes": 1655,
+      "sha256": "5f21ebe5d3cf5fdf952e67b538a7281adc61ee80eb4bc2beb0a51b5864c3599d"
+    },
+    "hex_terms_copy": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/runtime/arithmetic_check/attempt_20261105T070236Z_3368103/phi_terms.hex",
+      "exists": true,
+      "bytes": 2160,
+      "sha256": "2b1b04ef581eaeb77b12256dc530220993f42e4c27a148fc8a1df3d0fcc61190"
+    }
+  },
+  "fresh_scratch": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_grouped_forecast_20261105/Cloud-BAL/runtime/arithmetic_check/attempt_20261105T070236Z_3368103",
+  "limitations": [
+    "This unit validates IEEE binary32 arithmetic for the captured four input terms under pinned IFX O0/O2 strict profiles.",
+    "It does not prove compiled WRF instruction ordering or a forecast outcome; the native owner must establish those separately.",
+    "No physical mass budget or model conservation claim is made.",
+    "Interarm deltas are descriptive differences between captured B1 and DM065 values, not acceptance thresholds."
+  ]
+}

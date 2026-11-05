@@ -1,0 +1,11 @@
+--- a/module_big_step_utilities_em.f90
++++ b/module_big_step_utilities_em.f90
+@@ -1036,7 +1036,7 @@
+           pfu = c3f(k+1)*MUTS(i,j) + c4f(k+1) + ptop
+           pfd = c3f(k  )*MUTS(i,j) + c4f(k  ) + ptop
+           phm = c3h(k  )*MUTS(i,j) + c4h(k  ) + ptop
+-          al(i,k,j) = (ph(i,k+1,j)-ph(i,k,j)+phb(i,k+1,j)-phb(i,k,j))/phm/LOG(pfd/pfu)-alb(i,k,j)
++          al(i,k,j) = ((ph(i,k+1,j)-ph(i,k,j))+(phb(i,k+1,j)-phb(i,k,j)))/phm/LOG(pfd/pfu)-alb(i,k,j)
+         END DO
+         END DO
+         END DO
