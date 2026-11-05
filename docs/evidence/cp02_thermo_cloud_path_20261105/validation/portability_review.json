@@ -1,0 +1,32 @@
+{
+  "status": "PASS",
+  "method": "Replayed from a separate relocated checkout-like tree containing packaged arrays but no external runtime NPZs; compared byte hashes. History reference originally extracted from individually pinned prior NetCDF histories.",
+  "recount_outputs_sha256": {
+    "point_stage_recount.csv": "e881ecf2d59ef27bb2dda4da93daa23f4f05056914834a478bdfd2afcc4a794b",
+    "point_stage_recount.json": "47092b6ebb734c86cf359274b453c6cf64624e467dd0d73581b96cfb4139439b",
+    "cloud_rate_recount.csv": "1428b9c2d70fdf22e88d1e15630276d6bf45bd758fe014389046f57494cea1e3",
+    "rain_presence_recount.csv": "c50770c4b6ea3a750159be696e0d61e7a99966a2c5526543e6c1a92fb73f8c7e",
+    "hour1_wrapper_history_comparison.csv": "079687c588211f89c1167a5d9b5f09761a2416c9cc022e339c95337a9b12c8dd"
+  },
+  "source_sha256": {
+    "portable_arrays.py": "41e14a28c302870ac7a0441d28ff6c02f965ec700dc82cfcaaa9f0f3cced1655",
+    "recount_paths.py": "74720796a392ec0a155612deaccb22722ff1a896db2fc5dbbb6c435fef5dec91",
+    "recount_cloud_rates.py": "7a8dc5c6a1cde1537f71d0ef8069a9c54daa9c1fdda93aceea849c3ea894cb6d",
+    "recount_rain_presence.py": "2e29e01fb81d1e14acfba56f3c04848ba55a2a23f66fa46fb1e86903341da3c3",
+    "recount_hour1_boundary.py": "acb42b46524932f6af85a2410c9f39f8cd4b5eb1c1a17e70bda4f3a7f866a109",
+    "extract_hour1_native_reference.py": "9eabe36de7e0025bb2f8e022bdfef780a488db39a68306bd4f83377e030f1d1d"
+  },
+  "hour1_native_history_sha256": "ea523126bb24fb7163cc93975b660d28a7c881ba19b63f74b602952d78730f4c",
+  "hour1_native_history_receipt_sha256": "2af7a99992d88368ddc08c26fe1bbbdbdf6ae1a6d7e298a6fcf95f3e2495dc53",
+  "surface_reference_review": {
+    "status": "PASS",
+    "helper_sha256": "f7f7d7d49c2115e6d76587b921deebd60d54607f00190bac38cad0151a265381",
+    "rerun_outputs_sha256": {
+      "native_surface.csv": "19bf49cd1a673a1a9b3064669d2740455d750b51e224eec0bb1cecaf26fdd3aa",
+      "point_components.csv": "de81cd987b12c32ea84a240af17b5edd7391bd26e2e500f47e93b4ebb81137e2",
+      "receipt.json": "ea30ce9690ffa799fdf96f2ca2132ca953790f94deb77443641ae5e174eff516"
+    },
+    "review": "Checked protocol and cohort hash/time/finite guards, distinct RAINNC/RAINC, native corner increments before weighted projection, and arithmetic bound. Rerun reproduced both CSVs and original receipt byte-for-byte. Re-extraction requires the external pinned NetCDF histories."
+  },
+  "historical_recount_note": "The unchanged point-stage JSON binds its original script, preserved in attempts/portability; this receipt binds the new portable scripts."
+}

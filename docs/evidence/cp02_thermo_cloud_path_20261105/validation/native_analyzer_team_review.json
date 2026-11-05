@@ -1,0 +1,25 @@
+{
+  "status": "PASS",
+  "review_role": "Independent native instrumentation author reviewing analyzer and archival output, not author of analyzer or its tests.",
+  "scope": [
+    "Binary frame and selected-cell ownership; missing and duplicated records; mandatory phases and measured single-loop / sedimentation substep coverage.",
+    "Native-first interpolation; absent conditional phases remain NaN; sampled source-order float32 arithmetic and paired and intercall interpretation.",
+    "Source, receipt, history, input and output identity bindings; sampled four-corner raw records and independently recomputed point products.",
+    "All five lossless array manifests and original NPY payload byte, dtype, shape and order reconstruction."
+  ],
+  "analyzer_sha256": "a1b0d5ac6a418d5bcd679eaa4a8fdb9e3e8cb1bb63a8cebb6268c849b9efad8d",
+  "analyzer_tests_sha256": "13a5c0de51216839871e21aa517b15ed7731ecded555a8a6358d2472e5810e10",
+  "analyzer_focused_tests": {
+    "command": "python -m pytest -q tests/test_cp02_thermo_cloud_path.py",
+    "result": "8 passed"
+  },
+  "full_capture_receipt_sha256": "e41105c152b55991784f1fcf0b8c8e1c75fe03fc3d33160b897160adadd33245",
+  "input_manifest_sha256": "71a9b13753244693fd543587a81695c14c1ad019a5972948005a44e155df7c8d",
+  "raw_sample_review_sha256": "1d67ac830e432eb5c5b718b03bd90c3a8fc1ae70d31b5b7d8a05657d9dc3f159",
+  "array_parts_review_sha256": "70267f23bd0f23b4a5f2e482e37074c024b6b79832208ca6df0a9de2e61a851f",
+  "limitations": [
+    "The raw-record arithmetic review samples one point, four corners, three levels and the first timestep per arm; exhaustive capture checks are established by the analyzer receipt.",
+    "Point and intercall changes are descriptive fixed-location differences and do not establish trajectory, transport-only, or causal attribution."
+  ],
+  "findings": []
+}

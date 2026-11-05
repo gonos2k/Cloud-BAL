@@ -1,0 +1,51 @@
+{
+  "status": "PASS_INDEPENDENT_PUBLICATION_READBACK",
+  "reviewer": "independent from publisher",
+  "sha256": {
+    "baseline.json": "121856890def556e78a602eed376f8342112e996916b2b3ab9a05e45fea09b4b",
+    "selection_lock.json": "ddc647ca2f95d78aa83a7efd08e1306e6263463b6834c21cc37b905ac1a8fb69",
+    "stage_receipt.json": "efcae7d1cc136581b57e9324921fc516b7fc586c3a0ed45413953ffe7fada1ab",
+    "stage_validation.json": "22d0731703f4219ec4ce566f46ba71bce17c22eecfa4331d97de5f47a4926150",
+    "stage_review.json": "91f28b046ec7fad2ac7c77d5b75c7496ec0565320a5b9bf6c2617355e08151de",
+    "publish_receipt.json": "bbf933db8e14e02c211997ba0f1c0964288874a58dac22836e9fdf4468101868",
+    "postpublish_copy_receipt.json": "9af3320b6290ecd90b776a3de77c26558aba40bbc6195d4fc5ea6a98a27c9a9f"
+  },
+  "checks": {
+    "maintained_targets_readback": {
+      "pass": true,
+      "count": 13
+    },
+    "active_worktree_targets_readback": {
+      "pass": true,
+      "count": 4
+    },
+    "wiki_evidence_copies_readback": {
+      "pass": true,
+      "count": 5
+    },
+    "prior_dated_snapshots_preserved": {
+      "pass": true,
+      "count": 240
+    },
+    "new_snapshot_count": {
+      "pass": true,
+      "maintained_total": 242
+    },
+    "unrelated_dirty_status_and_head_preserved": {
+      "pass": true
+    },
+    "frozen_source_and_evidence_hashes": {
+      "pass": true,
+      "selected": 28,
+      "hash_only": 305
+    },
+    "receipt_chain": {
+      "pass": true
+    }
+  },
+  "limitations": [
+    "Only reviewed Python paths were structurally extracted; remaining evidence is hash-only.",
+    "Each raw corpus extraction has 185 external-import edges with missing targets.",
+    "Graph freshness is not scientific or runtime validation."
+  ]
+}

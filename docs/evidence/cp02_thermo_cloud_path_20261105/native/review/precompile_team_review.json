@@ -1,0 +1,29 @@
+{
+  "status": "GO_FOR_COMPILE_WITH_LISTED_GATES",
+  "scope": "Independent precompile source, schema and planned build review; no compilation or runtime was performed.",
+  "artifact_sha256": {
+    "docs/evidence/cp02_thermo_cloud_path_20261105/native/source/module_mp_kdm6_FIX.f90": "93e7575701655cd5fead8c40d316e6292f29c0ef7c9594380ee8a55d2dbcf0f5",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/native/schema/cp04_schema.json": "64496e9f19ec0042762a7b8fa7d4f8006ea617a45433434242706c223db2210c",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/native/source/instrument_cp04.py": "8465eb90296660ab93e1b50f5d697c8191b8eada6b96299b50738c3b8e118175",
+    "docs/evidence/cp02_rain_number_process_20261104/native/source/module_mp_kdm6_FIX.f90": "605b2d6895229f287dd6dc675b84dea0596f7a247a18bf80e3615635defb0295",
+    "../runtime/build_cp04.py": "526a3bd4b422aa782637b024a60b3126a7806c6e35a0b4305b60fd9e8efd3687",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/cohorts/results/unique_global_corners.csv": "c2ba19be993cd82dfeac0ff1b3a02659d6c137b733903e563da91f4024aa65b9"
+  },
+  "checks": [
+    "In-memory regeneration from exact prior source and 123-cell pin matches candidate source and parsed schema.",
+    "Inspected 26 source-diff hunks and generator transformations: changes are trace selection, instrumentation IO and metadata; physical update statements remain in place. Five global 540-to-360 replacements occur in trace guards. This is a source-diff review, not a formal semantic proof.",
+    "Wrapper stage 6/7 retains TH*PII temperature and adds P and PII; declared 16 REAL32 fields and stream headers match generated write statements.",
+    "Validated Intel environment and ifx hashes match pinned test profile; ten host link inputs match prior CP03 receipt. Derived builder copies host archive to fresh Lustre directory, replaces KDM6 member, carries prior ifx -O2 strict FP, big-endian conversion, real-size 32 and i4 arguments, and checks host link inputs unchanged across build."
+  ],
+  "required_gates": [
+    "Source tests/intel_toolchain.sh and check source and schema pins immediately before compilation; build driver records source hash but does not enforce an expected source SHA itself. Check copied build source hash equals reviewed pin.",
+    "Before 0\u20132h run, verify schema parsing and first-call full-domain B1 and DM065 parity against their saved matching quick probes. Verify actual run same-arm hourly history byte parity at 0, 1 and 2 h before scientific interpretation.",
+    "Use fresh Lustre working/output directories so status=unknown append diagnostics cannot include existing bytes; reject stale outputs.",
+    "Do not claim runtime noninterference or scientific validation from this precompile review."
+  ],
+  "limits": [
+    "Some module/host dependency provenance is carried by prior build records; this review checked current link input hashes against prior CP03 receipt and source static changes, not a fresh build.",
+    "P and PII are actual model inputs; temperature meaning remains tied to the model representation and no independent density basis or full budget closure is inferred."
+  ]
+}

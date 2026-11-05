@@ -1,0 +1,44 @@
+{
+  "status": "FROZEN_BEFORE_SELECTION",
+  "base_commit": "45de814",
+  "forecast_initial_time_utc": "2026-08-16T12:00:00Z",
+  "lead_hour": 2,
+  "threshold_mm": 0.1,
+  "sample_count": 3688,
+  "groups": {
+    "new_fa_initial_nr_unchanged": {
+      "rule": "reference<0.1 and B1<0.1 and DM065>=0.1; initial NR equal at every positive-weight native corner and all 39 levels",
+      "expected": 15
+    },
+    "removed_fa_initial_nr_unchanged": {
+      "rule": "reference<0.1 and B1>=0.1 and DM065<0.1; initial NR equal at every positive-weight native corner and all 39 levels",
+      "expected": 12
+    },
+    "weak_lost": {
+      "rule": "0.1<=reference<1 and B1>=0.1 and DM065<0.1",
+      "expected": 6
+    },
+    "weak_retained_nearest_control": {
+      "rule": "0.1<=reference<1 and B1>=0.1 and DM065>=0.1; for lost points in ascending flat_index_yx order choose nearest unused retained by great-circle haversine distance; exact ties use lower flat_index_yx",
+      "expected": 6
+    }
+  },
+  "geodesic_radius_km": 6371.0,
+  "corner_mapping": "frozen 253x149 mapping j0+5/i0+74, corners (j,i),(j,i+1),(j+1,i),(j+1,i+1), native zero-based; preserve raw four weights; deduplicate native cells only, never point weights",
+  "controls": "geographic comparators only; not asserted physically matched",
+  "expected_total_points": 39,
+  "required_new_fa_flat_indices": [
+    17051,
+    20183
+  ],
+  "input_sha256": {
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/hour_14_arrays.npz": "2b3de1fba4ebd1401458447006c9b12a6e871cc3f4210c7a786b7a1d958beee1",
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/bilinear_mapping.npz": "a57aab4e1c226f91cbb2ef2dfd3516f84de4446273c5abacdf91e9679c577b29",
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/receipt.json": "600d2cd041ea24f538af8ac477322b46393c2ab154ebbf2629c3eda2f15f3812",
+    "docs/evidence/cp02_failure_regimes_20261104/state/results/B1_input.npz": "2c9eda7ecb55e7bad66a507fff133a7408fe70e4639f1f35926a3805d41e40e8",
+    "docs/evidence/cp02_failure_regimes_20261104/state/results/DM065_input.npz": "a29368ddf92cfb5dc1519dec515226df811ddf89d3b3f649d84ce81a8d4b15fa",
+    "docs/evidence/cp02_failure_regimes_20261104/state/results/receipt.json": "9e6a4cea51bdd88ae45a6052e6818a07ee5003de7dfc5dc2050c048075277d8c",
+    "docs/evidence/cp02_failure_regimes_20261104/science/local_initial_change.csv": "658c18fa55ed6b3a12ff6ecd03fff845a8628ee160a49fe5ba57ea30577d541c",
+    "docs/evidence/cp02_failure_regimes_20261104/science/local_initial_change.json": "226fd600a92fd6a9193573ead356a9b2c7af7f768bfb154d1a0661307b0de10d"
+  }
+}

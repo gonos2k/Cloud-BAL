@@ -1,0 +1,41 @@
+{
+  "artifact_sha256": {
+    "README.md": "b2a2f71b63eca4e6cb2fbda6fd6bf55f67e1cb2f9556f7607fa56b65cc081dbd",
+    "docs/CP02_THERMO_CLOUD_PATH_20261105.md": "8d9f00caf391aab3cb8bf155a13c9ef9f894891dbee60e03bdcd4e830e815627",
+    "docs/CURRENT_RESEARCH_STATUS.md": "3a3142d704c8e258d7c922896b720697d78f1621a05c211c7181b5a4d34ff77a",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/analysis/cloud_rate_recount.csv": "1428b9c2d70fdf22e88d1e15630276d6bf45bd758fe014389046f57494cea1e3",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/analysis/full_capture_receipt.json": "e41105c152b55991784f1fcf0b8c8e1c75fe03fc3d33160b897160adadd33245",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/analysis/hour1_native_history.npz": "ea523126bb24fb7163cc93975b660d28a7c881ba19b63f74b602952d78730f4c",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/analysis/hour1_native_history_receipt.json": "2af7a99992d88368ddc08c26fe1bbbdbdf6ae1a6d7e298a6fcf95f3e2495dc53",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/analysis/point_stage_recount.csv": "e881ecf2d59ef27bb2dda4da93daa23f4f05056914834a478bdfd2afcc4a794b",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/analysis/rain_presence_recount.csv": "c50770c4b6ea3a750159be696e0d61e7a99966a2c5526543e6c1a92fb73f8c7e",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/cohorts/results/point_corners.csv": "b5d4de1d9209048e6e157ec8d5fe801f8464ee0b9fe307f5656cff32e09923fa",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/native/schema/cp04_schema.json": "64496e9f19ec0042762a7b8fa7d4f8006ea617a45433434242706c223db2210c",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/native/source/module_mp_kdm6_FIX.f90": "93e7575701655cd5fead8c40d316e6292f29c0ef7c9594380ee8a55d2dbcf0f5",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/science/process_groups/results/anchor_ledger.csv": "6375aec9575fc5bfe13e991af463eaded7391ec7a870a71a02f5567bfd4e5416",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/science/process_groups/results/group_quantiles.csv": "e0b16eeacc244c0f9899eacebbd3a789af19a3cffbeeff58921285335c94052a",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/science/process_groups/results/point_metrics.csv": "754a1b8eec731042e6686e308ccbc8a18180398c909065c62e8ed7c9553a188e",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/science/recount_process_groups.py": "3c3bfe37229eb92bb1495f45f0ad7fbef39e4319c8dc97e4dcab81429ca07ae0",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/science/surface_reference/point_components.csv": "de81cd987b12c32ea84a240af17b5edd7391bd26e2e500f47e93b4ebb81137e2"
+  },
+  "checks": {
+    "capture": "PASS: two arms each 1,726,920 cell-steps and 246 raw cumulative history matches; SED 2,373,150 vs 2,274,558 and conditional surface 30,885 vs 28,572 pairs match receipt.",
+    "cloud_rate_order": "PASS: saved limited praut/pracw first weighted differences 244/276 for 20183 and 304/234 for 17051; source places SED/surface before process updates and final condensation afterward.",
+    "first_difference_values": "PASS: recomputed 20183 step-2 extrema from paired-difference arrays: QV +4.703308333076084e-10 kg/kg at level 9, TK -3.021178468998187e-5 K at level 4, P -0.032870421768166125 Pa at level 4.",
+    "first_positive_and_difference": "PASS: independent stage and rain presence tables match entry 161/164 and return 234/287 for 17051; entry 23/23 and return 276/276 for 20183, with thermodynamic earliest differences 4/3/3 and 2/2/2.",
+    "gamma_relation": "PASS: prior source mu=1 and cubic mass law yield QNRAIN=QRAIN*lambda^3/(4000*pi) for rho_water=1000 kg/m3, and mass-weighted diameter 5000/lambda mm; same-frame density factor cancels; this is an assumed PSD, not observed particle size.",
+    "ledger": "PASS: all 16 anchor ledgers recomputed against pinned paired arrays, all sums and identities within roundoff bounds.",
+    "quantiles": "PASS: all 52 group median and linear-quartile rows independently recomputed from the 1014 already-derived point metric rows; these checks do not independently recalculate every point metric from raw arrays.",
+    "report_group_medians": "PASS: six reported +1\u2013+2 h medians match group quantiles, including QV 4.75046597e-5/7.07181834e-5 kg/kg, TK 0.08387835/0.15018802 K and signed RAINNC +0.03977420/-0.11211766 mm; all 16 reported ledger residuals are exactly zero.",
+    "selection": "PASS: report retains 8/11, 2/15, 10/26 with no new candidate or six-hour performance claim; prior PR147 manifest contains 161 artifacts.",
+    "surface": "PASS: +1h 20183 includes the quoted RAINC and tiny RAINNC; +2h both quoted points match total and 39-point +2h RAINC comparison is checked in source table. Receipt reports 2.220446049250313e-16 mm max reconstruction residual.",
+    "zero_hourly_state": "PASS: mapped each requested point corner by (wrf_i, wrf_j) into full_capture_receipt native_cells_i_j_1based ordering; both QR and NR are zero at +1 h on all four positive-weight corners and 39 levels for both 17051 and 20183 and both arms."
+  },
+  "limitations": [
+    "This review is bound to the draft report hash; substantively revised text requires recheck.",
+    "Fixed points and between-call residuals do not prove causal transport, complete water/energy closure or independent-event generalization."
+  ],
+  "review_correction": "An initial audit mistakenly used GC CSV row order as NPZ array order and reported a false nonzero finding. The extractor uses receipt native-cell order; coordinate-keyed recheck corrected and retracted the finding before this receipt.",
+  "scope": "Independent scientific review of the current draft and root status text; source-level and evidence checks, not a forecast or scientific validation.",
+  "status": "PASS_DRAFT_NO_CURRENT_BLOCKER"
+}
