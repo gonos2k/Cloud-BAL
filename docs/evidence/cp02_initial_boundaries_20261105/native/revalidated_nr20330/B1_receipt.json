@@ -1,0 +1,34 @@
+{
+  "status": "PASS_DISCOVERY_CAPTURE",
+  "validation_kind": "pointer-aware revalidation of preserved first completed discovery attempt",
+  "arm": "B1",
+  "target": "nr20330",
+  "event_file_sha256": "a70afc98edec5e3c02d9a629aaeb5866fe169123baf1f25a98ee9b8bff910a96",
+  "original_failure_receipt_sha256": "670494565eb21a373bebb3ff1312a81bbb073c60d23ad5460a46abfd47b9ea52",
+  "h00_sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+  "inputs_count": 89,
+  "inputs_unchanged": true,
+  "source_inputs_unchanged": true,
+  "runtime_profile_sha256": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libimf.so": "31f0ab1dcce74417de63e5c6876b5bb078c15efea4c49ca9afc233abbe80fda8",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/lib/libintlc.so.5": "2722b7aba08edf1d37c45b8f90070c87b499404b0888bd1b4150f34e123ef120",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib/libmpifort.so.12": "dd756ea87a74afd860dd5e7a936a3b774591f97fe931b7af94080689859d2b34",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/lib/libmpi.so.12": "5abc6334a074f2ca24a966669aaf70c8907fe2d9414389698737c36bbf8cabdd"
+  },
+  "rank_success_markers": 8,
+  "gdb_log_sha256": "f0b8470f8fbd7405ba90bb62eb436e8db95ee1280551756b3c8abba06ff3a24b",
+  "original_mpi_exit_evidence": "Frozen original runner raises its recorded RK-stage coverage error only after its MPI-return-code==0 and input-unchanged checks; all eight rank success markers and the GDB inferior normal exit were independently rechecked.",
+  "event_count": 56,
+  "event_counts": {
+    "function_entry:rk": 24,
+    "function_return:rk": 24,
+    "function_entry:kdm": 4,
+    "function_return:kdm": 4
+  },
+  "unclassified_same_index_candidate_count": 12,
+  "unclassified_note": "Same numeric species index with different storage base remains unclassified; no species identity inferred.",
+  "target_entry_return_matches": 8,
+  "watch_events": 0,
+  "limitations": "Watchpoint reports after changed stores; zero events does not prove no writes. Store-PC and vector-lane arithmetic need separately authorized preinstruction replay."
+}

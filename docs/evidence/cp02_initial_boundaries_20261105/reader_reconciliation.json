@@ -1,0 +1,12 @@
+{
+  "status": "PASS",
+  "reason": "The parity-gate SHA now explicitly binds both bundled launch receipts before input trust.",
+  "original_producer_sha256": "290ab52bd1ff08fd4bd8b7af8aa635ec962aa9c5f388a7a39c4fee6805f53aeb",
+  "original_receipt_sha256": "f76b74141410d5b287c554467fd0f3803fe9a8c8debceb6e33dd30639aa69681",
+  "replay_producer_sha256": "cd8d46e2f17d042b2b4274012806ee93c7f5916ea8ccf983726444df89b753d1",
+  "replay_receipt_sha256": "e70e28896534593c71cbda8a0cb25f643e8e6b33909b42970e884f9e2f7dd2d9",
+  "all_output_hashes_identical": true,
+  "output_count": 13,
+  "summary_and_owner_coverage_identical": true,
+  "replay_command": "taskset -c 56-63 env OPENBLAS_NUM_THREADS=1 OMP_NUM_THREADS=1 python -u tools/cp02_initial_boundaries.py --output ../runtime/reader_replay"
+}

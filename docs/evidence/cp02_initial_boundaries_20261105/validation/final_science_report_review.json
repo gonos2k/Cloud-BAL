@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "reviewer_role": "Independent review of report, linked native source equations and mechanism figures; not report or figure author.",
+  "artifact_sha256": {
+    "docs/CP02_INITIAL_BOUNDARIES_20261105.md": "6c61556561380ccc6df27aca9efe5b8310275322fe1fd1508908a2e9a298f211",
+    "tools/plot_cp02_initial_mechanisms.py": "0adaac365743660ab2a12d5b18dec79aa221b36f38d4638f3dd79631243d88e1",
+    "tests/test_plot_cp02_initial_mechanisms.py": "80b3b18d38419d2b919fa259156dfd1cf7d693041acc1e27f64ae37db8ba2227",
+    "docs/evidence/cp02_initial_boundaries_20261105/mechanism_figures/receipt.json": "04e94fb44a9c401d6dccf08d80cdcf2b378edb6182ee2bec058b7e9e28d128a4",
+    "docs/evidence/cp02_initial_boundaries_20261105/mechanism_figures/rk_mass_coupled_entry.png": "3bc1becabf6167565caf5c66913c38bed006d33d6cdbf6fc0ebb965669c2d56d",
+    "docs/evidence/cp02_initial_boundaries_20261105/mechanism_figures/phi_pressure_thermo_chain.png": "133fd2ef44b2eeb8dac5bfd4c73eb6888977af786b559d42f6ffacf566bcee3f",
+    "docs/evidence/cp02_initial_boundaries_20261105/mechanism_figures/offline_gallery.zip": "98f17e066e014ed2aec05a4178cc4355ae2179f09a33bb97c6882c568241f9a5",
+    "docs/evidence/cp02_initial_boundaries_20261105/native/numerator_p20183/paired_closure.json": "15a5ffdde46d24358af3d9815fa7ff0a63d9bf4ce381cbffa1e0df6ee9f6c300",
+    "docs/evidence/cp02_initial_boundaries_20261105/validation/independent_numerator_raw_review.json": "33603c3075a96cc7043212b57084f70f4e431ebb2cfb0fc2bb2f8620e08868d0",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/phi_arithmetic/all_samples/receipt.json": "9967339de7abd59792596b590561192a29e1d4d2db200e726e78950c28a9b8c8",
+    "docs/evidence/cp02_initial_boundaries_20261105/native/source_lineage.json": "3def32dbbde3cf31dff130751786ba94aefce1ffbd12a20592de88bca0144509",
+    "docs/evidence/cp02_initial_boundaries_20261105/native/phi_discovery/independent_bridge_audit.json": "5e8c8093bf6c3bbbb4d94485c2a7b9ac8ffe23edfd538c05f75ae3f17ba6a49a"
+  },
+  "checks": [
+    "Linked original host source confirms RK1 scalar copy, persistent RK2/3 scalar, MU_BASE in both mass factors, active hypsometric_opt=2 expression and use_theta_m=1 moist potential-temperature conversion.",
+    "Selected NR RK stages, actual p20183 phi7 raw SIMD order, lane words, AL store, 128 ratio and pressure/prep/KDM bridges agree with independent captured evidence.",
+    "Sixty local grouped-versus-source arithmetic comparisons are descriptive; alternative grouping was not run in the model.",
+    "Reviewed final figure code, pinned inputs and corruption guard; inspected PNG layout and report claims, units and evidence scope.",
+    "First-four-step selected parity and first-call global coverage do not imply full-domain cause, forecast improvement or a conservation budget."
+  ],
+  "findings": [],
+  "resolved_findings": [
+    "Report identifies RK3 rather than every RK return as matching KDM entry.",
+    "Updated outdated pending-SIMD language; figure footer now defines mass factors with MU_BASE and no longer says SIMD data are absent.",
+    "Adjusted pressure figure layout so scope disclaimer remains legible."
+  ]
+}

@@ -1,0 +1,47 @@
+{
+  "status": "GO_FOR_FREEZE_AND_ROOT_AUTHORIZATION",
+  "decision": "The revised bounded probe design is peer-reviewable for freezing. This receipt does not authorize model execution; root must separately issue GO after freezing the reviewed hashes.",
+  "scope": "Independent read-only review of the revised p20183 rank-5 phi7 SIMD numerator/lane probe for paired B1 and DM065 original-executable runs.",
+  "review_method": [
+    "Used the existing Cloud-BAL Graphify graph as a navigation aid; verified conclusions directly against source, the pinned original executable, gate logic, and existing raw captures.",
+    "Reviewed the corrected earlier-PH watch and loop-header prepoint, the exact vector operand base calculation, per-operation opcode and lane capture, independent target-address reconstruction, arithmetic replay gate, and paired phi/KDM gates.",
+    "Compared the actual original executable SHA and relevant disassembly against the reviewed instruction PCs and opcodes."
+  ],
+  "sha256": {
+    "plan": "fdda680830473b54764110a00c48d4cec11e85289c6a685750f12a8f2c99a91a",
+    "probe": "7f8d0f24f705689c7e036977a6bfe393fde2936c6e6a8d3e05c81a7e724ecc49",
+    "runner": "ec3bd006bb6aabdbcf19391f7c8bc891d81f3f80d45cc8525ee59cc37645f746",
+    "synthetic_test": "766b081a00d17f83f5c7c092956bba1699b51839425b68ae4743ba9b27fcb2f6",
+    "phi_probe": "3662b5eae597953ab8f1380e04fab09f4bbf2b152df666c535804fda6a93bbb0",
+    "phi_case": "d22a5f22856a28405b76bb98f20d787aaa37d446a018a3ef1de7648ba24114de",
+    "source": "d8c11bd9b3dd0fd717c14899c53ffe7ca37c4d768128c4dac750429f7fb4bf3a",
+    "B1_raw_phi_capture": "8fa745a544f2367ed68ce741bd9f534fadda6f44737dedd06e085f9cb147c614",
+    "DM065_raw_phi_capture": "cce811a1d165f1061eb512b3e5da096c36bb4dc0a3e5bbac134ffd5050217f14",
+    "bridge_audit": "5e8c8093bf6c3bbbb4d94485c2a7b9ac8ffe23edfd538c05f75ae3f17ba6a49a",
+    "prior_no_go": "7b67f7a16c7d2a1cd64edce00070bebb6547901a7bf3f9325c9d71becae09b7a",
+    "binary": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f"
+  },
+  "binary_review": {
+    "pinned_executable_matches": true,
+    "arithmetic_sequence": "The fixed operation PCs and bytes match objdump of the pinned executable.",
+    "operand_pointer_binding": "Numerator operand slot 0 is loaded via pointer at rbx+0x280, slot 1 at rbx+0x200, slot 2 at rbx+0x2a0, and slot 3 via r13. The revised vector_operand_bases helper now matches those exact bases; it no longer uses the coefficient-prep pointer at rbx+0x290.",
+    "read_watch_timing": "Watching PH(k−1) arms the conditional loop-header breakpoint before target level k is processed under the source loop order. Candidate checks remain bounded to 500 vector headers; only a candidate whose prospective AL store range contains the exact target address enables the arithmetic stops.",
+    "watch_pc_gate": "The event records the actual post-access PC. The offline gate requires that PC to correspond to one of the mapped PH/PH-next vector loads, rejects PHB-load PCs, and checks PH/PHB storage ranges are disjoint."
+  },
+  "raw_binding_review": {
+    "status": "PASS",
+    "details": "The existing B1 and DM065 raw target captures each contain 15 owning phi entries. Entry seven has caller 0x13eb579 and the target PH/PH-next/PHB/PHB-next raw words used in the plan. Existing independent bridge evidence confirms phi-to-prep and prep-to-KDM target word/pointer matches. These are existing input bindings, not evidence of SIMD lane attribution."
+  },
+  "gates_reviewed": [
+    "phi7 caller, completed KDM count, bounds, hypsometric option, use_theta_m, raw LOGICAL and target words are checked in the probe and independently compared to the seventh paired phi entry by the gate.",
+    "Target AL and neighbor PH addresses are reconstructed independently from recorded bases and actual bounds; watch address, vector slot addresses, lane mapping, and selected store address are checked.",
+    "The ordered 12-instruction sequence verifies each exact opcode, selected XMM lane, float32 replay, final AL register result, and stored four-byte AL word.",
+    "Existing unchanged source/executable/runtime/input hashes, phase0 target KDM parity, and h00 history checks remain required by the runner."
+  ],
+  "limitations": [
+    "No model execution or replay was performed during this design review.",
+    "The synthetic gate result was reported by the probe author; this reviewer inspected the updated fixture and gate but did not independently execute the test.",
+    "Review establishes probe design and static binding only; it does not establish runtime observation, scientific validity, or a model change."
+  ],
+  "reviewer_note": "The initial v1 NO_GO receipt remains preserved at validation/numerator_design_review.json. No source, executable, probe, input, or model data were modified by this review."
+}

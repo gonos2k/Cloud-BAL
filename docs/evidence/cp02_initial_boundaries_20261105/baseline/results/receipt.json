@@ -1,0 +1,45 @@
+{
+  "status": "PASS",
+  "pins": {
+    "docs/evidence/cp02_thermo_cloud_path_20261105/native/schema/cp04_schema.json": "64496e9f19ec0042762a7b8fa7d4f8006ea617a45433434242706c223db2210c",
+    "tools/pack_cp02_selected_npz.py": "3c929e783856119daebf5b35487a0b10330d368db201024e5e57e7b37c34fb4d",
+    "tools/cp02_thermo_cloud_path.py": "a1b0d5ac6a418d5bcd679eaa4a8fdb9e3e8cb1bb63a8cebb6268c849b9efad8d",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/analysis/full_capture_receipt.json": "e41105c152b55991784f1fcf0b8c8e1c75fe03fc3d33160b897160adadd33245",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/analysis/B1_native_wrapper_parts/B1_native_wrapper.parts.json": "2d6a6fb716de26f7abb4428d85137c92b33a242e7d35b1e83c796e21163dff09",
+    "docs/evidence/cp02_thermo_cloud_path_20261105/analysis/DM065_native_wrapper_parts/DM065_native_wrapper.parts.json": "5bc658ead82af6b75984c7c5af365ecb0c3fad80afcdd0209b51c0ff44b209fd"
+  },
+  "script_sha256": "6136b40f9ace6501a504da6a81ee421a6fc547344b7a11512b93334aa89b4cb8",
+  "steps": [
+    1,
+    2,
+    3,
+    4
+  ],
+  "native_cells": 123,
+  "levels": 39,
+  "fields": [
+    "TH",
+    "QV",
+    "QC",
+    "QR",
+    "QI",
+    "QS",
+    "QG",
+    "NN",
+    "NC",
+    "NI",
+    "NR",
+    "BG",
+    "DEN",
+    "TK",
+    "P",
+    "PII"
+  ],
+  "table_rows": 64,
+  "TK_float32_product_checks": 76752,
+  "semantics": "Existing PR148 selected Eulerian boundary data; numerical nonzero, not physical onset. Native columns follow receipt coordinate order, not GC labels. Table is ENTRY only. Returned TK already includes t/pii then TH*pii mapping within KDM6; intercall net starts after this boundary.",
+  "outputs": {
+    "early_selected.npz": "803c398b178db89271976b941a74db7e3a9010ffe16091c94749f5d1feb5ab1c",
+    "entry_frontier.csv": "43c429a7628a5245d90046620a39b8b9d757edd60edfc53829f32bd2f49ecdeb"
+  }
+}

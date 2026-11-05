@@ -1,0 +1,32 @@
+{
+  "artifact_sha256": {
+    "docs/evidence/cp02_initial_boundaries_20261105/plan.json": "06bcef5161a9d1016e19f8344c8ca086f8f83650c94f1a284054fda9ef184812",
+    "docs/evidence/cp02_initial_boundaries_20261105/prior_versions/pre_launch_receipt_binding/cp02_initial_boundaries.py": "290ab52bd1ff08fd4bd8b7af8aa635ec962aa9c5f388a7a39c4fee6805f53aeb",
+    "docs/evidence/cp02_initial_boundaries_20261105/prior_versions/pre_launch_receipt_binding/receipt.json": "f76b74141410d5b287c554467fd0f3803fe9a8c8debceb6e33dd30639aa69681",
+    "docs/evidence/cp02_initial_boundaries_20261105/reader_reconciliation.json": "181892f60337c3eade925ac5f3693ac1e1c5ca572988d0ea750707867ba6e72e",
+    "docs/evidence/cp02_initial_boundaries_20261105/reader_replay_receipt.json": "e70e28896534593c71cbda8a0cb25f643e8e6b33909b42970e884f9e2f7dd2d9",
+    "docs/evidence/cp02_initial_boundaries_20261105/results/receipt.json": "f76b74141410d5b287c554467fd0f3803fe9a8c8debceb6e33dd30639aa69681",
+    "tests/test_cp02_initial_boundaries.py": "883c094c599ec840ff9231968911660cd5bd3cd5ac4cf25dae35b7a08494317c",
+    "tools/cp02_initial_boundaries.py": "cd8d46e2f17d042b2b4274012806ee93c7f5916ea8ccf983726444df89b753d1",
+    "tools/cp02_state_path.py": "4caa267fccf1c4b1f4ebcb03564a636a3412a75f344edeeec79eb9e9b7e403db"
+  },
+  "checks": {
+    "anchor": "PASS: 20330 corner i=141,j=142,k=2 checked directly in both native NetCDFs and CBSP blocks; input NR B1=0 and DM065=0, entry B1=0, DM065=0.003587320912629366 on public number basis.",
+    "coordinates_and_ownership": "PASS: schema 14 fields have matching semantic order; NetCDF (k,j,i) transposes to raw (j,k,i); independent all-rank big-endian header decode reconstructed 2,533,440 core cells and 40,092 uncalled and entire owner-token map with no overlap.",
+    "entry": "PASS: decoded all eight first-call rank streams independently: NR differs at 353,417 cells including 154,317 with unchanged initial NR; QV, QC, TH and TK have zero numeric differences. All 353,417 changed NR indices and float32 values match portable sparse records.",
+    "fixed_inputs": "PASS: pinned schema, prior source/manifest and 80 global files (5 stages \u00d7 8 ranks \u00d7 2 arms), 16 call logs and 2 wrfinput files rehashed before/after replay. Bundled launch receipts now verified against hash from pinned parity gate.",
+    "initial_number": "PASS: 200,182 numeric inequalities from native wrfinput, 199,111 within called cells and 1,071 uncalled; independently verified every initial sparse index and exact 32-bit values.",
+    "replay": "PASS: final reader replay to fresh Lustre directory reproduces all 13 derivative file hashes, summary and coverage; replay receipt matches published replay receipt. Original receipt is retained and differs in producer SHA, as explained by reconciliation.",
+    "return": "PASS: independently decoded all eight return streams; all changed indices and exact float32 words match sparse outputs: NR 253,833, QV 225,174, QC 91,615, TH 161,102, TK 161,102.",
+    "semantics": "PASS: numerical inequality treats signed zeros equal; uncalled state is missing and not silently zero; sparse values retain float32 data and changed indices.",
+    "tests": "PASS: six focused pytest tests including launch receipt mutation rejection."
+  },
+  "limitations": [
+    "Full global streams remain external and hash-bound; compact sparse outputs record only unequal values, so signed-zero bit differences are not enumerated.",
+    "Global 14-field stream contains no pressure or Exner; first wrapper entry is a sampled state and does not identify a writer or prove transport causation.",
+    "This review verifies the recorded first call, not a full water/energy budget, future forecast, or independent-event generalization."
+  ],
+  "resolved_finding": "Original producer trusted bundled launch receipt content without comparing it to the pinned parity-gate SHA; fixed source now checks both hashes before reading, has mutation test, and preserves original source and receipt. All 13 derivative output hashes unchanged.",
+  "scope": "Independent global reader, ownership, coordinates, compact derivatives and replay review; no native build or additional forecast.",
+  "status": "GO"
+}

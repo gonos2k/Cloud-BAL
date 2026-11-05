@@ -1,0 +1,36 @@
+{
+  "artifact_sha256": {
+    "docs/evidence/cp02_initial_boundaries_20261105/native/revalidated_nr20330/B1_receipt.json": "e09f0bbf2e1a9b16b736c331cb3ea780825ea44f9068dd654bf1f629b39674f0",
+    "docs/evidence/cp02_initial_boundaries_20261105/native/revalidated_nr20330/DM065_receipt.json": "6e5c8c620fc88cb5ee420480c9c757cc358a42c2e38fd1aae86f80055ab02152",
+    "docs/evidence/cp02_initial_boundaries_20261105/native/revalidated_nr20330/revalidation_receipt.json": "62234a0cb5766ea9c5cb6b0b2ac8e9e9c4af3ef5a86996a4c66f60d2fb6c41c6",
+    "docs/evidence/cp02_initial_boundaries_20261105/prior_versions/writer_analysis_before_namespace_pair_guard.py": "ef45dde92cebcf9d74e334da06fd6cad4d2d328b1f5fb5bfc8b758533a317ce4",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/writer_namespace_pair_reconciliation.json": "19c0d3b8e9956c1b0803e466e20d6c38fdedd491d8696e9a7ccb1db91e8b9566",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/writer_nr20330/analysis.json": "81136f351c4804be078761cbfc57a715ccd58bf24ffd1537cb4c180a1b3d475b",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/writer_nr20330/operand_table_receipt.json": "c04a4af19269365767f860ac72e0dd890eddc4fc5f20c83b10f0d48b398e6d78",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/writer_nr20330/paired_rk_operands.csv": "8060b4444745989f5e352e007f16eb10bb72518af6376229a9e1dc836faec8e7",
+    "tests/test_cp02_initial_writer_analysis.py": "e5b92b96f2d6e72c9419f350aa60bb3dc73e06212d8eb53ad3dd11d5da527c92",
+    "tools/cp02_initial_writer_analysis.py": "789e34a8a41669cc9117affe386941bea1bd1bc16a529cb22bb7ed56174e4d46"
+  },
+  "checks": {
+    "bridges": "PASS: each matched third-RK return raw word equals same-step KDM NR entry word for both arms across all four steps; equality is not proof of absence of intervening writes.",
+    "pointer_classes": "PASS: each arm has 12 calls in 4 timesteps \u00d7 3 RK stages with same-step QNR-base pointer equal to KDM entry NR base; 12 additional calls per arm use another base and remain unclassified.",
+    "raw_and_table": "PASS: independently parsed both raw JSONL streams and cross-checked all 48 CSV rows, raw operand words, numerical values, watch counts/chains and computed REAL32 source-order references/residuals.",
+    "replay_guard": "PASS: updated parser rejects cross-arm mismatched pointer classifications; 11 focused tests pass. NR and pressure-target source-revision replays have identical parsed content except bound parser source SHA; no pressure physical result is asserted here.",
+    "runtime": "PASS: actual wrf.exe SHA 68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f, initial input and h00 history hashes match both arms\u2019 preserved receipts; Intel/MPI runtime hashes match recorded profile.",
+    "source_formula": "PASS: independently evaluated source-order float32 expression for all 48 rows against host dyn_em/module_em.f90 SHA e00d4b4131e179c2e59aa2cf282965bed1aef5c449202405e93b2e43e8e9e804; arithmetic is reference-only, not a claim of real instruction/FMA equivalence.",
+    "step1": "PASS: B1 matched QNR remains zero; DM065 returns 0.004196407273411751, 0.006230263039469719, 0.003587320912629366 from initial zero at RK1/2/3; scalar tendency is zero and dt values 6.666666507720947, 10, 20 seconds.",
+    "watch": "PASS: B1 records zero changed-store watch events, DM065 twelve; PC is post-store, and no event is not proof of no writes."
+  },
+  "limitations": [
+    "Only this rank/cell/first-four-call sample is interpreted. The other index-6 namespace stays unclassified.",
+    "Reported changed-store PC is provisional and occurs after the write; no source instruction exactness or causal transport attribution is claimed.",
+    "Temperature conversion belongs to the within-call L term, not the between-call E term; no energy or water closure inferred.",
+    "Pressure guard tests validate raw logical word and low-bit semantics; no pressure scientific conclusion is part of this review."
+  ],
+  "raw_event_sha256": {
+    "B1": "a70afc98edec5e3c02d9a629aaeb5866fe169123baf1f25a98ee9b8bff910a96",
+    "DM065": "68454d8b79e26c8367a9e3c8213f44f857ced3ed2089e293008ff6ddb1f41c18"
+  },
+  "scope": "Independent readback of preserved pointer-aware B1/DM065 first-four-call writer capture, operand table and parser hardening.",
+  "status": "GO_NR20330_SCOPE"
+}

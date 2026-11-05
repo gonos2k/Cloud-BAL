@@ -1,0 +1,33 @@
+{
+  "artifact_sha256": {
+    "docs/evidence/cp02_initial_boundaries_20261105/native/phi_discovery/independent_bridge_audit.json": "5e8c8093bf6c3bbbb4d94485c2a7b9ac8ffe23edfd538c05f75ae3f17ba6a49a",
+    "docs/evidence/cp02_initial_boundaries_20261105/native/phi_discovery/p17051/paired_closure.json": "7e66ee98bd40c745bf847894ed45432d095e8288b03a2e57df47699900d3cf57",
+    "docs/evidence/cp02_initial_boundaries_20261105/native/phi_discovery/p20183/paired_closure.json": "0eae5a9bfa8159fd7529c0c2bbf0258f30410bb3953d2c9890415696dd002434",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/phi_arithmetic/all_samples/receipt.json": "9967339de7abd59792596b590561192a29e1d4d2db200e726e78950c28a9b8c8",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/phi_arithmetic/all_samples/rows.csv": "9f0500412500fb01a899ea8855bccaed0d7da65986b3d165195b3f7e1a78b604",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/phi_arithmetic/recount.py": "e7c519df4a10b45f423db55e12a0653af40149117eb6f164cc25c808d2d737b8",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/phi_arithmetic/recount_all.py": "bf52341f19730ea53ae0e18d809c36ddea3e685306eec168d6531ec304545b76",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/phi_arithmetic/results.json": "96c6683a0bc5ea6691b4da2c453214e4d2ec1dc448a0e4778610ce712200a884",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/phi_p17051/analysis.json": "699474b149f4fb37bda809194f5f044929fa3741708149458edaeffd52d3b3ef",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/phi_p20183/analysis.json": "47bd19bf23651971ed63f27f13a4a9b8553f7d366771134d7811bcaee794dcc4",
+    "tests/test_cp02_initial_phi_analysis.py": "5474b2acc3b01aee9ef60c7946e399ea2588d438021d3877c7277a0ce8432d8b",
+    "tools/cp02_initial_phi_analysis.py": "ef7191478f21545b63258b74689ccaf236b4083b7240c4b0cf1798c7c6ce1f25",
+    "tools/cp02_initial_writer_analysis.py": "789e34a8a41669cc9117affe386941bea1bd1bc16a529cb22bb7ed56174e4d46"
+  },
+  "checks": [
+    "Both paired closure/freeze SHA pins and all four compressed/decompressed raw event and per-arm receipt hashes verified.",
+    "All event sequence IDs and KDM entered/completed counters, raw signed logical and low-bit guards, caller PC classes and moisture slice pointer offsets verified against archived records.",
+    "Across four arm-target streams: all 60 phi entry/return raw operands, vspow lane addresses, source-order AL/EOS/power/perturbation-P candidates and their recorded residuals independently recomputed.",
+    "All 16 phi-gap/prep and prep\u2192KDM recorded pointer/value bridges checked against raw event sequences; all gap watch chains checked without assigning Pa to dimensionless transient vspow words.",
+    "Both targets\u2019 15 paired phi chronology, per-field entry and return differences checked from archived words. First p20183 difference occurs after one KDM completion (mu and ph); first p17051 difference occurs after two KDM completions (t).",
+    "Six focused tests passed. All 60 local exact-Fraction versus binary32 source-order and grouped comparisons independently recomputed; grouped was closer on these 60 captured operand rows. Single-sample arithmetic replay also matches."
+  ],
+  "interpretation": [
+    "Transient vspow output is dimensionless; phi-return/prep-input P is perturbation pressure in Pa, while prep-return PF is full pressure.",
+    "Source-order references and local regrouping error comparisons are arithmetic on captured operands only. They do not establish actual instruction/FMA equivalence, physical truth, model performance or an approved model change.",
+    "Matching pointer/value observations do not rule out intervening equal-value stores; post-watch PC is not the exact store instruction.",
+    "Fixed-target four-call samples do not establish full water/energy closure or causal transport."
+  ],
+  "scope": "Independent archived phi/vspow event, pairing, bridge and local float32 arithmetic review for p20183 and p17051.",
+  "status": "GO"
+}

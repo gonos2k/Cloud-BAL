@@ -1,0 +1,31 @@
+{
+  "artifact_sha256": {
+    "docs/evidence/cp02_initial_boundaries_20261105/science/writer_nr20330/analysis.json": "81136f351c4804be078761cbfc57a715ccd58bf24ffd1537cb4c180a1b3d475b",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/writer_nr20330max/analysis.json": "ae60a061371e6fae99ff352a61d4ae3f541e7d73422d2b81ee9853b4f7d58735",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/writer_p17051/analysis.json": "c98855bfa798a6ed9e2cb007921f0a01f961dda12ab49caded34b65b395fa462",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/writer_p20183/analysis.json": "cd31c0400f17d7cdd94e9c4e91767f75ef25ed6bbab6959891cda767cc9576cd",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/writer_report_tables/recount_writer_tables.py": "c8de371ec335dd3609b43271dbbd07c08dd1fcd10dca9d626cc00ce7cf69adef",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/writer_report_tables/results/first_sampled_operator_differences.csv": "dd7cd3747916684a32e1af49098858b1a0b8ed28764f08dca75e07b4fc0e5578",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/writer_report_tables/results/pointer_value_bridges.csv": "6b4454743b476f37b67b99cf64fff3fba614ead2307805afa649a5fb2a067d82",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/writer_report_tables/results/producer_calls.csv": "fbc4761f340a7a29693beea78a7d5a6b02aac56cc50e9ee41b49df6c6bcc6a9a",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/writer_report_tables/results/receipt.json": "02cfbd67bf5a4c5e7aae51d2f9d4c2543a42dd021420c8877908235d53d1eb0c",
+    "tests/test_cp02_initial_writer_analysis.py": "e5b92b96f2d6e72c9419f350aa60bb3dc73e06212d8eb53ad3dd11d5da527c92",
+    "tools/cp02_initial_writer_analysis.py": "789e34a8a41669cc9117affe386941bea1bd1bc16a529cb22bb7ed56174e4d46"
+  },
+  "checks": {
+    "bridges": "PASS: 16/16 pressure return\u2192prep input bridges have equal base pointer and different values; no continuity claimed. 48/48 prep TH/PII/P return\u2192KDM entry pointer and values match; intervening writes cannot be ruled out.",
+    "first_differences": "PASS: p20183 first pressure difference at step2 occurrence7 acoustic iteration1 (mu entry; al,p,pm1 return), prep step2 (al,p entry; pf,pii,rho return); p17051 pressure step3 occurrence9 iteration3 (ph_k,ph_kplus1,t2 entry; p,pm1 return), prep step3 (p,t_new entry; pf,pii,th return).",
+    "guards": "PASS: every pressure guard raw little-endian word decodes to recorded signed integer; recorded branch bit equals signed low bit and is set, with matching next-call guard metadata and valid k+1 bounds.",
+    "input_binding": "PASS: both arms of each pressure target: raw event and per-arm receipt SHA match closed analysis; capture closures remain independent required prerequisites.",
+    "raw_calls_and_reference": "PASS: all 160 pressure calls across 2 targets and 2 arms were matched directly to raw entry/return fields and independently recalculated source-order float32 AL, undamped/damped pressure and pressure residual against calc_p_rho source. Reference is not compiled instruction equivalence.",
+    "tables": "PASS: all 272 producer rows match respective closed-analysis raw operand words, all 80 pointer/value bridge rows match analyses, and all 6 first-sampled-difference rows recomputed from paired raw words."
+  },
+  "limitations": [
+    "Numerical comparisons are sampled 4-call observations, not exhaustive writer identification or causal transport proof.",
+    "Source-order float32 references and residuals do not establish real compiled instruction, exact FMA or rounding equivalence.",
+    "Pointer equality does not imply value continuity; pressure-to-prep words differ. Prep\u2192KDM matching words do not rule out intervening equal-value writes.",
+    "Temperature in wrapper TH*PII round-trip belongs to within-call L accounting, not between-call E; no full water/energy closure or independent-case claim."
+  ],
+  "scope": "Independent raw-event and source-order pressure analysis review at p20183 and p17051, plus four-target writer report tables.",
+  "status": "GO"
+}

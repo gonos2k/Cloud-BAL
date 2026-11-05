@@ -1,0 +1,117 @@
+{
+  "status": "PASS",
+  "scope": "Six archived analysis replays and two actual numerator replays; no WRF execution or external source arrays.",
+  "producer_sha256": "32e54f161f5db39cbec601c4594aae1252987b328eba223fe8ec9d370d94e48e",
+  "outputs": [
+    {
+      "target": "nr20330",
+      "kind": "writer",
+      "original_sha256": "81136f351c4804be078761cbfc57a715ccd58bf24ffd1537cb4c180a1b3d475b",
+      "replayed_sha256": "e0672918a26566d8a2e8edcf77bae61ccccc5f2df4cdc3419aceab13f04ce709",
+      "producer_sha256": "f93103c1e1bb9d33a60123be076b429f8cd461e7bb049bd6c0524174836f3c46",
+      "comparison": "Explicitly bound producer version; all JSON values identical after normalizing four input path strings."
+    },
+    {
+      "target": "nr20330max",
+      "kind": "writer",
+      "original_sha256": "ae60a061371e6fae99ff352a61d4ae3f541e7d73422d2b81ee9853b4f7d58735",
+      "replayed_sha256": "d0d737ad971bd2ee7ce1552302bf3f393382d8cddb3966cf00d94e5f4c3e60ee",
+      "producer_sha256": "789e34a8a41669cc9117affe386941bea1bd1bc16a529cb22bb7ed56174e4d46",
+      "comparison": "Explicitly bound producer version; all JSON values identical after normalizing four input path strings."
+    },
+    {
+      "target": "p20183",
+      "kind": "writer",
+      "original_sha256": "cd31c0400f17d7cdd94e9c4e91767f75ef25ed6bbab6959891cda767cc9576cd",
+      "replayed_sha256": "f0e0e32ec3b16eff61402b88c1c5937a9cfeac9057d7f91c5f73dc91e2a4fa26",
+      "producer_sha256": "ef45dde92cebcf9d74e334da06fd6cad4d2d328b1f5fb5bfc8b758533a317ce4",
+      "comparison": "Explicitly bound producer version; all JSON values identical after normalizing four input path strings."
+    },
+    {
+      "target": "p17051",
+      "kind": "writer",
+      "original_sha256": "c98855bfa798a6ed9e2cb007921f0a01f961dda12ab49caded34b65b395fa462",
+      "replayed_sha256": "c526dacab72417f6ce23bb3867ee281ce5af7d5d68f46e4e3b78a70fe2854259",
+      "producer_sha256": "789e34a8a41669cc9117affe386941bea1bd1bc16a529cb22bb7ed56174e4d46",
+      "comparison": "Explicitly bound producer version; all JSON values identical after normalizing four input path strings."
+    },
+    {
+      "target": "p20183",
+      "kind": "phi",
+      "original_sha256": "47bd19bf23651971ed63f27f13a4a9b8553f7d366771134d7811bcaee794dcc4",
+      "replayed_sha256": "47bd19bf23651971ed63f27f13a4a9b8553f7d366771134d7811bcaee794dcc4",
+      "comparison": "Byte identical."
+    },
+    {
+      "target": "p17051",
+      "kind": "phi",
+      "original_sha256": "699474b149f4fb37bda809194f5f044929fa3741708149458edaeffd52d3b3ef",
+      "replayed_sha256": "699474b149f4fb37bda809194f5f044929fa3741708149458edaeffd52d3b3ef",
+      "comparison": "Byte identical."
+    },
+    {
+      "arm": "B1",
+      "kind": "actual_numerator",
+      "receipt_sha256": "8fa8cfdc075a6e3ba941572b93ae156cf5268576180cc8a034327a1b6afc3992",
+      "result": {
+        "event_file_sha256": "d85fb7f87a854cc7dfd764d09acc912b26a515ca68f0d5e9203f525fcad73fde",
+        "phi7_caller_pc": "0x13eb579",
+        "lane": 2,
+        "operand_slot_mapping": {
+          "ph": 1,
+          "ph_next": 0,
+          "phb": 3,
+          "phb_next": 2
+        },
+        "input_words": {
+          "ph": "7de0a842",
+          "ph_next": "5ef20143",
+          "phb": "4c280546",
+          "phb_next": "39751446"
+        },
+        "after_sub_word": "7e083642",
+        "after_add_word": "412b1546",
+        "numerator_word": "a8178044",
+        "first_division_word": "eff53a3c",
+        "observed_log_word": "8489443c",
+        "second_division_word": "af86733f",
+        "alb_word": "5032693f",
+        "stored_al_word": "f045253d",
+        "actual_instruction_order": "slot0 - slot1; slot2 + result; result - slot3; then division/log and AL vector store",
+        "limitations": "Observed one target lane in one phi call per arm; no alternate grouping or source edit was executed."
+      }
+    },
+    {
+      "arm": "DM065",
+      "kind": "actual_numerator",
+      "receipt_sha256": "88a217d936f8ee98c39bc2a954e44b81cf3e0268431009b61063897fdf416a0c",
+      "result": {
+        "event_file_sha256": "22a4de90c45a93f2b188c58e938fba856531426d660327f2d087e350ecd7baf0",
+        "phi7_caller_pc": "0x13eb579",
+        "lane": 2,
+        "operand_slot_mapping": {
+          "ph": 1,
+          "ph_next": 0,
+          "phb": 3,
+          "phb_next": 2
+        },
+        "input_words": {
+          "ph": "7ce0a842",
+          "ph_next": "5ef20143",
+          "phb": "4c280546",
+          "phb_next": "39751446"
+        },
+        "after_sub_word": "80083642",
+        "after_add_word": "422b1546",
+        "numerator_word": "b0178044",
+        "first_division_word": "fbf53a3c",
+        "observed_log_word": "8489443c",
+        "second_division_word": "bf86733f",
+        "alb_word": "5032693f",
+        "stored_al_word": "f046253d",
+        "actual_instruction_order": "slot0 - slot1; slot2 + result; result - slot3; then division/log and AL vector store",
+        "limitations": "Observed one target lane in one phi call per arm; no alternate grouping or source edit was executed."
+      }
+    }
+  ]
+}

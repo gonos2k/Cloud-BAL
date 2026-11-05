@@ -1,0 +1,28 @@
+{
+  "artifact_sha256": {
+    "docs/evidence/cp02_initial_boundaries_20261105/baseline/results/early_selected.npz": "803c398b178db89271976b941a74db7e3a9010ffe16091c94749f5d1feb5ab1c",
+    "docs/evidence/cp02_initial_boundaries_20261105/baseline/results/entry_frontier.csv": "43c429a7628a5245d90046620a39b8b9d757edd60edfc53829f32bd2f49ecdeb",
+    "docs/evidence/cp02_initial_boundaries_20261105/entry_only/statistics.json": "64087241cb52936fe36001084bc12ba07a730c9b03b210140ac5c7001abddc46",
+    "docs/evidence/cp02_initial_boundaries_20261105/results/receipt.json": "f76b74141410d5b287c554467fd0f3803fe9a8c8debceb6e33dd30639aa69681",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/review_tables/recount_report_tables.py": "f05766e133f2b9e5e07a7e42a0f8d31a0f25db49e3106216ad0b69af445aa70f",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/review_tables/results/NFA12_step2.csv": "7481fcf5d90e46f01ed90bea1dbaca19f649d64c02b60b6406a5156e10467154",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/review_tables/results/anchor_frontier.csv": "e4dc364387c856aff31f052cc90fdcf7bd95c79be7cad483ef0ec2bac5caeffb",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/review_tables/results/domain_scope.csv": "1f1d3aa830ec4d14a0ae27252096d361169f6870be9a7c470edae7505e4c8bf0",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/review_tables/results/entry_only_context.csv": "3744044c6be45ec6878e56b745d70eb8774179ed56568f000a850a2dc2d3c1b5",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/review_tables/results/global_cross_tabs.csv": "a914f837bca7fc6f165a79d0c720a2815b45666385d9e30b400589b4be118c39",
+    "docs/evidence/cp02_initial_boundaries_20261105/science/review_tables/results/receipt.json": "893bcf0c83a924e876eb78968da6d97695d41e5ade758eabaddd5345a2e6fbc4"
+  },
+  "checks": [
+    "10/10 global cross-tab rows match source receipt, including generic sample_only for return rows.",
+    "32/32 anchor rows preserve separately keyed native and weighted fields, time steps, levels and deltas from 64-row frontier.",
+    "Coordinate-keyed early selected arrays give NFA12 step2: 0/156 TH differences, 2/156 each TK, P and PII.",
+    "Entry-only subset reproduced from initial and entry NR sparse files: 154317 total, 152630 positive, 1687 negative; all six absolute-change quantiles agree.",
+    "Review of QR-sign counts is limited to verifying their source mapping and partition labels; raw QR sign is not a rain activation threshold."
+  ],
+  "limitations": [
+    "Uses previously reviewed input derivatives; no independent raw QR sign recount was performed in this table review.",
+    "All state differences are numeric; zeros and uncalled domains retain source semantics, with no causal-transport inference."
+  ],
+  "scope": "Independent review of compact derived report tables; scientific causation is not inferred.",
+  "status": "GO"
+}
