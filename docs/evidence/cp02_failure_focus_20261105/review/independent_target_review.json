@@ -1,0 +1,79 @@
+{
+  "analysis_plan_sha256": "bc33612e6d719791034d72a7de3e4ddfa09b81d66a9c1b73a8a7fffe668eb0d2",
+  "bundle_receipt_sha256": "3ea1a834f61fa7a88c8f199c5ef8710298c489abc83c3c11965241d5dd7a420f",
+  "bundle_status": "COMPLETE",
+  "checks": {
+    "control_pairs": 158,
+    "csi_algebra_rows": 72,
+    "focus_points": 270,
+    "missing_control_pairs": 0,
+    "source_arrays": 6,
+    "target_rows": 270,
+    "transition_count_rows": 128,
+    "unique_reused_controls": 21
+  },
+  "independent_review_script_sha256": "d2128322db0cecfaa4ce4dde0410200f4f26670e374f44ddefa9cc88e0c4662b",
+  "independently_recounted_claims": {
+    "h02_C_recovered_ids": [
+      10942,
+      11093,
+      11242
+    ],
+    "h02_C_unrecovered_count": 7,
+    "h02_new_and_resolved_false_alarms": [
+      53,
+      24
+    ],
+    "h02_weak_ORIGINAL_to_A_losses_gains": [
+      10,
+      2
+    ],
+    "h05_C_minus_A_5mm_new_FA_bands": [
+      6,
+      2,
+      4
+    ],
+    "h05_C_minus_A_5mm_new_FA_resolved_hit_loss": [
+      12,
+      1,
+      12299
+    ],
+    "h05_C_minus_A_weak_losses_gains": [
+      17,
+      6
+    ],
+    "h05_fixed_17_point_h4_h5_h6_amount_delta_signs": [
+      5,
+      12,
+      0
+    ],
+    "h05_fixed_17_point_h5_amount_delta_sum_mm": -2.9101645344026226,
+    "h06_C_minus_A_weak_losses_gains": [
+      8,
+      2
+    ],
+    "reused_controls_across_cohorts": 21
+  },
+  "limits": [
+    "Independent recount applies only to the six receipt-pinned score NPZs and the frozen target plan.",
+    "Control reuse is reported and verified across cohorts; exact matching is a sampling design, not proof of identical physical conditions.",
+    "This review does not validate state history extraction, causal mechanism, flux, water-budget closure, or adoption."
+  ],
+  "output_sha256": {
+    "conditional_weak_detections.csv": "99b838ec69630efe5a62d2392d4184d59e7b25e7669747dccdf9f960ed59d2bf",
+    "control_reuse_audit.csv": "b822070f99788123c8513c9d7d6347edc2641caaa7b85fee989deed7c1eed1b7",
+    "csi_algebra.csv": "fa6d38fec4e27c53211834d44075136e8ec8ab9805abfa14f05fb2803dca034c",
+    "event_membership.csv": "ebfe97c1e3bb3714289c502432f75be7313d1ee80b40199624b13cd1fb31e942",
+    "focus_membership.csv": "74a3667635442d0075a8af1689522c137b240249645a7a7ab86e8c09dfa88c8d",
+    "matched_controls.csv": "b9cb77c8bd7fa9dbc5890c997ce86bb5e18ada565a934f340717396025824b3a",
+    "source_receipt.json": "19ae04f9a8c3c6e485124674f4b93d7022ed4c20e5bfec6fb90dbdd6c839c4fb",
+    "spatial_neighbors.csv": "7a43d76875ddef5940f6dfd1865ebbcb20c4f4b958f82e4871a99063f42f3c98",
+    "temporal_cohort_summary.csv": "5bd6e7828efeecb2953afe46574e3f5e082874d648fe3e6dcbf0c11a694b0801",
+    "temporal_diagnostics.csv": "8f936b41de9f2c621e0a392ee6384153e2739b2ec4501dd9d45f27a6e7aab37c",
+    "transition_counts.csv": "6cf1dc489ef9d8f6a4a6e70468341f61d785a3c7f7049cb1102ad808e69e211f"
+  },
+  "schema": "cp02_failure_focus_independent_target_review_v1",
+  "status": "PASS_TARGET_RECOUNT_AND_MATCH_REVIEW",
+  "target_test_sha256": "052ebdec3d5619486460c5559f0414f8a22013a58c63141a79b032bc1df4f2c5",
+  "target_tool_sha256": "85b1f140c636cc83ac8a2b1622055ee907e8ec816adf90ac78d6ef1a05e744df"
+}

@@ -1,0 +1,33 @@
+{
+  "status": "PASS_MATCHED_STAGED_INPUTS",
+  "case_A": "IMPROVED_BG_FIXED",
+  "case_X": "ORIGINAL_B1_100",
+  "source_receipts": [
+    {
+      "path": "docs/evidence/six_hour_improvement_20261030/runtime/inputs.json",
+      "sha256": "fd9fb8977a568043343bcf3348052463b048638f679dd5deb696de9a1b1454e2",
+      "size_bytes": 17438
+    },
+    {
+      "path": "docs/evidence/weak_strong_balance_20261030/runtime/cases/ORIGINAL_B1_100/receipt.json",
+      "sha256": "4c084d3917825f639f1829e4f602f1469860dd94c50e4e0509a97d848a253bf5",
+      "size_bytes": 64954
+    }
+  ],
+  "input_count_each": 89,
+  "identical_nonexecutable_inputs": 88,
+  "changed_inputs": [
+    "wrf.exe"
+  ],
+  "A_executable_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+  "X_executable_sha256": "de110a7f1d40143a74ffedbe64ed5b3717c413876093f56d200563e2f6b9c168",
+  "wrfinput_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+  "wrfbdy_sha256": "74102ac2063f17a9007f3352e6e6c2f52629055bdf3f05b4f4d6d77aef835f45",
+  "namelist_sha256": "eced598028b71b996c0c22cf7bd4bacb067087575ec06c4b65d71ab4913156df",
+  "zero_rate_patch": {
+    "path": "patches/kdm6_zero_rain_transfer.patch",
+    "sha256": "5a115de9c6a2991cd5b74611b6362d4cd3652c2ca3e0ac6674cd90a77792f001",
+    "size_bytes": 337
+  },
+  "scope": "The preserved run receipts bind identical B1 initial, boundary, namelist and table input bytes; only executable identity differs. Source patch lineage is separate evidence. Snapshot comparisons do not identify internal process causality or close budgets."
+}

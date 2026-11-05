@@ -1,0 +1,88 @@
+{
+  "schema": "cp02_b1_failure_state_extraction_plan_v1",
+  "status": "FROZEN_BEFORE_STATE_EXTRACTION",
+  "analysis_plan": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/analysis_plan.json",
+    "sha256": "bc33612e6d719791034d72a7de3e4ddfa09b81d66a9c1b73a8a7fffe668eb0d2",
+    "size_bytes": 10659
+  },
+  "analysis_plan_review": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/review/plan_review.json",
+    "sha256": "b7a8ddf2444973350a5de622b88dfcb80da083c7bc29e911c0c3e827d070b3c3",
+    "size_bytes": 2302
+  },
+  "targets_receipt": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/targets/bundle_receipt.json",
+    "sha256": "3ea1a834f61fa7a88c8f199c5ef8710298c489abc83c3c11965241d5dd7a420f",
+    "size_bytes": 8552
+  },
+  "target_review": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/review/independent_target_review.json",
+    "sha256": "bd68bf423208f3d8aea13860a2e49703276e096b157b034e6b4598a624641057",
+    "size_bytes": 3148
+  },
+  "inputs_proposal": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/state/inputs_proposal.json",
+    "sha256": "9c6d2de2a9a8bcb0433db85914c95dac5dd96e9e865e6b03dbc901a7556bd310",
+    "size_bytes": 24193
+  },
+  "AX_lineage_comparison": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/state/AX_lineage_comparison.json",
+    "sha256": "17c2c1f1bc5e1607e08ead072d0ec7ac87bb31eb731df12edbf34a017727875a",
+    "size_bytes": 1578
+  },
+  "membership": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/targets/focus_membership.csv",
+    "sha256": "74a3667635442d0075a8af1689522c137b240249645a7a7ab86e8c09dfa88c8d",
+    "size_bytes": 23658
+  },
+  "matched_controls": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/targets/matched_controls.csv",
+    "sha256": "b9cb77c8bd7fa9dbc5890c997ce86bb5e18ada565a934f340717396025824b3a",
+    "size_bytes": 31583
+  },
+  "extractor": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/tools/cp02_b1_failure_state.py",
+    "sha256": "88d41806d13c961043f234de5d2fdfeccc694d5a6b4f56b80f9a6c8d52758d4e",
+    "size_bytes": 36894
+  },
+  "feature_implementation": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/tools/cp02_failure_state_features.py",
+    "sha256": "92c4c302700491587a8faa29bc40dffa89a6d1b0f79f0616f74fdf5963e1754c",
+    "size_bytes": 13158
+  },
+  "cases": [
+    "ORIGINAL",
+    "A",
+    "C",
+    "B1_OLD_KDM6"
+  ],
+  "hours_utc": [
+    12,
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "expected_unique_focus_points": 270,
+  "expected_control_pairs": 158,
+  "levels": 39,
+  "source_corners_per_point": 4,
+  "surface_abs_tolerance_mm": 1e-10,
+  "surface_rel_tolerance": 1e-12,
+  "surface_negative_increment_tolerance_mm": 1e-06,
+  "rainsh_contract": "zero_cumulative_and_increment",
+  "rainsh_abs_tolerance_mm": 1e-10,
+  "precision": "Native selected corner fields REAL32; derived corner nonlinear features and weighted fields REAL64; save both. Surface comparison allowance addresses only REAL64 operation order. Negative native-component increments are preserved and counted within the explicit -1e-6 mm bound; never clipped or hidden by summing components.",
+  "units": "Source WRF variable units and pinned feature function interpretation; temp is history-derived REAL64, not observed KDM6 call TK. Rain values are cumulative or single-hour increments as named.",
+  "height_and_mass": "Height diagnostic convention g=9.81 m s^-2; raw MU/MUB and hybrid coefficients archived; no model-native dry-mass equivalence, column water mass or budget closure asserted.",
+  "scope": "Existing histories re-read only, no WRF run, new forecast/candidate or adoption-policy change. Frozen controls are analytical labels, not initialization decisions.",
+  "event_membership": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/targets/event_membership.csv",
+    "sha256": "ebfe97c1e3bb3714289c502432f75be7313d1ee80b40199624b13cd1fb31e942",
+    "size_bytes": 17430
+  },
+  "refreeze_reason": "After failed read-only extraction_01, correct the verified 2-D surface-weight broadcasting bug; surface vector/profile shape regressions pass. Frozen histories, cohorts and tolerances are unchanged."
+}

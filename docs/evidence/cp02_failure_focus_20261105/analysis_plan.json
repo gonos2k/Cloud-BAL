@@ -1,0 +1,308 @@
+{
+  "schema": "cp02_b1_failure_focus_plan_v1",
+  "status": "FROZEN_DIAGNOSTIC_SCOPE",
+  "base_commit": "ff1adc6328d79fc6646c23d9cd9e90208037e817",
+  "case_initial_utc": "2026-08-16T12:00:00Z",
+  "hours_utc": [
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "lead_hours": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "points_per_hour": 3688,
+  "thresholds_mm": [
+    0.1,
+    0.5,
+    1.0,
+    2.5,
+    5.0,
+    10.0
+  ],
+  "objective": "Diagnose current B1 missed weak precipitation and false alarms, and include the dominant new 5 mm false alarms of rejected grouped candidate C. This batch neither defines a new initialization rule nor changes the frozen 26 adoption conditions.",
+  "cases": {
+    "ORIGINAL": "규준실험; initial state and historical KDM6 before the exact-zero transfer fix",
+    "A": "현재 B1; background-precip-preserving initialization, zero-rate FIX, old PH sum",
+    "B": "Rejected DM065; context only",
+    "C": "Rejected B1 grouped PH sum; isolate C-A arithmetic effect",
+    "D": "Rejected DM065 grouped PH sum; context only",
+    "B1_OLD_KDM6": "Existing ORIGINAL_B1_100 same B1 initialization, old KDM6 zero-rate branch and old PH sum; diagnostic state/surface comparison A-X only, not a new forecast or eligible candidate"
+  },
+  "cohorts": [
+    {
+      "id": "h02_original_A_weak_hit_loss",
+      "comparison": "A-ORIGINAL",
+      "lead_hour": 2,
+      "threshold_mm": 0.1,
+      "observed_range_mm": [
+        0.1,
+        1.0
+      ],
+      "event": "hit_loss",
+      "expected_count": 10
+    },
+    {
+      "id": "h02_original_A_weak_hit_gain",
+      "comparison": "A-ORIGINAL",
+      "lead_hour": 2,
+      "threshold_mm": 0.1,
+      "observed_range_mm": [
+        0.1,
+        1.0
+      ],
+      "event": "hit_gain",
+      "expected_count": 2
+    },
+    {
+      "id": "h02_loss_recovered_by_C",
+      "comparison": "C-A within h02_original_A_weak_hit_loss",
+      "expected_count": 3,
+      "expected_ids": [
+        10942,
+        11093,
+        11242
+      ]
+    },
+    {
+      "id": "h02_loss_unrecovered_by_C",
+      "comparison": "C-A within h02_original_A_weak_hit_loss",
+      "expected_count": 7
+    },
+    {
+      "id": "h02_original_A_new_FA",
+      "comparison": "A-ORIGINAL",
+      "lead_hour": 2,
+      "threshold_mm": 0.1,
+      "observed_range_mm": [
+        0.0,
+        0.1
+      ],
+      "event": "new_false_alarm",
+      "expected_count": 53
+    },
+    {
+      "id": "h02_original_A_resolved_FA",
+      "comparison": "A-ORIGINAL",
+      "lead_hour": 2,
+      "threshold_mm": 0.1,
+      "observed_range_mm": [
+        0.0,
+        0.1
+      ],
+      "event": "resolved_false_alarm",
+      "expected_count": 24
+    },
+    {
+      "id": "h05_A_C_5mm_new_FA",
+      "comparison": "C-A",
+      "lead_hour": 5,
+      "threshold_mm": 5.0,
+      "event": "new_false_alarm",
+      "expected_count": 12,
+      "expected_observed_band_counts": [
+        6,
+        2,
+        4
+      ]
+    },
+    {
+      "id": "h05_A_C_5mm_resolved_FA",
+      "comparison": "C-A",
+      "lead_hour": 5,
+      "threshold_mm": 5.0,
+      "event": "resolved_false_alarm",
+      "expected_count": 1
+    },
+    {
+      "id": "h05_A_C_5mm_hit_loss",
+      "comparison": "C-A",
+      "lead_hour": 5,
+      "threshold_mm": 5.0,
+      "event": "hit_loss",
+      "expected_count": 1,
+      "expected_ids": [
+        12299
+      ]
+    },
+    {
+      "id": "h05_A_C_5mm_hit_gain",
+      "comparison": "C-A",
+      "lead_hour": 5,
+      "threshold_mm": 5.0,
+      "event": "hit_gain",
+      "expected_count": 0
+    },
+    {
+      "id": "h05_A_C_weak_hit_loss",
+      "comparison": "C-A",
+      "lead_hour": 5,
+      "threshold_mm": 0.1,
+      "observed_range_mm": [
+        0.1,
+        1.0
+      ],
+      "event": "hit_loss",
+      "expected_count": 17
+    },
+    {
+      "id": "h05_A_C_weak_hit_gain",
+      "comparison": "C-A",
+      "lead_hour": 5,
+      "threshold_mm": 0.1,
+      "observed_range_mm": [
+        0.1,
+        1.0
+      ],
+      "event": "hit_gain",
+      "expected_count": 6
+    },
+    {
+      "id": "h06_A_C_weak_hit_loss",
+      "comparison": "C-A",
+      "lead_hour": 6,
+      "threshold_mm": 0.1,
+      "observed_range_mm": [
+        0.1,
+        1.0
+      ],
+      "event": "hit_loss",
+      "expected_count": 8
+    },
+    {
+      "id": "h06_A_C_weak_hit_gain",
+      "comparison": "C-A",
+      "lead_hour": 6,
+      "threshold_mm": 0.1,
+      "observed_range_mm": [
+        0.1,
+        1.0
+      ],
+      "event": "hit_gain",
+      "expected_count": 2
+    }
+  ],
+  "classification": {
+    "event_boundary": "prediction >= threshold and reference >= threshold; observed bins [0,.1),[.1,1),[1,5),[5,infinity)",
+    "weak_observation": "0.1 <= RN1 < 1 mm with prediction >= .1 mm; separate from whole-cohort low-threshold CSI",
+    "membership": "Unique flat_index_yx per focus_membership row; keep all multi-role labels; separate event_membership long rows for lead, threshold and amounts. No repeated-role independent sample claim.",
+    "controls": "Deterministic nearest unused retained/stable controls within the same observed band for each failing cohort; lower flat index breaks exact distance ties; controls can be reused across different cohorts only with explicit audit. Also compare all 53 new with all24 resolved +2 h false alarms. Matching does not establish identical physical conditions."
+  },
+  "diagnostics": {
+    "earth_radius_km": 6371.0,
+    "neighborhood_radii_km": [
+      5.0,
+      10.0,
+      20.0
+    ],
+    "neighborhood_rule": "Include the query point and record point counts. Use only existing paired RN1 coordinates. Empty threshold sets produce explicit invalid/null values. Nearest-threshold distances and neighbor ranges are contextual; do not compute neighborhood-adjusted CSI or call these trajectories/displacement causes.",
+    "temporal_rule": "All six one-hour values plus h4+h5+h6 sums, peak hour, and h5 fraction where sum>0. Distinguish interval total up/down with evaluation-hour decrease; do not infer actual timing shift, transport or evaporation from point sums.",
+    "csi_algebra": "With fixed O=H+M, delta CSI = [deltaH*(O+F_A)-H_A*deltaF]/[(O+F_A)*(O+F_C)]. Record exact fractions and separate H/F algebra terms; these are not physical causal contributions. Evaluate hit-only repair with F_C unchanged.",
+    "selection_criteria": "The original 26 independent lead-threshold criteria remain fixed; no average CSI or gate-count rank and no new eligible candidate."
+  },
+  "state_extraction": {
+    "stage": "Separate input/corner/output plan is frozen after target receipt and source identities are available, before extraction.",
+    "cases": [
+      "ORIGINAL",
+      "A",
+      "C",
+      "B1_OLD_KDM6"
+    ],
+    "snapshots_utc": [
+      12,
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
+    "mapping": "Existing canonical WRF bilinear four corners/weights, source and coordinate identities pinned; retain native zero-based indexes plus explicit Fortran one-based display.",
+    "fields": [
+      "QVAPOR",
+      "QCLOUD",
+      "QICE",
+      "QRAIN",
+      "QSNOW",
+      "QGRAUP",
+      "QNRAIN",
+      "T",
+      "THM",
+      "P",
+      "PB",
+      "PH",
+      "PHB",
+      "HGT",
+      "MU",
+      "MUB",
+      "RAINC",
+      "RAINNC",
+      "RAINSH"
+    ],
+    "diagnostics": "Reuse pinned cp02_failure_state_features temperature/RH/Dm functions: dry T perturbation distinct from THM; per-corner nonlinear diagnostics before spatial weights; native REAL32 and weighted REAL64 kept separately. Undefined Dm stays NaN at required invalid corners. History-derived temperatures and relative humidity are diagnostics, not captured KDM6 process states.",
+    "gravity_and_mass": "9.81 m/s² is the inherited height diagnostic convention. Archive raw hybrid coefficients and MU/MUB, but no dry-mass/water-budget claim without actual constant/time/flux validation.",
+    "surface": "Component native cumulative differences before spatial weighting; verify hourly total RAINC+RAINNC against sealed paired arrays for all selected points, with explicit REAL64 rounding allowance. Validate exact Times, no resets/buckets/RAINSH contract bypass."
+  },
+  "sources": {
+    "analysis_receipt": {
+      "path": "docs/evidence/cp02_grouped_forecast_20261105/analysis/receipt.json",
+      "sha256": "53cdf3da71cd47114f8e0806b47987b0b1d9b15128a91a127ce873cd921c8839",
+      "size_bytes": 17530
+    },
+    "analysis_outputs": [
+      {
+        "path": "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_13_arrays.npz",
+        "sha256": "efdcbc493f23d7765a941b9cf6d08cee7ce339624a8465c5ed875f48dd42d8fe",
+        "size_bytes": 150587
+      },
+      {
+        "path": "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_14_arrays.npz",
+        "sha256": "f422d3820eefa19ac71787c9e52e40b8098d1955b3af9e7039fb492c92eae971",
+        "size_bytes": 151514
+      },
+      {
+        "path": "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_15_arrays.npz",
+        "sha256": "f41d559ef2553a80b4d999a95d2b57a025a01bbe8938345c5212a2ed5eba22e8",
+        "size_bytes": 163832
+      },
+      {
+        "path": "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_16_arrays.npz",
+        "sha256": "edb35029ea27ed3d97b8a5f2163fd76912953a6febfd15c424d2dd71b0968f34",
+        "size_bytes": 164516
+      },
+      {
+        "path": "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_17_arrays.npz",
+        "sha256": "209283740dc8c564d05d79c8ba40076bf2e48066f82135b16ba63313ee69de06",
+        "size_bytes": 159314
+      },
+      {
+        "path": "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_18_arrays.npz",
+        "sha256": "e2b49311cd4ded0072ddc5f9f3770bb070d728d946dcab7b74f969b164b70841",
+        "size_bytes": 165352
+      }
+    ],
+    "temperature_RH_Dm_source": {
+      "path": "tools/cp02_failure_state_features.py",
+      "sha256": "92c4c302700491587a8faa29bc40dffa89a6d1b0f79f0616f74fdf5963e1754c",
+      "size_bytes": 13158
+    },
+    "fixed_evaluation_plan": {
+      "path": "docs/evidence/cp02_grouped_forecast_20261105/evaluation_plan.json",
+      "sha256": "583c4eb95a5bf2939bd3a40fa640cc3e6bad615f04bb3f903386840cbb1ccb8c",
+      "size_bytes": 14222
+    }
+  },
+  "open_items": [
+    "No new physical modification is justified merely by threshold transitions. Choose at most one next hypothesis only after joint failure/control state evidence.",
+    "The existing B1/ORIGINAL criteria and C/D rejection remain unchanged.",
+    "Single event, RN1 upstream time/coverage/QC, independent-case skill, domain water/energy budgets and separate C2 T39/H-A-N completion remain unresolved."
+  ]
+}

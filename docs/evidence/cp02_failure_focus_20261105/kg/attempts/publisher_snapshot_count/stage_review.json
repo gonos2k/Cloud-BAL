@@ -1,0 +1,96 @@
+{
+  "baseline_sha256": "64cc05c046f1fe43a102b3622dbd31311f9cca4d55b1596fa87081828a68a6e7",
+  "checks": {
+    "13_publication_targets_verified_in_isolated_stage": true,
+    "all_8_independent_checks_passed": true,
+    "baseline_246_snapshots_and_121_125_split_preserved": true,
+    "both_graphs_match_dated_snapshots_and_have_zero_integrity_counts": true,
+    "five_wiki_mirrors_staged_without_maintained_writes": true,
+    "frozen_source_scope_and_190_hash_only_pins_match": true,
+    "prior_graph_nodes_retained_no_removed_nodes": true,
+    "raw_extraction_receipts_hash_bound": true,
+    "selected_manifest_updates_limited_to_8_python_paths": true,
+    "stage_validation_passed": true
+  },
+  "graph_deltas": {
+    "Cloud-BAL": {
+      "after": {
+        "communities": 1680,
+        "edges": 34318,
+        "nodes": 18934
+      },
+      "before": {
+        "communities": 1653,
+        "edges": 34072,
+        "nodes": 18814
+      },
+      "delta": {
+        "communities": 27,
+        "edges": 246,
+        "nodes": 120
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "manifest_changed_keys": 8,
+      "prior_node_ids_preserved": 18814,
+      "removed_prior_node_ids": 0,
+      "snapshot_sha256": {
+        "GRAPH_REPORT.md": "12ea8e561e1f9020525a15009d4f0b940bfe3730f6c63029cd770569fe8d4770",
+        "graph.json": "31051b2a8756fbdef6a78e2d062a03ad5d89f9c3dd1e67fd81d1f53b759c57c8",
+        "manifest.json": "8db0c3f9e37b92621b323aa5356449443fca37f7abd2c48ce35c0e6af075bdfe"
+      }
+    },
+    "KLAPS50": {
+      "after": {
+        "communities": 3668,
+        "edges": 92885,
+        "nodes": 44762
+      },
+      "before": {
+        "communities": 3654,
+        "edges": 92635,
+        "nodes": 44642
+      },
+      "delta": {
+        "communities": 14,
+        "edges": 250,
+        "nodes": 120
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "manifest_changed_keys": 8,
+      "prior_node_ids_preserved": 44642,
+      "removed_prior_node_ids": 0,
+      "snapshot_sha256": {
+        "GRAPH_REPORT.md": "ee6f41b88d697832e07338a857e215f66b95996a4d3a1d4d9eaf5af7893fdb5b",
+        "graph.json": "0f78dc43495ac909a1ab9dc01ba4146203efc4ee238cb3f41ce8b481036bb331",
+        "manifest.json": "64cef048b7b3b0ed1c9ec9a717d8c6670dbed2f49df1023ffa3e5cd86698fad0"
+      }
+    }
+  },
+  "independent_kg_review_sha256": "18b566761316cd2808a9a84594a3048114bdaba9707d3d266e2485aa3386dcbf",
+  "maintained_roots_written": false,
+  "review_status": "GO",
+  "schema": "cp02_failure_focus_kg_stage_review_v1",
+  "scope_and_limits": [
+    "Review authorizes only the isolated stage; it does not authorize publication.",
+    "Only the eight selected Python source/test paths were structurally extracted; all remaining evidence is hash-only.",
+    "Fortran cross-file CALL extraction remains partial; graph structure does not establish runtime or scientific validity."
+  ],
+  "selection_lock_sha256": "dc91ecbf35886149bdd0d15dacda89319ee6ae19ebcc3c0ac99ac1b635858547",
+  "stage": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/kg_stage/stage-4404310784fe794d",
+  "stage_receipt_sha256": "4eb2df81df45ccd5d4991bfa1ce029023c0fb0866e1474983cd862b2e048a85d",
+  "stage_validation_sha256": "27b52d470e1c55b823cb2ac15c4ccd81e21ff0d8590941d0583486d44f9ff2d4",
+  "staged_target_count": 13,
+  "status": "GO"
+}

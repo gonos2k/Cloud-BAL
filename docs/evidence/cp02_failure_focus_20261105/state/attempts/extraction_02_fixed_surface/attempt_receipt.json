@@ -1,0 +1,63 @@
+{
+  "attempt_id": "extraction_02_fixed_surface",
+  "command": [
+    "python3",
+    "tools/cp02_b1_failure_state.py",
+    "--plan",
+    "docs/evidence/cp02_failure_focus_20261105/state/extraction_plan.json",
+    "--output",
+    "docs/evidence/cp02_failure_focus_20261105/state/extracted"
+  ],
+  "exit_code": 0,
+  "extractor": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/tools/cp02_b1_failure_state.py",
+    "sha256": "88d41806d13c961043f234de5d2fdfeccc694d5a6b4f56b80f9a6c8d52758d4e",
+    "size_bytes": 36894
+  },
+  "files": {
+    "extraction_receipt.json": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/state/extracted/receipt.json",
+      "sha256": "39f1cede1e47b173491a47e5f4f0182ef7f682be834fbea0f0e1ab37889e23ba",
+      "size_bytes": 42051
+    },
+    "postrun_hash_readback.json": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/state/extracted/postrun_hash_readback.json",
+      "sha256": "db322a7dcbaec0e63b274ddb094a049d49362628bc95faa97a4b8dd1270b86f4",
+      "size_bytes": 13867
+    },
+    "review/state_extraction_surface_fix_review.json": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/review/state_extraction_surface_fix_review.json",
+      "sha256": "f36bce4d81e616329100dee9558c72750987ecd6106f2d1d2a224915a7b3d225",
+      "size_bytes": 1442
+    },
+    "stderr.log": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/state/attempts/extraction_02_fixed_surface/stderr.log",
+      "sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "size_bytes": 0
+    },
+    "stdout.log": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/state/attempts/extraction_02_fixed_surface/stdout.log",
+      "sha256": "aebe667ebc172495b8c8a2429990152d46cc188ca129b333e332c6833cffd20a",
+      "size_bytes": 33758
+    }
+  },
+  "plan": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_failure_focus_20261105/Cloud-BAL/docs/evidence/cp02_failure_focus_20261105/state/extraction_plan.json",
+    "sha256": "c3961eee66da7e1979d47baad64df15e75701ea586462b6b4a634c184d798c27"
+  },
+  "result_summary": {
+    "case_hours": 28,
+    "derived_npz_hash_verified": 28,
+    "focus_points": 270,
+    "forecast_reruns": 0,
+    "mass_column_diagnostic": "not derived",
+    "matched_control_pairs": 158,
+    "rainsh_max_abs_mm": 0.0,
+    "source_files_postrun_hash_verified": 28,
+    "surface_max_abs_error_mm": 1.509903313490213e-14,
+    "surface_score_comparisons": 24
+  },
+  "review_go_sha256": "f36bce4d81e616329100dee9558c72750987ecd6106f2d1d2a224915a7b3d225",
+  "schema": "cp02_b1_failure_state_attempt_v1",
+  "status": "PASS"
+}
