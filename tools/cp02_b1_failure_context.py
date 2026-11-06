@@ -200,6 +200,15 @@ def summarize(values: list[float]) -> dict:
             'median': float(median), 'q75': float(q75), 'maximum': float(valid.max())}
 
 
+def surface_check(case: str, hour: int, rows: list[dict]) -> dict:
+    """Summarize residuals only after the current case-hour rows are complete."""
+    residuals = [abs(row['surface_score_residual_mm']) for row in rows
+                 if row['surface_score_residual_mm'] is not None]
+    return {'case': case, 'hour_utc': hour, 'points': len(rows),
+            'max_abs_residual_mm': max(residuals, default=None),
+            'verification': rows[0]['surface_verification']}
+
+
 def role_pairs(events: list[dict], controls: list[dict]) -> dict[str, list[tuple[int, int]]]:
     links = {}
     for row in controls:
@@ -259,6 +268,7 @@ def derive_context(state_arrays: dict, focus: list[dict], events: list[dict], co
                 lead, score = hour - 12, scores[hour]
                 reference = score['reference']
                 score_indices = score['flat_index_yx']
+                case_surface_rows = []
                 for point_idx, point_id in enumerate(ids):
                     score_index = int(data['point_index'][point_idx])
                     if int(score_indices[score_index]) != point_id:
@@ -285,12 +295,9 @@ def derive_context(state_arrays: dict, focus: list[dict], events: list[dict], co
                            'surface_score_residual_mm': residual, 'surface_verified': verified,
                            'surface_verification': verification}
                     surface_rows.append(row)
+                    case_surface_rows.append(row)
                     surface_lookup[point_id, case, lead] = row
-                    if point_idx == 0:
-                        surface_checks.append({'case': case, 'hour_utc': hour, 'points': len(ids),
-                                               'max_abs_residual_mm': float(max(abs(r['surface_score_residual_mm'] or 0)
-                                                                                for r in surface_rows[-len(ids):])),
-                                               'verification': verification})
+                surface_checks.append(surface_check(case, hour, case_surface_rows))
     contrasts, surface_context, surface_summary = [], [], []
     roles = sorted(pairs_by_role)
     for role in roles:

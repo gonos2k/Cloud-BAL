@@ -1,0 +1,26 @@
+{
+  "bindings": {
+    "collector_test_sha256": "ac5f0c74a65c7981a29c347cdba9817cad662227d351e39e1bf578e470700462",
+    "collector_tool_sha256": "c0c59c3d328a95168db14022772d52eae212cc38ae8f64d4e784f5df0ca490b9",
+    "quick_receipt_sha256": {
+      "FIX": "eb73db18d9cc02f4286c861b69ed28b9f2f0c54176aec9d8c90941998b23fefc",
+      "OLD": "cb448bac7d60928fafc47249f920b00340a26991ef58da38d2094eb43ac73016"
+    },
+    "schema_sha256": "677847102d32b1637340d94bcd24c3856d63348bd15ceb0a319d8b5eda8ff25c"
+  },
+  "limits": [
+    "V4 full data remain preserved as prior-version evidence; this review does not modify or rebind the original full-run start receipt.",
+    "V5 full-stream recapture and its independent data audit were still in progress when this review was recorded.",
+    "This field namespace fix affects generic raw scalar archive keys only; it makes no change to model physics, the instrumented Fortran source, or the derived core process channels."
+  ],
+  "review_findings": [
+    "Numeric subscripts present in schema argument tuples are retained in output channel identifiers: qci_1/qci_2, qrs_1/qrs_2/qrs_3, and surface fall_1 through fall_4.",
+    "Every phase derives channel names through the same normalizer; duplicate physical names and collisions with their _present companions are rejected before export.",
+    "The regression assigns distinct sentinel values to each qci/qrs source slot and verifies each normalized output key retains its corresponding value; it also verifies fall_1 through fall_4, rejects duplicate normalized names, and checks phase channel counts.",
+    "Focused test command `PYTHONDONTWRITEBYTECODE=1 python3 -B -m pytest -q -p no:cacheprovider tests/test_cp02_protected_process_capture.py` passed 14/14."
+  ],
+  "reviewed_at_utc": "2026-11-06",
+  "schema": "cp02_protected_process_field_namespace_review_v1",
+  "scope": "Read-only independent review of V5 process/surface field-name normalization and export namespace, plus focused collector tests. Does not review the full V5 recollected streams or change source physics.",
+  "status": "PASS_FIELD_NAMESPACE_IMPLEMENTATION"
+}

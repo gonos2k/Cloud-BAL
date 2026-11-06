@@ -47,6 +47,27 @@ def test_control_reuse_across_roles_does_not_merge_role_samples():
     assert sum(len(pairs) for pairs in roles.values()) == 2
 
 
+def test_surface_checks_use_each_complete_case_hour_and_keep_unpaired_null():
+    def rows_with_peak(peak):
+        rows = [{'surface_score_residual_mm': 0.01,
+                 'surface_verification': 'paired_score_array'} for _ in range(270)]
+        rows[269]['surface_score_residual_mm'] = peak
+        return rows
+
+    original = c.surface_check('ORIGINAL', 13, rows_with_peak(0.9))
+    modified = c.surface_check('A', 13, rows_with_peak(0.6))
+    unpaired_rows = [{'surface_score_residual_mm': None,
+                      'surface_verification': 'state_receipt_only_no_score_arm'} for _ in range(270)]
+    unpaired = c.surface_check('B1_OLD_KDM6', 13, unpaired_rows)
+
+    assert original == {'case': 'ORIGINAL', 'hour_utc': 13, 'points': 270,
+                        'max_abs_residual_mm': 0.9, 'verification': 'paired_score_array'}
+    assert modified['max_abs_residual_mm'] == 0.6
+    assert unpaired == {'case': 'B1_OLD_KDM6', 'hour_utc': 13, 'points': 270,
+                        'max_abs_residual_mm': None,
+                        'verification': 'state_receipt_only_no_score_arm'}
+
+
 def test_loader_rejects_missing_and_mutated_state_archives(tmp_path):
     state_dir = tmp_path / 'missing'
     state_dir.mkdir()
@@ -81,6 +102,18 @@ def test_pinned_state_context_recounts_legacy_crossings_and_surface_paths():
     tables = c.derive_context(arrays, focus, events, controls, scores)
     assert len(tables['point_surface_paths']) == 270 * 4 * 6
     assert len(tables['layer_features']) == 270 * 4 * 7 * 2
+    checks = tables['_surface_checks']
+    assert len(checks) == 24
+    for check in checks:
+        rows = [row for row in tables['point_surface_paths']
+                if row['case'] == check['case'] and row['hour_utc'] == check['hour_utc']]
+        assert check['points'] == len(rows) == 270
+        residuals = [abs(row['surface_score_residual_mm']) for row in rows
+                     if row['surface_score_residual_mm'] is not None]
+        assert check['max_abs_residual_mm'] == max(residuals, default=None)
+        if check['case'] == 'B1_OLD_KDM6':
+            assert check['max_abs_residual_mm'] is None
+            assert check['verification'] == 'state_receipt_only_no_score_arm'
     summary = tables['cohort_surface_context_summary']
     h02 = next(r for r in summary if r['cohort_label'] == 'h02_original_A_weak_hit_loss'
                and r['population'] == 'target' and r['case'] == 'B1_OLD_KDM6')

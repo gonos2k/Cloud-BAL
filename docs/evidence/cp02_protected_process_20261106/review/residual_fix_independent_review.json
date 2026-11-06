@@ -1,0 +1,210 @@
+{
+  "base_commit": "8e8208672092c2f4169fe617bc3b4d9f379e69ae",
+  "context_bundle_receipt_sha256": "8faf1ae646279e9bce55472cbd8930997cbc1fd7ca6db06bfa0fb1ff45d11077",
+  "limits": [
+    "All five CSV outputs are byte-identical to the prior context bundle.",
+    "Recomputed 24 case-hour groups from point_surface_paths.csv; all contain 270 points.",
+    "The B1_OLD_KDM6 rows have no direct paired score arm, so residual is null and verification is receipt-only.",
+    "This verifies summary arithmetic and output preservation; it does not establish process causality or runtime validity."
+  ],
+  "outputs": {
+    "cohort_physical_contrasts.csv": {
+      "byte_equal_to_prior": true,
+      "sha256": "77518c2415f33c0ec1185369b348167c178c464c0e8ae121022fbc8d1af78fb9",
+      "size_bytes": 553426
+    },
+    "cohort_surface_context.csv": {
+      "byte_equal_to_prior": true,
+      "sha256": "a0ed07209c87791eccb77bf0dbf666ca1769fb6286eb61cf4b2e335b02e39f3c",
+      "size_bytes": 96695
+    },
+    "cohort_surface_context_summary.csv": {
+      "byte_equal_to_prior": true,
+      "sha256": "1ec81cff556ebed14f5db055f6cdeded0a6f837de9bb425a32bc507a7787045c",
+      "size_bytes": 23343
+    },
+    "layer_features.csv": {
+      "byte_equal_to_prior": true,
+      "sha256": "e803b41412a1ce2963d9f25b2582c5ae32cc9f8b3e3b0a66f827d53d09db5778",
+      "size_bytes": 11571480
+    },
+    "point_surface_paths.csv": {
+      "byte_equal_to_prior": true,
+      "sha256": "1cdbc58119ec50221f239f841b35fb84bf49686fcf68aeb3728c9288bd0b999b",
+      "size_bytes": 963816
+    }
+  },
+  "source_sha256": "a790381f172cca1f1f1e4db79600ddd22a3d8d1e78bef29351ba285d542cf796",
+  "status": "PASS_INDEPENDENT_CONTEXT_RECOUNT",
+  "surface_score_checks": [
+    {
+      "case": "ORIGINAL",
+      "hour_utc": 13,
+      "max_abs_residual_mm": 1.734723475976807e-18,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "ORIGINAL",
+      "hour_utc": 14,
+      "max_abs_residual_mm": 3.552713678800501e-15,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "ORIGINAL",
+      "hour_utc": 15,
+      "max_abs_residual_mm": 5.329070518200751e-15,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "ORIGINAL",
+      "hour_utc": 16,
+      "max_abs_residual_mm": 7.105427357601002e-15,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "ORIGINAL",
+      "hour_utc": 17,
+      "max_abs_residual_mm": 1.3766765505351941e-14,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "ORIGINAL",
+      "hour_utc": 18,
+      "max_abs_residual_mm": 1.509903313490213e-14,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "A",
+      "hour_utc": 13,
+      "max_abs_residual_mm": 1.734723475976807e-18,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "A",
+      "hour_utc": 14,
+      "max_abs_residual_mm": 3.552713678800501e-15,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "A",
+      "hour_utc": 15,
+      "max_abs_residual_mm": 7.105427357601002e-15,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "A",
+      "hour_utc": 16,
+      "max_abs_residual_mm": 3.552713678800501e-15,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "A",
+      "hour_utc": 17,
+      "max_abs_residual_mm": 9.325873406851315e-15,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "A",
+      "hour_utc": 18,
+      "max_abs_residual_mm": 8.43769498715119e-15,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "C",
+      "hour_utc": 13,
+      "max_abs_residual_mm": 1.734723475976807e-18,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "C",
+      "hour_utc": 14,
+      "max_abs_residual_mm": 1.7763568394002505e-15,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "C",
+      "hour_utc": 15,
+      "max_abs_residual_mm": 1.7763568394002505e-15,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "C",
+      "hour_utc": 16,
+      "max_abs_residual_mm": 7.105427357601002e-15,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "C",
+      "hour_utc": 17,
+      "max_abs_residual_mm": 7.105427357601002e-15,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "C",
+      "hour_utc": 18,
+      "max_abs_residual_mm": 4.262866101778506e-15,
+      "points": 270,
+      "verification": "paired_score_array"
+    },
+    {
+      "case": "B1_OLD_KDM6",
+      "hour_utc": 13,
+      "max_abs_residual_mm": null,
+      "points": 270,
+      "verification": "state_receipt_only_no_score_arm"
+    },
+    {
+      "case": "B1_OLD_KDM6",
+      "hour_utc": 14,
+      "max_abs_residual_mm": null,
+      "points": 270,
+      "verification": "state_receipt_only_no_score_arm"
+    },
+    {
+      "case": "B1_OLD_KDM6",
+      "hour_utc": 15,
+      "max_abs_residual_mm": null,
+      "points": 270,
+      "verification": "state_receipt_only_no_score_arm"
+    },
+    {
+      "case": "B1_OLD_KDM6",
+      "hour_utc": 16,
+      "max_abs_residual_mm": null,
+      "points": 270,
+      "verification": "state_receipt_only_no_score_arm"
+    },
+    {
+      "case": "B1_OLD_KDM6",
+      "hour_utc": 17,
+      "max_abs_residual_mm": null,
+      "points": 270,
+      "verification": "state_receipt_only_no_score_arm"
+    },
+    {
+      "case": "B1_OLD_KDM6",
+      "hour_utc": 18,
+      "max_abs_residual_mm": null,
+      "points": 270,
+      "verification": "state_receipt_only_no_score_arm"
+    }
+  ],
+  "validation_receipt_sha256": "1da937db20fe9969fa97168c9e6006331fc718fd8bd12166c04dc062bdbc1d38"
+}

@@ -1,0 +1,50 @@
+{
+  "status": "CONTIGUOUS_PROCESS_COMPARISON_VALIDATED",
+  "rows": 70200,
+  "hours": [
+    1,
+    2,
+    5
+  ],
+  "nominal_rate_rows": 35100,
+  "group_profile_rows": 7020,
+  "points": 150,
+  "levels": 39,
+  "fields": {
+    "QV": "kg kg-1",
+    "QC": "kg kg-1",
+    "QR": "kg kg-1",
+    "TK": "K"
+  },
+  "full_launch_receipt_sha256": "41a1d6e8dd2b0821dc03bdc6927465513c31e877981497eb795ad349284201e5",
+  "collector_receipt_sha256": {
+    "OLD": "3778e4db7e661eb3f502235a9f5328e7b90254a80a11bd0ec0f93ed210510cd9",
+    "FIX": "9d852d396c037d633b1c000c94170516ed290eb7a56592335c1f3df423294914"
+  },
+  "tool_sha256": "77945c25b8ca369e451af9f54f81a5c4dc384c70c9166c71b5837e2c5fded895",
+  "outputs": {
+    "point_level_process_ledger.csv": {
+      "size_bytes": 12439843,
+      "sha256": "9231038aaa9a98680a08a83cf85f663c651b76a0d6adc0186e3d6b92bb9cf512"
+    },
+    "point_level_nominal_rates.csv": {
+      "size_bytes": 2277511,
+      "sha256": "7a234a737b85be201722006a8ebeb1e2261296485da27ecb7624a40f1fcf3bdf"
+    },
+    "group_level_process_profiles.csv": {
+      "size_bytes": 3628684,
+      "sha256": "1661aa751a05213d71f296b9a467fd28c786424f0c79c84ba7322f08cc1d09bb"
+    }
+  },
+  "limits": [
+    "Sums are over time at fixed native k, without vertical summation.",
+    "PREVP/PRAUT/PRACW time integrals are nominal source terms; they are not observed net state changes or causal rain fractions.",
+    "Between-call net changes include all external operations; they are not pure transport.",
+    "Remaining internal terms include unmeasured stages, clipping, and wrapper conversion/rounding.",
+    "Local state ledgers do not establish a column or domain water/energy budget.",
+    "Role profiles report point quantiles at each native k; groups overlap and are spatially correlated, and quantiles of components do not generally add.",
+    "No ledger bridges the uncaptured steps 361\u2013720.",
+    "Missing conditional sedimentation records remain missing; incomplete 180-call sedimentation sums and remaining internal terms are null.",
+    "Condensation substep is followed by additional source processing."
+  ]
+}

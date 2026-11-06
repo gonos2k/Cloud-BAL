@@ -1,0 +1,109 @@
+{
+  "status": "PASS",
+  "plan_sha256": "c14da5350a21957eea0e320e5b6cb4da3c8ca82430c38b98cfc096c0c4b24d6f",
+  "cohort_receipt_sha256": "cd1e03fbc075c25f6a4904ce278935dea8d23a2157162274835fca21fc911826",
+  "immutable_source_hashes": {
+    "tool_before": "36839a521d34122a83ce4a3ae4fa1f55f7a91367cf8eabbb5a5437962c5902fc",
+    "tool_after": "36839a521d34122a83ce4a3ae4fa1f55f7a91367cf8eabbb5a5437962c5902fc",
+    "test_before": "3ef8bf979b4a3c277e810a869bc16f8851968cb3a7e43b7ad46bb3fd1088d4de",
+    "test_after": "3ef8bf979b4a3c277e810a869bc16f8851968cb3a7e43b7ad46bb3fd1088d4de"
+  },
+  "cli_replay": {
+    "fresh_output_directory": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/Cloud-BAL/docs/evidence/cp02_protected_process_20261106/runtime/tasktmp/replay_cli_20261106_01/result",
+    "attempts": [
+      {
+        "argv": [
+          "python",
+          "tools/cp02_protected_process_cohorts.py",
+          "--output",
+          "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/Cloud-BAL/docs/evidence/cp02_protected_process_20261106/runtime/tasktmp/replay_cli_20261106_01"
+        ],
+        "exit_code": 1,
+        "result": "Expected FileExistsError: the target directory itself had been precreated; no output was written there."
+      },
+      {
+        "argv": [
+          "python",
+          "tools/cp02_protected_process_cohorts.py",
+          "--output",
+          "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/Cloud-BAL/docs/evidence/cp02_protected_process_20261106/runtime/tasktmp/replay_cli_20261106_01/result"
+        ],
+        "exit_code": 0,
+        "result": "COMPLETE"
+      }
+    ],
+    "csv_comparison_count": 9,
+    "all_csv_bytes_identical": true,
+    "csv_comparisons": [
+      {
+        "file": "categorical_scores.csv",
+        "canonical_sha256": "b6483f53b24e96cf5c75a9ef618b4c4090dcbb43f59198e9470c596bd4c0fe2f",
+        "replay_sha256": "b6483f53b24e96cf5c75a9ef618b4c4090dcbb43f59198e9470c596bd4c0fe2f",
+        "byte_identical": true
+      },
+      {
+        "file": "nearest_neighbors.csv",
+        "canonical_sha256": "44d23ee64d30876fc9695e90e5724fe6a01fb25af9ee9fcf7d5d43ebcd7616a0",
+        "replay_sha256": "44d23ee64d30876fc9695e90e5724fe6a01fb25af9ee9fcf7d5d43ebcd7616a0",
+        "byte_identical": true
+      },
+      {
+        "file": "point_corners.csv",
+        "canonical_sha256": "12a000e1dab5963f7327cce49a44e988940b8e1c208049dd7f5285f126e85ea9",
+        "replay_sha256": "12a000e1dab5963f7327cce49a44e988940b8e1c208049dd7f5285f126e85ea9",
+        "byte_identical": true
+      },
+      {
+        "file": "qrain_group_summary.csv",
+        "canonical_sha256": "04628aa71cdbdeae2b44cfbd0d8c42cf25ec1fd00f405608955ca64a0871daf1",
+        "replay_sha256": "04628aa71cdbdeae2b44cfbd0d8c42cf25ec1fd00f405608955ca64a0871daf1",
+        "byte_identical": true
+      },
+      {
+        "file": "qrain_point_contrasts.csv",
+        "canonical_sha256": "633f888782f3aa9c85f900fe2f9b99f2b0f946753b04d558c8ca13f675877d7c",
+        "replay_sha256": "633f888782f3aa9c85f900fe2f9b99f2b0f946753b04d558c8ca13f675877d7c",
+        "byte_identical": true
+      },
+      {
+        "file": "role_membership.csv",
+        "canonical_sha256": "54cbe13a13a7494fdaf10159919c480f90dfad26dcdcf8337735828d05132cb6",
+        "replay_sha256": "54cbe13a13a7494fdaf10159919c480f90dfad26dcdcf8337735828d05132cb6",
+        "byte_identical": true
+      },
+      {
+        "file": "selected_points.csv",
+        "canonical_sha256": "f66afa0f60ea02389fae5d0112426bcffdbec8aad0bb2487486f3e945da3d18d",
+        "replay_sha256": "f66afa0f60ea02389fae5d0112426bcffdbec8aad0bb2487486f3e945da3d18d",
+        "byte_identical": true
+      },
+      {
+        "file": "transitions.csv",
+        "canonical_sha256": "8bfba6b20924f34a73fe119f3ed793c7ed537dcdd9104c41ca1fcf89e4928ae3",
+        "replay_sha256": "8bfba6b20924f34a73fe119f3ed793c7ed537dcdd9104c41ca1fcf89e4928ae3",
+        "byte_identical": true
+      },
+      {
+        "file": "unique_global_corners.csv",
+        "canonical_sha256": "62b365cb0cc57b7b6006d8f6f760021f7424b94d7b381b507aeed093a9664b58",
+        "replay_sha256": "62b365cb0cc57b7b6006d8f6f760021f7424b94d7b381b507aeed093a9664b58",
+        "byte_identical": true
+      }
+    ],
+    "replay_receipt_sha256": "cd1e03fbc075c25f6a4904ce278935dea8d23a2157162274835fca21fc911826",
+    "replay_receipt_byte_identical": true
+  },
+  "focused_tests": {
+    "argv": [
+      "pytest",
+      "-q",
+      "tests/test_cp02_protected_process_cohorts.py"
+    ],
+    "exit_code": 0,
+    "result": "4 passed"
+  },
+  "outputs": {
+    "source_file": "tools/cp02_protected_process_cohorts.py",
+    "test_file": "tests/test_cp02_protected_process_cohorts.py"
+  }
+}

@@ -1,0 +1,45 @@
+{
+  "contract_regression": {
+    "graph_stage_executed": false,
+    "maintained_roots_written": false,
+    "positive_checks": 2,
+    "receipt_sha256": "e32fd2f86e430c36fcc6cc5761e112279a77a051c1b24f83e2b0ab79a3d09e73",
+    "rejected_mutations": 7,
+    "status": "PASS_SCOPE_AND_PRESERVATION_MUTATIONS"
+  },
+  "go_for_freeze_and_isolated_stage": true,
+  "hash_only_count": 48,
+  "independent_kg_review_sha256": "d5ddfdc5dc148129269477bb2a16802fc99b35d6a2943c89629bd4035b28a488",
+  "maintained_snapshot_baseline": {
+    "Cloud-BAL": 126,
+    "KLAPS50": 122,
+    "total": 248
+  },
+  "no_maintained_writes": true,
+  "open_items": [
+    "Full strict process capture/replay and final independent scientific review are still pending; this KG source GO is not scientific or runtime approval."
+  ],
+  "residual_nonblocking_note": "The source worktree dirty-state hash is captured but intentionally not required to remain identical because the task adds source/evidence paths after baseline capture. The publisher compares unrelated dirty status immediately before versus after publication. Maintained-root dirty-state hashes remain strict against the 122/126 baseline.",
+  "resolved_findings": [
+    "The review and lock must contain exactly the 12 maintained Python/test paths.",
+    "At freeze, stage, validation and publish, selected-source and hash-only maps are compared exactly to the independent review.",
+    "The reused legacy stage helper is required as a hash-only dependency and is rechecked with all other frozen inputs.",
+    "Selection lock, stage receipt and both baseline writers use exclusive creation; symlinked frozen outputs are rejected.",
+    "Snapshot inventory transient filtering is aligned across capture, verification and stage inventory."
+  ],
+  "review_type": "read-only static source review plus bounded nonpublishing contract mutation regression",
+  "schema": "cp02_protected_process_kg_helper_source_review_v1",
+  "selected_source_count": 12,
+  "source_sha256": {
+    "docs/evidence/cp02_protected_process_20261106/kg/capture_baseline.py": "27f23fcea0b7a56d153ba321b891a222a66595e7c765821ac4bddaf185acbc17",
+    "docs/evidence/cp02_protected_process_20261106/kg/check_contract.py": "f12922181ef8a3c11360e3b6b0ee4ef6968cdcd933c78b4d9d6d0b18163901d4",
+    "docs/evidence/cp02_protected_process_20261106/kg/contract_regression.json": "e32fd2f86e430c36fcc6cc5761e112279a77a051c1b24f83e2b0ab79a3d09e73",
+    "docs/evidence/cp02_protected_process_20261106/kg/prepare_kg.py": "cb47039f264e04e00b03e868e51715157535b9af5ef21346c5d407121980849c",
+    "docs/evidence/cp02_protected_process_20261106/kg/publish_kg.py": "ab686fc10a8d93cb9b9c756aa4315bf50b7aeb1cc3569ad3d919b7d1f4d3133d",
+    "docs/evidence/cp02_protected_process_20261106/kg/validate_stage.py": "18a375561c98a897ef39b0dd0e361cf85110727032ff73f7e6f40be79f64e6ad",
+    "docs/evidence/cp02_protected_process_20261106/kg/verify_baseline.py": "31e76c044707a17cd4b34a4128eea251d13133640e959c76d50e0a72d5e58a53",
+    "docs/evidence/first_hour_zero_rate_20261030/kg/stage_kg.py": "83895596df409a8b6b6843c942891c8e7f464ac3d71caaae5ee40ad729fe77e3"
+  },
+  "status": "GO_SOURCE_AND_EVIDENCE_FREEZE",
+  "validation_summary": "Static review confirms 248 prior maintained snapshots are frozen and the publisher preflights targets, verifies readback, checks unrelated dirty paths, and reverse-rolls back written targets on exceptions. Contract mutation regression rejected all seven tested source-scope/map/preservation mutations. No graph stage, publication, or maintained-root write was performed."
+}

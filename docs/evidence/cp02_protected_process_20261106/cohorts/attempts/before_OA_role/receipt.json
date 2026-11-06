@@ -1,0 +1,70 @@
+{
+  "status": "COMPLETE",
+  "hours_utc": [
+    13,
+    14,
+    15,
+    16,
+    17,
+    18
+  ],
+  "thresholds_mm": [
+    0.1,
+    0.5,
+    1.0,
+    2.5,
+    5.0,
+    10.0
+  ],
+  "point_count_deduplicated": 145,
+  "role_membership_rows": 216,
+  "point_corner_rows": 580,
+  "unique_native_global_corners": 375,
+  "deduplicated_corner_overlap_count": 205,
+  "nearest_neighbor_rows": 10,
+  "role_counts": {
+    "plus2_XA_weak_gain": 2,
+    "plus2_XA_weak_loss": 10,
+    "plus2_XA_new_false_alarm": 33,
+    "plus2_XA_resolved_false_alarm": 30,
+    "plus2_OA_new_false_alarm": 53,
+    "plus2_OA_resolved_false_alarm": 24,
+    "plus2_prior_retained_controls": 10,
+    "plus5_C_A_weak_loss": 17,
+    "plus5_protected_weak_X_miss_A_hit_C_miss": 11,
+    "plus5_remaining_weak_loss_X_hit_A_hit_C_miss": 6,
+    "plus5_strong_protected_hit_12299": 1,
+    "plus5_C_strong_new_false_alarm": 12,
+    "plus5_protected_strong_X_FA_A_resolved_C_FA": 7
+  },
+  "inputs": {
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_13_arrays.npz": "5ab0cc484b1bd47c587e9f710a8d19072b383447b8a7aa4c0c0d8f22a2ae5354",
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_14_arrays.npz": "309706609edb4f40c6063aacabf86cea2a28aafff39d73d584cc41336e0941f9",
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_15_arrays.npz": "6ccac20f2d141b9ff270e5dde8bf219378e456ae073614f783d41d0d1abc8510",
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_16_arrays.npz": "0fa329fc68ece6ce1334d168b8eeb92c8c3404cbdae3a5db274aae3194052852",
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_17_arrays.npz": "b4e2c8bf84daee247ba632c53ebd556e3d40313a91e1ad144340f6c5c6fab982",
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_18_arrays.npz": "5b29e885d50be1fb306a1f1f16d5961a87650f76b3432ebb12c4bd835728090a",
+    "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_13_arrays.npz": "efdcbc493f23d7765a941b9cf6d08cee7ce339624a8465c5ed875f48dd42d8fe",
+    "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_14_arrays.npz": "f422d3820eefa19ac71787c9e52e40b8098d1955b3af9e7039fb492c92eae971",
+    "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_15_arrays.npz": "f41d559ef2553a80b4d999a95d2b57a025a01bbe8938345c5212a2ed5eba22e8",
+    "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_16_arrays.npz": "edb35029ea27ed3d97b8a5f2163fd76912953a6febfd15c424d2dd71b0968f34",
+    "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_17_arrays.npz": "209283740dc8c564d05d79c8ba40076bf2e48066f82135b16ba63313ee69de06",
+    "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_18_arrays.npz": "e2b49311cd4ded0072ddc5f9f3770bb070d728d946dcab7b74f969b164b70841",
+    "docs/evidence/cp02_failure_focus_20261105/targets/focus_membership.csv": "74a3667635442d0075a8af1689522c137b240249645a7a7ab86e8c09dfa88c8d",
+    "docs/evidence/cp02_rain_number_process_20261104/followup/analysis_dm065/bilinear_mapping.npz": "a57aab4e1c226f91cbb2ef2dfd3516f84de4446273c5abacdf91e9679c577b29"
+  },
+  "outputs": {
+    "categorical_scores.csv": "b6483f53b24e96cf5c75a9ef618b4c4090dcbb43f59198e9470c596bd4c0fe2f",
+    "nearest_neighbors.csv": "703fa0414a0e350094723aa346d83d4dd59dd575fcb5541e24627e8354f43ed7",
+    "point_corners.csv": "c9f6b3e145c747708bb4b70fadb5c2cd056a20db0011f56f08000a0f080d6258",
+    "role_membership.csv": "100720cd7730191973324a752a95ad1c0be196e385f6f25001ed23da9de05a1a",
+    "selected_points.csv": "6f25ba0a5667e9034d1fc715fc93985031c70a42abc43faa421dc88958f27da1",
+    "transitions.csv": "8bfba6b20924f34a73fe119f3ed793c7ed537dcdd9104c41ca1fcf89e4928ae3",
+    "unique_global_corners.csv": "930ed6c80fe61e12e4370fd65c376f528dc2219d3c43bd6a5e8e1d77a81e2ef1"
+  },
+  "limitations": [
+    "Cohort and score extraction uses frozen paired 3,688-point arrays.",
+    "Native stencil indices/weights are reused from the pinned canonical bilinear mapping; runtime process state is not inferred.",
+    "Neighborhood counts include the evaluated canonical point grid and describe geographic context only."
+  ]
+}

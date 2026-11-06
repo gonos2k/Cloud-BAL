@@ -1,0 +1,59 @@
+{
+  "components": {
+    "between_call_E": "delta_between_call_sum; not pure transport",
+    "internal_L": "delta_call_internal_sum",
+    "phase8_minus_phase6": "main within-call state update sum",
+    "remaining_internal": "remaining_call_internal_sum",
+    "sedimentation_or_condensation": "field-specific captured substep"
+  },
+  "fields": {
+    "QR": "mg kg-1 (1e6 scaling from kg kg-1)",
+    "QV": "mg kg-1 (1e6 scaling from kg kg-1)",
+    "TK": "K"
+  },
+  "font_sha256": "48a28e97b34fc8e5b157657633670cd1b7de126cfc414da65ce9c3d5bc8be733",
+  "inputs": {
+    "cohort_receipt_sha256": "cd1e03fbc075c25f6a4904ce278935dea8d23a2157162274835fca21fc911826",
+    "collector_receipt_sha256": {
+      "FIX": "e819aba760bc53c0927f6bd9f66ea98fcdd7e10f0da6a98f17457c2ff9184fc0",
+      "OLD": "f28cab85b3efc9c89ef13460490b582ba5d21cfe4c3994d5b4cd8b5453d38454"
+    },
+    "full_launch_receipt_sha256": "41a1d6e8dd2b0821dc03bdc6927465513c31e877981497eb795ad349284201e5",
+    "role_membership_sha256": "54cbe13a13a7494fdaf10159919c480f90dfad26dcdcf8337735828d05132cb6",
+    "summary_ledger_sha256": "9231038aaa9a98680a08a83cf85f663c651b76a0d6adc0186e3d6b92bb9cf512",
+    "summary_receipt_sha256": "db80aca32dcd3669c77966d6aed1b4d4a36ac51febd369a644b12b066535a322",
+    "summary_tool_sha256": "77945c25b8ca369e451af9f54f81a5c4dc384c70c9166c71b5837e2c5fded895"
+  },
+  "interpretation_limits": [
+    "Each profile is summed over actual hourly calls at fixed native k; there is no vertical sum.",
+    "Within a captured one-loop call, source order is sedimentation, surface accumulator, main phase 5–8 update, later microphysical adjustments, phase 11–12 condensation, threshold/number cleanup, optional PSD reconstruction, then wrapper return.",
+    "Internal L is the total internal-call change; other internal components are its breakdown and must not be added to L.",
+    "Between-call E is net change between call return and following entry; it is not pure advection.",
+    "Missing conditional sedimentation stays null and plots as a gap, not zero.",
+    "Two selected points illustrate the frozen roles and do not represent all 150 cohort points.",
+    "No column/domain water conservation or causal precipitation fraction is claimed."
+  ],
+  "outputs": {
+    "two_point_process_components.png": "b781ad22b628d6cafb42d111d83fb5c08b7d330ef44f4a91160009e08396ca97"
+  },
+  "points": {
+    "RN1_10942": {
+      "actual_steps": [
+        181,
+        360
+      ],
+      "lead_hour": 2,
+      "role": "plus2_OA_weak_loss"
+    },
+    "RN1_12299": {
+      "actual_steps": [
+        721,
+        900
+      ],
+      "lead_hour": 5,
+      "role": "plus5_strong_protected_hit_12299"
+    }
+  },
+  "schema": "cp02_protected_process_native_figure_v1",
+  "status": "PASS"
+}

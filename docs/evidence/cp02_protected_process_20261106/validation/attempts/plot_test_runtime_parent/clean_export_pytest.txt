@@ -1,0 +1,230 @@
+Running 455 items in this shard
+........................................................................ [ 15%]
+........................................................................ [ 31%]
+........................................................................ [ 47%]
+........................................................................ [ 63%]
+........................................................................ [ 79%]
+........................................................................ [ 94%]
+........FF.FFF.........                                                  [100%]
+=================================== FAILURES ===================================
+________________ test_rejects_changed_receipt_bound_cohort_csv _________________
+
+    def test_rejects_changed_receipt_bound_cohort_csv():
+>       scratch = scratch_dir()
+
+tests/test_plot_cp02_protected_process.py:35: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_plot_cp02_protected_process.py:19: in scratch_dir
+    return Path(tempfile.mkdtemp(prefix='plot-protected-test-', dir=p.RUNTIME))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+suffix = '', prefix = 'plot-protected-test-'
+dir = PosixPath('/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/validation/runtime')
+
+    def mkdtemp(suffix=None, prefix=None, dir=None):
+        """User-callable function to create and return a unique temporary
+        directory.  The return value is the pathname of the directory.
+    
+        Arguments are as for mkstemp, except that the 'text' argument is
+        not accepted.
+    
+        The directory is readable, writable, and searchable only by the
+        creating user.
+    
+        Caller is responsible for deleting the directory when done with it.
+        """
+    
+        prefix, suffix, dir, output_type = _sanitize_params(prefix, suffix, dir)
+    
+        names = _get_candidate_names()
+        if output_type is bytes:
+            names = map(_os.fsencode, names)
+    
+        for seq in range(TMP_MAX):
+            name = next(names)
+            file = _os.path.join(dir, prefix + name + suffix)
+            _sys.audit("tempfile.mkdtemp", file)
+            try:
+>               _os.mkdir(file, 0o700)
+E               FileNotFoundError: [Errno 2] No such file or directory: '/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/validation/runtime/plot-protected-test-rwyrb7q5'
+
+/usr/lib/python3.12/tempfile.py:523: FileNotFoundError
+______________________ test_rejects_missing_context_table ______________________
+
+    def test_rejects_missing_context_table():
+>       scratch = scratch_dir()
+
+tests/test_plot_cp02_protected_process.py:47: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_plot_cp02_protected_process.py:19: in scratch_dir
+    return Path(tempfile.mkdtemp(prefix='plot-protected-test-', dir=p.RUNTIME))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+suffix = '', prefix = 'plot-protected-test-'
+dir = PosixPath('/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/validation/runtime')
+
+    def mkdtemp(suffix=None, prefix=None, dir=None):
+        """User-callable function to create and return a unique temporary
+        directory.  The return value is the pathname of the directory.
+    
+        Arguments are as for mkstemp, except that the 'text' argument is
+        not accepted.
+    
+        The directory is readable, writable, and searchable only by the
+        creating user.
+    
+        Caller is responsible for deleting the directory when done with it.
+        """
+    
+        prefix, suffix, dir, output_type = _sanitize_params(prefix, suffix, dir)
+    
+        names = _get_candidate_names()
+        if output_type is bytes:
+            names = map(_os.fsencode, names)
+    
+        for seq in range(TMP_MAX):
+            name = next(names)
+            file = _os.path.join(dir, prefix + name + suffix)
+            _sys.audit("tempfile.mkdtemp", file)
+            try:
+>               _os.mkdir(file, 0o700)
+E               FileNotFoundError: [Errno 2] No such file or directory: '/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/validation/runtime/plot-protected-test-9p0rh1np'
+
+/usr/lib/python3.12/tempfile.py:523: FileNotFoundError
+________ test_rejects_population_mismatch_even_with_updated_table_hash _________
+
+    def test_rejects_population_mismatch_even_with_updated_table_hash():
+>       scratch = scratch_dir()
+
+tests/test_plot_cp02_protected_process.py:74: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_plot_cp02_protected_process.py:19: in scratch_dir
+    return Path(tempfile.mkdtemp(prefix='plot-protected-test-', dir=p.RUNTIME))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+suffix = '', prefix = 'plot-protected-test-'
+dir = PosixPath('/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/validation/runtime')
+
+    def mkdtemp(suffix=None, prefix=None, dir=None):
+        """User-callable function to create and return a unique temporary
+        directory.  The return value is the pathname of the directory.
+    
+        Arguments are as for mkstemp, except that the 'text' argument is
+        not accepted.
+    
+        The directory is readable, writable, and searchable only by the
+        creating user.
+    
+        Caller is responsible for deleting the directory when done with it.
+        """
+    
+        prefix, suffix, dir, output_type = _sanitize_params(prefix, suffix, dir)
+    
+        names = _get_candidate_names()
+        if output_type is bytes:
+            names = map(_os.fsencode, names)
+    
+        for seq in range(TMP_MAX):
+            name = next(names)
+            file = _os.path.join(dir, prefix + name + suffix)
+            _sys.audit("tempfile.mkdtemp", file)
+            try:
+>               _os.mkdir(file, 0o700)
+E               FileNotFoundError: [Errno 2] No such file or directory: '/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/validation/runtime/plot-protected-test-d3iz4rft'
+
+/usr/lib/python3.12/tempfile.py:523: FileNotFoundError
+___________ test_failed_asset_render_does_not_publish_partial_bundle ___________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fbf9646de80>
+
+    def test_failed_asset_render_does_not_publish_partial_bundle(monkeypatch):
+>       scratch = scratch_dir()
+
+tests/test_plot_cp02_protected_process.py:103: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_plot_cp02_protected_process.py:19: in scratch_dir
+    return Path(tempfile.mkdtemp(prefix='plot-protected-test-', dir=p.RUNTIME))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+suffix = '', prefix = 'plot-protected-test-'
+dir = PosixPath('/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/validation/runtime')
+
+    def mkdtemp(suffix=None, prefix=None, dir=None):
+        """User-callable function to create and return a unique temporary
+        directory.  The return value is the pathname of the directory.
+    
+        Arguments are as for mkstemp, except that the 'text' argument is
+        not accepted.
+    
+        The directory is readable, writable, and searchable only by the
+        creating user.
+    
+        Caller is responsible for deleting the directory when done with it.
+        """
+    
+        prefix, suffix, dir, output_type = _sanitize_params(prefix, suffix, dir)
+    
+        names = _get_candidate_names()
+        if output_type is bytes:
+            names = map(_os.fsencode, names)
+    
+        for seq in range(TMP_MAX):
+            name = next(names)
+            file = _os.path.join(dir, prefix + name + suffix)
+            _sys.audit("tempfile.mkdtemp", file)
+            try:
+>               _os.mkdir(file, 0o700)
+E               FileNotFoundError: [Errno 2] No such file or directory: '/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/validation/runtime/plot-protected-test-5c1e21z_'
+
+/usr/lib/python3.12/tempfile.py:523: FileNotFoundError
+__________ test_preserved_replacement_carries_and_binds_prior_attempt __________
+
+monkeypatch = <_pytest.monkeypatch.MonkeyPatch object at 0x7fbf9646c230>
+
+    def test_preserved_replacement_carries_and_binds_prior_attempt(monkeypatch):
+>       scratch = scratch_dir()
+
+tests/test_plot_cp02_protected_process.py:121: 
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+tests/test_plot_cp02_protected_process.py:19: in scratch_dir
+    return Path(tempfile.mkdtemp(prefix='plot-protected-test-', dir=p.RUNTIME))
+_ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ _ 
+
+suffix = '', prefix = 'plot-protected-test-'
+dir = PosixPath('/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/validation/runtime')
+
+    def mkdtemp(suffix=None, prefix=None, dir=None):
+        """User-callable function to create and return a unique temporary
+        directory.  The return value is the pathname of the directory.
+    
+        Arguments are as for mkstemp, except that the 'text' argument is
+        not accepted.
+    
+        The directory is readable, writable, and searchable only by the
+        creating user.
+    
+        Caller is responsible for deleting the directory when done with it.
+        """
+    
+        prefix, suffix, dir, output_type = _sanitize_params(prefix, suffix, dir)
+    
+        names = _get_candidate_names()
+        if output_type is bytes:
+            names = map(_os.fsencode, names)
+    
+        for seq in range(TMP_MAX):
+            name = next(names)
+            file = _os.path.join(dir, prefix + name + suffix)
+            _sys.audit("tempfile.mkdtemp", file)
+            try:
+>               _os.mkdir(file, 0o700)
+E               FileNotFoundError: [Errno 2] No such file or directory: '/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/validation/runtime/plot-protected-test-j0f7k754'
+
+/usr/lib/python3.12/tempfile.py:523: FileNotFoundError
+=========================== short test summary info ============================
+FAILED tests/test_plot_cp02_protected_process.py::test_rejects_changed_receipt_bound_cohort_csv
+FAILED tests/test_plot_cp02_protected_process.py::test_rejects_missing_context_table
+FAILED tests/test_plot_cp02_protected_process.py::test_rejects_population_mismatch_even_with_updated_table_hash
+FAILED tests/test_plot_cp02_protected_process.py::test_failed_asset_render_does_not_publish_partial_bundle
+FAILED tests/test_plot_cp02_protected_process.py::test_preserved_replacement_carries_and_binds_prior_attempt
+5 failed, 450 passed in 82.43s (0:01:22)
