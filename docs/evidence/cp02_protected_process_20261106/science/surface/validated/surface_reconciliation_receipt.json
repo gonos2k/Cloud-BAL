@@ -1,0 +1,228 @@
+{
+  "capture_plan_sha256": "9183bd9f6bf7d0781cb6793d7f88e7ad6e44d2adb166e065c923bb0b7e67434e",
+  "capture_root": "../runtime/native/analysis/full_v5_retry1",
+  "cohort_receipt_sha256": "cd1e03fbc075c25f6a4904ce278935dea8d23a2157162274835fca21fc911826",
+  "collector_receipt_sha256": {
+    "FIX": "9d852d396c037d633b1c000c94170516ed290eb7a56592335c1f3df423294914",
+    "OLD": "3778e4db7e661eb3f502235a9f5328e7b90254a80a11bd0ec0f93ed210510cd9"
+  },
+  "collector_tool_sha256": {
+    "FIX": "c0c59c3d328a95168db14022772d52eae212cc38ae8f64d4e784f5df0ca490b9",
+    "OLD": "c0c59c3d328a95168db14022772d52eae212cc38ae8f64d4e784f5df0ca490b9"
+  },
+  "frozen_score_analysis_plan_sha256": "c14da5350a21957eea0e320e5b6cb4da3c8ca82430c38b98cfc096c0c4b24d6f",
+  "frozen_score_array_receipt_sha256": {
+    "grouped": "53cdf3da71cd47114f8e0806b47987b0b1d9b15128a91a127ce873cd921c8839",
+    "weak_strong": "c04e2e6002d043ec1624d7bc2145e78fed9a4173487251e4ce472c963094c0ae"
+  },
+  "full_run_history_status": "PASS_ALL_12_ARM_HOUR_COMPARISONS",
+  "full_run_receipt_sha256": "41a1d6e8dd2b0821dc03bdc6927465513c31e877981497eb795ad349284201e5",
+  "full_science_scope": "150 selected points \u00d7 five forecast-hour windows \u00d7 two actual arms; component increments are hourly history differences at native corners, promoted to float64 before bilinear interpolation.",
+  "history_input_sha256": {
+    "FIX": {
+      "12": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+      "13": "8b4ead8741dff7284b1de140038d85ba48a474d6b8b98e1905e10ddbac165702",
+      "14": "e4c2ef230a1e3574390a015945fdc051673c345156e9360bc8a54a3922561208",
+      "15": "d18f896ef731e6f50e88f51c794a70968b9c1a49bb89bb9d1ee45e1154b9a989",
+      "16": "079e93d0799f31632f7246041e31d0a81aa45882852f776d5e5f9e948ec0f99c",
+      "17": "b65652da14f58f352ae52f2126eaaff6c48b822ebc54dc64a2238c6b835a8114"
+    },
+    "OLD": {
+      "12": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+      "13": "8159eb06ca85695c533de590c27d9274c4fec4c31a11aeff58516171dae11468",
+      "14": "bb0afd836d622d06eef78c445c80c4544e879cfa6963f7932882e86309117ff5",
+      "15": "328cf6e21f5bff3f7098ad5a3690e5096b50be214555ae7d477134aa6e204eda",
+      "16": "9fffef1bc00fb9a64e718a5f958ced9b9e393febc348b909e3fdc5bd4a828dcf",
+      "17": "a6333e706c2d007d4ed7afce0e24a9b34b0ffbcf853c020de816c8cdc89933d2"
+    }
+  },
+  "limits": [
+    "KDM6 cumulative surface rain is compared with RAINNC only; RAINC is retained as a separate convective history component.",
+    "The hourly table is derived from actual full-run histories and checked against frozen X/A score arrays.",
+    "This is a selected-point precipitation-component reconciliation, not a full-grid closure or causal source attribution."
+  ],
+  "native_surface_endpoint_checks": {
+    "FIX": {
+      "1": {
+        "bitwise_equal_to_RAINNC": true,
+        "history_hour_utc": 13,
+        "mismatch_count": 0,
+        "native_columns": 381
+      },
+      "2": {
+        "bitwise_equal_to_RAINNC": true,
+        "history_hour_utc": 14,
+        "mismatch_count": 0,
+        "native_columns": 381
+      },
+      "3": {
+        "bitwise_equal_to_RAINNC": true,
+        "history_hour_utc": 15,
+        "mismatch_count": 0,
+        "native_columns": 381
+      },
+      "4": {
+        "bitwise_equal_to_RAINNC": true,
+        "history_hour_utc": 16,
+        "mismatch_count": 0,
+        "native_columns": 381
+      },
+      "5": {
+        "bitwise_equal_to_RAINNC": true,
+        "history_hour_utc": 17,
+        "mismatch_count": 0,
+        "native_columns": 381
+      }
+    },
+    "OLD": {
+      "1": {
+        "bitwise_equal_to_RAINNC": true,
+        "history_hour_utc": 13,
+        "mismatch_count": 0,
+        "native_columns": 381
+      },
+      "2": {
+        "bitwise_equal_to_RAINNC": true,
+        "history_hour_utc": 14,
+        "mismatch_count": 0,
+        "native_columns": 381
+      },
+      "3": {
+        "bitwise_equal_to_RAINNC": true,
+        "history_hour_utc": 15,
+        "mismatch_count": 0,
+        "native_columns": 381
+      },
+      "4": {
+        "bitwise_equal_to_RAINNC": true,
+        "history_hour_utc": 16,
+        "mismatch_count": 0,
+        "native_columns": 381
+      },
+      "5": {
+        "bitwise_equal_to_RAINNC": true,
+        "history_hour_utc": 17,
+        "mismatch_count": 0,
+        "native_columns": 381
+      }
+    }
+  },
+  "output": {
+    "first_call_boundaries.json": {
+      "sha256": "1c51101f255bf232812f7c7935ad5069125a27067c4ef55e0ac9f05d3c6643e4",
+      "size_bytes": 19993
+    },
+    "point_hourly_surface_components.csv": {
+      "sha256": "26b3ca8f3a662b60959cc83044ac284baf3b3e618cf4881be25e3e10ee892615",
+      "size_bytes": 244452
+    },
+    "surface_reconciliation_packet.npz": {
+      "sha256": "bd89b598294dc4ebd12b31e37e1862e9596448249efe2b2ecace4ecbb631960c",
+      "size_bytes": 48776
+    }
+  },
+  "portable_packet": {
+    "history_endpoints_per_arm": 6,
+    "native_columns": 381,
+    "path": "surface_reconciliation_packet.npz",
+    "point_corner_shape": [
+      150,
+      4
+    ],
+    "selected_points": 150,
+    "sha256": "bd89b598294dc4ebd12b31e37e1862e9596448249efe2b2ecace4ecbb631960c",
+    "size_bytes": 48776
+  },
+  "producer_sha256": "ef7e239c4fcb7be79ad4d31d96d0f9478b4143c849af6feb2a173277e933b8b5",
+  "quick_plan_sha256": "d8fbf329e658b292d9710617b9b501bf47bcbe89585fe9759095162656d40d28",
+  "schema": "cp02_protected_process_surface_reconciliation_v1",
+  "schema_sha256": "677847102d32b1637340d94bcd24c3856d63348bd15ceb0a319d8b5eda8ff25c",
+  "score_array_comparison": {
+    "absolute_tolerance_mm": 1e-12,
+    "diagnostics": {
+      "FIX": {
+        "exact_matches": 378,
+        "max_absolute_difference_mm": 5.329070518200751e-15,
+        "mean_absolute_difference_mm": 9.79481437658265e-17,
+        "rows": 750
+      },
+      "OLD": {
+        "exact_matches": 356,
+        "max_absolute_difference_mm": 5.773159728050814e-15,
+        "mean_absolute_difference_mm": 8.078784789200447e-17,
+        "rows": 750
+      }
+    },
+    "frozen_cases": {
+      "FIX": "IMPROVED_BG_FIXED",
+      "OLD": "ORIGINAL_B1_100"
+    },
+    "lead_hours": [
+      1,
+      2,
+      3,
+      4,
+      5
+    ],
+    "population_per_arm": 150,
+    "value": "hourly total (RAINNC + RAINC), not 0-to-lead cumulative"
+  },
+  "source_generation_receipt_sha256": "7ed9bf6189249468695e5ce4784f3733d04eed41dae95b3cb31bb46d6bc0ae37",
+  "status": "PASS_SURFACE_HISTORY_AND_FROZEN_ARRAY_RECONCILIATION",
+  "surface_channel_inputs": {
+    "FIX": {
+      "1": {
+        "path": "../runtime/native/analysis/full_v5_retry1/FIX/surface_rain_cumulative/lead_01/surface_rain_cumulative.npz",
+        "sha256": "aee5b97b58609ac6c1b2f95d0e5b600ecb8a85a2a0939942f5691772403105cd",
+        "size_bytes": 367245
+      },
+      "2": {
+        "path": "../runtime/native/analysis/full_v5_retry1/FIX/surface_rain_cumulative/lead_02/surface_rain_cumulative.npz",
+        "sha256": "0e5e77284435036b1d859fc7fddb5735e5daef55e5daa9abc0e0d92c795365ca",
+        "size_bytes": 407189
+      },
+      "3": {
+        "path": "../runtime/native/analysis/full_v5_retry1/FIX/surface_rain_cumulative/lead_03/surface_rain_cumulative.npz",
+        "sha256": "80a108f510dd3ba9b33540963fb82145bcf4234d69769bfd7f99d0468f6a082f",
+        "size_bytes": 383030
+      },
+      "4": {
+        "path": "../runtime/native/analysis/full_v5_retry1/FIX/surface_rain_cumulative/lead_04/surface_rain_cumulative.npz",
+        "sha256": "0592d03548ab792ef761bc20b8c29c339ea099fb55996a673301d885f79a2fca",
+        "size_bytes": 289868
+      },
+      "5": {
+        "path": "../runtime/native/analysis/full_v5_retry1/FIX/surface_rain_cumulative/lead_05/surface_rain_cumulative.npz",
+        "sha256": "76bc30ef6a26ae504ab24b415f4508916707c24db9a2c0632b047b9007fd7787",
+        "size_bytes": 287482
+      }
+    },
+    "OLD": {
+      "1": {
+        "path": "../runtime/native/analysis/full_v5_retry1/OLD/surface_rain_cumulative/lead_01/surface_rain_cumulative.npz",
+        "sha256": "3a038e411e8fef66e8dc665ba1c6bb558b09f5d7f681d07f268cbe427dbfa82a",
+        "size_bytes": 171260
+      },
+      "2": {
+        "path": "../runtime/native/analysis/full_v5_retry1/OLD/surface_rain_cumulative/lead_02/surface_rain_cumulative.npz",
+        "sha256": "f1465eb8147f169590cab8cd188dbdac6f66667256b63d94e701d060b0dd8261",
+        "size_bytes": 363272
+      },
+      "3": {
+        "path": "../runtime/native/analysis/full_v5_retry1/OLD/surface_rain_cumulative/lead_03/surface_rain_cumulative.npz",
+        "sha256": "096f0b6aab966f7124ca0d48705290192858a057baf29322dd3bf937905ccb43",
+        "size_bytes": 394376
+      },
+      "4": {
+        "path": "../runtime/native/analysis/full_v5_retry1/OLD/surface_rain_cumulative/lead_04/surface_rain_cumulative.npz",
+        "sha256": "7c574044f6e864b052ee5693590d23d3a4ba0d75b7b1e14c395338e3a2111ce4",
+        "size_bytes": 293019
+      },
+      "5": {
+        "path": "../runtime/native/analysis/full_v5_retry1/OLD/surface_rain_cumulative/lead_05/surface_rain_cumulative.npz",
+        "sha256": "8e7a4b8596decb9bb1deb9b244d1b15a8a4a0048259d11fdfbe59f88bc66d75a",
+        "size_bytes": 283554
+      }
+    }
+  }
+}

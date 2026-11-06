@@ -1,0 +1,61 @@
+{
+  "cohort_receipt_sha256": "cd1e03fbc075c25f6a4904ce278935dea8d23a2157162274835fca21fc911826",
+  "csv_sources": {
+    "categorical_scores.csv": "b6483f53b24e96cf5c75a9ef618b4c4090dcbb43f59198e9470c596bd4c0fe2f",
+    "receipt.json": "cd1e03fbc075c25f6a4904ce278935dea8d23a2157162274835fca21fc911826",
+    "transitions.csv": "8bfba6b20924f34a73fe119f3ed793c7ed537dcdd9104c41ca1fcf89e4928ae3"
+  },
+  "generator_sha256": "30323dd13ccd59837226a3ec89f6f3a997ec673fd104ab2db6723d6deacacea0",
+  "outputs": {
+    "FULL_SCORES.md": "334c75a38dd3bb670c0143652cd4fe97c94ae7c60a610258526df8ea31001d7c"
+  },
+  "raw_array_sources": {
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_13_arrays.npz": "5ab0cc484b1bd47c587e9f710a8d19072b383447b8a7aa4c0c0d8f22a2ae5354",
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_14_arrays.npz": "309706609edb4f40c6063aacabf86cea2a28aafff39d73d584cc41336e0941f9",
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_15_arrays.npz": "6ccac20f2d141b9ff270e5dde8bf219378e456ae073614f783d41d0d1abc8510",
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_16_arrays.npz": "0fa329fc68ece6ce1334d168b8eeb92c8c3404cbdae3a5db274aae3194052852",
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_17_arrays.npz": "b4e2c8bf84daee247ba632c53ebd556e3d40313a91e1ad144340f6c5c6fab982",
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_18_arrays.npz": "5b29e885d50be1fb306a1f1f16d5961a87650f76b3432ebb12c4bd835728090a"
+  },
+  "schema": "cp02_protected_process_full_scores_v2",
+  "scope": {
+    "aggregation": "none",
+    "comparisons": [
+      "ORIGINAL_to_FIX",
+      "X_to_A"
+    ],
+    "hours_utc": [
+      13,
+      14,
+      15,
+      16,
+      17,
+      18
+    ],
+    "metrics": [
+      "H",
+      "M",
+      "F",
+      "CSI",
+      "delta_CSI_FIX_minus_OLD"
+    ],
+    "n_grid_points_each_row": 3688,
+    "rows": 72,
+    "thresholds_mm": [
+      0.1,
+      0.5,
+      1.0,
+      2.5,
+      5.0,
+      10.0
+    ]
+  },
+  "status": "PASS_INDEPENDENT_OLD_FIX_RECOUNT",
+  "validation": {
+    "all_contingency_counts_sum_to_3688": true,
+    "fix_scores_match_raw_arrays": true,
+    "old_scores_reconstructed_from_transitions_and_match_raw_arrays": true,
+    "rows_independently_verified": 72,
+    "transition_counts_match_raw_paired_arrays": true
+  }
+}

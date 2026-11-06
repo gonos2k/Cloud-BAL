@@ -1,0 +1,62 @@
+{
+  "base_commit": "8e820867",
+  "context_bundle_receipt_sha256": "8faf1ae646279e9bce55472cbd8930997cbc1fd7ca6db06bfa0fb1ff45d11077",
+  "context_csvs": {
+    "cohort_physical_contrasts.csv": {
+      "byte_equal_to_prior": true,
+      "sha256": "77518c2415f33c0ec1185369b348167c178c464c0e8ae121022fbc8d1af78fb9"
+    },
+    "cohort_surface_context.csv": {
+      "byte_equal_to_prior": true,
+      "sha256": "a0ed07209c87791eccb77bf0dbf666ca1769fb6286eb61cf4b2e335b02e39f3c"
+    },
+    "cohort_surface_context_summary.csv": {
+      "byte_equal_to_prior": true,
+      "sha256": "1ec81cff556ebed14f5db055f6cdeded0a6f837de9bb425a32bc507a7787045c"
+    },
+    "layer_features.csv": {
+      "byte_equal_to_prior": true,
+      "sha256": "e803b41412a1ce2963d9f25b2582c5ae32cc9f8b3e3b0a66f827d53d09db5778"
+    },
+    "point_surface_paths.csv": {
+      "byte_equal_to_prior": true,
+      "sha256": "1cdbc58119ec50221f239f841b35fb84bf49686fcf68aeb3728c9288bd0b999b"
+    }
+  },
+  "focused_tests": "python -m pytest -q tests/test_cp02_b1_failure_context.py: 6 passed",
+  "historical_renderer_reproduction": "PASS; 5 context CSVs, 5 PNGs, and offline ZIP inventory matched",
+  "input_use": "Reused the 28 sealed case-hour NPZ archives; no history re-extraction.",
+  "native_validation": "Not applicable; no native source changes.",
+  "preserved_prior_versions": {
+    "tests/test_cp02_b1_failure_context.py": {
+      "matches_base_commit": true,
+      "path": "prior_versions/test_cp02_b1_failure_context.py",
+      "sha256": "2414434c9d0d3591de18282fd4da4448cee17c4a108ab24cb999abb0cbcf448b"
+    },
+    "tools/cp02_b1_failure_context.py": {
+      "matches_base_commit": true,
+      "path": "prior_versions/cp02_b1_failure_context.py",
+      "sha256": "fb8bc9a09b674077c8ca888f2fa6acfc3c22073e3305012a2562afcc8a54bc14"
+    }
+  },
+  "schema": "cp02_protected_process_residual_fix_validation_v1",
+  "source_receipt_binding_for_prior_context_renderer": {
+    "prior_context_assets_modified": false,
+    "prior_context_receipt_path": "docs/evidence/cp02_failure_focus_20261105/context/bundle_receipt.json",
+    "prior_context_receipt_sha256": "a63d4b0d43f94b7456a9ebd8dde68b1616aec521f28bab04e73ee8d48c3e014e",
+    "prior_source_alias": "prior_versions/cp02_b1_failure_context.py",
+    "renderer_path": "tools/plot_cp02_b1_failure_focus.py",
+    "renderer_sha256": "03237006d9d86c11dbd93d8dd9d6365c0584104d44536f44d167a22be7486705"
+  },
+  "source_sha256": "a790381f172cca1f1f1e4db79600ddd22a3d8d1e78bef29351ba285d542cf796",
+  "status": "PASS",
+  "surface_score_checks": {
+    "count": 24,
+    "independently_recomputed_from_point_surface_paths_csv": true,
+    "rows_each": 270,
+    "unpaired_case": "B1_OLD_KDM6",
+    "unpaired_max_abs_residual_mm": null,
+    "unpaired_verification": "state_receipt_only_no_score_arm"
+  },
+  "test_sha256": "f959cce3a14feaa70a1857a87ab3ad518bcc02ceb7eb810cfccfb082e41631a4"
+}

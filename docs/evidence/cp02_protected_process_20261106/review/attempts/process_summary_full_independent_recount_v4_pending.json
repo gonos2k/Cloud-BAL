@@ -1,0 +1,54 @@
+{
+  "schema": "cp02_protected_process_full_summary_independent_recount_v1",
+  "status": "PASS_V4_FULL_COMPACT_INPUT_AND_OUTPUT_RECOUNT_PENDING_V5_RECHECK",
+  "scope": "Independent read-only validation of the V4 packaged compact NPZ channels and every row/value in the three fixed-k summary outputs. Recomputed directly from the compact arrays without importing the summary tool. V4 capture is provisional because a generic optional phase-channel name collision was subsequently identified; core state/rate channels used here are expected unchanged, but root requires byte-identical V5 core-channel verification and a fresh summary before publication.",
+  "bindings": {
+    "full_run_receipt_sha256": "41a1d6e8dd2b0821dc03bdc6927465513c31e877981497eb795ad349284201e5",
+    "compact_package_receipt_sha256": "371a601789096e1094971589bd4bde9412b22e3ad3ef178f44358e4a09912102",
+    "compact_package_status": "EXACT_SOURCE_CHANNEL_SUBSET_VERIFIED",
+    "compact_channel_count": 130,
+    "compact_total_channel_bytes": 820732670,
+    "compact_arm_capture_receipt_sha256": {
+      "OLD": "f28cab85b3efc9c89ef13460490b582ba5d21cfe4c3994d5b4cd8b5453d38454",
+      "FIX": "e819aba760bc53c0927f6bd9f66ea98fcdd7e10f0da6a98f17457c2ff9184fc0"
+    },
+    "summary_tool_sha256": "77945c25b8ca369e451af9f54f81a5c4dc384c70c9166c71b5837e2c5fded895",
+    "summary_receipt_sha256": "db80aca32dcd3669c77966d6aed1b4d4a36ac51febd369a644b12b066535a322",
+    "summary_outputs": {
+      "point_level_process_ledger.csv": "9231038aaa9a98680a08a83cf85f663c651b76a0d6adc0186e3d6b92bb9cf512",
+      "point_level_nominal_rates.csv": "7a234a737b85be201722006a8ebeb1e2261296485da27ecb7624a40f1fcf3bdf",
+      "group_level_process_profiles.csv": "1661aa751a05213d71f296b9a467fd28c786424f0c79c84ba7322f08cc1d09bb"
+    }
+  },
+  "recount_results": {
+    "input_channel_hashes_rechecked_against_package_and_arm_capture_receipts": 130,
+    "process_ledger_rows": 70200,
+    "process_ledger_numeric_cells_recomputed_exactly": 508950,
+    "process_ledger_max_absolute_difference": 0.0,
+    "process_ledger_null_masks_and_paired_sedimentation_counts_match": true,
+    "nominal_rate_rows": 35100,
+    "nominal_rate_numeric_cells_recomputed_exactly": 105300,
+    "nominal_rate_max_absolute_difference": 0.0,
+    "group_profile_rows": 7020,
+    "group_profile_quantile_cells_recomputed_exactly": 210600,
+    "group_profile_max_absolute_difference": 0.0
+  },
+  "independent_methods": [
+    "Recomputed the FIX-minus-OLD call-internal sum, between-call net sum, endpoint change, and telescoping residual over each contiguous 180-step interval for hours 1, 2, and 5, retaining all 39 native levels and 150 selected points.",
+    "Recomputed phase 8 minus phase 6 and phase 12 minus phase 11 sums directly from the paired compact channel arrays; QR sedimentation remained a separately paired optional term.",
+    "Recomputed PREVP, PRAUT, and PRACW nominal rate integrals by multiplying native float32 rates by native float32 dtcld first, then applying the pinned four-corner point weights and summing time at fixed native k.",
+    "Rebuilt role-level fixed-k quantiles from the full ledger table and pinned role membership, checking every finite count and all q25/median/q75 values."
+  ],
+  "limits": [
+    "This receipt describes V4 collector inputs/outputs only. Do not treat it as the final V5 publication review until the 130 core NPZs are proven byte-identical and the summary is refreshed against V5 collector receipts.",
+    "This validates bookkeeping and exact output reproducibility; it is not a new physical attribution or a column/domain conservation closure.",
+    "PREVP/PRAUT/PRACW integrals are nominal source terms, not observed net state changes or causal precipitation fractions.",
+    "Between-call changes remain net external operations; no ledger bridges steps 361 through 720.",
+    "Role memberships overlap, points are spatially correlated, and group quantiles of components do not generally add."
+  ],
+  "validation": {
+    "summary_output_recount": "PASS",
+    "compact_source_hash_reconciliation": "PASS",
+    "tests_run_by_reviewer": false
+  }
+}

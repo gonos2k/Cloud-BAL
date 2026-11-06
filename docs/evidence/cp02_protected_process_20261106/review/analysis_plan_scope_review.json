@@ -1,0 +1,19 @@
+{
+  "status": "GO_READONLY_DIAGNOSTIC_SCOPE",
+  "reviewed_plan": "docs/evidence/cp02_protected_process_20261106/analysis_plan.json",
+  "reviewed_plan_sha256": "c14da5350a21957eea0e320e5b6cb4da3c8ca82430c38b98cfc096c0c4b24d6f",
+  "reviewed_base_commit": "8e8208672092c2f4169fe617bc3b4d9f379e69ae",
+  "checks": {
+    "retains_B1_and_declares_no_candidate": true,
+    "all_19_frozen_source_pins_match_size_and_sha256": true,
+    "separates_whole_population_from_ORIGINAL_selected_conditional_cohorts": true,
+    "preserves_26_adoption_11_protection_15_recovery_conditions": true,
+    "preserves_six_leads_six_thresholds_and_no_average_CSI": true,
+    "includes_protected_plus5_hour_and_plus2_hour_process_roles": true,
+    "requires_same_input_OLD_FIX_and_hourly_history_match_before_interpretation": true,
+    "disallows_unauthorized_physics_coefficient_or_zero_rate_fix_change": true
+  },
+  "finding": "The frozen scope is a bounded diagnostic study with B1 retained. It does not nominate a new forecast candidate or alter adoption/protection/recovery criteria.",
+  "gate": "This review covers only the analysis scope and its 19 source pins. Native implementation/runtime work remains gated on a separate frozen native plan and team review.",
+  "reviewer_validation": "Read-only independent checks passed; no source, analysis, or native build/run was performed."
+}

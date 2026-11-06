@@ -1,0 +1,79 @@
+{
+  "status": "AUTHORIZED_FULL_FIVE_HOUR_PAIRED_RUN",
+  "authorization_source": "Root explicit message on 2026-11-06: launch the paired same-B1 OLD/FIX five-hour diagnostic immediately after strict quick gate PASS; no further approval cycle.",
+  "run_scope": {
+    "arms": [
+      "OLD",
+      "FIX"
+    ],
+    "duration_seconds": 18000,
+    "dt_seconds": 20,
+    "forecast_steps": 900,
+    "mpi_ranks_per_arm": 8,
+    "omp_threads": 1,
+    "cpu_sets": {
+      "OLD": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ],
+      "FIX": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ]
+    }
+  },
+  "quick_gate": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/runtime/native/quick_gate.json",
+    "sha256": "62e2055e01636425b8d0917f913ada7a97e0306e6e92593bd622f659ced6f992",
+    "status": "PASS",
+    "quick_plan_sha256": "d8fbf329e658b292d9710617b9b501bf47bcbe89585fe9759095162656d40d28",
+    "arm_capture_receipt_sha256": {
+      "OLD": "e3e79f8cc160635ebfa7336cad4b09a53910a0d07129c0836eff23ba4959f1a1",
+      "FIX": "ad461d017fd77bd3f36dc16f1b5c2548bb7667ed5bd3926b8363b91880e60c26"
+    }
+  },
+  "raw_quick_run_receipt": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/runtime/native/quick_raw_receipt.json",
+    "sha256": "3e809bd3bc9ba8f0aecf79e67eba083ba0c9776f77f163c4b801804f118bc7f1",
+    "status": "RAW_PROBE_COMPLETED_AWAITING_CAPTURE_GATE"
+  },
+  "build_receipt_sha256": "29347a63ea954383c27f89c581289a2db19ad1f4fa91748d1310b8a726cb54b0",
+  "source_generation_receipt_sha256": "7ed9bf6189249468695e5ce4784f3733d04eed41dae95b3cb31bb46d6bc0ae37",
+  "runner_sha256": "22ffce0dc01faaa29cf0a7e47071e72f2e5984e0a1e554016d41bcc8323cfcbe",
+  "wrapper_sha256": "52c215adecff0e14ab2de91b5df4f69c5062ea356603e07842ee7f92712fbd7a",
+  "output_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/runtime/native/cases/full",
+  "capture_timestep_windows": [
+    [
+      1,
+      360
+    ],
+    [
+      721,
+      900
+    ]
+  ],
+  "history_gate_hours": [
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "limits": [
+    "Full-run authorization does not assert success; history and capture validation remain post-run gates.",
+    "The 361\u2013720 detailed-process window remains uncaptured."
+  ]
+}

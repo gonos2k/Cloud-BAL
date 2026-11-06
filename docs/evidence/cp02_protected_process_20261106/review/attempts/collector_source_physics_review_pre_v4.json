@@ -1,0 +1,124 @@
+{
+  "date_utc": "2026-11-06",
+  "findings": [
+    {
+      "detail": "Phase 6 is the pre-update state/work2; phase 7 records xlwork2/cpm/dtcld; phase 8 is the post-update state. QV replay uses q6 + work2*dtcld; TK replay uses t6 - xlwork2/cpm*dtcld. QR and QC phase8-minus-phase6 are retained as observed local state deltas. Cold/warm QR1 replay is a separate rate sum with the source floor.",
+      "id": "phase6_to_8_observed_and_replayed_updates",
+      "limit": "Source-order float32 replay is intended; no claim here that compiler operation association or captured runtime bitwise results were verified.",
+      "status": "SOURCE_ARITHMETIC_ALIGNS"
+    },
+    {
+      "detail": "Current source replay uses work2=-(prevp+psdep+pgdep+pinud+pidep) in the cold branch and -(prevp+psevp+pgevp) in the warm branch. QR1 uses its own cold/warm microphysical rate expressions. The two are distinct quantities.",
+      "id": "work2_is_qv_tendency_not_qr_rate",
+      "limit": "Source-level arithmetic reviewed; runtime values and compiler arithmetic association await successful full capture and stream replay.",
+      "status": "CORRECTED_IN_CURRENT_PROVISIONAL_TOOL"
+    },
+    {
+      "detail": "Generated source ordering places sedimentation pre/post substeps 9/10 earlier in the KDM6 call; surface accumulation records 13/14 follow those captured stages; the phase11/12 condensation substep occurs later. After phase12 the source performs threshold/number cleanup, optional PSD reconstruction, loop completion, and returns through KDM6/wrapper conversion. For the captured loops=1 call, sedimentation does not follow phase12.",
+      "id": "phases9_10_are_before_phase11_12",
+      "limit": "The phase11/12 channel is a local late condensation jump, not the terminal wrapper-return state. Any later sedimentation can only occur in a subsequent process subcycle/call.",
+      "status": "ORDER_CORRECTED"
+    },
+    {
+      "detail": "Phase11 records state and pcond immediately before q-=pcond*dtcld, qc1=max(qc1+pcond*dtcld,0), and t+=pcond*xl/cpm*dtcld; phase12 records immediately after. Collector stores actual QV/QC/T deltas and replays QV/T source expressions.",
+      "id": "phase11_to_12_condensation",
+      "limit": "QC is recorded as an actual delta but has no separate bitwise source-formula residual gate. Compiler association and runtime results are not claimed.",
+      "status": "SOURCE_ARITHMETIC_ALIGNS_WITH_OBSERVED_QC"
+    },
+    {
+      "detail": "Each phase10 post record is matched to phase9 by the same cell/level/substep. The collector sums actual QR/QS/QG state differences over that cell’s substeps and preserves captured fall/falk payload sums separately.",
+      "id": "sedimentation_channels_are_local_state_changes",
+      "limit": "Per-level kg/kg state changes are not density/height-weighted column budgets or domain conservation proofs; fall/falk raw diagnostics retain source units.",
+      "status": "SOURCE_MAPPING_ALIGNS"
+    },
+    {
+      "detail": "Phase13/14 capture before/after the conditional fallsums>0 rain and rainncv update. The payload contains fallsums, delz, denr, dtcld, and accumulators; denr is recorded as a phase operand rather than a frame-header constant. The replay follows fallsums*delz/denr*dtcld*1000 + accumulator. Full-step surface return keeps rain, rainncv, and sr separate; first adjacent rain delta is missing by construction.",
+      "id": "surface_accumulator_formula_and_operands",
+      "limit": "Individual raw fall/fallsum/delz/denr phase channel units remain generic in the schema; do not infer a conservation claim from these records.",
+      "status": "SOURCE_MAPPING_ALIGNS"
+    },
+    {
+      "detail": "The generated OLD/FIX source snapshots differ at the targeted prevp guard (`else` in OLD versus `else if (prevp.ne.0.)` in FIX); the broader source-generation receipt records insertion-only capture instrumentation relative to each respective original source.",
+      "id": "old_fix_generated_source_difference",
+      "status": "SOURCE_DIFF_SCOPED"
+    },
+    {
+      "detail": "Latest collector rejects a selected cell/level with no sedimentation records and requires a complete 1..mstep sequence with phase 9/10 pairing; current MANDATORY_PHASES also remains 1–8,11,12.",
+      "id": "sedimentation_substep1_mandatory",
+      "limit": "Conditional phase13/14 surface records remain applicable only when source fallsum>0; each slab may be non-applicable while full-run nonvacuity is handled separately.",
+      "status": "NEW_FINAL_COLLECTOR_GATE_REVIEWED"
+    }
+  ],
+  "limits": [
+    "No native build, launch, raw stream decode, or actual-stream arithmetic replay is claimed by this review.",
+    "The generated source receipt does not establish a completed capture; native execution and actual-stream replay remain pending.",
+    "No process causality, storm-motion attribution, full-column water conservation, or whole-domain budget claim follows from selected local state channels.",
+    "Raw phase13/14 diagnostic fields are not all assigned per-field units in the CP05 schema."
+  ],
+  "pins": {
+    "FIX_source": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/Cloud-BAL/docs/evidence/cp02_protected_process_20261106/native/source/module_mp_kdm6_FIX.f90",
+      "sha256": "1957f36c39d0e4bcbf16c238b90edde2a01285a03d7e1e65dd8de737c199d67c"
+    },
+    "OLD_source": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/Cloud-BAL/docs/evidence/cp02_protected_process_20261106/native/source/module_mp_kdm6_OLD.f90",
+      "sha256": "2372d988eeffa73d2fc68869119daf0515407a89ba89119e66834bc38c806385"
+    },
+    "collector_test": {
+      "execution_claim": "pytest -q tests/test_cp02_protected_process_capture.py tests/test_plot_cp02_protected_process_native.py: 16 passed (12 collector tests, 4 native renderer tests).",
+      "path": "tests/test_cp02_protected_process_capture.py",
+      "sha256": "d0320ff80f700f6139b010ec61594cb23a0f76f4ffce0a62bf5875531db54597"
+    },
+    "collector_tool": {
+      "path": "tools/cp02_protected_process_capture.py",
+      "sha256": "1c34e6754d3a8306f37e30b2ba3dc47a0258d05882613b521277fb52b0d4808b"
+    },
+    "generated_source_receipt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/Cloud-BAL/docs/evidence/cp02_protected_process_20261106/native/source/source_generation_receipt.json",
+      "sha256": "7ed9bf6189249468695e5ce4784f3733d04eed41dae95b3cb31bb46d6bc0ae37",
+      "status": "SOURCE_GENERATED_AWAITING_INDEPENDENT_REVIEW"
+    },
+    "schema": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/Cloud-BAL/docs/evidence/cp02_protected_process_20261106/native/schema/cp05_schema.json",
+      "sha256": "677847102d32b1637340d94bcd24c3856d63348bd15ceb0a319d8b5eda8ff25c"
+    }
+  },
+  "provisional": false,
+  "references": {
+    "collector_functions": [
+      "load_mode_contract",
+      "read_process_chunk",
+      "process_channels",
+      "surface_process_channels"
+    ],
+    "source_difference_location": 2523,
+    "source_phase_locations": {
+      "phase10": 1849,
+      "phase11": 3747,
+      "phase12": 3763,
+      "phase13": 2040,
+      "phase14": 2049,
+      "phase9": 1774
+    }
+  },
+  "review_scope": "Read-only arithmetic/schema review of the bounded collector against generated OLD/FIX KDM6 sources and CP05 schema.",
+  "schema": "cp02_protected_process_collector_source_physics_review_v1",
+  "source_contract": {
+    "conditional_phase_pairs": "Phase 9/10 substep 1 is mandatory for each selected cell/level; every substep through mstep is paired by cell/level/substep. Surface 13/14 records pair when present; absent surface masks remain explicit.",
+    "mandatory_phases": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      11,
+      12
+    ],
+    "production_contract_passes_mandatory_set": true,
+    "read_process_chunk_default_is_mandatory_set": true
+  },
+  "status": "SOURCE_REVIEW_COMPLETE_NATIVE_STREAM_REPLAY_PENDING"
+}

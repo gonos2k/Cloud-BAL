@@ -1,0 +1,83 @@
+{
+  "baseline_sha256": "4e8af7f1b0061672618aeecfa4af58a5afc81890596c9e14fd84364a740d6d23",
+  "hash_only_pin_count": 48,
+  "limits": [
+    "Structural extraction is limited to twelve selected Python source/test paths; other evidence is hash-only.",
+    "Graph freshness does not establish runtime or scientific validity or conservation.",
+    "Fortran cross-file calls are partial and external import edges may be absent."
+  ],
+  "maintained_roots_written": false,
+  "review_findings": [
+    "Independent stage validator passed all eight scope, preservation, integrity and wiki checks.",
+    "All twelve selected source/test paths produced nodes in each raw extraction and all 213 raw nodes per corpus survive in the staged graph.",
+    "Both corpora retain every prior graph node; separately dated new snapshots and derived wiki reports match their active staged versions.",
+    "The 96 raw edges per corpus with absent graph endpoints are not represented; Graphify structural extraction is partial and the staged wiki/report disclose this limitation.",
+    "Original prior225 audit remains pinned; a separate postpublication audit is required to resolve three active graph paths to their byte-identical 2026-11-05-failure-focus snapshots."
+  ],
+  "review_status": "GO",
+  "schema": "cp02_protected_process_independent_kg_stage_review_v1",
+  "selection_lock_sha256": "f7ddf5509fa3a3aaa299d3eb02d6a3d4ffc5cd257d6f019c60a5be5466486e83",
+  "source_coverage": {
+    "Cloud-BAL": {
+      "anonymous_external_nodes": 13,
+      "delta": {
+        "communities": 1,
+        "edges": 423,
+        "nodes": 189
+      },
+      "node_counts_by_source": {
+        "tests/test_cp02_b1_failure_context.py": 7,
+        "tests/test_cp02_protected_process_capture.py": 18,
+        "tests/test_cp02_protected_process_cohorts.py": 5,
+        "tests/test_cp02_protected_process_summary.py": 6,
+        "tests/test_plot_cp02_protected_process.py": 10,
+        "tests/test_plot_cp02_protected_process_native.py": 6,
+        "tools/cp02_b1_failure_context.py": 17,
+        "tools/cp02_protected_process_capture.py": 59,
+        "tools/cp02_protected_process_cohorts.py": 19,
+        "tools/cp02_protected_process_summary.py": 13,
+        "tools/plot_cp02_protected_process.py": 27,
+        "tools/plot_cp02_protected_process_native.py": 13
+      },
+      "raw_edges": 629,
+      "raw_edges_with_missing_endpoint": 96,
+      "raw_nodes": 213,
+      "raw_nodes_in_staged_graph": 213,
+      "source_files_with_nodes": 12
+    },
+    "KLAPS50": {
+      "anonymous_external_nodes": 13,
+      "delta": {
+        "communities": -26,
+        "edges": 425,
+        "nodes": 189
+      },
+      "node_counts_by_source": {
+        "tests/test_cp02_b1_failure_context.py": 7,
+        "tests/test_cp02_protected_process_capture.py": 18,
+        "tests/test_cp02_protected_process_cohorts.py": 5,
+        "tests/test_cp02_protected_process_summary.py": 6,
+        "tests/test_plot_cp02_protected_process.py": 10,
+        "tests/test_plot_cp02_protected_process_native.py": 6,
+        "tools/cp02_b1_failure_context.py": 17,
+        "tools/cp02_protected_process_capture.py": 59,
+        "tools/cp02_protected_process_cohorts.py": 19,
+        "tools/cp02_protected_process_summary.py": 13,
+        "tools/plot_cp02_protected_process.py": 27,
+        "tools/plot_cp02_protected_process_native.py": 13
+      },
+      "raw_edges": 629,
+      "raw_edges_with_missing_endpoint": 96,
+      "raw_nodes": 213,
+      "raw_nodes_in_staged_graph": 213,
+      "source_files_with_nodes": 12
+    }
+  },
+  "source_pin_count": 12,
+  "source_worktree_target_count": 4,
+  "stage": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/kg_stage/stage-0498407d937c52ea",
+  "stage_receipt_sha256": "da621998b96f3a4c135df791006f1999ae94328601ddf7019ad409ef65f469a4",
+  "stage_validation_sha256": "42c59c47813462621de3fe88253ceb5a7c83612c87f3b2f8701fcd077a1e6b56",
+  "staged_target_count": 13,
+  "status": "GO"
+}

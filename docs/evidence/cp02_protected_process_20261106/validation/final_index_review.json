@@ -1,0 +1,40 @@
+{
+  "evidence": {
+    "postpublish_review_sha256": "5d5dad5b19b4d47344a95990cad772587129c458907770dcee65dd05c4d36269",
+    "prior_after_kg_audit_sha256": "c1a27c9d2714692d62cda3c2f5af0d8043d5260b589e3d27ecc83107dc810469",
+    "reproduction_sha256": "73bf3a63e07f4a98411a45aa603fe470301669894b030d4f1f2ce5cc83e40d9e",
+    "science_review_sha256": "1d8db826ff8b1c1306b1f8fcdd005e126236aa216342c5f4be5af213ac8eccd1",
+    "selection_lock_sha256": "f7ddf5509fa3a3aaa299d3eb02d6a3d4ffc5cd257d6f019c60a5be5466486e83",
+    "stage_review_sha256": "02108f71b5d5b73c7b93a11fd4188d1e9ab4eaefa6f213a6c7f983ec379ddee4",
+    "tree_export_sha256": "6512ba286b0e2f60ccda3ccfbfbefa2a98c1289a672e92ae5c002e0431364d17"
+  },
+  "findings": [
+    "No blocking index, reproducibility, graph preservation or provenance issues found.",
+    "git diff --cached --check does not pass: the current source/test subset has extra EOF blank lines in tools/cp02_protected_process_capture.py:1320 and tests/test_cp02_protected_process_capture.py:428. Complete unfiltered check also reports CRLF CSV records and whitespace in preserved historical logs; these evidence files retain original bytes.",
+    "This review file is intentionally excluded from the sealed manifest to avoid a recursive hash and must be staged separately."
+  ],
+  "frozen_pins": "All 12 selected source and 48 hash-only hashes match frozen lock.",
+  "limits": [
+    "Graph extraction is structural and does not establish physical or scientific validity.",
+    "No new forecast candidate was adopted; fixed 26 conditions, RN1 data checks, independent cases, domain budgets and C2 remain open."
+  ],
+  "manifest_artifacts": 414,
+  "manifest_sha256": "dc7c9d53c0068859889b80ec8028128fb5826389766e4719afac6989de678b4c",
+  "portable_tree_export": {
+    "artifact_reproduction_count": 26,
+    "status": "PASS",
+    "surface_point_hour_rows": 1500,
+    "tree": "1327e727faac8e10538a9a1266cca7ae2c91ac22",
+    "verified_tree_metadata_delta": [
+      "docs/evidence/cp02_protected_process_20261106/review/terra_postpublish_review.json",
+      "docs/evidence/cp02_protected_process_20261106/validation.json",
+      "docs/evidence/cp02_protected_process_20261106/validation/reproduction.json",
+      "docs/evidence/cp02_protected_process_20261106/validation/tree_export.json"
+    ]
+  },
+  "review_status": "GO",
+  "schema": "cp02_terra_final_index_review_v1",
+  "staged_before_review_paths": 415,
+  "status": "GO",
+  "validation_and_git_blob_check": "All 414 manifest entries plus validation.json independently verified against current file size, SHA-256 and staged Git blob SHA-1; exact staged changed-path set, no missing/extra paths."
+}

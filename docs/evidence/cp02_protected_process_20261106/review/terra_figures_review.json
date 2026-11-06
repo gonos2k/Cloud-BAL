@@ -1,0 +1,41 @@
+{
+  "status": "PASS",
+  "paper_review": "Read-only comparison with reported evidence found no blocking scientific or terminology issue; the paper owner will update gallery links.",
+  "gallery_script_sha256": "a26d97ccabd1287ded88b61578c4bdbe80108300094f800201051151a919f563",
+  "gallery_script_checks": [
+    "Uses four existing PNGs and requires PASS native receipt with matching image hash.",
+    "Writes inline Markdown, HTML, deterministic seven-member ZIP and receipt; validates ZIP inventory, CRC and member SHA-256.",
+    "Output targets are guarded against overwriting existing files.",
+    "Markdown links to paper, scores and prior gallery resolve from bundle root; HTML image links resolve relative to bundle.",
+    "Gallery caption makes X-to-A basis of 33/30 false-alarm counts explicit."
+  ],
+  "pending": [],
+  "basic_reproduction": {
+    "status": "PASS_PNG_BYTE_IDENTICAL",
+    "output": "external runtime/figure_repro_terra_20261106",
+    "pngs": "All three SHA-256 match canonical receipts exactly.",
+    "metadata_note": "Fresh output has no prior-attempt manifest; therefore metadata and old offline ZIP differ, as expected."
+  },
+  "native_v4_reproduction": {
+    "status": "PASS_PNG_AND_METADATA_BYTE_IDENTICAL",
+    "output": "external runtime/native_figure_repro_terra_v4_20261106",
+    "png_sha256": "b781ad22b628d6cafb42d111d83fb5c08b7d330ef44f4a91160009e08396ca97",
+    "metadata_sha256": "a6769cf2af3e343d4dd6df3ce4d7dc6c0ecd1b5dbf403cb5d194c84ae88a8d63",
+    "scope": "V4; V5 source binding requires separate rerun."
+  },
+  "native_v5_reproduction": {
+    "status": "PASS_PNG_BYTE_IDENTICAL_METADATA_REFRESHED",
+    "summary_receipt_sha256": "f6d8af84a6dcba7ee80ead649cc709491f557e01db00ccb8a2ca4c178c5d8ec2",
+    "png_sha256": "b781ad22b628d6cafb42d111d83fb5c08b7d330ef44f4a91160009e08396ca97",
+    "metadata_sha256": "578f75af44ab1ad4f91b9a93fc3269379e4a1efb06c010f6db73bf6eb4185d21",
+    "previous_metadata_and_receipt": "native_figures/attempts/v4_before_v5_binding"
+  },
+  "gallery_validation": {
+    "status": "PASS",
+    "markdown_links": 8,
+    "html_links": 5,
+    "zip_members": 7,
+    "zip_sha256": "7969c6185d6b43189261587e6fad7bbba7fa04e64d35a72582bafa54b4b3020b",
+    "checks": "All local links exist; ZIP CRC and every member hash match source files and receipt."
+  }
+}
