@@ -1,0 +1,35 @@
+{
+  "status": "PASS_STATIC_ACCOUNTING_REVIEW_WITH_NONBLOCKING_HARDENING_NOTE",
+  "scope": "Read-only review of the fixed-native-k summary implementation and its two focused tests against the CP05 schema and strictly validated one-step collector outputs. No five-hour analysis has run; this receipt does not authorize scientific publication.",
+  "bindings": {
+    "summary_tool_sha256": "e07fbb9acfa7753f2c04055363e467dc443f5aa8c0e89e279cae7c74c4bc7925",
+    "summary_tests_sha256": "29fbf8ddabd40d86909e952574ea8437c7473bf313002c20016b753ca5c8e4e1",
+    "capture_collector_sha256": "08b4ec778fbec79c4316aaade615b96baeb44e7d01f32895d4818cedd2e71c60",
+    "cp05_schema_sha256": "677847102d32b1637340d94bcd24c3856d63348bd15ceb0a319d8b5eda8ff25c",
+    "strict_quick_gate_sha256": "62e2055e01636425b8d0917f913ada7a97e0306e6e92593bd622f659ced6f992",
+    "quick_capture_independent_review_sha256": "a7b254da8421d5f7b58c30b6847892f41defd5be58c5b4814a437e2bc9cac0d5"
+  },
+  "review_findings": [
+    "The ledger forms paired FIX-minus-OLD entry and return differences, sums per-call internal deltas and between-call net deltas separately, and checks that both telescope to the endpoint over exactly 180 contiguous calls.",
+    "The selected hours map to actual process steps 1\u2013180, 181\u2013360, and 721\u2013900; no term bridges the uncaptured 361\u2013720 interval.",
+    "Arrays retain the level and point axes; there is no vertical or domain aggregation.",
+    "phase8\u2212phase6 and phase12\u2212phase11 channels are taken from the actual captured stage arrays. CP05 source assigns qci(:,:,1)=qc; the Q C mapping is consistent with that implementation.",
+    "QR sedimentation compares captured per-call native values with finite pairing; ordinary sum propagates any missing conditional call to NaN, which the CSV writes as null. The remaining internal sum also remains null in that case; no nansum or zero-fill is used.",
+    "The report labels between-call changes as net external operations, disclaims pure-transport causality, and states that the residual is not a closed column/domain water or energy budget."
+  ],
+  "nonblocking_hardening": [
+    "Summary read_capture validates full status, mode, launch hash, time axes, dimensions and collector source hash, but does not itself assert cohort_receipt_sha256, capture_plan_sha256, schema_sha256, and source_generation_receipt_sha256 against the frozen expected values. The collector contract and its receipt already bind these; direct summary assertions would add defense in depth.",
+    "The focused tests cover the ledger telescoping identity and rejection of incomplete/misaligned inputs. They do not directly test the important conditional-sedimentation-null behavior, although the reviewed implementation correctly propagates NaN and emits null."
+  ],
+  "quick_evidence": {
+    "strict_gate_status": "PASS",
+    "scope": "strict one-actual-timestep capture gate only; not full five-hour scientific evidence",
+    "both_arms_exact_history_parity": true,
+    "source_formula_replay": "bitwise matched at all 14,859 selected cells per arm for the required channels",
+    "limitation": "one timestep only; no five-hour process conclusions"
+  },
+  "unresolved_work": [
+    "Run and validate the paired five-hour native capture.",
+    "Run the summary against validated full collector NPZs and independently recount its output before any science claims."
+  ]
+}

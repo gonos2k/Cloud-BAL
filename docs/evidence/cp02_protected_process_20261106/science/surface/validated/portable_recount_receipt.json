@@ -1,0 +1,36 @@
+{
+  "absolute_tolerance_mm": 1e-12,
+  "arm_count": 2,
+  "byte_identical": true,
+  "endpoint_history_hours_utc": [
+    12,
+    13,
+    14,
+    15,
+    16,
+    17
+  ],
+  "external_dependencies_used": [],
+  "hour_windows_per_arm": [
+    1,
+    2,
+    3,
+    4,
+    5
+  ],
+  "limits": [
+    "This recounter uses only the portable NPZ packet, its receipt, and the reference CSV; NetCDF and frozen source score arrays are not opened.",
+    "It verifies the packet\u2019s recorded endpoint match and repeats packet-internal endpoint equality; original NetCDF source hashes and timestamps are preserved in the packet receipt.",
+    "The portable recomputation validates the table derivation, not the provenance of the original history extraction."
+  ],
+  "max_absolute_difference_from_frozen_score_mm": 5.773159728050814e-15,
+  "native_columns": 381,
+  "packet_receipt_sha256": "06670250ce6541db75fea8f6ac77a99616f04a1a6691e8475e2293c2ed3b6884",
+  "packet_sha256": "bd89b598294dc4ebd12b31e37e1862e9596448249efe2b2ecace4ecbb631960c",
+  "points_per_arm": 150,
+  "rebuilt_csv_sha256": "26b3ca8f3a662b60959cc83044ac284baf3b3e618cf4881be25e3e10ee892615",
+  "recounter_sha256": "6f1eff5e6f44313511097dc80df2a6024a359a55c5faa3dab341294630580adc",
+  "reference_csv_sha256": "26b3ca8f3a662b60959cc83044ac284baf3b3e618cf4881be25e3e10ee892615",
+  "rows": 1500,
+  "status": "PASS_PORTABLE_PACKET_RECOUNT_BYTEWISE_IDENTICAL"
+}

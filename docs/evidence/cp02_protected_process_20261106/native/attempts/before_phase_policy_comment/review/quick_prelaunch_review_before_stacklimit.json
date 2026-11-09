@@ -1,0 +1,65 @@
+{
+  "status": "GO_FOR_ONE_STEP_CAPTURE",
+  "scope": "Authorizes only the paired 20-second (one actual timestep) OLD/FIX raw probe under the frozen quick-gate plan. Strict capture validation must run afterward; full five-hour capture remains blocked until that independent gate passes.",
+  "plan_sha256": "d8fbf329e658b292d9710617b9b501bf47bcbe89585fe9759095162656d40d28",
+  "runner_sha256": "57638d66ea45176d27f438934d4779ec384f44ba2c3abef462d1318baa2fa23c",
+  "wrapper_sha256": "0b58362ee7efc1c2b72141dea9571c50f1912d7102c95259f2076e7a59663591",
+  "build_receipt_sha256": "29347a63ea954383c27f89c581289a2db19ad1f4fa91748d1310b8a726cb54b0",
+  "compile_review_sha256": "43de51d36daba6278d60a8407b239faac11b00d3e5a8115eef3efb6b29f8e874",
+  "source_generation_receipt_sha256": "7ed9bf6189249468695e5ce4784f3733d04eed41dae95b3cb31bb46d6bc0ae37",
+  "capture_plan_sha256": "9183bd9f6bf7d0781cb6793d7f88e7ad6e44d2adb166e065c923bb0b7e67434e",
+  "plan_freeze_receipt_sha256": "1daab2769d031faecfc84560cbb6f67eecf0bf45b02e92de18a7fa683d1b35a2",
+  "schema_sha256": "677847102d32b1637340d94bcd24c3856d63348bd15ceb0a319d8b5eda8ff25c",
+  "cohort": {
+    "points": 150,
+    "point_corner_rows": 600,
+    "native_columns": 381,
+    "selector_sha256": "62b365cb0cc57b7b6006d8f6f760021f7424b94d7b381b507aeed093a9664b58",
+    "receipt_sha256": "cd1e03fbc075c25f6a4904ce278935dea8d23a2157162274835fca21fc911826"
+  },
+  "stage_receipt_sha256": "00eddd6ac26a3a4857ea40e294256d2b32c9c9e6a2998f112000c39d5281bf5e",
+  "toolchain_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "mpi_launcher_sha256": "f9b09c6d24ce83d52221fbc1cc59dbdf9f350ccf50b264e89980c4530c6369d4",
+  "mpi_environment_sha256": "1f807842591f742c0e285df3769b4a07e8944536cbd0b0905e88520ae07dbcf8",
+  "run": {
+    "duration_seconds": 20,
+    "dt_seconds": 20,
+    "actual_timesteps": [
+      1
+    ],
+    "mpi_ranks": 8,
+    "omp_threads": 1,
+    "arms": {
+      "OLD": {
+        "cpus": [
+          32,
+          33,
+          34,
+          35,
+          36,
+          37,
+          38,
+          39
+        ],
+        "history_reference": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100"
+      },
+      "FIX": {
+        "cpus": [
+          40,
+          41,
+          42,
+          43,
+          44,
+          45,
+          46,
+          47
+        ],
+        "history_reference": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED"
+      }
+    },
+    "raw_output_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/runtime/native",
+    "per_chunk_byte_limit": 94371840,
+    "per_arm_aggregate_diagnostic_byte_limit": 34359738368
+  },
+  "postrun_expectation": "If both raw runs exit successfully, preserve inputs, match the 12Z history and success markers, record RAW_PROBE_COMPLETED_AWAITING_CAPTURE_GATE. That status is not a strict capture PASS and does not authorize the full run."
+}

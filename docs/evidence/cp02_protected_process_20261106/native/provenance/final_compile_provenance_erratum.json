@@ -1,0 +1,30 @@
+{
+  "correct_executed_build_helper": {
+    "matches_final_build_receipt": true,
+    "path": "docs/evidence/cp02_protected_process_20261106/native/build/build_pair.py",
+    "sha256": "5b9dd8e0b636f613c648586809dfbaaae4e256ebcc3a6bd51d3d44fcc7eca9c1",
+    "source_sha256_recorded_by_build_receipt": "5b9dd8e0b636f613c648586809dfbaaae4e256ebcc3a6bd51d3d44fcc7eca9c1"
+  },
+  "final_build_conclusion": "Both OLD and FIX final IFX compile/link exits are zero; final build receipt confirms pinned profile, source-generation receipt, reviewed source hashes, and unchanged host link inputs. The helper-name correction does not change the final WRF binaries or compile outcomes.",
+  "final_build_receipt": {
+    "build_script_sha256": "5b9dd8e0b636f613c648586809dfbaaae4e256ebcc3a6bd51d3d44fcc7eca9c1",
+    "path": "docs/evidence/cp02_protected_process_20261106/native/build/build_receipt.json",
+    "sha256": "29347a63ea954383c27f89c581289a2db19ad1f4fa91748d1310b8a726cb54b0",
+    "status": "PASS"
+  },
+  "immutable_compile_review": {
+    "path": "docs/evidence/cp02_protected_process_20261106/review/final_compile_provenance_review.json",
+    "sha256": "43de51d36daba6278d60a8407b239faac11b00d3e5a8115eef3efb6b29f8e874",
+    "status": "PASS_COMPILE_PROVENANCE_WITH_WARNING"
+  },
+  "limitations": "Compile provenance alone does not establish runtime success, capture completeness, or scientific conclusions.",
+  "schema": "cp02_protected_process_compile_provenance_erratum_v1",
+  "scope": "Append-only correction to the executed-build-helper field in the immutable independent compile review. The original review JSON remains unchanged; this erratum binds the same final build receipt and only corrects the helper identity.",
+  "status": "PASS_FINAL_BUILD_HELPER_BINDING_CORRECTED",
+  "superseded_prior_helper_binding": {
+    "classification": "Prior archived helper attempt; not the executed helper recorded by the final build receipt.",
+    "path": "docs/evidence/cp02_protected_process_20261106/native/attempts/before_phase_policy_comment/build/build_pair_executed.py",
+    "reported_executed_build_helper_sha256": "b7e7c7b5188fed179cbff2772e9cc0f91efb350c5c297e011beee4a3a55ebb0f",
+    "sha256": "b7e7c7b5188fed179cbff2772e9cc0f91efb350c5c297e011beee4a3a55ebb0f"
+  }
+}

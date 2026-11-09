@@ -1,0 +1,440 @@
+{
+  "format": "CP04 framed Fortran stream, big-endian int32 and IEEE REAL32",
+  "frame_magic": "C4FR0001",
+  "frame_header_int32": [
+    "rank",
+    "call_id",
+    "itimestep",
+    "j",
+    "its",
+    "ite",
+    "kts",
+    "kte"
+  ],
+  "frame_constants_real32": [
+    "qmin",
+    "t0c",
+    "rv",
+    "cpv",
+    "cliq",
+    "psat",
+    "ep2",
+    "xlv0",
+    "xls",
+    "cice"
+  ],
+  "record_header_int32": [
+    "phase",
+    "i",
+    "k",
+    "loop",
+    "loops",
+    "substep",
+    "mstep",
+    "nfields"
+  ],
+  "record_payload": "nfields REAL32 values in exact phase field order; signed zero preserved",
+  "frame_end_int32": -1,
+  "phase_window_steps": [
+    1,
+    360,
+    721,
+    900
+  ],
+  "surface_return_steps": [
+    1,
+    900
+  ],
+  "chunk_steps": 3,
+  "cohort": {
+    "points": 150,
+    "point_corner_rows": 600,
+    "columns": 381,
+    "unique_global_columns_sha256": "62b365cb0cc57b7b6006d8f6f760021f7424b94d7b381b507aeed093a9664b58",
+    "point_corners_sha256": "12a000e1dab5963f7327cce49a44e988940b8e1c208049dd7f5285f126e85ea9",
+    "role_membership_sha256": "54cbe13a13a7494fdaf10159919c480f90dfad26dcdcf8337735828d05132cb6",
+    "receipt_sha256": "cd1e03fbc075c25f6a4904ce278935dea8d23a2157162274835fca21fc911826"
+  },
+  "phases": {
+    "1": {
+      "name": "ENTRY_RAW",
+      "fields": [
+        "p(i,k)",
+        "q(i,k)",
+        "t(i,k)",
+        "den(i,k)",
+        "qci(i,k,1)",
+        "qci(i,k,2)",
+        "qrs(i,k,1)",
+        "qrs(i,k,2)",
+        "qrs(i,k,3)",
+        "nci(i,k,1)",
+        "nci(i,k,2)",
+        "nci(i,k,3)",
+        "nrs(i,k,1)",
+        "nrs(i,k,2)",
+        "nrs(i,k,3)",
+        "brs(i,k)"
+      ]
+    },
+    "2": {
+      "name": "ENTRY_CLAMPED",
+      "fields": [
+        "p(i,k)",
+        "q(i,k)",
+        "t(i,k)",
+        "den(i,k)",
+        "qci(i,k,1)",
+        "qci(i,k,2)",
+        "qrs(i,k,1)",
+        "qrs(i,k,2)",
+        "qrs(i,k,3)",
+        "nci(i,k,1)",
+        "nci(i,k,2)",
+        "nci(i,k,3)",
+        "nrs(i,k,1)",
+        "nrs(i,k,2)",
+        "nrs(i,k,3)",
+        "brs(i,k)"
+      ]
+    },
+    "3": {
+      "name": "SATURATION",
+      "fields": [
+        "p(i,k)",
+        "q(i,k)",
+        "t(i,k)",
+        "den(i,k)",
+        "qs(i,k,1)",
+        "qs(i,k,2)",
+        "rh(i,k,1)",
+        "rh(i,k,2)",
+        "sw(i,k)",
+        "dtcld"
+      ]
+    },
+    "4": {
+      "name": "SATDT",
+      "fields": [
+        "p(i,k)",
+        "q(i,k)",
+        "t(i,k)",
+        "den(i,k)",
+        "qs(i,k,1)",
+        "rh(i,k,1)",
+        "satdt",
+        "dtcld"
+      ]
+    },
+    "5": {
+      "name": "PROCESS_RATES",
+      "fields": [
+        "praut(i,k)",
+        "pracw(i,k)",
+        "prevp(i,k)",
+        "piacr(i,k)",
+        "pgacr(i,k)",
+        "psacr(i,k)",
+        "pmulrs(i,k)",
+        "pmulrg(i,k)",
+        "pseml(i,k)",
+        "pgeml(i,k)",
+        "psevp(i,k)",
+        "pgevp(i,k)",
+        "psdep(i,k)",
+        "pgdep(i,k)",
+        "pinud(i,k)",
+        "pidep(i,k)",
+        "paacw(i,k)",
+        "piacw(i,k)",
+        "pmulcs(i,k)",
+        "pmulcg(i,k)",
+        "psaut(i,k)",
+        "pgaut(i,k)",
+        "praci(i,k)",
+        "psaci(i,k)",
+        "pgaci(i,k)",
+        "pgacs(i,k)",
+        "pracs(i,k)",
+        "nraut(i,k)",
+        "nccol(i,k)",
+        "nracw(i,k)",
+        "naacw(i,k)",
+        "niacw(i,k)",
+        "nrcol(i,k)",
+        "nraci(i,k)",
+        "nsacr(i,k)",
+        "ngacr(i,k)",
+        "nseml(i,k)",
+        "ngeml(i,k)",
+        "niacr(i,k)",
+        "delta2",
+        "delta3"
+      ]
+    },
+    "6": {
+      "name": "PRE_UPDATE",
+      "fields": [
+        "p(i,k)",
+        "q(i,k)",
+        "t(i,k)",
+        "den(i,k)",
+        "qci(i,k,1)",
+        "qci(i,k,2)",
+        "qrs(i,k,1)",
+        "qrs(i,k,2)",
+        "qrs(i,k,3)",
+        "nci(i,k,1)",
+        "nci(i,k,2)",
+        "nci(i,k,3)",
+        "nrs(i,k,1)",
+        "nrs(i,k,2)",
+        "nrs(i,k,3)",
+        "brs(i,k)",
+        "work2(i,k)",
+        "dtcld"
+      ]
+    },
+    "7": {
+      "name": "LATENT_INPUT",
+      "fields": [
+        "work2(i,k)",
+        "xlwork2",
+        "cpm(i,k)",
+        "dtcld",
+        "xl(i,k)",
+        "xlf"
+      ]
+    },
+    "8": {
+      "name": "POST_UPDATE",
+      "fields": [
+        "p(i,k)",
+        "q(i,k)",
+        "t(i,k)",
+        "den(i,k)",
+        "qci(i,k,1)",
+        "qci(i,k,2)",
+        "qrs(i,k,1)",
+        "qrs(i,k,2)",
+        "qrs(i,k,3)",
+        "nci(i,k,1)",
+        "nci(i,k,2)",
+        "nci(i,k,3)",
+        "nrs(i,k,1)",
+        "nrs(i,k,2)",
+        "nrs(i,k,3)",
+        "brs(i,k)"
+      ]
+    },
+    "9": {
+      "name": "SED_PRE",
+      "fields": [
+        "p(i,k)",
+        "q(i,k)",
+        "t(i,k)",
+        "qci(i,k,1)",
+        "qci(i,k,2)",
+        "qrs(i,k,1)",
+        "qrs(i,k,2)",
+        "qrs(i,k,3)",
+        "nrs(i,k,1)",
+        "den(i,k)",
+        "dend(i,k)",
+        "delz(i,k)",
+        "dtcld",
+        "brs(i,k)",
+        "nci(i,k,1)",
+        "nci(i,k,2)",
+        "nci(i,k,3)",
+        "fall(i,k,1)",
+        "fall(i,k,2)",
+        "fall(i,k,3)",
+        "falln(i,k,1)",
+        "fallb(i,k)"
+      ]
+    },
+    "10": {
+      "name": "SED_POST",
+      "fields": [
+        "p(i,k)",
+        "q(i,k)",
+        "t(i,k)",
+        "qci(i,k,1)",
+        "qci(i,k,2)",
+        "qrs(i,k,1)",
+        "qrs(i,k,2)",
+        "qrs(i,k,3)",
+        "nrs(i,k,1)",
+        "den(i,k)",
+        "dend(i,k)",
+        "delz(i,k)",
+        "dtcld",
+        "brs(i,k)",
+        "nci(i,k,1)",
+        "nci(i,k,2)",
+        "nci(i,k,3)",
+        "fall(i,k,1)",
+        "fall(i,k,2)",
+        "fall(i,k,3)",
+        "falln(i,k,1)",
+        "fallb(i,k)",
+        "falk(i,k,1)",
+        "falk(i,k,2)",
+        "falk(i,k,3)",
+        "falkn(i,k,1)",
+        "falkb(i,k)"
+      ]
+    },
+    "11": {
+      "name": "FINAL_COND_PRE",
+      "fields": [
+        "p(i,k)",
+        "q(i,k)",
+        "t(i,k)",
+        "qs(i,k,1)",
+        "qci(i,k,1)",
+        "qci(i,k,2)",
+        "nci(i,k,1)",
+        "nci(i,k,2)",
+        "nci(i,k,3)",
+        "pcond(i,k)",
+        "dtcld",
+        "xl(i,k)",
+        "cpm(i,k)"
+      ]
+    },
+    "12": {
+      "name": "FINAL_COND_POST",
+      "fields": [
+        "p(i,k)",
+        "q(i,k)",
+        "t(i,k)",
+        "qs(i,k,1)",
+        "qci(i,k,1)",
+        "qci(i,k,2)",
+        "nci(i,k,1)",
+        "nci(i,k,2)",
+        "nci(i,k,3)",
+        "pcond(i,k)",
+        "dtcld",
+        "xl(i,k)",
+        "cpm(i,k)"
+      ]
+    },
+    "13": {
+      "name": "SURFACE_PRE",
+      "fields": [
+        "fall(i,kts,1)",
+        "fall(i,kts,2)",
+        "fall(i,kts,3)",
+        "fall(i,kts,4)",
+        "fallsum",
+        "fallsum_qsi",
+        "fallsum_qg",
+        "delz(i,kts)",
+        "denr",
+        "dtcld",
+        "rain(i)",
+        "rainncv(i)"
+      ]
+    },
+    "14": {
+      "name": "SURFACE_POST",
+      "fields": [
+        "fall(i,kts,1)",
+        "fall(i,kts,2)",
+        "fall(i,kts,3)",
+        "fall(i,kts,4)",
+        "fallsum",
+        "fallsum_qsi",
+        "fallsum_qg",
+        "delz(i,kts)",
+        "denr",
+        "dtcld",
+        "rain(i)",
+        "rainncv(i)"
+      ]
+    },
+    "15": {
+      "name": "PREVP_RAW",
+      "fields": [
+        "prevp(i,k)",
+        "qrs(i,k,1)",
+        "satdt",
+        "dtcld"
+      ]
+    },
+    "16": {
+      "name": "PREVP_QR_CAP",
+      "fields": [
+        "prevp(i,k)"
+      ]
+    },
+    "17": {
+      "name": "PREVP_SAT_CAP",
+      "fields": [
+        "prevp(i,k)"
+      ]
+    }
+  },
+  "surface_return": {
+    "record_magic": "C4SR0001",
+    "key_int32": [
+      "rank",
+      "call_id",
+      "itimestep",
+      "j",
+      "i"
+    ],
+    "fields_real32": [
+      "rainncv(i,j)",
+      "rain(i,j)",
+      "sr(i,j)"
+    ],
+    "steps": "1..900; rain is checked against cumulative RAINNC; rainncv is retained as per-call non-convective increment; RAINC is separate convective history"
+  },
+  "wrapper_selected": {
+    "format": "CBSP0001 keyed stage 6 entry / 7 return",
+    "fields": [
+      "TH",
+      "QV",
+      "QC",
+      "QR",
+      "QI",
+      "QS",
+      "QG",
+      "NN",
+      "NC",
+      "NI",
+      "NR",
+      "BG",
+      "DEN",
+      "TK=TH*PII",
+      "P",
+      "PII"
+    ]
+  },
+  "field_units": {
+    "p": "Pa",
+    "t": "K",
+    "q/qci/qrs": "kg kg-1 model mixing-ratio basis",
+    "den/dend": "kg m-3 driver density",
+    "nci/nrs": "m-3 internal number",
+    "mass_process_rates": "kg kg-1 s-1",
+    "number_process_rates": "m-3 s-1",
+    "dtcld": "s",
+    "rain/rainncv": "mm"
+  },
+  "semantics": [
+    "Actual selected process timesteps are 1..360 and 721..900; 361..720 is missing by design.",
+    "Selected wrapper entry/return and all process phases preserve actual timestep, rank, call, loop, and substep.",
+    "Call inventory is recorded for steps 1..900; compact surface return is recorded at every selected cell and step.",
+    "Phase 5 rates are source values after their source limiters, not event counts.",
+    "Sedimentation phases 9/10 cover actual rain/snow/graupel substeps; phase 9 does not read falk.",
+    "Final condensation phases 11/12 are conditional at the existing pcond source update.",
+    "Surface phase 13/14 rows are conditional and paired; absence is not synthesized zero.",
+    "Wrapper differences between KDM6 calls are total non-KDM6 net, not pure transport.",
+    "No extrapolation or ledger term crosses the uncaptured step interval 361..720."
+  ]
+}

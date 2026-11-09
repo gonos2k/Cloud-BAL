@@ -1,0 +1,48 @@
+{
+  "status": "PASS_COMPILE_PROVENANCE_WITH_WARNING",
+  "scope": "Independent read-only review of the completed OLD/FIX compile and link receipt and external scratch outputs. No build command was run during review.",
+  "build_receipt": {
+    "path": "../runtime/native/build/build_receipt.json",
+    "sha256": "22d7abe32334986d0a9acfe215c5b071b3fa98e425eb1bd1d31fd38121cfed94",
+    "status": "PASS",
+    "review_receipt_sha256": "8d45fa3ebe980ebc6c0b21111bade324d7e29235f18981b4464df666ef08b15e",
+    "source_generation_receipt_sha256": "ecdd72306ff4bb7de762d97fbf36e38eb6d93ed977c23b0480885589765b85a5",
+    "compiler_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "link_inputs_before_equal_after": true,
+    "private_build_helper_sha256": "b7e7c7b5188fed179cbff2772e9cc0f91efb350c5c297e011beee4a3a55ebb0f"
+  },
+  "arms": {
+    "OLD": {
+      "source_sha256_matches_generation": true,
+      "compiled_copy_sha256_matches_generation": true,
+      "object_sha256_matches_receipt": true,
+      "executable_sha256_matches_receipt": true,
+      "compile_exit_code": 0,
+      "link_exit_code": 0,
+      "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "link_log_sha256": "1800459ee93f0e61e5303104b2d8bd00ee73817c17787dfc27ea416446076a28",
+      "build_directory_is_external": true
+    },
+    "FIX": {
+      "source_sha256_matches_generation": true,
+      "compiled_copy_sha256_matches_generation": true,
+      "object_sha256_matches_receipt": true,
+      "executable_sha256_matches_receipt": true,
+      "compile_exit_code": 0,
+      "link_exit_code": 0,
+      "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "link_log_sha256": "1800459ee93f0e61e5303104b2d8bd00ee73817c17787dfc27ea416446076a28",
+      "build_directory_is_external": true
+    }
+  },
+  "stage": {
+    "receipt_sha256": "00eddd6ac26a3a4857ea40e294256d2b32c9c9e6a2998f112000c39d5281bf5e",
+    "expected_receipt_sha256": "00eddd6ac26a3a4857ea40e294256d2b32c9c9e6a2998f112000c39d5281bf5e",
+    "matches_expected": true
+  },
+  "warning": "Both link logs contain Intel warning #10148 that -ip is unsupported. Compile/link exit codes are 0; preserve this warning in runtime interpretation.",
+  "limitations": "A successful build does not establish native run success, six-hour history parity, process capture completeness, or scientific validity."
+}

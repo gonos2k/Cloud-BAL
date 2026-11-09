@@ -1,0 +1,81 @@
+{
+  "schema": "cp02_protected_process_kg_helper_source_review_v1",
+  "status": "HOLD_SOURCE_REVIEW",
+  "go_for_freeze_or_stage": false,
+  "review_type": "read-only static source review",
+  "scope": [
+    "docs/evidence/cp02_protected_process_20261106/kg/prepare_kg.py",
+    "docs/evidence/cp02_protected_process_20261106/kg/publish_kg.py",
+    "docs/evidence/cp02_protected_process_20261106/kg/validate_stage.py",
+    "docs/evidence/cp02_protected_process_20261106/kg/capture_baseline.py",
+    "docs/evidence/cp02_protected_process_20261106/kg/verify_baseline.py",
+    "docs/evidence/first_hour_zero_rate_20261030/kg/stage_kg.py"
+  ],
+  "source_sha256": {
+    "docs/evidence/cp02_protected_process_20261106/kg/prepare_kg.py": "0d4531ccbd8fce3ed475eb861db9a292b3abec5e108afdaa71dc9dd5e7bf9256",
+    "docs/evidence/cp02_protected_process_20261106/kg/publish_kg.py": "ab686fc10a8d93cb9b9c756aa4315bf50b7aeb1cc3569ad3d919b7d1f4d3133d",
+    "docs/evidence/cp02_protected_process_20261106/kg/validate_stage.py": "18a375561c98a897ef39b0dd0e361cf85110727032ff73f7e6f40be79f64e6ad",
+    "docs/evidence/cp02_protected_process_20261106/kg/capture_baseline.py": "e98d9feb239d9d335cc42ff2c187f929d89b16953d060279c0d716f0f53a85bd",
+    "docs/evidence/cp02_protected_process_20261106/kg/verify_baseline.py": "31e76c044707a17cd4b34a4128eea251d13133640e959c76d50e0a72d5e58a53",
+    "docs/evidence/first_hour_zero_rate_20261030/kg/stage_kg.py": "83895596df409a8b6b6843c942891c8e7f464ac3d71caaae5ee40ad729fe77e3"
+  },
+  "baseline_sha256": "4e8af7f1b0061672618aeecfa4af58a5afc81890596c9e14fd84364a740d6d23",
+  "findings": [
+    {
+      "id": "KG-01",
+      "severity": "BLOCKER",
+      "location": "kg/prepare_kg.py:278-295; kg/validate_stage.py:181-205; kg/publish_kg.py:93-123",
+      "finding": "Stage validation binds the lock to the review file by review_sha256 but never verifies that selected_source_sha256 and hash_only_sha256 exactly equal the maps in that review. The independent validator and publisher then validate receipt scope against the lock, not against the review's exact maps. A changed lock can therefore select different current source files while retaining the same review-file hash.",
+      "required_resolution": "At freeze/stage/validation, compare both frozen path/hash maps exactly with the independently reviewed maps; recheck that equality in publisher preflight."
+    },
+    {
+      "id": "KG-02",
+      "severity": "BLOCKER",
+      "location": "kg/prepare_kg.py:107-135, 138-168, 278-296; kg/validate_stage.py:196-206",
+      "finding": "The helper accepts any nonempty set of Python paths; the current contract requires exactly 12 selected Python paths. The lock, receipt, stage validator, and publisher consistently reuse their own path count without enforcing the reviewed 12-path scope.",
+      "required_resolution": "Pin the intended 12 paths or enforce exactly 12 unique paths in the independent review schema and at each freeze/stage/validation boundary."
+    },
+    {
+      "id": "KG-03",
+      "severity": "BLOCKER",
+      "location": "kg/prepare_kg.py:22, 172-180, 267-319; kg/publish_kg.py:48-54",
+      "finding": "The pipeline dynamically imports the legacy stage helper at docs/evidence/first_hour_zero_rate_20261030/kg/stage_kg.py. Its bytes are not included in the frozen review/hash-only pins or stage receipt. This file controls graph-layer copying, extraction/merge and selected-only manifest updates, and is also imported by the publisher for baseline and inventory behavior.",
+      "required_resolution": "Add the exact legacy helper path and SHA-256 to reviewed hash-only inputs and bind/recheck it in the lock and stage receipt, or copy the required helper into the protected-process bundle and pin that copy."
+    },
+    {
+      "id": "KG-04",
+      "severity": "HIGH",
+      "location": "kg/prepare_kg.py:138-169, 335; kg/capture_baseline.py:83-91",
+      "finding": "The selection lock and stage receipt use nonexclusive write_text after existence checks (the selection existence check also does not reject a dangling symlink). The standalone capture_baseline.py writes baseline.json unconditionally. A rerun or path substitution can overwrite frozen artifacts rather than preserving them as prior attempts.",
+      "required_resolution": "Use exclusive creation and reject symlinks for every frozen receipt/lock; make the standalone baseline writer refuse an existing baseline."
+    },
+    {
+      "id": "KG-05",
+      "severity": "MEDIUM",
+      "location": "kg/capture_baseline.py:39-48; kg/prepare_kg.py:57-66; kg/verify_baseline.py:39-49",
+      "finding": "Baseline capture and verification use different snapshot inventories. The standalone capture and verify_baseline.py omit __pycache__, .pyc and .lock, while prepare_kg.snapshot_inventory includes them. Current 122/126 snapshots contain no such entries, so this baseline is consistent now, but future transient files can make prepare/stage fail or change inventory semantics.",
+      "required_resolution": "Use one shared, explicitly documented filter for capture, stage verification, and publication inventory."
+    },
+    {
+      "id": "KG-06",
+      "severity": "MEDIUM",
+      "location": "kg/prepare_kg.py:95-104; kg/publish_kg.py:298-301, 356-360",
+      "finding": "The source worktree's git state is captured in baseline.source_worktree.git_state_at_capture but is not compared by verify_baseline. Publication only compares unrelated source dirty paths immediately before and after publication, so unrelated source-worktree changes between baseline and publication are not detected.",
+      "required_resolution": "Either verify baseline source dirty-state bytes after accounting for the one known untracked evidence directory, or document why that mutable source state is intentionally outside the protected-root contract."
+    }
+  ],
+  "reviewed_positive_controls": [
+    "Maintained snapshot counts are consistently pinned at 122 KLAPS50 plus 126 Cloud-BAL, total 248; successful publication expects 123 plus 127, total 250.",
+    "Publication preflights all targets and refuses existing snapshot destinations or symlink targets.",
+    "The publisher records undo entries before each target replacement, verifies published hashes, checks old snapshots and unrelated dirty paths, and attempts reverse-order rollback on any exception.",
+    "No maintained-root or active-graph writes were made during this read-only review."
+  ],
+  "validation_summary": "Static review only. No KG stage, publisher, graph mutation, or maintained-root write was executed. The supplied clean-export receipt records 455 passing Python tests; the paired five-hour native run passed all six hourly history comparisons, while strict full process replay was still pending at review time.",
+  "science_open_items": [
+    "The protected-process evidence remains one weather case and does not meet the frozen 26-condition adoption goal.",
+    "RN1 observation timing, coverage, QC and independent-case replication remain open.",
+    "The full native capture and process replay are not yet complete at this review timestamp.",
+    "Domain-wide water/energy closure and the separate C2 T39/HAN evaluation remain open."
+  ],
+  "no_writes": true
+}

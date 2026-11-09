@@ -1,0 +1,50 @@
+{
+  "reviewed_at_utc": "2026-11-06",
+  "status": "GO_SOURCE_AND_PLAN; HOLD_BUILD_RUNNER",
+  "scope": "Static independent review of the frozen CP02 protected-process plan, generated paired OLD/FIX Fortran source, source-generation receipt, cohort inputs, and stage inventory. No compiler or model run was invoked.",
+  "cohort": {
+    "points": 150,
+    "point_corner_rows": 600,
+    "native_columns": 381,
+    "unique_global_corners_sha256": "62b365cb0cc57b7b6006d8f6f760021f7424b94d7b381b507aeed093a9664b58",
+    "point_corners_sha256": "12a000e1dab5963f7327cce49a44e988940b8e1c208049dd7f5285f126e85ea9",
+    "role_membership_sha256": "54cbe13a13a7494fdaf10159919c480f90dfad26dcdcf8337735828d05132cb6",
+    "receipt_sha256": "cd1e03fbc075c25f6a4904ce278935dea8d23a2157162274835fca21fc911826"
+  },
+  "plan": {
+    "path": "docs/evidence/cp02_protected_process_20261106/native/plans/capture_plan.md",
+    "sha256": "f9bb34cb75c582402dc490c4a928fa936d9783a8d47f37e959a4fbdd15ce6135",
+    "finding": "Plan freeze receipt matches plan SHA and final cohort pins; counts are consistently 150 points, 600 point-corner rows, 381 native columns. Five-hour/900-step plan retains 1-360 and 721-900 detailed phases, complete 1-900 call inventory/surface returns, and explicit history parity gates. Storage estimate distinguishes selected windows from 1-900 surface returns and retains 32 GiB/arm cap."
+  },
+  "generated_source": {
+    "receipt_path": "docs/evidence/cp02_protected_process_20261106/native/source/source_generation_receipt.json",
+    "receipt_sha256": "ecdd72306ff4bb7de762d97fbf36e38eb6d93ed977c23b0480885589765b85a5",
+    "old_source_sha256": "2372d988eeffa73d2fc68869119daf0515407a89ba89119e66834bc38c806385",
+    "fix_source_sha256": "1957f36c39d0e4bcbf16c238b90edde2a01285a03d7e1e65dd8de737c199d67c",
+    "schema_sha256": "6759a6899814e5b766e70d935f35b03e3fa052bdfa0611d891fbea3d78416703",
+    "archive_comparison": "For OLD and FIX independently, source lines from the pinned 4096-line archived arm source remain an ordered subsequence of the generated source; independent SequenceMatcher comparison reports zero replace and zero delete opcodes.",
+    "capture_window_review": "Static inspection confirms selected state and detailed CP04 phases are gated to actual steps 1-360 and 721-900; full call inventory and surface return are gated through step 900; process/state chunk names use three-step windows; cohort and receipt pins match the final CSVs.",
+    "caveat": "This static review is not compiler, runtime, history-parity, or scientific validation.",
+    "generator_sha256": "82e0cde027b69725d408b4dba637a3dc6741d59a0c703e119a3465235ce42abd",
+    "plan_freeze_receipt_sha256": "30209ad08cdae31645ee1f0e93f9fd7668b6d178092d928c7ad935ad9a0a51fd",
+    "finding": "Independent static source/plan review PASS for advancing toward compilation only after the build runner has passed a separate review. This does not authorize using the current runner."
+  },
+  "stage_inventory": {
+    "source": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED",
+    "prepared_file_count": 89,
+    "source_hashes_verified": 89,
+    "mismatches": 0,
+    "inventory_sha256": "74b8d73750dbd0c9430660d5293aef0cc033e4e61ab961b42beba0f6a9d060d6"
+  },
+  "remaining_blocker": "Source and plan review passed. Do not invoke the build runner until both runner blockers are fixed and reviewed.",
+  "build_runner_review": {
+    "path": "docs/evidence/cp02_protected_process_20261106/native/build/build_pair.py",
+    "sha256": "b7e7c7b5188fed179cbff2772e9cc0f91efb350c5c297e011beee4a3a55ebb0f",
+    "executed": false,
+    "blockers": [
+      "build_root = WORK / 'build' resolves under the evidence/source tree, and TMPDIR is nested there; plan requires ROOT.parent/runtime/native/build.",
+      "require_review checks plan_review.sha256 against source-generation receipt key plan_sha256, which is absent in the current receipt. The current review would be rejected before build."
+    ],
+    "required_before_compile": "Move build and temporary paths to the external Lustre runtime/native/build scratch root; bind the current frozen plan SHA using a present receipt field or the plan freeze receipt; obtain a fresh read-only runner check."
+  }
+}

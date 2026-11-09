@@ -1,0 +1,150 @@
+{
+  "status": "FROZEN_QUICK_GATE_PLAN",
+  "purpose": "Paired 20-second, one-actual-timestep instrumented validation before the authorized five-hour capture.",
+  "model": {
+    "dt_seconds": 20,
+    "duration_seconds": 20,
+    "actual_timesteps": [
+      1
+    ],
+    "expected_history_hours_utc": [
+      12
+    ]
+  },
+  "arms": {
+    "OLD": {
+      "initial_stage": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED",
+      "reference_history": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100",
+      "cpu_ids": [
+        32,
+        33,
+        34,
+        35,
+        36,
+        37,
+        38,
+        39
+      ]
+    },
+    "FIX": {
+      "initial_stage": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED",
+      "reference_history": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED",
+      "cpu_ids": [
+        40,
+        41,
+        42,
+        43,
+        44,
+        45,
+        46,
+        47
+      ]
+    }
+  },
+  "mpi": {
+    "ranks": 8,
+    "omp_threads": 1
+  },
+  "cohort": {
+    "points": 150,
+    "point_corner_rows": 600,
+    "native_columns": 381,
+    "selector_sha256": "62b365cb0cc57b7b6006d8f6f760021f7424b94d7b381b507aeed093a9664b58",
+    "receipt_sha256": "cd1e03fbc075c25f6a4904ce278935dea8d23a2157162274835fca21fc911826"
+  },
+  "pins": {
+    "capture_plan_sha256": "f9bb34cb75c582402dc490c4a928fa936d9783a8d47f37e959a4fbdd15ce6135",
+    "plan_freeze_sha256": "30209ad08cdae31645ee1f0e93f9fd7668b6d178092d928c7ad935ad9a0a51fd",
+    "source_generation_receipt_sha256": "ecdd72306ff4bb7de762d97fbf36e38eb6d93ed977c23b0480885589765b85a5",
+    "schema_sha256": "6759a6899814e5b766e70d935f35b03e3fa052bdfa0611d891fbea3d78416703",
+    "build_receipt_sha256": "22d7abe32334986d0a9acfe215c5b071b3fa98e425eb1bd1d31fd38121cfed94",
+    "stage_receipt_sha256": "00eddd6ac26a3a4857ea40e294256d2b32c9c9e6a2998f112000c39d5281bf5e",
+    "toolchain_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "build_script_executed_sha256": "b7e7c7b5188fed179cbff2772e9cc0f91efb350c5c297e011beee4a3a55ebb0f",
+    "compile_review_sha256": "355bb2c972e280c356c1ba98c794320e1019965b81fd825467e8b1b1253927a7"
+  },
+  "capture": {
+    "selected_state_stages": [
+      "entry",
+      "return"
+    ],
+    "state_levels": 39,
+    "process_phases": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6,
+      7,
+      8,
+      9,
+      10,
+      11,
+      12,
+      13,
+      14,
+      15,
+      16,
+      17
+    ],
+    "surface_fields": [
+      "rainncv",
+      "rain",
+      "sr"
+    ],
+    "calls_timestep_set": [
+      1
+    ],
+    "process_chunk_pattern": "cp04_t000001-000003_rank{rank}.bin",
+    "selected_state_patterns": [
+      "state_selected_entry_t000001-000003_rank{rank}.bin",
+      "state_selected_return_t000001-000003_rank{rank}.bin"
+    ],
+    "calls_pattern": "state_calls_rank{rank}.txt",
+    "surface_pattern": "surface_cp04_rank{rank}.bin",
+    "step_must_be_preserved_as_1": true,
+    "all_raw_runs_external": true,
+    "required_phase_cell_coverage": [
+      1,
+      2,
+      3,
+      4
+    ],
+    "conditional_phases": {
+      "5": "source-limited process-rate record; may be absent if source loop is not reached",
+      "6": "pre-update state; paired with phase 5 when emitted",
+      "7": "latent-input calculation; emitted only on its branch",
+      "8": "post-update state; paired with phases 5/6 when emitted",
+      "9": "pre-sedimentation; emitted only for actual sedimentation substeps",
+      "10": "post-sedimentation; must pair with phase 9 for same point/level/loop/substep",
+      "13": "surface-flux input; emitted only when all-species fall sum is positive",
+      "14": "surface-flux update; must pair with phase 13 for same point/loop",
+      "15": "rain evaporation; only where rain mixing ratio is positive",
+      "16": "negative-rain source limit; only within phase-15 negative-rate branch",
+      "17": "rain-rate bound; only within phase-15 bounded-rate branch",
+      "11": "final-condensation input; emitted only when the existing pcond update branch is reached",
+      "12": "final-condensation post-update; must pair with phase 11 for the same point/level/loop"
+    },
+    "conditional_absence_rule": "Absence remains explicitly absent; never fill with zero. Validate all source-required phases and pairs in the collector."
+  },
+  "history_gate": {
+    "comparisons": [
+      "dimensions",
+      "variables",
+      "coordinates",
+      "attributes",
+      "numerical variable data and masks"
+    ],
+    "comparison_is_byte_exact": true
+  },
+  "resource_limits": {
+    "per_chunk_bytes": 94371840,
+    "aggregate_diagnostic_bytes_per_arm": 34359738368,
+    "tmp_and_output_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/runtime/native"
+  },
+  "limitations": [
+    "This gate observes only actual timestep 1 and does not replace the full five-hour capture.",
+    "A missing process phase is missing evidence and must fail the strict gate; it is not filled with zero."
+  ]
+}

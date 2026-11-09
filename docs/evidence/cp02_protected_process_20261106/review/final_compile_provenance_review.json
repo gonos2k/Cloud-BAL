@@ -1,0 +1,51 @@
+{
+  "status": "PASS_COMPILE_PROVENANCE_WITH_WARNING",
+  "scope": "Independent read-only review of final paired OLD/FIX IFX build. No build or model run was executed by reviewer.",
+  "build_receipt_path": "../runtime/native/build/build_receipt.json",
+  "build_receipt_sha256": "29347a63ea954383c27f89c581289a2db19ad1f4fa91748d1310b8a726cb54b0",
+  "source_compile_go_sha256": "98dcc4355797b28d792717b2b1def152726e41c44fd41aa8f1738d43a250bb52",
+  "source_generation_receipt_sha256": "7ed9bf6189249468695e5ce4784f3733d04eed41dae95b3cb31bb46d6bc0ae37",
+  "executed_build_helper_sha256": "b7e7c7b5188fed179cbff2772e9cc0f91efb350c5c297e011beee4a3a55ebb0f",
+  "build_helper_source_sha256": "5b9dd8e0b636f613c648586809dfbaaae4e256ebcc3a6bd51d3d44fcc7eca9c1",
+  "compiler": {
+    "profile_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_protected_process_20261106/Cloud-BAL/tests/intel_toolchain.sh",
+    "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "compiler_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+    "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+    "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+    "mpi_launcher": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpirun",
+    "mpi_env": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh"
+  },
+  "host_link_input_count": 10,
+  "host_link_inputs_unchanged": true,
+  "stage_receipt_sha256": "00eddd6ac26a3a4857ea40e294256d2b32c9c9e6a2998f112000c39d5281bf5e",
+  "arms": {
+    "OLD": {
+      "source_sha256": "2372d988eeffa73d2fc68869119daf0515407a89ba89119e66834bc38c806385",
+      "object_sha256": "7beb6c9825218a93e21fc40d02c5d233809e3b04c6c4712760a643bc0c47ad0a",
+      "archive_sha256": "f7a80cd3f5220f00889921361113782e09bfb736c98427e770789b098c322d13",
+      "archive_member_sha256": "7beb6c9825218a93e21fc40d02c5d233809e3b04c6c4712760a643bc0c47ad0a",
+      "executable_sha256": "3840413a96f0ac0e74c01efbf3be947f2070dbb9ec9a938bac5f86cc0b272255",
+      "compile_exit_code": 0,
+      "link_exit_code": 0,
+      "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "link_log_sha256": "1800459ee93f0e61e5303104b2d8bd00ee73817c17787dfc27ea416446076a28",
+      "link_warning": "ifx: command line warning #10148: option '-ip' not supported",
+      "outputs_external": true
+    },
+    "FIX": {
+      "source_sha256": "1957f36c39d0e4bcbf16c238b90edde2a01285a03d7e1e65dd8de737c199d67c",
+      "object_sha256": "4b416ef4a7b615feb59ecd24344488f8aeb5e870e13e28ed8593a0d186399757",
+      "archive_sha256": "c874c14a539334c2ae68ccd1e57cfd6bb8b68a275f3d52bbd0e5c20b84a63850",
+      "archive_member_sha256": "4b416ef4a7b615feb59ecd24344488f8aeb5e870e13e28ed8593a0d186399757",
+      "executable_sha256": "3063f0eb2d1f679f6b3f7711002cfb1e0ea17bddafae3b8a010fc8ade68302e9",
+      "compile_exit_code": 0,
+      "link_exit_code": 0,
+      "compile_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+      "link_log_sha256": "1800459ee93f0e61e5303104b2d8bd00ee73817c17787dfc27ea416446076a28",
+      "link_warning": "ifx: command line warning #10148: option '-ip' not supported",
+      "outputs_external": true
+    }
+  },
+  "limitations": "Successful compilation/link does not establish raw-run success, history parity, capture completeness, or scientific interpretation."
+}

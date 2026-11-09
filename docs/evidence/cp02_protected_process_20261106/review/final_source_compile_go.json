@@ -1,0 +1,43 @@
+{
+  "status": "GO_FOR_COMPILE_STATIC_REVIEW",
+  "scope": "Independent compile-gate source and frozen-plan review. Compilation may proceed only under the pinned Intel profile and external scratch path.",
+  "plan": {
+    "path": "docs/evidence/cp02_protected_process_20261106/native/plans/capture_plan.md",
+    "sha256": "9183bd9f6bf7d0781cb6793d7f88e7ad6e44d2adb166e065c923bb0b7e67434e",
+    "freeze_receipt_sha256": "1daab2769d031faecfc84560cbb6f67eecf0bf45b02e92de18a7fa683d1b35a2"
+  },
+  "cohort": {
+    "points": 150,
+    "point_corner_rows": 600,
+    "native_columns": 381,
+    "selector_sha256": "62b365cb0cc57b7b6006d8f6f760021f7424b94d7b381b507aeed093a9664b58",
+    "receipt_sha256": "cd1e03fbc075c25f6a4904ce278935dea8d23a2157162274835fca21fc911826"
+  },
+  "generated_source": {
+    "receipt_sha256": "7ed9bf6189249468695e5ce4784f3733d04eed41dae95b3cb31bb46d6bc0ae37",
+    "schema_sha256": "677847102d32b1637340d94bcd24c3856d63348bd15ceb0a319d8b5eda8ff25c",
+    "generator_sha256": "49152024265d4d08bb28f63e93c39e47fe602df7e7816899b7dda1889d9bbac4",
+    "old_source_sha256": "2372d988eeffa73d2fc68869119daf0515407a89ba89119e66834bc38c806385",
+    "fix_source_sha256": "1957f36c39d0e4bcbf16c238b90edde2a01285a03d7e1e65dd8de737c199d67c",
+    "archive_preservation": {
+      "OLD": {
+        "archive_sha256": "c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b",
+        "generated_sha256": "2372d988eeffa73d2fc68869119daf0515407a89ba89119e66834bc38c806385",
+        "line_replace_ops": 0,
+        "line_delete_ops": 0
+      },
+      "FIX": {
+        "archive_sha256": "0b468be19f7dd66ad2f6e65a53b42f10391a4565831a96c80dddddf21934cf79",
+        "generated_sha256": "1957f36c39d0e4bcbf16c238b90edde2a01285a03d7e1e65dd8de737c199d67c",
+        "line_replace_ops": 0,
+        "line_delete_ops": 0
+      }
+    }
+  },
+  "intel_profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "build_helper_sha256": "5b9dd8e0b636f613c648586809dfbaaae4e256ebcc3a6bd51d3d44fcc7eca9c1",
+  "quick_plan_sha256": "e1918670ba1ad69f6d1f4c8d567696194e7e49f8439fc0487f577a2f193fca54",
+  "raw_runner_sha256": "d884383b1ce50c0dcb394f7ca833aa9014b06c7c11e32fb33e46d13bdb6d30c7",
+  "raw_runner_wrapper_sha256": "0b58362ee7efc1c2b72141dea9571c50f1912d7102c95259f2076e7a59663591",
+  "validation_limit": "Compile-gate GO only. It does not establish compilation success, native execution, history parity, phase collection, or scientific interpretation."
+}

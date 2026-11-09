@@ -1,0 +1,144 @@
+{
+  "schema": "cp02_protected_process_plan_v1",
+  "status": "FROZEN_DIAGNOSTIC_SCOPE",
+  "base_commit": "8e8208672092c2f4169fe617bc3b4d9f379e69ae",
+  "initial_utc": "2026-08-16T12:00:00Z",
+  "retained_configuration": "B1",
+  "new_candidate": false,
+  "frozen_source_pins": {
+    "docs/evidence/cp02_failure_focus_20261105/analysis_plan.json": {
+      "size_bytes": 10659,
+      "sha256": "bc33612e6d719791034d72a7de3e4ddfa09b81d66a9c1b73a8a7fffe668eb0d2"
+    },
+    "docs/evidence/cp02_failure_focus_20261105/context/bundle_receipt.json": {
+      "size_bytes": 19932,
+      "sha256": "a63d4b0d43f94b7456a9ebd8dde68b1616aec521f28bab04e73ee8d48c3e014e"
+    },
+    "docs/evidence/cp02_failure_focus_20261105/context/point_surface_paths.csv": {
+      "size_bytes": 963816,
+      "sha256": "1cdbc58119ec50221f239f841b35fb84bf49686fcf68aeb3728c9288bd0b999b"
+    },
+    "docs/evidence/cp02_failure_focus_20261105/context/layer_features.csv": {
+      "size_bytes": 11571480,
+      "sha256": "e803b41412a1ce2963d9f25b2582c5ae32cc9f8b3e3b0a66f827d53d09db5778"
+    },
+    "docs/evidence/cp02_failure_focus_20261105/targets/matched_controls.csv": {
+      "size_bytes": 31583,
+      "sha256": "b9cb77c8bd7fa9dbc5890c997ce86bb5e18ada565a934f340717396025824b3a"
+    },
+    "docs/evidence/cp02_grouped_forecast_20261105/analysis/receipt.json": {
+      "size_bytes": 17530,
+      "sha256": "53cdf3da71cd47114f8e0806b47987b0b1d9b15128a91a127ce873cd921c8839"
+    },
+    "docs/evidence/weak_strong_balance_20261030/analysis/receipt.json": {
+      "size_bytes": 246235,
+      "sha256": "c04e2e6002d043ec1624d7bc2145e78fed9a4173487251e4ce472c963094c0ae"
+    },
+    "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_13_arrays.npz": {
+      "size_bytes": 150587,
+      "sha256": "efdcbc493f23d7765a941b9cf6d08cee7ce339624a8465c5ed875f48dd42d8fe"
+    },
+    "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_14_arrays.npz": {
+      "size_bytes": 151514,
+      "sha256": "f422d3820eefa19ac71787c9e52e40b8098d1955b3af9e7039fb492c92eae971"
+    },
+    "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_15_arrays.npz": {
+      "size_bytes": 163832,
+      "sha256": "f41d559ef2553a80b4d999a95d2b57a025a01bbe8938345c5212a2ed5eba22e8"
+    },
+    "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_16_arrays.npz": {
+      "size_bytes": 164516,
+      "sha256": "edb35029ea27ed3d97b8a5f2163fd76912953a6febfd15c424d2dd71b0968f34"
+    },
+    "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_17_arrays.npz": {
+      "size_bytes": 159314,
+      "sha256": "209283740dc8c564d05d79c8ba40076bf2e48066f82135b16ba63313ee69de06"
+    },
+    "docs/evidence/cp02_grouped_forecast_20261105/analysis/hour_18_arrays.npz": {
+      "size_bytes": 165352,
+      "sha256": "e2b49311cd4ded0072ddc5f9f3770bb070d728d946dcab7b74f969b164b70841"
+    },
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_13_arrays.npz": {
+      "size_bytes": 309677,
+      "sha256": "5ab0cc484b1bd47c587e9f710a8d19072b383447b8a7aa4c0c0d8f22a2ae5354"
+    },
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_14_arrays.npz": {
+      "size_bytes": 320209,
+      "sha256": "309706609edb4f40c6063aacabf86cea2a28aafff39d73d584cc41336e0941f9"
+    },
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_15_arrays.npz": {
+      "size_bytes": 354064,
+      "sha256": "6ccac20f2d141b9ff270e5dde8bf219378e456ae073614f783d41d0d1abc8510"
+    },
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_16_arrays.npz": {
+      "size_bytes": 351113,
+      "sha256": "0fa329fc68ece6ce1334d168b8eeb92c8c3404cbdae3a5db274aae3194052852"
+    },
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_17_arrays.npz": {
+      "size_bytes": 337217,
+      "sha256": "b4e2c8bf84daee247ba632c53ebd556e3d40313a91e1ad144340f6c5c6fab982"
+    },
+    "docs/evidence/weak_strong_balance_20261030/analysis/hour_18_arrays.npz": {
+      "size_bytes": 357100,
+      "sha256": "5b29e885d50be1fb306a1f1f16d5961a87650f76b3432ebb12c4bd835728090a"
+    }
+  },
+  "tasks": [
+    "Fix per-case/per-hour residual summary after all 270 points; preserve five physical CSVs exactly. X has null direct-paired residual.",
+    "Recount whole-population OLD/FIX under both initializations, separately from ORIGINAL-selected conditional cohorts.",
+    "Define +2-hour weak losses, retained controls, new/resolved false alarms and +5-hour FIX successes as simultaneous process-diagnostic roles.",
+    "Show absolute and remaining lower-layer QRAIN as well as paired differences; independent medians are not subtractable.",
+    "Record nearest predicted-wet sample observation status and distinguish self-only 5-km counts from 10/20-km neighbors.",
+    "Perform bounded same-input OLD/FIX process re-integration only after separately frozen native plan and team source/plan review. Verify hourly histories against existing standard forecasts."
+  ],
+  "expected_recounts_from_review": {
+    "B1_plus2_weak_gain_loss": [
+      2,
+      10
+    ],
+    "B1_plus2_false_alarm_new_resolved": [
+      33,
+      30
+    ],
+    "original_to_A_selected_FA_new_resolved": [
+      53,
+      24
+    ],
+    "conditional_X_below_in_selected53": 32,
+    "plus5_protected_weak_in_C_losses": 11,
+    "plus5_protected_strong_hit_id": 12299,
+    "plus5_protected_FA_resolution_in_C_new12": 7
+  },
+  "evaluation_contract": {
+    "observed_weak_interval_mm": "0.1 <= RN1 < 1",
+    "weak_detection_mm": 0.1,
+    "event_operator": ">=",
+    "thresholds_mm": [
+      0.1,
+      0.5,
+      1.0,
+      2.5,
+      5.0,
+      10.0
+    ],
+    "lead_hours": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "adoption_conditions_unchanged": 26,
+    "protection_conditions_unchanged": 11,
+    "recovery_conditions_unchanged": 15,
+    "no_average_CSI_or_changed_baseline": true
+  },
+  "limits": [
+    "Same-input executable contrasts are not process-causal attribution.",
+    "Native diagnostic runs are not new candidate skill improvements; capture must reproduce standard histories.",
+    "No arbitrary PSD/RH/evaporation/autoconversion coefficient or reversal of zero-rate fix is authorized by this diagnosis.",
+    "Native transport is named only where actual tendency/flux is captured; other between-call changes stay external net changes.",
+    "One weather case; upstream RN1 timing/coverage/QC, independent cases, domain budgets and separate C2 T39/HAN remain open."
+  ]
+}

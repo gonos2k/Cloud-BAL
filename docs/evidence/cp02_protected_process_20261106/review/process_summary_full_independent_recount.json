@@ -1,0 +1,64 @@
+{
+  "bindings": {
+    "compact_arm_capture_receipt_sha256": {
+      "FIX": "e819aba760bc53c0927f6bd9f66ea98fcdd7e10f0da6a98f17457c2ff9184fc0",
+      "OLD": "f28cab85b3efc9c89ef13460490b582ba5d21cfe4c3994d5b4cd8b5453d38454"
+    },
+    "compact_channel_count": 130,
+    "compact_package_receipt_sha256": "371a601789096e1094971589bd4bde9412b22e3ad3ef178f44358e4a09912102",
+    "compact_package_status": "EXACT_SOURCE_CHANNEL_SUBSET_VERIFIED",
+    "compact_total_channel_bytes": 820732670,
+    "full_run_receipt_sha256": "41a1d6e8dd2b0821dc03bdc6927465513c31e877981497eb795ad349284201e5",
+    "summary_outputs": {
+      "group_level_process_profiles.csv": "1661aa751a05213d71f296b9a467fd28c786424f0c79c84ba7322f08cc1d09bb",
+      "point_level_nominal_rates.csv": "7a234a737b85be201722006a8ebeb1e2261296485da27ecb7624a40f1fcf3bdf",
+      "point_level_process_ledger.csv": "9231038aaa9a98680a08a83cf85f663c651b76a0d6adc0186e3d6b92bb9cf512"
+    },
+    "summary_receipt_sha256": "db80aca32dcd3669c77966d6aed1b4d4a36ac51febd369a644b12b066535a322",
+    "summary_tool_sha256": "77945c25b8ca369e451af9f54f81a5c4dc384c70c9166c71b5837e2c5fded895",
+    "v4_independent_recount_receipt_sha256": "23a1940477e4d9b212c62d60fb2b60acc05f123d1a361df530f370f61498f282",
+    "v5_collector_receipt_sha256": {
+      "FIX": "9d852d396c037d633b1c000c94170516ed290eb7a56592335c1f3df423294914",
+      "OLD": "3778e4db7e661eb3f502235a9f5328e7b90254a80a11bd0ec0f93ed210510cd9"
+    },
+    "v5_compact_identity_proof_sha256": "b1432f71b7756bf004b6c312875747dae247bb5ea7c75c1ed8c96039562741eb",
+    "v5_summary_receipt_sha256": "f6d8af84a6dcba7ee80ead649cc709491f557e01db00ccb8a2ca4c178c5d8ec2",
+    "v5_summary_reconciliation_sha256": "0d44b9f2a08f55a996ad582c153c54abb5906fc1782b602ffac09991a01fdf1f"
+  },
+  "independent_methods": [
+    "Recomputed the FIX-minus-OLD call-internal sum, between-call net sum, endpoint change, and telescoping residual over each contiguous 180-step interval for hours 1, 2, and 5, retaining all 39 native levels and 150 selected points.",
+    "Recomputed phase 8 minus phase 6 and phase 12 minus phase 11 sums directly from the paired compact channel arrays; QR sedimentation remained a separately paired optional term.",
+    "Recomputed PREVP, PRAUT, and PRACW nominal rate integrals by multiplying native float32 rates by native float32 dtcld first, then applying the pinned four-corner point weights and summing time at fixed native k.",
+    "Rebuilt role-level fixed-k quantiles from the full ledger table and pinned role membership, checking every finite count and all q25/median/q75 values."
+  ],
+  "limits": [
+    "V5 follows the complete independent V4 recount through exact input, summary-tool and output byte identity; the V4 numeric computation was not redundantly repeated.",
+    "This validates bookkeeping and exact output reproducibility; it is not a new physical attribution or a column/domain conservation closure.",
+    "PREVP/PRAUT/PRACW integrals are nominal source terms, not observed net state changes or causal precipitation fractions.",
+    "Between-call changes remain net external operations; no ledger bridges steps 361 through 720.",
+    "Role memberships overlap, points are spatially correlated, and group quantiles of components do not generally add."
+  ],
+  "recount_results": {
+    "group_profile_max_absolute_difference": 0.0,
+    "group_profile_quantile_cells_recomputed_exactly": 210600,
+    "group_profile_rows": 7020,
+    "input_channel_hashes_rechecked_against_package_and_arm_capture_receipts": 130,
+    "nominal_rate_max_absolute_difference": 0.0,
+    "nominal_rate_numeric_cells_recomputed_exactly": 105300,
+    "nominal_rate_rows": 35100,
+    "process_ledger_max_absolute_difference": 0.0,
+    "process_ledger_null_masks_and_paired_sedimentation_counts_match": true,
+    "process_ledger_numeric_cells_recomputed_exactly": 508950,
+    "process_ledger_rows": 70200
+  },
+  "schema": "cp02_protected_process_full_summary_independent_recount_v1",
+  "scope": "The complete independent V4 numerical recount is inherited only after independently rehashing all 130 V5 compact files and establishing exact V4-to-V5 input identity, unchanged summary tool, and byte-identical three V5 summary CSVs. The full original V4 receipt is preserved.",
+  "status": "PASS_V5_FULL_COMPACT_INPUT_AND_OUTPUT_RECOUNT_BY_BYTE_IDENTITY",
+  "validation": {
+    "compact_source_hash_reconciliation": "PASS",
+    "summary_output_recount": "PASS",
+    "tests_run_by_reviewer": false,
+    "v5_130_compact_hashes_independently_rechecked": "PASS",
+    "v5_summary_csv_and_tool_byte_identity": "PASS"
+  }
+}

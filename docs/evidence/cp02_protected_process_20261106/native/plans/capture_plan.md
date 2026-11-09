@@ -1,0 +1,46 @@
+# CP02 protected process native capture plan — 2026-11-06
+
+Status: source generation authorized; compilation and execution remain gated on independent plan/source review. No model coefficient, process expression, threshold, state update, or forecast physics is changed.
+
+## Frozen cohort and inputs
+
+The cohort producer froze 150 unique RN1 observation points, 600 bilinear corner rows, and 381 deduplicated native WRF columns. The authoritative selector is `docs/evidence/cp02_protected_process_20261106/cohorts/unique_global_corners.csv` (SHA-256 `62b365cb0cc57b7b6006d8f6f760021f7424b94d7b381b507aeed093a9664b58`); the point/corner map is `point_corners.csv` (SHA-256 `12a000e1dab5963f7327cce49a44e988940b8e1c208049dd7f5285f126e85ea9`); roles are `role_membership.csv` (SHA-256 `54cbe13a13a7494fdaf10159919c480f90dfad26dcdcf8337735828d05132cb6`). The receipt is pinned at SHA-256 `cd1e03fbc075c25f6a4904ce278935dea8d23a2157162274835fca21fc911826` and includes the four OA nearest-A-wet, RN1-zero neighboring points on the frozen miss→false-alarm pairs. Both +2h weak-loss definitions are retained separately: X→A has 10 points, O→A has 10 points, with nine shared points; RN1_16138 and RN1_17524 remain distinct. The retained controls are matched to O→A.
+
+Both OLD and FIX cases use the exact same 89-file B1 stage at `/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED`, with `wrfinput_d01` SHA-256 `9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5`, `wrfbdy_d01` SHA-256 `74102ac2063f17a9007f3352e6e6c2f52629055bdf3f05b4f4d6d77aef835f45`, and `dt=20 s`. Arm references are OLD `/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/weak_strong_balance_20261030/ORIGINAL_B1_100` and FIX `/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED`.
+
+## Run and history gates
+
+Run each arm for five hours (900 steps) with eight MPI ranks and one OpenMP thread. OLD is pinned to CPUs 32–39 and FIX to 40–47. Capture selected state and process phases at actual timesteps 1–360 and 721–900, for all 39 vertical levels and all 381 native columns (from 600 point-corner rows). The interval 361–720 is deliberately uncaptured and must remain absent in tables; no interpolation, zero filling, or transport attribution crosses that gap. Record the KDM6 call inventory for steps 1–900, and capture selected surface return fields at every actual step 1–900.
+
+Before interpreting process data, compare all six hourly WRF histories (12:00–17:00 UTC) against that arm's existing reference. Require identical dimensions, variables, coordinates, attributes, and numerical data bytes. A mismatch invalidates process interpretation. Preserve and report all native run exit codes, success markers, raw inputs, environment, and output hashes.
+
+## Source-linked fields and phase bounds
+
+Use the CP04 source generator lineage: CP03 baseline source SHA-256 `605b2d6895229f287dd6dc675b84dea0596f7a247a18bf80e3615635defb0295`, CP04 instrumented FIX reference source SHA-256 `93e7575701655cd5fead8c40d316e6292f29c0ef7c9594380ee8a55d2dbcf0f5`, and CP04 generator SHA-256 `8465eb90296660ab93e1b50f5d697c8191b8eada6b96299b50738c3b8e118175`. Build both arms from pinned OLD/FIX parents, adding the same diagnostic insertions/window gates/chunked I/O while leaving each arm’s original physics lines intact. Use CP04 frame structure and field order, extended only for the capture windows and bounded chunk files. Keep actual frame keys `(rank, call_id, itimestep, j, tile bounds)` and record keys `(phase, i, k, loop, substep)`.
+
+- Wrapper entry and return: 16 public values per selected column/level, including `TH`, `QV`, `QC`, `QR`, `TK=TH*PII`, `P`, and `PII`; compact retained output includes those required fields plus the selected water state needed for binding.
+- KDM62D phases 1–8 and 15–17: raw/clamped entry, saturation, source-limited mass/number rates, pre-update, latent inputs, post-update, and actual PREVP caps. Phase 5 retains the existing 39 rate fields; no rate is recreated from an event count.
+- Rain/snow/graupel sedimentation phases 9–10: all species' `fall`, actual `falk`, and before/after states for every real substep `1..mstep`.
+- Final condensation phases 11–12: capture `pcond`, `dtcld`, `xl`, `cpm`, and pre/post state for every selected cell and level. These diagnostic records are unconditional in the instrumented source; only the underlying condensation state change is source-limited.
+- Surface phases 13–14: all-species fall totals and actual accumulation update, conditional records paired strictly; absence is missing, not zero.
+- Surface return every step 1–900: preserve source `rain`, `rainncv`, and `sr` as separate fields. Check the returned cumulative `rain` field against the matching `RAINNC` history variable; retain `rainncv` as the per-call non-convective increment and verify it against native history changes. Keep `RAINC` as the separate convective history field; do not conflate either with these source fields. Retain all-species surface `fallsum` channels for the detailed capture windows.
+
+The compact collector will emit per-arm/per-hour/per-field files with actual timestep coordinates, 150 point IDs, 381 native corner IDs, 39 levels, role membership, and weights. Required derived channels are: wrapper entry/return; exact source `phase 8 - phase 6` internal `QV/QC/QR/T` updates; source-order process-rate channels including `praut`, `pracw`, and signed `prevp` with `dtcld`; sedimentation net `QR/QS/QG`; final-condensation actual `QV/QC/T` increments; source arithmetic residuals (or explicit unresolved closure gaps); and full 900-step surface cumulative values/increments. Validate the source-order float32 update equations against captured states. If cold/warm branch-specific `QR` terms cannot be replayed exactly from the stored rate channels, mark the residual unresolved and do not claim full `QR` closure.
+
+The wrapper difference is total change between KDM6 call boundaries, including all non-KDM6 operations. It is not labeled pure transport. Adjacent-step ledgers are reported only within observed contiguous intervals (1–180, 181–360, and 721–900).
+
+## Bounded storage and validation
+
+Existing CP04 capture (123 selected columns, 360 steps) used 2,316,443,628 bytes in process frames, 262,883,520 bytes in selected-state streams, and 1,771,200 bytes in surface returns. Linear scaling by `381/123 × 540/360` projects about 10.76 GB process, 1.22 GB selected state, and 13.716 MB surface returns per arm, before the first-step global snapshots (projected at roughly 1.5 GB). Retain an aggregate 32 GiB diagnostics cap per arm. Split process and state streams by rank and three actual timesteps; cap each raw chunk at 90 MiB and compress/hash it after close. Keep the full raw chunk inventory external under `ROOT.parent/runtime/native`; retain representative compressed chunks and compact validated per-hour/field tables in this evidence bundle. All run/build/temp/object paths stay under the Lustre `runtime/native` scratch root, never `/var/tmp` or the source tree.
+
+The collector will stream each binary frame and record, enforce the pinned schema and exact accepted timestep set, require one owner per selected level/step, validate 39-level completeness, phase/substep pairing and all expected actual call IDs, verify source arithmetic and output-history bindings, and emit a hash receipt. It will not use the existing `read_process` dense contiguous-step loader unchanged: that reader is hard-coded to steps 1–360 and allocates arrays for every phase simultaneously.
+
+## Build profile and gates
+
+Use only `Cloud-BAL/tests/intel_toolchain.sh` (SHA-256 `5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4`) and pinned Intel `ifx` 2026.0.0. Use fresh per-arm build directories under `ROOT.parent/runtime/native/build/`. Pin both archived source hashes from the prior B1 trace (`BASE` `c4a7d1e90ea27608ba7efb652cfb79dee2e30db769e076ad1a2e7a7e63d5e52b`; `FIX` `0b468be19f7dd66ad2f6e65a53b42f10391a4565831a96c80dddddf21934cf79`), host archive and link inputs, compiler profile/version, compiler/link argv, return codes, and instrumented source hashes. Source diff validation must establish that the original arm's physics lines remain unchanged and all new source text is diagnostic insertion/gating/I/O only. Independent plan/source review is required before any compiler invocation; native runs follow only after successful build and prelaunch gates.
+
+## Limits
+
+Integrate mixing-ratio and temperature increments over time only at fixed native levels; retain the 39-level axis and do not interpret an unweighted vertical sum as mass. Sedimentation includes vertical transfer and nonnegative clipping, while captured `falk` is not guaranteed to be the top-boundary flux; this is not a full-column sedimentation budget. `PREVP*dtcld` is kept distinct from the actual `phase 8 - phase 6` vapor/temperature change.
+
+This is a single B1 case and selected cohort diagnostic. It does not test a new coefficient or candidate, establish independent-event skill, prove full-domain water/energy closure, infer pure transport from between-call differences, or establish production approval. KG freshness is tracked separately and does not establish runtime or scientific validation.

@@ -1,0 +1,157 @@
+{
+  "actual_delta_channels": [
+    "phase8_minus_phase6_QV",
+    "phase8_minus_phase6_TK"
+  ],
+  "capture_receipt": "../runtime/native/analysis/full_v4/OLD/capture_receipt.json",
+  "capture_receipt_sha256": "f28cab85b3efc9c89ef13460490b582ba5d21cfe4c3994d5b4cd8b5453d38454",
+  "capture_root": "../runtime/native/analysis/full_v4/OLD",
+  "event_unit": "native corner \u00d7 level \u00d7 actual timestep; not independent observations",
+  "native_corner_npz": {
+    "actual_timesteps": [
+      1,
+      360
+    ],
+    "path": "p01_native_corner_process.npz",
+    "phase15_values_preserved_with_presence_mask": true,
+    "positive_weight_corners": 4,
+    "sha256": "933836b2b0eb6db06820f1acce3496f4f3af6130abb25e7452e8d91ed3d48a35",
+    "vertical_levels": 39
+  },
+  "nominal_channel": "PREVP_times_dtcld_source_term",
+  "point_id": "RN1_10942",
+  "raw_qv_t_channels": [
+    "phase06_q",
+    "phase08_q",
+    "phase06_t",
+    "phase08_t"
+  ],
+  "rows": [
+    {
+      "arm": "OLD",
+      "event_unit": "native corner \u00d7 level \u00d7 actual timestep; not independent observations",
+      "events_with_either_nonzero_actual_delta": 0,
+      "events_with_nonzero_actual_qv_delta": 0,
+      "events_with_nonzero_actual_tk_delta": 0,
+      "first_actual_timestep": 1,
+      "last_actual_timestep": 180,
+      "lead_block": 1,
+      "max_abs_phase05_prevp_times_dtcld": 4.350334762565078e-12,
+      "phase15_prev_zero_and_phase05_prev_negative_corner_events": 143,
+      "point_id": "RN1_10942",
+      "positive_weight_corner_count": 4,
+      "vertical_levels": 39
+    },
+    {
+      "arm": "OLD",
+      "event_unit": "native corner \u00d7 level \u00d7 actual timestep; not independent observations",
+      "events_with_either_nonzero_actual_delta": 0,
+      "events_with_nonzero_actual_qv_delta": 0,
+      "events_with_nonzero_actual_tk_delta": 0,
+      "first_actual_timestep": 181,
+      "last_actual_timestep": 360,
+      "lead_block": 2,
+      "max_abs_phase05_prevp_times_dtcld": 7.382094935337591e-12,
+      "phase15_prev_zero_and_phase05_prev_negative_corner_events": 47,
+      "point_id": "RN1_10942",
+      "positive_weight_corner_count": 4,
+      "vertical_levels": 39
+    }
+  ],
+  "selection": "phase15 raw PREVP == 0 and phase05 final PREVP < 0 at each of four positive-weight corners and each of 39 levels",
+  "source_arrays": [
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase15_prevp/lead_01/phase15_prevp.npz",
+      "sha256": "bbf00cf03be34fb25134c1b994813d8336c566842cd8212e0848665f742d9984"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase15_prevp_present/lead_01/phase15_prevp_present.npz",
+      "sha256": "fa5385dca70b2b02375636da929c148f4f058185b64eec8a3dd860a12df42318"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase05_prevp/lead_01/phase05_prevp.npz",
+      "sha256": "72b5cd4ea067775d34ae716c29ef3db143e5b86005e9f0de69a717fd92bc5369"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase05_prevp_present/lead_01/phase05_prevp_present.npz",
+      "sha256": "40ebc880730a30a03891dc94d5850b432304eccb67e23499579171905285109b"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase06_q/lead_01/phase06_q.npz",
+      "sha256": "531672e2085815eab4232d60bd412c863a79bbdd3d58e5a6bcff1221dd942259"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase08_q/lead_01/phase08_q.npz",
+      "sha256": "8fc7675e368661f88150c117455fe3d3a66264817b760fcb8040fa8271404ee4"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase06_t/lead_01/phase06_t.npz",
+      "sha256": "1ab058dcf56b37d38c38b801602706abfce548fe7ccccc4fce5f5fee9534f855"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase08_t/lead_01/phase08_t.npz",
+      "sha256": "1f4305dd18adbe1bc066733a1f6fae115584347fb6e4c30404e58d4b985a0b0f"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase8_minus_phase6_QV/lead_01/phase8_minus_phase6_QV.npz",
+      "sha256": "9bc1c57ef67d05603f30bab3ec9a25efd0805a199a14133e02330d9b2a5947ae"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase8_minus_phase6_TK/lead_01/phase8_minus_phase6_TK.npz",
+      "sha256": "7f07f87c71ed6f5489e31625bc36aa490264514c591734b185cb7d57ec8618d7"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/PREVP_times_dtcld_source_term/lead_01/PREVP_times_dtcld_source_term.npz",
+      "sha256": "6d574054ee100bfe339bfacb744258ac714ac858586459842bfdd7fddc18a899"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase15_prevp/lead_02/phase15_prevp.npz",
+      "sha256": "5362057150ec75526de23ef78ba0466c8d81786f327440c7cee3d105b9515fe8"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase15_prevp_present/lead_02/phase15_prevp_present.npz",
+      "sha256": "0574c210f419e2682cc18e47d300d77d7723e180f5090c27f852c59f5aa5ed93"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase05_prevp/lead_02/phase05_prevp.npz",
+      "sha256": "134fcb5708bb55df4d1d3b4a3f3de702a945d6f1e017dd5e0c4550ad8463902f"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase05_prevp_present/lead_02/phase05_prevp_present.npz",
+      "sha256": "0df668e9665f541e2dcb3d10065e8659c98c2ef728d9bba9c6ff62b78dd40a68"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase06_q/lead_02/phase06_q.npz",
+      "sha256": "52972127a1d954f5e35d7f7a37fd901564d6c0be3004b336af46cb7c93838b7a"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase08_q/lead_02/phase08_q.npz",
+      "sha256": "23b0d09f3edde8bc45f2564e1a2379f6753acf3be59569d362a6486c9f2a5963"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase06_t/lead_02/phase06_t.npz",
+      "sha256": "e1b7d951ee0a90bd7bf480d623d19fbd371be0aa94a645063348f47293352589"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase08_t/lead_02/phase08_t.npz",
+      "sha256": "a79c9b57222de7d627fc91ee2ecb3e2652ced3bac2f3108ae09a63ac68d721bc"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase8_minus_phase6_QV/lead_02/phase8_minus_phase6_QV.npz",
+      "sha256": "572e9051d5b142270b8cf5f83239474f1b9d714af915ea969db56f40b851a5c3"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/phase8_minus_phase6_TK/lead_02/phase8_minus_phase6_TK.npz",
+      "sha256": "b97d0c17208acaa67adee2c90fea721e51d40094d0dc5f883b3518033856b1fd"
+    },
+    {
+      "path": "../runtime/native/analysis/full_v4/OLD/PREVP_times_dtcld_source_term/lead_02/PREVP_times_dtcld_source_term.npz",
+      "sha256": "86bde7876e3b32bae40fc4b0e27887da269383e77dd337cb8dca7b204d5dd37f"
+    }
+  ],
+  "status": "COMPUTED_FROM_STRICT_FULL_CAPTURE",
+  "summary_csv": {
+    "path": "p01_prevp_zero_actual_delta.csv",
+    "sha256": "dfe2824c4da58c2679f38c61ca9f304764fffd1d61528feb6c32cb2e9bd6a998"
+  }
+}
