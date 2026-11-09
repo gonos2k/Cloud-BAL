@@ -1,0 +1,39 @@
+{
+  "scope": "diagnostic only; fixed 26-condition admission unchanged",
+  "selection": "h6 observation <5 and B1 <5; PR153 and FIRST_ICE_VELOCITY event threshold >=5 mm",
+  "cohorts": {
+    "persistent": 65,
+    "new": 26,
+    "resolved": 37
+  },
+  "full_false_alarm_transitions_h6": {
+    "IMPROVED_BG_FIXED": {
+      "before_false_alarms": 226,
+      "after_false_alarms": 285,
+      "gained": 91,
+      "lost": 32
+    },
+    "CONSERVATIVE_SEDIMENTATION": {
+      "before_false_alarms": 287,
+      "after_false_alarms": 285,
+      "gained": 48,
+      "lost": 50
+    }
+  },
+  "control_selection": "nearest retained h1 hit with observation, B1, PR153 and candidate all >=10 mm; equirectangular angular distance, ties by smallest flat_index_yx; sampling with replacement",
+  "named_targets": [
+    10813,
+    11571,
+    11855
+  ],
+  "candidate_admission": {
+    "passed": 21,
+    "required": 26
+  },
+  "bins": "left inclusive, right exclusive; each lead is preceding hourly precipitation",
+  "mapping": "flat_index_yx indexes observation grid; crop anchors are zero-based, native anchors are full WRF grid in zero- and Fortran one-based conventions; +1 gives adjacent corners; bilinear weights unchanged",
+  "crop_to_native_zero_based_offsets": {
+    "j": 5,
+    "i": 74
+  }
+}

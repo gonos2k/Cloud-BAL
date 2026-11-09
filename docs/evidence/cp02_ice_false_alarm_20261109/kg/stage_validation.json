@@ -1,0 +1,129 @@
+{
+  "baseline_sha256": "f1e755158cd2e65fc28c429ea3459bec994cf21bb166e8f16ceb6e58f0cc744c",
+  "checks": {
+    "baseline_254_snapshots_and_dirty_roots": {
+      "detail": "Read-only baseline verifier confirms the unchanged 125/129 snapshot inventories, graph trios, wiki mirrors, HEADs and dirty-state hashes.",
+      "pass": true
+    },
+    "dated_snapshots_and_deltas": {
+      "detail": "Both staged graph trios match their separately dated snapshots; counts and deltas are independently recomputed.",
+      "pass": true
+    },
+    "five_wiki_mirrors_and_old_content": {
+      "detail": "Exactly five mirrors are hash-bound; report mirrors match staged reports; old log bytes remain a prefix.",
+      "pass": true
+    },
+    "graph_integrity_prior_nodes_and_manifest_subset": {
+      "detail": "Both graph JSONs parse; prior nodes are retained; independently recomputed integrity counts are zero; manifest updates are confined to the selected paths.",
+      "pass": true
+    },
+    "publisher_target_inventory": {
+      "detail": "The staged publication inventory contains six active graph files, two dated directories and five wiki files (13 targets).",
+      "pass": true
+    },
+    "raw_extraction_hashes": {
+      "detail": "Both retained raw extraction artifacts match their receipt hashes and parse as JSON.",
+      "pass": true
+    },
+    "source_worktree_mirror_and_no_writes": {
+      "detail": "Active Cloud-BAL graph trio remains at baseline; four source mirror targets are staged; no maintained root was written.",
+      "pass": true
+    },
+    "stage_scope_and_source_pins": {
+      "detail": "Frozen lock and receipt bind 5 selected Python sources and 37 hash-only files.",
+      "pass": true
+    }
+  },
+  "graph_deltas": {
+    "Cloud-BAL": {
+      "after": {
+        "communities": 1672,
+        "edges": 34865,
+        "nodes": 19206
+      },
+      "before": {
+        "communities": 1691,
+        "edges": 34792,
+        "nodes": 19161
+      },
+      "delta": {
+        "communities": -19,
+        "edges": 73,
+        "nodes": 45
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "manifest_changed_keys": 5,
+      "prior_node_ids_preserved": 19161,
+      "removed_prior_node_ids": 0,
+      "snapshot_sha256": {
+        "GRAPH_REPORT.md": "6c34fb97bdddcfdd4c5153d51f70a2fe9de254ad2888e466fc325940fe10edf3",
+        "graph.json": "b5c3a69d488a5aa01fd14959190c9efe4e8638a93d9682883d93d9773cb32228",
+        "manifest.json": "ea039bbcaddd77bccd4c5fd7da96ba613b3dc81a43ecc62a515ddcff10d00d3c"
+      }
+    },
+    "KLAPS50": {
+      "after": {
+        "communities": 3637,
+        "edges": 93437,
+        "nodes": 45034
+      },
+      "before": {
+        "communities": 3659,
+        "edges": 93361,
+        "nodes": 44989
+      },
+      "delta": {
+        "communities": -22,
+        "edges": 76,
+        "nodes": 45
+      },
+      "integrity_zero_counts": {
+        "dangling_endpoint_edges": 0,
+        "exact_duplicate_edges": 0,
+        "missing_endpoint_edges": 0,
+        "same_endpoint_group_count": 0,
+        "self_loop_edges": 0
+      },
+      "manifest_changed_keys": 5,
+      "prior_node_ids_preserved": 44989,
+      "removed_prior_node_ids": 0,
+      "snapshot_sha256": {
+        "GRAPH_REPORT.md": "0df5d1344120c88d861c00892e86e6cba4f7021b0f140481f42e4080881a8dcd",
+        "graph.json": "805d7149970771f2f6c99e14f4a4fe35ae63d549e23f63c96b057b240deca8f9",
+        "manifest.json": "2001248dffbc36c1579a785752279041d063cf5fa73b48f711857ed40a50217f"
+      }
+    }
+  },
+  "hash_only_pin_count": 37,
+  "limits": [
+    "Only reviewed Python source paths are structurally extracted; other new evidence is hash-only.",
+    "External import targets may be absent; Fortran cross-file CALL extraction is partial.",
+    "Graph freshness does not establish runtime behavior, physical correctness, conservation or scientific validity."
+  ],
+  "maintained_roots_written": false,
+  "maintained_snapshot_count": 254,
+  "raw_extractions": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_ice_false_alarm_20261109/kg_stage/stage-f5b8d28c2b229b69/raw_extraction_1.json",
+      "sha256": "cf174c80845e7170d01cd9c4a1f5ec770a7c5c3b7e89e0c9f3ecf6db3c0cb78f"
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_ice_false_alarm_20261109/kg_stage/stage-f5b8d28c2b229b69/raw_extraction_2.json",
+      "sha256": "b6e0655ae34bc83395de3f3c64cce97fe96d45e2344f1b2ace9bc1d2dba3f508"
+    }
+  ],
+  "schema": "cp02_ice_false_alarm_independent_kg_stage_validation_v1",
+  "selection_lock_sha256": "954931e4a24552647e3a72bb656f9cad7080541c6e5ba8bb029c958aeb8b9dc0",
+  "source_pin_count": 5,
+  "source_worktree_target_count": 4,
+  "stage": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_ice_false_alarm_20261109/kg_stage/stage-f5b8d28c2b229b69",
+  "stage_receipt_sha256": "00281e079becceb0560e9034e39ce3bf6ac81a25a2baf46c17e609249df551bf",
+  "status": "PASS_STAGED_ONLY",
+  "target_count": 13
+}

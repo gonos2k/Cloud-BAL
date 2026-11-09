@@ -1,0 +1,139 @@
+{
+  "status": "PASS",
+  "byte_identical_count": 12,
+  "portable_tests_passed": 9,
+  "gallery_pngs": 16,
+  "artifacts": [
+    {
+      "path": "docs/evidence/cp02_ice_false_alarm_20261109/cohorts/membership.csv",
+      "sha256": "f5fab55be85886c8220846c449681d1e6c1c6cce1973af71f2f92e95e5508f09",
+      "size_bytes": 2249
+    },
+    {
+      "path": "docs/evidence/cp02_ice_false_alarm_20261109/cohorts/point_paths.csv",
+      "sha256": "c95974730770000e1a60af1573d9cd85099d90da85dc0b78f79912e99cc69ce5",
+      "size_bytes": 97052
+    },
+    {
+      "path": "docs/evidence/cp02_ice_false_alarm_20261109/cohorts/lead_bins.csv",
+      "sha256": "93a7535cfec5fb74a954e8425af97edce63e838822de0e2e2e0a6aac2c9f13b4",
+      "size_bytes": 11305
+    },
+    {
+      "path": "docs/evidence/cp02_ice_false_alarm_20261109/cohorts/summary.json",
+      "sha256": "5d08988c4589a20f40e764297c64e120615d48eb495b84df312ed291cc2605c6",
+      "size_bytes": 1276
+    },
+    {
+      "path": "docs/evidence/cp02_ice_false_alarm_20261109/surface/native/native_corners.npz",
+      "sha256": "96d099f3e8dba4aec43ea24b581cc054b1fc1a16ed977260a9c1f72e67163cfd",
+      "size_bytes": 940600
+    },
+    {
+      "path": "docs/evidence/cp02_ice_false_alarm_20261109/surface/native/hourly_points.csv",
+      "sha256": "aeb97fc1faf17206e4d5c8bd9d90fd81c60d58e9ae5f77f5698d0a9dc5dd1315",
+      "size_bytes": 6736670
+    },
+    {
+      "path": "docs/evidence/cp02_ice_false_alarm_20261109/surface/native/group_means.csv",
+      "sha256": "b962df7ebac9014a2d480d264ee33896634fa79267a81f9e182576e5b4794d5b",
+      "size_bytes": 8624
+    },
+    {
+      "path": "docs/evidence/cp02_ice_false_alarm_20261109/figures/h1_three_false_alarms.png",
+      "sha256": "1b043e2d89653c5bd3ccb3b0389d2034fbee2813bc5dedb45ed768f7b164bfa1",
+      "size_bytes": 69699
+    },
+    {
+      "path": "docs/evidence/cp02_ice_false_alarm_20261109/figures/h6_false_alarm_map.png",
+      "sha256": "604cdd40fb349ccc7ec8aec70f0db32d67805d50e0729fac586848f54cfd98ab",
+      "size_bytes": 472584
+    },
+    {
+      "path": "docs/evidence/cp02_ice_false_alarm_20261109/figures/h6_pointwise_paths.png",
+      "sha256": "6ae53a802cdb9f6b2ba01ce9ce711ef9864e1c2b183ecc0b29e0db473ca394df",
+      "size_bytes": 159953
+    },
+    {
+      "path": "docs/evidence/cp02_ice_false_alarm_20261109/figures/weak_observed_intensity.png",
+      "sha256": "536c33af4fdbca4a0b168bd5ef26b6855eca0614768c39438e25221f96132c4d",
+      "size_bytes": 137550
+    },
+    {
+      "path": "docs/evidence/cp02_ice_false_alarm_20261109/review/independent_recount.json",
+      "sha256": "5381680346b3e692b9254ea189bec80889be0a593d064c3bbf6a9a5ca82ce121",
+      "size_bytes": 1340
+    }
+  ],
+  "commands": [
+    {
+      "argv": [
+        "/usr/bin/python",
+        "-B",
+        "tools/cp02_ice_false_alarm.py",
+        "--results",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_ice_false_alarm_20261109/validation/portable_tree/docs/evidence/cp02_first_ice_velocity_20261109/evaluation/results",
+        "--output",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_ice_false_alarm_20261109/validation/ice-fa-replay-5qh3hsag/cohorts"
+      ],
+      "exit_code": 0,
+      "output": "{\n  \"scope\": \"diagnostic only; fixed 26-condition admission unchanged\",\n  \"selection\": \"h6 observation <5 and B1 <5; PR153 and FIRST_ICE_VELOCITY event threshold >=5 mm\",\n  \"cohorts\": {\n    \"persistent\": 65,\n    \"new\": 26,\n    \"resolved\": 37\n  },\n  \"full_false_alarm_transitions_h6\": {\n    \"IMPROVED_BG_FIXED\": {\n      \"before_false_alarms\": 226,\n      \"after_false_alarms\": 285,\n      \"gained\": 91,\n      \"lost\": 32\n    },\n    \"CONSERVATIVE_SEDIMENTATION\": {\n      \"before_false_alarms\": 287,\n      \"after_false_alarms\": 285,\n      \"gained\": 48,\n      \"lost\": 50\n    }\n  },\n  \"control_selection\": \"nearest retained h1 hit with observation, B1, PR153 and candidate all >=10 mm; equirectangular angular distance, ties by smallest flat_index_yx; sampling with replacement\",\n  \"named_targets\": [\n    10813,\n    11571,\n    11855\n  ],\n  \"candidate_admission\": {\n    \"passed\": 21,\n    \"required\": 26\n  },\n  \"bins\": \"left inclusive, right exclusive; each lead is preceding hourly precipitation\",\n  \"mapping\": \"flat_index_yx indexes observation grid; crop anchors are zero-based, native anchors are full WRF grid in zero- and Fortran one-based conventions; +1 gives adjacent corners; bilinear weights unchanged\",\n  \"crop_to_native_zero_based_offsets\": {\n    \"j\": 5,\n    \"i\": 74\n  }\n}\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/python",
+        "-B",
+        "tools/cp02_ice_surface_components.py",
+        "--replay",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_ice_false_alarm_20261109/validation/portable_tree/docs/evidence/cp02_ice_false_alarm_20261109/surface/native/native_corners.npz",
+        "--output",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_ice_false_alarm_20261109/validation/ice-fa-replay-5qh3hsag/surface"
+      ],
+      "exit_code": 0,
+      "output": "{\"rows\": 88512, \"max_component_sum_rounding_mm\": 7.815970093361102e-14}\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/python",
+        "-B",
+        "tools/plot_cp02_ice_false_alarm.py",
+        "--bundle",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_ice_false_alarm_20261109/validation/portable_tree/docs/evidence/cp02_ice_false_alarm_20261109",
+        "--output",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_ice_false_alarm_20261109/validation/ice-fa-replay-5qh3hsag/figures"
+      ],
+      "exit_code": 0,
+      "output": ""
+    },
+    {
+      "argv": [
+        "/usr/bin/python",
+        "-B",
+        "docs/evidence/cp02_ice_false_alarm_20261109/review/independent_recount.py"
+      ],
+      "exit_code": 0,
+      "output": "{\n  \"status\": \"PASS\",\n  \"inputs_sha256\": {\n    \"hour_13_arrays.npz\": \"44bbc19412754a57650601a324d9c85a94eed18900e449646546cbfe02fb521f\",\n    \"hour_14_arrays.npz\": \"4cfb7441a6b862956e547ac9bf3357cb5b567f8d96769deb21583646f31b65ee\",\n    \"hour_15_arrays.npz\": \"18a9e9b10e6dc0b1ff4ab403ba748d5ce2c172ebe9283065b235aa957abd79a1\",\n    \"hour_16_arrays.npz\": \"c814c11fac3e166644c7cd0c8b4da5167ed7ae412a84f041726e325863a3e132\",\n    \"hour_17_arrays.npz\": \"76c16de7974ce1defad615d1d043e68a20d2967f19d352c1e867083baa193dac\",\n    \"hour_18_arrays.npz\": \"b3460333e40b410ce9ba0b2f07e49adf1dc94cf1cf25bf8f969068c164e6b8da\"\n  },\n  \"h6_fixed_masks_old_new_persistent_new_resolved\": [\n    102,\n    91,\n    65,\n    26,\n    37\n  ],\n  \"h6_full_transitions_prior_then_b1_gained_lost\": [\n    [\n      48,\n      50\n    ],\n    [\n      91,\n      32\n    ]\n  ],\n  \"h6_new_cohort_observation_bins\": [\n    38,\n    17,\n    36\n  ],\n  \"h1_new_10mm_fa_ids_vs_b1\": [\n    10813,\n    11571,\n    11855\n  ],\n  \"h6_new_cohort_forecast_at_least_10mm\": 9,\n  \"weak_observed_h1_to_h6_detections_b1_prior_new\": [\n    [\n      246,\n      270,\n      265\n    ],\n    [\n      230,\n      271,\n      254\n    ],\n    [\n      219,\n      243,\n      237\n    ],\n    [\n      230,\n      262,\n      240\n    ],\n    [\n      258,\n      344,\n      304\n    ],\n    [\n      233,\n      284,\n      264\n    ]\n  ]\n}\n"
+    },
+    {
+      "argv": [
+        "/usr/bin/python",
+        "-B",
+        "-m",
+        "pytest",
+        "-q",
+        "--basetemp",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_ice_false_alarm_20261109/validation/ice-fa-replay-5qh3hsag/pytest",
+        "tests/test_cp02_ice_false_alarm.py",
+        "tests/test_cp02_ice_surface_components.py"
+      ],
+      "exit_code": 0,
+      "output": "Running 9 items in this shard\n.........                                                                [100%]\n9 passed in 0.89s\n"
+    }
+  ],
+  "limits": [
+    "No new WRF forecast; corner and point arrays are replayed.",
+    "Path-bearing receipts differ across roots and are hash checked separately.",
+    "Pinned Intel tests were run in the related exported suite; new tests are Python diagnostic cases."
+  ],
+  "reproducer_sha256": "0b41e10cc5b64d3fe26666c4f7cb3a4e8ffb371119cbdb1b76002eaac8f4ad35"
+}

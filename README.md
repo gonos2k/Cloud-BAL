@@ -1,5 +1,7 @@
 # Cloud-BAL
 
+**2026-11-09 PR154 후속 오경보 진단:** [학술 보고서](docs/CP02_ICE_FALSE_ALARM_20261109.md), [새 진단 4장·기존 예보 12장과 ZIP](docs/evidence/cp02_ice_false_alarm_20261109/FIGURES.md)을 추가했습니다. 저장 history 28개에서 RAINC·RAINNC를 분리해 88,512개 시간·지점별 총강수를 기존 평가와 정확히 대조했습니다. +6시간 잔존 65곳·신규 26곳·해소 37곳과 +1시간 신규 10 mm 오경보 3곳을 함께 비교합니다. 강수 성분의 변화와 물리적 원인을 구분하며 **새 예보·새 후보 없이 PR154 21/26·미채택·현재 B1 유지**입니다. 아래는 작성 시점별 기록입니다.
+
 **2026-11-09 첫 빙정 속도 단위 수정의 실제 6시간 평가:** [학술 보고서](docs/CP02_FIRST_ICE_VELOCITY_20261109.md), [모든 시간·임계값별 H/M/F·CSI](docs/evidence/cp02_first_ice_velocity_20261109/evaluation/results/FULL_SCORES.md), [그림 12장·ZIP](docs/evidence/cp02_first_ice_velocity_20261109/FIGURES.md). 공유 경계 보존식을 유지하고 첫 빙정 진입의 두 `/delz` 변환을 복원했습니다. 현재 B1 보호 **9/11**, 규준실험 수준 회복 **12/15(새 회복 10개)**, 합계 **21/26**으로 직전 19/26보다 진전했으나 **후보 미채택·현재 B1 유지**입니다. +4시간 5 mm 보호와 +3시간 낮은 세 임계값을 회복했지만 +1시간 10 mm와 +6시간 조건은 미달했습니다. CONTROL의 정시 history 7개는 PR153 보존 후보와 바이트 동일합니다. C2 T39·전체 수지·독립 사례 검증은 별도 미완료입니다. 아래는 작성 시점별 연구 기록입니다.
 
 **2026-11-09 침강 보존 후보의 실제 6시간 평가:** [학술 보고서](docs/CP02_SEDIMENTATION_CONSERVATION_20261109.md), [시간·임계값별 전체 점수](docs/evidence/cp02_sedimentation_conservation_20261109/evaluation/results/FULL_SCORES.md), [그림 13장·ZIP](docs/evidence/cp02_sedimentation_conservation_20261109/FIGURES.md). 기존 침강의 유입 재제한을 전체 포착 원시 기록에서 확인하고 공유 경계 이동량 후보를 Intel 시험·실제 예보로 평가했습니다. 낮은 임계값 회복 **10/15(새 회복 8개)**, B1 보호 **9/11**, 합계 **19/26**입니다. +4·+6시간 5 mm 보호 실패로 **후보 미채택·현재 B1 유지**이며, 수치 보존과 예측성능을 구분합니다. CONTROL의 정시 history 7개는 현재 B1과 바이트 동일합니다. 아래는 작성 시점별 연구 기록입니다.
