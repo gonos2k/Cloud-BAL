@@ -1,0 +1,20 @@
+{
+  "status": "GO_FOR_CONTROLLED_FORECAST_CONDITIONAL_ON_NATIVE_TEST_PASS",
+  "review_scope": "Exact standard FIX to candidate source and patch; independent static physical-equation review and patch replay; not a runtime or scientific validation.",
+  "baseline_source_sha256": "0b468be19f7dd66ad2f6e65a53b42f10391a4565831a96c80dddddf21934cf79",
+  "candidate_source_sha256": "ad255ae8b505af6b4ceebd177a54948d8bfff7fcd2c9f6d45c90122be0b57786",
+  "patch_sha256": "c29c6bb7c0b3f175ed62d0919ee682730b80e96c8dad76da2fe69e1fc16f437f",
+  "checks": [
+    "Patch replay in an isolated temporary directory reproduces candidate bytes exactly.",
+    "Each substep computes each face from its unchanged donor and caps transfer by donor inventory; top external face is zero and adjacent cells use the identical stored face.",
+    "Rain, snow, graupel and ice use rho*dz*q inventory; rain and ice number use dz*n because nrs and nci are converted to volumetric number using density at entry. Graupel brs uses the same rho*dz weighting and graupel speed as its existing transport.",
+    "Fall accumulators use the same limited face divided by dtcld*dz, so multiplication by dtcld*dz at ground recovers summed transfers up to REAL conversion and accumulation roundoff. Ice and number analogues are consistent.",
+    "No post-update max clipping has been added; under positive density, depth and timestep, nonnegative donor inventory and velocity, positivity follows from inventory cap plus nonnegative incoming face. Entry clipping and other original process limits remain outside this patch.",
+    "mstep and mstep_i still control separate precipitation and ice loops; kts..kte including the top and differing column substep counts remain guarded. Velocities are recomputed as in baseline."
+  ],
+  "limits": [
+    "The proof assumes finite, positive rho, dz and dt and nonnegative pre-substep states and fall velocities. This is inherited input contract, not an added runtime guard.",
+    "Only source and exact patch reproduction reviewed. Full exact-source pinned Intel native O0/O2 tests must pass before the controlled forecast starts; observe finite outputs and conservation at runtime.",
+    "Controlled forecast is an experiment, not candidate adoption or evidence that the broader 26-case gate passes."
+  ]
+}

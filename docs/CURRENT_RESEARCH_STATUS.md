@@ -1,5 +1,20 @@
 # 현재 연구 상태
 
+## 2026-11-09: 기존 침강의 비보존 검산과 공유 경계 후보의 6시간 평가
+
+| 항목 | 현재 상태 |
+|---|---|
+| 기존 침강식 | 두 층 사례의 비보존 재현, 전체 포착 OLD/FIX 원시 기록에서 실제 유입 재제한 확인 |
+| 원인 해석 | P01 후반 10분과 전체 선택 격자의 OLD/FIX 순서가 다름. 제한 발동을 약한 강수 소실의 직접 원인으로 확정하지 않음 |
+| 국지 수정 후보 | 갱신 전 공유 이동량, 질량/수농도 단위 구분. 정확한 소스 추출 Intel O0/O2 시험 통과 |
+| 전방 실험 | CONTROL·후보 모두 6시간 정상 완료, CONTROL history 7개와 후보 초기 history가 현재 B1과 바이트 동일 |
+| 낮은 임계값 회복 | 10/15, 현재 B1 미달에서 새 회복 8개·회복 소실 0개 |
+| B1 보호 | 9/11, +4·+6시간 5 mm 실패 |
+| 최종 판정 | 19/26으로 후보 미채택·현재 B1 유지 |
+| 별도 미완료 | 실제 질량/강수 flux·전체 물/에너지 수지, RN1 상류 시간·coverage·QC, 독립 사례, C2 T39/H/A/N |
+
+[보고서](CP02_SEDIMENTATION_CONSERVATION_20261109.md), [모든 시간·임계값 H/M/F·CSI](evidence/cp02_sedimentation_conservation_20261109/evaluation/results/FULL_SCORES.md), [P01·임계값별 CSI·시간별 지도 13장과 ZIP](evidence/cp02_sedimentation_conservation_20261109/FIGURES.md)을 제공한다. 규준실험은 ORIGINAL이다. 기존 과정 검산의 OLD/FIX와 새 CONTROL/보존 침강 후보의 실험축을 구분한다. 아래는 작성 시점별 연구 기록이다.
+
 ## 2026-11-06: 실패·보호 집단의 동일 B1 OLD/FIX 5시간 과정 진단
 
 | 연구 항목 | 현재 상태 |

@@ -1,0 +1,27 @@
+{
+  "schema": "cp02_sedimentation_independent_forecast_recipe_review_v1",
+  "reviewed_utc": "2026-11-09T06:30:45.900881+00:00",
+  "decision": "CONDITIONAL_GO",
+  "artifacts": {
+    "docs/evidence/cp02_sedimentation_conservation_20261109/forecast/build.py": "8f064330a367852a0f19d68c2ed1046bcdf0ade7b331afce656e31ce2577ffd4",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/forecast/forecast.py": "cff2ec1601f830371284c4532ea14ff3a664b6734791dc8af80212b29ba3d672",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/forecast/rank_wrapper.sh": "933d4496a8c3b0aed240364ef08c3b1db5d8219b348b71b9c3db5b1ab3135938",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/native/source/module_mp_kdm6_FIX.f90": "ad255ae8b505af6b4ceebd177a54948d8bfff7fcd2c9f6d45c90122be0b57786",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/native/source/module_mp_kdm6_FIX_baseline.f90": "0b468be19f7dd66ad2f6e65a53b42f10391a4565831a96c80dddddf21934cf79"
+  },
+  "checks": [
+    "Read all three helpers and verified Python syntax and shell syntax.",
+    "Rehashed all 664 frozen build manifest entries: zero mismatches; manifest cf2eaecf2f4c077d308c5873a9515c76cad3a2c699d88c8345fa006875f34f6c; archive fbb908b69da24a3474547a2a5216b4764cc8a1b03c0e15b3201af61546e7a1f4.",
+    "Rehashed 89 A forecast source inputs against historical receipt and verified six-hour namelist. Both arms select A; legacy B mappings are unreachable for those arms.",
+    "Verified CPU masks 48-55 and 56-63 available in reviewer process; fresh forecast destinations absent at review time.",
+    "Build checks pinned source identities and compiler, creates private archive and fresh output, verifies object member, links and records ldd and pre/post input hashes. Forecast copies source inputs to fresh private runtime, validates input hashes and rank placement. No prior bundle or frozen inputs are targeted for writes."
+  ],
+  "conditions": [
+    "Source pinned Intel profile, use same NETCDF runtime library prefix as build, and ensure unlimited hard stack before launching each run.",
+    "Compare ldd resolution in actual launch environment with recorded build ldd: run helper rehashes recorded libraries but does not independently ensure the launch loader selects the same paths.",
+    "Only launch after both actual build receipts pass and input-after guards remain true; review does not assert future build or forecast success."
+  ],
+  "limitations": [
+    "Static review and read-only checks; no build or forecast was run in this review. Graph snapshot is not scientific or runtime validation."
+  ]
+}

@@ -1,5 +1,7 @@
 # Cloud-BAL
 
+**2026-11-09 침강 보존 후보의 실제 6시간 평가:** [학술 보고서](docs/CP02_SEDIMENTATION_CONSERVATION_20261109.md), [시간·임계값별 전체 점수](docs/evidence/cp02_sedimentation_conservation_20261109/evaluation/results/FULL_SCORES.md), [그림 13장·ZIP](docs/evidence/cp02_sedimentation_conservation_20261109/FIGURES.md). 기존 침강의 유입 재제한을 전체 포착 원시 기록에서 확인하고 공유 경계 이동량 후보를 Intel 시험·실제 예보로 평가했습니다. 낮은 임계값 회복 **10/15(새 회복 8개)**, B1 보호 **9/11**, 합계 **19/26**입니다. +4·+6시간 5 mm 보호 실패로 **후보 미채택·현재 B1 유지**이며, 수치 보존과 예측성능을 구분합니다. CONTROL의 정시 history 7개는 현재 B1과 바이트 동일합니다. 아래는 작성 시점별 연구 기록입니다.
+
 **2026-11-06 동일 B1 OLD/FIX 5시간 과정 진단:** [학술 형식 보고서](docs/CP02_PROTECTED_PROCESS_20261106.md), [그림 4장·ZIP](docs/evidence/cp02_protected_process_20261106/FIGURES.md), [모든 예보시간·임계값별 H/M/F·CSI](docs/evidence/cp02_protected_process_20261106/tables/FULL_SCORES.md). 실제 재적분의 정시 history 12개가 각 표준 예보와 바이트 단위로 같았습니다. +2시간 실패와 +5시간 보호 집단 150점을 같은 호출 경계로 비교했고, 강수 검증 요약의 잔차 집계 오류를 수정했습니다. **과정 진단의 추가이며 새 성능 개선·후보 채택은 없습니다. 현재 B1 유지, C·D 미채택**입니다. 별도 C2 T39/H/A/N 1시간과 전체 물·에너지 수지, 독립 사례 검증은 미완료입니다. 아래는 시점별 연구 기록입니다.
 
 **2026-11-05 B1 실패 집단 공동 진단:** [학술 형식 보고서](docs/CP02_B1_FAILURE_FOCUS_20261105.md)와 [그림 5장 모음·ZIP](docs/evidence/cp02_failure_focus_20261105/figures/gallery.md)을 추가했습니다. 실제 history 28개에서 270개 초점·대조 지점을 연결했습니다. +2시간 소실 10곳 중 같은 B1 초기장의 기존 KDM6에서는 9곳이 적중하나, 신규 오경보 53곳 중 32곳도 실행파일 변경과 함께 문턱을 넘습니다. +5시간 C의 신규 5 mm 오경보 12곳을 포함해 시간·공간·선행 상태를 대조했습니다. **새 예보·후보 채택은 없으며 현재 B1 유지**입니다. 기존 26개 조건과 별도 C2 미완료 상태는 그대로입니다.

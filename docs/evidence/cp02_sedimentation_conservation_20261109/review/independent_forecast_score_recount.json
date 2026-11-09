@@ -1,0 +1,251 @@
+{
+  "status": "PASS",
+  "method": "Independent NumPy counts, exact fractions.Fraction CSI comparisons, direct MAE/RMSE; no scorer helpers imported.",
+  "array_sha256": {
+    "hour_13_arrays.npz": "2b06f184d9deb4d60633bc18234d7c0bc18814a157c33a28a77338afb38b47fc",
+    "hour_14_arrays.npz": "ab9a8b9460abade1bfd3887eb6045092a0ba5d65e0cea62feea57ccb0c139a25",
+    "hour_15_arrays.npz": "08b083c8b7dd94cc0adc9f38e7cb2d5c24148ccbc2a506afd740b34691bd3a87",
+    "hour_16_arrays.npz": "a7baf895afcfcfd10470739dfd0eb251aad8d330b2a6bb53fad1631c00559164",
+    "hour_17_arrays.npz": "731487c6414f7c0170ed5de62f466018288c06f971e7e01febd8c95c2e83ea4a",
+    "hour_18_arrays.npz": "7a67706fd52bd3441dc494e6e47a61e77dd203e908cba7425209d2acc5c2b824"
+  },
+  "published_files_sha256": {
+    "receipt.json": "3b97420c8c82f285c4793a2004131cc7832d2cb1f003f19785b63f2c6688963b",
+    "categorical_scores.csv": "268e88a8896867607db5b308224280b2d2932519112c53468618d55ded4eb1e2",
+    "continuous_scores.csv": "be1f4c802ebf15cbdf092862feb36ba3278904f414e693a9ad2e49ddc598c04e",
+    "admission_constraints.csv": "1ca5584a54b323bfbff9aff9bb644f9bd3c66f127c093f4367f802387dd3a9b8",
+    "observation_transitions.csv": "65898662065127c5b449d0d0ca06502807bb12618e82c426859a846c3bc2a15e",
+    "verdict.json": "b5499ca56321556df9e7d1b633773facefcb6408e6bbf583ec56595b12631908"
+  },
+  "helper_sha256": "94a618bd853c6ce48fb47f5775e5ba42832bdb7548c90e733d25141641f208f2",
+  "rows_verified": {
+    "categorical": 108,
+    "continuous": 18,
+    "transitions": 48,
+    "constraints": 26
+  },
+  "passed_constraints": 19,
+  "failed_constraints": [
+    {
+      "lead_hour": 3,
+      "threshold_mm": 0.1,
+      "baseline": "ORIGINAL",
+      "candidate": "163/502",
+      "reference": "786/2399"
+    },
+    {
+      "lead_hour": 3,
+      "threshold_mm": 0.5,
+      "baseline": "ORIGINAL",
+      "candidate": "481/1724",
+      "reference": "453/1622"
+    },
+    {
+      "lead_hour": 3,
+      "threshold_mm": 1.0,
+      "baseline": "ORIGINAL",
+      "candidate": "349/1264",
+      "reference": "109/382"
+    },
+    {
+      "lead_hour": 4,
+      "threshold_mm": 5.0,
+      "baseline": "IMPROVED_BG_FIXED",
+      "candidate": "21/197",
+      "reference": "67/569"
+    },
+    {
+      "lead_hour": 6,
+      "threshold_mm": 0.5,
+      "baseline": "ORIGINAL",
+      "candidate": "660/1931",
+      "reference": "646/1873"
+    },
+    {
+      "lead_hour": 6,
+      "threshold_mm": 1.0,
+      "baseline": "ORIGINAL",
+      "candidate": "515/1544",
+      "reference": "505/1447"
+    },
+    {
+      "lead_hour": 6,
+      "threshold_mm": 5.0,
+      "baseline": "IMPROVED_BG_FIXED",
+      "candidate": "163/635",
+      "reference": "12/41"
+    }
+  ],
+  "candidate_qualified": false,
+  "weak_and_dry_transitions": {
+    "1/ORIGINAL/weak_observed": {
+      "n_observed_subset": 880,
+      "forecast_both_below": 606,
+      "forecast_gained": 56,
+      "forecast_lost": 4,
+      "forecast_both_at_or_above": 214
+    },
+    "1/ORIGINAL/dry_observed": {
+      "n_observed_subset": 2095,
+      "forecast_both_below": 1992,
+      "forecast_gained": 49,
+      "forecast_lost": 1,
+      "forecast_both_at_or_above": 53
+    },
+    "1/IMPROVED_BG_FIXED/weak_observed": {
+      "n_observed_subset": 880,
+      "forecast_both_below": 610,
+      "forecast_gained": 24,
+      "forecast_lost": 0,
+      "forecast_both_at_or_above": 246
+    },
+    "1/IMPROVED_BG_FIXED/dry_observed": {
+      "n_observed_subset": 2095,
+      "forecast_both_below": 1993,
+      "forecast_gained": 16,
+      "forecast_lost": 0,
+      "forecast_both_at_or_above": 86
+    },
+    "2/ORIGINAL/weak_observed": {
+      "n_observed_subset": 974,
+      "forecast_both_below": 700,
+      "forecast_gained": 36,
+      "forecast_lost": 3,
+      "forecast_both_at_or_above": 235
+    },
+    "2/ORIGINAL/dry_observed": {
+      "n_observed_subset": 2021,
+      "forecast_both_below": 1526,
+      "forecast_gained": 68,
+      "forecast_lost": 23,
+      "forecast_both_at_or_above": 404
+    },
+    "2/IMPROVED_BG_FIXED/weak_observed": {
+      "n_observed_subset": 974,
+      "forecast_both_below": 700,
+      "forecast_gained": 44,
+      "forecast_lost": 3,
+      "forecast_both_at_or_above": 227
+    },
+    "2/IMPROVED_BG_FIXED/dry_observed": {
+      "n_observed_subset": 2021,
+      "forecast_both_below": 1535,
+      "forecast_gained": 30,
+      "forecast_lost": 14,
+      "forecast_both_at_or_above": 442
+    },
+    "3/ORIGINAL/weak_observed": {
+      "n_observed_subset": 735,
+      "forecast_both_below": 490,
+      "forecast_gained": 25,
+      "forecast_lost": 2,
+      "forecast_both_at_or_above": 218
+    },
+    "3/ORIGINAL/dry_observed": {
+      "n_observed_subset": 2106,
+      "forecast_both_below": 1150,
+      "forecast_gained": 139,
+      "forecast_lost": 28,
+      "forecast_both_at_or_above": 789
+    },
+    "3/IMPROVED_BG_FIXED/weak_observed": {
+      "n_observed_subset": 735,
+      "forecast_both_below": 491,
+      "forecast_gained": 25,
+      "forecast_lost": 1,
+      "forecast_both_at_or_above": 218
+    },
+    "3/IMPROVED_BG_FIXED/dry_observed": {
+      "n_observed_subset": 2106,
+      "forecast_both_below": 1174,
+      "forecast_gained": 114,
+      "forecast_lost": 4,
+      "forecast_both_at_or_above": 814
+    },
+    "4/ORIGINAL/weak_observed": {
+      "n_observed_subset": 678,
+      "forecast_both_below": 409,
+      "forecast_gained": 39,
+      "forecast_lost": 7,
+      "forecast_both_at_or_above": 223
+    },
+    "4/ORIGINAL/dry_observed": {
+      "n_observed_subset": 2068,
+      "forecast_both_below": 1118,
+      "forecast_gained": 128,
+      "forecast_lost": 26,
+      "forecast_both_at_or_above": 796
+    },
+    "4/IMPROVED_BG_FIXED/weak_observed": {
+      "n_observed_subset": 678,
+      "forecast_both_below": 410,
+      "forecast_gained": 38,
+      "forecast_lost": 6,
+      "forecast_both_at_or_above": 224
+    },
+    "4/IMPROVED_BG_FIXED/dry_observed": {
+      "n_observed_subset": 2068,
+      "forecast_both_below": 1120,
+      "forecast_gained": 121,
+      "forecast_lost": 24,
+      "forecast_both_at_or_above": 803
+    },
+    "5/ORIGINAL/weak_observed": {
+      "n_observed_subset": 772,
+      "forecast_both_below": 417,
+      "forecast_gained": 89,
+      "forecast_lost": 11,
+      "forecast_both_at_or_above": 255
+    },
+    "5/ORIGINAL/dry_observed": {
+      "n_observed_subset": 1991,
+      "forecast_both_below": 1158,
+      "forecast_gained": 107,
+      "forecast_lost": 44,
+      "forecast_both_at_or_above": 682
+    },
+    "5/IMPROVED_BG_FIXED/weak_observed": {
+      "n_observed_subset": 772,
+      "forecast_both_below": 425,
+      "forecast_gained": 89,
+      "forecast_lost": 3,
+      "forecast_both_at_or_above": 255
+    },
+    "5/IMPROVED_BG_FIXED/dry_observed": {
+      "n_observed_subset": 1991,
+      "forecast_both_below": 1160,
+      "forecast_gained": 96,
+      "forecast_lost": 42,
+      "forecast_both_at_or_above": 693
+    },
+    "6/ORIGINAL/weak_observed": {
+      "n_observed_subset": 666,
+      "forecast_both_below": 357,
+      "forecast_gained": 63,
+      "forecast_lost": 25,
+      "forecast_both_at_or_above": 221
+    },
+    "6/ORIGINAL/dry_observed": {
+      "n_observed_subset": 2054,
+      "forecast_both_below": 1017,
+      "forecast_gained": 148,
+      "forecast_lost": 122,
+      "forecast_both_at_or_above": 767
+    },
+    "6/IMPROVED_BG_FIXED/weak_observed": {
+      "n_observed_subset": 666,
+      "forecast_both_below": 365,
+      "forecast_gained": 68,
+      "forecast_lost": 17,
+      "forecast_both_at_or_above": 216
+    },
+    "6/IMPROVED_BG_FIXED/dry_observed": {
+      "n_observed_subset": 2054,
+      "forecast_both_below": 1056,
+      "forecast_gained": 132,
+      "forecast_lost": 83,
+      "forecast_both_at_or_above": 783
+    }
+  },
+  "scope": "Recounts the sealed scored arrays; does not independently validate gridded-to-point mapping or observations."
+}

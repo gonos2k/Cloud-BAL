@@ -1,0 +1,52 @@
+{
+  "status": "FROZEN_CONTROLLED_SIX_HOUR_PLAN",
+  "base_commit": "8e65810352d2103dc1d14c89f256070dec061b59",
+  "initial_time_utc": "2026-08-16T12:00:00Z",
+  "end_time_utc": "2026-08-16T18:00:00Z",
+  "source_sha256": {
+    "docs/evidence/cp02_sedimentation_conservation_20261109/forecast/build.py": "8f064330a367852a0f19d68c2ed1046bcdf0ade7b331afce656e31ce2577ffd4",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/forecast/forecast.py": "4294a555ce6f2452130dd603c30aff76e1722811528645018a2d3b84525f7e32",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/forecast/rank_wrapper.sh": "933d4496a8c3b0aed240364ef08c3b1db5d8219b348b71b9c3db5b1ab3135938",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/forecast/launch.py": "8daeb180a2c64824c52ade5ab3b3027e8f62c3dc02f7102a5dda6eda4486ed47",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/native/source/module_mp_kdm6_FIX_baseline.f90": "0b468be19f7dd66ad2f6e65a53b42f10391a4565831a96c80dddddf21934cf79",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/native/source/module_mp_kdm6_FIX.f90": "ad255ae8b505af6b4ceebd177a54948d8bfff7fcd2c9f6d45c90122be0b57786",
+    "patches/kdm6_conservative_sedimentation.patch": "c29c6bb7c0b3f175ed62d0919ee682730b80e96c8dad76da2fe69e1fc16f437f",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/review/independent_candidate_source_review.json": "dc412b1ca7136817a6818918307252ea7c6b734b1d03a7f49f3890f7f8da644e",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/review/independent_forecast_recipe_review.json": "5757875bd7cf2ab84eb4f901d643d15cbc6ec20b172c276af5f07762048d3960",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/native/SHA256SUMS": "c75fa90df0fffa8ecd72740c0319793302e32e409bd1056a4b1a3194d2374d02",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "build_receipt_sha256": {
+    "CONTROL": "0f76b299f7541ef3868572808181e624328e3b974405ad00051f599dd43fbef9",
+    "CONSERVATIVE": "1bf06c46f80590595ba3ff5b96815d8b1b5848e265828d825ae7f2a7e8099528"
+  },
+  "evaluation": {
+    "leads_hours": [
+      1,
+      2,
+      3,
+      4,
+      5,
+      6
+    ],
+    "thresholds_mm": [
+      0.1,
+      0.5,
+      1.0,
+      2.5,
+      5.0,
+      10.0
+    ],
+    "protection_conditions": 11,
+    "recovery_conditions": 15,
+    "recovery_reference": "ORIGINAL",
+    "protection_reference": "IMPROVED_BG_FIXED",
+    "selection": "All26 required; no averaging",
+    "candidate": "CONSERVATIVE_SEDIMENTATION"
+  },
+  "limits": [
+    "Current B1 remains adopted until forecast criteria pass.",
+    "Unit conservation does not establish forecast skill.",
+    "No change to initial QRAIN/QNRAIN or correct zero-rate branch."
+  ]
+}
