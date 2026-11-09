@@ -1,0 +1,82 @@
+program sediment_test
+ implicit none
+ integer, parameter :: its=1,ite=1,kts=1,kte=3
+ real :: qrs(1,3,3),nrs(1,3,1),brs(1,3),qci(1,3,2),nci(1,3,2)
+ real :: dend(1,3),delz(1,3),work1(1,3,4),workn(1,3,2),dtcld
+ real :: falk(1,3,4),fall(1,3,4),falkn(1,3,2),falln(1,3,2),falkb(1,3),fallb(1,3)
+ real(kind=8) :: sed_mass(1,4,4),sed_number(1,4,2),sed_volume(1,4),before(7),after(7),scale
+ real :: dqr(1,3),dnr(1,3),dqs(1,3),dqg(1,3),dbg(1,3),dqi(1,3),dni(1,3)
+ integer, parameter :: kte_in=kte
+ integer :: mstep(1),mstep_i(1),i,k,n,j,c
+ do c=1,7
+   dend(1,:)=(/1.7,0.6,2.1/); delz(1,:)=(/35.,120.,65./); dtcld=1.
+   qrs=0.; nrs=0.; brs=0.; qci=0.; nci=0.
+   work1=0.75; workn=0.35
+   mstep=1; mstep_i=1
+   select case(c)
+   case(1)
+     dend=1.; delz=1.; qrs(1,2,:)=1.; brs(1,2)=1.; qci(1,2,2)=1.; nrs(1,2,1)=1.; nci(1,2,2)=1.
+   case(2)
+     qrs(1,2,:)=1.e-4; brs(1,2)=1.e-6; qci(1,2,2)=2.e-4; nrs(1,2,1)=1.e5; nci(1,2,2)=3.e5
+   case(3)
+     qrs=0.; brs=0.; qci=0.; nrs=0.; nci=0.
+   case(4)
+     qrs(1,3,:)=1.e-30; brs(1,3)=2.e-30; qci(1,3,2)=3.e-30; nrs(1,3,1)=4.e-30; nci(1,3,2)=5.e-30
+   case(5)
+     qrs=1.e-4; brs=1.e-6; qci(:,:,2)=2.e-4; nrs=1.e5; nci(:,:,2)=3.e5; mstep=4; mstep_i=4
+   case(7)
+     dend=1.; delz=100.; dtcld=20.; work1=3.75/100.; workn=work1(:,:,1:2)
+     qrs(1,2,:)=0.001; brs(1,2)=0.001; qci(1,2,2)=0.001; nrs(1,2,1)=0.001; nci(1,2,2)=0.001
+   case(6)
+     qrs(1,1,:)=1.e-4; brs(1,1)=1.e-6; qci(1,1,2)=2.e-4; nrs(1,1,1)=1.e5; nci(1,1,2)=3.e5
+     work1=2.; workn=1.5
+   end select
+   fall=0.; falln=0.; fallb=0.
+   call totals(before)
+   do n=1,mstep(1)
+@WARM@
+   enddo
+   do n=1,mstep_i(1)
+@ICE@
+   enddo
+   call totals(after)
+   do j=1,4
+     after(j)=after(j)+real(fall(1,1,j),8)*real(dtcld,8)*real(delz(1,1),8)
+   enddo
+   do j=1,2
+     after(4+j)=after(4+j)+real(falln(1,1,j),8)*real(dtcld,8)*real(delz(1,1),8)
+   enddo
+   after(7)=after(7)+real(fallb(1,1),8)*real(dtcld,8)*real(delz(1,1),8)
+   do j=1,7
+     scale=max(abs(before(j)),tiny(1.d0))
+     if(abs(after(j)-before(j)) > 1.d-6*scale) then
+       print *, 'FAIL budget case/field',c,j,before(j),after(j); stop 1
+     endif
+   enddo
+   if(any(qrs<0.) .or. any(nrs<0.) .or. any(brs<0.) .or. any(qci<0.) .or. any(nci<0.)) stop 2
+   if(c==1) then
+     if(qrs(1,2,1)/=0.25 .or. qrs(1,1,1)/=0.75) stop 3
+     if(nrs(1,2,1)/=0.65 .or. nrs(1,1,1)/=0.35) stop 4
+   endif
+   if(c==7) then
+     if(abs(qrs(1,2,1)-0.00025)>1.e-9 .or. abs(qrs(1,1,1)-0.00075)>1.e-9) stop 5
+     print *, 'literal user case initial mass and final upper/lower:', before(1),qrs(1,2,1),qrs(1,1,1)
+   endif
+   print *, 'PASS case',c,'max relative residual',maxval(abs(after-before)/max(abs(before),tiny(1.d0)))
+ enddo
+contains
+ subroutine totals(v)
+ real(kind=8),intent(out)::v(7)
+ integer z,h
+ v=0.d0
+ do z=1,3
+   do h=1,3
+     v(h)=v(h)+real(dend(1,z),8)*real(delz(1,z),8)*real(qrs(1,z,h),8)
+   enddo
+   v(4)=v(4)+real(dend(1,z),8)*real(delz(1,z),8)*real(qci(1,z,2),8)
+   v(5)=v(5)+real(delz(1,z),8)*real(nrs(1,z,1),8)
+   v(6)=v(6)+real(delz(1,z),8)*real(nci(1,z,2),8)
+   v(7)=v(7)+real(dend(1,z),8)*real(delz(1,z),8)*real(brs(1,z),8)
+ enddo
+ end subroutine
+end program

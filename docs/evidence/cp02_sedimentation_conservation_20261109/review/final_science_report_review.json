@@ -1,0 +1,40 @@
+{
+  "status": "PASS_FINAL_REPORT_SCIENCE_REVIEW",
+  "reviewed_utc": "2026-11-09T06:57:06.646315+00:00",
+  "reviewed_artifacts": {
+    "docs/CP02_SEDIMENTATION_CONSERVATION_20261109.md": "9d745abf8625d0095ef3bb82e5736f718f1e5d20b241b84af0b0017a0f52a040",
+    "patches/kdm6_conservative_sedimentation.patch": "c29c6bb7c0b3f175ed62d0919ee682730b80e96c8dad76da2fe69e1fc16f437f",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/native/source/module_mp_kdm6_FIX_baseline.f90": "0b468be19f7dd66ad2f6e65a53b42f10391a4565831a96c80dddddf21934cf79",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/native/source/module_mp_kdm6_FIX.f90": "ad255ae8b505af6b4ceebd177a54948d8bfff7fcd2c9f6d45c90122be0b57786",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/native/intel_receipt.txt": "bb1269a0856335f4b3fbacba6c66aa04d314332be1a2df18cd677e014d949251",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/native/SHA256SUMS": "c75fa90df0fffa8ecd72740c0319793302e32e409bd1056a4b1a3194d2374d02",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/forecast/proof/comparability.json": "082fd71a6bfdd166fb9988f5de16b85f1711a941874dcec7aae95ae0bce3efde",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/review/independent_forecast_score_recount.json": "de162a8ef7476d32bf52f74fb284d588f6716866173db7ad43a6ffd70447993a",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/evaluation/results/categorical_scores.csv": "268e88a8896867607db5b308224280b2d2932519112c53468618d55ded4eb1e2",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/evaluation/results/admission_constraints.csv": "1ca5584a54b323bfbff9aff9bb644f9bd3c66f127c093f4367f802387dd3a9b8",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/evaluation/results/observation_transitions.csv": "65898662065127c5b449d0d0ca06502807bb12618e82c426859a846c3bc2a15e",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/evaluation/results/verdict.json": "b5499ca56321556df9e7d1b633773facefcb6408e6bbf583ec56595b12631908",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/audit/full/receipt.json": "483ab7572e45c9f7daf38410653cf13150e0a296219519b7e6eee2f52d519c91",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/audit/full/OLD/OLD_summary.json": "0472254f4e0f5322c3e9ca67cf505e6853fa393b59694bc94e78fbe0896eaeb0",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/audit/full/FIX/FIX_summary.json": "530f16bf035ab5b7ae775b1ce83fdafda8cfa1b9d045db1f5a3f69fa8dbf0088",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/audit/signed_gaps/README.md": "d82e1be732acd102919ea950dbe3d5b6ec256e25466d8dba2d348b854816ac4b",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/audit/signed_gaps/receipt.json": "ddbaf60d57afa897208e722fca241f244d4c49e3857beded0bba843c98f01ef0",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/audit/signed_gaps/OLD_signed_gaps.csv": "251cd99dd139490b393b991cf72905318d8b0430a601d2c86d8366560a77c243",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/audit/signed_gaps/FIX_signed_gaps.csv": "33ab6a619ac5b776a79516e6d386618619323c2161e4de0d1be455821c118a39",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/science/P01_TIMING.md": "2fe754fe7aeaf4623b5003e152edbd971ed4ce3d152b0225519e34cca5952f95",
+    "docs/evidence/cp02_sedimentation_conservation_20261109/science/p01_timing_receipt.json": "7473802777d34c5400251b282e34e08b32ebf3de9db207ae697ce4ec90b1290c"
+  },
+  "checks": [
+    "Source-pinned mass and number transfer equations match reviewed patch; number is concentration times layer depth, no density; brs is identified as volume-related state rather than water mass.",
+    "Scoped REAL64 transfer/update and remaining REAL32 state/fall rounding are distinguished from whole-atmosphere and energy budgets; numerical conservation and observational skill are not equated.",
+    "Independently recomputed exact CSI fractions: reported +2-hour values, +4/+6-hour H/M/F and all 36 displayed CSI differences agree; protection 9/11, recovery 10/15, 8 newly recovered and 0 lost agree.",
+    "Weak/dry +2-hour transition counts and +4/+6 strong and below-strong transition counts match scored transition table.",
+    "OLD/FIX frame, raw stream, substep, limiter, signed gap and bottom/storage residual figures match full summaries and signed-gap rows; nonlimited interface signs cannot be reconstructed and are not attributed wholesale to rounding.",
+    "P01 331–360 native limiter counts, four-corner weighted signed gaps, late-hour split and surface/return timing match preserved evidence.",
+    "Replaced the report’s unsupported general precipitation-supply inference in section 5.3 with the observed candidate-specific loss and false-alarm result; no causal attribution asserted."
+  ],
+  "limitations": [
+    "This is a source-and-receipt-based science review, not independent reproduction of full raw trace decoding or observational quality control.",
+    "Figure and gallery link availability is a separate asset review; no assessment of forecast generalization or whole-model conservation is implied."
+  ]
+}

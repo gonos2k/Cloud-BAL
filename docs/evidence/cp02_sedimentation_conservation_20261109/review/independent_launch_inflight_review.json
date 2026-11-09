@@ -1,0 +1,19 @@
+{
+  "status": "PASS_INFLIGHT_SOURCE_AND_INPUT_CHECKS",
+  "plan_sha256": "07230f1e89c2bb499df6fae109411afd1472b42560db136aeb577f40a2d18570",
+  "prepared_sha256": {
+    "CONTROL": "7a08504077be1060bf2f3dd6feb975e5d614e05053733f4b36c3df9aeee42428",
+    "CONSERVATIVE": "f51c80d6311f07c0039cf2122668db5e6dcb6047ec3f9265d42898503f493e43"
+  },
+  "checks": [
+    "All eleven frozen source hashes and both frozen build receipt hashes matched at review time.",
+    "Both prepared receipts contain the same 89 source hashes, source receipt hash, and MPI hash; private non-executable input hashes match between arms. The historical source receipt matches the base commit byte-for-byte.",
+    "The launcher validates staged inputs, executable and libraries, rank CPU affinity and finite seven-history outputs; it has a two-hour wall-clock guard and records sampled-descendant cleanup.",
+    "Both launch processes were running at review time. This does not establish run completion."
+  ],
+  "required_postrun_checks": [
+    "Independently verify the plan hash above is unchanged; launch.py does not itself bind plan bytes before and after the run.",
+    "Check both driver and run receipts, model exit, all rank success and affinity records, seven finite histories, and unchanged source and input closure before drawing conclusions.",
+    "The historical input receipt and MPI are recorded and cross-checked here but are not independent launch-plan pins; check them again post-run. Descendant sampling can miss short-lived children."
+  ]
+}

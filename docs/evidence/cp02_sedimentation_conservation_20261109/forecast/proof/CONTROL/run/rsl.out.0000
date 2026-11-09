@@ -1,0 +1,1279 @@
+taskid: 0 hostname: KIM-meso-gpu
+Quilting with   1 groups of   0 I/O tasks.
+ Ntasks in X            2 , ntasks in Y            4
+  Domain # 1: dx =  5000.000 m
+WRF V4.6.0 MODEL
+No git found or not a git repository, git commit version not available.
+ *************************************
+ Parent domain
+ ids,ide,jds,jde            1         235           1         283
+ ims,ime,jms,jme           -4         124          -4          78
+ ips,ipe,jps,jpe            1         117           1          71
+ *************************************
+DYNAMICS OPTION: Eulerian Mass Coordinate
+   alloc_space_field: domain            1 ,              364402840  bytes allocated
+  med_initialdata_input: calling input_input
+ Domain            1  Setting history stream            0  for ww
+ Domain            1  Setting history stream            0  for h_diabatic
+   Input data is acceptable to use: wrfinput_d01
+ CURRENT DATE          = 2026-08-16_12:00:00
+ SIMULATION START DATE = 2026-08-16_12:00:00
+Timing for processing wrfinput file (stream 0) for domain        1:    0.40623 elapsed seconds
+Max map factor in domain 1 =  0.99. Scale the dt in the model accordingly.
+ D01: Time step                              =    20.00000      (s)
+ D01: Grid Distance                          =    5.000000      (km)
+ D01: Grid Distance Ratio dt/dx              =    4.000000      (s/km)
+ D01: Ratio Including Maximum Map Factor     =    3.977278      (s/km)
+ D01: NML defined reasonable_time_step_ratio =    6.000000
+ Climate GHG input from file from year         1765  to         2499
+ CO2   range =    277.913000000000        579.264000000000       ppm
+ N2O   range =    274.372000000000        359.798000000000       ppb
+ CH4   range =    738.986000000000        997.311000000000       ppb
+ CFC11 range =   0.000000000000000E+000  1.400000000000000E-002  ppt
+ CFC12 range =   0.000000000000000E+000   2.88100000000000       ppt
+ Normal ending of CAMtr_volume_mixing_ratio file
+ GHG annual values from CAM trace gas file
+ Year =         2026 , Julian day =          228
+ CO2   =   4.325289926143744E-004  volume mixing ratio
+ N2O   =   3.369177731134107E-007  volume mixing ratio
+ CH4   =   1.971027112568899E-006  volume mixing ratio
+ CFC11 =   2.011653065666968E-010  volume mixing ratio
+ CFC12 =   4.662322421778747E-010  volume mixing ratio
+ LANDUSE TYPE = MODIFIED_IGBP_MODIS_NOAH FOUND          20  CATEGORIES
+INPUT LandUse = "MODIFIED_IGBP_MODIS_NOAH"
+ LANDUSE TYPE = "MODIFIED_IGBP_MODIS_NOAH" FOUND          61  CATEGORIES           2  SEASONS WATER CATEGORY =           17  SNOW CATEGORY =           15
+INITIALIZE THREE Noah LSM RELATED TABLES
+Skipping over LUTYPE = USGS
+ LANDUSE TYPE = MODIFIED_IGBP_MODIS_NOAH FOUND          20  CATEGORIES
+ INPUT SOIL TEXTURE CLASSIFICATION = STAS
+ SOIL TEXTURE CLASSIFICATION = STAS FOUND          19  CATEGORIES
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ Sample of Urban settings
+ TSURFACE0_URB   297.6967
+ TDEEP0_URB   284.9876
+ IVGTYP           1
+ TR_URB2D   297.6967
+ TB_URB2D   297.6967
+ TG_URB2D   297.6967
+ TC_URB2D   297.6967
+ QC_URB2D  9.9999998E-03
+ XXXR_URB2D  0.0000000E+00
+ SH_URB2D  0.0000000E+00
+ LH_URB2D  0.0000000E+00
+ G_URB2D  0.0000000E+00
+ RN_URB2D  0.0000000E+00
+ TS_URB2D   297.6967
+ LF_AC_URB3D   125.3829
+ SF_AC_URB3D   124.5244
+ CM_AC_URB3D  0.0000000E+00
+ SFVENT_URB3D   120.1838
+ LFVENT_URB3D   121.0391
+ FRC_URB2D  0.0000000E+00
+ UTYPE_URB2D           0
+ I           2 J          40
+ num_urban_hi          15
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+ USING DEFAULT URBAN MORPHOLOGY
+   Initializing OML with 2d HML0
+Timing for Writing wrfout_d01_2026-08-16_12:00:00 for domain        1:    0.71103 elapsed seconds
+INFO: Boundary file found: wrfbdy_d01
+d01 2026-08-16_12:00:00  Input data is acceptable to use: wrfbdy_d01
+Timing for processing lateral boundary for domain        1:    0.03743 elapsed seconds
+ Tile Strategy is not specified. Assuming 1D-Y
+WRF TILE   1 IS      1 IE    117 JS      1 JE     71
+WRF NUMBER OF TILES =   1
+d01 2026-08-16_12:00:00  ----------------------------------------
+d01 2026-08-16_12:00:00  W-DAMPING  BEGINS AT W-COURANT NUMBER =    1.000000
+d01 2026-08-16_12:00:00  ----------------------------------------
+Timing for main: time 2026-08-16_12:00:20 on domain   1:    3.29641 elapsed seconds
+Timing for main: time 2026-08-16_12:00:40 on domain   1:    0.64632 elapsed seconds
+Timing for main: time 2026-08-16_12:01:00 on domain   1:    0.67069 elapsed seconds
+Timing for main: time 2026-08-16_12:01:20 on domain   1:    0.69875 elapsed seconds
+Timing for main: time 2026-08-16_12:01:40 on domain   1:    0.73314 elapsed seconds
+Timing for main: time 2026-08-16_12:02:00 on domain   1:    0.75003 elapsed seconds
+Timing for main: time 2026-08-16_12:02:20 on domain   1:    0.76000 elapsed seconds
+Timing for main: time 2026-08-16_12:02:40 on domain   1:    0.76620 elapsed seconds
+Timing for main: time 2026-08-16_12:03:00 on domain   1:    0.77042 elapsed seconds
+Timing for main: time 2026-08-16_12:03:20 on domain   1:    0.77318 elapsed seconds
+Timing for main: time 2026-08-16_12:03:40 on domain   1:    0.77389 elapsed seconds
+Timing for main: time 2026-08-16_12:04:00 on domain   1:    0.77159 elapsed seconds
+Timing for main: time 2026-08-16_12:04:20 on domain   1:    0.77093 elapsed seconds
+Timing for main: time 2026-08-16_12:04:40 on domain   1:    0.77066 elapsed seconds
+Timing for main: time 2026-08-16_12:05:00 on domain   1:    0.77315 elapsed seconds
+Timing for main: time 2026-08-16_12:05:20 on domain   1:    2.62687 elapsed seconds
+Timing for main: time 2026-08-16_12:05:40 on domain   1:    0.77102 elapsed seconds
+Timing for main: time 2026-08-16_12:06:00 on domain   1:    0.77417 elapsed seconds
+Timing for main: time 2026-08-16_12:06:20 on domain   1:    0.76968 elapsed seconds
+Timing for main: time 2026-08-16_12:06:40 on domain   1:    0.76941 elapsed seconds
+Timing for main: time 2026-08-16_12:07:00 on domain   1:    0.76793 elapsed seconds
+Timing for main: time 2026-08-16_12:07:20 on domain   1:    0.77007 elapsed seconds
+Timing for main: time 2026-08-16_12:07:40 on domain   1:    0.77044 elapsed seconds
+Timing for main: time 2026-08-16_12:08:00 on domain   1:    0.76923 elapsed seconds
+Timing for main: time 2026-08-16_12:08:20 on domain   1:    0.77036 elapsed seconds
+Timing for main: time 2026-08-16_12:08:40 on domain   1:    0.77156 elapsed seconds
+Timing for main: time 2026-08-16_12:09:00 on domain   1:    0.76702 elapsed seconds
+Timing for main: time 2026-08-16_12:09:20 on domain   1:    0.76214 elapsed seconds
+Timing for main: time 2026-08-16_12:09:40 on domain   1:    0.76063 elapsed seconds
+Timing for main: time 2026-08-16_12:10:00 on domain   1:    0.75889 elapsed seconds
+Timing for main: time 2026-08-16_12:10:20 on domain   1:    2.58674 elapsed seconds
+Timing for main: time 2026-08-16_12:10:40 on domain   1:    0.75806 elapsed seconds
+Timing for main: time 2026-08-16_12:11:00 on domain   1:    0.75756 elapsed seconds
+Timing for main: time 2026-08-16_12:11:20 on domain   1:    0.75924 elapsed seconds
+Timing for main: time 2026-08-16_12:11:40 on domain   1:    0.76292 elapsed seconds
+Timing for main: time 2026-08-16_12:12:00 on domain   1:    0.75963 elapsed seconds
+Timing for main: time 2026-08-16_12:12:20 on domain   1:    0.75575 elapsed seconds
+Timing for main: time 2026-08-16_12:12:40 on domain   1:    0.75872 elapsed seconds
+Timing for main: time 2026-08-16_12:13:00 on domain   1:    0.76306 elapsed seconds
+Timing for main: time 2026-08-16_12:13:20 on domain   1:    0.75696 elapsed seconds
+Timing for main: time 2026-08-16_12:13:40 on domain   1:    0.75815 elapsed seconds
+Timing for main: time 2026-08-16_12:14:00 on domain   1:    0.75959 elapsed seconds
+Timing for main: time 2026-08-16_12:14:20 on domain   1:    0.75801 elapsed seconds
+Timing for main: time 2026-08-16_12:14:40 on domain   1:    0.76073 elapsed seconds
+Timing for main: time 2026-08-16_12:15:00 on domain   1:    0.76159 elapsed seconds
+Timing for main: time 2026-08-16_12:15:20 on domain   1:    2.60588 elapsed seconds
+Timing for main: time 2026-08-16_12:15:40 on domain   1:    0.77237 elapsed seconds
+Timing for main: time 2026-08-16_12:16:00 on domain   1:    0.77262 elapsed seconds
+Timing for main: time 2026-08-16_12:16:20 on domain   1:    0.76472 elapsed seconds
+Timing for main: time 2026-08-16_12:16:40 on domain   1:    0.76652 elapsed seconds
+Timing for main: time 2026-08-16_12:17:00 on domain   1:    0.76492 elapsed seconds
+Timing for main: time 2026-08-16_12:17:20 on domain   1:    0.76295 elapsed seconds
+Timing for main: time 2026-08-16_12:17:40 on domain   1:    0.76380 elapsed seconds
+Timing for main: time 2026-08-16_12:18:00 on domain   1:    0.76173 elapsed seconds
+Timing for main: time 2026-08-16_12:18:20 on domain   1:    0.76197 elapsed seconds
+Timing for main: time 2026-08-16_12:18:40 on domain   1:    0.75973 elapsed seconds
+Timing for main: time 2026-08-16_12:19:00 on domain   1:    0.75654 elapsed seconds
+Timing for main: time 2026-08-16_12:19:20 on domain   1:    0.75358 elapsed seconds
+Timing for main: time 2026-08-16_12:19:40 on domain   1:    0.75739 elapsed seconds
+Timing for main: time 2026-08-16_12:20:00 on domain   1:    0.75359 elapsed seconds
+Timing for main: time 2026-08-16_12:20:20 on domain   1:    2.62674 elapsed seconds
+Timing for main: time 2026-08-16_12:20:40 on domain   1:    0.75998 elapsed seconds
+Timing for main: time 2026-08-16_12:21:00 on domain   1:    0.75627 elapsed seconds
+Timing for main: time 2026-08-16_12:21:20 on domain   1:    0.75362 elapsed seconds
+Timing for main: time 2026-08-16_12:21:40 on domain   1:    0.75439 elapsed seconds
+Timing for main: time 2026-08-16_12:22:00 on domain   1:    0.75150 elapsed seconds
+Timing for main: time 2026-08-16_12:22:20 on domain   1:    0.75621 elapsed seconds
+Timing for main: time 2026-08-16_12:22:40 on domain   1:    0.75164 elapsed seconds
+Timing for main: time 2026-08-16_12:23:00 on domain   1:    0.75918 elapsed seconds
+Timing for main: time 2026-08-16_12:23:20 on domain   1:    0.75714 elapsed seconds
+Timing for main: time 2026-08-16_12:23:40 on domain   1:    0.75204 elapsed seconds
+Timing for main: time 2026-08-16_12:24:00 on domain   1:    0.74965 elapsed seconds
+Timing for main: time 2026-08-16_12:24:20 on domain   1:    0.74988 elapsed seconds
+Timing for main: time 2026-08-16_12:24:40 on domain   1:    0.74798 elapsed seconds
+Timing for main: time 2026-08-16_12:25:00 on domain   1:    0.74304 elapsed seconds
+Timing for main: time 2026-08-16_12:25:20 on domain   1:    2.62334 elapsed seconds
+Timing for main: time 2026-08-16_12:25:40 on domain   1:    0.75143 elapsed seconds
+Timing for main: time 2026-08-16_12:26:00 on domain   1:    0.76593 elapsed seconds
+Timing for main: time 2026-08-16_12:26:20 on domain   1:    0.75445 elapsed seconds
+Timing for main: time 2026-08-16_12:26:40 on domain   1:    0.75599 elapsed seconds
+Timing for main: time 2026-08-16_12:27:00 on domain   1:    0.75251 elapsed seconds
+Timing for main: time 2026-08-16_12:27:20 on domain   1:    0.75048 elapsed seconds
+Timing for main: time 2026-08-16_12:27:40 on domain   1:    0.74999 elapsed seconds
+Timing for main: time 2026-08-16_12:28:00 on domain   1:    0.75511 elapsed seconds
+Timing for main: time 2026-08-16_12:28:20 on domain   1:    0.75925 elapsed seconds
+Timing for main: time 2026-08-16_12:28:40 on domain   1:    0.76007 elapsed seconds
+Timing for main: time 2026-08-16_12:29:00 on domain   1:    0.75765 elapsed seconds
+Timing for main: time 2026-08-16_12:29:20 on domain   1:    0.75241 elapsed seconds
+Timing for main: time 2026-08-16_12:29:40 on domain   1:    0.75124 elapsed seconds
+Timing for main: time 2026-08-16_12:30:00 on domain   1:    0.73579 elapsed seconds
+Timing for main: time 2026-08-16_12:30:20 on domain   1:    2.62381 elapsed seconds
+Timing for main: time 2026-08-16_12:30:40 on domain   1:    0.75218 elapsed seconds
+Timing for main: time 2026-08-16_12:31:00 on domain   1:    0.75202 elapsed seconds
+Timing for main: time 2026-08-16_12:31:20 on domain   1:    0.74480 elapsed seconds
+Timing for main: time 2026-08-16_12:31:40 on domain   1:    0.74308 elapsed seconds
+Timing for main: time 2026-08-16_12:32:00 on domain   1:    0.74064 elapsed seconds
+Timing for main: time 2026-08-16_12:32:20 on domain   1:    0.74305 elapsed seconds
+Timing for main: time 2026-08-16_12:32:40 on domain   1:    0.74028 elapsed seconds
+Timing for main: time 2026-08-16_12:33:00 on domain   1:    0.73951 elapsed seconds
+Timing for main: time 2026-08-16_12:33:20 on domain   1:    0.73726 elapsed seconds
+Timing for main: time 2026-08-16_12:33:40 on domain   1:    0.73446 elapsed seconds
+Timing for main: time 2026-08-16_12:34:00 on domain   1:    0.73451 elapsed seconds
+Timing for main: time 2026-08-16_12:34:20 on domain   1:    0.73680 elapsed seconds
+Timing for main: time 2026-08-16_12:34:40 on domain   1:    0.72824 elapsed seconds
+Timing for main: time 2026-08-16_12:35:00 on domain   1:    0.72685 elapsed seconds
+Timing for main: time 2026-08-16_12:35:20 on domain   1:    2.58105 elapsed seconds
+Timing for main: time 2026-08-16_12:35:40 on domain   1:    0.74682 elapsed seconds
+Timing for main: time 2026-08-16_12:36:00 on domain   1:    0.73620 elapsed seconds
+Timing for main: time 2026-08-16_12:36:20 on domain   1:    0.73676 elapsed seconds
+Timing for main: time 2026-08-16_12:36:40 on domain   1:    0.73436 elapsed seconds
+Timing for main: time 2026-08-16_12:37:00 on domain   1:    0.73163 elapsed seconds
+Timing for main: time 2026-08-16_12:37:20 on domain   1:    0.73106 elapsed seconds
+Timing for main: time 2026-08-16_12:37:40 on domain   1:    0.73197 elapsed seconds
+Timing for main: time 2026-08-16_12:38:00 on domain   1:    0.73304 elapsed seconds
+Timing for main: time 2026-08-16_12:38:20 on domain   1:    0.73345 elapsed seconds
+Timing for main: time 2026-08-16_12:38:40 on domain   1:    0.73677 elapsed seconds
+Timing for main: time 2026-08-16_12:39:00 on domain   1:    0.73058 elapsed seconds
+Timing for main: time 2026-08-16_12:39:20 on domain   1:    0.73140 elapsed seconds
+Timing for main: time 2026-08-16_12:39:40 on domain   1:    0.71752 elapsed seconds
+Timing for main: time 2026-08-16_12:40:00 on domain   1:    0.71777 elapsed seconds
+Timing for main: time 2026-08-16_12:40:20 on domain   1:    2.56635 elapsed seconds
+Timing for main: time 2026-08-16_12:40:40 on domain   1:    0.73773 elapsed seconds
+Timing for main: time 2026-08-16_12:41:00 on domain   1:    0.72990 elapsed seconds
+Timing for main: time 2026-08-16_12:41:20 on domain   1:    0.72706 elapsed seconds
+Timing for main: time 2026-08-16_12:41:40 on domain   1:    0.72502 elapsed seconds
+Timing for main: time 2026-08-16_12:42:00 on domain   1:    0.72243 elapsed seconds
+Timing for main: time 2026-08-16_12:42:20 on domain   1:    0.72523 elapsed seconds
+Timing for main: time 2026-08-16_12:42:40 on domain   1:    0.72250 elapsed seconds
+Timing for main: time 2026-08-16_12:43:00 on domain   1:    0.72054 elapsed seconds
+Timing for main: time 2026-08-16_12:43:20 on domain   1:    0.71912 elapsed seconds
+Timing for main: time 2026-08-16_12:43:40 on domain   1:    0.72146 elapsed seconds
+Timing for main: time 2026-08-16_12:44:00 on domain   1:    0.73298 elapsed seconds
+Timing for main: time 2026-08-16_12:44:20 on domain   1:    0.71983 elapsed seconds
+Timing for main: time 2026-08-16_12:44:40 on domain   1:    0.71590 elapsed seconds
+Timing for main: time 2026-08-16_12:45:00 on domain   1:    0.71515 elapsed seconds
+Timing for main: time 2026-08-16_12:45:20 on domain   1:    2.60168 elapsed seconds
+Timing for main: time 2026-08-16_12:45:40 on domain   1:    0.73248 elapsed seconds
+Timing for main: time 2026-08-16_12:46:00 on domain   1:    0.73138 elapsed seconds
+Timing for main: time 2026-08-16_12:46:20 on domain   1:    0.73561 elapsed seconds
+Timing for main: time 2026-08-16_12:46:40 on domain   1:    0.73014 elapsed seconds
+Timing for main: time 2026-08-16_12:47:00 on domain   1:    0.73529 elapsed seconds
+Timing for main: time 2026-08-16_12:47:20 on domain   1:    0.73444 elapsed seconds
+Timing for main: time 2026-08-16_12:47:40 on domain   1:    0.73624 elapsed seconds
+Timing for main: time 2026-08-16_12:48:00 on domain   1:    0.73634 elapsed seconds
+Timing for main: time 2026-08-16_12:48:20 on domain   1:    0.73411 elapsed seconds
+Timing for main: time 2026-08-16_12:48:40 on domain   1:    0.73588 elapsed seconds
+Timing for main: time 2026-08-16_12:49:00 on domain   1:    0.74089 elapsed seconds
+Timing for main: time 2026-08-16_12:49:20 on domain   1:    0.72262 elapsed seconds
+Timing for main: time 2026-08-16_12:49:40 on domain   1:    0.72533 elapsed seconds
+Timing for main: time 2026-08-16_12:50:00 on domain   1:    0.72496 elapsed seconds
+Timing for main: time 2026-08-16_12:50:20 on domain   1:    2.60973 elapsed seconds
+Timing for main: time 2026-08-16_12:50:40 on domain   1:    0.74169 elapsed seconds
+Timing for main: time 2026-08-16_12:51:00 on domain   1:    0.79637 elapsed seconds
+Timing for main: time 2026-08-16_12:51:20 on domain   1:    0.74372 elapsed seconds
+Timing for main: time 2026-08-16_12:51:40 on domain   1:    0.73630 elapsed seconds
+Timing for main: time 2026-08-16_12:52:00 on domain   1:    0.73769 elapsed seconds
+Timing for main: time 2026-08-16_12:52:20 on domain   1:    0.73721 elapsed seconds
+Timing for main: time 2026-08-16_12:52:40 on domain   1:    0.73635 elapsed seconds
+Timing for main: time 2026-08-16_12:53:00 on domain   1:    0.73620 elapsed seconds
+Timing for main: time 2026-08-16_12:53:20 on domain   1:    0.73631 elapsed seconds
+Timing for main: time 2026-08-16_12:53:40 on domain   1:    0.73620 elapsed seconds
+Timing for main: time 2026-08-16_12:54:00 on domain   1:    0.73483 elapsed seconds
+Timing for main: time 2026-08-16_12:54:20 on domain   1:    0.72784 elapsed seconds
+Timing for main: time 2026-08-16_12:54:40 on domain   1:    0.72888 elapsed seconds
+Timing for main: time 2026-08-16_12:55:00 on domain   1:    0.73731 elapsed seconds
+Timing for main: time 2026-08-16_12:55:20 on domain   1:    2.61814 elapsed seconds
+Timing for main: time 2026-08-16_12:55:40 on domain   1:    0.74028 elapsed seconds
+Timing for main: time 2026-08-16_12:56:00 on domain   1:    0.74262 elapsed seconds
+Timing for main: time 2026-08-16_12:56:20 on domain   1:    0.73936 elapsed seconds
+Timing for main: time 2026-08-16_12:56:40 on domain   1:    0.73846 elapsed seconds
+Timing for main: time 2026-08-16_12:57:00 on domain   1:    0.74061 elapsed seconds
+Timing for main: time 2026-08-16_12:57:20 on domain   1:    0.74059 elapsed seconds
+Timing for main: time 2026-08-16_12:57:40 on domain   1:    0.74495 elapsed seconds
+Timing for main: time 2026-08-16_12:58:00 on domain   1:    0.74205 elapsed seconds
+Timing for main: time 2026-08-16_12:58:20 on domain   1:    0.74398 elapsed seconds
+Timing for main: time 2026-08-16_12:58:40 on domain   1:    0.73529 elapsed seconds
+Timing for main: time 2026-08-16_12:59:00 on domain   1:    0.71806 elapsed seconds
+Timing for main: time 2026-08-16_12:59:20 on domain   1:    0.71946 elapsed seconds
+Timing for main: time 2026-08-16_12:59:40 on domain   1:    0.72734 elapsed seconds
+Timing for main: time 2026-08-16_13:00:00 on domain   1:    0.72988 elapsed seconds
+Timing for Writing wrfout_d01_2026-08-16_13:00:00 for domain        1:    0.73119 elapsed seconds
+Timing for main: time 2026-08-16_13:00:20 on domain   1:    3.34780 elapsed seconds
+Timing for main: time 2026-08-16_13:00:40 on domain   1:    0.74384 elapsed seconds
+Timing for main: time 2026-08-16_13:01:00 on domain   1:    0.74407 elapsed seconds
+Timing for main: time 2026-08-16_13:01:20 on domain   1:    0.73849 elapsed seconds
+Timing for main: time 2026-08-16_13:01:40 on domain   1:    0.73819 elapsed seconds
+Timing for main: time 2026-08-16_13:02:00 on domain   1:    0.73752 elapsed seconds
+Timing for main: time 2026-08-16_13:02:20 on domain   1:    0.74094 elapsed seconds
+Timing for main: time 2026-08-16_13:02:40 on domain   1:    0.73836 elapsed seconds
+Timing for main: time 2026-08-16_13:03:00 on domain   1:    0.73713 elapsed seconds
+Timing for main: time 2026-08-16_13:03:20 on domain   1:    0.73687 elapsed seconds
+Timing for main: time 2026-08-16_13:03:40 on domain   1:    0.73643 elapsed seconds
+Timing for main: time 2026-08-16_13:04:00 on domain   1:    0.72363 elapsed seconds
+Timing for main: time 2026-08-16_13:04:20 on domain   1:    0.72487 elapsed seconds
+Timing for main: time 2026-08-16_13:04:40 on domain   1:    0.73373 elapsed seconds
+Timing for main: time 2026-08-16_13:05:00 on domain   1:    0.73544 elapsed seconds
+Timing for main: time 2026-08-16_13:05:20 on domain   1:    2.60155 elapsed seconds
+Timing for main: time 2026-08-16_13:05:40 on domain   1:    0.73373 elapsed seconds
+Timing for main: time 2026-08-16_13:06:00 on domain   1:    0.73432 elapsed seconds
+Timing for main: time 2026-08-16_13:06:20 on domain   1:    0.72199 elapsed seconds
+Timing for main: time 2026-08-16_13:06:40 on domain   1:    0.72389 elapsed seconds
+Timing for main: time 2026-08-16_13:07:00 on domain   1:    0.72292 elapsed seconds
+Timing for main: time 2026-08-16_13:07:20 on domain   1:    0.72185 elapsed seconds
+Timing for main: time 2026-08-16_13:07:40 on domain   1:    0.72323 elapsed seconds
+Timing for main: time 2026-08-16_13:08:00 on domain   1:    0.72328 elapsed seconds
+Timing for main: time 2026-08-16_13:08:20 on domain   1:    0.73071 elapsed seconds
+Timing for main: time 2026-08-16_13:08:40 on domain   1:    0.72338 elapsed seconds
+Timing for main: time 2026-08-16_13:09:00 on domain   1:    0.72126 elapsed seconds
+Timing for main: time 2026-08-16_13:09:20 on domain   1:    0.72050 elapsed seconds
+Timing for main: time 2026-08-16_13:09:40 on domain   1:    0.76938 elapsed seconds
+Timing for main: time 2026-08-16_13:10:00 on domain   1:    0.72990 elapsed seconds
+Timing for main: time 2026-08-16_13:10:20 on domain   1:    2.58500 elapsed seconds
+Timing for main: time 2026-08-16_13:10:40 on domain   1:    0.72865 elapsed seconds
+Timing for main: time 2026-08-16_13:11:00 on domain   1:    0.73074 elapsed seconds
+Timing for main: time 2026-08-16_13:11:20 on domain   1:    0.73212 elapsed seconds
+Timing for main: time 2026-08-16_13:11:40 on domain   1:    0.72454 elapsed seconds
+Timing for main: time 2026-08-16_13:12:00 on domain   1:    0.73470 elapsed seconds
+Timing for main: time 2026-08-16_13:12:20 on domain   1:    0.72994 elapsed seconds
+Timing for main: time 2026-08-16_13:12:40 on domain   1:    0.73293 elapsed seconds
+Timing for main: time 2026-08-16_13:13:00 on domain   1:    0.73752 elapsed seconds
+Timing for main: time 2026-08-16_13:13:20 on domain   1:    0.73522 elapsed seconds
+Timing for main: time 2026-08-16_13:13:40 on domain   1:    0.72203 elapsed seconds
+Timing for main: time 2026-08-16_13:14:00 on domain   1:    0.72139 elapsed seconds
+Timing for main: time 2026-08-16_13:14:20 on domain   1:    0.72929 elapsed seconds
+Timing for main: time 2026-08-16_13:14:40 on domain   1:    0.72853 elapsed seconds
+Timing for main: time 2026-08-16_13:15:00 on domain   1:    0.74247 elapsed seconds
+Timing for main: time 2026-08-16_13:15:20 on domain   1:    2.58252 elapsed seconds
+Timing for main: time 2026-08-16_13:15:40 on domain   1:    0.72443 elapsed seconds
+Timing for main: time 2026-08-16_13:16:00 on domain   1:    0.72565 elapsed seconds
+Timing for main: time 2026-08-16_13:16:20 on domain   1:    0.72924 elapsed seconds
+Timing for main: time 2026-08-16_13:16:40 on domain   1:    0.73034 elapsed seconds
+Timing for main: time 2026-08-16_13:17:00 on domain   1:    0.72711 elapsed seconds
+Timing for main: time 2026-08-16_13:17:20 on domain   1:    0.79119 elapsed seconds
+Timing for main: time 2026-08-16_13:17:40 on domain   1:    0.73177 elapsed seconds
+Timing for main: time 2026-08-16_13:18:00 on domain   1:    0.72939 elapsed seconds
+Timing for main: time 2026-08-16_13:18:20 on domain   1:    0.71770 elapsed seconds
+Timing for main: time 2026-08-16_13:18:40 on domain   1:    0.71732 elapsed seconds
+Timing for main: time 2026-08-16_13:19:00 on domain   1:    0.72334 elapsed seconds
+Timing for main: time 2026-08-16_13:19:20 on domain   1:    0.73233 elapsed seconds
+Timing for main: time 2026-08-16_13:19:40 on domain   1:    0.73039 elapsed seconds
+Timing for main: time 2026-08-16_13:20:00 on domain   1:    0.72904 elapsed seconds
+Timing for main: time 2026-08-16_13:20:20 on domain   1:    2.57911 elapsed seconds
+Timing for main: time 2026-08-16_13:20:40 on domain   1:    0.72701 elapsed seconds
+Timing for main: time 2026-08-16_13:21:00 on domain   1:    0.72613 elapsed seconds
+Timing for main: time 2026-08-16_13:21:20 on domain   1:    0.72734 elapsed seconds
+Timing for main: time 2026-08-16_13:21:40 on domain   1:    0.72348 elapsed seconds
+Timing for main: time 2026-08-16_13:22:00 on domain   1:    0.72240 elapsed seconds
+Timing for main: time 2026-08-16_13:22:20 on domain   1:    0.72329 elapsed seconds
+Timing for main: time 2026-08-16_13:22:40 on domain   1:    0.72114 elapsed seconds
+Timing for main: time 2026-08-16_13:23:00 on domain   1:    0.71764 elapsed seconds
+Timing for main: time 2026-08-16_13:23:20 on domain   1:    0.71643 elapsed seconds
+Timing for main: time 2026-08-16_13:23:40 on domain   1:    0.71584 elapsed seconds
+Timing for main: time 2026-08-16_13:24:00 on domain   1:    0.77749 elapsed seconds
+Timing for main: time 2026-08-16_13:24:20 on domain   1:    0.79203 elapsed seconds
+Timing for main: time 2026-08-16_13:24:40 on domain   1:    0.72760 elapsed seconds
+Timing for main: time 2026-08-16_13:25:00 on domain   1:    0.72795 elapsed seconds
+Timing for main: time 2026-08-16_13:25:20 on domain   1:    2.55696 elapsed seconds
+Timing for main: time 2026-08-16_13:25:40 on domain   1:    0.71903 elapsed seconds
+Timing for main: time 2026-08-16_13:26:00 on domain   1:    0.71883 elapsed seconds
+Timing for main: time 2026-08-16_13:26:20 on domain   1:    0.72017 elapsed seconds
+Timing for main: time 2026-08-16_13:26:40 on domain   1:    0.72342 elapsed seconds
+Timing for main: time 2026-08-16_13:27:00 on domain   1:    0.72860 elapsed seconds
+Timing for main: time 2026-08-16_13:27:20 on domain   1:    0.72995 elapsed seconds
+Timing for main: time 2026-08-16_13:27:40 on domain   1:    0.73318 elapsed seconds
+Timing for main: time 2026-08-16_13:28:00 on domain   1:    0.73019 elapsed seconds
+Timing for main: time 2026-08-16_13:28:20 on domain   1:    0.71404 elapsed seconds
+Timing for main: time 2026-08-16_13:28:40 on domain   1:    0.71877 elapsed seconds
+Timing for main: time 2026-08-16_13:29:00 on domain   1:    0.72458 elapsed seconds
+Timing for main: time 2026-08-16_13:29:20 on domain   1:    0.71876 elapsed seconds
+Timing for main: time 2026-08-16_13:29:40 on domain   1:    0.71740 elapsed seconds
+Timing for main: time 2026-08-16_13:30:00 on domain   1:    0.71640 elapsed seconds
+Timing for main: time 2026-08-16_13:30:20 on domain   1:    2.56878 elapsed seconds
+Timing for main: time 2026-08-16_13:30:40 on domain   1:    0.72455 elapsed seconds
+Timing for main: time 2026-08-16_13:31:00 on domain   1:    0.72048 elapsed seconds
+Timing for main: time 2026-08-16_13:31:20 on domain   1:    0.72324 elapsed seconds
+Timing for main: time 2026-08-16_13:31:40 on domain   1:    0.72050 elapsed seconds
+Timing for main: time 2026-08-16_13:32:00 on domain   1:    0.71724 elapsed seconds
+Timing for main: time 2026-08-16_13:32:20 on domain   1:    0.71831 elapsed seconds
+Timing for main: time 2026-08-16_13:32:40 on domain   1:    0.71635 elapsed seconds
+Timing for main: time 2026-08-16_13:33:00 on domain   1:    0.71255 elapsed seconds
+Timing for main: time 2026-08-16_13:33:20 on domain   1:    0.71007 elapsed seconds
+Timing for main: time 2026-08-16_13:33:40 on domain   1:    0.72013 elapsed seconds
+Timing for main: time 2026-08-16_13:34:00 on domain   1:    0.72554 elapsed seconds
+Timing for main: time 2026-08-16_13:34:20 on domain   1:    0.72446 elapsed seconds
+Timing for main: time 2026-08-16_13:34:40 on domain   1:    0.72594 elapsed seconds
+Timing for main: time 2026-08-16_13:35:00 on domain   1:    0.72779 elapsed seconds
+Timing for main: time 2026-08-16_13:35:20 on domain   1:    2.56371 elapsed seconds
+Timing for main: time 2026-08-16_13:35:40 on domain   1:    0.72049 elapsed seconds
+Timing for main: time 2026-08-16_13:36:00 on domain   1:    0.72119 elapsed seconds
+Timing for main: time 2026-08-16_13:36:20 on domain   1:    0.72003 elapsed seconds
+Timing for main: time 2026-08-16_13:36:40 on domain   1:    0.72179 elapsed seconds
+Timing for main: time 2026-08-16_13:37:00 on domain   1:    0.72338 elapsed seconds
+Timing for main: time 2026-08-16_13:37:20 on domain   1:    0.72707 elapsed seconds
+Timing for main: time 2026-08-16_13:37:40 on domain   1:    0.72061 elapsed seconds
+Timing for main: time 2026-08-16_13:38:00 on domain   1:    0.71575 elapsed seconds
+Timing for main: time 2026-08-16_13:38:20 on domain   1:    0.77397 elapsed seconds
+Timing for main: time 2026-08-16_13:38:40 on domain   1:    0.71386 elapsed seconds
+Timing for main: time 2026-08-16_13:39:00 on domain   1:    0.71532 elapsed seconds
+Timing for main: time 2026-08-16_13:39:20 on domain   1:    0.71997 elapsed seconds
+Timing for main: time 2026-08-16_13:39:40 on domain   1:    0.71892 elapsed seconds
+Timing for main: time 2026-08-16_13:40:00 on domain   1:    0.71897 elapsed seconds
+Timing for main: time 2026-08-16_13:40:20 on domain   1:    2.56688 elapsed seconds
+Timing for main: time 2026-08-16_13:40:40 on domain   1:    0.72452 elapsed seconds
+Timing for main: time 2026-08-16_13:41:00 on domain   1:    0.73598 elapsed seconds
+Timing for main: time 2026-08-16_13:41:20 on domain   1:    0.72413 elapsed seconds
+Timing for main: time 2026-08-16_13:41:40 on domain   1:    0.72133 elapsed seconds
+Timing for main: time 2026-08-16_13:42:00 on domain   1:    0.72629 elapsed seconds
+Timing for main: time 2026-08-16_13:42:20 on domain   1:    0.73046 elapsed seconds
+Timing for main: time 2026-08-16_13:42:40 on domain   1:    0.72275 elapsed seconds
+Timing for main: time 2026-08-16_13:43:00 on domain   1:    0.72048 elapsed seconds
+Timing for main: time 2026-08-16_13:43:20 on domain   1:    0.72985 elapsed seconds
+Timing for main: time 2026-08-16_13:43:40 on domain   1:    0.73167 elapsed seconds
+Timing for main: time 2026-08-16_13:44:00 on domain   1:    0.73129 elapsed seconds
+Timing for main: time 2026-08-16_13:44:20 on domain   1:    0.73117 elapsed seconds
+Timing for main: time 2026-08-16_13:44:40 on domain   1:    0.73286 elapsed seconds
+Timing for main: time 2026-08-16_13:45:00 on domain   1:    0.73310 elapsed seconds
+Timing for main: time 2026-08-16_13:45:20 on domain   1:    2.55658 elapsed seconds
+Timing for main: time 2026-08-16_13:45:40 on domain   1:    0.75266 elapsed seconds
+Timing for main: time 2026-08-16_13:46:00 on domain   1:    0.72776 elapsed seconds
+Timing for main: time 2026-08-16_13:46:20 on domain   1:    0.72942 elapsed seconds
+Timing for main: time 2026-08-16_13:46:40 on domain   1:    0.73040 elapsed seconds
+Timing for main: time 2026-08-16_13:47:00 on domain   1:    0.73649 elapsed seconds
+Timing for main: time 2026-08-16_13:47:20 on domain   1:    0.72678 elapsed seconds
+Timing for main: time 2026-08-16_13:47:40 on domain   1:    0.72705 elapsed seconds
+Timing for main: time 2026-08-16_13:48:00 on domain   1:    0.72727 elapsed seconds
+Timing for main: time 2026-08-16_13:48:20 on domain   1:    0.73411 elapsed seconds
+Timing for main: time 2026-08-16_13:48:40 on domain   1:    0.74322 elapsed seconds
+Timing for main: time 2026-08-16_13:49:00 on domain   1:    0.73248 elapsed seconds
+Timing for main: time 2026-08-16_13:49:20 on domain   1:    0.73746 elapsed seconds
+Timing for main: time 2026-08-16_13:49:40 on domain   1:    0.73616 elapsed seconds
+Timing for main: time 2026-08-16_13:50:00 on domain   1:    0.73441 elapsed seconds
+Timing for main: time 2026-08-16_13:50:20 on domain   1:    2.56644 elapsed seconds
+Timing for main: time 2026-08-16_13:50:40 on domain   1:    0.74138 elapsed seconds
+Timing for main: time 2026-08-16_13:51:00 on domain   1:    0.74159 elapsed seconds
+Timing for main: time 2026-08-16_13:51:20 on domain   1:    0.74454 elapsed seconds
+Timing for main: time 2026-08-16_13:51:40 on domain   1:    0.74272 elapsed seconds
+Timing for main: time 2026-08-16_13:52:00 on domain   1:    0.74529 elapsed seconds
+Timing for main: time 2026-08-16_13:52:20 on domain   1:    0.73299 elapsed seconds
+Timing for main: time 2026-08-16_13:52:40 on domain   1:    0.73175 elapsed seconds
+Timing for main: time 2026-08-16_13:53:00 on domain   1:    0.74257 elapsed seconds
+Timing for main: time 2026-08-16_13:53:20 on domain   1:    0.74171 elapsed seconds
+Timing for main: time 2026-08-16_13:53:40 on domain   1:    0.74285 elapsed seconds
+Timing for main: time 2026-08-16_13:54:00 on domain   1:    0.74423 elapsed seconds
+Timing for main: time 2026-08-16_13:54:20 on domain   1:    0.74277 elapsed seconds
+Timing for main: time 2026-08-16_13:54:40 on domain   1:    0.74221 elapsed seconds
+Timing for main: time 2026-08-16_13:55:00 on domain   1:    0.74695 elapsed seconds
+Timing for main: time 2026-08-16_13:55:20 on domain   1:    2.57167 elapsed seconds
+Timing for main: time 2026-08-16_13:55:40 on domain   1:    0.74271 elapsed seconds
+Timing for main: time 2026-08-16_13:56:00 on domain   1:    0.73615 elapsed seconds
+Timing for main: time 2026-08-16_13:56:20 on domain   1:    0.73601 elapsed seconds
+Timing for main: time 2026-08-16_13:56:40 on domain   1:    0.73464 elapsed seconds
+Timing for main: time 2026-08-16_13:57:00 on domain   1:    0.72306 elapsed seconds
+Timing for main: time 2026-08-16_13:57:20 on domain   1:    0.72542 elapsed seconds
+Timing for main: time 2026-08-16_13:57:40 on domain   1:    0.73133 elapsed seconds
+Timing for main: time 2026-08-16_13:58:00 on domain   1:    0.73035 elapsed seconds
+Timing for main: time 2026-08-16_13:58:20 on domain   1:    0.74395 elapsed seconds
+Timing for main: time 2026-08-16_13:58:40 on domain   1:    0.74896 elapsed seconds
+Timing for main: time 2026-08-16_13:59:00 on domain   1:    0.74479 elapsed seconds
+Timing for main: time 2026-08-16_13:59:20 on domain   1:    0.74433 elapsed seconds
+Timing for main: time 2026-08-16_13:59:40 on domain   1:    0.74999 elapsed seconds
+Timing for main: time 2026-08-16_14:00:00 on domain   1:    0.74978 elapsed seconds
+Timing for Writing wrfout_d01_2026-08-16_14:00:00 for domain        1:    0.79096 elapsed seconds
+Timing for main: time 2026-08-16_14:00:20 on domain   1:    3.38422 elapsed seconds
+Timing for main: time 2026-08-16_14:00:40 on domain   1:    0.75044 elapsed seconds
+Timing for main: time 2026-08-16_14:01:00 on domain   1:    0.75183 elapsed seconds
+Timing for main: time 2026-08-16_14:01:20 on domain   1:    0.75170 elapsed seconds
+Timing for main: time 2026-08-16_14:01:40 on domain   1:    0.75409 elapsed seconds
+Timing for main: time 2026-08-16_14:02:00 on domain   1:    0.74028 elapsed seconds
+Timing for main: time 2026-08-16_14:02:20 on domain   1:    0.74129 elapsed seconds
+Timing for main: time 2026-08-16_14:02:40 on domain   1:    0.74354 elapsed seconds
+Timing for main: time 2026-08-16_14:03:00 on domain   1:    0.75036 elapsed seconds
+Timing for main: time 2026-08-16_14:03:20 on domain   1:    0.74653 elapsed seconds
+Timing for main: time 2026-08-16_14:03:40 on domain   1:    0.74077 elapsed seconds
+Timing for main: time 2026-08-16_14:04:00 on domain   1:    0.81286 elapsed seconds
+Timing for main: time 2026-08-16_14:04:20 on domain   1:    0.73578 elapsed seconds
+Timing for main: time 2026-08-16_14:04:40 on domain   1:    0.73871 elapsed seconds
+Timing for main: time 2026-08-16_14:05:00 on domain   1:    0.73675 elapsed seconds
+Timing for main: time 2026-08-16_14:05:20 on domain   1:    2.57700 elapsed seconds
+Timing for main: time 2026-08-16_14:05:40 on domain   1:    0.73937 elapsed seconds
+Timing for main: time 2026-08-16_14:06:00 on domain   1:    0.73877 elapsed seconds
+Timing for main: time 2026-08-16_14:06:20 on domain   1:    0.74185 elapsed seconds
+Timing for main: time 2026-08-16_14:06:40 on domain   1:    0.73356 elapsed seconds
+Timing for main: time 2026-08-16_14:07:00 on domain   1:    0.73440 elapsed seconds
+Timing for main: time 2026-08-16_14:07:20 on domain   1:    0.73228 elapsed seconds
+Timing for main: time 2026-08-16_14:07:40 on domain   1:    0.74714 elapsed seconds
+Timing for main: time 2026-08-16_14:08:00 on domain   1:    0.74298 elapsed seconds
+Timing for main: time 2026-08-16_14:08:20 on domain   1:    0.74500 elapsed seconds
+Timing for main: time 2026-08-16_14:08:40 on domain   1:    0.74454 elapsed seconds
+Timing for main: time 2026-08-16_14:09:00 on domain   1:    0.74545 elapsed seconds
+Timing for main: time 2026-08-16_14:09:20 on domain   1:    0.74304 elapsed seconds
+Timing for main: time 2026-08-16_14:09:40 on domain   1:    0.74611 elapsed seconds
+Timing for main: time 2026-08-16_14:10:00 on domain   1:    0.75011 elapsed seconds
+Timing for main: time 2026-08-16_14:10:20 on domain   1:    2.57339 elapsed seconds
+Timing for main: time 2026-08-16_14:10:40 on domain   1:    0.74290 elapsed seconds
+Timing for main: time 2026-08-16_14:11:00 on domain   1:    0.74224 elapsed seconds
+Timing for main: time 2026-08-16_14:11:20 on domain   1:    0.74576 elapsed seconds
+Timing for main: time 2026-08-16_14:11:40 on domain   1:    0.73733 elapsed seconds
+Timing for main: time 2026-08-16_14:12:00 on domain   1:    0.73942 elapsed seconds
+Timing for main: time 2026-08-16_14:12:20 on domain   1:    0.73967 elapsed seconds
+Timing for main: time 2026-08-16_14:12:40 on domain   1:    0.75377 elapsed seconds
+Timing for main: time 2026-08-16_14:13:00 on domain   1:    0.75488 elapsed seconds
+Timing for main: time 2026-08-16_14:13:20 on domain   1:    0.75319 elapsed seconds
+Timing for main: time 2026-08-16_14:13:40 on domain   1:    0.75107 elapsed seconds
+Timing for main: time 2026-08-16_14:14:00 on domain   1:    0.75526 elapsed seconds
+Timing for main: time 2026-08-16_14:14:20 on domain   1:    0.75091 elapsed seconds
+Timing for main: time 2026-08-16_14:14:40 on domain   1:    0.75075 elapsed seconds
+Timing for main: time 2026-08-16_14:15:00 on domain   1:    0.74970 elapsed seconds
+Timing for main: time 2026-08-16_14:15:20 on domain   1:    2.58762 elapsed seconds
+Timing for main: time 2026-08-16_14:15:40 on domain   1:    0.75502 elapsed seconds
+Timing for main: time 2026-08-16_14:16:00 on domain   1:    0.75642 elapsed seconds
+Timing for main: time 2026-08-16_14:16:20 on domain   1:    0.79018 elapsed seconds
+Timing for main: time 2026-08-16_14:16:40 on domain   1:    0.74281 elapsed seconds
+Timing for main: time 2026-08-16_14:17:00 on domain   1:    0.74310 elapsed seconds
+Timing for main: time 2026-08-16_14:17:20 on domain   1:    0.74868 elapsed seconds
+Timing for main: time 2026-08-16_14:17:40 on domain   1:    0.74804 elapsed seconds
+Timing for main: time 2026-08-16_14:18:00 on domain   1:    0.74850 elapsed seconds
+Timing for main: time 2026-08-16_14:18:20 on domain   1:    0.74703 elapsed seconds
+Timing for main: time 2026-08-16_14:18:40 on domain   1:    0.75246 elapsed seconds
+Timing for main: time 2026-08-16_14:19:00 on domain   1:    0.75118 elapsed seconds
+Timing for main: time 2026-08-16_14:19:20 on domain   1:    0.75010 elapsed seconds
+Timing for main: time 2026-08-16_14:19:40 on domain   1:    0.74716 elapsed seconds
+Timing for main: time 2026-08-16_14:20:00 on domain   1:    0.74956 elapsed seconds
+Timing for main: time 2026-08-16_14:20:20 on domain   1:    2.57720 elapsed seconds
+Timing for main: time 2026-08-16_14:20:40 on domain   1:    0.74472 elapsed seconds
+Timing for main: time 2026-08-16_14:21:00 on domain   1:    0.74460 elapsed seconds
+Timing for main: time 2026-08-16_14:21:20 on domain   1:    0.74064 elapsed seconds
+Timing for main: time 2026-08-16_14:21:40 on domain   1:    0.73804 elapsed seconds
+Timing for main: time 2026-08-16_14:22:00 on domain   1:    0.73967 elapsed seconds
+Timing for main: time 2026-08-16_14:22:20 on domain   1:    0.74895 elapsed seconds
+Timing for main: time 2026-08-16_14:22:40 on domain   1:    0.75046 elapsed seconds
+Timing for main: time 2026-08-16_14:23:00 on domain   1:    0.75330 elapsed seconds
+Timing for main: time 2026-08-16_14:23:20 on domain   1:    0.75582 elapsed seconds
+Timing for main: time 2026-08-16_14:23:40 on domain   1:    0.75806 elapsed seconds
+Timing for main: time 2026-08-16_14:24:00 on domain   1:    0.75555 elapsed seconds
+Timing for main: time 2026-08-16_14:24:20 on domain   1:    0.75723 elapsed seconds
+Timing for main: time 2026-08-16_14:24:40 on domain   1:    0.74904 elapsed seconds
+Timing for main: time 2026-08-16_14:25:00 on domain   1:    0.75429 elapsed seconds
+Timing for main: time 2026-08-16_14:25:20 on domain   1:    2.58697 elapsed seconds
+Timing for main: time 2026-08-16_14:25:40 on domain   1:    0.75285 elapsed seconds
+Timing for main: time 2026-08-16_14:26:00 on domain   1:    0.76030 elapsed seconds
+Timing for main: time 2026-08-16_14:26:20 on domain   1:    0.74802 elapsed seconds
+Timing for main: time 2026-08-16_14:26:40 on domain   1:    0.74812 elapsed seconds
+Timing for main: time 2026-08-16_14:27:00 on domain   1:    0.80170 elapsed seconds
+Timing for main: time 2026-08-16_14:27:20 on domain   1:    0.75758 elapsed seconds
+Timing for main: time 2026-08-16_14:27:40 on domain   1:    0.75562 elapsed seconds
+Timing for main: time 2026-08-16_14:28:00 on domain   1:    0.75432 elapsed seconds
+Timing for main: time 2026-08-16_14:28:20 on domain   1:    0.75525 elapsed seconds
+Timing for main: time 2026-08-16_14:28:40 on domain   1:    0.75499 elapsed seconds
+Timing for main: time 2026-08-16_14:29:00 on domain   1:    0.75515 elapsed seconds
+Timing for main: time 2026-08-16_14:29:20 on domain   1:    0.75170 elapsed seconds
+Timing for main: time 2026-08-16_14:29:40 on domain   1:    0.75397 elapsed seconds
+Timing for main: time 2026-08-16_14:30:00 on domain   1:    0.75240 elapsed seconds
+Timing for main: time 2026-08-16_14:30:20 on domain   1:    2.56853 elapsed seconds
+Timing for main: time 2026-08-16_14:30:40 on domain   1:    0.74487 elapsed seconds
+Timing for main: time 2026-08-16_14:31:00 on domain   1:    0.74557 elapsed seconds
+Timing for main: time 2026-08-16_14:31:20 on domain   1:    0.73745 elapsed seconds
+Timing for main: time 2026-08-16_14:31:40 on domain   1:    0.73708 elapsed seconds
+Timing for main: time 2026-08-16_14:32:00 on domain   1:    0.73494 elapsed seconds
+Timing for main: time 2026-08-16_14:32:20 on domain   1:    0.73703 elapsed seconds
+Timing for main: time 2026-08-16_14:32:40 on domain   1:    0.74400 elapsed seconds
+Timing for main: time 2026-08-16_14:33:00 on domain   1:    0.74097 elapsed seconds
+Timing for main: time 2026-08-16_14:33:20 on domain   1:    0.74145 elapsed seconds
+Timing for main: time 2026-08-16_14:33:40 on domain   1:    0.74295 elapsed seconds
+Timing for main: time 2026-08-16_14:34:00 on domain   1:    0.74306 elapsed seconds
+Timing for main: time 2026-08-16_14:34:20 on domain   1:    0.74349 elapsed seconds
+Timing for main: time 2026-08-16_14:34:40 on domain   1:    0.75042 elapsed seconds
+Timing for main: time 2026-08-16_14:35:00 on domain   1:    0.74717 elapsed seconds
+Timing for main: time 2026-08-16_14:35:20 on domain   1:    2.55365 elapsed seconds
+Timing for main: time 2026-08-16_14:35:40 on domain   1:    0.74818 elapsed seconds
+Timing for main: time 2026-08-16_14:36:00 on domain   1:    0.75542 elapsed seconds
+Timing for main: time 2026-08-16_14:36:20 on domain   1:    0.74941 elapsed seconds
+Timing for main: time 2026-08-16_14:36:40 on domain   1:    0.74827 elapsed seconds
+Timing for main: time 2026-08-16_14:37:00 on domain   1:    0.76279 elapsed seconds
+Timing for main: time 2026-08-16_14:37:20 on domain   1:    0.76426 elapsed seconds
+Timing for main: time 2026-08-16_14:37:40 on domain   1:    0.76783 elapsed seconds
+Timing for main: time 2026-08-16_14:38:00 on domain   1:    0.76256 elapsed seconds
+Timing for main: time 2026-08-16_14:38:20 on domain   1:    0.77075 elapsed seconds
+Timing for main: time 2026-08-16_14:38:40 on domain   1:    0.76476 elapsed seconds
+Timing for main: time 2026-08-16_14:39:00 on domain   1:    0.76132 elapsed seconds
+Timing for main: time 2026-08-16_14:39:20 on domain   1:    0.76442 elapsed seconds
+Timing for main: time 2026-08-16_14:39:40 on domain   1:    0.77431 elapsed seconds
+Timing for main: time 2026-08-16_14:40:00 on domain   1:    0.76808 elapsed seconds
+Timing for main: time 2026-08-16_14:40:20 on domain   1:    2.59055 elapsed seconds
+Timing for main: time 2026-08-16_14:40:40 on domain   1:    0.75714 elapsed seconds
+Timing for main: time 2026-08-16_14:41:00 on domain   1:    0.75373 elapsed seconds
+Timing for main: time 2026-08-16_14:41:20 on domain   1:    0.75611 elapsed seconds
+Timing for main: time 2026-08-16_14:41:40 on domain   1:    0.75150 elapsed seconds
+Timing for main: time 2026-08-16_14:42:00 on domain   1:    0.78197 elapsed seconds
+Timing for main: time 2026-08-16_14:42:20 on domain   1:    0.76434 elapsed seconds
+Timing for main: time 2026-08-16_14:42:40 on domain   1:    0.76371 elapsed seconds
+Timing for main: time 2026-08-16_14:43:00 on domain   1:    0.76523 elapsed seconds
+Timing for main: time 2026-08-16_14:43:20 on domain   1:    0.76215 elapsed seconds
+Timing for main: time 2026-08-16_14:43:40 on domain   1:    0.76013 elapsed seconds
+Timing for main: time 2026-08-16_14:44:00 on domain   1:    0.75728 elapsed seconds
+Timing for main: time 2026-08-16_14:44:20 on domain   1:    0.75540 elapsed seconds
+Timing for main: time 2026-08-16_14:44:40 on domain   1:    0.75743 elapsed seconds
+Timing for main: time 2026-08-16_14:45:00 on domain   1:    0.75620 elapsed seconds
+Timing for main: time 2026-08-16_14:45:20 on domain   1:    2.57273 elapsed seconds
+Timing for main: time 2026-08-16_14:45:40 on domain   1:    0.75363 elapsed seconds
+Timing for main: time 2026-08-16_14:46:00 on domain   1:    0.74676 elapsed seconds
+Timing for main: time 2026-08-16_14:46:20 on domain   1:    0.74508 elapsed seconds
+Timing for main: time 2026-08-16_14:46:40 on domain   1:    0.74442 elapsed seconds
+Timing for main: time 2026-08-16_14:47:00 on domain   1:    0.77447 elapsed seconds
+Timing for main: time 2026-08-16_14:47:20 on domain   1:    0.75320 elapsed seconds
+Timing for main: time 2026-08-16_14:47:40 on domain   1:    0.75714 elapsed seconds
+Timing for main: time 2026-08-16_14:48:00 on domain   1:    0.75125 elapsed seconds
+Timing for main: time 2026-08-16_14:48:20 on domain   1:    0.75549 elapsed seconds
+Timing for main: time 2026-08-16_14:48:40 on domain   1:    0.75964 elapsed seconds
+Timing for main: time 2026-08-16_14:49:00 on domain   1:    0.75502 elapsed seconds
+Timing for main: time 2026-08-16_14:49:20 on domain   1:    0.75902 elapsed seconds
+Timing for main: time 2026-08-16_14:49:40 on domain   1:    0.75644 elapsed seconds
+Timing for main: time 2026-08-16_14:50:00 on domain   1:    0.76006 elapsed seconds
+Timing for main: time 2026-08-16_14:50:20 on domain   1:    2.59125 elapsed seconds
+Timing for main: time 2026-08-16_14:50:40 on domain   1:    0.76241 elapsed seconds
+Timing for main: time 2026-08-16_14:51:00 on domain   1:    0.78806 elapsed seconds
+Timing for main: time 2026-08-16_14:51:20 on domain   1:    0.75132 elapsed seconds
+Timing for main: time 2026-08-16_14:51:40 on domain   1:    0.76192 elapsed seconds
+Timing for main: time 2026-08-16_14:52:00 on domain   1:    0.76028 elapsed seconds
+Timing for main: time 2026-08-16_14:52:20 on domain   1:    0.76224 elapsed seconds
+Timing for main: time 2026-08-16_14:52:40 on domain   1:    0.76149 elapsed seconds
+Timing for main: time 2026-08-16_14:53:00 on domain   1:    0.75995 elapsed seconds
+Timing for main: time 2026-08-16_14:53:20 on domain   1:    0.76161 elapsed seconds
+Timing for main: time 2026-08-16_14:53:40 on domain   1:    0.75718 elapsed seconds
+Timing for main: time 2026-08-16_14:54:00 on domain   1:    0.75555 elapsed seconds
+Timing for main: time 2026-08-16_14:54:20 on domain   1:    0.75662 elapsed seconds
+Timing for main: time 2026-08-16_14:54:40 on domain   1:    0.75103 elapsed seconds
+Timing for main: time 2026-08-16_14:55:00 on domain   1:    0.75459 elapsed seconds
+Timing for main: time 2026-08-16_14:55:20 on domain   1:    2.57634 elapsed seconds
+Timing for main: time 2026-08-16_14:55:40 on domain   1:    0.75779 elapsed seconds
+Timing for main: time 2026-08-16_14:56:00 on domain   1:    0.73597 elapsed seconds
+Timing for main: time 2026-08-16_14:56:20 on domain   1:    0.74310 elapsed seconds
+Timing for main: time 2026-08-16_14:56:40 on domain   1:    0.75109 elapsed seconds
+Timing for main: time 2026-08-16_14:57:00 on domain   1:    0.75320 elapsed seconds
+Timing for main: time 2026-08-16_14:57:20 on domain   1:    0.75272 elapsed seconds
+Timing for main: time 2026-08-16_14:57:40 on domain   1:    0.75205 elapsed seconds
+Timing for main: time 2026-08-16_14:58:00 on domain   1:    0.74978 elapsed seconds
+Timing for main: time 2026-08-16_14:58:20 on domain   1:    0.75058 elapsed seconds
+Timing for main: time 2026-08-16_14:58:40 on domain   1:    0.75397 elapsed seconds
+Timing for main: time 2026-08-16_14:59:00 on domain   1:    0.75379 elapsed seconds
+Timing for main: time 2026-08-16_14:59:20 on domain   1:    0.75451 elapsed seconds
+Timing for main: time 2026-08-16_14:59:40 on domain   1:    0.75481 elapsed seconds
+Timing for main: time 2026-08-16_15:00:00 on domain   1:    0.75459 elapsed seconds
+Timing for Writing wrfout_d01_2026-08-16_15:00:00 for domain        1:    0.79121 elapsed seconds
+d01 2026-08-16_15:00:00  Input data is acceptable to use: wrfbdy_d01
+Timing for processing lateral boundary for domain        1:    0.03449 elapsed seconds
+Timing for main: time 2026-08-16_15:00:20 on domain   1:    3.40322 elapsed seconds
+Timing for main: time 2026-08-16_15:00:40 on domain   1:    0.75627 elapsed seconds
+Timing for main: time 2026-08-16_15:01:00 on domain   1:    0.75086 elapsed seconds
+Timing for main: time 2026-08-16_15:01:20 on domain   1:    0.75276 elapsed seconds
+Timing for main: time 2026-08-16_15:01:40 on domain   1:    0.78546 elapsed seconds
+Timing for main: time 2026-08-16_15:02:00 on domain   1:    0.75898 elapsed seconds
+Timing for main: time 2026-08-16_15:02:20 on domain   1:    0.76022 elapsed seconds
+Timing for main: time 2026-08-16_15:02:40 on domain   1:    0.76167 elapsed seconds
+Timing for main: time 2026-08-16_15:03:00 on domain   1:    0.76096 elapsed seconds
+Timing for main: time 2026-08-16_15:03:20 on domain   1:    0.76143 elapsed seconds
+Timing for main: time 2026-08-16_15:03:40 on domain   1:    0.76279 elapsed seconds
+Timing for main: time 2026-08-16_15:04:00 on domain   1:    0.76357 elapsed seconds
+Timing for main: time 2026-08-16_15:04:20 on domain   1:    0.76912 elapsed seconds
+Timing for main: time 2026-08-16_15:04:40 on domain   1:    0.76612 elapsed seconds
+Timing for main: time 2026-08-16_15:05:00 on domain   1:    0.76513 elapsed seconds
+Timing for main: time 2026-08-16_15:05:20 on domain   1:    2.59596 elapsed seconds
+Timing for main: time 2026-08-16_15:05:40 on domain   1:    0.75570 elapsed seconds
+Timing for main: time 2026-08-16_15:06:00 on domain   1:    0.75493 elapsed seconds
+Timing for main: time 2026-08-16_15:06:20 on domain   1:    0.75613 elapsed seconds
+Timing for main: time 2026-08-16_15:06:40 on domain   1:    0.76761 elapsed seconds
+Timing for main: time 2026-08-16_15:07:00 on domain   1:    0.76585 elapsed seconds
+Timing for main: time 2026-08-16_15:07:20 on domain   1:    0.76427 elapsed seconds
+Timing for main: time 2026-08-16_15:07:40 on domain   1:    0.76361 elapsed seconds
+Timing for main: time 2026-08-16_15:08:00 on domain   1:    0.76289 elapsed seconds
+Timing for main: time 2026-08-16_15:08:20 on domain   1:    0.76284 elapsed seconds
+Timing for main: time 2026-08-16_15:08:40 on domain   1:    0.76363 elapsed seconds
+Timing for main: time 2026-08-16_15:09:00 on domain   1:    0.76490 elapsed seconds
+Timing for main: time 2026-08-16_15:09:20 on domain   1:    0.76290 elapsed seconds
+Timing for main: time 2026-08-16_15:09:40 on domain   1:    0.76709 elapsed seconds
+Timing for main: time 2026-08-16_15:10:00 on domain   1:    0.76169 elapsed seconds
+Timing for main: time 2026-08-16_15:10:20 on domain   1:    2.58616 elapsed seconds
+Timing for main: time 2026-08-16_15:10:40 on domain   1:    0.75222 elapsed seconds
+Timing for main: time 2026-08-16_15:11:00 on domain   1:    0.75217 elapsed seconds
+Timing for main: time 2026-08-16_15:11:20 on domain   1:    0.77354 elapsed seconds
+Timing for main: time 2026-08-16_15:11:40 on domain   1:    0.76518 elapsed seconds
+Timing for main: time 2026-08-16_15:12:00 on domain   1:    0.76679 elapsed seconds
+Timing for main: time 2026-08-16_15:12:20 on domain   1:    0.76599 elapsed seconds
+Timing for main: time 2026-08-16_15:12:40 on domain   1:    0.76429 elapsed seconds
+Timing for main: time 2026-08-16_15:13:00 on domain   1:    0.76475 elapsed seconds
+Timing for main: time 2026-08-16_15:13:20 on domain   1:    0.76407 elapsed seconds
+Timing for main: time 2026-08-16_15:13:40 on domain   1:    0.77081 elapsed seconds
+Timing for main: time 2026-08-16_15:14:00 on domain   1:    0.76797 elapsed seconds
+Timing for main: time 2026-08-16_15:14:20 on domain   1:    0.76940 elapsed seconds
+Timing for main: time 2026-08-16_15:14:40 on domain   1:    0.77013 elapsed seconds
+Timing for main: time 2026-08-16_15:15:00 on domain   1:    0.77555 elapsed seconds
+Timing for main: time 2026-08-16_15:15:20 on domain   1:    2.59822 elapsed seconds
+Timing for main: time 2026-08-16_15:15:40 on domain   1:    0.75706 elapsed seconds
+Timing for main: time 2026-08-16_15:16:00 on domain   1:    0.75689 elapsed seconds
+Timing for main: time 2026-08-16_15:16:20 on domain   1:    0.75748 elapsed seconds
+Timing for main: time 2026-08-16_15:16:40 on domain   1:    0.77635 elapsed seconds
+Timing for main: time 2026-08-16_15:17:00 on domain   1:    0.76450 elapsed seconds
+Timing for main: time 2026-08-16_15:17:20 on domain   1:    0.76414 elapsed seconds
+Timing for main: time 2026-08-16_15:17:40 on domain   1:    0.76529 elapsed seconds
+Timing for main: time 2026-08-16_15:18:00 on domain   1:    0.76296 elapsed seconds
+Timing for main: time 2026-08-16_15:18:20 on domain   1:    0.76304 elapsed seconds
+Timing for main: time 2026-08-16_15:18:40 on domain   1:    0.76253 elapsed seconds
+Timing for main: time 2026-08-16_15:19:00 on domain   1:    0.76065 elapsed seconds
+Timing for main: time 2026-08-16_15:19:20 on domain   1:    0.76300 elapsed seconds
+Timing for main: time 2026-08-16_15:19:40 on domain   1:    0.80398 elapsed seconds
+Timing for main: time 2026-08-16_15:20:00 on domain   1:    0.76507 elapsed seconds
+Timing for main: time 2026-08-16_15:20:20 on domain   1:    2.58718 elapsed seconds
+Timing for main: time 2026-08-16_15:20:40 on domain   1:    0.75547 elapsed seconds
+Timing for main: time 2026-08-16_15:21:00 on domain   1:    0.75300 elapsed seconds
+Timing for main: time 2026-08-16_15:21:20 on domain   1:    0.75504 elapsed seconds
+Timing for main: time 2026-08-16_15:21:40 on domain   1:    0.75761 elapsed seconds
+Timing for main: time 2026-08-16_15:22:00 on domain   1:    0.75925 elapsed seconds
+Timing for main: time 2026-08-16_15:22:20 on domain   1:    0.75703 elapsed seconds
+Timing for main: time 2026-08-16_15:22:40 on domain   1:    0.75376 elapsed seconds
+Timing for main: time 2026-08-16_15:23:00 on domain   1:    0.75604 elapsed seconds
+Timing for main: time 2026-08-16_15:23:20 on domain   1:    0.76471 elapsed seconds
+Timing for main: time 2026-08-16_15:23:40 on domain   1:    0.75551 elapsed seconds
+Timing for main: time 2026-08-16_15:24:00 on domain   1:    0.75910 elapsed seconds
+Timing for main: time 2026-08-16_15:24:20 on domain   1:    0.75895 elapsed seconds
+Timing for main: time 2026-08-16_15:24:40 on domain   1:    0.78052 elapsed seconds
+Timing for main: time 2026-08-16_15:25:00 on domain   1:    0.75881 elapsed seconds
+Timing for main: time 2026-08-16_15:25:20 on domain   1:    2.58874 elapsed seconds
+Timing for main: time 2026-08-16_15:25:40 on domain   1:    0.75098 elapsed seconds
+Timing for main: time 2026-08-16_15:26:00 on domain   1:    0.75075 elapsed seconds
+Timing for main: time 2026-08-16_15:26:20 on domain   1:    0.76326 elapsed seconds
+Timing for main: time 2026-08-16_15:26:40 on domain   1:    0.75855 elapsed seconds
+Timing for main: time 2026-08-16_15:27:00 on domain   1:    0.75951 elapsed seconds
+Timing for main: time 2026-08-16_15:27:20 on domain   1:    0.75712 elapsed seconds
+Timing for main: time 2026-08-16_15:27:40 on domain   1:    0.75967 elapsed seconds
+Timing for main: time 2026-08-16_15:28:00 on domain   1:    0.76960 elapsed seconds
+Timing for main: time 2026-08-16_15:28:20 on domain   1:    0.76871 elapsed seconds
+Timing for main: time 2026-08-16_15:28:40 on domain   1:    0.76728 elapsed seconds
+Timing for main: time 2026-08-16_15:29:00 on domain   1:    0.76533 elapsed seconds
+Timing for main: time 2026-08-16_15:29:20 on domain   1:    0.76187 elapsed seconds
+Timing for main: time 2026-08-16_15:29:40 on domain   1:    0.76172 elapsed seconds
+Timing for main: time 2026-08-16_15:30:00 on domain   1:    0.76109 elapsed seconds
+Timing for main: time 2026-08-16_15:30:20 on domain   1:    2.58539 elapsed seconds
+Timing for main: time 2026-08-16_15:30:40 on domain   1:    0.75336 elapsed seconds
+Timing for main: time 2026-08-16_15:31:00 on domain   1:    0.75460 elapsed seconds
+Timing for main: time 2026-08-16_15:31:20 on domain   1:    0.76358 elapsed seconds
+Timing for main: time 2026-08-16_15:31:40 on domain   1:    0.76363 elapsed seconds
+Timing for main: time 2026-08-16_15:32:00 on domain   1:    0.76128 elapsed seconds
+Timing for main: time 2026-08-16_15:32:20 on domain   1:    0.76106 elapsed seconds
+Timing for main: time 2026-08-16_15:32:40 on domain   1:    0.76671 elapsed seconds
+Timing for main: time 2026-08-16_15:33:00 on domain   1:    0.77111 elapsed seconds
+Timing for main: time 2026-08-16_15:33:20 on domain   1:    0.76406 elapsed seconds
+Timing for main: time 2026-08-16_15:33:40 on domain   1:    0.76758 elapsed seconds
+Timing for main: time 2026-08-16_15:34:00 on domain   1:    0.76500 elapsed seconds
+Timing for main: time 2026-08-16_15:34:20 on domain   1:    0.76549 elapsed seconds
+Timing for main: time 2026-08-16_15:34:40 on domain   1:    0.76647 elapsed seconds
+Timing for main: time 2026-08-16_15:35:00 on domain   1:    0.77408 elapsed seconds
+Timing for main: time 2026-08-16_15:35:20 on domain   1:    2.57986 elapsed seconds
+Timing for main: time 2026-08-16_15:35:40 on domain   1:    0.75170 elapsed seconds
+Timing for main: time 2026-08-16_15:36:00 on domain   1:    0.75282 elapsed seconds
+Timing for main: time 2026-08-16_15:36:20 on domain   1:    0.76272 elapsed seconds
+Timing for main: time 2026-08-16_15:36:40 on domain   1:    0.76482 elapsed seconds
+Timing for main: time 2026-08-16_15:37:00 on domain   1:    0.76373 elapsed seconds
+Timing for main: time 2026-08-16_15:37:20 on domain   1:    0.76603 elapsed seconds
+Timing for main: time 2026-08-16_15:37:40 on domain   1:    0.76328 elapsed seconds
+Timing for main: time 2026-08-16_15:38:00 on domain   1:    0.76383 elapsed seconds
+Timing for main: time 2026-08-16_15:38:20 on domain   1:    0.76229 elapsed seconds
+Timing for main: time 2026-08-16_15:38:40 on domain   1:    0.76618 elapsed seconds
+Timing for main: time 2026-08-16_15:39:00 on domain   1:    0.77138 elapsed seconds
+Timing for main: time 2026-08-16_15:39:20 on domain   1:    0.76197 elapsed seconds
+Timing for main: time 2026-08-16_15:39:40 on domain   1:    0.76469 elapsed seconds
+Timing for main: time 2026-08-16_15:40:00 on domain   1:    0.76571 elapsed seconds
+Timing for main: time 2026-08-16_15:40:20 on domain   1:    2.58395 elapsed seconds
+Timing for main: time 2026-08-16_15:40:40 on domain   1:    0.75506 elapsed seconds
+Timing for main: time 2026-08-16_15:41:00 on domain   1:    0.75375 elapsed seconds
+Timing for main: time 2026-08-16_15:41:20 on domain   1:    0.76391 elapsed seconds
+Timing for main: time 2026-08-16_15:41:40 on domain   1:    0.76479 elapsed seconds
+Timing for main: time 2026-08-16_15:42:00 on domain   1:    0.76417 elapsed seconds
+Timing for main: time 2026-08-16_15:42:20 on domain   1:    0.76213 elapsed seconds
+Timing for main: time 2026-08-16_15:42:40 on domain   1:    0.76572 elapsed seconds
+Timing for main: time 2026-08-16_15:43:00 on domain   1:    0.76657 elapsed seconds
+Timing for main: time 2026-08-16_15:43:20 on domain   1:    0.76957 elapsed seconds
+Timing for main: time 2026-08-16_15:43:40 on domain   1:    0.76618 elapsed seconds
+Timing for main: time 2026-08-16_15:44:00 on domain   1:    0.76172 elapsed seconds
+Timing for main: time 2026-08-16_15:44:20 on domain   1:    0.76019 elapsed seconds
+Timing for main: time 2026-08-16_15:44:40 on domain   1:    0.76181 elapsed seconds
+Timing for main: time 2026-08-16_15:45:00 on domain   1:    0.76437 elapsed seconds
+Timing for main: time 2026-08-16_15:45:20 on domain   1:    2.59958 elapsed seconds
+Timing for main: time 2026-08-16_15:45:40 on domain   1:    0.74716 elapsed seconds
+Timing for main: time 2026-08-16_15:46:00 on domain   1:    0.75030 elapsed seconds
+Timing for main: time 2026-08-16_15:46:20 on domain   1:    0.75929 elapsed seconds
+Timing for main: time 2026-08-16_15:46:40 on domain   1:    0.75592 elapsed seconds
+Timing for main: time 2026-08-16_15:47:00 on domain   1:    0.75485 elapsed seconds
+Timing for main: time 2026-08-16_15:47:20 on domain   1:    0.75927 elapsed seconds
+Timing for main: time 2026-08-16_15:47:40 on domain   1:    0.76044 elapsed seconds
+Timing for main: time 2026-08-16_15:48:00 on domain   1:    0.75637 elapsed seconds
+Timing for main: time 2026-08-16_15:48:20 on domain   1:    0.75597 elapsed seconds
+Timing for main: time 2026-08-16_15:48:40 on domain   1:    0.75304 elapsed seconds
+Timing for main: time 2026-08-16_15:49:00 on domain   1:    0.75434 elapsed seconds
+Timing for main: time 2026-08-16_15:49:20 on domain   1:    0.75855 elapsed seconds
+Timing for main: time 2026-08-16_15:49:40 on domain   1:    0.75605 elapsed seconds
+Timing for main: time 2026-08-16_15:50:00 on domain   1:    0.75843 elapsed seconds
+Timing for main: time 2026-08-16_15:50:20 on domain   1:    2.57458 elapsed seconds
+Timing for main: time 2026-08-16_15:50:40 on domain   1:    0.75503 elapsed seconds
+Timing for main: time 2026-08-16_15:51:00 on domain   1:    0.76193 elapsed seconds
+Timing for main: time 2026-08-16_15:51:20 on domain   1:    0.75832 elapsed seconds
+Timing for main: time 2026-08-16_15:51:40 on domain   1:    0.76003 elapsed seconds
+Timing for main: time 2026-08-16_15:52:00 on domain   1:    0.76184 elapsed seconds
+Timing for main: time 2026-08-16_15:52:20 on domain   1:    0.76433 elapsed seconds
+Timing for main: time 2026-08-16_15:52:40 on domain   1:    0.76401 elapsed seconds
+Timing for main: time 2026-08-16_15:53:00 on domain   1:    0.76452 elapsed seconds
+Timing for main: time 2026-08-16_15:53:20 on domain   1:    0.76544 elapsed seconds
+Timing for main: time 2026-08-16_15:53:40 on domain   1:    0.76428 elapsed seconds
+Timing for main: time 2026-08-16_15:54:00 on domain   1:    0.76281 elapsed seconds
+Timing for main: time 2026-08-16_15:54:20 on domain   1:    0.76208 elapsed seconds
+Timing for main: time 2026-08-16_15:54:40 on domain   1:    0.76112 elapsed seconds
+Timing for main: time 2026-08-16_15:55:00 on domain   1:    0.76245 elapsed seconds
+Timing for main: time 2026-08-16_15:55:20 on domain   1:    2.58006 elapsed seconds
+Timing for main: time 2026-08-16_15:55:40 on domain   1:    0.75340 elapsed seconds
+Timing for main: time 2026-08-16_15:56:00 on domain   1:    0.75775 elapsed seconds
+Timing for main: time 2026-08-16_15:56:20 on domain   1:    0.75858 elapsed seconds
+Timing for main: time 2026-08-16_15:56:40 on domain   1:    0.76187 elapsed seconds
+Timing for main: time 2026-08-16_15:57:00 on domain   1:    0.76235 elapsed seconds
+Timing for main: time 2026-08-16_15:57:20 on domain   1:    0.76571 elapsed seconds
+Timing for main: time 2026-08-16_15:57:40 on domain   1:    0.76390 elapsed seconds
+Timing for main: time 2026-08-16_15:58:00 on domain   1:    0.75994 elapsed seconds
+Timing for main: time 2026-08-16_15:58:20 on domain   1:    0.75935 elapsed seconds
+Timing for main: time 2026-08-16_15:58:40 on domain   1:    0.75765 elapsed seconds
+Timing for main: time 2026-08-16_15:59:00 on domain   1:    0.75846 elapsed seconds
+Timing for main: time 2026-08-16_15:59:20 on domain   1:    0.75464 elapsed seconds
+Timing for main: time 2026-08-16_15:59:40 on domain   1:    0.76003 elapsed seconds
+Timing for main: time 2026-08-16_16:00:00 on domain   1:    0.75885 elapsed seconds
+Timing for Writing wrfout_d01_2026-08-16_16:00:00 for domain        1:    0.76158 elapsed seconds
+Timing for main: time 2026-08-16_16:00:20 on domain   1:    3.33597 elapsed seconds
+Timing for main: time 2026-08-16_16:00:40 on domain   1:    0.74920 elapsed seconds
+Timing for main: time 2026-08-16_16:01:00 on domain   1:    0.75449 elapsed seconds
+Timing for main: time 2026-08-16_16:01:20 on domain   1:    0.75502 elapsed seconds
+Timing for main: time 2026-08-16_16:01:40 on domain   1:    0.75456 elapsed seconds
+Timing for main: time 2026-08-16_16:02:00 on domain   1:    0.75322 elapsed seconds
+Timing for main: time 2026-08-16_16:02:20 on domain   1:    0.75498 elapsed seconds
+Timing for main: time 2026-08-16_16:02:40 on domain   1:    0.75565 elapsed seconds
+Timing for main: time 2026-08-16_16:03:00 on domain   1:    0.75763 elapsed seconds
+Timing for main: time 2026-08-16_16:03:20 on domain   1:    0.75536 elapsed seconds
+Timing for main: time 2026-08-16_16:03:40 on domain   1:    0.75757 elapsed seconds
+Timing for main: time 2026-08-16_16:04:00 on domain   1:    0.75838 elapsed seconds
+Timing for main: time 2026-08-16_16:04:20 on domain   1:    0.76122 elapsed seconds
+Timing for main: time 2026-08-16_16:04:40 on domain   1:    0.76018 elapsed seconds
+Timing for main: time 2026-08-16_16:05:00 on domain   1:    0.76247 elapsed seconds
+Timing for main: time 2026-08-16_16:05:20 on domain   1:    2.58839 elapsed seconds
+Timing for main: time 2026-08-16_16:05:40 on domain   1:    0.75441 elapsed seconds
+Timing for main: time 2026-08-16_16:06:00 on domain   1:    0.76028 elapsed seconds
+Timing for main: time 2026-08-16_16:06:20 on domain   1:    0.76451 elapsed seconds
+Timing for main: time 2026-08-16_16:06:40 on domain   1:    0.76521 elapsed seconds
+Timing for main: time 2026-08-16_16:07:00 on domain   1:    0.76417 elapsed seconds
+Timing for main: time 2026-08-16_16:07:20 on domain   1:    0.76817 elapsed seconds
+Timing for main: time 2026-08-16_16:07:40 on domain   1:    0.76743 elapsed seconds
+Timing for main: time 2026-08-16_16:08:00 on domain   1:    0.76648 elapsed seconds
+Timing for main: time 2026-08-16_16:08:20 on domain   1:    0.76558 elapsed seconds
+Timing for main: time 2026-08-16_16:08:40 on domain   1:    0.76517 elapsed seconds
+Timing for main: time 2026-08-16_16:09:00 on domain   1:    0.76794 elapsed seconds
+Timing for main: time 2026-08-16_16:09:20 on domain   1:    0.76746 elapsed seconds
+Timing for main: time 2026-08-16_16:09:40 on domain   1:    0.76967 elapsed seconds
+Timing for main: time 2026-08-16_16:10:00 on domain   1:    0.78320 elapsed seconds
+Timing for main: time 2026-08-16_16:10:20 on domain   1:    2.59450 elapsed seconds
+Timing for main: time 2026-08-16_16:10:40 on domain   1:    0.76073 elapsed seconds
+Timing for main: time 2026-08-16_16:11:00 on domain   1:    0.76631 elapsed seconds
+Timing for main: time 2026-08-16_16:11:20 on domain   1:    0.77040 elapsed seconds
+Timing for main: time 2026-08-16_16:11:40 on domain   1:    0.76282 elapsed seconds
+Timing for main: time 2026-08-16_16:12:00 on domain   1:    0.76534 elapsed seconds
+Timing for main: time 2026-08-16_16:12:20 on domain   1:    0.76127 elapsed seconds
+Timing for main: time 2026-08-16_16:12:40 on domain   1:    0.76262 elapsed seconds
+Timing for main: time 2026-08-16_16:13:00 on domain   1:    0.76220 elapsed seconds
+Timing for main: time 2026-08-16_16:13:20 on domain   1:    0.76354 elapsed seconds
+Timing for main: time 2026-08-16_16:13:40 on domain   1:    0.76604 elapsed seconds
+Timing for main: time 2026-08-16_16:14:00 on domain   1:    0.77194 elapsed seconds
+Timing for main: time 2026-08-16_16:14:20 on domain   1:    0.76493 elapsed seconds
+Timing for main: time 2026-08-16_16:14:40 on domain   1:    0.76586 elapsed seconds
+Timing for main: time 2026-08-16_16:15:00 on domain   1:    0.76809 elapsed seconds
+Timing for main: time 2026-08-16_16:15:20 on domain   1:    2.57865 elapsed seconds
+Timing for main: time 2026-08-16_16:15:40 on domain   1:    0.75648 elapsed seconds
+Timing for main: time 2026-08-16_16:16:00 on domain   1:    0.76609 elapsed seconds
+Timing for main: time 2026-08-16_16:16:20 on domain   1:    0.77305 elapsed seconds
+Timing for main: time 2026-08-16_16:16:40 on domain   1:    0.77807 elapsed seconds
+Timing for main: time 2026-08-16_16:17:00 on domain   1:    0.78858 elapsed seconds
+Timing for main: time 2026-08-16_16:17:20 on domain   1:    0.77379 elapsed seconds
+Timing for main: time 2026-08-16_16:17:40 on domain   1:    0.77438 elapsed seconds
+Timing for main: time 2026-08-16_16:18:00 on domain   1:    0.77132 elapsed seconds
+Timing for main: time 2026-08-16_16:18:20 on domain   1:    0.77393 elapsed seconds
+Timing for main: time 2026-08-16_16:18:40 on domain   1:    0.77485 elapsed seconds
+Timing for main: time 2026-08-16_16:19:00 on domain   1:    0.77106 elapsed seconds
+Timing for main: time 2026-08-16_16:19:20 on domain   1:    0.78269 elapsed seconds
+Timing for main: time 2026-08-16_16:19:40 on domain   1:    0.78226 elapsed seconds
+Timing for main: time 2026-08-16_16:20:00 on domain   1:    0.77444 elapsed seconds
+Timing for main: time 2026-08-16_16:20:20 on domain   1:    2.59076 elapsed seconds
+Timing for main: time 2026-08-16_16:20:40 on domain   1:    0.75997 elapsed seconds
+Timing for main: time 2026-08-16_16:21:00 on domain   1:    0.77047 elapsed seconds
+Timing for main: time 2026-08-16_16:21:20 on domain   1:    0.77107 elapsed seconds
+Timing for main: time 2026-08-16_16:21:40 on domain   1:    0.77311 elapsed seconds
+Timing for main: time 2026-08-16_16:22:00 on domain   1:    0.77199 elapsed seconds
+Timing for main: time 2026-08-16_16:22:20 on domain   1:    0.77452 elapsed seconds
+Timing for main: time 2026-08-16_16:22:40 on domain   1:    0.77471 elapsed seconds
+Timing for main: time 2026-08-16_16:23:00 on domain   1:    0.77413 elapsed seconds
+Timing for main: time 2026-08-16_16:23:20 on domain   1:    0.76629 elapsed seconds
+Timing for main: time 2026-08-16_16:23:40 on domain   1:    0.76436 elapsed seconds
+Timing for main: time 2026-08-16_16:24:00 on domain   1:    0.76371 elapsed seconds
+Timing for main: time 2026-08-16_16:24:20 on domain   1:    0.76082 elapsed seconds
+Timing for main: time 2026-08-16_16:24:40 on domain   1:    0.76534 elapsed seconds
+Timing for main: time 2026-08-16_16:25:00 on domain   1:    0.76396 elapsed seconds
+Timing for main: time 2026-08-16_16:25:20 on domain   1:    2.56396 elapsed seconds
+Timing for main: time 2026-08-16_16:25:40 on domain   1:    0.75321 elapsed seconds
+Timing for main: time 2026-08-16_16:26:00 on domain   1:    0.75969 elapsed seconds
+Timing for main: time 2026-08-16_16:26:20 on domain   1:    0.76238 elapsed seconds
+Timing for main: time 2026-08-16_16:26:40 on domain   1:    0.76274 elapsed seconds
+Timing for main: time 2026-08-16_16:27:00 on domain   1:    0.76611 elapsed seconds
+Timing for main: time 2026-08-16_16:27:20 on domain   1:    0.76095 elapsed seconds
+Timing for main: time 2026-08-16_16:27:40 on domain   1:    0.76182 elapsed seconds
+Timing for main: time 2026-08-16_16:28:00 on domain   1:    0.76282 elapsed seconds
+Timing for main: time 2026-08-16_16:28:20 on domain   1:    0.76756 elapsed seconds
+Timing for main: time 2026-08-16_16:28:40 on domain   1:    0.76432 elapsed seconds
+Timing for main: time 2026-08-16_16:29:00 on domain   1:    0.76300 elapsed seconds
+Timing for main: time 2026-08-16_16:29:20 on domain   1:    0.76463 elapsed seconds
+Timing for main: time 2026-08-16_16:29:40 on domain   1:    0.77065 elapsed seconds
+Timing for main: time 2026-08-16_16:30:00 on domain   1:    0.76811 elapsed seconds
+Timing for main: time 2026-08-16_16:30:20 on domain   1:    2.59743 elapsed seconds
+Timing for main: time 2026-08-16_16:30:40 on domain   1:    0.75898 elapsed seconds
+Timing for main: time 2026-08-16_16:31:00 on domain   1:    0.77099 elapsed seconds
+Timing for main: time 2026-08-16_16:31:20 on domain   1:    0.77462 elapsed seconds
+Timing for main: time 2026-08-16_16:31:40 on domain   1:    0.77127 elapsed seconds
+Timing for main: time 2026-08-16_16:32:00 on domain   1:    0.77644 elapsed seconds
+Timing for main: time 2026-08-16_16:32:20 on domain   1:    0.77847 elapsed seconds
+Timing for main: time 2026-08-16_16:32:40 on domain   1:    0.77646 elapsed seconds
+Timing for main: time 2026-08-16_16:33:00 on domain   1:    0.77500 elapsed seconds
+Timing for main: time 2026-08-16_16:33:20 on domain   1:    0.77775 elapsed seconds
+Timing for main: time 2026-08-16_16:33:40 on domain   1:    0.77354 elapsed seconds
+Timing for main: time 2026-08-16_16:34:00 on domain   1:    0.77478 elapsed seconds
+Timing for main: time 2026-08-16_16:34:20 on domain   1:    0.77938 elapsed seconds
+Timing for main: time 2026-08-16_16:34:40 on domain   1:    0.78133 elapsed seconds
+Timing for main: time 2026-08-16_16:35:00 on domain   1:    0.77630 elapsed seconds
+Timing for main: time 2026-08-16_16:35:20 on domain   1:    2.60040 elapsed seconds
+Timing for main: time 2026-08-16_16:35:40 on domain   1:    0.75771 elapsed seconds
+Timing for main: time 2026-08-16_16:36:00 on domain   1:    0.76759 elapsed seconds
+Timing for main: time 2026-08-16_16:36:20 on domain   1:    0.77038 elapsed seconds
+Timing for main: time 2026-08-16_16:36:40 on domain   1:    0.77105 elapsed seconds
+Timing for main: time 2026-08-16_16:37:00 on domain   1:    0.76825 elapsed seconds
+Timing for main: time 2026-08-16_16:37:20 on domain   1:    0.76748 elapsed seconds
+Timing for main: time 2026-08-16_16:37:40 on domain   1:    0.76694 elapsed seconds
+Timing for main: time 2026-08-16_16:38:00 on domain   1:    0.76765 elapsed seconds
+Timing for main: time 2026-08-16_16:38:20 on domain   1:    0.76605 elapsed seconds
+Timing for main: time 2026-08-16_16:38:40 on domain   1:    0.76383 elapsed seconds
+Timing for main: time 2026-08-16_16:39:00 on domain   1:    0.76730 elapsed seconds
+Timing for main: time 2026-08-16_16:39:20 on domain   1:    0.76625 elapsed seconds
+Timing for main: time 2026-08-16_16:39:40 on domain   1:    0.76538 elapsed seconds
+Timing for main: time 2026-08-16_16:40:00 on domain   1:    0.76781 elapsed seconds
+Timing for main: time 2026-08-16_16:40:20 on domain   1:    2.57806 elapsed seconds
+Timing for main: time 2026-08-16_16:40:40 on domain   1:    0.75630 elapsed seconds
+Timing for main: time 2026-08-16_16:41:00 on domain   1:    0.76813 elapsed seconds
+Timing for main: time 2026-08-16_16:41:20 on domain   1:    0.77171 elapsed seconds
+Timing for main: time 2026-08-16_16:41:40 on domain   1:    0.77276 elapsed seconds
+Timing for main: time 2026-08-16_16:42:00 on domain   1:    0.80168 elapsed seconds
+Timing for main: time 2026-08-16_16:42:20 on domain   1:    0.77047 elapsed seconds
+Timing for main: time 2026-08-16_16:42:40 on domain   1:    0.77182 elapsed seconds
+Timing for main: time 2026-08-16_16:43:00 on domain   1:    0.77398 elapsed seconds
+Timing for main: time 2026-08-16_16:43:20 on domain   1:    0.77223 elapsed seconds
+Timing for main: time 2026-08-16_16:43:40 on domain   1:    0.77285 elapsed seconds
+Timing for main: time 2026-08-16_16:44:00 on domain   1:    0.77219 elapsed seconds
+Timing for main: time 2026-08-16_16:44:20 on domain   1:    0.77167 elapsed seconds
+Timing for main: time 2026-08-16_16:44:40 on domain   1:    0.77225 elapsed seconds
+Timing for main: time 2026-08-16_16:45:00 on domain   1:    0.77118 elapsed seconds
+Timing for main: time 2026-08-16_16:45:20 on domain   1:    2.60406 elapsed seconds
+Timing for main: time 2026-08-16_16:45:40 on domain   1:    0.75840 elapsed seconds
+Timing for main: time 2026-08-16_16:46:00 on domain   1:    0.76448 elapsed seconds
+Timing for main: time 2026-08-16_16:46:20 on domain   1:    0.76378 elapsed seconds
+Timing for main: time 2026-08-16_16:46:40 on domain   1:    0.76455 elapsed seconds
+Timing for main: time 2026-08-16_16:47:00 on domain   1:    0.77036 elapsed seconds
+Timing for main: time 2026-08-16_16:47:20 on domain   1:    0.76740 elapsed seconds
+Timing for main: time 2026-08-16_16:47:40 on domain   1:    0.76438 elapsed seconds
+Timing for main: time 2026-08-16_16:48:00 on domain   1:    0.76454 elapsed seconds
+Timing for main: time 2026-08-16_16:48:20 on domain   1:    0.76668 elapsed seconds
+Timing for main: time 2026-08-16_16:48:40 on domain   1:    0.76382 elapsed seconds
+Timing for main: time 2026-08-16_16:49:00 on domain   1:    0.76533 elapsed seconds
+Timing for main: time 2026-08-16_16:49:20 on domain   1:    0.76406 elapsed seconds
+Timing for main: time 2026-08-16_16:49:40 on domain   1:    0.76436 elapsed seconds
+Timing for main: time 2026-08-16_16:50:00 on domain   1:    0.76211 elapsed seconds
+Timing for main: time 2026-08-16_16:50:20 on domain   1:    2.58052 elapsed seconds
+Timing for main: time 2026-08-16_16:50:40 on domain   1:    0.76197 elapsed seconds
+Timing for main: time 2026-08-16_16:51:00 on domain   1:    0.76193 elapsed seconds
+Timing for main: time 2026-08-16_16:51:20 on domain   1:    0.75940 elapsed seconds
+Timing for main: time 2026-08-16_16:51:40 on domain   1:    0.76275 elapsed seconds
+Timing for main: time 2026-08-16_16:52:00 on domain   1:    0.76301 elapsed seconds
+Timing for main: time 2026-08-16_16:52:20 on domain   1:    0.76420 elapsed seconds
+Timing for main: time 2026-08-16_16:52:40 on domain   1:    0.76103 elapsed seconds
+Timing for main: time 2026-08-16_16:53:00 on domain   1:    0.76536 elapsed seconds
+Timing for main: time 2026-08-16_16:53:20 on domain   1:    0.77121 elapsed seconds
+Timing for main: time 2026-08-16_16:53:40 on domain   1:    0.76829 elapsed seconds
+Timing for main: time 2026-08-16_16:54:00 on domain   1:    0.76779 elapsed seconds
+Timing for main: time 2026-08-16_16:54:20 on domain   1:    0.76727 elapsed seconds
+Timing for main: time 2026-08-16_16:54:40 on domain   1:    0.79103 elapsed seconds
+Timing for main: time 2026-08-16_16:55:00 on domain   1:    0.76998 elapsed seconds
+Timing for main: time 2026-08-16_16:55:20 on domain   1:    2.58323 elapsed seconds
+Timing for main: time 2026-08-16_16:55:40 on domain   1:    0.76693 elapsed seconds
+Timing for main: time 2026-08-16_16:56:00 on domain   1:    0.76661 elapsed seconds
+Timing for main: time 2026-08-16_16:56:20 on domain   1:    0.76941 elapsed seconds
+Timing for main: time 2026-08-16_16:56:40 on domain   1:    0.76626 elapsed seconds
+Timing for main: time 2026-08-16_16:57:00 on domain   1:    0.77117 elapsed seconds
+Timing for main: time 2026-08-16_16:57:20 on domain   1:    0.77127 elapsed seconds
+Timing for main: time 2026-08-16_16:57:40 on domain   1:    0.76626 elapsed seconds
+Timing for main: time 2026-08-16_16:58:00 on domain   1:    0.76565 elapsed seconds
+Timing for main: time 2026-08-16_16:58:20 on domain   1:    0.76674 elapsed seconds
+Timing for main: time 2026-08-16_16:58:40 on domain   1:    0.76503 elapsed seconds
+Timing for main: time 2026-08-16_16:59:00 on domain   1:    0.75950 elapsed seconds
+Timing for main: time 2026-08-16_16:59:20 on domain   1:    0.76121 elapsed seconds
+Timing for main: time 2026-08-16_16:59:40 on domain   1:    0.75922 elapsed seconds
+Timing for main: time 2026-08-16_17:00:00 on domain   1:    0.76197 elapsed seconds
+Timing for Writing wrfout_d01_2026-08-16_17:00:00 for domain        1:    0.80559 elapsed seconds
+Timing for main: time 2026-08-16_17:00:20 on domain   1:    3.37855 elapsed seconds
+Timing for main: time 2026-08-16_17:00:40 on domain   1:    0.76259 elapsed seconds
+Timing for main: time 2026-08-16_17:01:00 on domain   1:    0.76214 elapsed seconds
+Timing for main: time 2026-08-16_17:01:20 on domain   1:    0.76547 elapsed seconds
+Timing for main: time 2026-08-16_17:01:40 on domain   1:    0.76766 elapsed seconds
+Timing for main: time 2026-08-16_17:02:00 on domain   1:    0.76425 elapsed seconds
+Timing for main: time 2026-08-16_17:02:20 on domain   1:    0.76147 elapsed seconds
+Timing for main: time 2026-08-16_17:02:40 on domain   1:    0.75871 elapsed seconds
+Timing for main: time 2026-08-16_17:03:00 on domain   1:    0.76116 elapsed seconds
+Timing for main: time 2026-08-16_17:03:20 on domain   1:    0.76419 elapsed seconds
+Timing for main: time 2026-08-16_17:03:40 on domain   1:    0.76546 elapsed seconds
+Timing for main: time 2026-08-16_17:04:00 on domain   1:    0.76872 elapsed seconds
+Timing for main: time 2026-08-16_17:04:20 on domain   1:    0.76545 elapsed seconds
+Timing for main: time 2026-08-16_17:04:40 on domain   1:    0.76760 elapsed seconds
+Timing for main: time 2026-08-16_17:05:00 on domain   1:    0.76803 elapsed seconds
+Timing for main: time 2026-08-16_17:05:20 on domain   1:    2.59228 elapsed seconds
+Timing for main: time 2026-08-16_17:05:40 on domain   1:    0.76729 elapsed seconds
+Timing for main: time 2026-08-16_17:06:00 on domain   1:    0.77009 elapsed seconds
+Timing for main: time 2026-08-16_17:06:20 on domain   1:    0.77231 elapsed seconds
+Timing for main: time 2026-08-16_17:06:40 on domain   1:    0.76928 elapsed seconds
+Timing for main: time 2026-08-16_17:07:00 on domain   1:    0.76909 elapsed seconds
+Timing for main: time 2026-08-16_17:07:20 on domain   1:    0.79266 elapsed seconds
+Timing for main: time 2026-08-16_17:07:40 on domain   1:    0.77243 elapsed seconds
+Timing for main: time 2026-08-16_17:08:00 on domain   1:    0.77032 elapsed seconds
+Timing for main: time 2026-08-16_17:08:20 on domain   1:    0.77218 elapsed seconds
+Timing for main: time 2026-08-16_17:08:40 on domain   1:    0.77241 elapsed seconds
+Timing for main: time 2026-08-16_17:09:00 on domain   1:    0.77156 elapsed seconds
+Timing for main: time 2026-08-16_17:09:20 on domain   1:    0.78282 elapsed seconds
+Timing for main: time 2026-08-16_17:09:40 on domain   1:    0.77813 elapsed seconds
+Timing for main: time 2026-08-16_17:10:00 on domain   1:    0.77285 elapsed seconds
+Timing for main: time 2026-08-16_17:10:20 on domain   1:    2.58490 elapsed seconds
+Timing for main: time 2026-08-16_17:10:40 on domain   1:    0.76411 elapsed seconds
+Timing for main: time 2026-08-16_17:11:00 on domain   1:    0.77114 elapsed seconds
+Timing for main: time 2026-08-16_17:11:20 on domain   1:    0.76523 elapsed seconds
+Timing for main: time 2026-08-16_17:11:40 on domain   1:    0.76787 elapsed seconds
+Timing for main: time 2026-08-16_17:12:00 on domain   1:    0.76558 elapsed seconds
+Timing for main: time 2026-08-16_17:12:20 on domain   1:    0.76786 elapsed seconds
+Timing for main: time 2026-08-16_17:12:40 on domain   1:    0.76599 elapsed seconds
+Timing for main: time 2026-08-16_17:13:00 on domain   1:    0.76500 elapsed seconds
+Timing for main: time 2026-08-16_17:13:20 on domain   1:    0.76314 elapsed seconds
+Timing for main: time 2026-08-16_17:13:40 on domain   1:    0.76127 elapsed seconds
+Timing for main: time 2026-08-16_17:14:00 on domain   1:    0.76148 elapsed seconds
+Timing for main: time 2026-08-16_17:14:20 on domain   1:    0.76238 elapsed seconds
+Timing for main: time 2026-08-16_17:14:40 on domain   1:    0.76995 elapsed seconds
+Timing for main: time 2026-08-16_17:15:00 on domain   1:    0.76407 elapsed seconds
+Timing for main: time 2026-08-16_17:15:20 on domain   1:    2.57345 elapsed seconds
+Timing for main: time 2026-08-16_17:15:40 on domain   1:    0.76481 elapsed seconds
+Timing for main: time 2026-08-16_17:16:00 on domain   1:    0.76676 elapsed seconds
+Timing for main: time 2026-08-16_17:16:20 on domain   1:    0.76376 elapsed seconds
+Timing for main: time 2026-08-16_17:16:40 on domain   1:    0.76929 elapsed seconds
+Timing for main: time 2026-08-16_17:17:00 on domain   1:    0.76839 elapsed seconds
+Timing for main: time 2026-08-16_17:17:20 on domain   1:    0.76802 elapsed seconds
+Timing for main: time 2026-08-16_17:17:40 on domain   1:    0.76679 elapsed seconds
+Timing for main: time 2026-08-16_17:18:00 on domain   1:    0.76679 elapsed seconds
+Timing for main: time 2026-08-16_17:18:20 on domain   1:    0.76710 elapsed seconds
+Timing for main: time 2026-08-16_17:18:40 on domain   1:    0.76537 elapsed seconds
+Timing for main: time 2026-08-16_17:19:00 on domain   1:    0.76595 elapsed seconds
+Timing for main: time 2026-08-16_17:19:20 on domain   1:    0.76643 elapsed seconds
+Timing for main: time 2026-08-16_17:19:40 on domain   1:    0.76618 elapsed seconds
+Timing for main: time 2026-08-16_17:20:00 on domain   1:    0.76196 elapsed seconds
+Timing for main: time 2026-08-16_17:20:20 on domain   1:    2.59418 elapsed seconds
+Timing for main: time 2026-08-16_17:20:40 on domain   1:    0.77419 elapsed seconds
+Timing for main: time 2026-08-16_17:21:00 on domain   1:    0.77362 elapsed seconds
+Timing for main: time 2026-08-16_17:21:20 on domain   1:    0.77247 elapsed seconds
+Timing for main: time 2026-08-16_17:21:40 on domain   1:    0.77063 elapsed seconds
+Timing for main: time 2026-08-16_17:22:00 on domain   1:    0.76791 elapsed seconds
+Timing for main: time 2026-08-16_17:22:20 on domain   1:    0.77075 elapsed seconds
+Timing for main: time 2026-08-16_17:22:40 on domain   1:    0.76895 elapsed seconds
+Timing for main: time 2026-08-16_17:23:00 on domain   1:    0.76618 elapsed seconds
+Timing for main: time 2026-08-16_17:23:20 on domain   1:    0.76937 elapsed seconds
+Timing for main: time 2026-08-16_17:23:40 on domain   1:    0.76740 elapsed seconds
+Timing for main: time 2026-08-16_17:24:00 on domain   1:    0.76909 elapsed seconds
+Timing for main: time 2026-08-16_17:24:20 on domain   1:    0.77207 elapsed seconds
+Timing for main: time 2026-08-16_17:24:40 on domain   1:    0.77224 elapsed seconds
+Timing for main: time 2026-08-16_17:25:00 on domain   1:    0.77162 elapsed seconds
+Timing for main: time 2026-08-16_17:25:20 on domain   1:    2.57743 elapsed seconds
+Timing for main: time 2026-08-16_17:25:40 on domain   1:    0.76349 elapsed seconds
+Timing for main: time 2026-08-16_17:26:00 on domain   1:    0.76643 elapsed seconds
+Timing for main: time 2026-08-16_17:26:20 on domain   1:    0.76958 elapsed seconds
+Timing for main: time 2026-08-16_17:26:40 on domain   1:    0.76674 elapsed seconds
+Timing for main: time 2026-08-16_17:27:00 on domain   1:    0.76545 elapsed seconds
+Timing for main: time 2026-08-16_17:27:20 on domain   1:    0.76579 elapsed seconds
+Timing for main: time 2026-08-16_17:27:40 on domain   1:    0.76539 elapsed seconds
+Timing for main: time 2026-08-16_17:28:00 on domain   1:    0.76686 elapsed seconds
+Timing for main: time 2026-08-16_17:28:20 on domain   1:    0.76358 elapsed seconds
+Timing for main: time 2026-08-16_17:28:40 on domain   1:    0.76530 elapsed seconds
+Timing for main: time 2026-08-16_17:29:00 on domain   1:    0.78229 elapsed seconds
+Timing for main: time 2026-08-16_17:29:20 on domain   1:    0.76600 elapsed seconds
+Timing for main: time 2026-08-16_17:29:40 on domain   1:    0.76454 elapsed seconds
+Timing for main: time 2026-08-16_17:30:00 on domain   1:    0.76444 elapsed seconds
+Timing for main: time 2026-08-16_17:30:20 on domain   1:    2.57609 elapsed seconds
+Timing for main: time 2026-08-16_17:30:40 on domain   1:    0.76628 elapsed seconds
+Timing for main: time 2026-08-16_17:31:00 on domain   1:    0.77529 elapsed seconds
+Timing for main: time 2026-08-16_17:31:20 on domain   1:    0.77211 elapsed seconds
+Timing for main: time 2026-08-16_17:31:40 on domain   1:    0.77296 elapsed seconds
+Timing for main: time 2026-08-16_17:32:00 on domain   1:    0.76951 elapsed seconds
+Timing for main: time 2026-08-16_17:32:20 on domain   1:    0.77428 elapsed seconds
+Timing for main: time 2026-08-16_17:32:40 on domain   1:    0.76848 elapsed seconds
+Timing for main: time 2026-08-16_17:33:00 on domain   1:    0.76796 elapsed seconds
+Timing for main: time 2026-08-16_17:33:20 on domain   1:    0.76920 elapsed seconds
+Timing for main: time 2026-08-16_17:33:40 on domain   1:    0.77018 elapsed seconds
+Timing for main: time 2026-08-16_17:34:00 on domain   1:    0.77348 elapsed seconds
+Timing for main: time 2026-08-16_17:34:20 on domain   1:    0.77083 elapsed seconds
+Timing for main: time 2026-08-16_17:34:40 on domain   1:    0.76899 elapsed seconds
+Timing for main: time 2026-08-16_17:35:00 on domain   1:    0.76798 elapsed seconds
+Timing for main: time 2026-08-16_17:35:20 on domain   1:    2.57976 elapsed seconds
+Timing for main: time 2026-08-16_17:35:40 on domain   1:    0.76796 elapsed seconds
+Timing for main: time 2026-08-16_17:36:00 on domain   1:    0.76632 elapsed seconds
+Timing for main: time 2026-08-16_17:36:20 on domain   1:    0.76576 elapsed seconds
+Timing for main: time 2026-08-16_17:36:40 on domain   1:    0.76185 elapsed seconds
+Timing for main: time 2026-08-16_17:37:00 on domain   1:    0.76194 elapsed seconds
+Timing for main: time 2026-08-16_17:37:20 on domain   1:    0.76511 elapsed seconds
+Timing for main: time 2026-08-16_17:37:40 on domain   1:    0.76554 elapsed seconds
+Timing for main: time 2026-08-16_17:38:00 on domain   1:    0.76422 elapsed seconds
+Timing for main: time 2026-08-16_17:38:20 on domain   1:    0.76755 elapsed seconds
+Timing for main: time 2026-08-16_17:38:40 on domain   1:    0.76509 elapsed seconds
+Timing for main: time 2026-08-16_17:39:00 on domain   1:    0.76459 elapsed seconds
+Timing for main: time 2026-08-16_17:39:20 on domain   1:    0.78239 elapsed seconds
+Timing for main: time 2026-08-16_17:39:40 on domain   1:    0.76532 elapsed seconds
+Timing for main: time 2026-08-16_17:40:00 on domain   1:    0.76774 elapsed seconds
+Timing for main: time 2026-08-16_17:40:20 on domain   1:    2.58259 elapsed seconds
+Timing for main: time 2026-08-16_17:40:40 on domain   1:    0.76580 elapsed seconds
+Timing for main: time 2026-08-16_17:41:00 on domain   1:    0.76857 elapsed seconds
+Timing for main: time 2026-08-16_17:41:20 on domain   1:    0.76935 elapsed seconds
+Timing for main: time 2026-08-16_17:41:40 on domain   1:    0.76963 elapsed seconds
+Timing for main: time 2026-08-16_17:42:00 on domain   1:    0.76812 elapsed seconds
+Timing for main: time 2026-08-16_17:42:20 on domain   1:    0.76947 elapsed seconds
+Timing for main: time 2026-08-16_17:42:40 on domain   1:    0.76714 elapsed seconds
+Timing for main: time 2026-08-16_17:43:00 on domain   1:    0.76399 elapsed seconds
+Timing for main: time 2026-08-16_17:43:20 on domain   1:    0.76398 elapsed seconds
+Timing for main: time 2026-08-16_17:43:40 on domain   1:    0.76365 elapsed seconds
+Timing for main: time 2026-08-16_17:44:00 on domain   1:    0.76105 elapsed seconds
+Timing for main: time 2026-08-16_17:44:20 on domain   1:    0.75844 elapsed seconds
+Timing for main: time 2026-08-16_17:44:40 on domain   1:    0.75897 elapsed seconds
+Timing for main: time 2026-08-16_17:45:00 on domain   1:    0.75902 elapsed seconds
+Timing for main: time 2026-08-16_17:45:20 on domain   1:    2.56368 elapsed seconds
+Timing for main: time 2026-08-16_17:45:40 on domain   1:    0.75874 elapsed seconds
+Timing for main: time 2026-08-16_17:46:00 on domain   1:    0.75862 elapsed seconds
+Timing for main: time 2026-08-16_17:46:20 on domain   1:    0.75979 elapsed seconds
+Timing for main: time 2026-08-16_17:46:40 on domain   1:    0.77272 elapsed seconds
+Timing for main: time 2026-08-16_17:47:00 on domain   1:    0.75647 elapsed seconds
+Timing for main: time 2026-08-16_17:47:20 on domain   1:    0.75758 elapsed seconds
+Timing for main: time 2026-08-16_17:47:40 on domain   1:    0.76040 elapsed seconds
+Timing for main: time 2026-08-16_17:48:00 on domain   1:    0.75701 elapsed seconds
+Timing for main: time 2026-08-16_17:48:20 on domain   1:    0.75568 elapsed seconds
+Timing for main: time 2026-08-16_17:48:40 on domain   1:    0.75754 elapsed seconds
+Timing for main: time 2026-08-16_17:49:00 on domain   1:    0.75818 elapsed seconds
+Timing for main: time 2026-08-16_17:49:20 on domain   1:    0.75469 elapsed seconds
+Timing for main: time 2026-08-16_17:49:40 on domain   1:    0.75848 elapsed seconds
+Timing for main: time 2026-08-16_17:50:00 on domain   1:    0.75552 elapsed seconds
+Timing for main: time 2026-08-16_17:50:20 on domain   1:    2.56595 elapsed seconds
+Timing for main: time 2026-08-16_17:50:40 on domain   1:    0.75698 elapsed seconds
+Timing for main: time 2026-08-16_17:51:00 on domain   1:    0.75410 elapsed seconds
+Timing for main: time 2026-08-16_17:51:20 on domain   1:    0.75588 elapsed seconds
+Timing for main: time 2026-08-16_17:51:40 on domain   1:    0.75821 elapsed seconds
+Timing for main: time 2026-08-16_17:52:00 on domain   1:    0.75511 elapsed seconds
+Timing for main: time 2026-08-16_17:52:20 on domain   1:    0.75654 elapsed seconds
+Timing for main: time 2026-08-16_17:52:40 on domain   1:    0.75547 elapsed seconds
+Timing for main: time 2026-08-16_17:53:00 on domain   1:    0.75714 elapsed seconds
+Timing for main: time 2026-08-16_17:53:20 on domain   1:    0.75600 elapsed seconds
+Timing for main: time 2026-08-16_17:53:40 on domain   1:    0.75627 elapsed seconds
+Timing for main: time 2026-08-16_17:54:00 on domain   1:    0.75743 elapsed seconds
+Timing for main: time 2026-08-16_17:54:20 on domain   1:    0.75813 elapsed seconds
+Timing for main: time 2026-08-16_17:54:40 on domain   1:    0.76023 elapsed seconds
+Timing for main: time 2026-08-16_17:55:00 on domain   1:    0.75804 elapsed seconds
+Timing for main: time 2026-08-16_17:55:20 on domain   1:    2.51399 elapsed seconds
+Timing for main: time 2026-08-16_17:55:40 on domain   1:    0.73189 elapsed seconds
+Timing for main: time 2026-08-16_17:56:00 on domain   1:    0.73116 elapsed seconds
+Timing for main: time 2026-08-16_17:56:20 on domain   1:    0.73527 elapsed seconds
+Timing for main: time 2026-08-16_17:56:40 on domain   1:    0.74268 elapsed seconds
+Timing for main: time 2026-08-16_17:57:00 on domain   1:    0.73629 elapsed seconds
+Timing for main: time 2026-08-16_17:57:20 on domain   1:    0.73336 elapsed seconds
+Timing for main: time 2026-08-16_17:57:40 on domain   1:    0.73115 elapsed seconds
+Timing for main: time 2026-08-16_17:58:00 on domain   1:    0.73132 elapsed seconds
+Timing for main: time 2026-08-16_17:58:20 on domain   1:    0.73052 elapsed seconds
+Timing for main: time 2026-08-16_17:58:40 on domain   1:    0.73066 elapsed seconds
+Timing for main: time 2026-08-16_17:59:00 on domain   1:    0.73041 elapsed seconds
+Timing for main: time 2026-08-16_17:59:20 on domain   1:    0.73157 elapsed seconds
+Timing for main: time 2026-08-16_17:59:40 on domain   1:    0.73306 elapsed seconds
+Timing for main: time 2026-08-16_18:00:00 on domain   1:    0.73084 elapsed seconds
+Timing for Writing wrfout_d01_2026-08-16_18:00:00 for domain        1:    0.74521 elapsed seconds
+d01 2026-08-16_18:00:00 wrf: SUCCESS COMPLETE WRF

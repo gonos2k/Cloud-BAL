@@ -1,0 +1,72 @@
+{
+  "point_id": "RN1_10942",
+  "steps": [
+    181,
+    360
+  ],
+  "time_definition": "hour 2 call n occupies ((n-181)/3, (n-180)/3] minutes; bins contain 30 returns",
+  "bin_surface_definition": "cumulative at last step minus cumulative at immediately preceding step, including step 180 baseline",
+  "native_corners": [
+    {
+      "id": "GC0028",
+      "i": 140,
+      "j": 79,
+      "weight": 0.24629397354739388
+    },
+    {
+      "id": "GC0029",
+      "i": 141,
+      "j": 79,
+      "weight": 0.24211872650600177
+    },
+    {
+      "id": "GC0041",
+      "i": 140,
+      "j": 80,
+      "weight": 0.2579803287393153
+    },
+    {
+      "id": "GC0042",
+      "i": 141,
+      "j": 80,
+      "weight": 0.25360697120728903
+    }
+  ],
+  "sources": [
+    {
+      "path": "docs/evidence/cp02_protected_process_20261106/native/compact/OLD/state_return_QR/lead_02/state_return_QR.npz",
+      "sha256": "7b4f51071ae9c4301a0efbafab06f7e694d94a1a8a36020681c951967146a38d"
+    },
+    {
+      "path": "docs/evidence/cp02_protected_process_20261106/native/compact/OLD/surface_rain_cumulative/lead_01/surface_rain_cumulative.npz",
+      "sha256": "3a038e411e8fef66e8dc665ba1c6bb558b09f5d7f681d07f268cbe427dbfa82a"
+    },
+    {
+      "path": "docs/evidence/cp02_protected_process_20261106/native/compact/OLD/surface_rain_cumulative/lead_02/surface_rain_cumulative.npz",
+      "sha256": "f1465eb8147f169590cab8cd188dbdac6f66667256b63d94e701d060b0dd8261"
+    },
+    {
+      "path": "docs/evidence/cp02_protected_process_20261106/native/compact/FIX/state_return_QR/lead_02/state_return_QR.npz",
+      "sha256": "cf0d4a55e77e626cf5e58cb5057f58de4018cce061e3df9d106aec7327758e36"
+    },
+    {
+      "path": "docs/evidence/cp02_protected_process_20261106/native/compact/FIX/surface_rain_cumulative/lead_01/surface_rain_cumulative.npz",
+      "sha256": "aee5b97b58609ac6c1b2f95d0e5b600ecb8a85a2a0939942f5691772403105cd"
+    },
+    {
+      "path": "docs/evidence/cp02_protected_process_20261106/native/compact/FIX/surface_rain_cumulative/lead_02/surface_rain_cumulative.npz",
+      "sha256": "0e5e77284435036b1d859fc7fddb5735e5daef55e5daa9abc0e0d92c795365ca"
+    }
+  ],
+  "font_sha256": "48a28e97b34fc8e5b157657633670cd1b7de126cfc414da65ce9c3d5bc8be733",
+  "renderer_sha256": "a9802775bffe938b219a8540aca74b10932ded672b7257142d744fe19012aba1",
+  "numpy": "1.26.4",
+  "matplotlib": "3.10.8",
+  "outputs": {
+    "science/p01_return_corners.csv": "6fb879dda6a9a4016530f93f4302e86f81776ba0770ab7821e6eebfd5d949a6f",
+    "science/p01_10min_bins.csv": "723535afa4adf3cd2202cce3f8e9b329dd62156658d0c77eb54379326f0005b7",
+    "science/p01_surface_calls.csv": "9f6cc621e41fd5a76c606b72423674b64aab9f0b1b08ed6fc4d691076d0247c8",
+    "figures/p01_return_and_surface.png": "329589e7a1e01833c673df752555bb68d8b03b5d563e10eef8fdcd66387d9519"
+  },
+  "limitations": "Selected point and original corners only; RAINNC excludes RAINC. Not a vertical mass budget or causal attribution."
+}

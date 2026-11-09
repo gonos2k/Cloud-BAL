@@ -1,0 +1,35 @@
+{
+  "status": "PASS",
+  "independent_checks": [
+    "13 PNG files decode and match the separate P01, categorical-score, and map receipts",
+    "13 Markdown image paths and 13 HTML image paths cover the same PNGs; every local Markdown and HTML link resolves",
+    "ZIP has 16 unique expected members, no PDF, valid CRCs, and every member matches its source and gallery receipt hash",
+    "no PDF exists in the new evidence bundle"
+  ],
+  "figure_sha256": {
+    "figures/p01_return_and_surface.png": "329589e7a1e01833c673df752555bb68d8b03b5d563e10eef8fdcd66387d9519",
+    "figures/candidate_csi_0.1mm.png": "f94ed178ed73b19660dd716f39dbb5bf1610633400d92b3bd7a76932d98b6897",
+    "figures/candidate_csi_0.5mm.png": "484e0e5e88ef39f4988c391fbe25d10932e89623fe8cb83c2b1b00a98b3e0ab6",
+    "figures/candidate_csi_1mm.png": "48b55e6f8348c968e2d5e209701d5159ded9e11acbcf5894c99beb60169266b5",
+    "figures/candidate_csi_2.5mm.png": "92c5d7f90c853a1a1d32f336ae010eb8c5e57c8b999197afd0a40c2f066fe3d1",
+    "figures/candidate_csi_5mm.png": "99f3a196c63e0ca04ad62563f6b2d31b86851f6c27a338bd1d20c3fc6550feeb",
+    "figures/candidate_csi_10mm.png": "2ad59ebce7cd206b29a299a66334a6e94bf144c992019236b224d0ecaa88e422",
+    "figures/candidate_rn1_hour_13_maps.png": "ac35857547a43cc5ced23fea581a50504db3c80e36371306489e0048aa8e963d",
+    "figures/candidate_rn1_hour_14_maps.png": "7c3f797d845d6d8df4e78f0fb5d1c1594c5ba97bff989407adf7537aef3deeac",
+    "figures/candidate_rn1_hour_15_maps.png": "69dfedd5b30a2759fd7cea9826625f581c73ee03dfd373ccae7a2d02d09d1336",
+    "figures/candidate_rn1_hour_16_maps.png": "71e16b991833feb72794e927a8a42069c8c2e424a39bb55f0705593eb2e9537c",
+    "figures/candidate_rn1_hour_17_maps.png": "25e28eb158cca950274d33bcecfc19ea6c59e49ee54bd7c1f3bd175fbc8daf0e",
+    "figures/candidate_rn1_hour_18_maps.png": "ea2a87630367f073dfac15a866c502891147354627a881c4a3155cd826058297"
+  },
+  "bound_artifacts": {
+    "FIGURES.md": "cf3e2c55e59cb0bca7a81170d9c93c4746fd369229e54ee9ddb457d8a3c4b1cb",
+    "gallery.html": "4a1eb6cc74312f4c2483700153ddd2757b1de755c4eca222aa1ac41ab6694f2b",
+    "all_figures.zip": "6b97b918488c41db2fa10c225e96f56bb5e5ba183b3f15a2ceb0880390071353",
+    "gallery_receipt.json": "c9ab0577d4364f969186125e35529989dac0ec5e4f555d36c065c61db5d7859f",
+    "science/p01_timing_receipt.json": "7473802777d34c5400251b282e34e08b32ebf3de9db207ae697ce4ec90b1290c",
+    "evaluation/results/receipt.json": "3b97420c8c82f285c4793a2004131cc7832d2cb1f003f19785b63f2c6688963b",
+    "evaluation/maps_metadata.json": "acf2c064cd206bc0fae47121c088ed4783caca815dcf269fae9a4b0242074aaf"
+  },
+  "visual_scope": "+2 h map and 5 mm CSI visually reviewed; P01 reviewed by report owner",
+  "scope_limit": "asset integrity and link checks do not validate forecast or scientific conclusions"
+}

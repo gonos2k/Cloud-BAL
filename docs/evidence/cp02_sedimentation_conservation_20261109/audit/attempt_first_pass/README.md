@@ -1,0 +1,1 @@
+These are the completed first-pass summaries. The exact bytes of the executing source were not captured at launch; `../reconstructed_full_launch_source.py` is a later reconstruction, not a contemporaneous attestation. They are retained as an attempt and compared with the independently pinned-source final run. Summing column quantities over the cohort is not a spatial integral.
