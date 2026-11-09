@@ -1,0 +1,69 @@
+program coupled
+ use module_mp_kdm6
+ implicit none
+ integer, parameter :: its=1,ite=1,kts=1,kte=3
+ real :: qrs(1,3,3),qci(1,3,2),nrs(1,3),nci(1,3,2),dend(1,3),delz(1,3),denfac(1,3),t(1,3)
+ real :: rslope(1,3,4),rslopeb(1,3,4),rslope2(1,3,4),rslope3(1,3,4),rsloped(1,3,4)
+ real :: pidn0g(1,3),pvtg(1,3),bvtg(1,3),rslopegbmax(1,3),dtcld
+ real :: falk(1,3,4),fall(1,3,4),falkn(1,3,2),falln(1,3,2)
+ real(8) :: work1(1,3,4),workn(1,3,2),rslopemu(1,3,4),sed_mass(1,4,4),sed_number(1,4,2)
+ real(8) :: beforem,beforen,afterm,aftern,vm,vn,expectm,expectn,rawm,rawn
+ integer :: mstep_i(1),i,k,n,steps,mode
+ ! Values below are the kdm6init equations for the inactive warm branches and ice.
+ rslopermax=1./3.5e4; rslopesmax=1./1.8e5; rslopegmax=1./1.8e5
+ rslopeimax=1./1.82e6
+ rslopermmax=dble(rslopermax); rslopesmmax=1.; rslopegmmax=1.; rslopeimmax=1.
+ rsloperbmax=rslopermax**.8; rslopesbmax=rslopesmax**.41; rslopeibmax=rslopeimax
+ rsloperdmax=rslopermax**3; rslopesdmax=rslopesmax**3; rslopegdmax=rslopegmax**3
+ rsloper2max=rslopermax**2; rslopes2max=rslopesmax**2; rslopeg2max=rslopegmax**2
+ rsloper3max=rslopermax**3; rslopes3max=rslopesmax**3; rslopeg3max=rslopegmax**3
+ rslopeidmax=rslopeimax**3; rslopei2max=rslopeimax**2; rslopei3max=rslopeimax**3
+ pvtr=0.; pvtrn=0.; pvts=0.; pvti=2710.*4.; pvtin=2710.
+ pidni=(acos(-1.)*500./6.)*6.
+ do steps=1,4,3
+  do mode=0,1
+   qrs=0.; nrs=0.; qci=0.; nci=0.; dend=1.; delz=100.; denfac=1.; t=260.
+   pidn0g=1.; pvtg=0.; bvtg=0.; rslopegbmax=1.; dtcld=20.; mstep_i=steps
+   qci(1,2,2)=.001; nci(1,2,2)=.001*21680.**3/(acos(-1.)*500./6.*6.)
+   fall=0.; falln=0.
+   beforem=sum(real(qci(:,:,2),8))*100; beforen=sum(real(nci(:,:,2),8))*100
+   call slope()
+   vm=work1(1,2,4); vn=workn(1,2,2)
+   if(abs(vm-.5d0)>1.d-5 .or. abs(vn-.125d0)>1.d-5) stop 10
+   rawm=vm; rawn=vn
+   if(mode==1) then
+@BOUNDARY@
+     if(abs(work1(1,2,4)-rawm/100.d0)>1.d-14 .or. &
+        abs(workn(1,2,2)-rawn/100.d0)>1.d-14) stop 16
+   endif
+   do n=1,steps
+    vm=work1(1,2,4); vn=workn(1,2,2)
+    expectm=min(1.d0,vm*dtcld/steps); expectn=min(1.d0,vn*dtcld/steps)
+    beforem=real(qci(1,2,2),8); beforen=real(nci(1,2,2),8)
+@ICE@
+    if(abs(real(qci(1,2,2),8)-beforem*(1-expectm))>1.d-6*max(beforem,1.d-30)) stop 11
+    if(abs(real(nci(1,2,2),8)-beforen*(1-expectn))>1.d-6*max(beforen,1.d-30)) stop 12
+    if(n==1 .and. steps==1) then
+      if(mode==1 .and. (abs(expectm-.1d0)>1.d-5 .or. abs(expectn-.025d0)>1.d-5)) stop 13
+      if(mode==0 .and. (expectm/=1.d0 .or. expectn/=1.d0)) stop 14
+      print *, 'first transfer mode,mass,number:',mode,expectm,expectn
+    endif
+    call slope()
+    rawm=work1(1,2,4); rawn=workn(1,2,2)
+@ENDNORM@
+    if(abs(work1(1,2,4)-rawm/100.d0)>1.d-14 .or. &
+       abs(workn(1,2,2)-rawn/100.d0)>1.d-14) stop 17
+   enddo
+   afterm=sum(real(qci(:,:,2),8))*100+real(fall(1,1,4),8)*dtcld*100
+   aftern=sum(real(nci(:,:,2),8))*100+real(falln(1,1,2),8)*dtcld*100
+   beforem=.001d0*100; beforen=real(.001*21680.**3/(acos(-1.)*500./6.*6.),8)*100
+   if(abs(afterm-beforem)>1.d-6*beforem .or. abs(aftern-beforen)>1.d-6*beforen) stop 15
+   print *, 'PASS coupled mode,substeps:',mode,steps
+  enddo
+ enddo
+contains
+ subroutine slope()
+ call slope_kdm6(qrs,qci(:,:,2),nrs,nci(:,:,2),dend,denfac,t,rslope,rslopeb,rslope2,rslope3, &
+ rslopemu,rsloped,work1,workn,its,ite,kts,kte,1.e-15,pidn0g,pvtg,bvtg,rslopegbmax)
+ end subroutine
+end program

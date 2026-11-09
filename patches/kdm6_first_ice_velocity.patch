@@ -1,0 +1,17 @@
+--- a/module_mp_kdm6_FIX.f90
++++ b/module_mp_kdm6_FIX.f90
+@@ -1141,6 +1141,14 @@
+ 
+ 
+ 
++      ! The final warm-loop slope call restores ice velocities to m/s.
++      do k = kte, kts, -1
++        do i = its, ite
++          work1(i,k,4) = work1(i,k,4)/delz(i,k)
++          workn(i,k,2) = workn(i,k,2)/delz(i,k)
++        enddo
++      enddo
++
+       do n = 1, mstepmax_i
+         ! Ice mass and number use the same donor-boundary transfer rule.
+         do k = kts, kte
