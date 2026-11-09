@@ -1,0 +1,26 @@
+{
+  "status": "GO",
+  "scope": "Independent science/source and visual review; gallery and final index reviewed separately",
+  "sha256": {
+    "docs/CP02_ICE_FALSE_ALARM_20261109.md": "e47b0f626708639816fe951763a703e33fe7e2b5b211ff695e2691334eb54415",
+    "docs/evidence/cp02_ice_false_alarm_20261109/figures/receipt.json": "08ce6a8cf203eabad6aa45aef6466756811560b469581132d0b9ecf7154c2541",
+    "docs/evidence/cp02_ice_false_alarm_20261109/cohorts/receipt.json": "5495f1eaf43cb696060761862e80820c0b5a6807a0b4ec50b43a53b86d21f476",
+    "docs/evidence/cp02_ice_false_alarm_20261109/surface/native/receipt.json": "a10a18911c849af5750dd780126c38b11fb143848679a172694eb24d525882de",
+    "docs/evidence/cp02_ice_false_alarm_20261109/review/independent_recount.json": "5381680346b3e692b9254ea189bec80889be0a593d064c3bbf6a9a5ca82ce121",
+    "tools/cp02_ice_false_alarm.py": "f660f251542d7372e6ab1fe6b3a3004d4715f764891759c036a1627a2209d2b9",
+    "tools/cp02_ice_surface_components.py": "4ee15947f031d272f4a1484a4ce0c12967ff255e26920523c1152439735447ab",
+    "tools/plot_cp02_ice_false_alarm.py": "3b18adc9944e45b86bda82bdeaf57b3dfe9fbfcc02eb63f5aee78c1ec30b553c"
+  },
+  "checks": [
+    "Independent cohort mask and full transition recount, six weak detection leads, +1 h IDs and >=10 mm count",
+    "Independent 88512-row component/corner recomputation, maximum absolute difference 4.27e-14 mm",
+    "Recomputed group medians, component extrema, two-hour paired differences, all weak intensity table entries",
+    "Four new figures visually reviewed after label and glyph fixes",
+    "Source lineage and counter interpretation reviewed; hourly counter components do not establish causation"
+  ],
+  "limitations": [
+    "Single case and correlated grid points",
+    "RN1 upstream quality/coverage, transport fluxes and whole-domain budgets not established",
+    "Native history extraction requires original external inputs; stored corners enable replay"
+  ]
+}
