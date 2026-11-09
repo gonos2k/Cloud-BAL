@@ -1,0 +1,28 @@
+{
+  "schema": "cp02_first_ice_final_science_review_v1",
+  "status": "GO",
+  "sha256": {
+    "docs/CP02_FIRST_ICE_VELOCITY_20261109.md": "0b7bedd121b305cc3079713055ce12b24535a5fd4f27f5edbd9981c33f230ca6",
+    "docs/evidence/cp02_first_ice_velocity_20261109/FIGURES.md": "91b0a4185150b8395e3df95cb6317d575ba37e84b3ea54d8fe40871fbdee5ab5",
+    "docs/evidence/cp02_first_ice_velocity_20261109/evaluation/results/categorical_scores.csv": "08283aed0b2430b673b08b2aa6770fb9badf036c112ec843dfc99fce3f21fac2",
+    "docs/evidence/cp02_first_ice_velocity_20261109/evaluation/results/continuous_scores.csv": "8a5832ccd5ec57b3212643d4690758ab8a5349e5f71336a6eb2e1a191e7f4676",
+    "docs/evidence/cp02_first_ice_velocity_20261109/evaluation/results/admission_constraints.csv": "f266c88272276849736ece372fc0d82f62d40743152febdd746ad21285bc62be",
+    "docs/evidence/cp02_first_ice_velocity_20261109/evaluation/results/observation_transitions.csv": "363c42eb2144f4d9135367f03f146ee7b86750ab65b15fc0bd91c555b423bafb",
+    "docs/evidence/cp02_first_ice_velocity_20261109/evaluation/results/receipt.json": "09bd7015a9f84f3a79cd90a0dc00b2600f10f32589b26e336554e54e7dc24b16",
+    "docs/evidence/cp02_first_ice_velocity_20261109/evaluation/cohorts/cohorts.csv": "d3e8494b0ba3188b45a82cc0e9403e269f18d18ead73c9396f77d9e8036da546",
+    "docs/evidence/cp02_first_ice_velocity_20261109/evaluation/cohorts/summary.json": "ceae81ff4e0ac7a799570605c4ccb1558c13cde78a3f278c7277167f3f7b2498",
+    "docs/evidence/cp02_first_ice_velocity_20261109/review/independent_recount.json": "df8ad5b6d5ba7e93d91d6955b221900faa21ad6deacf04e165331c92aaf2ec35",
+    "docs/evidence/cp02_first_ice_velocity_20261109/forecast/proof/comparability.json": "73d32936e0e2038f83be34a1a89a262a4b85315f408cb01dbd3378ad430b534b"
+  },
+  "checks": [
+    "Source dimensional derivation, donor cap, separate number-per-volume equation and local test limitations agree with source review.",
+    "Recount confirms 144 categorical rows, 24 continuous rows, 48 transitions and 26 exact conditions per candidate; published 36 CSI and 36 B1-difference values and weak/dry transition table independently checked.",
+    "Fixed sets independently reconstructed from final arrays: 8 prior lost hits with 7 recovered and 1 remaining; 102 prior new false alarms with 37 removed and 65 remaining. Named points and hourly values agree with cohort CSV.",
+    "Candidate 21/26 and prior 19/26; failed five conditions and retention of B1 agree with fixed rules.",
+    "WRF-to-RN1 bilinear mapping and no additional map display interpolation are explicitly distinguished."
+  ],
+  "limitations": [
+    "Single forecast case; RN1 coverage/QC, independent-case generalization, full model water/energy budget and C2 T39 remain open.",
+    "This review does not infer process-specific causation or skill from conservation."
+  ]
+}

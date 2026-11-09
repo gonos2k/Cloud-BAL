@@ -1,0 +1,60 @@
+{
+  "status": "PASS",
+  "scope": "visual and packaging review, not forecast or scientific validation",
+  "visual_review": {
+    "contact_sheet": "all 12 PNGs inspected as a contact sheet",
+    "full_resolution": [
+      "figures/csi_10mm.png",
+      "figures/rn1_hour_18_maps.png"
+    ],
+    "observations": [
+      "All six CSI plots show four labeled experiments and six lead times.",
+      "All six maps show RN1, four experiments and three signed difference panels with colorbars.",
+      "Some CSI series and markers overlap, especially where values are close; use the full score table for exact values.",
+      "Each CSI threshold uses its own y-axis range, as labeled; visual heights across plots should not be compared directly.",
+      "Map thumbnails are too small to read comfortably; open full-size images. Map colors use bins and the difference scale is symmetric logarithmic, so color distance is nonlinear.",
+      "Dense point symbols visually merge, although the maps display paired points and do not interpolate.",
+      "The caption distinguishes the frozen bilinear WRF-to-RN1 mapping from the lack of additional interpolation between displayed evaluation points."
+    ]
+  },
+  "checks": {
+    "local_link_count": 34,
+    "all_local_and_zip_links_resolve": true,
+    "zip_member_count": 19,
+    "zip_crc_and_member_hashes": "PASS",
+    "no_pdf": true,
+    "no_overwrite_rejected": true
+  },
+  "hashes": {
+    "FIGURES.md": "91b0a4185150b8395e3df95cb6317d575ba37e84b3ea54d8fe40871fbdee5ab5",
+    "gallery.html": "1532f1a1cd685c743179d79723a6b7e89f3161aa23d5a7764800da91ed8cd6fe",
+    "all_figures.zip": "f79e4a9e5f1139cdd81c8cb50f08866612220ac2dd11b6504d830017273d39e7",
+    "gallery_receipt.json": "c451caf49e92316ed97323f4368e50ac73ff6a3c0946cea28f0c332bce2674e5",
+    "evaluation/results/receipt.json": "09bd7015a9f84f3a79cd90a0dc00b2600f10f32589b26e336554e54e7dc24b16",
+    "figures/maps_metadata.json": "e9824edf9551d7d3e613d269aff7205090af1b95070062ed67bc8d450b042433"
+  },
+  "caption_revision": {
+    "reason": "clarify frozen bilinear mapping before point display",
+    "previous_outputs_external": "/var/tmp/cp02_ice_gallery_before_mapping_caption_20261109",
+    "previous_sha256": {
+      "FIGURES.md": "6215ecaaaef84dd06e053c8da805abf78027a6d49db928bb81eefb952562c157",
+      "gallery.html": "3d25afa6de89e9e61217749a70d9473365cdb18f316040f82b86878d61332bab",
+      "all_figures.zip": "de4f79a848c4f74cd8699f62723c0e84f13564ec93411852d6a1399c0bc44273",
+      "gallery_receipt.json": "6ddb88192935218989351ad4cc06d040ca58b369c93ab2e598e7afb22adbc676",
+      "figure_gallery_review.json": "e779968218c132ac2183b9f9febdddc066443327afe1f4341f3e9a2dda3f9f03"
+    },
+    "images_unchanged": true
+  },
+  "terminology_revision": {
+    "reason": "match plot terminology and state 21/26 non-admission; include full scores",
+    "previous_outputs_external": "/var/tmp/cp02_ice_gallery_before_terminology_20261109",
+    "previous_sha256": {
+      "FIGURES.md": "552e7bee49dc6dc040ced10a1cc0d7646de5507488aff3161fbf91f20eb99f3a",
+      "gallery.html": "eadc3ac1c7b5f9aa128b7ff611ab642f20613b3b5f4422abcd81335d2f150032",
+      "all_figures.zip": "3dcb65bd68df7734b962097fb355453cc12e56fcbacc1e6b11338ef26839f009",
+      "gallery_receipt.json": "589b72bdab49db2cc4aa6105470f02206eb72210b9404705a9909858b71f48fb",
+      "figure_gallery_review.json": "1aba47a6b52e2bb49533600b14f249f0426f686123045577c5cf1d9a93816f19"
+    },
+    "images_unchanged": true
+  }
+}
