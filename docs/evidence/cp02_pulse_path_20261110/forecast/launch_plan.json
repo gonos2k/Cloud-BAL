@@ -1,0 +1,68 @@
+{
+  "status": "FROZEN_CONTROLLED_SIX_HOUR_PLAN",
+  "schema": "cp02_pulse_substeps_launch_plan_v1",
+  "base_commit": "6218dc33cced6a6b41d71a99244d300fb44972cd",
+  "initial_time_utc": "2026-08-16T12:00:00Z",
+  "end_time_utc": "2026-08-16T18:00:00Z",
+  "purpose": "Numerical timestep sensitivity, not a proposed physics fix; CONTROL is PR154 source, MP10 changes dtcldcr 120 to 10 seconds only.",
+  "source_sha256": {
+    "docs/evidence/cp02_pulse_path_20261110/forecast/build.py": "ae807e5102e3d4912b60e96bec662e8df6b99b21ef7e24673bce514d98dfb243",
+    "docs/evidence/cp02_pulse_path_20261110/forecast/forecast.py": "5b0399d13b7d02bba36ca6ffce7562afdc11dfe1ae6181fcbdba3b6e1e626149",
+    "docs/evidence/cp02_pulse_path_20261110/forecast/launch.py": "2ebe76899b3f5ddccc6af3b0d82227399f0b2d765567e16f6ebfbd7cae30a049",
+    "docs/evidence/cp02_pulse_path_20261110/forecast/rank_wrapper.sh": "933d4496a8c3b0aed240364ef08c3b1db5d8219b348b71b9c3db5b1ab3135938",
+    "docs/evidence/cp02_pulse_path_20261110/forecast/source/CONTROL.f90": "c2e90bcc04b0f8fac2224c24124cbac0f5fbf0916ee91f679759e5bbb55bfcc2",
+    "docs/evidence/cp02_pulse_path_20261110/forecast/source/MP10.f90": "4604dc031d618a6feeb43a72a7cfabc656abf7f3e4eb591b0c7724f7e490f586",
+    "docs/evidence/cp02_pulse_path_20261110/forecast/mp10.patch": "65be56a766e5bdd6ccc20bd197834bbc633a5075400a969b83aa6c743caacda9",
+    "docs/evidence/cp02_pulse_path_20261110/forecast/loop_probe.py": "dd42c94d4a443298f6e04c8b7618c3603c6b52dac929651a383842ad18242e84",
+    "docs/evidence/cp02_pulse_path_20261110/forecast/loop_probe_receipt.json": "783a41e810d44065aed9ef14aab9339e89733ebe3078e938e399d8b672607880",
+    "docs/evidence/cp02_pulse_path_20261110/forecast/gdb_availability.json": "c6ca6c4fcb6bdbe3f7317f6380e46b98fd89ecd2700f3f97f38705aeeab8652b",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "docs/evidence/six_hour_improvement_20261030/runtime/inputs.json": "fd9fb8977a568043343bcf3348052463b048638f679dd5deb696de9a1b1454e2",
+    "docs/evidence/cp02_pulse_path_20261110/experiment_policy.json": "d842b1aaa7b7c5bd81397e9fac38841acea089a500c7cebabad6ca9858eb5254",
+    "docs/evidence/cp02_pulse_path_20261110/forecast/comparability.py": "60f459e0688c762d2ed7a034779b34d0b1bb3601de8abd93335ea8279f834738"
+  },
+  "external_sha256": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpirun": "f9b09c6d24ce83d52221fbc1cc59dbdf9f350ccf50b264e89980c4530c6369d4",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/env/vars.sh": "1f807842591f742c0e285df3769b4a07e8944536cbd0b0905e88520ae07dbcf8"
+  },
+  "build_receipt_sha256": {
+    "CONTROL": "9a95536566b7362f715c56965b9b53051912f8086d198ec5ca29888a0b03bc3b",
+    "MP10": "e78fcdb27c66108bde4446e155923636b02fdda4e60060cf0a43373e61284412"
+  },
+  "prepared_sha256": {
+    "CONTROL": "0ae4f682d1c03503087ea6edb902009f757e224f617eb17ebdc94ccbb64c6cc1",
+    "MP10": "8319fe3cf6de5022f2bcbd4f8908944aa08a819378c9b63262493c216c24f4ff"
+  },
+  "cases": {
+    "CONTROL": {
+      "cpus": [
+        48,
+        49,
+        50,
+        51,
+        52,
+        53,
+        54,
+        55
+      ]
+    },
+    "MP10": {
+      "cpus": [
+        56,
+        57,
+        58,
+        59,
+        60,
+        61,
+        62,
+        63
+      ]
+    }
+  },
+  "gdb_probe": "No source/local variable debug symbols; actual forecast loop values not observed.",
+  "requirements": [
+    "Independent prelaunch review GO",
+    "Compare seven CONTROL histories bytewise to PR154",
+    "Compare MP10 initial history bytewise to PR154"
+  ]
+}

@@ -1,0 +1,35 @@
+{
+  "status": "PASS_WITH_LIMITATIONS",
+  "reviewer": "independent team reviewer",
+  "reviewed_utc": "2026-11-10T02:35:57.983733+00:00",
+  "inputs": {
+    "docs/evidence/cp02_pulse_path_20261110/native/CONSERVATIVE_selected.bin.gz": "8432d366a389161d447988247c8760926299c55cfcae24f062377abc7a6ccf83",
+    "docs/evidence/cp02_pulse_path_20261110/native/FIX_selected.bin.gz": "47ceaafccd998c9ca393e51b6f6f595ba4f5a6446fb732088b18d8aaf3e56398",
+    "docs/evidence/cp02_pulse_path_20261110/native/ICE_FIXED_selected.bin.gz": "e5f25087a8f9ac6ad82109847abcf098e50a2d1cb68519bb450f271b0d2a2561",
+    "docs/evidence/cp02_pulse_path_20261110/native/README.md": "514a54fdab0e91b0e77f9d6217bc62cf69187db56f622771cd8bcdb04e78e96a",
+    "docs/evidence/cp02_pulse_path_20261110/native/core_qg_partition.csv": "4a8f2d76d5994c88c2daf3fcb7c0374d082789395ab02895b7f5a75c5a5998d6",
+    "docs/evidence/cp02_pulse_path_20261110/native/core_recount.csv.gz": "7a6e506a79999f96f72ae7871c35c3c070750f43f9136a7e5b0f63a00bb1f545",
+    "docs/evidence/cp02_pulse_path_20261110/native/extract.py": "5880a08a7f799452fcd3c94be3a3ef64075920b953cfc6eb039dbccff66e54f0",
+    "docs/evidence/cp02_pulse_path_20261110/native/extract_receipt.json": "478f74344b3bf3066518ccb3d63318f733e1718635905b60042c8dda8fcb5a59",
+    "docs/evidence/cp02_pulse_path_20261110/native/read_frames_with_constants.py": "5399e7217c7bbb710b9c00bfb49638717f54309151956846cd4e7b107f793107",
+    "docs/evidence/cp02_pulse_path_20261110/native/recount.py": "d52b87b18f360f07362ddc511bcf8f04539bc5d94a5f10080c19b25fed6f7850",
+    "docs/evidence/cp02_pulse_path_20261110/native/recount_receipt.json": "45b4086fb8eae8470b06a611b6176cb75d82518ae33df61ce7f67f8c1ed8226a",
+    "docs/evidence/cp02_pulse_path_20261110/native/recount_sediment.py": "697c691f822c28da151bd1bfdcef1ce5d2feb4918b1fb4f693cbbc96da8faf52",
+    "docs/evidence/cp02_pulse_path_20261110/native/sediment_substeps.csv": "914bfd19b92ade1f5338071c010cf6aa8b9d95090421088d3d53898bad1380aa",
+    "docs/evidence/cp02_pulse_path_20261110/native/summarize_core.py": "cbac5f4f42b7eea818a08d1a2bbffc6e583ebafb3d14557f5fa703fa33be32e3",
+    "docs/evidence/cp02_pulse_path_20261110/native/summarize_faces.py": "63f66f0d1606d80ba5194928ab3995df4865e6861a063978c4d93e4b4d52f972",
+    "docs/evidence/cp02_pulse_path_20261110/native/sediment_faces_summary.csv": "8bdddd4af640ede7a0045c40947c504150f209fb5294fe23cae4fed1f6f8a0ed",
+    "docs/evidence/cp02_pulse_path_20261110/native/sediment_recount_receipt.json": "4996eb7335c1756c566c18d7dff94a59008be659b6b3d1da58268218401a3119"
+  },
+  "checks": [
+    "Corrected 1-based native coordinates match frozen point geometry: 21 steps \u00d7 10 cells; selected files are bound to prior raw inventory and prior/after inventory checks.",
+    "Cold and warm post-limiter source-rate expressions and delta2/delta3 terms match native source updates; rate-integral reconstructions are distinct from observed before/after changes and max clamps.",
+    "Sediment phase 9,10,18 field indexes match schema; all 24 selected arm/step/corner combinations exist. Independently recomputed observed versus mass-interface closure: maximum absolute discrepancy 4.70e-11 kg/kg in these selected records.",
+    "No claim that branch limiter activated from nominal rate records; no attribution to surface precipitation.",
+    "Carrier-normalized selected face summary independently reviewed: each arm and corner divides raw kg/m\u00b2 by its own \u03c1_src \u0394z before temporal and bilinear weighting; summary signs agree with substep records."
+  ],
+  "limitations": [
+    "Raw subset replay needs prior scratch inventory and source files; extraction verifies hashes.",
+    "Selected local transfer checks are not a whole-domain water or energy budget."
+  ]
+}

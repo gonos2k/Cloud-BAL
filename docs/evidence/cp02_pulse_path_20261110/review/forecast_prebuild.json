@@ -1,0 +1,24 @@
+{
+  "decision": "GO_FOR_BUILD_ONLY",
+  "reviewer": "independent team reviewer",
+  "recorded_utc": "2026-11-10T02:49:27.621316+00:00",
+  "record_note": "Records prebuild review communicated before compilation; hashes checked when receipt was written.",
+  "inputs": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/forecast/source/CONTROL.f90": "c2e90bcc04b0f8fac2224c24124cbac0f5fbf0916ee91f679759e5bbb55bfcc2",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/forecast/source/MP10.f90": "4604dc031d618a6feeb43a72a7cfabc656abf7f3e4eb591b0c7724f7e490f586",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/forecast/mp10.patch": "65be56a766e5bdd6ccc20bd197834bbc633a5075400a969b83aa6c743caacda9",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/forecast/build.py": "ae807e5102e3d4912b60e96bec662e8df6b99b21ef7e24673bce514d98dfb243",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/forecast/loop_probe.py": "dd42c94d4a443298f6e04c8b7618c3603c6b52dac929651a383842ad18242e84",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/forecast/loop_probe_receipt.json": "783a41e810d44065aed9ef14aab9339e89733ebe3078e938e399d8b672607880",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4"
+  },
+  "findings": [
+    "CONTROL matches pinned c2e90bcc04b0f8fac2224c24124cbac0f5fbf0916ee91f679759e5bbb55bfcc2; MP10 differs only in dtcldcr=120. to 10.",
+    "Build script uses fresh scratch, pinned Intel IFX, frozen inventory checks, and archive member identity verification.",
+    "Source-derived Intel scheduling probe reports 1\u00d720 s and 2\u00d710 s for delt=20 s."
+  ],
+  "limitations": [
+    "Standalone scheduling probe is not an isolated full KDM6 state/counter carry test or observation of actual forecast internal loop timing.",
+    "Whole-domain water and energy closure remains open."
+  ]
+}

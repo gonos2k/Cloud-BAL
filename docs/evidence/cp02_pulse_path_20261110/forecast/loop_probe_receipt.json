@@ -1,0 +1,52 @@
+{
+  "status": "PASS",
+  "compiler": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+  "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+  "compiler_version": "ifx (IFX) 2026.0.0 20260331",
+  "probe_sha256": "dd42c94d4a443298f6e04c8b7618c3603c6b52dac929651a383842ad18242e84",
+  "variants": {
+    "CONTROL": {
+      "source_sha256": "c2e90bcc04b0f8fac2224c24124cbac0f5fbf0916ee91f679759e5bbb55bfcc2",
+      "probe_source_sha256": "314bc64ab3707aef9ef8025deb6b792af506a10075d737d44cc72c6c229cc1b7",
+      "command": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-real-size",
+        "32",
+        "-i4",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/runtime/loop_probe/CONTROL/probe.f90",
+        "-o",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/runtime/loop_probe/CONTROL/probe"
+      ],
+      "stdout": "1           1   20.00000       20.00000",
+      "loops": 1,
+      "iterations": 1,
+      "dtcld_seconds": 20.0,
+      "elapsed_microphysics_seconds": 20.0
+    },
+    "MP10": {
+      "source_sha256": "4604dc031d618a6feeb43a72a7cfabc656abf7f3e4eb591b0c7724f7e490f586",
+      "probe_source_sha256": "6e7cdb1347002ace3d04b2e1b86c729d73485af759c16d9f60be3cf9ac0c7397",
+      "command": [
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/compiler/2026.0/bin/ifx",
+        "-O2",
+        "-fp-model",
+        "strict",
+        "-real-size",
+        "32",
+        "-i4",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/runtime/loop_probe/MP10/probe.f90",
+        "-o",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/runtime/loop_probe/MP10/probe"
+      ],
+      "stdout": "2           2   10.00000       20.00000",
+      "loops": 2,
+      "iterations": 2,
+      "dtcld_seconds": 10.0,
+      "elapsed_microphysics_seconds": 20.0
+    }
+  },
+  "scope": "Native executable built from exact source scheduling statements; not an instrumented KDM6 forecast invocation."
+}

@@ -1,0 +1,30 @@
+{
+  "decision": "GO_FOR_NUMERICAL_SENSITIVITY_LAUNCH",
+  "reviewer": "independent team reviewer",
+  "recorded_utc": "2026-11-10T02:49:27.634172+00:00",
+  "record_note": "Records limited prelaunch GO communicated before launch; frozen artifact hashes checked when receipt was written.",
+  "inputs": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/forecast/launch_plan.json": "663c97b2a4d3622a2f445af70fbaf827c71554bdf7113ebfcdd39522e03a5952",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/forecast/forecast.py": "5b0399d13b7d02bba36ca6ffce7562afdc11dfe1ae6181fcbdba3b6e1e626149",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/forecast/launch.py": "2ebe76899b3f5ddccc6af3b0d82227399f0b2d765567e16f6ebfbd7cae30a049",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/forecast/rank_wrapper.sh": "933d4496a8c3b0aed240364ef08c3b1db5d8219b348b71b9c3db5b1ab3135938",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/forecast/comparability.py": "60f459e0688c762d2ed7a034779b34d0b1bb3601de8abd93335ea8279f834738",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/forecast/gdb_availability.json": "c6ca6c4fcb6bdbe3f7317f6380e46b98fd89ecd2700f3f97f38705aeeab8652b",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/experiment_policy.json": "d842b1aaa7b7c5bd81397e9fac38841acea089a500c7cebabad6ca9858eb5254",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/runtime/native_build/variants/CONTROL/build_receipt.json": "9a95536566b7362f715c56965b9b53051912f8086d198ec5ca29888a0b03bc3b",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/runtime/native_build/variants/MP10/build_receipt.json": "e78fcdb27c66108bde4446e155923636b02fdda4e60060cf0a43373e61284412",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/runtime/forecasts/CONTROL/prepared.json": "0ae4f682d1c03503087ea6edb902009f757e224f617eb17ebdc94ccbb64c6cc1",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/runtime/forecasts/MP10/prepared.json": "8319fe3cf6de5022f2bcbd4f8908944aa08a819378c9b63262493c216c24f4ff"
+  },
+  "findings": [
+    "89 staged inputs per arm; 88 non-executable inputs are identical, with separate matching built executables.",
+    "Both build receipts report PASS, unchanged inputs, and archived object identity.",
+    "CPU sets 48\u201355 and 56\u201363 are disjoint and available; rank wrapper checks affinity.",
+    "Frozen plan binds source, policy, build and prepared receipts. Comparability gate requires seven byte-identical control histories and initial candidate history."
+  ],
+  "limitations": [
+    "Internal forecast loop timing remains unobserved; GDB lacks source/local variable debug information.",
+    "An isolated actual full-scheme loop/state/counter carry test was deferred, not passed; source order and a source-derived schedule probe were reviewed.",
+    "Whole-domain water and energy closure remains open; this launch only tests numerical sensitivity."
+  ]
+}

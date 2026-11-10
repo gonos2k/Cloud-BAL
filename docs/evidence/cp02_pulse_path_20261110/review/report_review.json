@@ -1,0 +1,30 @@
+{
+  "decision": "PASS_WITH_LIMITATIONS",
+  "reviewer": "independent team reviewer",
+  "recorded_utc": "2026-11-10T02:58:38.826937+00:00",
+  "inputs": {
+    "docs/CP02_PULSE_PATH_AND_SUBSTEPS_20261110.md": "48e07e879b9b5ea198a1844f48ce8e5f7e7472094e29dcabe26f6326fe35bd99",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/categorical_scores.csv": "5941149662d093e491b8bb48a019d04bc95e9f09a2d4201cf30a1374a2471ca5",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/admission_constraints.csv": "ec6f2efd66f1a20de45da49c0e55a9fab8e19826860243b1e8930bbec3b67291",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/weak_detection.csv": "dd52744104a80cb70838002236c2c660fa713ba3fdf283b2679e1dd8dfa46a40",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/verdict.json": "c04ae0c1bc36b5a1eb24d9e7080cebff641089387e6c2da8d9368d477e566e98",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/hourly_maps/hour_6_rainfall.png": "24fc778e7292d21e0ecb24ed9a55ff16d11c0669437dafe490fb5539edd8af79",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/figures/01_csi_change.png": "eacbd57dbcdac901b52b21d27a90869b6affd69d2d4ed6f775d5df4c36f5a1b1",
+    "docs/evidence/cp02_pulse_path_20261110/native/sediment_faces_summary.csv": "8bdddd4af640ede7a0045c40947c504150f209fb5294fe23cae4fed1f6f8a0ed",
+    "docs/evidence/cp02_pulse_path_20261110/analysis/surface_windows.csv": "f75949514ef3e70de05917204bcb21d78db615422420eb38c99fe5e3c7a691b3",
+    "docs/evidence/cp02_pulse_path_20261110/FIGURES.md": "4fcaa513d722c4223009b08a748f71c9c57c9a2c2aa6f37ef6aec46e16dde1d8",
+    "docs/evidence/cp02_pulse_path_20261110/all_figures.zip": "f9416ca06c8e1af2c5445a9a6983c542e8a3b58e3625ea1c206556036f494164",
+    "docs/evidence/cp02_pulse_path_20261110/gallery_receipt.json": "de595350016db164f0a6dcd051a6b65f8054a685649ec621da221d22482178ce"
+  },
+  "checks": [
+    "Independently verified 15-call counter windows, 36 CSI delta cells, weak detection table, selected hourly three-point values, failure conditions and 22/26 decision against result arrays and CSV.",
+    "Reviewed 1-based geometry, local face-carrier normalization, cold process equations, fixed cpm/xl and unobserved internal loop caveats.",
+    "Reviewed representative CSI figure and +6h map; report links checked except pending FIGURES.md packaging. Map label now distinguishes no additional display interpolation from earlier bilinear forecast-to-RN1 mapping.",
+    "Corrected report labels distinguish source-derived schedule from directly observed loops and carrier-normalized face terms from kg/m\u00b2 face mass.",
+    "Post-packaging independent link check PASS; gallery and report links resolve, archive has 44 files including 16 PNGs, CRC passes, and all 44 archive members match working-tree bytes."
+  ],
+  "limitations": [
+    "Hourly MP10 output cannot establish the change to the prior five-minute pulse.",
+    "No full-scheme isolated carry test, observed internal loop timing, whole-domain water-energy closure or independent case validation is claimed."
+  ]
+}

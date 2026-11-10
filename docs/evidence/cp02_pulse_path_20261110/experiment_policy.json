@@ -1,0 +1,196 @@
+{
+  "schema": "cp02_pulse_substeps_policy_v1",
+  "frozen_utc": "2026-11-10T02:32:09.878937+00:00",
+  "status": "FROZEN_BEFORE_FORECAST_EVALUATION",
+  "base_commit": "6218dc33cced6a6b41d71a99244d300fb44972cd",
+  "candidate": "MP10",
+  "reference_configuration": "PR154 FIRST_ICE_VELOCITY; candidate remains unadopted 21/26; retained B1",
+  "changed_statement": "real, parameter, private :: dtcldcr = 120. -> 10.",
+  "hypothesis": "Sensitivity of the complete sequential sedimentation, phase-growth and condensation integration to internal time subdivision. Not a physical-coefficient correction or proof that the 20-second sequence is erroneous.",
+  "held_fixed": [
+    "B1 initial and boundary fields",
+    "20-second dynamics step and coupling frequency",
+    "conservative mass and number face transfers",
+    "first-ice velocity unit normalization",
+    "other source coefficients and execution flags",
+    "3688 RN1 points, mapping and observation arrays"
+  ],
+  "schedule": {
+    "CONTROL": {
+      "outer_seconds": 20,
+      "microphysics_loops": 1,
+      "substep_seconds": 20
+    },
+    "MP10": {
+      "outer_seconds": 20,
+      "microphysics_loops": 2,
+      "substep_seconds": 10
+    }
+  },
+  "caveats": [
+    "cpm and xl computed before the internal loop remain held across both microsteps, as do pressure, carrier density and layer thickness.",
+    "Two internal microsteps are not two independent public KDM6 calls.",
+    "Any score response is an effect of the entire modified numerical sequence, not an attribution to one collision term.",
+    "Whole-domain water/energy budget, RN1 upstream timing/coverage/QC, independent cases and C2 T39 remain separate open items."
+  ],
+  "thresholds_mm": [
+    0.1,
+    0.5,
+    1.0,
+    2.5,
+    5.0,
+    10.0
+  ],
+  "lead_hours": [
+    1,
+    2,
+    3,
+    4,
+    5,
+    6
+  ],
+  "admission": {
+    "protection": [
+      {
+        "lead_hour": 1,
+        "threshold_mm": 0.1,
+        "baseline": "IMPROVED_BG_FIXED"
+      },
+      {
+        "lead_hour": 1,
+        "threshold_mm": 0.5,
+        "baseline": "IMPROVED_BG_FIXED"
+      },
+      {
+        "lead_hour": 1,
+        "threshold_mm": 1.0,
+        "baseline": "IMPROVED_BG_FIXED"
+      },
+      {
+        "lead_hour": 1,
+        "threshold_mm": 2.5,
+        "baseline": "IMPROVED_BG_FIXED"
+      },
+      {
+        "lead_hour": 1,
+        "threshold_mm": 5.0,
+        "baseline": "IMPROVED_BG_FIXED"
+      },
+      {
+        "lead_hour": 1,
+        "threshold_mm": 10.0,
+        "baseline": "IMPROVED_BG_FIXED"
+      },
+      {
+        "lead_hour": 2,
+        "threshold_mm": 5.0,
+        "baseline": "IMPROVED_BG_FIXED"
+      },
+      {
+        "lead_hour": 3,
+        "threshold_mm": 5.0,
+        "baseline": "IMPROVED_BG_FIXED"
+      },
+      {
+        "lead_hour": 4,
+        "threshold_mm": 5.0,
+        "baseline": "IMPROVED_BG_FIXED"
+      },
+      {
+        "lead_hour": 5,
+        "threshold_mm": 5.0,
+        "baseline": "IMPROVED_BG_FIXED"
+      },
+      {
+        "lead_hour": 6,
+        "threshold_mm": 5.0,
+        "baseline": "IMPROVED_BG_FIXED"
+      }
+    ],
+    "recovery": [
+      {
+        "lead_hour": 2,
+        "threshold_mm": 0.1,
+        "baseline": "ORIGINAL"
+      },
+      {
+        "lead_hour": 2,
+        "threshold_mm": 0.5,
+        "baseline": "ORIGINAL"
+      },
+      {
+        "lead_hour": 2,
+        "threshold_mm": 1.0,
+        "baseline": "ORIGINAL"
+      },
+      {
+        "lead_hour": 3,
+        "threshold_mm": 0.1,
+        "baseline": "ORIGINAL"
+      },
+      {
+        "lead_hour": 3,
+        "threshold_mm": 0.5,
+        "baseline": "ORIGINAL"
+      },
+      {
+        "lead_hour": 3,
+        "threshold_mm": 1.0,
+        "baseline": "ORIGINAL"
+      },
+      {
+        "lead_hour": 4,
+        "threshold_mm": 0.1,
+        "baseline": "ORIGINAL"
+      },
+      {
+        "lead_hour": 4,
+        "threshold_mm": 0.5,
+        "baseline": "ORIGINAL"
+      },
+      {
+        "lead_hour": 4,
+        "threshold_mm": 1.0,
+        "baseline": "ORIGINAL"
+      },
+      {
+        "lead_hour": 5,
+        "threshold_mm": 0.1,
+        "baseline": "ORIGINAL"
+      },
+      {
+        "lead_hour": 5,
+        "threshold_mm": 0.5,
+        "baseline": "ORIGINAL"
+      },
+      {
+        "lead_hour": 5,
+        "threshold_mm": 1.0,
+        "baseline": "ORIGINAL"
+      },
+      {
+        "lead_hour": 6,
+        "threshold_mm": 0.1,
+        "baseline": "ORIGINAL"
+      },
+      {
+        "lead_hour": 6,
+        "threshold_mm": 0.5,
+        "baseline": "ORIGINAL"
+      },
+      {
+        "lead_hour": 6,
+        "threshold_mm": 1.0,
+        "baseline": "ORIGINAL"
+      }
+    ],
+    "decision": "All 26 exact rational CSI comparisons must be satisfied. No averaged score and no relaxed baseline. Passing is case-specific, not operational scientific completion."
+  },
+  "secondary_diagnostics": [
+    "observed 0.1<=RN1<1 mm detection, gain and loss",
+    "same weak observed/predicted band 0.1<=R<1 mm",
+    "new/resolved false alarms and intensity distribution",
+    "hourly H/M/F CSI for all thresholds",
+    "RAINC/RAINNC components and selected pulse points where available"
+  ]
+}

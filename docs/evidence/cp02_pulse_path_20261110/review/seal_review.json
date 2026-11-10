@@ -1,0 +1,21 @@
+{
+  "decision": "GO_FOR_KG_STAGING",
+  "reviewer": "independent team reviewer",
+  "recorded_utc": "2026-11-10T03:04:08.916273+00:00",
+  "inputs": {
+    "docs/evidence/cp02_pulse_path_20261110/validation/seal.py": "5a809953def71ee9bcbe6ed9a545d0f8a851f9a44a8c5de5fe2af633d893ca07",
+    "docs/evidence/cp02_pulse_path_20261110/validation/clean_export.json": "e421b5d018e861fb83fb8d3daa99a2c70acbea3c9fc8769abc2866ac19f382be",
+    "docs/evidence/cp02_pulse_path_20261110/validation/tree_replay_receipt.json": "69e61bab38aa75b1c5bce1eaa7ceffd92118b71b765e0a25892949eaef449df2",
+    "docs/evidence/cp02_pulse_path_20261110/experiment_policy.json": "d842b1aaa7b7c5bd81397e9fac38841acea089a500c7cebabad6ca9858eb5254",
+    "docs/evidence/cp02_pulse_path_20261110/forecast/proof/comparability.json": "b747f42f38104f85d4d0246aba15fc663bf139b5612e671810464bc8e7d7a51b",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/verdict.json": "c04ae0c1bc36b5a1eb24d9e7080cebff641089387e6c2da8d9368d477e566e98"
+  },
+  "checks": [
+    "Reviewed fixes for mixed decision/status review receipts, exact scoped prebuild and launch GO values, exact frozen policy identities and 22/26 and 21/26 verdicts.",
+    "Executed verify() read-only with only three future KG stage/publish receipts replaced with synthetic status placeholders; all other checks passed including source pins, 514 suite, 11 focused tests, 37 replayed outputs and 158 overlay identities.",
+    "Pre-KG result does not claim that skipped future stage/publish receipts exist or passed."
+  ],
+  "limitations": [
+    "Full verify and final seal must be rerun on actual KG stage and publication receipts; final index preservation separately reviewed after publication."
+  ]
+}
