@@ -1,0 +1,44 @@
+{
+  "extraction_limits": [
+    "Only listed Fortran and Python sources are selected for structural extraction; remaining evidence is hash-only.",
+    "Fortran cross-file calls and external import edges may be incomplete.",
+    "Graph freshness does not establish runtime or scientific validation."
+  ],
+  "hash_only_sha256": {
+    "docs/MODEL_MOMENT_HANDOFF.md": "e87fbe36aae62b40f7846b962e549a307639312afde1410f1f4207cea964b48c",
+    "docs/evidence/physical_moment_handoff_20261110/figures/receipt.json": "0add00e6eaadf88683f018ce179c2ce27a2f16a39b88122f3d240089b007d92f",
+    "docs/evidence/physical_moment_handoff_20261110/native/actual_real/README.md": "9b581f92f6ad1305f2020eeda33421e8b79239cfab532f536840a8bee2b6a9fe",
+    "docs/evidence/physical_moment_handoff_20261110/native/actual_real/bundle_manifest.json": "83bb043f3dee15172be589702cf2a45983ce872e01714eff5e50b32ef725cb19",
+    "docs/evidence/physical_moment_handoff_20261110/native/actual_real/ice_cap_recount.json": "3d44ae3fdf030e62c2eb04a308aa3fb60af02a80783f188ebcc0d95c2e82bc86",
+    "docs/evidence/physical_moment_handoff_20261110/validation/focused_receipt.json": "fe47670b9f26340cf0b18eb7a0fcf373ce29788d99a0d453af0dd22bd6ae9049"
+  },
+  "open_items": [
+    "Native KDM6 first-use and forecast are not run.",
+    "Policy thresholds and producer/source-to-binary provenance remain caller-attested.",
+    "Independent meteorological cases and scientific acceptance remain open."
+  ],
+  "selected_source_sha256": {
+    "src/common/cloud_bal_microphysics_initialization.f90": "005acfb20caab21f7511fc0d671cb5d94a4cbf36f92f28e1b1109f35573e370b",
+    "src/common/cloud_bal_real_netcdf.f90": "216c540e238388bcbfa36598bd8bcc20abb5c34b4e4d1e4aa10eb7f67a2d8c6b",
+    "src/common/cloud_bal_state.f90": "205d034e803f9e7294e8d913e46b40174f38caaf82a19d119ffafcacdae494ab",
+    "src/common/cloud_bal_wps_adapter.f90": "171d3013497efa8b2a08b29095ba81346a09e58118c40de54c4246b15ea5ec52",
+    "tests/test_canonical_state.f90": "613efe58f606632dd107cbd1df828fdff3749a50afcd3f81c8e9252de9adf9c2",
+    "tests/test_initialize_model_moments.py": "545547352418b0ee93a578834ee2dde10f0ba78c64825408bd7f39366963e14e",
+    "tests/test_microphysics_initialization.f90": "3aa6458a75ba6a5da3c1c9bc5f5093cd1cc16ca2a238a890d69f4b60ea09d60c",
+    "tests/test_pressure_wps_mapping.f90": "ab49330104eb2d411b7930163638e20ac12826ae4ee335b8994c883713cbd635",
+    "tests/test_real_shadow_io_contract.f90": "7ff072e2d9ee1fbd0786fe0a2dc9172b882186f01b3f010cf9f1de6cf7a3239e",
+    "tools/initialize_model_moments.py": "52b90f86213f4f4f60a61ccb178e899e48f6a5605c4e604d219e2b2cc70d6cfc",
+    "tools/model_moment_driver.f90": "60cd2b2320988f243d5a8127d6adf1dfc342c2d079881b9a805cd9bd0f351287",
+    "tools/plot_physical_moment_handoff.py": "c76d5b6b930b264bd99fde103275717658f6c79bc3a7bf0c39cd6ef545f9adb0"
+  },
+  "snapshot": "2026-11-10-physical-moment-handoff",
+  "source_commit": "dc68d30af29ae7fd3c3ecbf9fa9452a28b4a8d72",
+  "status": "PENDING_FULL_UNIT_VALIDATION_NOT_FROZEN",
+  "validation_summary": [
+    "Pinned Intel O0/O2 core and six manufactured physics cases reported passing.",
+    "Independent pinned Intel fresh scratch handoff profile suite passed 11 tests.",
+    "Full portable unit suite on fixed source export is running; receipt pending.",
+    "Fresh real B1 reproduced historical input, but fixed ice prior was rejected; independent recount found 106128 prior cap cells.",
+    "Independent profile guard and 11 handoff tests passed; independent immutable input recount reproduces 106128 cap exceedances and exact failed cell."
+  ]
+}

@@ -1,0 +1,68 @@
+{
+  "corpora": {
+    "Cloud-BAL": {
+      "after": {
+        "communities": 1714,
+        "edges": 35322,
+        "nodes": 19461
+      },
+      "before": {
+        "communities": 1700,
+        "edges": 35218,
+        "nodes": 19397
+      }
+    },
+    "KLAPS50": {
+      "after": {
+        "communities": 3684,
+        "edges": 93907,
+        "nodes": 45289
+      },
+      "before": {
+        "communities": 3654,
+        "edges": 93801,
+        "nodes": 45225
+      }
+    }
+  },
+  "extraction_limits": [
+    "Only listed Fortran and Python sources are selected for structural extraction; remaining evidence is hash-only.",
+    "Fortran cross-file calls and external import edges may be incomplete.",
+    "Graph freshness does not establish runtime or scientific validation."
+  ],
+  "hash_only_pin_count": 12,
+  "open_items": [
+    "Native first advection and first-use KDM6 remain UNRUN; no new forecast.",
+    "Analytical source-derived profile uses real64 constants; native REAL32 coefficient and PSD-boundary first-use replay remains open.",
+    "Producer/source-to-binary identity and policy thresholds are caller attested.",
+    "Independent meteorological cases, domain water/energy budgets and scientific acceptance remain open."
+  ],
+  "postpublish_review_sha256": "2dc168369338413618c732e2074f79e758c797cde9d458bf245770fa8a09d986",
+  "preserved_prior_snapshots": 264,
+  "prior_manifest_artifacts_preserved": 3058,
+  "publish_receipt_sha256": "4f3b17cda5e1f4f6530bd6aa9d1e4465e5e311ec228d9c694c6a6894824705b8",
+  "published_maintained_snapshot_count": 266,
+  "selected_source_sha256": {
+    "src/common/cloud_bal_microphysics_initialization.f90": "005acfb20caab21f7511fc0d671cb5d94a4cbf36f92f28e1b1109f35573e370b",
+    "src/common/cloud_bal_real_netcdf.f90": "216c540e238388bcbfa36598bd8bcc20abb5c34b4e4d1e4aa10eb7f67a2d8c6b",
+    "src/common/cloud_bal_state.f90": "205d034e803f9e7294e8d913e46b40174f38caaf82a19d119ffafcacdae494ab",
+    "src/common/cloud_bal_wps_adapter.f90": "171d3013497efa8b2a08b29095ba81346a09e58118c40de54c4246b15ea5ec52",
+    "tests/test_canonical_state.f90": "613efe58f606632dd107cbd1df828fdff3749a50afcd3f81c8e9252de9adf9c2",
+    "tests/test_initialize_model_moments.py": "b76f8c3df4b2cbd8dce3062b0e02e72dd1d507e8c7f150345f13fa705dd22443",
+    "tests/test_microphysics_initialization.f90": "3aa6458a75ba6a5da3c1c9bc5f5093cd1cc16ca2a238a890d69f4b60ea09d60c",
+    "tests/test_pressure_wps_mapping.f90": "ab49330104eb2d411b7930163638e20ac12826ae4ee335b8994c883713cbd635",
+    "tests/test_real_shadow_io_contract.f90": "7ff072e2d9ee1fbd0786fe0a2dc9172b882186f01b3f010cf9f1de6cf7a3239e",
+    "tools/initialize_model_moments.py": "52b90f86213f4f4f60a61ccb178e899e48f6a5605c4e604d219e2b2cc70d6cfc",
+    "tools/model_moment_driver.f90": "60cd2b2320988f243d5a8127d6adf1dfc342c2d079881b9a805cd9bd0f351287",
+    "tools/plot_physical_moment_handoff.py": "c76d5b6b930b264bd99fde103275717658f6c79bc3a7bf0c39cd6ef545f9adb0"
+  },
+  "snapshot": "2026-11-10-physical-moment-handoff",
+  "source_commit": "dc68d30af29ae7fd3c3ecbf9fa9452a28b4a8d72",
+  "source_copy_receipt_sha256": "3b6eae67f51a77b80be0c1102fe09c900e16ecf7657b71e960ec41bf057ebf67",
+  "status": "COMPLETE_MAINTENANCE_WITH_OPEN_SCIENTIFIC_ITEMS",
+  "validation_summary": [
+    "Fixed-export full portable unit suite PASS, 1365 guarded source/test/patch files; separately tested boundary source version and tier exceptions documented in focused receipt.",
+    "Pinned Intel fresh scratch boundary suite 11 tests, six composed cases O0/O2, extracted native rain-sign proof, and 3 figure/table replays PASS.",
+    "Fresh real B1 exactly reproduced historical input; fixed ice prior rejected; independent recount 106128 file-state prior cap cells."
+  ]
+}

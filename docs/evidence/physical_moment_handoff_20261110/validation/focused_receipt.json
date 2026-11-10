@@ -1,0 +1,80 @@
+{
+  "status": "PASS",
+  "boundary_tests": 11,
+  "composed_cases": 6,
+  "physics_profiles": [
+    "O0",
+    "O2"
+  ],
+  "source_sha256": {
+    "src/common/cloud_bal_state.f90": "205d034e803f9e7294e8d913e46b40174f38caaf82a19d119ffafcacdae494ab",
+    "src/common/cloud_bal_column_physics.f90": "0c2cdbf4379814a2fa720ad387591c9396c9a959eb0cf383132bda910bd66ecf",
+    "src/common/cloud_bal_microphysics_initialization.f90": "005acfb20caab21f7511fc0d671cb5d94a4cbf36f92f28e1b1109f35573e370b",
+    "tools/model_moment_driver.f90": "60cd2b2320988f243d5a8127d6adf1dfc342c2d079881b9a805cd9bd0f351287",
+    "tools/initialize_model_moments.py": "52b90f86213f4f4f60a61ccb178e899e48f6a5605c4e604d219e2b2cc70d6cfc",
+    "tools/plot_physical_moment_handoff.py": "c76d5b6b930b264bd99fde103275717658f6c79bc3a7bf0c39cd6ef545f9adb0",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/test_initialize_model_moments.py": "b76f8c3df4b2cbd8dce3062b0e02e72dd1d507e8c7f150345f13fa705dd22443",
+    "tests/run_initialize_model_moments.sh": "421a5e4731c281ab04a45048ee09a3fae1a9f59ba3bffed9763a04e2bbf74a5e",
+    "tests/test_tier_exceptions.json": "e0729eff8e49993a1350e29b36b4cc8501c39657be7fed5d7e0ae4651e2d818d",
+    "docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+    "docs/evidence/physical_moment_handoff_20261110/science/native_moments.md": "baf93ff098c77a5ae8a89962a28ee572f2519c2b1486aeba1d0ec0035a5a7b8e",
+    "docs/evidence/physical_moment_handoff_20261110/science/integration_cases.f90": "1151eb5eba9e307514e2be91c7b74516f03c8455800a347c0cc39b0df281c58a",
+    "docs/evidence/physical_moment_handoff_20261110/science/run_integration_cases.sh": "2081141e3ab310fe18bc21ce284fb5e1d6d3681c61697b78efdf9d60da500f94",
+    "docs/evidence/physical_moment_handoff_20261110/native/real_probe_rejection.md": "d2b216cbed242e61ccd961309d25efb31ad3bf9f5b928bc30ecb12771c44efbd",
+    "docs/evidence/physical_moment_handoff_20261110/native/rain_intercept_proof.py": "87a155c538babada73a58fc3374791ead64ee9aaecaba308e4fd7c4fab87acd1",
+    "docs/evidence/physical_moment_handoff_20261110/native/run_rain_intercept_proof.sh": "6de8100f16c94942bb5823d94cc2351ae5acf36cbd014d9b4802fac81df56ab3"
+  },
+  "commands": {
+    "boundary": {
+      "exit_code": 0,
+      "seconds": 2.8638880532234907,
+      "argv": [
+        "bash",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/physical_moment_handoff_20261110/validation/focused-p0otuzze/source/tests/run_initialize_model_moments.sh"
+      ],
+      "log": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/physical_moment_handoff_20261110/validation/focused-p0otuzze/boundary.log",
+      "log_sha256": "9e617b0372775a950055457c334c453142e1f4bc59a0c8e5b01606dd9b02914a"
+    },
+    "physics": {
+      "exit_code": 0,
+      "seconds": 19.232986567541957,
+      "argv": [
+        "bash",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/physical_moment_handoff_20261110/validation/focused-p0otuzze/source/docs/evidence/physical_moment_handoff_20261110/science/run_integration_cases.sh"
+      ],
+      "log": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/physical_moment_handoff_20261110/validation/focused-p0otuzze/physics.log",
+      "log_sha256": "292a1e096dd2b636c3c969ad0ebe2d5dc87032dd9482905e77fdb62347e91caa"
+    },
+    "rain_consumer": {
+      "exit_code": 0,
+      "seconds": 0.8111830595880747,
+      "argv": [
+        "bash",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/physical_moment_handoff_20261110/validation/focused-p0otuzze/source/docs/evidence/physical_moment_handoff_20261110/native/run_rain_intercept_proof.sh"
+      ],
+      "log": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/physical_moment_handoff_20261110/validation/focused-p0otuzze/rain_consumer.log",
+      "log_sha256": "eef0167af2583897268e4a2e988bfcba6344801ff0aea4e8b785aef1decb52b3"
+    },
+    "figures": {
+      "exit_code": 0,
+      "seconds": 0.6314835399389267,
+      "argv": [
+        "/usr/bin/python3",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/physical_moment_handoff_20261110/validation/focused-p0otuzze/source/tools/plot_physical_moment_handoff.py",
+        "--output",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/physical_moment_handoff_20261110/validation/focused-p0otuzze/figures"
+      ],
+      "log": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/physical_moment_handoff_20261110/validation/focused-p0otuzze/figures.log",
+      "log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855"
+    }
+  },
+  "exact_figure_outputs": {
+    "01_initialization_path.png": "f995ea8fe1dad71371ccf4064d328ca48f96373fa9c0228c71c7104746cdb73e",
+    "02_rain_psd_freedom.png": "b30b902526ccafac2f126f9bf37caa830dd49aea0027024d145f595d1ddacf05",
+    "rain_psd_family.csv": "c2b3f735e86523aae7b81e4cc79cfe6a69dfac54e8372c0a12c74d71dc284af9"
+  },
+  "profile_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "scratch": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/physical_moment_handoff_20261110/validation/focused-p0otuzze",
+  "scope": "Frozen-source fixture boundary, six composed physical cases, isolated rain-consumer sign proof and exact figure/data replay; no first native use or forecast."
+}

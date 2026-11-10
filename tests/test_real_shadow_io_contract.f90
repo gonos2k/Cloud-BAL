@@ -55,6 +55,13 @@ PROGRAM test_real_shadow_io_contract
   CALL check(status==STATUS_OK .AND. reason==REASON_NONE, &
              'verified SHADOW state must pass',failures)
 
+  ALLOCATE(candidate%moments%value(2,2,2,5))
+  candidate%moments%value=0.0_real64
+  CALL validate_shadow_write_contract(input,candidate,operational,result,config,status,reason)
+  CALL check(status==STATUS_FAILED .AND. reason==REASON_AUTHORITY, &
+    'legacy SHADOW writer cannot discard optional moment state',failures)
+  candidate=input
+
   result%requested_surface_pressure=REAL(input%surface_pressure%value,real64)
   CALL write_shadow_diagnostics('unbound-pressure-request.nc',input,candidate,longitude, &
     result,config,residual,residual,status,operational)

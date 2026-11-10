@@ -352,6 +352,10 @@ CONTAINS
     c%surface_height%valid=.TRUE.; c%surface_height%quality=0_int32
     c%surface_height%source=SOURCE_MANUFACTURED_TEST
     CALL reject(c,bg,good,'manufactured surface height source',n)
+    c=original
+    ALLOCATE(c%moments%value(NX,NY,NZ,5))
+    c%moments%value=0.0_real64
+    CALL reject(c,bg,good,'mass-only WPS cannot drop moment payload',n)
     c=original; c%u%valid(1,1,1)=.FALSE.; CALL reject(c,bg,good,'degraded wind coverage',n)
     c=original; c%temperature%value(2,1,1)=ieee_value(0.0_real32,ieee_quiet_nan)
     c%geopotential%value(2,1,1)=ieee_value(0.0_real32,ieee_quiet_nan)

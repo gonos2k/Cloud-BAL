@@ -12,7 +12,7 @@ MODULE cloud_bal_wps_adapter
     SOURCE_OUTPUT_ADAPTER,SOURCE_COLUMN_PHYSICS,QUALITY_LEGACY_PROVENANCE,QUALITY_BELOW_GROUND_FILLED, &
     QUALITY_RAW_MISSING,source_bits_known,quality_bits_known, &
     cell_is_usable,validate_canonical_state,field3d_shape_metadata_ok, &
-    dry_air_density,configure_pressure_geometry,refresh_dry_air_mass_measure
+    dry_air_density,configure_pressure_geometry,refresh_dry_air_mass_measure,moment_bundle_present
   IMPLICIT NONE
   PRIVATE
 
@@ -767,6 +767,9 @@ CONTAINS
     REAL(real64) :: pressure_reference
 
     status=STATUS_FAILED
+    ! This mass-only writer cannot preserve completed model-grid moments.
+    ! Complete them after real.exe instead of silently dropping them here.
+    IF (moment_bundle_present(candidate%moments)) RETURN
     nx=candidate%grid%nx; ny=candidate%grid%ny; nz=candidate%grid%nz
     IF (nx<1 .OR. ny<1 .OR. nz<2) RETURN
 
