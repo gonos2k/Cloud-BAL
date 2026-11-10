@@ -1,0 +1,96 @@
+{
+  "status": "PASS",
+  "scope": "reduced frozen-input activation plus NN floor, not full KDM6",
+  "float_type": "native REAL32; values decoded exactly from raw output bits",
+  "units": {
+    "NC": "m-3",
+    "NN": "m-3",
+    "QV": "kg kg-1",
+    "QC": "kg kg-1",
+    "T": "K"
+  },
+  "row_count": 12,
+  "comparisons_sha256": "e3647ac1ecfb210230caf3fdc7be98496adf792a9d4b3589d8ac8bf0e6f22388",
+  "inputs": {
+    "synthetic": {
+      "native_post_match": null,
+      "capture_receipt": null,
+      "log_sha256": "7d6d70bdc636bd265832a72397171767ba29c0c45f3cd0781729bedc091591cd"
+    },
+    "control_nonbinding": {
+      "native_post_match": true,
+      "capture_receipt": {
+        "status": "PASS",
+        "sample_sha256": "3336baefbe8b62b6f1bdf247d920aa6c1e3ccf88defd68ee8fe35d5e146569fb",
+        "raw_source_sha256": "ee17327352ef8b6cc644f1dd53c73cec9ebb7dd7190385268cdb0fedcb173193",
+        "schema_sha256": "dd05ff88773c4daf45fd3618d8fe9901e26c69f52873b1dd20ae906d4c1a080c",
+        "input_sha256": "432e42c2bf4b9cb01fce4fd0f1bd459598946cb1b457db0b55f7a542182d4737",
+        "key": {
+          "step": 361,
+          "rank": 3,
+          "call": 361,
+          "i": 158,
+          "j": 86,
+          "k": 2,
+          "loop": 1,
+          "loops": 1,
+          "substep": 0,
+          "mstep": 0
+        },
+        "verified": "all 17 serialized values round-trip to the sample REAL32 words"
+      },
+      "log_sha256": "4fa53390a6c37766d2aba17e3bf9f5f3805595e2119e170ead458b2b0f6adfe9"
+    },
+    "mp10_nonbinding": {
+      "native_post_match": true,
+      "capture_receipt": {
+        "status": "PASS",
+        "sample_sha256": "435c11ceb6068a3a4795710e6cee8e0b3ceb0a01aac0ade4937002f06f62ecbf",
+        "raw_source_sha256": "82e6a481553242f70afc0e5a448c01698b13b53e47b77fc01cc3f595750a2192",
+        "schema_sha256": "dd05ff88773c4daf45fd3618d8fe9901e26c69f52873b1dd20ae906d4c1a080c",
+        "input_sha256": "8fc9ee48e36e3fb582a77ed59b10dd20e72b45382dd4b48af9a8a71a3e443598",
+        "key": {
+          "step": 361,
+          "rank": 3,
+          "call": 361,
+          "i": 158,
+          "j": 86,
+          "k": 2,
+          "loop": 1,
+          "loops": 2,
+          "substep": 0,
+          "mstep": 0
+        },
+        "verified": "all 17 serialized values round-trip to the sample REAL32 words"
+      },
+      "log_sha256": "2442ba20497394c26d553c3f755d6c06c0e6334f84a8f439f789fd8f64c260e3"
+    },
+    "mp10_binding": {
+      "native_post_match": true,
+      "capture_receipt": {
+        "status": "PASS",
+        "sample_sha256": "fe32d35f40a480934183132ed8e5116ce6390c6f3373a8142c90a588a6c3fcc0",
+        "raw_source_sha256": "82e6a481553242f70afc0e5a448c01698b13b53e47b77fc01cc3f595750a2192",
+        "schema_sha256": "dd05ff88773c4daf45fd3618d8fe9901e26c69f52873b1dd20ae906d4c1a080c",
+        "input_sha256": "19e4c8fbbbeb3be8c941fd5b8c19ca595ad5599cc5d07a5de3f3d7ed689cb722",
+        "key": {
+          "step": 361,
+          "rank": 3,
+          "call": 361,
+          "i": 156,
+          "j": 86,
+          "k": 14,
+          "loop": 1,
+          "loops": 2,
+          "substep": 0,
+          "mstep": 0
+        },
+        "verified": "all 17 serialized values round-trip to the sample REAL32 words"
+      },
+      "log_sha256": "c643d50cf16eb64d929e1601a19b52dcddfce9b650aedc384b58e97ff1577774"
+    }
+  },
+  "driver_sha256": "7b1db26da64fc9a10b7df03dcf33f454fdfc1dddc49751909474edfb4fabdf16",
+  "extractor_sha256": "dffd7f6625050031e3773441f8ae8dcc7e9c619643eca5b85f975cf4259ab5ad",
+  "runner_sha256": "b75bf092e962aa1735fbf9b129880fbcb3dcad888a817b7fca45d686f3d1f7be"
+}

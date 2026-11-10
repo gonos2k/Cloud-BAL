@@ -1,0 +1,16 @@
+{
+  "status": "PASS_INDEPENDENT_CANDIDATE_FORECAST_REVIEW",
+  "reviewer": "terra_activation_review",
+  "comparability_sha256": "07a1e3083762a5ec61b7c3adcba2554e24ebc7047c6ee090d2c1a2cc40c9c878",
+  "finite_sanity_sha256": "8882b4821c474949fa74afa803fcd6132b3c8c36a3e5b98744a8627874b35a52",
+  "provenance_inventory_sha256": "8d64a6af12713ab765f4e2e343ebfca5badf8c7d212c6ad33fda6b62e4a37e60",
+  "checks": [
+    "Independently rehashed all seven histories and validated internal timestamps; initial history matches MP10 byte-for-byte.",
+    "Independently reread all 77 water and number arrays across seven histories and verified finite values and recorded counts.",
+    "Rehashed all 89 private runtime inputs, copied provenance records, source, policy, launch plan, production build and probe receipts."
+  ],
+  "limitations": [
+    "Finite-only checks do not establish sign, conservation, or scientific skill.",
+    "Forecast scores require a separate independent frozen-policy evaluation review."
+  ]
+}

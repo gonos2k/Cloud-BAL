@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "reviewer": "terra_activation_review",
+  "inputs": {
+    "README.md": "9614c295ec9f3cf73c606aae345a1fb569e5619a60305f3cef706097c1c9c583",
+    "docs/CURRENT_RESEARCH_STATUS.md": "6c532e049b99f9a4597132461cfd9335aa3e14f05fb7878941040b29200ccbfc",
+    "docs/CP02_ACTIVATION_PATH_20261110.md": "9429990056bab9cffdd952d6815e7458838b238d01a94fe43ccc029f401b5297",
+    "tests/test_cp02_activation_path.py": "56bd9ef7146e638c627b5cbdd46d1a84a1bf92de5208c6dbebf4b852e50969ca",
+    "tests/test_cp02_weak_activation.py": "2f24678c94cfe73bd911595040672e36aefe7a95a4565b8f0c11f22c49cfa400",
+    "tools/cp02_activation_path.py": "0440217a3c3c2d3b11ca34e959788777d52b9c1509f1e1ca84d0bde604029642",
+    "tools/cp02_weak_activation.py": "46dd4571665f4f2011a83ee742420c54e5e7d6e8b81e7f1cef0b34fe82c7ec6a",
+    "tools/plot_cp02_activation_path.py": "a0c22e9a43c9b80ccce60e423f16b5ff2de946d9a834cf2bc84b4381f5a32bf3",
+    "docs/evidence/cp02_activation_path_20261110/validation/clean_export.json": "83b1be2662d4051ba7c7cb2aab70622f9e454775b3f3245da1c2b565a2631bd3",
+    "docs/evidence/cp02_activation_path_20261110/validation/tree_replay.py": "6bcfda1d7b10de250cf70dc4748f3ea50b57be5ffe1efd2610c8992ba790ae84",
+    "docs/evidence/cp02_activation_path_20261110/validation/tree_replay_receipt.json": "e547a9a40f0e0e10cb05aa020adeca7fb871e73b9f737913e050882fc585a039",
+    "docs/evidence/cp02_activation_path_20261110/validation/prior_after_kg_audit.json": "008e8d7c0a5f0d53069229692c9ea409315a6c9e6f95de2052fe0eac9e404c41",
+    "docs/evidence/cp02_activation_path_20261110/kg/session_completion.json": "6bbcb2d8cfb327e7368370af3dc505b0b79689bde3e68cb238202c5ae0198daa",
+    "docs/evidence/cp02_activation_path_20261110/kg/publish_receipt.json": "dc72309cada103a6977031aeead609a9306cee5af6f63145f1d950c79903a838",
+    "docs/evidence/cp02_activation_path_20261110/kg/postpublish_independent_readback.json": "3b38c2821b3638e986efa4861fb516403ef790d509f6ac71784d0100cd885833",
+    "docs/evidence/cp02_activation_path_20261110/review/final_science_gallery_review.json": "d1a65b3f3c7180e6dba3c6d4069a6173854474245a58fa7772028f68eacc13c1",
+    "docs/evidence/cp02_activation_path_20261110/review/native_final_review.json": "edc0bec870facfae6600ab93107f420196211f7771c0e5ba4252f84afcb91d0d",
+    "docs/evidence/cp02_activation_path_20261110/review/nn_end_forecast_review.json": "866bc70c994b9641ef39b8ccff67d5d759808c58fc190428013d8ec935a4f39a",
+    "docs/evidence/cp02_activation_path_20261110/review/nn_end_score_review.json": "1f9a6c032239cececb9f078bc0896d49278f40431ab4c5b24a6e773ec6d68db5",
+    "docs/evidence/cp02_activation_path_20261110/native/proof/comparability.json": "5b024b7de267c9c1fdc98b8833a8633fd15a7599243838e1b4680778cf8414c9",
+    "docs/evidence/cp02_activation_path_20261110/forecast/proof/comparability.json": "07a1e3083762a5ec61b7c3adcba2554e24ebc7047c6ee090d2c1a2cc40c9c878",
+    "docs/evidence/cp02_activation_path_20261110/local_replay/portable_recount_receipt.json": "14628b8c0e1be9570d360f8119306b1ea5e1da386d3f4110dce335c94a55e4ca",
+    "docs/evidence/cp02_activation_path_20261110/weak_analysis/receipt.json": "20536aac6db36051b10d6bc69347e674c0ef4d0c00fa39a7420d7b0d96da3e47",
+    "docs/evidence/cp02_activation_path_20261110/evaluation/results/receipt.json": "8bcdaaf8f0830b2796aef204c43448a48ca902739c15d94d20edc703a994fb54",
+    "docs/evidence/cp02_activation_path_20261110/gallery_receipt.json": "ec9be66031cc4893542a9ef1c16850ed983289a017bd6d8f95215b1225ea8438",
+    "docs/evidence/cp02_activation_path_20261110/FIGURES.md": "bc085a16314e59d5c173172c656a3fc7d52c2f802be1aff9bb482a7a5afcf08e",
+    "docs/evidence/cp02_activation_path_20261110/all_figures.zip": "842aa56edba8802914e7bce5e55fc058b001c6f609eadfdfd27c58bde5c7ae31"
+  },
+  "checks": [
+    "Independently verified all 3054 private-tree overlay identities against working source and export, all 59 outputs, ten logs and 16 tests.",
+    "Reviewed 545-test clean export, five maintained source files, report, README/status, weak/native/local evidence, score recount and 27-image gallery.",
+    "Validated published KG postreadback and prior 8656 artifacts audit; session-completion bookkeeping added after private replay is separately bound.",
+    "Candidate satisfies 21/26 fixed gates and remains unadopted; B1 retained."
+  ],
+  "limitations": [
+    "Raw capture extraction and candidate WRF forecast were not rerun by private-tree replay.",
+    "Whole-domain water/energy conservation, independent meteorological case, RN1 QC and C2 T39 remain open.",
+    "Graph extraction is partial and graph freshness is not scientific validation."
+  ]
+}

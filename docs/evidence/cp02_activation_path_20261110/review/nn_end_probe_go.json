@@ -1,0 +1,19 @@
+{
+  "status": "GO_FOR_PROBE",
+  "sha256": {
+    "docs/evidence/cp02_activation_path_20261110/forecast/probe.py": "e13f03329b0f12b19f7272c9b4f293287cdc1ff7e673606172a3068422ba1570",
+    "docs/evidence/cp02_activation_path_20261110/forecast/forecast.py": "5be5dfdc210e1657e86ff6dbfb1561b6b9a0bba5ae9a87b20ac2e737ea11708d",
+    "docs/evidence/cp02_activation_path_20261110/forecast/rank_wrapper.sh": "933d4496a8c3b0aed240364ef08c3b1db5d8219b348b71b9c3db5b1ab3135938",
+    "docs/evidence/cp02_activation_path_20261110/forecast/source/probe_source_receipt.json": "084c692081414d51c6cf4fedab35579941f963c84ffc87a74c7ed6c85068eeef",
+    "docs/evidence/cp02_activation_path_20261110/forecast/policy.json": "b9fbbf9cc9e216b8bb9334cecdf079591058e129705414fb8ab93c070aca85b0",
+    "docs/evidence/cp02_activation_path_20261110/forecast/build_probe.py": "6320aaec0fbe05ec87c9dc50d69747f8e5047b9337f5b7a04eaf6a8494982355"
+  },
+  "build_receipt_sha256": "86e771eaf3ac1734555cf7c30f15642e68628692675545b24ec2c41695a28ec0",
+  "checks": [
+    "Trace-only IFX build passed and executable matches build receipt.",
+    "Runner uses private one-outer-call model setup and validates actual loop counts, dt, entry bound, and inner final-only bound words."
+  ],
+  "limitations": [
+    "A single native trace covers its observed input only; reduced synthetic kernel separately exercises below-floor and above-cap cases."
+  ]
+}

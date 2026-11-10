@@ -1,0 +1,34 @@
+{
+  "status": "PASS_INDEPENDENT_NATIVE_REVIEW",
+  "reviewer": "terra_activation_review",
+  "sha256": {
+    "docs/evidence/cp02_activation_path_20261110/native/proof/comparability.json": "5b024b7de267c9c1fdc98b8833a8633fd15a7599243838e1b4680778cf8414c9",
+    "docs/evidence/cp02_activation_path_20261110/native/proof/provenance_inventory.json": "edd360a9eea1f4baf05208a4c9ffee955bc3cbe0d3ac0a64351afb240c42fd00",
+    "docs/evidence/cp02_activation_path_20261110/native/schema/contract_supplement.json": "989edbec0f1bd74a52e96f38d8f348057a67e782ac994aa054c6a9df6230a8c7",
+    "docs/evidence/cp02_activation_path_20261110/native/compact/CONTROL/capture_receipt.json": "88e0d417067f5f5b89556e66eaba23255e57ed2b5228237e40e9aa586d8a4838",
+    "docs/evidence/cp02_activation_path_20261110/native/compact/CONTROL/raw_recount_receipt.json": "25a3e9ea41fdb1117ae8fd1d4d6bb8a1c29ad6e81de5974f62809fcd20ad7a6c",
+    "docs/evidence/cp02_activation_path_20261110/native/compact/CONTROL/surface_audit.json": "eb67b8c7297ba3e70ba0f2b9964a0d1d4df8fb11699bb832bab49d488a88e831",
+    "docs/evidence/cp02_activation_path_20261110/native/compact/CONTROL/relocation_receipt.json": "941e1346afa018d8129583fc27a831e008be7b46def0dd2969c21d1d5e6797dd",
+    "docs/evidence/cp02_activation_path_20261110/native/packed/CONTROL/packing_receipt.json": "a8a488885a9ed83a3877f8ac72e45c6ddba1b54f315219c447fff9ad13a34eaa",
+    "docs/evidence/cp02_activation_path_20261110/native/proof/CONTROL/run_shared_comparison.json": "02dd80a94af3607c2781efcf126732892ef586f19a0ee4a4557442b95fd72523",
+    "docs/evidence/cp02_activation_path_20261110/native/proof/CONTROL/run_history_comparison.json": "01eba4a8146d2cbc2414e800077449e7ef81ad48b9025bea2702f7ae9c34dc0b",
+    "docs/evidence/cp02_activation_path_20261110/native/compact/MP10/capture_receipt.json": "fb123d87517b683bf422cc3b4cecb843df0fd54e9590da08185656b3409b7509",
+    "docs/evidence/cp02_activation_path_20261110/native/compact/MP10/raw_recount_receipt.json": "615f28cf7a243e3ca8cbb21ed19c487d339b6336e874b726c2416fafed554b70",
+    "docs/evidence/cp02_activation_path_20261110/native/compact/MP10/surface_audit.json": "41174adb8a2b27a3ad7e2ce34b424173df0f9dd6c828665bfb1f607c02ead8b2",
+    "docs/evidence/cp02_activation_path_20261110/native/compact/MP10/relocation_receipt.json": "42972b5ffbdb4262e6b7127ead6726f2d18781c2df472338cddef6616140a554",
+    "docs/evidence/cp02_activation_path_20261110/native/packed/MP10/packing_receipt.json": "f03034c9e468b9d07ff1f5794b719fbdee661964012746f35ceff87693e09690",
+    "docs/evidence/cp02_activation_path_20261110/native/proof/MP10/run_shared_comparison.json": "5e7c77fb5122133b37be6ca0174f9dc3a799e5c4a8aaf64f6288f0d2acc0ae0d",
+    "docs/evidence/cp02_activation_path_20261110/native/proof/MP10/run_history_comparison.json": "73962bda735687078f1473b0521e9af8be4ff39b07270c281165573a3b519d57"
+  },
+  "checks": [
+    "Independently hashed all eight current histories and confirmed corresponding pinned prior history SHA256.",
+    "Verified every receipt binding, all 2760 packed file sizes and hashes, and all NPZ member decompressed hashes.",
+    "Checked both shared-comparison and raw recount methods and PASS receipts; five shared columns, steps 361\u2013540, all common native phase payloads and wrapper levels; new phases excluded from prior comparison.",
+    "Independently verified all 32 copied provenance records and 2760 relocated pre-packing artifacts against source sizes and hashes.",
+    "Validated schema supplement binds schema and explicitly corrects stale surface-window and phase-field descriptions; prior schema remains untouched."
+  ],
+  "limitations": [
+    "Independent review did not rerun full raw-to-packed recount or all shared-stream comparisons; relies on inspected hash-bound PASS receipts for those exhaustive checks.",
+    "Diagnostic capture alone does not establish domain-wide scientific validation."
+  ]
+}

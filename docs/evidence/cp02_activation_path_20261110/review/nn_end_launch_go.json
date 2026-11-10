@@ -1,0 +1,15 @@
+{
+  "status": "GO_FOR_LAUNCH",
+  "reviewer": "terra_activation_review",
+  "launch_plan_sha256": "e26a7013d852ede9c25932d6eb9232871eb9734d6f920ccfb2a2bb4ae198cfac",
+  "checks": [
+    "Independently compared all 372 production and parent archive members; only KDM6 object differs, with candidate object matching the built archive.",
+    "Independently rehashed 89 prepared private inputs, all linked libraries, production executable and one-step trace logs.",
+    "Trace observes two 10 s loops per 20 s call; reduced IFX kernel exercises lower and upper bounds and verifies final-only lower clamp.",
+    "Source change, 26 fixed gates, evaluation review and freeze, production and probe build/provenance hashes bind the plan before forecast evaluation."
+  ],
+  "limitations": [
+    "The one-step full-scheme trace did not exercise the inner floor or cap; the reduced synthetic kernel did.",
+    "Initial history byte identity, six-hour completion and scientific score checks remain postrun gates."
+  ]
+}
