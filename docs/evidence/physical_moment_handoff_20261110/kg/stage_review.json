@@ -1,0 +1,79 @@
+{
+  "checks": {
+    "264_prior_count": true,
+    "AGENTS_unchanged": true,
+    "Cloud-BAL_HEAD_and_NUL_status": true,
+    "Cloud-BAL_active_trio_untouched": true,
+    "Cloud-BAL_dated_snapshot_trio": true,
+    "Cloud-BAL_expected_replaced_imports": true,
+    "Cloud-BAL_graph_integrity": true,
+    "Cloud-BAL_manifest_nonselected_preserved": true,
+    "Cloud-BAL_no_shrink": true,
+    "Cloud-BAL_raw_canonical_paths": true,
+    "Cloud-BAL_report_caveat": true,
+    "Cloud-BAL_snapshot_inventory": true,
+    "Cloud-BAL_staged_copied_sources": true,
+    "Cloud-BAL_untouched_nodes_preserved": true,
+    "KLAPS50_HEAD_and_NUL_status": true,
+    "KLAPS50_active_trio_untouched": true,
+    "KLAPS50_dated_snapshot_trio": true,
+    "KLAPS50_expected_replaced_imports": true,
+    "KLAPS50_graph_integrity": true,
+    "KLAPS50_manifest_nonselected_preserved": true,
+    "KLAPS50_no_shrink": true,
+    "KLAPS50_raw_canonical_paths": true,
+    "KLAPS50_report_caveat": true,
+    "KLAPS50_snapshot_inventory": true,
+    "KLAPS50_staged_copied_sources": true,
+    "KLAPS50_untouched_nodes_preserved": true,
+    "baseline_and_lock_frozen": true,
+    "focused_log_hashes": true,
+    "frozen_12_sources": true,
+    "hash_only_evidence": true,
+    "old_wiki_untouched": true,
+    "staged_five_wiki_hashes": true,
+    "unit_focused_source_coverage": true,
+    "wiki_index_other_sections_unchanged": true,
+    "wiki_log_append_only": true,
+    "wiki_report_mirrors": true,
+    "wiki_reports_two_dated_corpora": true
+  },
+  "corpora": {
+    "Cloud-BAL": {
+      "after_edges": 35322,
+      "after_nodes": 19461,
+      "before_edges": 35218,
+      "before_nodes": 19397,
+      "raw_source_files": 12,
+      "removed_selected_node_ids": [
+        "tests_test_real_shadow_io_contract_f90_cloud_bal_pressure_analysis",
+        "tests_test_real_shadow_io_contract_f90_cloud_bal_real_netcdf"
+      ]
+    },
+    "KLAPS50": {
+      "after_edges": 93907,
+      "after_nodes": 45289,
+      "before_edges": 93801,
+      "before_nodes": 45225,
+      "raw_source_files": 12,
+      "removed_selected_node_ids": [
+        "cloud_bal_tests_test_real_shadow_io_contract_f90_cloud_bal_pressure_analysis",
+        "cloud_bal_tests_test_real_shadow_io_contract_f90_cloud_bal_real_netcdf"
+      ]
+    }
+  },
+  "extraction_limitations": [
+    "Only listed Fortran and Python sources are selected for structural extraction; remaining evidence is hash-only.",
+    "Fortran cross-file calls and external import edges may be incomplete.",
+    "Graph freshness does not establish runtime or scientific validation."
+  ],
+  "failures": [],
+  "hash_only_evidence_count": 12,
+  "old_node_note": "Two selected-source USE-import node IDs per graph were replaced by unqualified module IDs; their source imports remain represented. All unselected old IDs persist.",
+  "prior_snapshot_count": 264,
+  "selected_sources": 12,
+  "selection_lock_sha256": "dfb0ae9b609395156ca336066cb990155e95f4f0be33ef8139c1e2a74b9633ed",
+  "stage_receipt_sha256": "e8ce2c72978dad8e38ff4faa1e2a02d0cc452d1d6c643ce8a75c0b0f3f34c37a",
+  "status": "GO",
+  "validation_scope": "Unit and focused receipts cover all frozen selected sources; no forecast or first-use runtime inferred."
+}

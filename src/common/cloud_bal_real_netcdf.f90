@@ -2546,6 +2546,11 @@ CONTAINS
     REAL(real64) :: flux_terms(7),flux_accounted,flux_error,flux_limit
 
     status=STATUS_FAILED; reason=REASON_AUTHORITY
+    ! The legacy SHADOW file inventory cannot serialize model-grid moments.
+    ! Refuse the payload rather than silently discard completed state.
+    IF (moment_bundle_present(state_in%moments) .OR. &
+        moment_bundle_present(candidate%moments) .OR. &
+        moment_bundle_present(operational_state%moments)) RETURN
     IF (.NOT.thermo_density_receipt_valid(result,config,[state_in%grid%nx,state_in%grid%ny,state_in%grid%nz])) RETURN
     IF (config%force_prior_enabled .NEQV. result%force_prior_applied) RETURN
     IF (config%force_prior_enabled) THEN

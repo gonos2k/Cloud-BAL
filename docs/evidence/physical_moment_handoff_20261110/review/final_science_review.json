@@ -1,0 +1,44 @@
+{
+  "status": "PASS",
+  "scope": "Independent scientific report and two-figure review; not an implementation author review or forecast validation.",
+  "inputs_sha256": {
+    "docs/PHYSICAL_MOMENT_INITIALIZATION_20261110.md": "04a7e1c761212c9f1539c13372feac9a0d8cb5fd2065bdeb36e5bf9cfb4a27be",
+    "docs/MODEL_MOMENT_HANDOFF.md": "77286b1a07dc8b8014303d69583585df99fc5cc6fb17a5a65d4b6c5c0b97b4ba",
+    "docs/evidence/physical_moment_handoff_20261110/science/native_moments.md": "baf93ff098c77a5ae8a89962a28ee572f2519c2b1486aeba1d0ec0035a5a7b8e",
+    "docs/evidence/physical_moment_handoff_20261110/science/integration_cases.f90": "1151eb5eba9e307514e2be91c7b74516f03c8455800a347c0cc39b0df281c58a",
+    "docs/evidence/physical_moment_handoff_20261110/native/real_probe_rejection.md": "d2b216cbed242e61ccd961309d25efb31ad3bf9f5b928bc30ecb12771c44efbd",
+    "docs/evidence/physical_moment_handoff_20261110/native/actual_real/README.md": "9b581f92f6ad1305f2020eeda33421e8b79239cfab532f536840a8bee2b6a9fe",
+    "docs/evidence/physical_moment_handoff_20261110/native/actual_real/ice_cap_recount.json": "3d44ae3fdf030e62c2eb04a308aa3fb60af02a80783f188ebcc0d95c2e82bc86",
+    "docs/evidence/physical_moment_handoff_20261110/native/actual_real/completion_v3.stdout": "88c240086fde79235a3d873422241dd4e1a6c1c1f126061cd74718c549e747cd",
+    "docs/evidence/physical_moment_handoff_20261110/validation/unit_receipt.json": "8de7359f3f4597edf5cc13780d8df55809080ca04fefaa4f9d8afcbaccc2588b",
+    "docs/evidence/physical_moment_handoff_20261110/validation/focused_receipt.json": "4bbcad1718fc814b12d7da03314378ba9467f48494c2274153750df5654b2883",
+    "docs/evidence/physical_moment_handoff_20261110/figures/01_initialization_path.png": "f995ea8fe1dad71371ccf4064d328ca48f96373fa9c0228c71c7104746cdb73e",
+    "docs/evidence/physical_moment_handoff_20261110/figures/02_rain_psd_freedom.png": "b30b902526ccafac2f126f9bf37caa830dd49aea0027024d145f595d1ddacf05",
+    "docs/evidence/physical_moment_handoff_20261110/figures/rain_psd_family.csv": "c2b3f735e86523aae7b81e4cc79cfe6a69dfac54e8372c0a12c74d71dc284af9",
+    "docs/evidence/cp02_activation_path_20261110/FIGURES.md": "bc085a16314e59d5c173172c656a3fc7d52c2f802be1aff9bb482a7a5afcf08e"
+  },
+  "checks": [
+    "Reviewed report equations and source mapping, including gamma-rain number, mass-weighted diameter, Rayleigh reflectivity and file-state AL+ALB density distinction.",
+    "Independently recomputed all 181 CSV rows; maximum relative or absolute normalized discrepancy < 6e-16.",
+    "Visually inspected both PNGs: pathway separates actual-use verification; rain plot identifies theoretical fixed-mass example, axes and units.",
+    "Independently reopened SHA-256 9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5 source; reproduced 106128-cell file-state prior-cap mask, mask SHA-256 1deba6cbc3412dfc0882396b9c66200441a7adfaeaae1399a52835f155b3e00c, first cell and all-zero source NI.",
+    "Checked current focused source and figure hashes against receipt and both validation receipts report PASS; unit and focused scopes remain distinct.",
+    "Confirmed rejection is not a successful model launch, no WRF step was performed, first-use density remains unverified; analytical profile is not a claim of native bit-exact PSD clamping."
+  ],
+  "limits": [
+    "Did not independently rerun the native producer, compiler suite, or forecast; relied on bound receipts and independently recomputed retained-file diagnostics.",
+    "The source-to-real.exe build identity, actual first-advection and first-microphysics moment/density linkage, independent meteorological cases, and forecast performance remain open."
+  ],
+  "recount": {
+    "source_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+    "count": 106128,
+    "mask_sha256": "1deba6cbc3412dfc0882396b9c66200441a7adfaeaae1399a52835f155b3e00c",
+    "fortran_ijk_slot": [
+      1,
+      228,
+      13,
+      2
+    ]
+  },
+  "figure_csv_rows": 181
+}

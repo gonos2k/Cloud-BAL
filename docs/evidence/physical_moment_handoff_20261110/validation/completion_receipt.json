@@ -1,0 +1,48 @@
+{
+  "status": "COMPLETE_SCOPED_IMPLEMENTATION_AND_VALIDATION",
+  "tree": "ea48ce044b9abd221bfcf6ba63967e97d63424fc",
+  "receipts_sha256": {
+    "validation/unit_receipt.json": "8de7359f3f4597edf5cc13780d8df55809080ca04fefaa4f9d8afcbaccc2588b",
+    "validation/focused_receipt.json": "4bbcad1718fc814b12d7da03314378ba9467f48494c2274153750df5654b2883",
+    "validation/tree_replay_receipt.json": "3d21d3809283be5bc345df2be38a9e507dc8cd6fda44d103597df5c7b1923e9e",
+    "validation/SCOPE.md": "5a2d0437c56e524c4237709911c24a913306374665ff747167638a4b1d4f45a2",
+    "native/actual_real/bundle_manifest.json": "83bb043f3dee15172be589702cf2a45983ce872e01714eff5e50b32ef725cb19",
+    "native/actual_real_publication_check.json": "8c78bdf0818771ccd7d1772b056634eed37ff6bc122e629269c03a94ae3f2ca7",
+    "kg/session_completion.json": "4b1f24cdcde90c0cfb1e38a8cb65304c7ceff994554427fd784855f1869ad814",
+    "kg/publish_receipt.json": "4f3b17cda5e1f4f6530bd6aa9d1e4465e5e311ec228d9c694c6a6894824705b8",
+    "kg/postpublish_independent_review.json": "2dc168369338413618c732e2074f79e758c797cde9d458bf245770fa8a09d986",
+    "validation/prior_after_kg_audit.json": "200779d5463e9c03bba2b9408bebe012cb486adb1d64faeedb5e6dd25c69c80e",
+    "review/recipe_amendment.json": "d0b02ea607626c51dee368e6c6a461c33292faef0af3a01e8ecfdf3adb64f04d"
+  },
+  "validation": {
+    "broad_unit_entry": "PASS",
+    "boundary_tests": 11,
+    "composed_cases": 6,
+    "profiles": [
+      "O0",
+      "O2"
+    ],
+    "exact_figure_data_outputs": 3,
+    "private_unit_inputs": 1365,
+    "private_overlaid_paths": 101
+  },
+  "native_case": {
+    "fresh_real_identical": true,
+    "fixed_prior_rejected": true,
+    "ice_prior_file_state_exceedances": 106128,
+    "initialized_input_published": false,
+    "first_model_use": "UNRUN",
+    "new_forecast": "UNRUN",
+    "retained_configuration": "B1"
+  },
+  "open_items": [
+    "Actual first-advection and first-microphysics transfer/density",
+    "Native REAL32 coefficients and PSD boundary replay",
+    "Source-to-binary producer build closure",
+    "Observed PSD and regridding/forward observation consistency",
+    "Full water/energy including storage/regrid/dynamics",
+    "Independent meteorological cases and RN1 upstream QC/time",
+    "Separate C2 T39"
+  ],
+  "scope": "Added after private replay; final review and manifest bind this bookkeeping. Completion applies to this implementation batch, not general physical initialization or forecast improvement."
+}

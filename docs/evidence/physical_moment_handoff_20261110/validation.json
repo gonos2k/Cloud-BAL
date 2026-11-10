@@ -1,0 +1,548 @@
+{
+  "status": "PASS",
+  "schema": "physical_moment_handoff_validation_v1",
+  "checks": {
+    "boundary_tests": 11,
+    "physical_cases": 6,
+    "physical_profiles": [
+      "O0",
+      "O2"
+    ],
+    "actual_cap_count": 106128,
+    "actual_first_use_verified": false,
+    "native_input_published": false,
+    "figures": 2,
+    "zip_members": 29,
+    "selected_sources": 12,
+    "prior_artifacts": 3058,
+    "maintained_snapshots": 266,
+    "scope": "Fixture, source and rejection evidence only; no first-use or forecast validation."
+  },
+  "artifact_count": 104,
+  "artifacts": [
+    {
+      "path": "README.md",
+      "sha256": "5b6134d9090ccad644b26a2dd57ce0663e89a40cdaf8d45c80eb4955b9e9db83",
+      "size_bytes": 24939
+    },
+    {
+      "path": "docs/CURRENT_RESEARCH_STATUS.md",
+      "sha256": "82fc5cbc028ddd59d74412844e267cc2553836747cff8f38c214f8ecf102070d",
+      "size_bytes": 35151
+    },
+    {
+      "path": "docs/MODEL_MOMENT_HANDOFF.md",
+      "sha256": "77286b1a07dc8b8014303d69583585df99fc5cc6fb17a5a65d4b6c5c0b97b4ba",
+      "size_bytes": 4210
+    },
+    {
+      "path": "docs/PHYSICAL_MOMENT_INITIALIZATION_20261110.md",
+      "sha256": "04a7e1c761212c9f1539c13372feac9a0d8cb5fd2065bdeb36e5bf9cfb4a27be",
+      "size_bytes": 16760
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/FIGURES.md",
+      "sha256": "5b5a9fb3a202d4872636bd3bf4ee328e7648aba1f444d9a4f291dba0f92822fb",
+      "size_bytes": 898
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/figures/01_initialization_path.png",
+      "sha256": "f995ea8fe1dad71371ccf4064d328ca48f96373fa9c0228c71c7104746cdb73e",
+      "size_bytes": 131495
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/figures/02_rain_psd_freedom.png",
+      "sha256": "b30b902526ccafac2f126f9bf37caa830dd49aea0027024d145f595d1ddacf05",
+      "size_bytes": 109962
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/figures/rain_psd_family.csv",
+      "sha256": "c2b3f735e86523aae7b81e4cc79cfe6a69dfac54e8372c0a12c74d71dc284af9",
+      "size_bytes": 14694
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/figures/receipt.json",
+      "sha256": "0add00e6eaadf88683f018ce179c2ce27a2f16a39b88122f3d240089b007d92f",
+      "size_bytes": 1079
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/gallery_receipt.json",
+      "sha256": "de8ae99bf74a14f8b8d6d607239d6a146ce6c255436e051df17bc98ebea556a0",
+      "size_bytes": 6361
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/README.md",
+      "sha256": "0a126cd70f1d8fcdb714358503643494edc21f0b12947e0ebc717b2bf0704246",
+      "size_bytes": 1247
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/audit_prior.py",
+      "sha256": "475701b1ba343ca45c1f122b72f522279fc7f5943a2259a79ba405c88b317441",
+      "size_bytes": 3643
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/baseline.json",
+      "sha256": "c5a3235ecdcc913e79ccbc10bb0e2f22a22eacbcda57f24de7e3aaf9a502ba6d",
+      "size_bytes": 163316
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/capture_baseline.py",
+      "sha256": "43ff76d2afe12353fe3c3d3cfbf71771ae664079b6deffe000865bde9ad2387c",
+      "size_bytes": 4920
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/postpublish_independent_review.json",
+      "sha256": "2dc168369338413618c732e2074f79e758c797cde9d458bf245770fa8a09d986",
+      "size_bytes": 1514
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/prior_aliases/README.md",
+      "sha256": "9614c295ec9f3cf73c606aae345a1fb569e5619a60305f3cef706097c1c9c583",
+      "size_bytes": 24081
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/prior_aliases/docs/CURRENT_RESEARCH_STATUS.md",
+      "sha256": "6c532e049b99f9a4597132461cfd9335aa3e14f05fb7878941040b29200ccbfc",
+      "size_bytes": 33608
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/prior_aliases/graphify-out/GRAPH_REPORT.md",
+      "sha256": "e620c29ffad8b84a53d6b82ef77a5520dd7f85a40a49114426ea1fca2c7dd132",
+      "size_bytes": 359795
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/prior_aliases/graphify-out/graph.json",
+      "sha256": "3070387a22abcabb02dc4663f85b4b0c76eb31371d869de4c7997bea72e47ca8",
+      "size_bytes": 22940424
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/prior_aliases/graphify-out/manifest.json",
+      "sha256": "4de80a27f171be0dfc6a30e4219404c0b22340d107c18cb85a83e318a670a1cd",
+      "size_bytes": 1125313
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/prior_audit.json",
+      "sha256": "68da049eeea4548a8bfbc132f6aab0083125c6c453f95276cdfe1dfa08df90fb",
+      "size_bytes": 960
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/publish_kg.py",
+      "sha256": "67f00b648a877b2ae5bd6e3c9e92564aa0d29eeba60536f93457b2f4dbd67af0",
+      "size_bytes": 6272
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/publish_receipt.json",
+      "sha256": "4f3b17cda5e1f4f6530bd6aa9d1e4465e5e311ec228d9c694c6a6894824705b8",
+      "size_bytes": 6764
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/review_input_pending.json",
+      "sha256": "62b62f86b84a3effd1d8a644768b51c2c881d06d47954c4331016cf290a4369b",
+      "size_bytes": 3578
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/selection_lock.json",
+      "sha256": "dfb0ae9b609395156ca336066cb990155e95f4f0be33ef8139c1e2a74b9633ed",
+      "size_bytes": 4536
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/session_completion.json",
+      "sha256": "4b1f24cdcde90c0cfb1e38a8cb65304c7ceff994554427fd784855f1869ad814",
+      "size_bytes": 3729
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/source_copy_receipt.json",
+      "sha256": "3b6eae67f51a77b80be0c1102fe09c900e16ecf7657b71e960ec41bf057ebf67",
+      "size_bytes": 3164
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/stage_kg.py",
+      "sha256": "696f01f97ff28dfd99bcf19802798e5539991f0e042b6c4d7a3f7d634999a9c3",
+      "size_bytes": 16905
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/stage_receipt.json",
+      "sha256": "e8ce2c72978dad8e38ff4faa1e2a02d0cc452d1d6c643ce8a75c0b0f3f34c37a",
+      "size_bytes": 8689
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/stage_review.json",
+      "sha256": "b6d3e3a22a3100277ef9736933e0f2c18c51cd4883c3d8a260fee974233dce61",
+      "size_bytes": 3206
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/verify_baseline.py",
+      "sha256": "ab0ababcd9ee63c3e7a7fce97d08fcdf32f7012c5219e6f18d5e39f5f220c11f",
+      "size_bytes": 1486
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/wiki/graph-report-cloud-bal.md",
+      "sha256": "f369785fa60450f7b256aeb67d06dd6383462641cd710d825e2170b1c500eaa9",
+      "size_bytes": 359777
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/wiki/graph-report-klaps50.md",
+      "sha256": "d9bf5360b00f85e4d95ee8867aa5cb39290bd0e6c4b6393b813b4bea5da3c473",
+      "size_bytes": 518626
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/wiki/graph-report.md",
+      "sha256": "76a69bece1a3d8b15a339fe5028810487d70982977ed39655635961abe678893",
+      "size_bytes": 31618
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/wiki/index.md",
+      "sha256": "ee9df126ac9d4694bced450b9d301804f7c3ad45d4d88b37122a482fba51de31",
+      "size_bytes": 1503
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/kg/wiki/log.md",
+      "sha256": "13a4065f43b875c787f1a903fdfc8c571e603db53b12b47532730e38796d86cb",
+      "size_bytes": 500045
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/README.md",
+      "sha256": "9b581f92f6ad1305f2020eeda33421e8b79239cfab532f536840a8bee2b6a9fe",
+      "size_bytes": 3248
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/bundle_manifest.json",
+      "sha256": "83bb043f3dee15172be589702cf2a45983ce872e01714eff5e50b32ef725cb19",
+      "size_bytes": 2303
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/completion.stdout",
+      "sha256": "3054c5ae687baf8fb9db0f3eef020f75e73449d082d1bd45417145bc730338d0",
+      "size_bytes": 756
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/completion_v2.stdout",
+      "sha256": "82be828e204a6c7161e5fe377a61abdb449f7f7112e9e5e20da8e18691cf4be7",
+      "size_bytes": 1129
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/completion_v3.stdout",
+      "sha256": "88c240086fde79235a3d873422241dd4e1a6c1c1f126061cd74718c549e747cd",
+      "size_bytes": 1220
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/ice_cap_recount.json",
+      "sha256": "3d44ae3fdf030e62c2eb04a308aa3fb60af02a80783f188ebcc0d95c2e82bc86",
+      "size_bytes": 896
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/manifest.json",
+      "sha256": "0cc724b15333ce18915d2bd0025ebe0f3292d3e27c276d71ea99323c27ffd3f1",
+      "size_bytes": 25188
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/manifest_v2.json",
+      "sha256": "6b2a18979a0b34749df22e3011b645508a09b6c68d0ed1172f9fac6d02e65337",
+      "size_bytes": 25191
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/namelist_v1.input",
+      "sha256": "9dc6f6d3b4cd728a11b69b317d30568ff340aa2363c34603955418116a100c77",
+      "size_bytes": 4953
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/namelist_v2.input",
+      "sha256": "1304985eb247d8a52f0245aa6517fb081902dc04624245ecd2e0986035888da4",
+      "size_bytes": 4953
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/plan.json",
+      "sha256": "c167cda49339282d1c2fbc9dc291dd5d56cf8fc3e4dd2dec1f0e13427e4c9b7d",
+      "size_bytes": 24699
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/plan_v2.json",
+      "sha256": "b2ca5145b56f450e4afceb1369636c88cf612e167c2772c0c6f1b25fd05e0512",
+      "size_bytes": 24884
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/policy.json",
+      "sha256": "647126e5215acbb985d39d56564898f7c6f82adb85d05266bf0d2c4ba008a00e",
+      "size_bytes": 532
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/real_bad_namelist.log",
+      "sha256": "60ebdc9cc675cfe09b7b01e2762da57a9fc4b0bb7b51652aeedb3f081e32c9fc",
+      "size_bytes": 484
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/real_stack_failure.log",
+      "sha256": "2acd4b18cb3e4b6105b641166777c6811421a88f859f8f84800fcaa81dd10007",
+      "size_bytes": 2405
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/real_success.log",
+      "sha256": "4c516468b72afc7999f3ec920523eac31331de23747193d3760cc044f58c9b66",
+      "size_bytes": 3082
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/recount_ice_cap.py",
+      "sha256": "275c8c238d42fca52a7ea3553a56c3e37a9e43961a556a02401f7189d1ea9a6a",
+      "size_bytes": 2593
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/actual_real_publication_check.json",
+      "sha256": "8c78bdf0818771ccd7d1772b056634eed37ff6bc122e629269c03a94ae3f2ca7",
+      "size_bytes": 1919
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/rain_intercept_proof.py",
+      "sha256": "87a155c538babada73a58fc3374791ead64ee9aaecaba308e4fd7c4fab87acd1",
+      "size_bytes": 2038
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/real_probe_rejection.md",
+      "sha256": "d2b216cbed242e61ccd961309d25efb31ad3bf9f5b928bc30ecb12771c44efbd",
+      "size_bytes": 3083
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/native/run_rain_intercept_proof.sh",
+      "sha256": "6de8100f16c94942bb5823d94cc2351ae5acf36cbd014d9b4802fac81df56ab3",
+      "size_bytes": 497
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/report_figures.zip",
+      "sha256": "c6f7fc37618c35c535d5d9f59c57882bd548046f61bc124e50b126fa714ba93b",
+      "size_bytes": 351908
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/review/final_review.json",
+      "sha256": "e6b56a88f6afd8a47bc53f80e85ad57da0a48331e7164d1fd4bce43f5d1d2305",
+      "size_bytes": 8909
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/review/final_science_review.json",
+      "sha256": "192174ac7ac19a6073315ae6a601171c2790a00ded166cec8687970d741c2bd0",
+      "size_bytes": 3984
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/review/recipe_amendment.json",
+      "sha256": "d0b02ea607626c51dee368e6c6a461c33292faef0af3a01e8ecfdf3adb64f04d",
+      "size_bytes": 1792
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/review/recipe_versions/initial.py",
+      "sha256": "adda1485beecd73ee29d716133eba112423b2641ae11cae8208c232ac9f298a5",
+      "size_bytes": 5007
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/review/recipe_versions/sparse.py",
+      "sha256": "27380ef6360ec71b447539f0b654325a24a53db62dd26ceac9542aacf01331ae",
+      "size_bytes": 5018
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/science/integration_cases.f90",
+      "sha256": "1151eb5eba9e307514e2be91c7b74516f03c8455800a347c0cc39b0df281c58a",
+      "size_bytes": 10631
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/science/native_moments.md",
+      "sha256": "baf93ff098c77a5ae8a89962a28ee572f2519c2b1486aeba1d0ec0035a5a7b8e",
+      "size_bytes": 9096
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/science/run_integration_cases.sh",
+      "sha256": "2081141e3ab310fe18bc21ce284fb5e1d6d3681c61697b78efdf9d60da500f94",
+      "size_bytes": 772
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/SCOPE.md",
+      "sha256": "5a2d0437c56e524c4237709911c24a913306374665ff747167638a4b1d4f45a2",
+      "size_bytes": 1434
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/attempts/incomplete_export_dependency/attempt.json",
+      "sha256": "8160958fc8d3a6766e4ec8a7df494a1624d0d436c498d1a8b93eb5fead07dfdb",
+      "size_bytes": 340
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/attempts/incomplete_export_dependency/unit_tests.log",
+      "sha256": "6bf0856c3b5195e45af506a84e382c59c38ca007847a345a43371b53c164e522",
+      "size_bytes": 35094
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/attempts/mutable_source_compile/attempt.json",
+      "sha256": "c9840c04123ffcda14236f254a52e70606ef759c47095d9650e42502372bb180",
+      "size_bytes": 224
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/attempts/mutable_source_compile/unit_tests.log",
+      "sha256": "936f8fd6ce3cc0d2498d435440ea80f441e622df12ec9fe7bc3a16c84218abd0",
+      "size_bytes": 242812
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/attempts/pre_native_tier/focused_receipt.json",
+      "sha256": "fe47670b9f26340cf0b18eb7a0fcf373ce29788d99a0d453af0dd22bd6ae9049",
+      "size_bytes": 5329
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/completion_receipt.json",
+      "sha256": "1e71dc26c1e5496de1547401629ca7ce156010eb445292e693f16d36d1042fa8",
+      "size_bytes": 2472
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/focused_receipt.json",
+      "sha256": "4bbcad1718fc814b12d7da03314378ba9467f48494c2274153750df5654b2883",
+      "size_bytes": 5437
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/package_figures.py",
+      "sha256": "38888735f6217598302c69d8b56af179adf4bc731529b4c169cad2dc6071c06e",
+      "size_bytes": 3581
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/prior_after_kg_audit.json",
+      "sha256": "200779d5463e9c03bba2b9408bebe012cb486adb1d64faeedb5e6dd25c69c80e",
+      "size_bytes": 676
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/prior_after_kg_audit.py",
+      "sha256": "60866a29f5edc7232f1a54e575ad1069188d118113c95e860686ac2a1e11305c",
+      "size_bytes": 2358
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/run_focused.py",
+      "sha256": "73ed3873a47d15fd5a4c066f701c515f7068c93f78b34f636bf727e57ef1b93e",
+      "size_bytes": 3697
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/seal.py",
+      "sha256": "fae039fb06c55d26392c0a7553952be005156919ddedb221864fcfc0e84b2bda",
+      "size_bytes": 19067
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/tree_replay.py",
+      "sha256": "c47b062b664e5fbc4d023204dc22704cc33ec0ed1afb1cd28ff702ca2cb6e78a",
+      "size_bytes": 5460
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/tree_replay_receipt.json",
+      "sha256": "3d21d3809283be5bc345df2be38a9e507dc8cd6fda44d103597df5c7b1923e9e",
+      "size_bytes": 15733
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/unit_receipt.json",
+      "sha256": "8de7359f3f4597edf5cc13780d8df55809080ca04fefaa4f9d8afcbaccc2588b",
+      "size_bytes": 154270
+    },
+    {
+      "path": "docs/evidence/physical_moment_handoff_20261110/validation/unit_tests.log",
+      "sha256": "c002e92feb265a0c394ea95f4962c8b5da167214d74c90b0454b88cf07af4ab6",
+      "size_bytes": 872786
+    },
+    {
+      "path": "graphify-out/2026-11-10-physical-moment-handoff/GRAPH_REPORT.md",
+      "sha256": "f369785fa60450f7b256aeb67d06dd6383462641cd710d825e2170b1c500eaa9",
+      "size_bytes": 359777
+    },
+    {
+      "path": "graphify-out/2026-11-10-physical-moment-handoff/graph.json",
+      "sha256": "09f89c2843c43539d60ba8d1fed3853f961841cd0f20e4b76bd012f67e8f66a7",
+      "size_bytes": 23007719
+    },
+    {
+      "path": "graphify-out/2026-11-10-physical-moment-handoff/manifest.json",
+      "sha256": "df0f48e198512d4c91c1bb94a9c8ee232b8f8445e161587217ff21090e594607",
+      "size_bytes": 1126101
+    },
+    {
+      "path": "graphify-out/GRAPH_REPORT.md",
+      "sha256": "f369785fa60450f7b256aeb67d06dd6383462641cd710d825e2170b1c500eaa9",
+      "size_bytes": 359777
+    },
+    {
+      "path": "graphify-out/graph.json",
+      "sha256": "09f89c2843c43539d60ba8d1fed3853f961841cd0f20e4b76bd012f67e8f66a7",
+      "size_bytes": 23007719
+    },
+    {
+      "path": "graphify-out/manifest.json",
+      "sha256": "df0f48e198512d4c91c1bb94a9c8ee232b8f8445e161587217ff21090e594607",
+      "size_bytes": 1126101
+    },
+    {
+      "path": "src/common/cloud_bal_microphysics_initialization.f90",
+      "sha256": "005acfb20caab21f7511fc0d671cb5d94a4cbf36f92f28e1b1109f35573e370b",
+      "size_bytes": 13070
+    },
+    {
+      "path": "src/common/cloud_bal_real_netcdf.f90",
+      "sha256": "216c540e238388bcbfa36598bd8bcc20abb5c34b4e4d1e4aa10eb7f67a2d8c6b",
+      "size_bytes": 265883
+    },
+    {
+      "path": "src/common/cloud_bal_state.f90",
+      "sha256": "205d034e803f9e7294e8d913e46b40174f38caaf82a19d119ffafcacdae494ab",
+      "size_bytes": 112678
+    },
+    {
+      "path": "src/common/cloud_bal_wps_adapter.f90",
+      "sha256": "171d3013497efa8b2a08b29095ba81346a09e58118c40de54c4246b15ea5ec52",
+      "size_bytes": 54249
+    },
+    {
+      "path": "tests/run_initialize_model_moments.sh",
+      "sha256": "421a5e4731c281ab04a45048ee09a3fae1a9f59ba3bffed9763a04e2bbf74a5e",
+      "size_bytes": 567
+    },
+    {
+      "path": "tests/run_unit_tests.sh",
+      "sha256": "b392b45bf92320fdb84a7ebd03c34336e088ce04d30f0f3b8391236b0197bccb",
+      "size_bytes": 19357
+    },
+    {
+      "path": "tests/test_canonical_state.f90",
+      "sha256": "613efe58f606632dd107cbd1df828fdff3749a50afcd3f81c8e9252de9adf9c2",
+      "size_bytes": 48701
+    },
+    {
+      "path": "tests/test_initialize_model_moments.py",
+      "sha256": "b76f8c3df4b2cbd8dce3062b0e02e72dd1d507e8c7f150345f13fa705dd22443",
+      "size_bytes": 13829
+    },
+    {
+      "path": "tests/test_microphysics_initialization.f90",
+      "sha256": "3aa6458a75ba6a5da3c1c9bc5f5093cd1cc16ca2a238a890d69f4b60ea09d60c",
+      "size_bytes": 10332
+    },
+    {
+      "path": "tests/test_pressure_wps_mapping.f90",
+      "sha256": "ab49330104eb2d411b7930163638e20ac12826ae4ee335b8994c883713cbd635",
+      "size_bytes": 30608
+    },
+    {
+      "path": "tests/test_real_shadow_io_contract.f90",
+      "sha256": "7ff072e2d9ee1fbd0786fe0a2dc9172b882186f01b3f010cf9f1de6cf7a3239e",
+      "size_bytes": 220466
+    },
+    {
+      "path": "tests/test_tier_exceptions.json",
+      "sha256": "e0729eff8e49993a1350e29b36b4cc8501c39657be7fed5d7e0ae4651e2d818d",
+      "size_bytes": 11463
+    },
+    {
+      "path": "tools/initialize_model_moments.py",
+      "sha256": "52b90f86213f4f4f60a61ccb178e899e48f6a5605c4e604d219e2b2cc70d6cfc",
+      "size_bytes": 15969
+    },
+    {
+      "path": "tools/model_moment_driver.f90",
+      "sha256": "60cd2b2320988f243d5a8127d6adf1dfc342c2d079881b9a805cd9bd0f351287",
+      "size_bytes": 3884
+    },
+    {
+      "path": "tools/plot_physical_moment_handoff.py",
+      "sha256": "c76d5b6b930b264bd99fde103275717658f6c79bc3a7bf0c39cd6ef545f9adb0",
+      "size_bytes": 4958
+    }
+  ],
+  "excluded_self_referential": [
+    "validation.json",
+    "review/final_index_review.json"
+  ]
+}

@@ -110,6 +110,20 @@ MODULE cloud_bal_state
   REAL(real64), PARAMETER :: EPSILON_WATER = 0.622_real64
   REAL(real64), PARAMETER :: GRAVITY = 9.80665_real64
 
+  ! Optional final-model-grid microphysics moments. Number fields share the
+  ! canonical dry-air mass denominator; BG is bulk volume / dry-air mass.
+  ! This in-memory extension does not change the mass-only WPS file contract.
+  INTEGER, PARAMETER, PUBLIC :: MOMENT_NC=1, MOMENT_NI=2, MOMENT_NR=3
+  INTEGER, PARAMETER, PUBLIC :: MOMENT_NN=4, MOMENT_BG=5, MOMENT_COUNT=5
+  INTEGER(int32), PARAMETER, PUBLIC :: MOMENT_OBSERVED=1_int32
+  INTEGER(int32), PARAMETER, PUBLIC :: MOMENT_BACKGROUND=2_int32
+  INTEGER(int32), PARAMETER, PUBLIC :: MOMENT_PRIOR=3_int32, MOMENT_ZERO=4_int32
+  TYPE, PUBLIC :: moment_bundle
+    REAL(real64), ALLOCATABLE :: value(:,:,:,:)
+    LOGICAL, ALLOCATABLE :: valid(:,:,:,:)
+    INTEGER(int32), ALLOCATABLE :: provenance(:,:,:,:)
+  END TYPE moment_bundle
+
   TYPE, PUBLIC :: field3d
     REAL(real32), ALLOCATABLE :: value(:,:,:)
     LOGICAL, ALLOCATABLE :: valid(:,:,:)
@@ -194,6 +208,7 @@ MODULE cloud_bal_state
     TYPE(field3d) :: cloud_fraction, radar_reflectivity
     TYPE(integer_field3d) :: cloud_type, precipitation_phase, lightning_support
     TYPE(field3d) :: cloud_water, cloud_ice, rain, snow, graupel
+    TYPE(moment_bundle) :: moments
     TYPE(field3d) :: vt_z_mean, vt_z_sigma
     TYPE(field2d) :: surface_pressure, surface_temperature, surface_vapor, surface_height, latitude
     TYPE(field2d) :: omega_top_boundary, omega_bottom_boundary
@@ -313,6 +328,7 @@ MODULE cloud_bal_state
   PUBLIC :: stage_is_ok
   PUBLIC :: canonical_to_legacy_status
   PUBLIC :: canonical_states_equal
+  PUBLIC :: moment_bundle_present, moment_bundle_shape_valid, moment_bundles_equal
 
   INTERFACE initialize_field
     MODULE PROCEDURE initialize_field2d
@@ -484,7 +500,7 @@ CONTAINS
     LOGICAL, INTENT(IN) :: require_cloud,require_hydro
     INTEGER, INTENT(OUT) :: status,reason
     LOGICAL, INTENT(IN), OPTIONAL :: require_surface
-    INTEGER :: field_status,nx,ny,nz
+    INTEGER :: field_status,nx,ny,nz,i,j,k,m
     INTEGER(int64) :: valid_time
     LOGICAL :: surface_required
 
@@ -619,6 +635,27 @@ CONTAINS
                               0.0_real32,HUGE(1.0_real32),field_status,reason, &
                               state%above_ground)
       CALL merge_status(status,field_status); IF (field_status==STATUS_FAILED) RETURN
+    END IF
+    IF (moment_bundle_present(state%moments)) THEN
+      IF (.NOT.moment_bundle_shape_valid(state%moments,nx,ny,nz)) THEN
+        status=STATUS_FAILED; reason=REASON_SHAPE; RETURN
+      END IF
+      IF (ANY(state%moments%valid .AND. .NOT.ieee_is_finite(state%moments%value))) THEN
+        status=STATUS_FAILED; reason=REASON_NONFINITE; RETURN
+      END IF
+      ! Fortran logical expressions need not short circuit. Never compare
+      ! missing NaN storage while checking the represented moments.
+      DO m=1,MOMENT_COUNT; DO k=1,nz; DO j=1,ny; DO i=1,nx
+        IF (.NOT.state%moments%valid(i,j,k,m)) CYCLE
+        IF (state%moments%value(i,j,k,m)<0.0_real64) THEN
+          status=STATUS_FAILED; reason=REASON_RANGE; RETURN
+        END IF
+      END DO; END DO; END DO; END DO
+      IF (ANY(state%moments%valid .AND. &
+          (state%moments%provenance<MOMENT_OBSERVED .OR. &
+           state%moments%provenance>MOMENT_ZERO))) THEN
+        status=STATUS_FAILED; reason=REASON_METADATA; RETURN
+      END IF
     END IF
     CALL validate_los_observations(state%radar_los,nx,ny,nz,valid_time, &
                                    field_status,reason)
@@ -1833,6 +1870,51 @@ CONTAINS
 
   ! Exact state identity used at authority boundaries.  Array content is
   ! compared element by element to avoid large TRANSFER temporaries.
+  LOGICAL FUNCTION moment_bundle_present(bundle)
+    TYPE(moment_bundle), INTENT(IN) :: bundle
+    moment_bundle_present=ALLOCATED(bundle%value) .OR. ALLOCATED(bundle%valid) .OR. &
+                          ALLOCATED(bundle%provenance)
+  END FUNCTION moment_bundle_present
+
+  LOGICAL FUNCTION moment_bundle_shape_valid(bundle,nx,ny,nz)
+    TYPE(moment_bundle), INTENT(IN) :: bundle
+    INTEGER, INTENT(IN) :: nx,ny,nz
+    moment_bundle_shape_valid=.FALSE.
+    IF (.NOT.ALLOCATED(bundle%value) .OR. .NOT.ALLOCATED(bundle%valid) .OR. &
+        .NOT.ALLOCATED(bundle%provenance)) RETURN
+    IF (ANY(SHAPE(bundle%value)/=[nx,ny,nz,MOMENT_COUNT])) RETURN
+    IF (ANY(SHAPE(bundle%valid)/=SHAPE(bundle%value))) RETURN
+    IF (ANY(SHAPE(bundle%provenance)/=SHAPE(bundle%value))) RETURN
+    moment_bundle_shape_valid=.TRUE.
+  END FUNCTION moment_bundle_shape_valid
+
+  LOGICAL FUNCTION moment_bundles_equal(left,right)
+    TYPE(moment_bundle), INTENT(IN) :: left,right
+    INTEGER :: i,j,k,n
+    moment_bundles_equal=.FALSE.
+    IF (ALLOCATED(left%value) .NEQV. ALLOCATED(right%value)) RETURN
+    IF (ALLOCATED(left%valid) .NEQV. ALLOCATED(right%valid)) RETURN
+    IF (ALLOCATED(left%provenance) .NEQV. ALLOCATED(right%provenance)) RETURN
+    IF (ALLOCATED(left%value)) THEN
+      IF (ANY(SHAPE(left%value)/=SHAPE(right%value))) RETURN
+      DO n=1,SIZE(left%value,4); DO k=1,SIZE(left%value,3)
+        DO j=1,SIZE(left%value,2); DO i=1,SIZE(left%value,1)
+          IF (TRANSFER(left%value(i,j,k,n),0_int64)/= &
+              TRANSFER(right%value(i,j,k,n),0_int64)) RETURN
+        END DO; END DO
+      END DO; END DO
+    END IF
+    IF (ALLOCATED(left%valid)) THEN
+      IF (ANY(SHAPE(left%valid)/=SHAPE(right%valid))) RETURN
+      IF (ANY(left%valid .NEQV. right%valid)) RETURN
+    END IF
+    IF (ALLOCATED(left%provenance)) THEN
+      IF (ANY(SHAPE(left%provenance)/=SHAPE(right%provenance))) RETURN
+      IF (ANY(left%provenance/=right%provenance)) RETURN
+    END IF
+    moment_bundles_equal=.TRUE.
+  END FUNCTION moment_bundles_equal
+
   LOGICAL FUNCTION canonical_states_equal(left,right,allow_pipeline_candidate_changes)
     TYPE(cloud_bal_state_type), INTENT(IN) :: left,right
     LOGICAL, INTENT(IN), OPTIONAL :: allow_pipeline_candidate_changes
@@ -1842,6 +1924,7 @@ CONTAINS
       candidate_scope=allow_pipeline_candidate_changes
     canonical_states_equal=.FALSE.
     IF (left%schema_version/=right%schema_version) RETURN
+    IF (.NOT.moment_bundles_equal(left%moments,right%moments)) RETURN
     IF (.NOT.states_equal_grid(left%grid,right%grid,candidate_scope)) RETURN
     IF (.NOT.states_equal_field3d(left%pressure,right%pressure)) RETURN
     IF (.NOT.states_equal_field3d(left%temperature,right%temperature)) RETURN

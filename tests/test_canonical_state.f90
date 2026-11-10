@@ -7,6 +7,7 @@ PROGRAM test_canonical_state
   INTEGER :: failures
   failures=0
   CALL test_contract(failures)
+  CALL test_optional_moment_contract(failures)
   CALL test_optional_surface_contract(failures)
   CALL test_observational_target_sigma_contract(failures)
   CALL test_domain_and_mass_contract(failures)
@@ -232,6 +233,41 @@ CONTAINS
     CALL check(.NOT.canonical_states_equal(state,state_copy), &
       'canonical identity must detect sigma provenance changes',failures)
   END SUBROUTINE test_observational_target_sigma_contract
+
+  SUBROUTINE test_optional_moment_contract(failures)
+    INTEGER, INTENT(INOUT) :: failures
+    TYPE(cloud_bal_state_type) :: state,other
+    INTEGER :: status,reason
+    CALL make_valid_state(state)
+    CALL check(.NOT.moment_bundle_present(state%moments),'moments absent by default',failures)
+    ALLOCATE(state%moments%value(4,5,3,5))
+    state%moments%value=0.0_real64
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_SHAPE,'partial moment payload rejected',failures)
+    ALLOCATE(state%moments%valid(4,5,3,5),state%moments%provenance(4,5,3,5))
+    state%moments%valid=.TRUE.; state%moments%provenance=MOMENT_ZERO
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_OK,'optional moment payload accepted',failures)
+    other=state
+    CALL check(canonical_states_equal(state,other),'copied moments remain equal',failures)
+    other%moments%value(1,1,1,MOMENT_NN)=1.0_real64
+    CALL check(.NOT.canonical_states_equal(state,other,.TRUE.),'candidate comparison detects changed moments',failures)
+    state%moments%value(1,1,1,MOMENT_NR)=-1.0_real64
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_FAILED,'negative valid moment rejected',failures)
+    state%moments%value=0.0_real64; state%moments%provenance(1,1,1,1)=0
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_METADATA,'missing moment provenance rejected',failures)
+    state%moments%provenance=MOMENT_BACKGROUND
+    state%moments%value(1,1,1,1)=ieee_value(0.0_real64,ieee_quiet_nan)
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_FAILED .AND. reason==REASON_NONFINITE,'valid NaN moment rejected without trap',failures)
+    state%moments%valid=.FALSE.; state%moments%value=ieee_value(0.0_real64,ieee_quiet_nan)
+    other=state
+    CALL check(moment_bundles_equal(state%moments,other%moments),'invalid NaN payload copied bitwise',failures)
+    CALL validate_canonical_state(state,.FALSE.,.FALSE.,status,reason)
+    CALL check(status==STATUS_OK,'unknown NaN moment storage remains optional',failures)
+  END SUBROUTINE test_optional_moment_contract
 
   SUBROUTINE test_contract(failures)
     INTEGER, INTENT(INOUT) :: failures

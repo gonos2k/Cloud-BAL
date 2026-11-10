@@ -39,6 +39,20 @@ pressure_transition_fixture="$test_tmp/pressure_transition_remap_fixture.txt"
 
 "$test_tmp/test_canonical_state"
 
+for moment_profile in O0 O2; do
+  if [[ $moment_profile == O0 ]]; then
+    moment_flags=("${CLOUD_BAL_FREE_FLAGS[@]}")
+  else
+    moment_flags=("${CLOUD_BAL_REPRO_FLAGS[@]}")
+  fi
+  "$CLOUD_BAL_FC" "${moment_flags[@]}" -module "$test_tmp" -I "$test_tmp" \
+    "$repo_root/src/common/cloud_bal_state.f90" \
+    "$repo_root/src/common/cloud_bal_microphysics_initialization.f90" \
+    "$repo_root/tests/test_microphysics_initialization.f90" \
+    -o "$test_tmp/test_microphysics_initialization_$moment_profile"
+  "$test_tmp/test_microphysics_initialization_$moment_profile"
+done
+
 "$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" \
   -module "$test_tmp" -I "$test_tmp" \
   "$repo_root/src/common/cloud_bal_joint_transport.f90" \
