@@ -1,0 +1,79 @@
+{
+  "status": "PASS",
+  "difference": "ICE_FIXED minus CONSERVATIVE",
+  "matching": "phase,step,rank,call,j,i,k,loop,loops,substep,mstep all equal; unmatched records excluded and counted",
+  "float_kind": "REAL64 native transfers",
+  "fields": {
+    "18": [
+      "sed_mass(i,k,1)",
+      "sed_mass(i,k+1,1)",
+      "sed_mass(i,k,2)",
+      "sed_mass(i,k+1,2)",
+      "sed_mass(i,k,3)",
+      "sed_mass(i,k+1,3)",
+      "sed_number(i,k,1)",
+      "sed_number(i,k+1,1)",
+      "sed_volume(i,k)",
+      "sed_volume(i,k+1)"
+    ],
+    "22": [
+      "sed_mass(i,k,4)",
+      "sed_mass(i,k+1,4)",
+      "sed_number(i,k,2)",
+      "sed_number(i,k+1,2)"
+    ]
+  },
+  "totals": {
+    "18": {
+      "matched": 2300454,
+      "only_conservative": 759135,
+      "only_ice_fixed": 728286,
+      "sum_delta": [
+        650.8421068864095,
+        606.1458769977968,
+        -154.8885324249321,
+        -154.8885324249321,
+        58.583345312434794,
+        58.583345312434794,
+        653603428.4854351,
+        620833506.0190923,
+        0.511927601250232,
+        0.511927601250232
+      ],
+      "max_abs_delta": [
+        0.12898758707848257,
+        0.12898758707848257,
+        0.02352219037425874,
+        0.02352219037425874,
+        0.08890260076868219,
+        0.08890260076868219,
+        1505746.1418134444,
+        1505746.1418134444,
+        0.0003979063236698578,
+        0.0003979063236698578
+      ]
+    },
+    "22": {
+      "matched": 1621620,
+      "only_conservative": 0,
+      "only_ice_fixed": 0,
+      "sum_delta": [
+        -248.8828718565848,
+        -248.8828718565848,
+        -19111982806418.38,
+        -19111982806418.38
+      ],
+      "max_abs_delta": [
+        0.3754283963893854,
+        0.3754283963893854,
+        761766891.8702469,
+        761766891.8702469
+      ]
+    }
+  },
+  "reference_capture_sha256": {
+    "CONSERVATIVE": "390eb545650d1bc49a8df65e357407e60a6279025c2125f66f0a37d14ade6e79",
+    "ICE_FIXED": "4eeee1689b94e6b048a4e15924e4ff291b4a1514fe84cd90a659116b3b09fcc3"
+  },
+  "baseline": "FIX uses legacy REAL32 local falk and has no equivalent shared-transfer field; comparisons to FIX are unavailable, not zero"
+}
