@@ -1,0 +1,19 @@
+{
+  "status": "PASS",
+  "scope": "Independent hash inventory and compact surface endpoint recount, plus inspection of sample verifier; not an independent full raw stream replay.",
+  "package_inventory_sha256": "077912ac1a4400447170b3cacb8d1f83ea069917a60a2692871e11c3b2ce06b7",
+  "verification_receipt_sha256": "473fae984e0bb06a8f608b8b33e334224c3bfd79e1f6b382e1ed7171ccb93561",
+  "verifier_sha256": "f135e0b8bc0238dc9e166245400838bfdfeeec069ea3d660f653fdfe52dd40df",
+  "surface_endpoint_csv_sha256": "74b17e20d324d38323d48f010b5a936f01565e4848e288dbb30758a13fb60b25",
+  "surface_npz_sha256": {
+    "FIX": "fda9ec45c7a7eae766780ed319414530483d71015e837b6befa2a33a31650388",
+    "CONSERVATIVE": "1df27dbdf994b5bb41ad64a2dc40b1ee9561e729020e2cc6c3d2634d7db77ce2",
+    "ICE_FIXED": "a4e396ba5c662fd8bfb21de58643c22e5eb0afa9544fdcd68afb481e1c4b4afe"
+  },
+  "independent_package_files_checked": 217,
+  "independent_surface_bit_patterns_checked": 1617,
+  "limitations": [
+    "Only actual first-three-step raw samples are packaged for replay; full raw captured streams remain external.",
+    "Comparison of CSV history values to actual NetCDF is supported by separate aggregate proof, not independently repeated in this review."
+  ]
+}

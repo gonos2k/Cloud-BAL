@@ -1,0 +1,24 @@
+{
+  "status": "PASS",
+  "arm": "CONSERVATIVE",
+  "steps": [
+    1,
+    2,
+    3
+  ],
+  "review_sha256": "06132f36ee4539771e72b21c22b3dffade78cc748648d66e17ab03d8121048ab",
+  "build_receipt_sha256": "7042660add5fecf4536e4f41896917681dbb5d8f3c7c80dbba92cc429c32d03d",
+  "namelist_sha256": "52466a2019084c20786684a893a6583617174f9d5c6a60d4d9d8feb84b4ae823",
+  "launcher_sha256": "b5be256bbab2cdbb7a98c8602a40a1853a8339b2b7fdcf26683e576170ff5ad0",
+  "capture_validation_sha256": "3606a59140bbb380bb634cc1c0a18074ba27a3d90cdd0d25aff84813545b1471",
+  "argv": [
+    "taskset",
+    "-c",
+    "32,33,34,35,36,37,38,39",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/local/mpi/2021.18/bin/mpirun",
+    "-np",
+    "8",
+    "/bin/bash",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_low_threshold_process_20261110/Cloud-BAL/docs/evidence/cp02_low_threshold_process_20261110/native/runs/rank_wrapper.sh"
+  ]
+}

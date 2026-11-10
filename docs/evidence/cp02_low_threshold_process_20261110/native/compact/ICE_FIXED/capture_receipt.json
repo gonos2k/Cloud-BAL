@@ -1,0 +1,93 @@
+{
+  "status": "COMPLETE",
+  "arm": "ICE_FIXED",
+  "coverage_hours": [
+    1,
+    5,
+    6
+  ],
+  "surface_steps": [
+    1,
+    1080
+  ],
+  "columns": 77,
+  "levels": 39,
+  "schema_sha256": "cca30da190e50e23b273eb4a11765084929cca062504220462da89f1bd9f0120",
+  "source_sha256": "dd2298365de54c64a37e9a3af2baa055d3524e7630ced329cf1bbc3b2ab25ba7",
+  "run_receipt_sha256": "7000dc5b7c799f0a453402ffcf6707a3842914f3dfbe324c1a758ca51288165a",
+  "history_comparison_sha256": "da1bf2062d40b72e25aaec823666f4fdeafa9aa668628d03370b322b2ccf5b2a",
+  "raw_inventory_sha256": "7f51eb131ef310e037de9d278bb68d052a659f2544a1fa3ae7c7b930c7160e8a",
+  "prior_collector_sha256": "c0c59c3d328a95168db14022772d52eae212cc38ae8f64d4e784f5df0ca490b9",
+  "outputs": {
+    "h01.npz": {
+      "sha256": "4846e09e5eaa19784e35f2047413fa30ba31ff6270ea2c72234ed274e26e430d",
+      "size_bytes": 59654075
+    },
+    "h05.npz": {
+      "sha256": "7cdf596450fecfdcb88d705c757770b98fd55f1819fcd25eae03e93b93fcac2f",
+      "size_bytes": 74882177
+    },
+    "h06.npz": {
+      "sha256": "73a58cb10d666d5ac2a957c7462054a66601708d95a8a799683366fef112b2c8",
+      "size_bytes": 74939986
+    },
+    "surface.npz": {
+      "sha256": "a4e396ba5c662fd8bfb21de58643c22e5eb0afa9544fdcd68afb481e1c4b4afe",
+      "size_bytes": 518899
+    }
+  },
+  "audit": {
+    "1": {
+      "frames": 4860,
+      "face_counts": {
+        "18": 879723,
+        "22": 540540,
+        "23": 0
+      },
+      "max_abs_storage_residual": {
+        "rain_mass_kg_m2": 1.0696172118851432e-07,
+        "snow_mass_kg_m2": 5.495623608617328e-08,
+        "graupel_mass_kg_m2": 1.019282932224197e-07,
+        "rain_number_m2": 19.023739959881823,
+        "graupel_volume_m": 2.159965642488989e-10,
+        "ice_mass_kg_m2": 9.019545084984829e-09,
+        "ice_number_m2": 23.187973966822028
+      }
+    },
+    "5": {
+      "frames": 4860,
+      "face_counts": {
+        "18": 1077726,
+        "22": 540540,
+        "23": 0
+      },
+      "max_abs_storage_residual": {
+        "rain_mass_kg_m2": 1.100622084720948e-07,
+        "snow_mass_kg_m2": 5.4983448197210016e-08,
+        "graupel_mass_kg_m2": 5.476547398908238e-08,
+        "rain_number_m2": 2.042176030479636,
+        "graupel_volume_m": 1.0917595047276038e-10,
+        "ice_mass_kg_m2": 7.364976038325838e-09,
+        "ice_number_m2": 22.734891106869327
+      }
+    },
+    "6": {
+      "frames": 4860,
+      "face_counts": {
+        "18": 1071291,
+        "22": 540540,
+        "23": 0
+      },
+      "max_abs_storage_residual": {
+        "rain_mass_kg_m2": 1.0880190964845937e-07,
+        "snow_mass_kg_m2": 5.506749260232591e-08,
+        "graupel_mass_kg_m2": 5.5626839239042436e-08,
+        "rain_number_m2": 2.236156599418946,
+        "graupel_volume_m": 2.169092569676099e-10,
+        "ice_mass_kg_m2": 5.083213905442802e-10,
+        "ice_number_m2": 22.53343761670658
+      }
+    }
+  },
+  "residual_policy": "float64 storage residual includes float32 state rounding; no conservation tolerance claimed"
+}

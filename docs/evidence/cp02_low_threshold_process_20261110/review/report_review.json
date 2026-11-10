@@ -1,0 +1,27 @@
+{
+  "status": "PASS",
+  "report_sha256": "b8a91b0a0e397fc71740c51cf02127a1a26511dd3fc508fe770bf6b0fe21b197",
+  "scope": "Source chronology and precision, threshold/count and selected-table recount, selected 3-point ledger values, source-column residual interpretation, unit separation, and stated limitations reviewed.",
+  "evidence_sha256": {
+    "docs/evidence/cp02_low_threshold_process_20261110/review/independent_recount.json": "9481d4e592d0f67dd929c92b93cec10c84ea93dcc6e5e233420e73ef36b40864",
+    "docs/evidence/cp02_low_threshold_process_20261110/review/analysis_review.json": "65c45c9ee940883c6d6ea00cdb8da16b5635136ec3b98ab53ab7c1a6b8999c43",
+    "docs/evidence/cp02_low_threshold_process_20261110/review/figures_review.json": "56ddb7be854b56c2475ca0cf0c6f6936fa732c3cd4ad51c56b4f277cfc4aeacc",
+    "docs/evidence/cp02_low_threshold_process_20261110/review/provenance_review.json": "edc055069f2b9ae014a55c099311e7eb364b859f2d9103cdc1d6badf69507fd7",
+    "docs/evidence/cp02_low_threshold_process_20261110/science/h6_review/summary.json": "1c70c5568acf15116dced1a7a8e7ecfa5f59a99dacf638a68cd40d1f68f33e39",
+    "docs/evidence/cp02_low_threshold_process_20261110/native/proof/comparability.json": "b7058afa7febed6a8a9af53d7dd3c0a21b588eafa064b33dcee69b267f999984",
+    "docs/evidence/cp02_low_threshold_process_20261110/analysis/receipt.json": "dee97fc24f3baf42092bc5abe588a7708103858f1e0bfb90073700579e506504",
+    "docs/evidence/cp02_low_threshold_process_20261110/cohorts/results/selected_points.csv": "fa729899d1af5abb23d8e6cd7fe0b3b151de512b4c3674864b1d70206df53d92"
+  },
+  "checks": [
+    "15 h6 selected-point table rows checked against frozen arrays to printed precision.",
+    "Three-point QR ledger checked against analysis and 19145 recomputed directly from native compact four-corner data.",
+    "Matched weak observation counts, all-arm low-threshold gains and old-group membership independently recounted.",
+    "Source REAL64 shared transfers and legacy REAL32 local falk distinguished; public/internal number conversion verified.",
+    "Initial reconstructed-cap activation overstatement corrected to source-consistent inference; measured residual kept separate."
+  ],
+  "limitations": [
+    "Local accounting closure is not a domain water/energy budget or causal attribution.",
+    "Only sampled first-three-step raw frames are portable; full raw data are external.",
+    "Independent meteorological cases, RN1 QC and C2 T39 remain open."
+  ]
+}
