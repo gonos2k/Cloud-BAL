@@ -1,0 +1,38 @@
+{
+  "status": "SESSION_COMPLETED_VALIDATION_RECORDED",
+  "maintenance": "Reviewed five-path Graphify incremental update, derived wiki synchronization, independent postpublish readback and prior artifact audit.",
+  "dated_snapshots": {
+    "KLAPS50": 129,
+    "Cloud-BAL": 133,
+    "total": 262,
+    "prior_preserved": 260
+  },
+  "final_validation": {
+    "related_tests": 529,
+    "focused_replay_tests": 15,
+    "byte_identical_replayed_outputs": 37,
+    "whole_history_byte_identical": 14,
+    "core_vapor_temperature_update_pairs": 7012980
+  },
+  "decision": "MP10 not adopted, 22/26; retain current B1",
+  "evidence_sha256": {
+    "kg/publish_receipt.json": "0aed652d497e5359e4be04a0253eadf913f1361af454a62573af836e226a4c10",
+    "kg/postpublish_independent_readback.json": "2600ee68f5b6ba8076c5772a8954d65446c978afd045e55136691d9a531d1691",
+    "validation/prior_after_kg_audit.json": "a4d6fae2d9c5864f87afd25d36797074c63451bb52dd3b332825b3d1b1aca939",
+    "validation/clean_export.json": "a39a64ebcc3fedf462ed021283742a815292eb2e185b41f416cb9d0c98c18695",
+    "validation/tree_replay_receipt.json": "46f73ea7648ca9734efb499e31f4153239efe3be822bbded4fe10046aeefd0e3",
+    "analysis/receipt.json": "67a98f065f1935ac27d7a41382b16d97eeda33883a68273f0a4f7b9371b60061",
+    "review/final_review.json": "0c08dde607af5bfc8030e53dc5d386a656595afc98db9f909e600e1ca70f684f"
+  },
+  "science_open_items": [
+    "Full-domain water, energy and measured transport budgets",
+    "RN1 upstream interval/coverage/QC and independent meteorological cases",
+    "C2 T39",
+    "Separate changed entry state and number-limit/activation responses before choosing a new physical candidate"
+  ],
+  "limits": [
+    "Only five reviewed Python files were structurally extracted; the remaining experiment evidence is hash-only.",
+    "The frozen KG review records its review-time pending process analysis; final completed evidence is linked here without rewriting the immutable review or dated snapshots.",
+    "Graph freshness does not establish runtime or scientific validity."
+  ]
+}

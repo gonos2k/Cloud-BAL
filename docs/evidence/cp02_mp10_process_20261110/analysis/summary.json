@@ -1,0 +1,40 @@
+{
+  "points": 30,
+  "columns": 111,
+  "levels": 39,
+  "windows": {
+    "1": [
+      1,
+      180
+    ],
+    "3": [
+      361,
+      540
+    ],
+    "6": [
+      901,
+      1080
+    ]
+  },
+  "public_ledger_rows": 52650,
+  "native_operator_rows": 7920,
+  "arms": {
+    "CONTROL": 1,
+    "MP10": 2
+  },
+  "core_vapor_temperature_updates_bitwise_replayed": {
+    "CONTROL": 2337660,
+    "MP10": 4675320
+  },
+  "limits": [
+    "Source number fields are internal per-volume; public NR/NI are per-mass and kept separate.",
+    "zero_removed_column is source DEN*DELZ-weighted removal kg/m2; psd_number_column is per-species number/m2 with DELZ only. Neither is a domain budget.",
+    "Between-public-call changes include all external processing; they are not transport alone.",
+    "Different inner-loop and sediment substep ordinals are never paired across configurations.",
+    "Missing stage fields remain NaN; no absent observation is replaced by zero.",
+    "unmeasured_loop subtracts only available observed stages and retains all unmeasured intervals/fields; it is not an assigned physical process.",
+    "Time sums at a native k are not vertically integrated water/energy budgets.",
+    "Bitwise vapor/temperature arithmetic replay and held cpm/xl checks are local operation tests, not a closed energy budget.",
+    "Operator extrema count actual changed inner updates at native cell-levels; these are not independent observations."
+  ]
+}

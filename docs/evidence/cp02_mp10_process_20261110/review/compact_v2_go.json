@@ -1,0 +1,20 @@
+{
+  "status": "GO_FOR_COMPACTION",
+  "sha256": {
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/compact_v2.py": "fad4983bc673b1a874811c20ba60f120926f4128e1cd6ccd5e989b249e70c7c6",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/read_frames_constants.py": "f8bf5a8daecf54d3f7454cf5fa7750a375b1345672b2bb524c42b3ec8feeab88",
+    "docs/evidence/cp02_mp10_process_20261110/native/schema/schema.json": "c71fc8f9831f0be9f6f52aa1725f9d7e09493906e5083112127db9ab601e5cc2",
+    "docs/evidence/cp02_mp10_process_20261110/native/source/source_receipt.json": "98621cc1d701cac072a1c403a162c688753c8b6e63f646e7abaa94cfe7e7bc1c",
+    "docs/evidence/cp02_mp10_process_20261110/cohorts/native_columns.csv": "f867579125b8b780db0035737cfeee844da2d9f921bf2b403df3c86500f8f107",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/recount_compact_v2.py": "00b9112011b60cd69a6bda8977065d00ac4a67f1819e212b4f6f426ad50f5712",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/pack_npz.py": "cb88dac722545793afa618839a82428cf8eab26c500e80580e1d9845f6298aa7",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/pack_npz_parallel.py": "b8472966b94137662d195f74fff6fbb53fff05d628cd1b0aad38aebfa1e50c22",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/relocate_unpacked.py": "85a7ad8581f50ca1a03695cd42aed180b6604c718157b0ffd46265a989e8103f",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/recount_parallel.py": "6a8eacaaf9e6a48a89fc9263b2e40eb4502e8c462f9c4e22b0d4fa10fa13346e",
+    "docs/evidence/cp02_mp10_process_20261110/native/proof/make_comparability.py": "4606e2415a012c49188100f31fef4a271002fb3f6d2d54e8e2cd7b9fc697964c",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/compact_parallel.py": "88059301bcc4832085e65431694b2bfac44d7a9c8dc0fb3aa71f7f1439d421fd",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/audit_surface_all.py": "4ffa075d69dce6d5d001acf87ea245a6ed476be40334c2f2cf49899987bdf822"
+  },
+  "frozen_launch_compact_v1_sha256": "37d1a3e1304c88ad34d7242c4fad356826df230d44a4a7e74a5ff47dc02a450b",
+  "review": "Separately reviewed v2 adding emitted sediment phases 9,10,20,21 to retention and enforcing per-chunk required state/surface coverage plus actual MP10 carry. Original launch-bound v1 remains unchanged. Full-run parent history parity and independent raw-to-compact recount remain required. Recount independently compares retained source-order keys and native bits, while group membership was checked separately; recount imports the v2 group list. V2 now enforces paired sediment records; reviewed separate deterministic LZMA repack, verifies all uncompressed members SHA and unchanged wrapper bytes, with prior raw recount binding. Reviewed bounded parallel packer; each unique output has before/after input hash and per-member verification; map retains order. Reviewed scratch relocation only after audited chain and per-file hashes, with rollback on failure; public receipt records external destination. Reviewed bounded parallel recount: same record-wise bits with full expected chunk coverage, input hashes before/after, wrappers and outputs audited. Reviewed comparability proof including pinned parent histories, run receipt and capture/recount/packing/relocation hash lineage. Reviewed separate forked chunk compactor; ordered disjoint outputs and V2 equivalent per-chunk logic. Full raw recount required before promotion. Reviewed all-step actual rain update audit; requires PASS recount and labels unexecuted branch without inventing unobserved fallsum. Proof requires and binds passing per-arm all-step precipitation arithmetic audits."
+}
