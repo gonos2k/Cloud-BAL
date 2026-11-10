@@ -1,0 +1,23 @@
+{
+  "status": "PASS_PREFORECAST_REVIEW",
+  "reviewer": "terra_activation_review",
+  "sha256": {
+    "docs/evidence/cp02_activation_path_20261110/evaluation/evaluate.py": "166f5ebb94a240eb2735b08086a7608de48d7a98959093ad290e22a5586dedc7",
+    "docs/evidence/cp02_activation_path_20261110/evaluation/test_nn_frequency_evaluation.py": "eb775b1453af11b9d81034eacff725bef8a9d7f4ff8e7ac5bb0a9323f5b058f3",
+    "docs/evidence/cp02_activation_path_20261110/forecast/policy.json": "b9fbbf9cc9e216b8bb9334cecdf079591058e129705414fb8ab93c070aca85b0"
+  },
+  "tests": {
+    "command": "python -m pytest -q docs/evidence/cp02_activation_path_20261110/evaluation/test_nn_frequency_evaluation.py",
+    "passed": 4
+  },
+  "checks": [
+    "All 26 exact rational CSI conditions preserve fixed B1 and ORIGINAL reference gates.",
+    "Prior arrays, mapping and previous scores must match frozen references.",
+    "Candidate build, run, probe and all seven history identities are validated before evaluation.",
+    "Weak and false-alarm summaries are descriptive."
+  ],
+  "candidate_data_inspected": false,
+  "limitations": [
+    "Forecast execution, actual scoring and independent result review remain outstanding."
+  ]
+}

@@ -1,0 +1,95 @@
+{
+  "selection": "MP10 loop 1 preferred, then step/i/j/k/loop/rank/call, positive sw and actual NN decrease with post NN < 1e8",
+  "inputs": [
+    {
+      "arm": "MP10",
+      "path": "scratch/b1_activation_path_20261110/runtime/probe/MP10/cp04_t000361-000363_rank3.bin",
+      "sha256": "82e6a481553242f70afc0e5a448c01698b13b53e47b77fc01cc3f595750a2192"
+    },
+    {
+      "arm": "CONTROL",
+      "path": "scratch/b1_activation_path_20261110/runtime/probe/CONTROL/cp04_t000361-000363_rank3.bin",
+      "sha256": "ee17327352ef8b6cc644f1dd53c73cec9ebb7dd7190385268cdb0fedcb173193"
+    }
+  ],
+  "pairs": 936,
+  "eligible": 11,
+  "status": "MATCH",
+  "selected_arm": "MP10",
+  "selected_sample": {
+    "status": "PASS",
+    "source": "scratch/b1_activation_path_20261110/runtime/probe/MP10/cp04_t000361-000363_rank3.bin",
+    "source_sha256": "82e6a481553242f70afc0e5a448c01698b13b53e47b77fc01cc3f595750a2192",
+    "schema_sha256": "dd05ff88773c4daf45fd3618d8fe9901e26c69f52873b1dd20ae906d4c1a080c",
+    "step": 361,
+    "rank": 3,
+    "call": 361,
+    "i": 156,
+    "j": 86,
+    "k": 14,
+    "loop": 1,
+    "loops": 2,
+    "substep": 0,
+    "mstep": 0,
+    "phase35": {
+      "values": {
+        "sw": 0.10026693344116211,
+        "NC": 61980960.0,
+        "NN": 100641640.0,
+        "q": 0.009853429161012173,
+        "qc": 3.8353915442712605e-05,
+        "t": 280.6183776855469,
+        "den": 0.8098620772361755,
+        "xl": 2482497.25,
+        "cpm": 1012.7955932617188,
+        "dtcld": 10.0,
+        "pi": 3.1415927410125732,
+        "denr": 1000.0
+      },
+      "uint32_bits": {
+        "sw": "3dcd58c0",
+        "NC": "4c6c7048",
+        "NN": "4cbff56d",
+        "q": "3c217047",
+        "qc": "3820de34",
+        "t": "438c4f27",
+        "den": "3f4f531f",
+        "xl": "4a178505",
+        "cpm": "447d32eb",
+        "dtcld": "41200000",
+        "pi": "40490fdb",
+        "denr": "447a0000"
+      }
+    },
+    "phase36": {
+      "values": {
+        "sw": 0.10026693344116211,
+        "NC": 63552224.0,
+        "NN": 99070376.0,
+        "q": 0.009853402152657509,
+        "qc": 3.838134216493927e-05,
+        "t": 280.6184387207031,
+        "den": 0.8098620772361755,
+        "xl": 2482497.25,
+        "cpm": 1012.7955932617188,
+        "dtcld": 10.0,
+        "pi": 3.1415927410125732,
+        "denr": 1000.0
+      },
+      "uint32_bits": {
+        "sw": "3dcd58c0",
+        "NC": "4c726eb8",
+        "NN": "4cbcf635",
+        "q": "3c21702a",
+        "qc": "3820fba7",
+        "t": "438c4f29",
+        "den": "3f4f531f",
+        "xl": "4a178505",
+        "cpm": "447d32eb",
+        "dtcld": "41200000",
+        "pi": "40490fdb",
+        "denr": "447a0000"
+      }
+    }
+  }
+}

@@ -1,0 +1,96 @@
+{
+  "status": "PASS",
+  "method": "exact source schedule and two clamp expressions compiled as reduced native kernel; synthetic NN perturbations; not a full KDM6 replay",
+  "compiler": "ifx (IFX) 2026.0.0 20260331",
+  "compiler_sha256": "909ac6dba06fb5af2e79760421718fb9f6a219f22ea4fa3bfdd9848385c5eaef",
+  "flags": [
+    "-O2",
+    "-fp-model",
+    "strict",
+    "-fimf-arch-consistency=true",
+    "-no-ftz",
+    "-fpe0",
+    "-FR"
+  ],
+  "program_sha256": "ce86a86f554c25d3d966e13f3374ef421641291c631d0fa95c8bae8e92b14bf5",
+  "build_log_sha256": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+  "run_log_sha256": "cce926987d1fb11e50d67960d86f7d8db7860da457dd5cd55f87ab2c3ab8c1bf",
+  "workdir": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_activation_path_20261110/runtime/nn_end/nn-end-kernel-m9z60cy9",
+  "parent_sha256": "4604dc031d618a6feeb43a72a7cfabc656abf7f3e4eb591b0c7724f7e490f586",
+  "control_sha256": "c2e90bcc04b0f8fac2224c24124cbac0f5fbf0916ee91f679759e5bbb55bfcc2",
+  "candidate_sha256": "8619bcc0d64f7a4a8d05fec3aad0b15edae59f218d921dde179162830db1a101",
+  "rows": [
+    {
+      "policy": 1,
+      "trial": 1,
+      "loops": 1,
+      "lower_count": 1,
+      "upper_count": 1,
+      "dt": 20.0,
+      "first_nn": 100000000.0,
+      "final_nn": 100000000.0,
+      "entry_before": 50000000.0,
+      "entry_after": 100000000.0
+    },
+    {
+      "policy": 1,
+      "trial": 2,
+      "loops": 1,
+      "lower_count": 1,
+      "upper_count": 1,
+      "dt": 20.0,
+      "first_nn": 20000000000.0,
+      "final_nn": 20000000000.0,
+      "entry_before": 30000001024.0,
+      "entry_after": 20000000000.0
+    },
+    {
+      "policy": 2,
+      "trial": 1,
+      "loops": 2,
+      "lower_count": 2,
+      "upper_count": 2,
+      "dt": 10.0,
+      "first_nn": 100000000.0,
+      "final_nn": 100000000.0,
+      "entry_before": 50000000.0,
+      "entry_after": 100000000.0
+    },
+    {
+      "policy": 2,
+      "trial": 2,
+      "loops": 2,
+      "lower_count": 2,
+      "upper_count": 2,
+      "dt": 10.0,
+      "first_nn": 20000000000.0,
+      "final_nn": 20000000000.0,
+      "entry_before": 30000001024.0,
+      "entry_after": 20000000000.0
+    },
+    {
+      "policy": 3,
+      "trial": 1,
+      "loops": 2,
+      "lower_count": 1,
+      "upper_count": 2,
+      "dt": 10.0,
+      "first_nn": 80000000.0,
+      "final_nn": 100000000.0,
+      "entry_before": 50000000.0,
+      "entry_after": 100000000.0
+    },
+    {
+      "policy": 3,
+      "trial": 2,
+      "loops": 2,
+      "lower_count": 1,
+      "upper_count": 2,
+      "dt": 10.0,
+      "first_nn": 20000000000.0,
+      "final_nn": 20000000000.0,
+      "entry_before": 30000001024.0,
+      "entry_after": 20000000000.0
+    }
+  ]
+}

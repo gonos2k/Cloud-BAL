@@ -1,0 +1,62 @@
+{
+  "schema_sha256": "dd05ff88773c4daf45fd3618d8fe9901e26c69f52873b1dd20ae906d4c1a080c",
+  "status": "CORRECTION_TO_CAPTURE_DESCRIPTION",
+  "capture_windows": {
+    "phase_and_wrapper": [
+      [
+        361,
+        540
+      ]
+    ],
+    "surface_return": [
+      1,
+      540
+    ],
+    "surface_process": [
+      1,
+      540
+    ]
+  },
+  "phase_state_fields": {
+    "30_32_33_34": [
+      "p",
+      "q",
+      "t",
+      "den",
+      "delz",
+      "dtcld",
+      "qci1",
+      "qci2",
+      "qrs1",
+      "qrs2",
+      "qrs3",
+      "nci1",
+      "nci2",
+      "nci3",
+      "nrs1",
+      "nrs2",
+      "nrs3",
+      "brs"
+    ],
+    "35_36": [
+      "sw",
+      "NC",
+      "NN",
+      "q",
+      "qc",
+      "t",
+      "den",
+      "xl",
+      "cpm",
+      "dtcld",
+      "pi",
+      "denr"
+    ]
+  },
+  "corrections": [
+    "schema.surface_return.steps says 1..1080 but generated current source captures steps 1..540; use this supplement.",
+    "schema.compact_contract.native_state.fields contains the 18 fields for phases 30,32,33,34; phases 35,36 have their own 12-field order in schema.phases and this supplement.",
+    "The historical PR158 schema remains untouched; its detailed window is 1..180,361..540,901..1080, despite its stale semantics prose."
+  ],
+  "missing_records": "missing is unavailable, never zero"
+}

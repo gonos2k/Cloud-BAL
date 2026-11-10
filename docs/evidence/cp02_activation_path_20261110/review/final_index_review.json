@@ -1,0 +1,22 @@
+{
+  "status": "PASS_FINAL_INDEX_REVIEW",
+  "reviewer": "terra_activation_review",
+  "manifest_sha256": "eb1e2e6a6930c50a756b21781057398342841279c7225745bb274bb05e9351ea",
+  "staged_tree_before_review_receipt": "5f81de757a0c288ea28f019c23f3e7e9ebb94a29",
+  "manifest_artifacts": 3058,
+  "staged_changed_paths": 3059,
+  "checks": [
+    "Exact staged change set is the 3058 manifest artifacts plus validation.json; no staged extras, deletions or unmerged paths.",
+    "Streamed every staged Git blob and independently matched SHA256 and size to manifest and working file; executable mode matches working file.",
+    "Final review receipt itself is intentionally excluded from the sealed manifest and must be staged separately."
+  ],
+  "whitespace": {
+    "full_staged_git_diff_check_exit": 2,
+    "reported_output_lines": 2446,
+    "note": "Generated CRLF CSVs and preserved source/evidence whitespace are retained to preserve reviewed hashes; maintained code/document whitespace check was reported passing separately."
+  },
+  "limitations": [
+    "Raw forecast data and executable remain external; isolated replay did not rerun WRF.",
+    "Finite fields and graph freshness do not establish conservation or scientific validation."
+  ]
+}

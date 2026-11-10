@@ -1,0 +1,25 @@
+{
+  "status": "GO",
+  "review_status": "GO",
+  "reviewer": "terra_activation_review",
+  "stage_receipt_sha256": "dda20057b4c70622f08bc7b5fda946285cbb14dac3cfe5111347578d82f552d1",
+  "stage_validation_sha256": "f0d23a80af694a988b6ea2410aed0eea95d47ebc0fc3be3d1017461e2939548c",
+  "selection_lock_sha256": "539e172b940c81eba90c3809ed5fcdb2243f576b9cc32de54b1ced628457f75e",
+  "baseline_sha256": "cf190c60a58399b3762771dd183ad42e02a0b3956872cb26fdbbc1d9e60b8576",
+  "stage": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_activation_path_20261110/kg_stage/stage-c6911b3ec078b1f6",
+  "staged_target_count": 13,
+  "checks": [
+    "Independent read-only baseline verification preserved 262 prior dated snapshots and maintained dirty-state baselines.",
+    "Recomputed both graph node/edge totals and confirmed all previous node IDs survive; KLAPS50 +55 nodes/+112 edges, Cloud-BAL +55 nodes/+109 edges.",
+    "Verified separate dated snapshot trios match active staged trios and both wiki report mirrors; all five wiki hashes match receipt.",
+    "Stage validation records selected-only five Python files, 79 hash-only pins, zero integrity issues and 13 publication targets."
+  ],
+  "limitations": [
+    "Only the reviewed Python paths are structurally extracted.",
+    "Remaining new evidence is hash-only; native source and runtime evidence is not semantically extracted.",
+    "Manifest changes are selected-path-only; no corpus scan or prune occurs.",
+    "Edges to absent external import targets can be dropped during normal graph merge; raw extraction is retained for review.",
+    "Fortran cross-file CALL extraction is partial.",
+    "Graph freshness does not establish runtime behavior, physical correctness, conservation, or scientific validation."
+  ]
+}

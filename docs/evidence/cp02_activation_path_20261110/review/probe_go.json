@@ -1,0 +1,26 @@
+{
+  "status": "GO_FOR_PROBE",
+  "sha256": {
+    "docs/evidence/cp02_activation_path_20261110/native/runs/quick_probe.py": "22f767d376f4169c3ecc54587d063f4e116eb55c061298f9a98a32dea9b99187",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/validate_probe.py": "7a4e0e00b64f7b55cc9916b2b5202fb1bb465b6e5fde94f977a0c69c41521722",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/read_frames.py": "03edc98fe5b199a26f0722f8f2a3e83e6330c5bc96799d91df8422ccea2afb10",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/forecast.py": "9503ea825c683ba05c3c02ccca5a57e8007d6a77d26cd85af025ed4dacd07558",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/rank_wrapper.sh": "933d4496a8c3b0aed240364ef08c3b1db5d8219b348b71b9c3db5b1ab3135938",
+    "docs/evidence/cp02_activation_path_20261110/native/schema/schema.json": "dd05ff88773c4daf45fd3618d8fe9901e26c69f52873b1dd20ae906d4c1a080c",
+    "docs/evidence/cp02_activation_path_20261110/native/source/source_receipt.json": "37d70e8aa49307f1a8b3ece2d0da6c4ae42665c606f8b37db865ebf5813d91ee",
+    "docs/evidence/cp02_activation_path_20261110/cohorts/native_columns.csv": "4a8ac3a114da13564ac83995c2480fd0312e7e91206424e76b7eceb65f53831a",
+    "docs/evidence/cp02_protected_process_20261106/native/provenance/collector_v5/cp02_protected_process_capture.py": "c0c59c3d328a95168db14022772d52eae212cc38ae8f64d4e784f5df0ca490b9"
+  },
+  "build_receipt_sha256": {
+    "CONTROL": "903444c401beeaddc6a618fe76a6e486a56407b99479234a9050bad3aa1328b0",
+    "MP10": "3bd01efd9bef91aded1bad5bd94ba69e6697f82b466410866ca71f638ec79280"
+  },
+  "checks": [
+    "Both fresh pinned Intel builds passed, frozen inputs unchanged, executables match receipt hashes.",
+    "Probe validates complete paired 35/36 coverage, dt and invariant words, bitwise inner loop carry, precipitation update and REAL64 records.",
+    "Runs finish at step 361; no launch approval inferred."
+  ],
+  "limitations": [
+    "One timestep of detailed diagnostic coverage; production comparability and history equivalence remain separate gates."
+  ]
+}

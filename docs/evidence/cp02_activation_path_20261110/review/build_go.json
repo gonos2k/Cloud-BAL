@@ -1,0 +1,19 @@
+{
+  "status": "GO_FOR_BUILD",
+  "source_receipt_sha256": "37d70e8aa49307f1a8b3ece2d0da6c4ae42665c606f8b37db865ebf5813d91ee",
+  "schema_sha256": "dd05ff88773c4daf45fd3618d8fe9901e26c69f52873b1dd20ae906d4c1a080c",
+  "build_script_sha256": "0ad49f1002885bf20b0085d7b5bf614379a9c7732b098d1d61bec2474aa20f8a",
+  "generator_sha256": "60bfe72bd493402b47a5d68a9da515ad239a7bf973424588e2a410092e7156ca",
+  "scope": "Independent prebuild review only; probe and forecast launch require separate review.",
+  "checks": [
+    "Both source and frozen forecast-parent hashes match receipt; independent line diff found insertion-only changes.",
+    "Selector hash binds eight unique columns.",
+    "Phases 35 and 36 bracket activation and contain its captured inputs, with matching schema.",
+    "Detailed capture steps 361\u2013540 and surface steps 1\u2013540 are reflected in generated source.",
+    "Build recipe requires pinned IFX profile, input hash audit, and fresh output outside source checkout."
+  ],
+  "limitations": [
+    "Insertion-only and successful compilation do not prove unchanged forecast histories; paired probe and history comparisons remain necessary.",
+    "Point-to-grid membership requires separately verified mapping provenance."
+  ]
+}

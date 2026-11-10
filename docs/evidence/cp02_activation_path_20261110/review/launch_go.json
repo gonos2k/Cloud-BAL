@@ -1,0 +1,38 @@
+{
+  "status": "GO_FOR_LAUNCH",
+  "sha256": {
+    "docs/evidence/cp02_activation_path_20261110/native/runs/launch.py": "e21cbe2143eb359d15fc3e97a357ab51681c0cebbe39f38b44248a337091cc91",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/forecast.py": "9503ea825c683ba05c3c02ccca5a57e8007d6a77d26cd85af025ed4dacd07558",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/rank_wrapper.sh": "933d4496a8c3b0aed240364ef08c3b1db5d8219b348b71b9c3db5b1ab3135938",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/compare_histories.py": "35b258f3aa547445c0f07372e8fb7b880c4ab7786c6bb960d5a76f540bffa39a",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/reference_pins.json": "44b2a13f9885258a140bef9880db38935a4b3e7d31024683f2676cd2cb515697",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/compact_parallel.py": "793563f4a6a8eef8c98acbf1724cda0a3cd1af6a5273215eb7e82761115f0632",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/compact_v2.py": "b068cc998ab9b0adf91b2d878cf6d8e14d1f7ebc637b28d65a44707a205da428",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/recount_parallel.py": "f6e81fb98225d37fc14cd5dae2842681bb44dfca0f7ee84aa5af6e9a6d8975fb",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/compare_shared.py": "4ba446590b936455414d006e7de7f7005b123a05ad9032a839612fe93a31046d",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/read_wrapper.py": "ce9882165c6be45745dbc2c591f8f5e1d8d0cdfc971c9cffa589302f2fa93b0c",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/read_frames.py": "03edc98fe5b199a26f0722f8f2a3e83e6330c5bc96799d91df8422ccea2afb10",
+    "docs/evidence/cp02_activation_path_20261110/native/runs/read_frames_constants.py": "f8bf5a8daecf54d3f7454cf5fa7750a375b1345672b2bb524c42b3ec8feeab88",
+    "docs/evidence/cp02_protected_process_20261106/native/provenance/collector_v5/cp02_protected_process_capture.py": "c0c59c3d328a95168db14022772d52eae212cc38ae8f64d4e784f5df0ca490b9",
+    "docs/evidence/cp02_activation_path_20261110/native/schema/schema.json": "dd05ff88773c4daf45fd3618d8fe9901e26c69f52873b1dd20ae906d4c1a080c",
+    "docs/evidence/cp02_activation_path_20261110/native/source/source_receipt.json": "37d70e8aa49307f1a8b3ece2d0da6c4ae42665c606f8b37db865ebf5813d91ee",
+    "docs/evidence/cp02_activation_path_20261110/cohorts/native_columns.csv": "4a8ac3a114da13564ac83995c2480fd0312e7e91206424e76b7eceb65f53831a"
+  },
+  "probe_receipt_sha256": {
+    "CONTROL": "81605767745592a90cc6444c746ba44cb1d50b35f32e291d7f5065e8720e434c",
+    "MP10": "16e974ce86801024d2b92a5bc8f195be74b0d3f73a322b3c31df658633e1463c"
+  },
+  "build_receipt_sha256": {
+    "CONTROL": "903444c401beeaddc6a618fe76a6e486a56407b99479234a9050bad3aa1328b0",
+    "MP10": "3bd01efd9bef91aded1bad5bd94ba69e6697f82b466410866ca71f638ec79280"
+  },
+  "checks": [
+    "Both step-361 probes PASS with complete paired activation records, expected 20/10 second loops, source-ordered rain checks, and exact MP10 loop carry.",
+    "Launch uses private staged input copies, pinned IFX runtime and affinity; frozen per-arm histories will be checked byte-for-byte at hours 0\u20133.",
+    "Compactors retain schema phase inventory including 35/36 and sedimentation; conditional empty records are preserved as missing.",
+    "Independent bilinear mapping verified selected eight-column union for weak points 12000, 12001, 12002."
+  ],
+  "limitations": [
+    "Full-run model history identity, capture completeness, compact recount and local replay remain post-run gates."
+  ]
+}

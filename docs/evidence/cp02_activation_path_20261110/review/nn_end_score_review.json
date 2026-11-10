@@ -1,0 +1,27 @@
+{
+  "status": "PASS_INDEPENDENT_SCORE_RECOUNT",
+  "reviewer": "terra_activation_review",
+  "results_receipt_sha256": "8bcdaaf8f0830b2796aef204c43448a48ca902739c15d94d20edc703a994fb54",
+  "forecast_proof_sha256": "07a1e3083762a5ec61b7c3adcba2554e24ebc7047c6ee090d2c1a2cc40c9c878",
+  "policy_sha256": "b9fbbf9cc9e216b8bb9334cecdf079591058e129705414fb8ab93c070aca85b0",
+  "counts": {
+    "categorical": 216,
+    "continuous": 36,
+    "weak_bands": 108,
+    "false_alarm_transitions": 72,
+    "gates": 26
+  },
+  "passed": {
+    "protection": 9,
+    "protection_total": 11,
+    "recovery": 12,
+    "recovery_total": 15,
+    "total": 21,
+    "required": 26
+  },
+  "method": "Independently recomputed every score, weak-band and transition row from six saved hourly arrays and every gate with exact rational arithmetic; verified all prior-case arrays and prior score rows unchanged.",
+  "conclusion": "Candidate fails five fixed conditions; B1 remains selected.",
+  "limitations": [
+    "Same case only; finite output is not a conservation proof."
+  ]
+}

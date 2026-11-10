@@ -1,0 +1,49 @@
+{
+  "status": "COMPLETE_MAINTENANCE_WITH_OPEN_SCIENTIFIC_ITEMS",
+  "snapshot": "2026-11-10-activation-path",
+  "selected_source_sha256": {
+    "tests/test_cp02_activation_path.py": "56bd9ef7146e638c627b5cbdd46d1a84a1bf92de5208c6dbebf4b852e50969ca",
+    "tests/test_cp02_weak_activation.py": "2f24678c94cfe73bd911595040672e36aefe7a95a4565b8f0c11f22c49cfa400",
+    "tools/cp02_activation_path.py": "0440217a3c3c2d3b11ca34e959788777d52b9c1509f1e1ca84d0bde604029642",
+    "tools/cp02_weak_activation.py": "46dd4571665f4f2011a83ee742420c54e5e7d6e8b81e7f1cef0b34fe82c7ec6a",
+    "tools/plot_cp02_activation_path.py": "a0c22e9a43c9b80ccce60e423f16b5ff2de946d9a834cf2bc84b4381f5a32bf3"
+  },
+  "hash_only_pin_count": 79,
+  "publication_sha256": "dc72309cada103a6977031aeead609a9306cee5af6f63145f1d950c79903a838",
+  "independent_readback_sha256": "3b38c2821b3638e986efa4861fb516403ef790d509f6ac71784d0100cd885833",
+  "prior_preservation_sha256": "008e8d7c0a5f0d53069229692c9ea409315a6c9e6f95de2052fe0eac9e404c41",
+  "private_tree_replay_sha256": "e547a9a40f0e0e10cb05aa020adeca7fb871e73b9f737913e050882fc585a039",
+  "private_tree": "12946fa36854f997f58151dc670d50428bc581a7",
+  "completed": [
+    "Actual weak-rain loss/control three-hour capture at three adjacent RN1 points; eight matched histories",
+    "Activation, NN floor/return, main rain and selected warm melting partitions",
+    "One frozen NN_END six-hour forecast and independent 216-row CSI recount; candidate not adopted",
+    "545 related tests and separate private-tree replay of 59 outputs, 110 raw words, 16 focused tests",
+    "Five-path Python AST incremental graph update; separate KLAPS50 and Cloud-BAL dated snapshots, five wiki mirrors and prior 8656 artifacts preserved"
+  ],
+  "candidate": {
+    "name": "MP10_NN_END",
+    "protect_pass": 9,
+    "protect_required": 11,
+    "recover_pass": 12,
+    "recover_required": 15,
+    "adopted": false,
+    "retained": "B1"
+  },
+  "open_items": [
+    "Actual weak-rain loss at h3 point12002 remains; incoming state differs at start of traced hour",
+    "h1 >=10mm and h6 >=5mm B1 protection; h2 >=0.5,h3 >=0.1,h6 >=1mm ORIGINAL recovery unmet",
+    "Whole-domain water/energy and boundary budgets",
+    "RN1 upstream interval/coverage/QC and independent meteorological cases",
+    "Separate C2 T39 and H/A/N one-hour integration"
+  ],
+  "extraction_limits": [
+    "Only the reviewed Python paths are structurally extracted.",
+    "Remaining new evidence is hash-only; native source and runtime evidence is not semantically extracted.",
+    "Manifest changes are selected-path-only; no corpus scan or prune occurs.",
+    "Edges to absent external import targets can be dropped during normal graph merge; raw extraction is retained for review.",
+    "Fortran cross-file CALL extraction is partial.",
+    "Graph freshness does not establish runtime behavior, physical correctness, conservation, or scientific validation."
+  ],
+  "scope": "KG maintenance and bookkeeping; graph freshness does not establish runtime or scientific validation. Added after isolated replay; independently bound by final review and artifact manifest."
+}
