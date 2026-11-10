@@ -1,0 +1,67 @@
+{
+  "status": "COMPLETE",
+  "inputs": [
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_low_threshold_process_20261110/analysis/receipt.json",
+      "sha256": "dee97fc24f3baf42092bc5abe588a7708103858f1e0bfb90073700579e506504",
+      "size_bytes": 9384
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_low_threshold_process_20261110/analysis/point_surface_traces.npz",
+      "sha256": "0b8eee88a2fb68830a440332bea5aafcb777247903b0110bd3984b745cc558a2",
+      "size_bytes": 852379
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/analysis/receipt.json",
+      "sha256": "e89f7dc0b81413d7271982dd9dba0dde402783e0e2972d76952ffa3173ef105a",
+      "size_bytes": 9761
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/analysis/calls.csv.gz",
+      "sha256": "d15a364a3ae107a33efee05c29522b3a6629c9178437d87885b4d3f2a6d9332e",
+      "size_bytes": 34212657
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/analysis/surface_windows.csv",
+      "sha256": "f75949514ef3e70de05917204bcb21d78db615422420eb38c99fe5e3c7a691b3",
+      "size_bytes": 2683
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/native/core_qg_partition.csv",
+      "sha256": "4a8f2d76d5994c88c2daf3fcb7c0374d082789395ab02895b7f5a75c5a5998d6",
+      "size_bytes": 993
+    },
+    {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/docs/evidence/cp02_pulse_path_20261110/native/recount_receipt.json",
+      "sha256": "45b4086fb8eae8470b06a611b6176cb75d82518ae33df61ce7f67f8c1ed8226a",
+      "size_bytes": 1539
+    }
+  ],
+  "source": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/Cloud-BAL/tools/plot_cp02_pulse_path.py",
+    "sha256": "452ed388be5c52a240f7af3546cf3015ef1d62ab6348d5a6f188e5799a7164f8",
+    "size_bytes": 10482
+  },
+  "matplotlib": "3.10.8",
+  "numpy": "1.26.4",
+  "limits": [
+    "Native k is model level, not height. No vertical averaging.",
+    "RAINNC counter changes are not RAINNCV sums.",
+    "Differences are coupled forecast responses, not causal physical contributions.",
+    "Between-call changes include all operations outside the captured microphysics call.",
+    "Gray shading is a context interval, not a 15-call window.",
+    "Cold QG terms are signed limited equation rates integrated over each arm\u2019s actual substeps; not rainfall."
+  ],
+  "outputs": {
+    "04_QG_CONSERVATIVE-FIX.png": "e55ccb2fb9da790775ddd4afd6c68f49c5e27afed5b49b2bba86d8bbc2637859",
+    "02_surface_pulse_zoom.png": "cad6679a27f72141e9a667cac25ebb00eabf1ea2e4f7c288cf5860fa0e466a47",
+    "07_cold_qg_terms.png": "1c12b8e1d169324243c264eaf1931048fb18e3fb10f8a72c2a8946e3bbdcf231",
+    "05_QR_ICE_FIXED-CONSERVATIVE.png": "eb490fce65fb264830d12d81feaf0d393b5b279b3d764a11f25f8d71c13aaa26",
+    "01_surface_cumulative.png": "279434c157c9e3650a07156837058fbfd84fcbce1484c43b443de5e2d6db5c1c",
+    "native_levels.csv.gz": "6145f6599696e52461c609669c8b27cdb7248ba6cc419bff1ea1fd9f60d03723",
+    "03_QR_CONSERVATIVE-FIX.png": "b4a33dd30aa848da604fb29c15aee3d9bb9b54f741a06c4d2a5fba4e328ea331",
+    "06_QG_ICE_FIXED-CONSERVATIVE.png": "57bcf8be9b2cf2b5204acb14889e4a4df4f8c7560a777654c28f5f298d6bb64b",
+    "surface_full.csv": "7f0f4e4b515f4dfbc18c042e93786c2b285274ecd63dbe662063b2c996122f63",
+    "cold_qg_terms.csv": "4a8f2d76d5994c88c2daf3fcb7c0374d082789395ab02895b7f5a75c5a5998d6"
+  }
+}

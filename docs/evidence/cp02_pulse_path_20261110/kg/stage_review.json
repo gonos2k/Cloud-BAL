@@ -1,0 +1,38 @@
+{
+  "baseline_sha256": "20539ea5f3a3ae28e80b2c97a6bd77b7784d930a3190a4b8aab6b810c4c5d044",
+  "checks": [
+    "Independent validator passed eight checks, including all 258 prior dated snapshots, dirty status and graph/wiki preservation.",
+    "Both retained raw extractions contain exactly the three reviewed Python paths, 27 nodes and 74 edges each; no failed sources.",
+    "Both graph merges preserve all prior node IDs, have zero reported integrity defects, and update only selected manifest keys.",
+    "Five staged wiki mirrors preserve permitted old content with one appended audit entry.",
+    "Three structural source pins and 178 hash-only evidence pins match frozen independent review; seven contract mutations rejected."
+  ],
+  "graph_deltas": {
+    "Cloud-BAL": {
+      "communities": 13,
+      "edges": 48,
+      "nodes": 27
+    },
+    "KLAPS50": {
+      "communities": 18,
+      "edges": 50,
+      "nodes": 27
+    }
+  },
+  "limits": [
+    "Only the reviewed Python paths are structurally extracted.",
+    "Remaining new evidence is hash-only; native source and runtime evidence is not semantically extracted.",
+    "Manifest changes are selected-path-only; no corpus scan or prune occurs.",
+    "Edges to absent external import targets can be dropped during normal graph merge; raw extraction is retained for review.",
+    "Fortran cross-file CALL extraction is partial.",
+    "Graph freshness does not establish runtime behavior, physical correctness, conservation, or scientific validation."
+  ],
+  "review_status": "GO",
+  "selection_lock_sha256": "8172867b5d5bd7eade6242545b5094df17e46cdbfa4132023ced10d8f0413e59",
+  "source_worktree_target_count": 4,
+  "stage": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_pulse_path_20261110/kg_stage/stage-62c13d88939a4ab2",
+  "stage_receipt_sha256": "279ad1797aa162729777fc55e71b801d12a1934d9fbdbbf6837c989904a2d942",
+  "stage_validation_sha256": "93384560fe9c9a35ad4c2063534ebadab401567d96ff2485e32f7feaf2fa8473",
+  "staged_target_count": 13,
+  "status": "GO"
+}

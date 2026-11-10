@@ -1,0 +1,24 @@
+{
+  "decision": "PASS_WITH_LIMITATIONS",
+  "reviewer": "independent team reviewer",
+  "recorded_utc": "2026-11-10T03:00:22.860045+00:00",
+  "inputs": {
+    "docs/CP02_PULSE_PATH_AND_SUBSTEPS_20261110.md": "48e07e879b9b5ea198a1844f48ce8e5f7e7472094e29dcabe26f6326fe35bd99",
+    "docs/evidence/cp02_pulse_path_20261110/FIGURES.md": "4fcaa513d722c4223009b08a748f71c9c57c9a2c2aa6f37ef6aec46e16dde1d8",
+    "docs/evidence/cp02_pulse_path_20261110/all_figures.zip": "f9416ca06c8e1af2c5445a9a6983c542e8a3b58e3625ea1c206556036f494164",
+    "docs/evidence/cp02_pulse_path_20261110/gallery_receipt.json": "de595350016db164f0a6dcd051a6b65f8054a685649ec621da221d22482178ce",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/hourly_maps/hour_6_rainfall.png": "24fc778e7292d21e0ecb24ed9a55ff16d11c0669437dafe490fb5539edd8af79",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/hourly_maps/receipt.json": "c37877ddcfc1708443f93e742880a13c785a10394b5dddd3d6ba87009a28071d",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/figures/01_csi_change.png": "eacbd57dbcdac901b52b21d27a90869b6affd69d2d4ed6f775d5df4c36f5a1b1"
+  },
+  "checks": [
+    "Report arithmetic, 36 CSI deltas, weak-rain and three representative point tables match frozen output; MP10 22/26 decision and unresolved conditions correct.",
+    "All local links in report and gallery resolve; ZIP CRC passes and all 44 members independently match working-tree SHA-256 bytes; 16 PNG figures present.",
+    "Visually reviewed CSI plot and +6h map; map labels clarify no additional display interpolation after model fields are bilinearly mapped to RN1 points.",
+    "Native-level normalization, source-derived schedule vs unobserved runtime, frozen cpm/xl and hourly-only MP10 temporal limits are explicit."
+  ],
+  "limitations": [
+    "No isolated full-scheme loop/carry observation, whole-domain water-energy closure or independent meteorological case validation.",
+    "MP10 hourly outputs cannot resolve the original five-minute pulse."
+  ]
+}

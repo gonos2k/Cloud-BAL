@@ -1,0 +1,9 @@
+{
+  "status": "UNAVAILABLE",
+  "reason": "The compiled forecast has no DWARF debug sections or source variable symbols. GDB lists kdm62d only as a non-debugging symbol and finds no dtcld variables; source-line or local-variable breakpoint values cannot be interpreted reliably. No WRF probe was run and no actual forecast loop observation is claimed.",
+  "executable_sha256": "c1c2088726728deaa6e12ef39ae8efff11d159ecb229d90c89a54896445a7b37",
+  "commands": [
+    "readelf -S wrf.exe",
+    "gdb --batch -ex info sources -ex info variables dtcld -ex info functions kdm62d wrf.exe"
+  ]
+}

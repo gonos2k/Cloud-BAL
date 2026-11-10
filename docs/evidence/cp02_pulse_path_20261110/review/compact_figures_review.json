@@ -1,0 +1,37 @@
+{
+  "status": "PASS_WITH_LIMITATIONS",
+  "reviewer": "independent team reviewer",
+  "reviewed_utc": "2026-11-10T02:35:58.004730+00:00",
+  "inputs": {
+    "tools/cp02_pulse_path.py": "ac5b08d9d9358960de71867b879f93d2df42baa812702b07e39371ccd01bf09d",
+    "tools/plot_cp02_pulse_path.py": "452ed388be5c52a240f7af3546cf3015ef1d62ab6348d5a6f188e5799a7164f8",
+    "tests/test_cp02_pulse_path.py": "20a40c13480c670b6487c004cea9e5d82901a9131e616dc33ab1933daff0ebf0",
+    "docs/evidence/cp02_pulse_path_20261110/analysis/calls.csv.gz": "d15a364a3ae107a33efee05c29522b3a6629c9178437d87885b4d3f2a6d9332e",
+    "docs/evidence/cp02_pulse_path_20261110/analysis/receipt.json": "e89f7dc0b81413d7271982dd9dba0dde402783e0e2972d76952ffa3173ef105a",
+    "docs/evidence/cp02_pulse_path_20261110/analysis/summary.json": "2df14e00374bdbe3029f7bdbf14442c9494c92bf1f9728885900ccc5d9127800",
+    "docs/evidence/cp02_pulse_path_20261110/analysis/surface_calls.csv": "5829acbfd117f7ae86012d109879b880386048cba8a9c6c64421bf6a634b4a3b",
+    "docs/evidence/cp02_pulse_path_20261110/analysis/surface_windows.csv": "f75949514ef3e70de05917204bcb21d78db615422420eb38c99fe5e3c7a691b3",
+    "docs/evidence/cp02_pulse_path_20261110/analysis/window_levels.csv": "23c8f727afedf5cccf10df2ef51f39594a93cbec63a9e2ade4e9ee85ce2e7953",
+    "docs/evidence/cp02_pulse_path_20261110/figures/01_surface_cumulative.png": "279434c157c9e3650a07156837058fbfd84fcbce1484c43b443de5e2d6db5c1c",
+    "docs/evidence/cp02_pulse_path_20261110/figures/02_surface_pulse_zoom.png": "cad6679a27f72141e9a667cac25ebb00eabf1ea2e4f7c288cf5860fa0e466a47",
+    "docs/evidence/cp02_pulse_path_20261110/figures/03_QR_CONSERVATIVE-FIX.png": "b4a33dd30aa848da604fb29c15aee3d9bb9b54f741a06c4d2a5fba4e328ea331",
+    "docs/evidence/cp02_pulse_path_20261110/figures/04_QG_CONSERVATIVE-FIX.png": "e55ccb2fb9da790775ddd4afd6c68f49c5e27afed5b49b2bba86d8bbc2637859",
+    "docs/evidence/cp02_pulse_path_20261110/figures/05_QR_ICE_FIXED-CONSERVATIVE.png": "eb490fce65fb264830d12d81feaf0d393b5b279b3d764a11f25f8d71c13aaa26",
+    "docs/evidence/cp02_pulse_path_20261110/figures/06_QG_ICE_FIXED-CONSERVATIVE.png": "57bcf8be9b2cf2b5204acb14889e4a4df4f8c7560a777654c28f5f298d6bb64b",
+    "docs/evidence/cp02_pulse_path_20261110/figures/07_cold_qg_terms.png": "1c12b8e1d169324243c264eaf1931048fb18e3fb10f8a72c2a8946e3bbdcf231",
+    "docs/evidence/cp02_pulse_path_20261110/figures/cold_qg_terms.csv": "4a8f2d76d5994c88c2daf3fcb7c0374d082789395ab02895b7f5a75c5a5998d6",
+    "docs/evidence/cp02_pulse_path_20261110/figures/native_levels.csv.gz": "6145f6599696e52461c609669c8b27cdb7248ba6cc419bff1ea1fd9f60d03723",
+    "docs/evidence/cp02_pulse_path_20261110/figures/receipt.json": "9ff78e8b7dbb1f339c73048bf7ab69edd96f3b961ffb60f5a88cf9f1db6f1d6b",
+    "docs/evidence/cp02_pulse_path_20261110/figures/surface_full.csv": "7f0f4e4b515f4dfbc18c042e93786c2b285274ecd63dbe662063b2c996122f63"
+  },
+  "checks": [
+    "Independently recomputed five-minute counter difference: I 19145 peak 847\u2192862 1.2706997856477429 mm; C at same boundaries 0.6781500541751402 mm. Exactly calls 848\u2013862 contribute.",
+    "Nearby 19144 I and C own peak windows 830\u2192845 and 826\u2192841; control 17804 own peaks both 700\u2192715.",
+    "Independently reconstructed 19145 I\u2212C at 847\u2192862 from four frozen weighted corners: QR k16 sediment \u22120.0007293472568230973 kg/kg; QG k17 core +0.0006378769545377554 kg/kg; TK k16 condensation +0.9089413319750702 K.",
+    "Reviewed source, surface figure, representative QR path figure and cold QG partition figure; stage differences compare finished call sums, not same substep ordinal."
+  ],
+  "limitations": [
+    "Temporal fixed-level sums are not vertical mass budgets or surface causal shares.",
+    "Figure review is scoped to source and representative rendered figures; it does not certify all outputs scientifically."
+  ]
+}

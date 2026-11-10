@@ -1,0 +1,7 @@
+# Numerical microphysics-step sensitivity
+
+The CONTROL source is the exact uninstrumented PR154 first-ice-velocity source. MP10 changes only the `dtcldcr` parameter from 120 to 10 seconds. With a 20-second model call, the source-derived Intel probe executes one 20-second outer microphysics loop for CONTROL and two 10-second loops for MP10. This refines the whole operation sequence, not an isolated sedimentation process; thermodynamic coefficients computed before the loop remain fixed during both substeps. This is a numerical sensitivity experiment and is not a proposed physics fix.
+
+`loop_probe_receipt.json` records a native executable compiled from the exact source scheduling statements. It is not an instrumented full-scheme run. The production binary has no usable source-level local-variable debug information (`gdb_availability.json`), so actual internal loop values are not claimed as observed. An isolated full-scheme counter/state-carry test and global water and energy closure remain open.
+
+The frozen launch plan binds the experiment policy, source, prepared inputs and pinned Intel build receipts. Both runs use the same historical 89-file B1 input set with only the built executable differing, separate private directories and disjoint eight-rank CPU sets. Histories and executables remain external in scratch. A successful pair is subject to the independent seven-history bytewise CONTROL comparison against PR154 and MP10 initial-history comparison, then to the unchanged evaluation gates.

@@ -1,0 +1,11 @@
+# Native process evidence
+
+The three compressed subsets retain exact CP04 frame headers and selected raw record bytes for steps 831, 839 and 844–862, all levels and the ten one-based native corners of points 19145, 19144 and 17804. `extract_receipt.json` binds the original source files and schema and reports full raw-inventory hash verification before and after extraction. The original forecast data and inventory are external to this repository; replay requires the absolute prior scratch paths in the scripts. The gzip subset and CSVs are reviewable without rerunning WRF. Frame constants and REAL64 face transfers retain their original precision.
+
+`core_recount.csv.gz` contains captured rate fields and phase 6/8 endpoint differences, plus rate integrals for the six mass mixing ratios. The diagnostic sums are evaluated in float64 from recorded REAL32 operands and are not a replay of native floating-point arithmetic. Warm/cold branches use captured REAL32 `t0c`. Missing phases are not treated as zero. Process rates are kg kg-1 s-1 for mass or m-3 s-1 for number; state deltas and their integrals are kg kg-1. The core recount validates phase 5/6/8 pairing but does not attribute uninstrumented spans.
+
+`core_qg_partition.csv` contains the cold QG equation terms including the captured delta switches, multiplied by actual dt and observation weights for point 19145 at step 858, k=17. Each row is signed as added to QG. Both arms already enter this operation with different states. The relative contributions do not by themselves determine why those states differ or quantify ground precipitation.
+
+`sediment_substeps.csv` records each actual phase 9/10 change and the corresponding captured REAL64 shared faces for rain and graupel at steps 831 and 839, k=16, four corners of 19145. The FIX arm has no captured shared faces. Different arms can execute different substep counts: sum each arm's actual substeps independently. Source carrier density and thickness are provided for dimensional checking; do not compare substep ordinal as though the arms had the same partition.
+
+The extracted native source loop probe and numerical sensitivity forecast live separately under `forecast/`. This data does not establish the first origin of the forecast divergence, global conservation, or an isolated full-scheme carry test.

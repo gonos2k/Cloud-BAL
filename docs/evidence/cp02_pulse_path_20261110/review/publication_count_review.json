@@ -1,0 +1,22 @@
+{
+  "decision": "PASS_WITH_LIMITATIONS",
+  "reviewer": "independent team reviewer",
+  "recorded_utc": "2026-11-10T03:14:02.937098+00:00",
+  "inputs": {
+    "docs/evidence/cp02_pulse_path_20261110/kg/reconcile_published_count.py": "91f99eb36d60da516ebd9e6e266c8d9e401e20b14617666e84e7809ce9e2aeb7",
+    "docs/evidence/cp02_pulse_path_20261110/kg/publication_summary.json": "e4aceeb75db5bffe24bb4b0f30712199a8bb6fc0325cb18a432ebd7ffc13479a",
+    "docs/evidence/cp02_pulse_path_20261110/kg/README.md": "256a7183a3997a8a98a56ff85451c95fbd189d207471accca8ddbc9b1f5051c2",
+    "docs/evidence/cp02_pulse_path_20261110/kg/publish_receipt.json": "10b1e3c7efa050a3d4c5fdb3602d867eb05db33051a2f4dc4fe4013a110659d7",
+    "docs/evidence/cp02_pulse_path_20261110/kg/postpublish_copy_receipt.json": "5ac7a6783ef9c7a52081c7d54df14928d44f989d0ac83ee0a2b868fe58000c1b",
+    "docs/evidence/cp02_pulse_path_20261110/kg/selection_lock.json": "8172867b5d5bd7eade6242545b5094df17e46cdbfa4132023ced10d8f0413e59",
+    "docs/evidence/cp02_pulse_path_20261110/kg/baseline.json": "20539ea5f3a3ae28e80b2c97a6bd77b7784d930a3190a4b8aab6b810c4c5d044"
+  },
+  "checks": [
+    "Independently counted 128 KLAPS50 and 132 Cloud-BAL dated snapshots, including all 258 prior snapshots unchanged and two new separate corpus snapshots.",
+    "Independently checked 13 publication targets and 9 worktree/wiki copy targets, plus all three selected source and 178 hash-only frozen pins.",
+    "Original publisher and receipts remain unchanged; corrected summary supersedes only the original misreported published_snapshot_count, without republishing or modifying maintained graph/wiki files."
+  ],
+  "limitations": [
+    "Reconciliation validates graph and wiki file identity and inventory only; it is not scientific or runtime validation."
+  ]
+}

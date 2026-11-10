@@ -1,0 +1,35 @@
+{
+  "decision": "PASS_WITH_LIMITATIONS",
+  "reviewer": "independent team reviewer",
+  "recorded_utc": "2026-11-10T02:55:48.243928+00:00",
+  "inputs": {
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/evaluate.py": "7c7b5c9267df4d9cd160b75f50fa4e42c4aee4fc2af35c447c5db433df62b595",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/FULL_SCORES.md": "937e52c1a86bf663da2a9195695a23f6d64feb55c3b8e33821898903e03105f5",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/admission_constraints.csv": "ec6f2efd66f1a20de45da49c0e55a9fab8e19826860243b1e8930bbec3b67291",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/bilinear_mapping.npz": "a57aab4e1c226f91cbb2ef2dfd3516f84de4446273c5abacdf91e9679c577b29",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/categorical_scores.csv": "5941149662d093e491b8bb48a019d04bc95e9f09a2d4201cf30a1374a2471ca5",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/continuous_scores.csv": "dd88f10ee81136892cbda04a68abe0d045bba3eacc1408c7b5766dc62e25e44f",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/hour_13_arrays.npz": "f0f6c54d4a7d2a9f6237b6f0b982190894901e80109d467077deb9d88b36d45f",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/hour_14_arrays.npz": "9271fad69c6ffb25d8f07f6eba32e748129f30084ab3422367d6e67bc51cbd99",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/hour_15_arrays.npz": "5d9e0089f8b9342f2b8125e0075223ab0d593fd116e1fc55366cd482a738434c",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/hour_16_arrays.npz": "7f0fec8c1e46a0a3f41629f3f0592e5c14c256e009e48166738d8cfe992d6333",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/hour_17_arrays.npz": "3920270418ca81f1aae0cee916abfd5dbd6aa8da18f2b50c1c704145a74400a3",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/hour_18_arrays.npz": "338f06eb6bf319ad387c445051fc3993e967b40c765854c001aa09ad4ff1a52b",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/observation_transitions.csv": "cf20c235f0c66978fb9ff5f96af2eab5d4d95ef7a8eacebc18c3f7a8817e24da",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/observed_forecast_bands.csv": "66268951ee85ac786d57f6ebc1b90e58f2ce2dcdb992e469374dbd3b6ead43b0",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/receipt.json": "c369a2b7601355b64fac8e8611528684a3be99cebda28827fe6c38446b75fa28",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/verdict.json": "c04ae0c1bc36b5a1eb24d9e7080cebff641089387e6c2da8d9368d477e566e98",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/weak_detection.csv": "dd52744104a80cb70838002236c2c660fa713ba3fdf283b2679e1dd8dfa46a40",
+    "docs/evidence/cp02_pulse_path_20261110/experiment_policy.json": "d842b1aaa7b7c5bd81397e9fac38841acea089a500c7cebabad6ca9858eb5254",
+    "docs/evidence/cp02_pulse_path_20261110/forecast/proof/comparability.json": "b747f42f38104f85d4d0246aba15fc663bf139b5612e671810464bc8e7d7a51b"
+  },
+  "checks": [
+    "Independently rehashed seven prior versus CONTROL histories and initial prior versus MP10 history: SHA-256 and size match.",
+    "Recounted all 180 contingency rows, 30 continuous errors, 52 exact fraction gates, 48 transition rows, 60 weak-bin distributions and 1176 observed/forecast band rows directly from the six point arrays.",
+    "Weak-bin denominators and maintained B1/PR153/PR154 subset were independently recounted. MP10 passes 22/26; PR154 passes 21/26."
+  ],
+  "limitations": [
+    "Recount validates computations on the frozen mapped arrays, not observational provenance, an independent meteorological case, whole-domain water/energy closure, or unobserved internal loop timing.",
+    "Hourly MP10 history does not resolve the original five-minute pulse."
+  ]
+}
