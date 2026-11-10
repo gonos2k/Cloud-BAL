@@ -1,0 +1,135 @@
+{
+  "schema": "cp02_mp10_process_comparability_v1",
+  "status": "PASS",
+  "source_receipt_sha256": "98621cc1d701cac072a1c403a162c688753c8b6e63f646e7abaa94cfe7e7bc1c",
+  "schema_sha256": "c71fc8f9831f0be9f6f52aa1725f9d7e09493906e5083112127db9ab601e5cc2",
+  "selector_sha256": "f867579125b8b780db0035737cfeee844da2d9f921bf2b403df3c86500f8f107",
+  "postrun_review_sha256": "9cd24f4ee966e7f19cb975c6873c2f561a1848a1bdeba5d16afd591b3ba2ea29",
+  "reviewed_script_sha256": {
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/compact_v2.py": "fad4983bc673b1a874811c20ba60f120926f4128e1cd6ccd5e989b249e70c7c6",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/read_frames_constants.py": "f8bf5a8daecf54d3f7454cf5fa7750a375b1345672b2bb524c42b3ec8feeab88",
+    "docs/evidence/cp02_mp10_process_20261110/native/schema/schema.json": "c71fc8f9831f0be9f6f52aa1725f9d7e09493906e5083112127db9ab601e5cc2",
+    "docs/evidence/cp02_mp10_process_20261110/native/source/source_receipt.json": "98621cc1d701cac072a1c403a162c688753c8b6e63f646e7abaa94cfe7e7bc1c",
+    "docs/evidence/cp02_mp10_process_20261110/cohorts/native_columns.csv": "f867579125b8b780db0035737cfeee844da2d9f921bf2b403df3c86500f8f107",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/recount_compact_v2.py": "00b9112011b60cd69a6bda8977065d00ac4a67f1819e212b4f6f426ad50f5712",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/pack_npz.py": "cb88dac722545793afa618839a82428cf8eab26c500e80580e1d9845f6298aa7",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/pack_npz_parallel.py": "b8472966b94137662d195f74fff6fbb53fff05d628cd1b0aad38aebfa1e50c22",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/relocate_unpacked.py": "85a7ad8581f50ca1a03695cd42aed180b6604c718157b0ffd46265a989e8103f",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/recount_parallel.py": "6a8eacaaf9e6a48a89fc9263b2e40eb4502e8c462f9c4e22b0d4fa10fa13346e",
+    "docs/evidence/cp02_mp10_process_20261110/native/proof/make_comparability.py": "4606e2415a012c49188100f31fef4a271002fb3f6d2d54e8e2cd7b9fc697964c",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/compact_parallel.py": "88059301bcc4832085e65431694b2bfac44d7a9c8dc0fb3aa71f7f1439d421fd",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/audit_surface_all.py": "4ffa075d69dce6d5d001acf87ea245a6ed476be40334c2f2cf49899987bdf822"
+  },
+  "arms": {
+    "CONTROL": {
+      "source_sha256": "e87b5c4ba2e32f190bc76dc867bbd27d11ea1bc1dd78134aedcc95c2e00dafab",
+      "capture_receipt_sha256": "6e46dc840134a01961b971f80db3cd7aabc6f4bdbf347b02cc0bd609ce5992ce",
+      "raw_recount_sha256": "1f1f51b2579211d683f2778914ee13432431f1289e54ca8f5030bcec890c62d8",
+      "packing_receipt_sha256": "192e4ea5a7b0dba69023a19f111c63189cbf4e466f2032cf2adab5c72cbdb403",
+      "surface_audit_sha256": "5c27b5f5bc390affb081dce5f0e82a560af8f64b5ffbbf8d8fedb815e55c1e33",
+      "relocation_receipt_sha256": "c28802d39ade46ecc020f77d66fc065f147dde170870033e97b7a528768aee87",
+      "history_comparison_sha256": "f07319318942a2d081ef1cd823902d5321b8baa1c662f93a8aef13940e4e9c9c",
+      "run_receipt_sha256": "8e8e1879893cddc12c02bc453c997e616c7d6f02ece2b5aea3b1e74ac1c77d82",
+      "packed_artifacts": 4140,
+      "history7byte_equal": [
+        {
+          "name": "wrfout_d01_2026-08-16_12:00:00",
+          "actual_sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+          "reference_sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+          "byte_equal": true
+        },
+        {
+          "name": "wrfout_d01_2026-08-16_13:00:00",
+          "actual_sha256": "c90ce1d3bb84f139bd1f2badaafc542d9fea7e18d5383079966e08cf661164b1",
+          "reference_sha256": "c90ce1d3bb84f139bd1f2badaafc542d9fea7e18d5383079966e08cf661164b1",
+          "byte_equal": true
+        },
+        {
+          "name": "wrfout_d01_2026-08-16_14:00:00",
+          "actual_sha256": "1d0047a828c41a143257fa63b5fc64002c7818ba9a13c83204b79988f6894b29",
+          "reference_sha256": "1d0047a828c41a143257fa63b5fc64002c7818ba9a13c83204b79988f6894b29",
+          "byte_equal": true
+        },
+        {
+          "name": "wrfout_d01_2026-08-16_15:00:00",
+          "actual_sha256": "29e73e174c4d02ce7c22587ac2963fbf123f06b32e0846d87408dd3d08b3535d",
+          "reference_sha256": "29e73e174c4d02ce7c22587ac2963fbf123f06b32e0846d87408dd3d08b3535d",
+          "byte_equal": true
+        },
+        {
+          "name": "wrfout_d01_2026-08-16_16:00:00",
+          "actual_sha256": "5a23662ca2ac47e8f630c2b2ec90ffd120e849feac26bd95491ba83a13cf09bc",
+          "reference_sha256": "5a23662ca2ac47e8f630c2b2ec90ffd120e849feac26bd95491ba83a13cf09bc",
+          "byte_equal": true
+        },
+        {
+          "name": "wrfout_d01_2026-08-16_17:00:00",
+          "actual_sha256": "155e98b526797cd246364a133b415b4fad407590e371624ca3524e4749fa99a6",
+          "reference_sha256": "155e98b526797cd246364a133b415b4fad407590e371624ca3524e4749fa99a6",
+          "byte_equal": true
+        },
+        {
+          "name": "wrfout_d01_2026-08-16_18:00:00",
+          "actual_sha256": "0eefd5d7d366b7daf8b350ca68986d5db3aa2de9b25c4e94e0e07ee20f6d2b2d",
+          "reference_sha256": "0eefd5d7d366b7daf8b350ca68986d5db3aa2de9b25c4e94e0e07ee20f6d2b2d",
+          "byte_equal": true
+        }
+      ]
+    },
+    "MP10": {
+      "source_sha256": "d91f6a09351027a1e0fc1d8c8120dd58a509df2aa8f139e4ed075ed1b4125c22",
+      "capture_receipt_sha256": "5ce792f9546ec639898c556b5ef5bbcd7c78d28fffef27e6d71d9ca3e9214b3c",
+      "raw_recount_sha256": "4511f02e86f513cf9bce7a8e4ecaffa0a1c6c2903c95dec72f6ce3efd23f0945",
+      "packing_receipt_sha256": "5494abd4674e244f7b600437836b9ed36b94ca9c9976345a74c9ba3b9aa44ef9",
+      "surface_audit_sha256": "c922ed12042f19f26152353a4dd1bdd3d3a097464dee473af1299ad8d43cf7b4",
+      "relocation_receipt_sha256": "3dfadd65da122cefdf55d72eea4395bb7d14e4d808301a584f61fc158d95ec5c",
+      "history_comparison_sha256": "df7c6c36dd8713274e1c6a72944848d43f5ffcea376adb5b6a57fbc08cface91",
+      "run_receipt_sha256": "1f4b835db668df329e062eaf00895cf8e86155621df7d282e010412d18a485a0",
+      "packed_artifacts": 4320,
+      "history7byte_equal": [
+        {
+          "name": "wrfout_d01_2026-08-16_12:00:00",
+          "actual_sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+          "reference_sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+          "byte_equal": true
+        },
+        {
+          "name": "wrfout_d01_2026-08-16_13:00:00",
+          "actual_sha256": "2c2cfabcf9d2aa9df5df28c5863ca455f64d37a04352529e405b43d9f5b2d96f",
+          "reference_sha256": "2c2cfabcf9d2aa9df5df28c5863ca455f64d37a04352529e405b43d9f5b2d96f",
+          "byte_equal": true
+        },
+        {
+          "name": "wrfout_d01_2026-08-16_14:00:00",
+          "actual_sha256": "1b3f6bc3e5c364a1cf1d17cbbc25d3ccf7db0b6a555ddb3b8778431b37d1c466",
+          "reference_sha256": "1b3f6bc3e5c364a1cf1d17cbbc25d3ccf7db0b6a555ddb3b8778431b37d1c466",
+          "byte_equal": true
+        },
+        {
+          "name": "wrfout_d01_2026-08-16_15:00:00",
+          "actual_sha256": "48954eb721cfaf21aff207cf4ccdb8af46c1517fd43e6a4cc681670dc7c7a2f9",
+          "reference_sha256": "48954eb721cfaf21aff207cf4ccdb8af46c1517fd43e6a4cc681670dc7c7a2f9",
+          "byte_equal": true
+        },
+        {
+          "name": "wrfout_d01_2026-08-16_16:00:00",
+          "actual_sha256": "79fab3088f92f93acd0978493f0fe0a3998ad5d54103f913afc6912b43283ff6",
+          "reference_sha256": "79fab3088f92f93acd0978493f0fe0a3998ad5d54103f913afc6912b43283ff6",
+          "byte_equal": true
+        },
+        {
+          "name": "wrfout_d01_2026-08-16_17:00:00",
+          "actual_sha256": "d651176c8e0a21e5e5b23d7b5106e098cd77eac669d8f4fe068f943b0ef2de81",
+          "reference_sha256": "d651176c8e0a21e5e5b23d7b5106e098cd77eac669d8f4fe068f943b0ef2de81",
+          "byte_equal": true
+        },
+        {
+          "name": "wrfout_d01_2026-08-16_18:00:00",
+          "actual_sha256": "456db6c8d40b490e03ffcd9bb62883b4ef25082c5a2a5c777adec93839cde9d4",
+          "reference_sha256": "456db6c8d40b490e03ffcd9bb62883b4ef25082c5a2a5c777adec93839cde9d4",
+          "byte_equal": true
+        }
+      ]
+    }
+  }
+}

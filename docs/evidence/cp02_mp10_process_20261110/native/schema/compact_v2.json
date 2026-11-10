@@ -1,0 +1,22 @@
+{
+  "version": "cp02_mp10_compact_v2",
+  "coverage_windows": [[1, 180], [361, 540], [901, 1080]],
+  "surface_steps": [1, 1080],
+  "file_groups": {
+    "constants": [0],
+    "state": [30, 32, 33, 34],
+    "core": [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 20, 21],
+    "faces": [18, 22],
+    "surface": [40, 41, 42, 43, 46, 47, 51, 52, 53, 60, 61, 62, 63, 70, 71, 72, 73]
+  },
+  "keys_columns": ["step", "rank", "call", "j", "i", "k", "loop", "loops", "substep", "mstep", "phase", "nfields"],
+  "keys_dtype": "int32",
+  "bits_dtype": "uint32 except faces group uint64",
+  "bits_encoding": "IEEE real bit patterns; reinterpret uint32 as native float32 or uint64 as native float64, retaining signed zero",
+  "payload": "Each row is padded to group maximum fields; only the first nfields entries are valid. Phase fields are specified in schema.json, with conservative phase 10 override.",
+  "constants": "phase 0 uses actual frame constants in schema.json order, with i=k=loop=loops=substep=mstep=0",
+  "missing": "Absent key is missing; padding is never an observation.",
+  "end_alias": "Phase 34 is both post-PSD and actual loop END; no duplicate phase 31.",
+  "wrapper": "state_selected_entry and state_selected_return gzip files retain exact CBSP0001 native byte streams, including pressure and Exner.",
+  "solid_precipitation": "snow and graupel counters are presence-guarded and overlap the total rain counter; do not add them to it."
+}

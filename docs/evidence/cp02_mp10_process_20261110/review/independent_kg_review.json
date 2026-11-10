@@ -1,0 +1,41 @@
+{
+  "status": "PASS_SOURCE_AND_EVIDENCE_REVIEW",
+  "selected_source_paths": [
+    "tools/cp02_mp10_failure_cohorts.py",
+    "tests/test_cp02_mp10_failure_cohorts.py",
+    "tools/cp02_mp10_process.py",
+    "tests/test_cp02_mp10_process.py",
+    "tools/plot_cp02_mp10_process.py"
+  ],
+  "selected_source_sha256": {
+    "tools/cp02_mp10_failure_cohorts.py": "d91917a7148c00437abbd43bf331f346e10db02a3b7b44002035466fc5938e82",
+    "tests/test_cp02_mp10_failure_cohorts.py": "a5ca12b3d99b00c012af8950ee44281b1618e213256a5b79a104ce1d3cc7384e",
+    "tools/cp02_mp10_process.py": "31d4727adeb719cd9e8448e15dd5824a4288783c08d02a4d9baae7627bb4e2fb",
+    "tests/test_cp02_mp10_process.py": "f7f3aead7f79a1c9dadf3b1071359785eb6fa667fe8e9b710c602ee73f2170a1",
+    "tools/plot_cp02_mp10_process.py": "e494a6e445796d1872e1c426ede7f638555819dd5761683fec87fdb02b7c2db8"
+  },
+  "hash_only_sha256": {
+    "docs/evidence/first_hour_zero_rate_20261030/kg/stage_kg.py": "83895596df409a8b6b6843c942891c8e7f464ac3d71caaae5ee40ad729fe77e3",
+    "docs/evidence/cp02_mp10_process_20261110/cohorts/receipt.json": "a4a23c985f95460e795f2a82fb6071514306c4623eea9e9d8b7e452ab981e333",
+    "docs/evidence/cp02_mp10_process_20261110/cohorts/selected_points.csv": "f36d193647d04a4eb811318431dd15f0b92d0644d9815b35a3650d70b073888d",
+    "docs/evidence/cp02_mp10_process_20261110/cohorts/native_columns.csv": "f867579125b8b780db0035737cfeee844da2d9f921bf2b403df3c86500f8f107",
+    "docs/evidence/cp02_mp10_process_20261110/surface/results/receipt.json": "c90c3ffbd657fab90e5e8d3cfc58fea4339d3abdef7c2e7cb4fbcd76fa560e8e",
+    "docs/evidence/cp02_mp10_process_20261110/native/proof/comparability.json": "a83ef35144150946f7e2d4529954d055951bf32fda9a3dfc70607671a6a38c28",
+    "docs/evidence/cp02_mp10_process_20261110/native/schema/schema.json": "c71fc8f9831f0be9f6f52aa1725f9d7e09493906e5083112127db9ab601e5cc2",
+    "docs/evidence/cp02_mp10_process_20261110/native/source/source_receipt.json": "98621cc1d701cac072a1c403a162c688753c8b6e63f646e7abaa94cfe7e7bc1c",
+    "docs/evidence/cp02_mp10_process_20261110/validation/clean_export.json": "a39a64ebcc3fedf462ed021283742a815292eb2e185b41f416cb9d0c98c18695",
+    "docs/evidence/cp02_pulse_path_20261110/evaluation/results/verdict.json": "c04ae0c1bc36b5a1eb24d9e7080cebff641089387e6c2da8d9368d477e566e98"
+  },
+  "validation_summary": [
+    "Independently reviewed five maintained source/test paths and their current hashes against the passing pinned Intel fresh-export suite: 529 tests.",
+    "Both native builds and actual 20-second probe passed; 4,329 selected MP10 level states carry bitwise and nonzero rain updates reproduce in REAL32 source order.",
+    "Both six-hour instrumented runs match seven corresponding parent histories byte-for-byte; full raw-to-packed native recount and 1,080-step surface audits pass.",
+    "Cohort and surface data are frozen diagnostic selections. Full primary process analysis was still running at this review and requires separate final review."
+  ],
+  "science_open_items": [
+    "MP10 meets 22/26 frozen conditions, is not adopted, and current B1 remains selected.",
+    "Full-domain water/energy and transport budgets, RN1 upstream coverage/QC, independent meteorological cases, and C2 T39 remain open.",
+    "Graph extraction and dated freshness do not establish native runtime or scientific validation."
+  ],
+  "extraction_limits": "Exactly five selected maintained Python paths are structurally extracted; the other listed evidence is hash-only. This review is limited to sources and frozen evidence and does not approve pending process-analysis conclusions."
+}

@@ -1,0 +1,527 @@
+{
+  "scope": "read-only ODAM reference inventory for retained 6-hour 12 UTC forecast comparison",
+  "reference_day": "2026-08-16",
+  "times_utc": [
+    "13:00",
+    "14:00",
+    "15:00",
+    "16:00",
+    "17:00",
+    "18:00"
+  ],
+  "grid": {
+    "nx": 149,
+    "ny": 253,
+    "values": 37697,
+    "odam_source_grid": [
+      235,
+      283
+    ],
+    "crop_x_inclusive": [
+      76,
+      224
+    ],
+    "crop_y_inclusive": [
+      7,
+      259
+    ]
+  },
+  "source_sha256": {
+    "klps_lc05_dfsd_odam.f": "f0088086ee3db6fe7ef7aa8faa2e9d4bc9fedd282f9c3b67fdd56bf9f5ecce16",
+    "klps_lc05_dfsd_rain.f": "02a78c9c1c013b748d68bcfc6bc4e1560a4bba637db7aa52f00123ec78f4765a",
+    "read_radar.f": "59881dee6763e1d08988c2f3138423fb75df74d394f1db9def297edeea79beee",
+    "read_lng_radar.f": "dfb86901666c7b8b7e750500b49f20481c43cbc4f193a8b73f81599c2521d34b",
+    "odam_read_aws.f": "677652d85253846e45ff454ba8c30d73087fa02ca00e778bcb58c1b3eba19f7d",
+    "rain_read_aws.f": "099f1a121442a3de50f5737e62a3266a8c0b5e2082ddee5c1469c49c973b65ec"
+  },
+  "static_inputs": {
+    "landseamask.dat": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/landseamask.dat",
+      "bytes": 37697,
+      "sha256": "099284fc01f0175ceac96f07fa0ea11bfc4debcff2c2c084f6868d045af17026"
+    },
+    "mask_k1_dfs.gdat": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/mask_k1_dfs.gdat",
+      "bytes": 1652281,
+      "sha256": "fbcd4d72073635ebe80ec4639f116e717d5d66ce04252809203386aebeb18b2f"
+    },
+    "mask_k1_dfs_sm.gdat": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/mask_k1_dfs_sm.gdat",
+      "bytes": 1652281,
+      "sha256": "2ce93b0883cde82d853e6fa83744de3593cd9908692f26fd219cc058268ef43a"
+    },
+    "landsea_mask_k1.gdat": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/landsea_mask_k1.gdat",
+      "bytes": 6609124,
+      "sha256": "d03342e0c313ec31028865426d8231e491d2be6ff325717888e99d5875c7b67f"
+    },
+    "static.nest7grid": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/static.nest7grid",
+      "bytes": 25321424,
+      "sha256": "384b419c8165457432e8c7ce58e8ab07f57ac07f5a08c2da608880b3240b4b9b"
+    }
+  },
+  "products": [
+    {
+      "utc": "2026-08-16T13:00:00Z",
+      "stamp": "202608161300",
+      "products": {
+        "RN1": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161300",
+          "bytes": 267686,
+          "sha256": "5f435e9e7845860636b8ac6d4a982563f1d709f4340dadb7828df2f2cda8e9a1",
+          "line_count": 3771,
+          "header": "2026081613+000hour     2026081622LST",
+          "shape": [
+            149,
+            253
+          ],
+          "count": 37697,
+          "finite": 37697,
+          "min": 0.0,
+          "max": 44.0,
+          "sum": 17757.1,
+          "mean": 0.47104809401278613,
+          "zero": 32176,
+          "positive": 5521,
+          "negative": 0,
+          "ge_0_1": 5521,
+          "ge_1": 3065,
+          "ge_5": 1167,
+          "ge_10": 592
+        },
+        "PTY": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_PTY.202608161300",
+          "bytes": 267686,
+          "sha256": "0103d086fff28d7979a23dad3362034f009ac41b1fbf37513335a0ba09efe22c",
+          "line_count": 3771,
+          "header": "2026081613+000hour     2026081622LST",
+          "shape": [
+            149,
+            253
+          ],
+          "count": 37697,
+          "finite": 37697,
+          "min": 0.0,
+          "max": 1.0,
+          "sum": 5521.0,
+          "mean": 0.1464572777674616,
+          "zero": 32176,
+          "positive": 5521,
+          "negative": 0,
+          "ge_0_1": 5521,
+          "ge_1": 5521,
+          "ge_5": 0,
+          "ge_10": 0,
+          "categories": {
+            "0": 32176,
+            "1": 5521
+          }
+        }
+      },
+      "internal_joint": {
+        "rn1_positive_pty_zero": 0,
+        "rn1_zero_pty_positive": 0,
+        "pty_unexpected_categories": [],
+        "note": "same ODAM processing path; not independent forecast validation"
+      }
+    },
+    {
+      "utc": "2026-08-16T14:00:00Z",
+      "stamp": "202608161400",
+      "products": {
+        "RN1": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161400",
+          "bytes": 267686,
+          "sha256": "54ba0fe609630eec8366b9f4a21fddd29baabbd1ad89e8a2ac4e769900887497",
+          "line_count": 3771,
+          "header": "2026081614+000hour     2026081623LST",
+          "shape": [
+            149,
+            253
+          ],
+          "count": 37697,
+          "finite": 37697,
+          "min": 0.0,
+          "max": 52.6,
+          "sum": 16998.1,
+          "mean": 0.45091386582486664,
+          "zero": 32373,
+          "positive": 5324,
+          "negative": 0,
+          "ge_0_1": 5324,
+          "ge_1": 2944,
+          "ge_5": 1142,
+          "ge_10": 457
+        },
+        "PTY": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_PTY.202608161400",
+          "bytes": 267686,
+          "sha256": "85637039ac400419e9ebadc26d1ca2c726cee6c39cef4167f42fa8fc327434a0",
+          "line_count": 3771,
+          "header": "2026081614+000hour     2026081623LST",
+          "shape": [
+            149,
+            253
+          ],
+          "count": 37697,
+          "finite": 37697,
+          "min": 0.0,
+          "max": 1.0,
+          "sum": 5325.0,
+          "mean": 0.1412579250338223,
+          "zero": 32372,
+          "positive": 5325,
+          "negative": 0,
+          "ge_0_1": 5325,
+          "ge_1": 5325,
+          "ge_5": 0,
+          "ge_10": 0,
+          "categories": {
+            "0": 32372,
+            "1": 5325
+          }
+        }
+      },
+      "internal_joint": {
+        "rn1_positive_pty_zero": 0,
+        "rn1_zero_pty_positive": 1,
+        "pty_unexpected_categories": [],
+        "note": "same ODAM processing path; not independent forecast validation"
+      }
+    },
+    {
+      "utc": "2026-08-16T15:00:00Z",
+      "stamp": "202608161500",
+      "products": {
+        "RN1": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161500",
+          "bytes": 267686,
+          "sha256": "00219ebc741da5bbdc79b408a1363e4a920d4f58d41118978234d2cbe089f346",
+          "line_count": 3771,
+          "header": "2026081615+000hour     2026081700LST",
+          "shape": [
+            149,
+            253
+          ],
+          "count": 37697,
+          "finite": 37697,
+          "min": 0.0,
+          "max": 46.6,
+          "sum": 24260.3,
+          "mean": 0.6435604955301483,
+          "zero": 30320,
+          "positive": 7377,
+          "negative": 0,
+          "ge_0_1": 7377,
+          "ge_1": 4308,
+          "ge_5": 1493,
+          "ge_10": 596
+        },
+        "PTY": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_PTY.202608161500",
+          "bytes": 267686,
+          "sha256": "20f16acadf9f746b407a4d561b242501a39652ba15ab3e2ec17258bb7858edff",
+          "line_count": 3771,
+          "header": "2026081615+000hour     2026081700LST",
+          "shape": [
+            149,
+            253
+          ],
+          "count": 37697,
+          "finite": 37697,
+          "min": 0.0,
+          "max": 1.0,
+          "sum": 7379.0,
+          "mean": 0.19574501949757275,
+          "zero": 30318,
+          "positive": 7379,
+          "negative": 0,
+          "ge_0_1": 7379,
+          "ge_1": 7379,
+          "ge_5": 0,
+          "ge_10": 0,
+          "categories": {
+            "0": 30318,
+            "1": 7379
+          }
+        }
+      },
+      "internal_joint": {
+        "rn1_positive_pty_zero": 0,
+        "rn1_zero_pty_positive": 2,
+        "pty_unexpected_categories": [],
+        "note": "same ODAM processing path; not independent forecast validation"
+      }
+    },
+    {
+      "utc": "2026-08-16T16:00:00Z",
+      "stamp": "202608161600",
+      "products": {
+        "RN1": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161600",
+          "bytes": 267686,
+          "sha256": "74f2b96af4e0686b15dc1c8a75e337f964a9e25841540a61b3d3546e22187af6",
+          "line_count": 3771,
+          "header": "2026081616+000hour     2026081701LST",
+          "shape": [
+            149,
+            253
+          ],
+          "count": 37697,
+          "finite": 37697,
+          "min": 0.0,
+          "max": 92.0,
+          "sum": 27955.1,
+          "mean": 0.7415736000212219,
+          "zero": 30051,
+          "positive": 7646,
+          "negative": 0,
+          "ge_0_1": 7646,
+          "ge_1": 5390,
+          "ge_5": 1556,
+          "ge_10": 574
+        },
+        "PTY": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_PTY.202608161600",
+          "bytes": 267686,
+          "sha256": "2c5bc630c9a606bb03eb577d87b4c0905c6729e59f2cac3a1cafa5f5428a4964",
+          "line_count": 3771,
+          "header": "2026081616+000hour     2026081701LST",
+          "shape": [
+            149,
+            253
+          ],
+          "count": 37697,
+          "finite": 37697,
+          "min": 0.0,
+          "max": 1.0,
+          "sum": 7648.0,
+          "mean": 0.202880865851394,
+          "zero": 30049,
+          "positive": 7648,
+          "negative": 0,
+          "ge_0_1": 7648,
+          "ge_1": 7648,
+          "ge_5": 0,
+          "ge_10": 0,
+          "categories": {
+            "0": 30049,
+            "1": 7648
+          }
+        }
+      },
+      "internal_joint": {
+        "rn1_positive_pty_zero": 0,
+        "rn1_zero_pty_positive": 2,
+        "pty_unexpected_categories": [],
+        "note": "same ODAM processing path; not independent forecast validation"
+      }
+    },
+    {
+      "utc": "2026-08-16T17:00:00Z",
+      "stamp": "202608161700",
+      "products": {
+        "RN1": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161700",
+          "bytes": 267686,
+          "sha256": "77145a0b095203e452cc029cf56a97f1ff10a5485b69f76ab1d21219c15fa2d5",
+          "line_count": 3771,
+          "header": "2026081617+000hour     2026081702LST",
+          "shape": [
+            149,
+            253
+          ],
+          "count": 37697,
+          "finite": 37697,
+          "min": 0.0,
+          "max": 89.9,
+          "sum": 19932.9,
+          "mean": 0.5287662148181553,
+          "zero": 33191,
+          "positive": 4506,
+          "negative": 0,
+          "ge_0_1": 4506,
+          "ge_1": 2831,
+          "ge_5": 1100,
+          "ge_10": 458
+        },
+        "PTY": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_PTY.202608161700",
+          "bytes": 267686,
+          "sha256": "aa5b3173874d407250a3b51f7c373b31549eaf08d4d43e847e95a8d9f51d1526",
+          "line_count": 3771,
+          "header": "2026081617+000hour     2026081702LST",
+          "shape": [
+            149,
+            253
+          ],
+          "count": 37697,
+          "finite": 37697,
+          "min": 0.0,
+          "max": 1.0,
+          "sum": 4507.0,
+          "mean": 0.11955858556383797,
+          "zero": 33190,
+          "positive": 4507,
+          "negative": 0,
+          "ge_0_1": 4507,
+          "ge_1": 4507,
+          "ge_5": 0,
+          "ge_10": 0,
+          "categories": {
+            "0": 33190,
+            "1": 4507
+          }
+        }
+      },
+      "internal_joint": {
+        "rn1_positive_pty_zero": 0,
+        "rn1_zero_pty_positive": 1,
+        "pty_unexpected_categories": [],
+        "note": "same ODAM processing path; not independent forecast validation"
+      }
+    },
+    {
+      "utc": "2026-08-16T18:00:00Z",
+      "stamp": "202608161800",
+      "products": {
+        "RN1": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_RN1.202608161800",
+          "bytes": 267686,
+          "sha256": "f0b6834a27449904efb7f6242e47a6246d75ad1403d6eb24ce82c689f00557bc",
+          "line_count": 3771,
+          "header": "2026081618+000hour     2026081703LST",
+          "shape": [
+            149,
+            253
+          ],
+          "count": 37697,
+          "finite": 37697,
+          "min": 0.0,
+          "max": 117.1,
+          "sum": 27712.000000000004,
+          "mean": 0.7351248109929173,
+          "zero": 30901,
+          "positive": 6796,
+          "negative": 0,
+          "ge_0_1": 6796,
+          "ge_1": 4123,
+          "ge_5": 1597,
+          "ge_10": 599
+        },
+        "PTY": {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee_data/ODAM/20260816/DFS_VSRT_GRD_KLPS_ODAM_PTY.202608161800",
+          "bytes": 267686,
+          "sha256": "bbbcf2227a3e0465ae4a57a68867b98898793b94c73222522450fe0b6038e8c5",
+          "line_count": 3771,
+          "header": "2026081618+000hour     2026081703LST",
+          "shape": [
+            149,
+            253
+          ],
+          "count": 37697,
+          "finite": 37697,
+          "min": 0.0,
+          "max": 1.0,
+          "sum": 6797.0,
+          "mean": 0.18030612515584796,
+          "zero": 30900,
+          "positive": 6797,
+          "negative": 0,
+          "ge_0_1": 6797,
+          "ge_1": 6797,
+          "ge_5": 0,
+          "ge_10": 0,
+          "categories": {
+            "0": 30900,
+            "1": 6797
+          }
+        }
+      },
+      "internal_joint": {
+        "rn1_positive_pty_zero": 0,
+        "rn1_zero_pty_positive": 1,
+        "pty_unexpected_categories": [],
+        "note": "same ODAM processing path; not independent forecast validation"
+      }
+    }
+  ],
+  "mask": {
+    "authority_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/landseamask.dat",
+    "authority_sha256": "099284fc01f0175ceac96f07fa0ea11bfc4debcff2c2c084f6868d045af17026",
+    "shape_nx_ny": [
+      149,
+      253
+    ],
+    "i1mask_code_selection": [
+      11,
+      21,
+      31,
+      41,
+      51,
+      61
+    ],
+    "i1mask_code_only": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/south_korea_i1mask_codes_149x253_uint8_fortran.bin",
+      "sha256": "1d98591e31c8f7d8d9e8e46d19b28a63486e86c7fa8fdf149809d58773f11765",
+      "bytes": 37697,
+      "selected_count": 4435,
+      "excluded_count": 33262,
+      "layout": "uint8 raw; Fortran order (i fastest), equivalent to ODAM direct record"
+    },
+    "south_korea_land_intersection": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/scratch/cp02_six_hour_20260914/reference/south_korea_land_mask_149x253_uint8_fortran.bin",
+      "sha256": "25a43d7e2981b6551cb753362f9d52ce11037a6e2d61a4750c1e21d152742b46",
+      "bytes": 37697,
+      "selected_count": 3688,
+      "excluded_count": 34009,
+      "definition": "i1mask in {11,21,31,41,51,61} AND static.nest7grid lnd == 1.0",
+      "layout": "uint8 raw; Fortran order (i fastest), equivalent to ODAM direct record",
+      "note": "This is the strict land-only scoring mask. The categorical code-only mask is retained for provenance."
+    },
+    "code_counts": {
+      "11": 531,
+      "21": 684,
+      "22": 311,
+      "23": 1667,
+      "31": 685,
+      "32": 148,
+      "33": 2250,
+      "41": 1079,
+      "42": 187,
+      "43": 2578,
+      "51": 101,
+      "52": 146,
+      "53": 2851,
+      "61": 1355,
+      "62": 207,
+      "63": 5188,
+      "71": 4856,
+      "72": 815,
+      "73": 4723,
+      "81": 1916,
+      "91": 5419
+    },
+    "static_lnd_source": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/static.nest7grid",
+      "sha256": "384b419c8165457432e8c7ce58e8ab07f57ac07f5a08c2da608880b3240b4b9b",
+      "field": "lnd",
+      "source_definition": "land (1) water (0) mask",
+      "crop_x_inclusive": [
+        76,
+        224
+      ],
+      "crop_y_inclusive": [
+        7,
+        259
+      ]
+    },
+    "static_1km_crosscheck": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/ANAL/NE57/DABA/landsea_mask_k1.gdat",
+      "sha256": "d03342e0c313ec31028865426d8231e491d2be6ff325717888e99d5875c7b67f",
+      "note": "RAIN reads this 1171x1411 field; no source-defined reduction to the 149x253 scoring grid was applied."
+    },
+    "no_geographic_box": true
+  }
+}

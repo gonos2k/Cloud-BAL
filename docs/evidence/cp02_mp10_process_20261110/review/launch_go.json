@@ -1,0 +1,26 @@
+{
+  "status": "GO_FOR_LAUNCH",
+  "sha256": {
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/launch.py": "24baca711fc03b863edc3eeadb49878fe72f741c4d5ff3f8da5b3b68e9ace9a8",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/forecast.py": "7ecd53d1d4325af9325c5ab4d4f25a7c43a2874753433c8ffa1fb63caa24570c",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/rank_wrapper.sh": "933d4496a8c3b0aed240364ef08c3b1db5d8219b348b71b9c3db5b1ab3135938",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/compare_histories.py": "42e53ffb53e9b2c7d5774acea489e6ffcf9ba64e9551d22e2a8d5e00968297df",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/reference_pins.json": "44b2a13f9885258a140bef9880db38935a4b3e7d31024683f2676cd2cb515697",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/compact.py": "37d1a3e1304c88ad34d7242c4fad356826df230d44a4a7e74a5ff47dc02a450b",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/read_frames.py": "03edc98fe5b199a26f0722f8f2a3e83e6330c5bc96799d91df8422ccea2afb10",
+    "docs/evidence/cp02_protected_process_20261106/native/provenance/collector_v5/cp02_protected_process_capture.py": "c0c59c3d328a95168db14022772d52eae212cc38ae8f64d4e784f5df0ca490b9",
+    "docs/evidence/cp02_mp10_process_20261110/native/schema/schema.json": "c71fc8f9831f0be9f6f52aa1725f9d7e09493906e5083112127db9ab601e5cc2",
+    "docs/evidence/cp02_mp10_process_20261110/native/source/source_receipt.json": "98621cc1d701cac072a1c403a162c688753c8b6e63f646e7abaa94cfe7e7bc1c",
+    "docs/evidence/cp02_mp10_process_20261110/cohorts/native_columns.csv": "f867579125b8b780db0035737cfeee844da2d9f921bf2b403df3c86500f8f107",
+    "docs/evidence/cp02_mp10_process_20261110/native/runs/read_frames_constants.py": "f8bf5a8daecf54d3f7454cf5fa7750a375b1345672b2bb524c42b3ec8feeab88"
+  },
+  "probe_receipt_sha256": {
+    "CONTROL": "c3cf6358df7b0d8e7d6ebf962dbb74384acf9d7d6cd5441ea980e87f2124132b",
+    "MP10": "baaffc5ac5ee8e18b26761436e5a07ae24bc4fb4babab8592db5b6c6e3a29457"
+  },
+  "build_receipt_sha256": {
+    "CONTROL": "2a9c968bd875947a50951816af9ef49d8b3712aa85684612a8372db9eef39532",
+    "MP10": "1108274452692c67980f4a8dc28a5f186df067e3e1b7ae407c8ebf410c6171e2"
+  },
+  "review": "Actual 20 s WRF probe verified 4329 exact MP10 carry levels and 160 source-order precipitation updates (CONTROL 85); both face precisions observed. Six-hour recipe uses privately staged pinned inputs, independent process cleanup, and seven exact byte comparisons with each pinned parent; comparisons and compact completeness remain mandatory before interpretation. Reviewed frame constant preservation with actual REAL32 bits and separate REAL64 face payload."
+}
