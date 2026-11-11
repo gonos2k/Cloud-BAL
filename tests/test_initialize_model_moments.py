@@ -91,6 +91,101 @@ class ModelMomentBoundaryTest(unittest.TestCase):
         self.manifest = self.p / "manifest.json"
         self.manifest.write_text(json.dumps(manifest))
 
+    def set_partition(self, *, ni=6000, frozen_error=0):
+        shape = (2, 2, 3)
+        mask = np.zeros(shape, dtype=np.int32)
+        mask[0, 0, 0] = 1
+        qi = np.full(shape, 1e-6, dtype=np.float32)
+        qs = np.full(shape, 1e-6, dtype=np.float32)
+        qi[0, 0, 0] = 0.6e-6
+        qs[0, 0, 0] = 1.4e-6 + frozen_error
+        path = self.p / "partition.npz"
+        np.savez(path, source_sha256=module.sha(self.template), source="synthetic declared frozen partition",
+                 provenance=np.int32(3), qi=qi, qs=qs, ni=np.full(shape, ni, dtype=np.float32), valid=mask)
+        manifest = json.loads(self.manifest.read_text())
+        manifest["ice_snow_partition"] = {"path": str(path), "sha256": module.sha(path)}
+        self.manifest.write_text(json.dumps(manifest))
+        return path
+
+    def test_joint_partition_and_number_are_published_together(self):
+        self.set_partition()
+        out, receipt = self.p / "joint.nc", self.p / "joint.json"
+        report = module.run_real_and_complete(self.manifest, out, receipt)
+        self.assertEqual(report["completion"]["ice_snow_partition"]["selected_cells"], 1)
+        self.assertFalse(report["native_first_use_verified"])
+        with Dataset(out) as ds, Dataset(self.template) as original:
+            self.assertEqual(ds["QICE"][0, 0, 0, 0], np.float32(.6e-6))
+            self.assertEqual(ds["QSNOW"][0, 0, 0, 0], np.float32(1.4e-6))
+            self.assertEqual(ds["QNICE"][0, 0, 0, 0], 6000)
+            for name in ("T", "QVAPOR", "QRAIN", "QGRAUP", "QCLOUD", "U"):
+                np.testing.assert_array_equal(ds[name][:], original[name][:])
+            for name in ("QICE", "QSNOW"):
+                np.testing.assert_array_equal(ds[name][0, 1], original[name][0, 1])
+            # Existing independent observations retain their priority for other slots.
+            self.assertEqual(ds["QNCLOUD"][0, 0, 0, 0], 20000)
+        self.assertEqual(module.sha(self.template), report["producer_output_sha256"])
+
+    def test_joint_bad_number_and_mass_change_never_publish(self):
+        for name, kwargs in (("number", {"ni": 2e6}), ("mass", {"frozen_error": 1e-6})):
+            with self.subTest(name=name):
+                self.set_partition(**kwargs)
+                out, receipt = self.p / (name+".nc"), self.p / (name+".json")
+                with self.assertRaisesRegex(ValueError, "completion failed"):
+                    module.run_real_and_complete(self.manifest, out, receipt)
+                self.assertFalse(out.exists())
+                self.assertFalse(receipt.exists())
+
+    def test_joint_driver_cannot_substitute_another_conservative_partition(self):
+        self.set_partition()
+        real_run = module.subprocess.run
+        for corruption in ("offmask", "negative", "number", "provenance"):
+            def corrupt_output(command, *args, **kwargs):
+                result = real_run(command, *args, **kwargs)
+                if len(command) == 4:
+                    path = Path(command[2])
+                    raw = bytearray(path.read_bytes())
+                    count, cells = 60, 12
+                    mass = np.frombuffer(raw, dtype=np.float32, count=2*cells, offset=48+16*count).reshape(2, 2, 2, 3)
+                    if corruption == "offmask":
+                        mass[:, 1, 0, 0] = [np.float32(.6e-6), np.float32(1.4e-6)]
+                    elif corruption == "negative":
+                        mass[:, 0, 0, 0] = [np.float32(-.6e-6), np.float32(2.6e-6)]
+                    elif corruption == "number":
+                        number = np.frombuffer(raw, dtype=np.float64, count=count, offset=20)
+                        number[cells] = 10000
+                    else:
+                        sources = np.frombuffer(raw, dtype=np.int32, count=count, offset=20+12*count)
+                        sources[cells] = 1
+                    path.write_bytes(raw)
+                return result
+            out, receipt = self.p/(corruption+".nc"), self.p/(corruption+".json")
+            with self.subTest(corruption=corruption):
+                with mock.patch.object(module.subprocess, "run", side_effect=corrupt_output):
+                    with self.assertRaisesRegex(ValueError, "joint driver disagrees"):
+                        module.run_real_and_complete(self.manifest, out, receipt)
+                self.assertFalse(out.exists())
+                self.assertFalse(receipt.exists())
+
+    def test_joint_proposal_hash_and_mask_are_required(self):
+        path = self.set_partition()
+        with np.load(path) as data:
+            arrays = {key: data[key] for key in data.files}
+        arrays["source_sha256"] = "not-the-source"
+        np.savez(path, **arrays)
+        manifest = json.loads(self.manifest.read_text())
+        manifest["ice_snow_partition"]["sha256"] = module.sha(path)
+        self.manifest.write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(ValueError, "partition source hash mismatch"):
+            module.run_real_and_complete(self.manifest, self.p/"bad.nc", self.p/"bad.json")
+        arrays["source_sha256"] = module.sha(self.template)
+        arrays["valid"] = np.ones((2, 2, 3), dtype=np.float32)
+        np.savez(path, **arrays)
+        manifest["ice_snow_partition"]["sha256"] = module.sha(path)
+        self.manifest.write_text(json.dumps(manifest))
+        with self.assertRaisesRegex(ValueError, "partition mask"):
+            module.run_real_and_complete(self.manifest, self.p/"bad.nc", self.p/"bad.json")
+        self.assertFalse((self.p/"bad.nc").exists())
+
     def test_fresh_copy_priorities_and_preservation(self):
         output, receipt = self.p / "output.nc", self.p / "receipt.json"
         report = module.run_real_and_complete(self.manifest, output, receipt)

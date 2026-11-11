@@ -1,0 +1,54 @@
+{
+  "status": "PASS",
+  "source_sha256": {
+    "src/common/cloud_bal_state.f90": "205d034e803f9e7294e8d913e46b40174f38caaf82a19d119ffafcacdae494ab",
+    "src/common/cloud_bal_microphysics_initialization.f90": "37213d78d9c26bd269b2df450deb915a38c96a3fb638a7ab50af17365317d22f",
+    "tools/model_moment_driver.f90": "d3847dc2455b84d36384a673422a711d64e19dc8f1f5fcc21c8b2a32531bc921",
+    "tools/initialize_model_moments.py": "ccea402f04ea2337aa19db108783e3c716f25273376b2a1c6764d870ed4c1c35",
+    "tests/test_microphysics_initialization.f90": "0c9ea056fe637106fa776968624e51bbea6a1714ebb60519a3dcf466ee41fbcc",
+    "tests/test_ice_snow_initialization.f90": "ffc63b33ec0e92772d8069dbe32893f8bc6b0f1c343d29c118abaf148ec9ba23",
+    "tests/test_initialize_model_moments.py": "b942021039679639fc2aeb16e517a5eb18a4151904d4ef95027ca0f8778d04e0",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/run_ice_snow_initialization.sh": "8ff775892020d282890928d949ca898a22c50a46139b96853555af910117804f",
+    "tests/run_initialize_model_moments.sh": "421a5e4731c281ab04a45048ee09a3fae1a9f59ba3bffed9763a04e2bbf74a5e",
+    "tests/run_unit_tests.sh": "0c550a771127b07031d1913772ca703237153e9a5e19b3b36fa61372eeb43620",
+    "tools/plot_ice_partition_handoff.py": "edabb20e2fe877ea75bdc22d386e92cbcf3d6ec4b7fdffddfb45d32bf5f51223",
+    "docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+    "docs/evidence/ice_partition_policy_20261111/native/file_values.json": "f264630978ab13ebdc841d93e6b0738bc07c70c794c0a27a0072cafdb66ee246",
+    "docs/evidence/ice_partition_policy_20261111/native/capturedsmallrecords/rank3.jsonl": "944840ff71872bcf70301d8fc88afb3b5e5da57da86d9d3786dd339ec7053006",
+    "docs/evidence/ice_partition_policy_20261111/native/capturedsmallrecords/rank7.jsonl": "4de157781326fd8d8bb240cef1bc3fcc94575f0d6b75fdd724bd0a2ee0e5bf5b",
+    "docs/evidence/ice_partition_policy_20261111/validation/run.py": "ff6aef78b72ed6965bd57f9f6f69dabc1de34b74bc9d2f96c88dd578fef0b5bb"
+  },
+  "commands": {
+    "O0": {
+      "exit_code": 0,
+      "log": "docs/evidence/ice_partition_policy_20261111/validation/O0.log",
+      "log_sha256": "0444050b71df48df7982129db565469033f6864b4f11923762d1098767a5b689",
+      "seconds": 5.526173796504736,
+      "scratch_script": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/ice_partition_policy_20261111/validation/frozen-3xhl03ce/O0/run.sh"
+    },
+    "O2": {
+      "exit_code": 0,
+      "log": "docs/evidence/ice_partition_policy_20261111/validation/O2.log",
+      "log_sha256": "67d0bdb08f8f2f700c137af83b41532feab265232cf3fd6b8a3ec32e455370c9",
+      "seconds": 12.545342303812504,
+      "scratch_script": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/ice_partition_policy_20261111/validation/frozen-3xhl03ce/O2/run.sh"
+    }
+  },
+  "scratch": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/ice_partition_policy_20261111/validation/frozen-3xhl03ce",
+  "optimizations": [
+    "O0",
+    "O2"
+  ],
+  "python_tests_per_optimization": 19,
+  "checks": [
+    "existing common completion",
+    "new atomic QI/QS/NI completion",
+    "final file and corruption/rollback cases"
+  ],
+  "reproduced": {
+    "native_handoff.csv": "e8c3b5bdec351e29c10a8e8a6039a798932014f5f5e28b7e322ac23e95ba5c35",
+    "native_handoff.png": "80a629e0ecbe806fac87a2eb5d838d71822b59ae640d59c9b7277aeff4ca9702"
+  },
+  "scope": "Frozen-source common/adapter fixtures and deterministic selected historical native plot; not a new initialized WRF input or forecast test."
+}

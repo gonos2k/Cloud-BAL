@@ -1,0 +1,23 @@
+{
+  "version": 1,
+  "name": "Explicit sourced QI-QS-NI joint proposal",
+  "partition_estimator": "none; caller must supply a justified joint proposal",
+  "fallback_for_unknown_partition": "reject; never move excess QI to QS solely to satisfy NI constraints",
+  "supported_mass_basis": "kg per kg dry air; NI per kg dry air",
+  "supported_change": "closed ice/snow repartition of the existing frozen total",
+  "source": "nonempty caller attestation; provenance 1 observed, 2 background, 3 explicit prior",
+  "observational_authority_verified": false,
+  "storage": "REAL32 QI, QS, NI; compare frozen sums in REAL64",
+  "frozen_sum_tolerance": "epsilon32 * max(before_sum, after_sum)",
+  "temperature_and_vapor": "unchanged; ice/snow share common enthalpy coefficients",
+  "number_admission": "unchanged analytical mean-mass policy and native REAL32 stored-number cap",
+  "native_lambda_nonadjustment_guaranteed": false,
+  "joint_ni_priority": "authoritative on the shared proposal mask; no fallback for invalid supplied NI",
+  "other_moments": "existing observed/background/prior completion rules",
+  "commit_status": "STATUS_OK only; preserve entire output on failure or DEGRADED",
+  "default_without_proposal": "unchanged moment-only file path",
+  "historical_native_trace": "unchanged B1, five cells, 80 seconds; not the new proposal",
+  "new_proposal_native_first_use_verified": false,
+  "new_forecast_skill_evaluated": false,
+  "unresolved": "Physical partition of B1's 1362 analytically empty NI intervals; actual first use of a new initialized input; independent weather events"
+}

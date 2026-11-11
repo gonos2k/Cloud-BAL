@@ -1,0 +1,63 @@
+{
+  "status": "PUBLISHED_AND_READBACK_PASS",
+  "snapshot": "2026-11-11-ice-partition-policy",
+  "selection": [
+    "docs/evidence/ice_partition_policy_20261111/native/file_capture.py",
+    "docs/evidence/ice_partition_policy_20261111/native/probe.py",
+    "docs/evidence/ice_partition_policy_20261111/native/stage.py",
+    "docs/evidence/ice_partition_policy_20261111/native/validate.py",
+    "src/common/cloud_bal_microphysics_initialization.f90",
+    "tests/test_ice_snow_initialization.f90",
+    "tests/test_initialize_model_moments.py",
+    "tools/initialize_model_moments.py",
+    "tools/model_moment_driver.f90",
+    "tools/plot_ice_partition_handoff.py"
+  ],
+  "maintained_dated_snapshots": {
+    "before": 272,
+    "after": 274
+  },
+  "corpora": {
+    "Cloud-BAL": {
+      "before": {
+        "communities": 1735,
+        "edges": 35441,
+        "nodes": 19568
+      },
+      "after": {
+        "communities": 1744,
+        "edges": 35523,
+        "nodes": 19615
+      },
+      "delta": {
+        "nodes": 47,
+        "edges": 82,
+        "communities": 9
+      }
+    },
+    "KLAPS50": {
+      "before": {
+        "communities": 3697,
+        "edges": 94027,
+        "nodes": 45396
+      },
+      "after": {
+        "communities": 3697,
+        "edges": 94110,
+        "nodes": 45443
+      },
+      "delta": {
+        "nodes": 47,
+        "edges": 83,
+        "communities": 0
+      }
+    }
+  },
+  "validation": "Full pinned Intel unit suite exit0; frozen O0/O2 old/joint core and19fileboundarytests each; historical8rank80secondpair,290records,15RKwords,5densitywords; independent source/science/package review. See ../validation/receipt.json.",
+  "extraction_note": "Ten selected AST sources; other docs/evidence are hash-only, no semantic document extraction. Fortran cross-file CALL coverage is partial. Selected edge source locations update; untouched edge records and all old nodes preserved. Graph freshness is not runtime/scientific acceptance.",
+  "open_items": [
+    "Physical source-backed QI/QS/NI partition for1362analytical conflicts remains open; no cap-driven mass redistribution.",
+    "First actual WRF use of a new joint proposal remains unverified; native trace used unchanged historical B1.",
+    "Operational phase coupling, full-domain water/energy, independent weather events and forecast skill remain open."
+  ]
+}

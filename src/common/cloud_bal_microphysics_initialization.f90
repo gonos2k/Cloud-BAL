@@ -1,7 +1,7 @@
 ! Complete dry-air specific hydrometeor moments without changing analyzed water.
 ! The caller supplies scheme-specific bounds and independently sourced priors.
 MODULE cloud_bal_microphysics_initialization
-  USE, INTRINSIC :: iso_fortran_env, ONLY: real32, real64, int64
+  USE, INTRINSIC :: iso_fortran_env, ONLY: real32, real64, int32, int64
   USE, INTRINSIC :: ieee_arithmetic, ONLY: ieee_is_finite
   USE cloud_bal_state, ONLY: cloud_bal_state_type, field3d, moment_bundle, &
     MOMENT_NC, MOMENT_NI, MOMENT_NR, MOMENT_NN, MOMENT_BG, &
@@ -20,9 +20,16 @@ MODULE cloud_bal_microphysics_initialization
     REAL(real64) :: lower(5) = 0.0_real64
     REAL(real64) :: upper(5) = 0.0_real64
   END TYPE microphysics_completion_policy
+  ! The mask is carried by all three fields and must agree.  No partition is
+  ! inferred from the number cap; source identifies the external authority.
+  TYPE, PUBLIC :: ice_snow_partition
+    TYPE(field3d) :: cloud_ice, snow, ice_number
+    CHARACTER(LEN=256) :: source = ''
+    INTEGER(int32) :: provenance = 0
+  END TYPE ice_snow_partition
   INTEGER, PARAMETER, PUBLIC :: MOMENT_FAILURE_OTHER=1, MOMENT_FAILURE_EMPTY_ANALYTICAL_INTERVAL=2, &
     MOMENT_FAILURE_CANDIDATE=3
-  PUBLIC :: complete_microphysics, complete_initialization_state
+  PUBLIC :: complete_microphysics, complete_initialization_state, complete_ice_snow_initialization
 
 CONTAINS
 
@@ -223,6 +230,134 @@ CONTAINS
       failure_reason,feasible_interval)
     IF (status/=STATUS_FAILED) output=candidate
   END SUBROUTINE complete_initialization_state
+
+  ! Atomic joint proposal: all three supplied moments are authoritative on the
+  ! shared mask.  The existing completer fills other moments but may not repair
+  ! an invalid proposed NI.  Input and output must be distinct actual objects.
+  SUBROUTINE complete_ice_snow_initialization(state,output,partition,prior,policy,status,native_den, &
+      failed_location,failure_reason,feasible_interval,observed)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    TYPE(cloud_bal_state_type), INTENT(INOUT) :: output
+    TYPE(ice_snow_partition), INTENT(IN) :: partition
+    TYPE(moment_bundle), INTENT(IN) :: prior
+    TYPE(microphysics_completion_policy), INTENT(IN) :: policy
+    INTEGER, INTENT(OUT) :: status
+    REAL(real32), INTENT(IN) :: native_den(:,:,:)
+    INTEGER, INTENT(OUT), OPTIONAL :: failed_location(4),failure_reason
+    REAL(real64), INTENT(OUT), OPTIONAL :: feasible_interval(2)
+    TYPE(moment_bundle), INTENT(IN), OPTIONAL :: observed
+    TYPE(moment_bundle) :: observed_copy
+    TYPE(cloud_bal_state_type) :: candidate,completed
+    INTEGER :: dims(3),dims4(4),i,j,k,completion_status
+    REAL(real64) :: before,after,tolerance,ni
+
+    status=STATUS_FAILED
+    IF (PRESENT(failed_location)) failed_location=0
+    IF (PRESENT(failure_reason)) failure_reason=MOMENT_FAILURE_OTHER
+    IF (PRESENT(feasible_interval)) feasible_interval=0.0_real64
+    dims=[state%grid%nx,state%grid%ny,state%grid%nz]
+    IF (ANY(dims<=0)) RETURN
+    dims4=[dims,5]
+    IF (LEN_TRIM(partition%source)==0) RETURN
+    IF (partition%provenance/=MOMENT_OBSERVED .AND. partition%provenance/=MOMENT_BACKGROUND .AND. &
+        partition%provenance/=MOMENT_PRIOR) RETURN
+    IF (.NOT.proposal_field_shape(partition%cloud_ice,dims,state%pressure%valid_time,'kg kg-1 dryair')) RETURN
+    IF (.NOT.proposal_field_shape(partition%snow,dims,state%pressure%valid_time,'kg kg-1 dryair')) RETURN
+    IF (.NOT.proposal_field_shape(partition%ice_number,dims,state%pressure%valid_time,'kg-1 dryair')) RETURN
+    IF (ANY(partition%cloud_ice%valid .NEQV. partition%snow%valid)) RETURN
+    IF (ANY(partition%cloud_ice%valid .NEQV. partition%ice_number%valid)) RETURN
+    IF (.NOT.mass_field_valid(state%cloud_ice,dims,state%pressure%valid_time)) RETURN
+    IF (.NOT.mass_field_valid(state%snow,dims,state%pressure%valid_time)) RETURN
+    IF (.NOT.policy_valid(policy)) RETURN
+    IF (ANY(SHAPE(native_den)/=dims)) RETURN
+    IF (.NOT.ALL(ieee_is_finite(native_den))) RETURN
+    IF (ANY(native_den<=0.0_real32)) RETURN
+    IF (PRESENT(observed)) THEN
+      IF (moment_bundle_present(observed)) THEN
+        IF (.NOT.bundle_shape(observed,dims4)) RETURN
+        observed_copy=observed
+        ! Joint NI is authoritative on the proposal mask; other observations
+        ! retain the existing completer's priority.
+        WHERE (partition%cloud_ice%valid) observed_copy%valid(:,:,:,MOMENT_NI)=.FALSE.
+      END IF
+    END IF
+    candidate=state
+    IF (moment_bundle_present(candidate%moments)) THEN
+      IF (.NOT.bundle_shape(candidate%moments,dims4)) RETURN
+    ELSE
+      ALLOCATE(candidate%moments%value(dims(1),dims(2),dims(3),5), &
+        candidate%moments%valid(dims(1),dims(2),dims(3),5), &
+        candidate%moments%provenance(dims(1),dims(2),dims(3),5))
+      candidate%moments%value=0.0_real64
+      candidate%moments%valid=.FALSE.
+      candidate%moments%provenance=0
+    END IF
+    DO k=1,dims(3)
+      DO j=1,dims(2)
+        DO i=1,dims(1)
+          IF (.NOT.partition%cloud_ice%valid(i,j,k)) CYCLE
+          IF (PRESENT(failed_location)) failed_location=[i,j,k,MOMENT_NI]
+          IF (.NOT.proposal_cell_valid(partition%cloud_ice,i,j,k)) RETURN
+          IF (.NOT.proposal_cell_valid(partition%snow,i,j,k)) RETURN
+          IF (.NOT.proposal_cell_valid(partition%ice_number,i,j,k)) RETURN
+          before=REAL(state%cloud_ice%value(i,j,k),real64)+REAL(state%snow%value(i,j,k),real64)
+          after=REAL(partition%cloud_ice%value(i,j,k),real64)+REAL(partition%snow%value(i,j,k),real64)
+          ! Each of two stored REAL32 components may incur half an ulp;
+          ! one epsilon times the total bounds both rounding errors.
+          tolerance=REAL(EPSILON(1.0_real32),real64)*MAX(before,after)
+          IF (ABS(after-before)>tolerance) RETURN
+          ni=REAL(partition%ice_number%value(i,j,k),real64)
+          IF (.NOT.admissible(ni,REAL(partition%cloud_ice%value(i,j,k),real64), &
+              MOMENT_NI,policy,native_den(i,j,k))) THEN
+            IF (PRESENT(failure_reason)) failure_reason=MOMENT_FAILURE_CANDIDATE
+            RETURN
+          END IF
+          candidate%cloud_ice%value(i,j,k)=partition%cloud_ice%value(i,j,k)
+          candidate%cloud_ice%quality(i,j,k)=partition%cloud_ice%quality(i,j,k)
+          candidate%cloud_ice%source(i,j,k)=partition%cloud_ice%source(i,j,k)
+          candidate%snow%value(i,j,k)=partition%snow%value(i,j,k)
+          candidate%snow%quality(i,j,k)=partition%snow%quality(i,j,k)
+          candidate%snow%source(i,j,k)=partition%snow%source(i,j,k)
+          candidate%moments%value(i,j,k,MOMENT_NI)=ni
+          candidate%moments%valid(i,j,k,MOMENT_NI)=.TRUE.
+          candidate%moments%provenance(i,j,k,MOMENT_NI)=partition%provenance
+        END DO
+      END DO
+    END DO
+    CALL complete_initialization_state(candidate,completed,prior,policy,completion_status,native_den, &
+      observed=observed_copy,failed_location=failed_location,failure_reason=failure_reason, &
+      feasible_interval=feasible_interval)
+    IF (completion_status/=STATUS_OK) THEN
+      IF (PRESENT(failure_reason)) THEN
+        IF (failure_reason==0) failure_reason=MOMENT_FAILURE_OTHER
+      END IF
+      RETURN
+    END IF
+    output=completed
+    status=STATUS_OK
+  END SUBROUTINE complete_ice_snow_initialization
+
+  LOGICAL FUNCTION proposal_field_shape(field,dims,valid_time,unit)
+    TYPE(field3d), INTENT(IN) :: field
+    INTEGER, INTENT(IN) :: dims(3)
+    INTEGER(int64), INTENT(IN) :: valid_time
+    CHARACTER(LEN=*), INTENT(IN) :: unit
+    proposal_field_shape=.FALSE.
+    IF (.NOT.ALLOCATED(field%value) .OR. .NOT.ALLOCATED(field%valid) .OR. &
+        .NOT.ALLOCATED(field%quality) .OR. .NOT.ALLOCATED(field%source)) RETURN
+    IF (ANY(SHAPE(field%value)/=dims) .OR. ANY(SHAPE(field%valid)/=dims) .OR. &
+        ANY(SHAPE(field%quality)/=dims) .OR. ANY(SHAPE(field%source)/=dims)) RETURN
+    proposal_field_shape=field%unit==unit .AND. field%valid_time==valid_time
+  END FUNCTION proposal_field_shape
+
+  LOGICAL FUNCTION proposal_cell_valid(field,i,j,k)
+    TYPE(field3d), INTENT(IN) :: field
+    INTEGER, INTENT(IN) :: i,j,k
+    proposal_cell_valid=.FALSE.
+    IF (.NOT.cell_is_usable(field%valid(i,j,k),field%quality(i,j,k),field%source(i,j,k))) RETURN
+    IF (.NOT.ieee_is_finite(field%value(i,j,k))) RETURN
+    proposal_cell_valid=field%value(i,j,k)>=0.0_real32
+  END FUNCTION proposal_cell_valid
 
   LOGICAL FUNCTION bundle_shape(bundle,shape4)
     TYPE(moment_bundle), INTENT(IN) :: bundle

@@ -118,7 +118,43 @@ def bundle(npz, prefix, shape):
     return value, valid.astype(np.int32), source
 
 
-def complete_file(source, target, driver, policy, candidates, work, use_theta_m):
+def write_ice_snow_partition(path, source_hash, shape, output):
+    """Serialize an explicitly sourced joint proposal, never infer one from caps."""
+    with np.load(path, allow_pickle=False) as data:
+        if str(data["source_sha256"].item()) != source_hash:
+            raise ValueError("ice/snow partition source hash mismatch")
+        label = data["source"].item()
+        if not isinstance(label, str):
+            raise ValueError("explicit ice/snow partition source required")
+        encoded = label.encode("utf-8")
+        if not label.strip() or len(encoded) > 256 or b"\0" in encoded:
+            raise ValueError("explicit ice/snow partition source required")
+        provenance = data["provenance"].item()
+        if type(provenance) is not int or provenance not in (1, 2, 3):
+            raise ValueError("invalid ice/snow partition provenance")
+        arrays = [np.asarray(data[key]) for key in ("qi", "qs", "ni")]
+        if any(a.shape != shape or a.dtype != np.dtype("float32") for a in arrays):
+            raise ValueError("ice/snow partition requires matching float32 fields")
+        mask = np.asarray(data["valid"])
+        if mask.shape != shape or mask.dtype.kind not in "biu" or not np.isin(mask, (0, 1)).all():
+            raise ValueError("invalid ice/snow partition mask")
+        active = mask.astype(bool)
+        if any(not np.isfinite(a[active]).all() or np.any(a[active] < 0) for a in arrays):
+            raise ValueError("invalid active ice/snow partition value")
+        with output.open("xb") as stream:
+            np.asarray(shape[::-1], dtype=np.int32).tofile(stream)
+            for a in arrays:
+                np.ascontiguousarray(a).tofile(stream)
+            np.ascontiguousarray(mask, dtype=np.int32).tofile(stream)
+            np.asarray(provenance, dtype=np.int32).tofile(stream)
+            stream.write(encoded.ljust(256, b" "))
+    details = {"source": label, "provenance": provenance, "selected_cells": int(active.sum()),
+            "authority": "Caller attestation, not verification of observational support.",
+            "rule": "Explicit QI/QS/NI; frozen mass preserved within REAL32 storage tolerance; no cap-driven repartition."}
+    return details, arrays, active
+
+
+def complete_file(source, target, driver, policy, candidates, work, use_theta_m, ice_snow_partition=None):
     validate_kdm6_policy(policy)
     with Dataset(source) as ds:
         ds.set_auto_maskandscale(False)
@@ -170,7 +206,14 @@ def complete_file(source, target, driver, policy, candidates, work, use_theta_m)
             if a.shape != (size,) or not np.isfinite(a).all():
                 raise ValueError(f"invalid policy: {key}")
             a.tofile(f)
-    subprocess.run([str(driver), str(inp), str(out)], cwd=work, check=True)
+    command = [str(driver), str(inp), str(out)]
+    partition_details = None
+    if ice_snow_partition is not None:
+        partition_input = work / "partition.in"
+        partition_details, partition_arrays, partition_mask = write_ice_snow_partition(
+            ice_snow_partition, sha(source), shape[1:], partition_input)
+        command.append(str(partition_input))
+    subprocess.run(command, cwd=work, check=True)
     count = 5 * int(np.prod(shape[1:]))
     with out.open("rb") as f:
         status = np.fromfile(f, dtype=np.int32, count=1)
@@ -181,6 +224,12 @@ def complete_file(source, target, driver, policy, candidates, work, use_theta_m)
         temperature_range = np.fromfile(f, dtype=np.float32, count=2)
         failure_reason = np.fromfile(f, dtype=np.int32, count=1)
         interval = np.fromfile(f, dtype=np.float64, count=2)
+        partition_mass = None
+        if ice_snow_partition is not None:
+            partition_mass = np.fromfile(f, dtype=np.float32, count=2 * int(np.prod(shape[1:])))
+            if partition_mass.size != 2 * int(np.prod(shape[1:])) or not np.isfinite(partition_mass).all():
+                raise ValueError("invalid joint ice/snow driver output")
+            partition_mass = partition_mass.reshape((2, *shape[1:]))
         sizes = (status.size, location.size, values.size, valid.size, provenance.size,
                  temperature_range.size, failure_reason.size, interval.size)
         if (f.read(1) or sizes != (1, 4, count, count, count, 2, 1, 2)
@@ -197,19 +246,50 @@ def complete_file(source, target, driver, policy, candidates, work, use_theta_m)
     values = values.reshape((5, *shape[1:])).astype(np.float32)
     if not np.isfinite(values).all():
         raise ValueError("moment cannot be represented in native dtype")
+    if partition_mass is not None:
+        for index, name in enumerate(("QICE", "QSNOW")):
+            expected = np.where(partition_mask, partition_arrays[index], fields[name][0])
+            if np.any(partition_mass[index] < 0) or not np.array_equal(partition_mass[index], expected):
+                raise ValueError(f"joint driver disagrees with explicit partition: {name}")
+        if not np.array_equal(values[1][partition_mask], partition_arrays[2][partition_mask]):
+            raise ValueError("joint driver disagrees with explicit partition: QNICE")
+        sources = provenance.reshape((5, *shape[1:]))
+        if np.any(sources[1][partition_mask] != partition_details["provenance"]):
+            raise ValueError("joint driver disagrees with explicit partition: NI provenance")
     shutil.copy2(source, target)
     with Dataset(target, "r+") as ds:
         for name, value in zip(MOMENT, values):
             ds[name][0] = value
+        if partition_mass is not None:
+            for name, value in zip(("QICE", "QSNOW"), partition_mass):
+                ds[name][0] = value
     with Dataset(target) as ds:
         ds.set_auto_maskandscale(False)
         for name, var in ds.variables.items():
-            if name not in MOMENT and hashlib.sha256(np.asarray(var[:]).tobytes()).digest() != before[name]:
+            allowed = (*MOMENT, "QICE", "QSNOW") if partition_mass is not None else MOMENT
+            if name not in allowed and hashlib.sha256(np.asarray(var[:]).tobytes()).digest() != before[name]:
                 raise ValueError(f"nonmoment changed: {name}")
         for name, value in zip(MOMENT, values):
             if not np.array_equal(read_array(ds[name], name)[0], value):
                 raise ValueError(f"moment readback mismatch: {name}")
-    return {"status": int(status[0]), "valid_time": valid_time, "input_thermodynamics": {"fields_sha256": {name: hashlib.sha256(fields[name].tobytes()).hexdigest() for name in ("P", "PB", "T", "QVAPOR", "AL", "ALB")}, "pressure": "P+PB", "exner": "(pressure/100000)**(287/1004.5)", "temperature": "(T+300)*exner", "driver_temperature_range_kelvin": temperature_range.tolist(), "scope": "file-state inputs and source formulas; not first-use capture"}, "provenance_encoding": "zlib-base64 little-endian int32, slot,z,y,x", "provenance_shape": [5, *shape[1:]], "provenance_data": base64.b64encode(zlib.compress(provenance.astype("<i4").tobytes())).decode("ascii"), "provenance_counts": {str(int(x)): int((provenance == x).sum()) for x in np.unique(provenance)}, "initial_dry_density": "float32 1/(float32(AL+ALB)); pre-advection proxy"}
+        if partition_mass is not None:
+            for name, value in zip(("QICE", "QSNOW"), partition_mass):
+                if not np.array_equal(read_array(ds[name], name)[0], value):
+                    raise ValueError(f"ice/snow readback mismatch: {name}")
+    details = {"status": int(status[0]), "valid_time": valid_time, "input_thermodynamics": {"fields_sha256": {name: hashlib.sha256(fields[name].tobytes()).hexdigest() for name in ("P", "PB", "T", "QVAPOR", "AL", "ALB")}, "pressure": "P+PB", "exner": "(pressure/100000)**(287/1004.5)", "temperature": "(T+300)*exner", "driver_temperature_range_kelvin": temperature_range.tolist(), "scope": "file-state inputs and source formulas; not first-use capture"}, "provenance_encoding": "zlib-base64 little-endian int32, slot,z,y,x", "provenance_shape": [5, *shape[1:]], "provenance_data": base64.b64encode(zlib.compress(provenance.astype("<i4").tobytes())).decode("ascii"), "provenance_counts": {str(int(x)): int((provenance == x).sum()) for x in np.unique(provenance)}, "initial_dry_density": "float32 1/(float32(AL+ALB)); pre-advection proxy"}
+
+    if partition_details is not None:
+        before_frozen = fields["QICE"][0].astype(np.float64) + fields["QSNOW"][0].astype(np.float64)
+        after_frozen = partition_mass.astype(np.float64).sum(axis=0)
+        residual = after_frozen - before_frozen
+        tolerance = np.finfo(np.float32).eps * np.maximum(before_frozen, after_frozen)
+        if np.any(np.abs(residual) > tolerance):
+            raise ValueError("stored ice/snow mass conservation failed")
+        partition_details["maximum_frozen_mass_residual_kg_kg"] = float(np.max(np.abs(residual)))
+        partition_details["thermodynamics"] = "T and QV unchanged; ice and snow have equal enthalpy in the common convention."
+        partition_details["native_first_use_verified"] = False
+        details["ice_snow_partition"] = partition_details
+    return details
 
 
 def run_real_and_complete(manifest_path, output, receipt):
@@ -218,6 +298,7 @@ def run_real_and_complete(manifest_path, output, receipt):
     if manifest.get("stage") != "fresh_real_before_model_launch" or (type(manifest.get("use_theta_m")) is not int or manifest["use_theta_m"] not in (0, 1)) or manifest.get("mp_physics") != 37:
         raise ValueError("explicit fresh-real stage and use_theta_m required")
     exe, driver, candidates, policy_path = (checked_file(manifest[k]) for k in ("producer", "driver", "candidates", "policy"))
+    partition = checked_file(manifest["ice_snow_partition"]) if "ice_snow_partition" in manifest else None
     inputs = [(item["name"], checked_file(item)) for item in manifest["inputs"]]
     for key in ("source", "build"):
         checked_file(manifest[key])
@@ -256,11 +337,13 @@ def run_real_and_complete(manifest_path, output, receipt):
             raise ValueError("producer did not create wrfinput_d01")
         source_hash = sha(source)
         candidate = work / "completed.nc"
-        details = complete_file(source, candidate, driver, policy, candidates, work, manifest["use_theta_m"])
+        details = complete_file(source, candidate, driver, policy, candidates, work, manifest["use_theta_m"], partition)
         if sha(source) != source_hash:
             raise ValueError("producer output changed during completion")
         for key in ("producer", "driver", "candidates", "policy", "source", "build"):
             checked_file(manifest[key])
+        if partition is not None:
+            checked_file(manifest["ice_snow_partition"])
         for item in manifest["inputs"]:
             checked_file(item)
         validate_kdm6_policy(policy)

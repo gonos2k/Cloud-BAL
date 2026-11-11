@@ -1,0 +1,9 @@
+{
+  "status": "FAILED_ENVIRONMENT",
+  "launcher_exit": 143,
+  "observation": "test_output_transaction: filesystem does not support atomic no-replace generation rename",
+  "tmpdir": "shared workspace Lustre",
+  "log_sha256": "27e0c745f4bff77869d33c5de53f6678e800288a443bd0d335ce13e7f33d1fcd",
+  "source_before": "source_before.json",
+  "remedy": "use a fresh /var/tmp local TMPDIR for publication tests; keep compile scratch external to source"
+}

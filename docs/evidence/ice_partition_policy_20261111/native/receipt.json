@@ -1,0 +1,501 @@
+{
+  "status": "PASS_SCOPED_HISTORICAL_NATIVE_TRACE",
+  "scope": "Five cells, unchanged historical B1; no newly initialized input, policy acceptance or forecast validation. Pointer identity proves binding, not sole cause of boundary differences. TK is offline float32 TH*PII, not directly observed TK.",
+  "input_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+  "exe_sha256": "68ed2833b5f207d037949c9b20c7c2f800500e632f911a4acf1eb09d13bf1c1f",
+  "history_hashes_equal_between_arms": {
+    "12:00:00": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+    "12:01:20": "89e00f9a4dec052dfb8f228cf55d3e83c8f7cc60ef9f9f96e140303278b85161"
+  },
+  "runtime_mapping": {
+    "QI": 5,
+    "QS": 6,
+    "NI": 4
+  },
+  "record_counts": {
+    "update_entry": 90,
+    "update_return": 90,
+    "tend_entry": 45,
+    "tend_return": 45,
+    "prep_entry": 5,
+    "prep_return": 5,
+    "kdm_entry": 5,
+    "kdm_return": 5
+  },
+  "cells": [
+    {
+      "cell": [
+        212,
+        84,
+        20
+      ],
+      "owner_rank": 3,
+      "file": {
+        "QICE": {
+          "value": 0.0019849517848342657,
+          "hex_le": "f715023b"
+        },
+        "QSNOW": {
+          "value": 0.00010852448031073436,
+          "hex_le": "a397e338"
+        },
+        "QNICE": {
+          "value": 0.0,
+          "hex_le": "00000000"
+        },
+        "AL": {
+          "value": 0.12931358814239502,
+          "hex_le": "c86a043e"
+        },
+        "ALB": {
+          "value": 1.7626460790634155,
+          "hex_le": "639ee13f"
+        },
+        "T": {
+          "value": 39.407989501953125,
+          "hex_le": "c8a11d42"
+        },
+        "P": {
+          "value": 91.31640625,
+          "hex_le": "00a2b642"
+        },
+        "PB": {
+          "value": 39697.25,
+          "hex_le": "40111b47"
+        },
+        "QVAPOR": {
+          "value": 0.0034757014364004135,
+          "hex_le": "98c8633b"
+        }
+      },
+      "kdm_entry": {
+        "qi": {
+          "hex_le": "a13a023b",
+          "pointer": "0x1029571c040c",
+          "value": 0.001987137133255601
+        },
+        "qs": {
+          "hex_le": "fe78e238",
+          "pointer": "0x10295736ad0c",
+          "value": 0.00010799056326504797
+        },
+        "ni": {
+          "hex_le": "00000000",
+          "pointer": "0x102955762b0c",
+          "value": 0.0
+        },
+        "den": {
+          "hex_le": "2341073f",
+          "pointer": "0x102957d6c00c",
+          "value": 0.5283376574516296
+        },
+        "th": {
+          "hex_le": "edb6a943",
+          "pointer": "0x7ffdfbd5752c",
+          "value": 339.4291076660156
+        },
+        "pii": {
+          "hex_le": "7db5443f",
+          "pointer": "0x7ffdfbf01e2c",
+          "value": 0.7683942914009094
+        },
+        "p": {
+          "hex_le": "fb581b47",
+          "pointer": "0x7ffdfc0ac72c",
+          "value": 39768.98046875
+        },
+        "qv": {
+          "hex_le": "7379633b",
+          "pointer": "0x102956cc090c",
+          "value": 0.0034709840547293425
+        }
+      },
+      "tk_float32_th_times_pii": 260.8153991699219,
+      "rk_pointer_chain_all_stages": true,
+      "rk3_return_equals_kdm_entry_raw_words": true,
+      "prep_pointer_chain": true
+    },
+    {
+      "cell": [
+        199,
+        111,
+        22
+      ],
+      "owner_rank": 3,
+      "file": {
+        "QICE": {
+          "value": 0.004695878364145756,
+          "hex_le": "e2df993b"
+        },
+        "QSNOW": {
+          "value": 1.564988269819878e-05,
+          "hex_le": "de478337"
+        },
+        "QNICE": {
+          "value": 0.0,
+          "hex_le": "00000000"
+        },
+        "AL": {
+          "value": 0.15357184410095215,
+          "hex_le": "f0411d3e"
+        },
+        "ALB": {
+          "value": 2.0847361087799072,
+          "hex_le": "516c0540"
+        },
+        "T": {
+          "value": 45.8233642578125,
+          "hex_le": "204b3742"
+        },
+        "P": {
+          "value": 45.498046875,
+          "hex_le": "00fe3542"
+        },
+        "PB": {
+          "value": 32102.359375,
+          "hex_le": "b8ccfa46"
+        },
+        "QVAPOR": {
+          "value": 0.001647628378123045,
+          "hex_le": "3cf5d73a"
+        }
+      },
+      "kdm_entry": {
+        "qi": {
+          "hex_le": "aded983b",
+          "pointer": "0x1029572499a8",
+          "value": 0.004667005036026239
+        },
+        "qs": {
+          "hex_le": "c02a7537",
+          "pointer": "0x1029573f42a8",
+          "value": 1.4613091479986906e-05
+        },
+        "ni": {
+          "hex_le": "00000000",
+          "pointer": "0x1029557ec0a8",
+          "value": 0.0
+        },
+        "den": {
+          "hex_le": "19afe43e",
+          "pointer": "0x102957df55a8",
+          "value": 0.44664838910102844
+        },
+        "th": {
+          "hex_le": "64eaac43",
+          "pointer": "0x7ffdfbde0ac8",
+          "value": 345.8311767578125
+        },
+        "pii": {
+          "hex_le": "2417393f",
+          "pointer": "0x7ffdfbf8b3c8",
+          "value": 0.7230093479156494
+        },
+        "p": {
+          "hex_le": "c511fb46",
+          "pointer": "0x7ffdfc135cc8",
+          "value": 32136.884765625
+        },
+        "qv": {
+          "hex_le": "0ab5d73a",
+          "pointer": "0x102956d49ea8",
+          "value": 0.0016457152087241411
+        }
+      },
+      "tk_float32_th_times_pii": 250.03916931152344,
+      "rk_pointer_chain_all_stages": true,
+      "rk3_return_equals_kdm_entry_raw_words": true,
+      "prep_pointer_chain": true
+    },
+    {
+      "cell": [
+        219,
+        236,
+        17
+      ],
+      "owner_rank": 7,
+      "file": {
+        "QICE": {
+          "value": 0.00306437024846673,
+          "hex_le": "9ad3483b"
+        },
+        "QSNOW": {
+          "value": 0.000666076666675508,
+          "hex_le": "a69b2e3a"
+        },
+        "QNICE": {
+          "value": 0.0,
+          "hex_le": "00000000"
+        },
+        "AL": {
+          "value": 0.07468390464782715,
+          "hex_le": "e0f3983d"
+        },
+        "ALB": {
+          "value": 1.3856201171875,
+          "hex_le": "005cb13f"
+        },
+        "T": {
+          "value": 24.15301513671875,
+          "hex_le": "6039c141"
+        },
+        "P": {
+          "value": 288.75,
+          "hex_le": "00609043"
+        },
+        "PB": {
+          "value": 53610.5546875,
+          "hex_le": "8e6a5147"
+        },
+        "QVAPOR": {
+          "value": 0.005875890143215656,
+          "hex_le": "8a8ac03b"
+        }
+      },
+      "kdm_entry": {
+        "qi": {
+          "hex_le": "6c29483b",
+          "pointer": "0x6bcd17f66d0",
+          "value": 0.0030542267486453056
+        },
+        "qs": {
+          "hex_le": "17792e3a",
+          "pointer": "0x6bcd199be90",
+          "value": 0.0006655617034994066
+        },
+        "ni": {
+          "hex_le": "00000000",
+          "pointer": "0x6bccffa1f10",
+          "value": 0.0
+        },
+        "den": {
+          "hex_le": "112f2f3f",
+          "pointer": "0x6bcd237f7d0",
+          "value": 0.6843119263648987
+        },
+        "th": {
+          "hex_le": "0c17a243",
+          "pointer": "0x7ffd6e346590",
+          "value": 324.1800537109375
+        },
+        "pii": {
+          "hex_le": "b681563f",
+          "pointer": "0x7ffd6e4ebd50",
+          "value": 0.8379167318344116
+        },
+        "p": {
+          "hex_le": "275c5247",
+          "pointer": "0x7ffd6e691510",
+          "value": 53852.15234375
+        },
+        "qv": {
+          "hex_le": "784bc03b",
+          "pointer": "0x6bcd1305f90",
+          "value": 0.0058683715760707855
+        }
+      },
+      "tk_float32_th_times_pii": 271.6358947753906,
+      "rk_pointer_chain_all_stages": true,
+      "rk3_return_equals_kdm_entry_raw_words": true,
+      "prep_pointer_chain": true
+    },
+    {
+      "cell": [
+        209,
+        94,
+        17
+      ],
+      "owner_rank": 3,
+      "file": {
+        "QICE": {
+          "value": 0.0035323493648320436,
+          "hex_le": "fd7e673b"
+        },
+        "QSNOW": {
+          "value": 0.0007573770708404481,
+          "hex_le": "b78a463a"
+        },
+        "QNICE": {
+          "value": 0.0,
+          "hex_le": "00000000"
+        },
+        "AL": {
+          "value": 0.08040332794189453,
+          "hex_le": "80aaa43d"
+        },
+        "ALB": {
+          "value": 1.3856201171875,
+          "hex_le": "005cb13f"
+        },
+        "T": {
+          "value": 25.05584716796875,
+          "hex_le": "6072c841"
+        },
+        "P": {
+          "value": 298.734375,
+          "hex_le": "005e9543"
+        },
+        "PB": {
+          "value": 53610.5546875,
+          "hex_le": "8e6a5147"
+        },
+        "QVAPOR": {
+          "value": 0.006667004432529211,
+          "hex_le": "e376da3b"
+        }
+      },
+      "kdm_entry": {
+        "qi": {
+          "hex_le": "87de663b",
+          "pointer": "0x1029571f2a68",
+          "value": 0.00352278514765203
+        },
+        "qs": {
+          "hex_le": "206d463a",
+          "pointer": "0x10295739d368",
+          "value": 0.0007569361478090286
+        },
+        "ni": {
+          "hex_le": "00000000",
+          "pointer": "0x102955795168",
+          "value": 0.0
+        },
+        "den": {
+          "hex_le": "5f6e2e3f",
+          "pointer": "0x102957d9e668",
+          "value": 0.6813716292381287
+        },
+        "th": {
+          "hex_le": "f888a243",
+          "pointer": "0x7ffdfbd89b88",
+          "value": 325.070068359375
+        },
+        "pii": {
+          "hex_le": "347b563f",
+          "pointer": "0x7ffdfbf34488",
+          "value": 0.8378174304962158
+        },
+        "p": {
+          "hex_le": "d0455247",
+          "pointer": "0x7ffdfc0ded88",
+          "value": 53829.8125
+        },
+        "qv": {
+          "hex_le": "5b63da3b",
+          "pointer": "0x102956cf2f68",
+          "value": 0.006664676126092672
+        }
+      },
+      "tk_float32_th_times_pii": 272.349365234375,
+      "rk_pointer_chain_all_stages": true,
+      "rk3_return_equals_kdm_entry_raw_words": true,
+      "prep_pointer_chain": true
+    },
+    {
+      "cell": [
+        192,
+        72,
+        26
+      ],
+      "owner_rank": 3,
+      "file": {
+        "QICE": {
+          "value": 0.01022245828062296,
+          "hex_le": "197c273c"
+        },
+        "QSNOW": {
+          "value": 0.0,
+          "hex_le": "00000000"
+        },
+        "QNICE": {
+          "value": 0.0,
+          "hex_le": "00000000"
+        },
+        "AL": {
+          "value": 0.2002871036529541,
+          "hex_le": "10184d3e"
+        },
+        "ALB": {
+          "value": 2.897550344467163,
+          "hex_le": "77713940"
+        },
+        "T": {
+          "value": 54.296966552734375,
+          "hex_le": "18305942"
+        },
+        "P": {
+          "value": 37.939453125,
+          "hex_le": "00c21742"
+        },
+        "PB": {
+          "value": 20993.74609375,
+          "hex_le": "7e03a446"
+        },
+        "QVAPOR": {
+          "value": 0.00021180800104048103,
+          "hex_le": "c7185e39"
+        }
+      },
+      "kdm_entry": {
+        "qi": {
+          "hex_le": "f5f2243c",
+          "pointer": "0x1029571840ec",
+          "value": 0.010067691095173359
+        },
+        "qs": {
+          "hex_le": "e5677733",
+          "pointer": "0x10295732e9ec",
+          "value": 5.7603660508220855e-08
+        },
+        "ni": {
+          "hex_le": "00000000",
+          "pointer": "0x1029557267ec",
+          "value": 0.0
+        },
+        "den": {
+          "hex_le": "b646a53e",
+          "pointer": "0x102957d2fcec",
+          "value": 0.32280510663986206
+        },
+        "th": {
+          "hex_le": "2428b143",
+          "pointer": "0x7ffdfbd1b20c",
+          "value": 354.3135986328125
+        },
+        "pii": {
+          "hex_le": "1afa233f",
+          "pointer": "0x7ffdfbec5b0c",
+          "value": 0.6405349969863892
+        },
+        "p": {
+          "hex_le": "e351a446",
+          "pointer": "0x7ffdfc07040c",
+          "value": 21032.943359375
+        },
+        "qv": {
+          "hex_le": "a2c35c39",
+          "pointer": "0x102956c845ec",
+          "value": 0.00021053713862784207
+        }
+      },
+      "tk_float32_th_times_pii": 226.95025634765625,
+      "rk_pointer_chain_all_stages": true,
+      "rk3_return_equals_kdm_entry_raw_words": true,
+      "prep_pointer_chain": true
+    }
+  ],
+  "source_sha256": {
+    "/var/tmp/firsthour-runtime-plan-20261030/experiment/host/dyn_em/solve_em.f90": "4e1c09c342c9a6382d08a02f7944ada74d5f5b54ba3fca49062bfd628825aaf9",
+    "/var/tmp/firsthour-runtime-plan-20261030/experiment/host/dyn_em/module_em.f90": "e00d4b4131e179c2e59aa2cf282965bed1aef5c449202405e93b2e43e8e9e804",
+    "/var/tmp/firsthour-runtime-plan-20261030/experiment/host/phys/module_microphysics_driver.f90": "149e11e0dc678600f189bd5fb66c190b6253b0663b253d211d929d8b17b0cddc"
+  },
+  "elapsed_seconds": {
+    "control_terminal": 19.748,
+    "probe_terminal": 20.327
+  },
+  "limits": [
+    "Saved preprocessed sources have prior object/library identity association, not a reproduced original compilation transcript.",
+    "Small selected-cell evidence; no domain conservation, physical treatment of 1362 empty intervals, or scientific acceptance.",
+    "History at t=0 and t=80 identical; this is not exhaustive proof of every transient intermediate model value."
+  ]
+}

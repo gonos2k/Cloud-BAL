@@ -1,0 +1,49 @@
+{
+  "scope": "Read-only debugger capture against unchanged historical B1; source association is historical, not rebuilt.",
+  "files": {
+    "README.md": "a7527bc113f4603021ba82d3a08296768eb6c49edd4c4378df79fca9d2ebfc95",
+    "capturedsmallrecords/gdb_rank0.log": "52e109e458cc365da9e9d5fd218a695387ac2efd0eb8b3f0923bcd006e358a6f",
+    "capturedsmallrecords/gdb_rank1.log": "48eef007a97fb1d554161819cb1f95c84c864cf8b63092635c4fcb5a56f43fb3",
+    "capturedsmallrecords/gdb_rank2.log": "2d93e378d8e1ea133dbe69ee5e3e45ff970c1a4ed08d6a6ad9b93f2e6d18e92b",
+    "capturedsmallrecords/gdb_rank3.log": "37d3634ac63cd599289c612f9884849ec036f39f5f98590e3029732dc1c0f153",
+    "capturedsmallrecords/gdb_rank4.log": "08360c1555ab46236da3dc3796ce8af36b3ce7fd7c473d76816f57ef58a7a837",
+    "capturedsmallrecords/gdb_rank5.log": "550e8b17ac51f4544b2c95a1f33bb1eab053d82b074738ef8f828e5b7d86e1ee",
+    "capturedsmallrecords/gdb_rank6.log": "c3fb9c1c5890b8a80ae2119b80f552f930502a7c6af2fc1a48a03f6fa8e58ca6",
+    "capturedsmallrecords/gdb_rank7.log": "a7ace76800b39d386b4173399a793c9a842c3476ad61e67081699a956b8229a7",
+    "capturedsmallrecords/rank3.jsonl": "944840ff71872bcf70301d8fc88afb3b5e5da57da86d9d3786dd339ec7053006",
+    "capturedsmallrecords/rank7.jsonl": "4de157781326fd8d8bb240cef1bc3fcc94575f0d6b75fdd724bd0a2ee0e5bf5b",
+    "file_capture.py": "2cb24bb27ad3b4a9f9f1c4254ac176c99c10e0901d0e5f46207bed6af9730212",
+    "file_values.json": "f264630978ab13ebdc841d93e6b0738bc07c70c794c0a27a0072cafdb66ee246",
+    "probe.py": "6cccb5c10d6f0ba41cbf26157cf2f0420344285083542982110e6717266c0c78",
+    "rank_wrapper.sh": "eb87212c1171457cd61ecb3cd7ebdf05011b6abd7182d78be74bc960ebdfbec7",
+    "receipt.json": "9ea0bcc5d84387bd8b1e1d6b2496486326374202c2a0fe5827b24ac485cae8c5",
+    "run_pair.sh": "402c1a647290f60f005f88b2e0a3aaf52878fea5a5d89972bc059b1ceb5e30df",
+    "stage.py": "965cd2f072a2d96bfdf918b4ac61c62b042b34c90385441a69f3aeae3c7ca182",
+    "validate.py": "920eff8304e44a358770861a0f52a9babac21d1c2b7d289fd5265536b3b081d1"
+  },
+  "failed_attempts": [
+    {
+      "case": "control",
+      "exit": 174,
+      "failure": "Initial 8 MB stack caused SIGSEGV during WRF input distribution; historical unlimited stack resolved it.",
+      "rsl_error_rank0_sha256": "5219a1c2d08a8c402738053a6b03c098b77cfb4d0ade8beef416e52c10d8241d"
+    },
+    {
+      "case": "probe",
+      "exit": 126,
+      "failure": "Launcher wrapper pathname mistake; model did not launch.",
+      "stdout_sha256": "7cba61a555b18d9638708cc1e0953bc9d43273ee21ea006af74a0a9af90fdd20"
+    }
+  ],
+  "pinned_toolchain_sha256": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+  "source_run_root": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/ice_partition_policy_20261111/native_runtime",
+  "terminal_recipe_reproduction": {
+    "namelist_sha256": "dca7bf8b9fc28b196877cb4d555f598b6b81745df8ecab83efb64da2ea392d2a",
+    "namelist_matches": [
+      "control_terminal",
+      "probe_terminal"
+    ],
+    "staged_inventory_matches": "control_terminal",
+    "scope": "Updated staging recipe run only; no new WRF run. The original terminal pair used the prior staging script and a separate interval edit."
+  }
+}

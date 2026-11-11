@@ -206,6 +206,7 @@ done
 "$test_tmp/test_pressure_thermo_state"
 
 bash "$repo_root/tests/run_phase_moment_consumer.sh"
+bash "$repo_root/tests/run_ice_snow_initialization.sh"
 
 for phase_test in test_water_phase_transfer test_pressure_phase_transfer; do
   "$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" \
