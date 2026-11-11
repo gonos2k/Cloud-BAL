@@ -1,0 +1,26 @@
+{
+  "version": 1,
+  "name": "KDM6 staged ice-number diagnostic contract",
+  "source_sha256": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+  "default_initialization": "Unchanged strict simultaneous number-cap and mean-particle-mass policy; no initialized file is published by this diagnostic.",
+  "entry_cap_m3": 1000000,
+  "lambda_min_m_inv": 9080,
+  "lambda_max_m_inv": 1820000,
+  "qmin": 1e-15,
+  "ncmin_m3": 10,
+  "psd12_qi_min": 1e-14,
+  "call_parameters": "qmin from the pinned model epsilon; ncmin=10 and dt=20 are declared local experiment inputs, not an observed first WRF call.",
+  "stage_conditions": {
+    "WRAPPER": "Volume number is the source REAL32 product of public NI and provided DEN; density is not inferred inside this contract.",
+    "ENTRY": "Source min(max(NI,0),1e6) is required here; its actual change must be recorded.",
+    "SLOPE": "The first slope consumes the limited NI without repairing it; its reciprocal slope is bounded separately. This is not a second number cap.",
+    "PSD1": "Active when QI >= 1e-14, including NI=0. Source lambda bounds may reconstruct NI above the entry cap.",
+    "PSD2": "Same active gate as PSD1, evaluated with this stage's actual QI and NI; no global number cap is imposed.",
+    "PSD3": "Active when QI >= qmin and NI >= ncmin after preceding cleanup; no global number cap is imposed.",
+    "FINAL": "Public NI is the source REAL32 division of internal number by provided DEN; an entry cap is not asserted at this stage."
+  },
+  "allowed_native_adjustments": "Exact source entry and PSD adjustments are counted as native semantics; this is not scientific approval of their magnitude or permission to publish an otherwise inadmissible initialization.",
+  "density_scope": "File-state float32 1/(AL+ALB) proxy supplied to a standalone local column; actual first-advection and first-microphysics DEN are unobserved.",
+  "scientific_admission": false,
+  "modified_input_publication": false
+}
