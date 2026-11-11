@@ -1,0 +1,1 @@
+The source-team review found a missing finite guard in the new evaporation helper. The running unit suite was intentionally stopped with SIGTERM (exit -15) after 122.45 s; no final pass is claimed. Focused boundary and plot jobs had passed. The corrected frozen-source validation is recorded separately.

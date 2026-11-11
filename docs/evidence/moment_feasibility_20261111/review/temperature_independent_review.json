@@ -1,0 +1,36 @@
+{
+  "review": "independent source, scientific scope and artifact review",
+  "result": "pass",
+  "findings": [],
+  "reviewer_exclusion": "Own driver, Python boundary, boundary tests and handoff documentation were excluded.",
+  "checks": [
+    "Analytical empty intervals classify failure after candidate evaluation, preserving candidates admitted by native REAL32 rounding. Tests cover both rounded background and prior.",
+    "Pinned full-file recount reran and output is byte-identical: NI empty 1362, fixed 50-micrometre prior over cap 106128, overlap 1362, remainder 104766; NC and NR empty 0.",
+    "Closed complete cloud evaporation returns NC to NN only for explicit process; graupel proportional-volume rule reflects the unclamped density case; chain supplies a separate explicit rain-number prior.",
+    "Native rain slope extracted from hash-pinned source exercises fallback and equality/next-REAL32 branches; harness supplies constants and placeholder velocities, so it is not a full model or first-use replay.",
+    "Report and rendered plot distinguish analytical file-state density proxy from native runtime, and do not claim forecast acceptance."
+  ],
+  "limitations": [
+    "Recount replay uses the bundled recount program rather than an independent implementation.",
+    "Focused tests were reviewed, not rerun in this review; parent runs complete pinned Intel validation.",
+    "No full source-to-binary provenance, first-use model integration or forecast validation is established."
+  ],
+  "recount_replay_sha256": "916041c2f1962374a193f99e499e7ffd98744ce130a4a12c06a714936d90e7f8",
+  "sha256": {
+    "src/common/cloud_bal_microphysics_initialization.f90": "aeed11853d28fcd23d23f5a6e743cbe9f0238075f7a25a19a968d846d3bcd199",
+    "src/common/cloud_bal_phase_moments.f90": "c8cf12aad8efb8becbdc23a9dcb036bb30e238163a03fb1f7998b4f7e52d3979",
+    "tests/test_microphysics_initialization.f90": "0c9ea056fe637106fa776968624e51bbea6a1714ebb60519a3dcf466ee41fbcc",
+    "tests/test_phase_moments.f90": "160ae3a9c10bc73926b9186f65e13a47a5ba381275df101e332cfccdece3f4fa",
+    "tests/test_phase_initialization_chain.f90": "1c1201d30b04fc25cb8f09327b710f26b92055e59bef3b8b9a671aa7101e6722",
+    "tests/source_extract_phase_consumer.py": "d528ad130058912826e00a08ffefbb61ac56a4298ebc90168d1553e613be281b",
+    "tests/test_phase_consumer_native.f90": "c6c1fed7ee314e6bb60ed154e8d26fa75c017b32023020eb7286dadc68d3dcc9",
+    "tests/run_phase_moment_consumer.sh": "68814a7d9239e041cf49555d0c7547703123935229fcef046b17ad72436c14f5",
+    "docs/MOMENT_FEASIBILITY_20261111.md": "b1b1869bebd7fae6df2ac12abebb6dcbfe2ca5c8ce5a862ea1fd44fb7096f49c",
+    "docs/evidence/moment_feasibility_20261111/science/phase_consumer.md": "5ee2a699c2ba932d2fd37e67d5baf39d415e876c38fefb15e14d07fe1e38e793",
+    "docs/evidence/moment_feasibility_20261111/science/feasibility_recount.py": "b7f6fff29a6f97bd2e2eaaf12ac58d5b856b27231ec0354f3ab2319aac33d53e",
+    "docs/evidence/moment_feasibility_20261111/science/feasibility_recount.json": "916041c2f1962374a193f99e499e7ffd98744ce130a4a12c06a714936d90e7f8",
+    "tools/plot_moment_feasibility.py": "76e11898fbb74a128dfcfed381340e551b989a03335c7cfa899615ad2f745722",
+    "docs/evidence/moment_feasibility_20261111/figures/01_ice_feasibility.png": "af6ed99157cf0007f14b22e1412d4acada06feba722bb46c0e42f1476f895066",
+    "docs/evidence/moment_feasibility_20261111/figures/ice_feasibility_curve.csv": "97d29ed3224d081f8e3805148fcaa0ec380f8fbb078d40f185606d3edbd1aaf4"
+  }
+}

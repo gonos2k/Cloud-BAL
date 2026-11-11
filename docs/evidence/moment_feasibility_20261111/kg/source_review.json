@@ -1,0 +1,44 @@
+{
+  "findings_addressed": [
+    "Analytical emptiness classifies failure only after native REAL32 candidate acceptance, preserving valid background and prior near rounding boundaries.",
+    "Dry T uses T+300 for both theta settings; pinned source Registry and native dynamics distinguish file T from prognostic moist THM.",
+    "Phase helper rejects orphan cloud and graupel moment pairs, uses closed transfer, preserves rollback and carries separate NR prior into completion.",
+    "Extracted native rain slope exhibits threshold-equality fallback; this is not a full KDM6 run."
+  ],
+  "hash_only_sha256": {
+    "docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+    "docs/evidence/moment_feasibility_20261111/kg/prior_audit.json": "daf421b58701f7063982193e746392d3aba4d84e082db1fc7304e6a484f2d8fe",
+    "docs/evidence/moment_feasibility_20261111/kg/stage_kg.py": "92d955f3cbc8799a7de876b1208c5c48d94e9242668f8405b786fb3af4d7889b",
+    "docs/evidence/physical_moment_handoff_20261110/native/actual_real/policy.json": "647126e5215acbb985d39d56564898f7c6f82adb85d05266bf0d2c4ba008a00e",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/run_initialize_model_moments.sh": "421a5e4731c281ab04a45048ee09a3fae1a9f59ba3bffed9763a04e2bbf74a5e",
+    "tests/run_phase_moment_consumer.sh": "68814a7d9239e041cf49555d0c7547703123935229fcef046b17ad72436c14f5",
+    "tests/run_unit_tests.sh": "1361c534aef20d0eeb62fb8baee8cc8c80e8fa546285b5291ff8cc5fdcdfc8f3"
+  },
+  "independent_checks": [
+    "Pinned Intel fresh scratch boundary suite: 15 tests PASS.",
+    "Pinned Intel checked O0 and optimized O2 core completion, phase helper, phase-to-completion chain and source-extracted rain slope branch: PASS.",
+    "Independent B1 file-state ice count: 1362 empty ideal intervals, mask sha256 3a0830a16306febdc4ca92c0959cf9392df057c84481975aa90cf531d2a44c45; peak 0.00329986904706997 kg/m3."
+  ],
+  "limitations": [
+    "Broad frozen-source suite is still running.",
+    "Water and enthalpy checks precede REAL32 storage; no whole-domain water or energy closure claim.",
+    "File-state density is not first-use density; no native first-use, new forecast or operational acceptance.",
+    "Analytical nonempty interval does not prove representability or actual slope consumption."
+  ],
+  "selection_lock_sha256": "1720c9e52e999673b3787303d92b52246bcee567f7765cd5afde6ca80122b689",
+  "source_sha256": {
+    "src/common/cloud_bal_microphysics_initialization.f90": "aeed11853d28fcd23d23f5a6e743cbe9f0238075f7a25a19a968d846d3bcd199",
+    "src/common/cloud_bal_phase_moments.f90": "c8cf12aad8efb8becbdc23a9dcb036bb30e238163a03fb1f7998b4f7e52d3979",
+    "tests/source_extract_phase_consumer.py": "d528ad130058912826e00a08ffefbb61ac56a4298ebc90168d1553e613be281b",
+    "tests/test_initialize_model_moments.py": "a2c9337cb988e3eb1c9436d5cb9c36335ae99cb18f16fe350e057000d1b36d90",
+    "tests/test_microphysics_initialization.f90": "0c9ea056fe637106fa776968624e51bbea6a1714ebb60519a3dcf466ee41fbcc",
+    "tests/test_phase_consumer_native.f90": "c6c1fed7ee314e6bb60ed154e8d26fa75c017b32023020eb7286dadc68d3dcc9",
+    "tests/test_phase_initialization_chain.f90": "1c1201d30b04fc25cb8f09327b710f26b92055e59bef3b8b9a671aa7101e6722",
+    "tests/test_phase_moments.f90": "160ae3a9c10bc73926b9186f65e13a47a5ba381275df101e332cfccdece3f4fa",
+    "tools/initialize_model_moments.py": "87762f109b99a800b0b2da7135eb893590200c251ee95c8db29a2ffe17be67fa",
+    "tools/model_moment_driver.f90": "e892cfd2a481a4bb72fb1870efddc3f8f2a562da082619f48167bc9a4629ccd0",
+    "tools/plot_moment_feasibility.py": "76e11898fbb74a128dfcfed381340e551b989a03335c7cfa899615ad2f745722"
+  },
+  "status": "PASS_SOURCE_REVIEW_WITH_BROAD_VALIDATION_PENDING"
+}

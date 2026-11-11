@@ -25,6 +25,8 @@ from netCDF4 import Dataset, default_fillvals
 MASS = ("QCLOUD", "QICE", "QRAIN", "QGRAUP", "QSNOW")
 MOMENT = ("QNCLOUD", "QNICE", "QNRAIN", "QNCCN", "QIB")
 DIMS = ("Time", "bottom_top", "south_north", "west_east")
+# Values from cloud_bal_state.f90, serialized by model_moment_driver.
+STATUS_FAILED, STATUS_DEGRADED, STATUS_OK = -10, 10, 20
 UNITS = {**dict.fromkeys(MASS, "kg kg-1"), **dict.fromkeys(MOMENT[:4], "kg-1"),
          "QIB": "m3 kg-1", "AL": "m3 kg-1", "ALB": "m3 kg-1",
          "P": "pa", "PB": "pa", "T": "k", "QVAPOR": "kg kg-1"}
@@ -176,10 +178,22 @@ def complete_file(source, target, driver, policy, candidates, work, use_theta_m)
         values = np.fromfile(f, dtype=np.float64, count=count)
         valid = np.fromfile(f, dtype=np.int32, count=count)
         provenance = np.fromfile(f, dtype=np.int32, count=count)
-        if f.read(1) or status.size != 1 or location.size != 4 or values.size != count or valid.size != count or provenance.size != count:
+        temperature_range = np.fromfile(f, dtype=np.float32, count=2)
+        failure_reason = np.fromfile(f, dtype=np.int32, count=1)
+        interval = np.fromfile(f, dtype=np.float64, count=2)
+        sizes = (status.size, location.size, values.size, valid.size, provenance.size,
+                 temperature_range.size, failure_reason.size, interval.size)
+        if (f.read(1) or sizes != (1, 4, count, count, count, 2, 1, 2)
+                or not np.isfinite(temperature_range).all() or not np.isfinite(interval).all()):
             raise ValueError("invalid driver output")
-    if status[0] != 20 or not np.all(valid == 1) or not np.isfinite(values).all():
-        raise ValueError(f"moment completion failed or incomplete: location={location.tolist()}")
+    reasons = {1: "INVALID_OR_MISSING_INPUT", 2: "EMPTY_ANALYTICAL_INTERVAL", 3: "CANDIDATE_INADMISSIBLE"}
+    reason = int(failure_reason[0])
+    if not ((status[0] in (STATUS_OK, STATUS_DEGRADED) and reason == 0)
+            or (status[0] == STATUS_FAILED and reason in reasons)):
+        raise ValueError("inconsistent driver status and failure reason")
+    if status[0] != STATUS_OK or not np.all(valid == 1) or not np.isfinite(values).all():
+        raise ValueError(f"moment completion failed or incomplete: location={location.tolist()}, "
+                         f"reason={reasons.get(reason, 'INCOMPLETE')} ({reason}), feasible_interval={interval.tolist()}")
     values = values.reshape((5, *shape[1:])).astype(np.float32)
     if not np.isfinite(values).all():
         raise ValueError("moment cannot be represented in native dtype")
@@ -195,7 +209,7 @@ def complete_file(source, target, driver, policy, candidates, work, use_theta_m)
         for name, value in zip(MOMENT, values):
             if not np.array_equal(read_array(ds[name], name)[0], value):
                 raise ValueError(f"moment readback mismatch: {name}")
-    return {"status": int(status[0]), "valid_time": valid_time, "input_thermodynamics": {"fields_sha256": {name: hashlib.sha256(fields[name].tobytes()).hexdigest() for name in ("P", "PB", "T", "QVAPOR", "AL", "ALB")}, "pressure": "P+PB", "exner": "(pressure/100000)**(287/1004.5)", "temperature": "(T+300)*exner; divide theta by (1+461.6/287*QVAPOR) when use_theta_m=1", "scope": "file-state inputs and source formulas; not first-use capture"}, "provenance_encoding": "zlib-base64 little-endian int32, slot,z,y,x", "provenance_shape": [5, *shape[1:]], "provenance_data": base64.b64encode(zlib.compress(provenance.astype("<i4").tobytes())).decode("ascii"), "provenance_counts": {str(int(x)): int((provenance == x).sum()) for x in np.unique(provenance)}, "initial_dry_density": "float32 1/(float32(AL+ALB)); pre-advection proxy"}
+    return {"status": int(status[0]), "valid_time": valid_time, "input_thermodynamics": {"fields_sha256": {name: hashlib.sha256(fields[name].tobytes()).hexdigest() for name in ("P", "PB", "T", "QVAPOR", "AL", "ALB")}, "pressure": "P+PB", "exner": "(pressure/100000)**(287/1004.5)", "temperature": "(T+300)*exner", "driver_temperature_range_kelvin": temperature_range.tolist(), "scope": "file-state inputs and source formulas; not first-use capture"}, "provenance_encoding": "zlib-base64 little-endian int32, slot,z,y,x", "provenance_shape": [5, *shape[1:]], "provenance_data": base64.b64encode(zlib.compress(provenance.astype("<i4").tobytes())).decode("ascii"), "provenance_counts": {str(int(x)): int((provenance == x).sum()) for x in np.unique(provenance)}, "initial_dry_density": "float32 1/(float32(AL+ALB)); pre-advection proxy"}
 
 
 def run_real_and_complete(manifest_path, output, receipt):
