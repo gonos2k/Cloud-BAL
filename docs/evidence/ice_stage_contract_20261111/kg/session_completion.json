@@ -1,0 +1,65 @@
+{
+  "status": "PUBLISHED_AND_READBACK_PASS",
+  "snapshot": "2026-11-11-ice-stage-contract",
+  "selection": [
+    "docs/evidence/ice_stage_contract_20261111/native/boundary/prepare.py",
+    "docs/evidence/ice_stage_contract_20261111/native/full/driver.f90",
+    "docs/evidence/ice_stage_contract_20261111/native/full/inputs.py",
+    "docs/evidence/ice_stage_contract_20261111/native/full/prepare.py",
+    "docs/evidence/ice_stage_contract_20261111/native/oracle/prepare.py",
+    "docs/evidence/ice_stage_contract_20261111/native/prepare.py",
+    "tests/test_cp02_ice_stage_audit.py",
+    "tests/test_cp02_ice_stage_cases.py",
+    "tools/cp02_ice_stage_audit.py",
+    "tools/cp02_ice_stage_cases.py",
+    "tools/plot_ice_stage_contract.py",
+    "tools/plot_ice_stage_trace.py"
+  ],
+  "maintained_dated_snapshots": {
+    "before": 270,
+    "after": 272
+  },
+  "corpora": {
+    "Cloud-BAL": {
+      "before": {
+        "communities": 1731,
+        "edges": 35364,
+        "nodes": 19511
+      },
+      "after": {
+        "communities": 1735,
+        "edges": 35441,
+        "nodes": 19568
+      },
+      "delta": {
+        "nodes": 57,
+        "edges": 77,
+        "communities": 4
+      }
+    },
+    "KLAPS50": {
+      "before": {
+        "communities": 3671,
+        "edges": 93949,
+        "nodes": 45339
+      },
+      "after": {
+        "communities": 3697,
+        "edges": 94027,
+        "nodes": 45396
+      },
+      "delta": {
+        "nodes": 57,
+        "edges": 78,
+        "communities": 26
+      }
+    }
+  },
+  "validation": "Pinned Intel fresh-scratch O0/O2: 30 native terminal pairs, 4680 exact source-oracle comparisons, 33 boundary assertions per optimization; eight focused Python tests. See ../validation/receipt.json.",
+  "extraction_note": "Bounded AST update for 12 source files, hash-only provenance for evidence; no document-semantic extraction. Fortran and cross-file CALL extraction are partial. Graph freshness is not runtime or scientific validation.",
+  "open_items": [
+    "Physical treatment of 1362 infeasible NI states remains open; strict publisher unchanged.",
+    "File to first advection and KDM6 native WRF use remains unverified.",
+    "Operational phase coupling, full-domain budgets, independent weather cases and new forecast skill remain open."
+  ]
+}

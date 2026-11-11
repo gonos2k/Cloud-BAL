@@ -1,0 +1,37 @@
+{
+  "review": "independent source, scientific scope, report and numeric evidence",
+  "status": "PASS_NO_OPEN_FINDINGS",
+  "resolved_findings": [
+    "Audit now verifies each slope and PSD output using source-extracted same-optimization REAL32 oracle and verifies wrapper input multiplication.",
+    "Report distinguishes active PSD lambda evaluation from conditional NI reconstruction."
+  ],
+  "evidence": [
+    "Independent recount: 30 original/instrumented terminal binaries byte-identical, finite probes, expected stage and over-cap counts for O0 and O2.",
+    "Independent stage differences for each optimization: ENTRY 60, PSD1 85, PSD2 0, PSD3 0.",
+    "Five selected coordinates and ratios and maximum-IWC target table checked against saved records.",
+    "Eight targeted Python unit tests passed."
+  ],
+  "limitations": "These local-column and manufactured probes do not establish first WRF use, whole-domain conservation, forecast skill, or physical acceptance of proposed initializations.",
+  "sha256": {
+    "docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+    "docs/ICE_NUMBER_STAGE_CONTRACT_20261111.md": "77c65bfac29c92b439a5eccb241a84b996804ee3a21a0767e696fea964e3ab8e",
+    "README.md": "223c358941802806bb9627646fa7f39fead042cdc4cb27ba05f65864bb6482fe",
+    "docs/CURRENT_RESEARCH_STATUS.md": "45977cf6481814b83ac22b8da1fa88d2beb576a65bada78f27fa7a7670147858",
+    "docs/evidence/ice_stage_contract_20261111/FIGURES.md": "083d86dd2804943736ed6efd7064c7c01d235930f7814c8fc0ed2ac075b92a4a",
+    "docs/evidence/ice_stage_contract_20261111/contract/policy.json": "bdb0767ebced9548139d769f3f8f97ddd5b7050686c564d01ae4b550e67266a4",
+    "docs/evidence/ice_stage_contract_20261111/analysis/summary.json": "8564f83c3161666a930e105e225bf24b0f4cca3904420f852852d67f9e253bce",
+    "docs/evidence/ice_stage_contract_20261111/analysis/operator_adjustments.csv": "cc001277f8b143424972ed62e8e19b986aeac61f23e0bc3793c19e459e86e13e",
+    "docs/evidence/ice_stage_contract_20261111/cases/profiles.json": "e1024d0792b3a9db313d1e00e8d966ec7b7bdbb4573684a14aa398a07def08ca",
+    "docs/evidence/ice_stage_contract_20261111/native/full/prepare.py": "fa82cea42598dbca97bea84c4d4fc7263f8283529bf3ac8877e150fb9a6d6d95",
+    "docs/evidence/ice_stage_contract_20261111/native/full/driver.f90": "e269df5f2a654d74aac5a08de8c244f0ccc5c93cd75cb61e9a4793b7459e052e",
+    "docs/evidence/ice_stage_contract_20261111/native/oracle/prepare.py": "ba47d836feba32bbce3aef24f271bec1c21d5eaa36f9ecda9ece0181d5a34409",
+    "docs/evidence/ice_stage_contract_20261111/native/boundary/prepare.py": "305ece3b7c3ed374979d6a2a4e046c957bd32551bd55124eb9de7b32fe0c5ae0",
+    "docs/evidence/ice_stage_contract_20261111/figures/full_column_trace.png": "c8d4b9749fef8ac519ac955b7a16aedfba0b4cb84e0efed114c84437861f2acb",
+    "docs/evidence/ice_stage_contract_20261111/validation/receipt.json": "1aac7cf25218094accf153a268a29deb0fe619b7c4dffdb441af9519364738d7",
+    "docs/evidence/ice_stage_contract_20261111/review/recount.py": "91eb0ab94e00edd12d4ebff47361be826c8671624cb6d17b3a241697237daa56",
+    "tools/cp02_ice_stage_audit.py": "02956704407f99cbd861ebdddb399cfc3622ddf39c18280b87198312a73489b8",
+    "tools/cp02_ice_stage_cases.py": "f985d300c6656600f58871819f2858cdd64d3f293e9f27d94681de61fdae386d",
+    "tests/test_cp02_ice_stage_audit.py": "422a57419cb1c492643413e182ef16cd2e792ec045e7aa22d1894ae602ca3b90",
+    "tests/test_cp02_ice_stage_cases.py": "a214f3a3f9f1dd382b15f74d0683a15eb35800f5f57b068a9a424dfcf1b42625"
+  }
+}

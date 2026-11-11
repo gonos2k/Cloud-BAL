@@ -1,0 +1,40 @@
+{
+  "files": {
+    "share/module_model_constants.F": {
+      "sha256": "5b80377fecdc18a5f0ad38d3b6c15cfc86ad5d76701adbbbb08a08698d0f7062",
+      "excerpts": [
+        {
+          "first_line": 8,
+          "last_line": 32,
+          "text": "   !  A really small number.\n\n   REAL    , PARAMETER :: epsilon         = 1.E-15\n\n   !  4. Following is information related to the physical constants.\n\n   !  These are the physical constants used within the model.\n\n! JM NOTE -- can we name this grav instead?\n   REAL    , PARAMETER :: g = 9.81  ! acceleration due to gravity (m {s}^-2)\n\n   REAL    , PARAMETER :: r_d          = 287.       ! gas constant of dry air (J deg^-1 kg^-1)\n   REAL    , PARAMETER :: cp           = 7.*r_d/2.  ! \n\n   REAL    , PARAMETER :: r_v          = 461.6      ! gas constant for water vapor (J deg^-1 kg^-1)\n   REAL    , PARAMETER :: cv           = cp-r_d     ! Specific heat of air at contant volume (J deg^-1 kg^-1)\n   REAL    , PARAMETER :: cpv          = 4.*r_v\n   REAL    , PARAMETER :: cvv          = cpv-r_v    ! \n   REAL    , PARAMETER :: cvpm         = -cv/cp\n   REAL    , PARAMETER :: cliq         = 4190.      ! specific heat of liquid water at 0^oC\n   REAL    , PARAMETER :: cice         = 2106.      ! specific heat of ice at 0^oC\n   REAL    , PARAMETER :: psat         = 610.78\n   REAL    , PARAMETER :: rcv          = r_d/cv     ! \n   REAL    , PARAMETER :: rcp          = r_d/cp\n   REAL    , PARAMETER :: rovg         = r_d/g"
+        },
+        {
+          "first_line": 53,
+          "last_line": 60,
+          "text": "\n   REAL    , PARAMETER :: XLS          = 2.85E6      ! latent heat of sublimation of water at 0^oC (J kg^-1) \n   REAL    , PARAMETER :: XLV          = 2.5E6       ! latent heat of vaporization of water at 0^oC (J kg^-1)\n   REAL    , PARAMETER :: XLF          = 3.50E5      ! latent heat of fusion of water at 0^oC (J kg^-1)\n\n   REAL    , PARAMETER :: rhowater     = 1000.       ! density of liquid water at 0^oC (kg m^-3)\n   REAL    , PARAMETER :: rhosnow      = 100.        ! density of snow (kg m^-3)\n   REAL    , PARAMETER :: rhoair0      = 1.28        ! density of dry air at 0^oC and 1000mb pressure (kg m^-3)"
+        },
+        {
+          "first_line": 79,
+          "last_line": 82,
+          "text": "   REAL    , PARAMETER ::  SVPT0=273.15     ! constant for saturation vapor pressure calculation (K)\n   REAL    , PARAMETER ::  EP_1=R_v/R_d-1.  !  constant for virtual temperature (r_v/r_d - 1) (dimensionless)\n   REAL    , PARAMETER ::  EP_2=R_d/R_v     ! constant for specific humidity calculation (dimensionless)\n   REAL    , PARAMETER ::  KARMAN=0.4               ! von Karman constant"
+        }
+      ]
+    },
+    "phys/module_microphysics_driver.F": {
+      "sha256": "bcac98180bfb5e260271a5836d71c5936d47ab167e2164c37b328f37ec2c03f4",
+      "excerpts": [
+        {
+          "first_line": 201,
+          "last_line": 207,
+          "text": "#endif\n\n! Model Layer\n   USE module_model_constants\n   USE module_wrf_error\n   USE module_configure, only: grid_config_rec_type\n#if ( WRF_CHEM == 1 )   "
+        },
+        {
+          "first_line": 2545,
+          "last_line": 2564,
+          "text": "                 ,NI=qni_curr                                       & \n                 ,NR=qnr_curr                                       &\n                 ,BG=qib_curr                                       &\n                 ,diag_rhog=rhopo3d                                 &\n                 ,DEN=rho,PII=pi_phy,P=p,DELZ=dz8w                  &\n                 ,DELT=dt,G=g,CPD=cp,CPV=cpv,CCN0=ccn_conc          & ! RAS\n                 ,RD=r_d,RV=r_v,T0C=svpt0                           &\n                 ,EP1=ep_1, EP2=ep_2, QMIN=epsilon                  &\n                 ,XLS=xls, XLV0=xlv, XLF0=xlf                       &\n                 ,DEN0=rhoair0, DENR=rhowater                       &\n                 ,scale_h=scale_h                                   & ! yhlee\n                 ,qnn_land_mult=qnn_land_mult                       &\n                 ,qnn_sea_mult=qnn_sea_mult                         &\n                 ,ncmin_land=ncmin_land                             & ! yhlee\n                 ,ncmin_sea=ncmin_sea                               & ! yhlee\n                 ,CLIQ=cliq,CICE=cice,PSAT=psat                     &\n                 ,xland=xland                                       &  ! land mask, 1: land, 2: water\n                 ,RAIN=rainnc ,RAINNCV=rainncv                      & \n                 ,SNOW=snownc ,SNOWNCV=snowncv                      &\n                 ,SR=sr                                             &"
+        }
+      ]
+    }
+  },
+  "scope": "Source-level call relationship, not compiler/binary or first-use closure. Host constants match tests/fixtures/kdm6_wrapper/module_model_constants.F."
+}

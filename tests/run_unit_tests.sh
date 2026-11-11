@@ -21,6 +21,9 @@ if [[ $ncgen_sha256 != "$ncgen_expected_sha256" ]]; then
   exit 2
 fi
 export CLOUD_BAL_WORKSPACE_ROOT=$workspace_root
+python3 "$repo_root/tests/test_cp02_ice_stage_cases.py"
+python3 "$repo_root/tests/test_cp02_ice_stage_audit.py"
+
 test_scratch_root=${CLOUD_BAL_TEST_SCRATCH_ROOT:-/var/tmp}
 mkdir -p "$test_scratch_root"
 test_tmp=$(mktemp -d "$test_scratch_root/unit_tests.XXXXXX")
