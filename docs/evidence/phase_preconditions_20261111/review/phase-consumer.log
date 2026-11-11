@@ -1,0 +1,94 @@
+Frozen source: /var/tmp/phase-review-source.OYGW33
+/var/tmp/phase-review-source.OYGW33/src/common/cloud_bal_column_physics.f90(178): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+                                   density_prior,thermo_analysis_budget,pre_density_temperature,pre_density_vapor,pre_density_condensates, &
+-------------------------------------------------------------------------------------------------------------------------------------^
+ phase moment completion: PASS
+/var/tmp/phase-review-source.OYGW33/src/common/cloud_bal_column_physics.f90(178): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+                                   density_prior,thermo_analysis_budget,pre_density_temperature,pre_density_vapor,pre_density_condensates, &
+-------------------------------------------------------------------------------------------------------------------------------------^
+ phase to initialization chain: PASS
+../native_slope.f90(38): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [LAMDAR]
+      lamdar(xd,yd,zd)= exp(log(((pidnr*zd)/(xd*yd)))*(1./dmr))
+------^
+../native_slope.f90(13): remark #7712: This variable has not been used.   [T]
+      subroutine slope_rain(qrs,nrs,den,denfac,t,rslope,rslopeb,rslope2,rslope3,   &
+-----------------------------------------------^
+../native_slope.f90(16): remark #7712: This variable has not been used.   [JTS]
+  INTEGER       ::               its,ite, jts,jte, kts,kte
+------------------------------------------^
+../native_slope.f90(16): remark #7712: This variable has not been used.   [JTE]
+  INTEGER       ::               its,ite, jts,jte, kts,kte
+----------------------------------------------^
+../native_slope.f90(30): remark #7712: This variable has not been used.   [N0SFAC]
+                                                                       n0sfac
+-----------------------------------------------------------------------^
+../native_slope.f90(31): remark #7712: This variable has not been used.   [X]
+  REAL       ::  x, y, z, supcol
+-----------------^
+../native_slope.f90(31): remark #7712: This variable has not been used.   [Y]
+  REAL       ::  x, y, z, supcol
+--------------------^
+../native_slope.f90(31): remark #7712: This variable has not been used.   [Z]
+  REAL       ::  x, y, z, supcol
+-----------------------^
+../native_slope.f90(31): remark #7712: This variable has not been used.   [SUPCOL]
+  REAL       ::  x, y, z, supcol
+--------------------------^
+../native_slope.f90(33): remark #7712: This variable has not been used.   [J]
+  integer :: i, j, k
+----------------^
+ native slope witness number m-3:  8.7535214E-03  fallback lambda:
+   35000.00    
+ native slope equality and active branches: PASS
+/var/tmp/phase-review-source.OYGW33/src/common/cloud_bal_column_physics.f90(178): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+                                   density_prior,thermo_analysis_budget,pre_density_temperature,pre_density_vapor,pre_density_condensates, &
+-------------------------------------------------------------------------------------------------------------------------------------^
+ phase moment completion: PASS
+/var/tmp/phase-review-source.OYGW33/src/common/cloud_bal_column_physics.f90(178): warning #5268: Extension to standard: The text exceeds right hand column allowed on the line.
+                                   density_prior,thermo_analysis_budget,pre_density_temperature,pre_density_vapor,pre_density_condensates, &
+-------------------------------------------------------------------------------------------------------------------------------------^
+ phase to initialization chain: PASS
+../native_slope.f90(38): warning #7343: A statement function is an obsolescent feature in Fortran 2008.   [LAMDAR]
+      lamdar(xd,yd,zd)= exp(log(((pidnr*zd)/(xd*yd)))*(1./dmr))
+------^
+../native_slope.f90(13): remark #7712: This variable has not been used.   [T]
+      subroutine slope_rain(qrs,nrs,den,denfac,t,rslope,rslopeb,rslope2,rslope3,   &
+-----------------------------------------------^
+../native_slope.f90(16): remark #7712: This variable has not been used.   [JTS]
+  INTEGER       ::               its,ite, jts,jte, kts,kte
+------------------------------------------^
+../native_slope.f90(16): remark #7712: This variable has not been used.   [JTE]
+  INTEGER       ::               its,ite, jts,jte, kts,kte
+----------------------------------------------^
+../native_slope.f90(30): remark #7712: This variable has not been used.   [N0SFAC]
+                                                                       n0sfac
+-----------------------------------------------------------------------^
+../native_slope.f90(31): remark #7712: This variable has not been used.   [X]
+  REAL       ::  x, y, z, supcol
+-----------------^
+../native_slope.f90(31): remark #7712: This variable has not been used.   [Y]
+  REAL       ::  x, y, z, supcol
+--------------------^
+../native_slope.f90(31): remark #7712: This variable has not been used.   [Z]
+  REAL       ::  x, y, z, supcol
+-----------------------^
+../native_slope.f90(31): remark #7712: This variable has not been used.   [SUPCOL]
+  REAL       ::  x, y, z, supcol
+--------------------------^
+../native_slope.f90(33): remark #7712: This variable has not been used.   [J]
+  integer :: i, j, k
+----------------^
+ native slope witness number m-3:  8.7535214E-03  fallback lambda:
+   35000.00    
+ native slope equality and active branches: PASS
+tests/intel_toolchain.sh: OK
+tests/run_phase_moment_consumer.sh: OK
+tests/source_extract_phase_consumer.py: OK
+tests/test_phase_moments.f90: OK
+tests/test_phase_initialization_chain.f90: OK
+tests/test_phase_consumer_native.f90: OK
+src/common/cloud_bal_state.f90: OK
+src/common/cloud_bal_column_physics.f90: OK
+src/common/cloud_bal_phase_moments.f90: OK
+src/common/cloud_bal_microphysics_initialization.f90: OK
+docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90: OK

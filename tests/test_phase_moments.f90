@@ -47,5 +47,69 @@ PROGRAM test_phase_moments
   IF (status/=STATUS_FAILED .OR. ANY(TRANSFER(s,[0_int64,0_int64,0_int64,0_int64,0_int64,0_int64])/= &
       TRANSFER(old,[0_int64,0_int64,0_int64,0_int64,0_int64,0_int64])) .OR. &
       t/=to .OR. nn/=20.0_real64 .OR. nc/=80.0_real64) ERROR STOP 'NaN cloud mass rollback'
+  CALL precondition_boundaries()
   PRINT *, 'phase moment completion: PASS'
+CONTAINS
+  SUBROUTINE precondition_boundaries()
+    REAL(real64) :: q(6),temp,n,ncloud,volume,nan
+    nan=ieee_value(0.0_real64,ieee_quiet_nan)
+
+    q=[0.01_real64,0.001_real64,0.0_real64,0.0_real64,0.0_real64,0.0_real64]
+    temp=280.0_real64; n=20.0_real64; ncloud=0.0_real64
+    CALL reject_evaporation(temp,q,n,ncloud)
+    ncloud=-1.0_real64
+    CALL reject_evaporation(temp,q,n,ncloud)
+    ncloud=nan
+    CALL reject_evaporation(temp,q,n,ncloud)
+    ncloud=TINY(1.0_real64)
+    CALL evaporate_cloud_completely(temp,q,n,ncloud,status)
+    IF (status/=STATUS_OK .OR. q(2)/=0.0_real64 .OR. ncloud/=0.0_real64) ERROR STOP 'tiny NC accepted'
+    q=0.0_real64; temp=280.0_real64; n=0.0_real64; ncloud=0.0_real64
+    CALL evaporate_cloud_completely(temp,q,n,ncloud,status)
+    IF (status/=STATUS_OK .OR. ANY(q/=0.0_real64) .OR. temp/=280.0_real64 .OR. &
+        n/=0.0_real64 .OR. ncloud/=0.0_real64) ERROR STOP 'empty evaporation no-op'
+
+    q=[0.01_real64,0.0_real64,0.0_real64,0.0_real64,0.0_real64,0.002_real64]
+    temp=280.0_real64; volume=0.0_real64
+    CALL reject_melt(temp,q,volume,0.0005_real64)
+    CALL reject_melt(temp,q,volume,0.002_real64)
+    volume=-1.0_real64
+    CALL reject_melt(temp,q,volume,0.0005_real64)
+    volume=nan
+    CALL reject_melt(temp,q,volume,0.0005_real64)
+    volume=0.00001_real64
+    CALL reject_melt(temp,q,volume,nan)
+    CALL reject_melt(temp,q,volume,-0.0005_real64)
+    volume=0.0_real64
+    old=q; to=temp
+    CALL melt_graupel_proportionally(temp,q,volume,0.0_real64,status)
+    IF (status/=STATUS_OK .OR. ANY(q/=old) .OR. temp/=to .OR. volume/=0.0_real64) &
+      ERROR STOP 'zero melt with missing BG no-op'
+    volume=TINY(1.0_real64)
+    CALL melt_graupel_proportionally(temp,q,volume,0.0005_real64,status)
+    IF (status/=STATUS_OK .OR. q(6)>=0.002_real64) ERROR STOP 'tiny BG accepted'
+    q=0.0_real64; temp=280.0_real64; volume=0.0_real64
+    CALL melt_graupel_proportionally(temp,q,volume,0.0_real64,status)
+    IF (status/=STATUS_OK .OR. ANY(q/=0.0_real64) .OR. temp/=280.0_real64 .OR. &
+        volume/=0.0_real64) ERROR STOP 'empty melt no-op'
+  END SUBROUTINE precondition_boundaries
+
+  SUBROUTINE reject_evaporation(temp,q,n,ncloud)
+    REAL(real64), INTENT(INOUT) :: temp,q(6),n,ncloud
+    REAL(real64) :: saved(9)
+    saved=[temp,q,n,ncloud]
+    CALL evaporate_cloud_completely(temp,q,n,ncloud,status)
+    IF (status/=STATUS_FAILED .OR. ANY(TRANSFER([temp,q,n,ncloud],[0_int64],9)/= &
+        TRANSFER(saved,[0_int64],9))) ERROR STOP 'evaporation precondition rollback'
+  END SUBROUTINE reject_evaporation
+
+  SUBROUTINE reject_melt(temp,q,volume,amount)
+    REAL(real64), INTENT(INOUT) :: temp,q(6),volume
+    REAL(real64), INTENT(IN) :: amount
+    REAL(real64) :: saved(8)
+    saved=[temp,q,volume]
+    CALL melt_graupel_proportionally(temp,q,volume,amount,status)
+    IF (status/=STATUS_FAILED .OR. ANY(TRANSFER([temp,q,volume],[0_int64],8)/= &
+        TRANSFER(saved,[0_int64],8))) ERROR STOP 'melt precondition rollback'
+  END SUBROUTINE reject_melt
 END PROGRAM test_phase_moments

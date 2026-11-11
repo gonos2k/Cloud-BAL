@@ -1,0 +1,30 @@
+{
+  "status": "PASS",
+  "base": "359ef4be308fb44693fce87f601ae9b7fabe3835",
+  "source_sha256": {
+    "src/common/cloud_bal_state.f90": "205d034e803f9e7294e8d913e46b40174f38caaf82a19d119ffafcacdae494ab",
+    "src/common/cloud_bal_column_physics.f90": "0c2cdbf4379814a2fa720ad387591c9396c9a959eb0cf383132bda910bd66ecf",
+    "src/common/cloud_bal_microphysics_initialization.f90": "aeed11853d28fcd23d23f5a6e743cbe9f0238075f7a25a19a968d846d3bcd199",
+    "src/common/cloud_bal_phase_moments.f90": "da12a31f389ecf2155e1d7a454bdbc72e6eadd4f469bc7a14054331d5c062fa1",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/run_phase_moment_consumer.sh": "68814a7d9239e041cf49555d0c7547703123935229fcef046b17ad72436c14f5",
+    "tests/test_phase_moments.f90": "5ebf02826bbb166589f44de3448b6eb1ab918fcc209a62a504bcf704abcaf808",
+    "tests/test_phase_initialization_chain.f90": "1c1201d30b04fc25cb8f09327b710f26b92055e59bef3b8b9a671aa7101e6722",
+    "tests/test_phase_consumer_native.f90": "c6c1fed7ee314e6bb60ed154e8d26fa75c017b32023020eb7286dadc68d3dcc9",
+    "tests/source_extract_phase_consumer.py": "d528ad130058912826e00a08ffefbb61ac56a4298ebc90168d1553e613be281b",
+    "docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595"
+  },
+  "command": [
+    "bash",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/phase_preconditions_20261111/runtime/frozen-9p2km3vd/source/tests/run_phase_moment_consumer.sh"
+  ],
+  "exit_code": 0,
+  "seconds": 30.715567955747247,
+  "log": "docs/evidence/phase_preconditions_20261111/validation/intel.log",
+  "log_sha256": "1f42227c870b08911fb31c677dd53ed3c376b10905f053eaca87d656b46e9e75",
+  "profiles": [
+    "O0 checked",
+    "O2 optimized"
+  ],
+  "scope": "Affected phase helper, phase-to-completion chain and extracted native consumer only. Prior full unit run not repeated. No WRF integration or physical NI policy decision."
+}
