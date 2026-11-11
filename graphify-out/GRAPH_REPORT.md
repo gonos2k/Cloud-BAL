@@ -4,7 +4,7 @@
 - cluster-only mode — file stats not available
 
 ## Summary
-- 19568 nodes · 35441 edges · 1735 communities (1322 shown, 299 thin omitted)
+- 19615 nodes · 35523 edges · 1744 communities (1328 shown, 302 thin omitted)
 - Extraction: 96% EXTRACTED · 4% INFERRED · 0% AMBIGUOUS · INFERRED: 1341 edges (avg confidence: 0.84)
 - Token cost: 0 input · 0 output
 
@@ -63,7 +63,7 @@
 - ndarray
 - cloud_bal_stage_payload
 - cloud_bal_state_type
-- plot_snow_sensitivity.py
+- read_global_stage
 - CP01_COMPLETION_AUDIT_20260909.md
 - certify_actual_saturation_output
 - cloud_bal_transaction.py
@@ -85,7 +85,7 @@
 - test_upstream_temperature_status.f90
 - pr94_water_budget.py
 - cloud_bal_radar_downdraft
-- pr82_candidate_wps_hook
+- pr94_hydro_wps_hook
 - check_physical_contract_shadow.py
 - Legacy receiver constraints — 2026-09-21
 - 상세 기준 카드
@@ -118,7 +118,7 @@
 - Path
 - cloud_bal_ncgen_system.c
 - CP01 native mass/frame contract
-- pr73_native_input_pair_audit.py
+- pr74_common_moment_audit.py
 - Physical boundary decision after PR31
 - verify_qbal_lapsprep.py
 - Approved WPS output → actual metgrid reader
@@ -208,7 +208,7 @@
 - lapsprep_wps
 - barnes_multivariate.f90
 - test_transition_geometry_reference.py
-- reproduction_probe
+- cp02_initial_boundaries.py
 - test_landlock_policy.py
 - test_bound_bridge_matches_direct_ncgen_bytes
 - test_qbal_operator
@@ -217,7 +217,7 @@
 - test_hydrometeor_moments.py
 - test_pr68_velocity_contract
 - pr102_native_wind_candidate.py
-- Cloud-BAL NO-GO 폐합 실행 체크리스트
+- Any
 - extend_graupel_process_domain
 - cp02_source_write.py
 - test_pr90_execution_layout.py
@@ -352,7 +352,7 @@
 - Legacy continuity 연산자 교정 — 2026-09-18
 - cp02_preclamp_response.py
 - PR84NativeMomentPolicyTests
-- test_pr87_v42_budget.py
+- cloud_bal_state_type
 - pressure_analysis_budget
 - run_callback_replay.py
 - run_qbal_writer_tests.sh
@@ -367,7 +367,7 @@
 - numerator_case.py
 - run_kdm6_number_wrapper.sh
 - build
-- candidate_evaluation_inputs_valid
+- pr73_native_input_pair_audit.py
 - pr87_graupel_activity_audit.py
 - water_phase_budget
 - run_qbal_metgrid_reader_tests.sh
@@ -380,7 +380,7 @@
 - cloud_bal_pipeline_result
 - CP06-A input readiness for the remaining CP02 native work
 - joint_candidate_evaluation
-- pr103_time_response.py
+- pr77_native_state_run.py
 - pressure_analysis_budget
 - run_cp06a_stationary_omega_actual.sh
 - balance_operator_config
@@ -394,10 +394,10 @@
 - run_cp06a_stationary_omega_test.sh
 - real_shadow_driver
 - ValueError
-- SnowSensitivityFigureReplayTests
+- plot_snow_sensitivity.py
 - test_pressure_radar_reference
 - pr97_620_c4_failure_classify.py
-- test_pr87_diffusion_intermediate_precision.py
+- pr78_cp06a_spatial_receipt.py
 - column_physics_config
 - c6/runtime/independent_runtime_audit.py
 - weighted_change
@@ -413,11 +413,11 @@
 - pr87_rain_diffusion_probe.py
 - analyze
 - test_cp02_initial_phi_analysis.py
-- pr103_history_response.py
+- read_capture
 - cloud_bal_pipeline
 - score_ablation.py
 - verify_prefix_and_t10_tail.py
-- FakeVariable
+- test_pr65_pbl_domain_metrics.py
 - c7/runtime/independent_runtime_audit.py
 - run_qbal_real_operator_tests.sh
 - parametrize
@@ -433,13 +433,13 @@
 - label_components
 - qbal_physical_boundary
 - test_pr101_cloud_thermo_source.py
-- balance_operator_config
+- test_transition_geometry_ledger.py
 - cp02_failure_state_features.py
 - run_qbal_profile_basis_tests.sh
 - PairedGraupelVolumeTests
 - run_qbal_surface_thermo_tests.sh
 - test_operational_shadow_compare.py
-- test_pr103_time_response.py
+- pr102_native_capture_plan.py
 - PR94 frozen-C4 cloud response
 - qbal_pressure_flux
 - PR94 Long-Run Diagnostics Profile — 2026-10-21
@@ -467,7 +467,7 @@
 - ndarray
 - fixture
 - score_producer.py
-- test_pr101_projected_c2_response.py
+- test_lsx_candidate.py
 - skipUnless
 - skipUnless
 - pr99_group_failure_scalar_replay.py
@@ -479,9 +479,9 @@
 - Path
 - skipUnless
 - pr103_archived_consumer.py
-- initialize_qnrain
+- transform
 - diagnose_qbal_sloping_faces
-- P1 — Diagnostic compare 계약·fail-closed
+- Cloud-BAL NO-GO 폐합 실행 체크리스트
 - laps_static
 - pr99_native_consumer_replay.py
 - cloud_bal_balance_adapter
@@ -503,9 +503,9 @@
 - _regular_bytes_at
 - cp02_density_comparison.py
 - pr101_upper_wind_replay.py
-- test_pr102_native_ww_bound.py
+- extend_pbl_source_probe
 - independent_source.py
-- iso_fortran_env
+- pr97_liquid_observer
 - recount_writer_tables.py
 - add_pbl_source_precision
 - test_first_hour_species_scoring.py
@@ -518,14 +518,14 @@
 - pr101_guarded_replay.py
 - run
 - P3 — Delta / mass / metrics
-- pr94_hydro_wps_hook
+- TestPR94HydroExternalInput
 - main
 - datetime
 - P6 — Full KLAPS / WPS
-- P8 — CI / main
+- kdm6_radar_contract_native.py
 - pr102_execution_preflight.py
 - Cloud-BAL design review
-- test_pr101_projected_c2_response_native.py
+- extend_rain_density_storage
 - test_recount_cp02_weak_strong_balance.py
 - cp02_ice_false_alarm.py
 - P7 — 0–6 h science
@@ -537,12 +537,12 @@
 - ndarray
 - Path
 - plot_cp02_ice_false_alarm.py
-- extend_fogdes_source_contract
+- compose
 - P4 — Independent generation validation
 - Cloud-BAL 최종 요구사항 체크리스트
-- PR102PreflightTests
+- test_lco_evidence.py
 - main
-- pr97_liquid_observer
+- M04 — canonical–WPS–native 질량분모 계약
 - Physical surface and legacy face mapping — 2026-09-21
 - verify_shadow_wps_pair.py
 - test_pr91_host_store_trace_native.py
@@ -550,32 +550,33 @@
 - pr103_execution_preflight.py
 - test_transition_state_validator.py
 - write_cloud_bal_stage_payload
-- test_derive_cp02_b1_components.py
+- M06 — 바람 frame·투영·metric·w↔omega 계약
 - ArchivedConsumerNativeTests
 - pr82_candidate_wps_readback.py
-- write_static
+- extend_graupel_strict_mass
 - CP02 model-dynamics increment experiment
 - test_lapsprep_off.py
 - 2026-09-21 PR #34 후속 경사진 면 재구성
 - CompactProfileTests
-- test_pr102_response.py
+- _lambert_latlon
 - Partial-layer and finite-top pressure flux research kernel
 - main
 - field4d
 - test_score_new_histories.py
 - score_components.py
-- pr99_compact_stage_crosscheck.py
+- pr94_hydro_control.py
 - 기존 다변량 Barnes 설정과 Cloud-BAL 입력 연결
 - main
 - P2 — Provenance / atomicity
 - P5 — Physical authority
 - cp02_thermo_cloud_cohorts.py
-- run.txt
-- snow_extension_20261030/runtime/run_all.py
+- transform
+- test_pr101_guarded_replay.py
 - Legacy continuity: 지원영역과 수평 face 계수 정렬
 - Lower-profile domain and prior: bounded next experiment
 - Same-ELF producer, supervised runtime and graph refresh
 - run
+- validated_window
 - pressure_wps_fields
 - radar_los_observation_set
 - cloud_bal_state_type
@@ -583,16 +584,24 @@
 - weak_strong_balance_20261030/runtime/run_all.py
 - field3d
 - stage_result
+- CP01 nonzero number wrapper probe — 2026-09-09
 - cloud_bal_state_type
 - run
 - field2d
 - field3d
 - test_pr87_kdm6_ng_base_diag.py
-- build
-- score_species.py
+- review_raw_sample.py
+- cp02_zero_candidate_20261029/review/independent_raw.py
+- snow_lower_20261030/runtime/run_all.py
+- pr93_freezing_packet_contract
+- run_pr83_same13_native_initialization.py
 - snow_sensitivity_20261030/runtime/run_all.py
-- initialize_b1_rain_psd_contrast.py
+- test_pr83_policy_source_integration.py
+- test_surface_boundary_validator.py
+- sha
 - Retrospective surface flux and explicit incomplete column budget
+- test_pr84_native_moment_policy_native.py
+- cloud_bal_state_type
 - diagnose_qbal_column_budget
 - qbal_column_budget
 - test_qbal_column_budget
@@ -805,7 +814,7 @@
 - PR76 team review
 - PR76 gradual-underflow policy comparison
 - pr76_native_fp_policy.c
-- pr78_cp06a_spatial_receipt.py
+- pr78_native_fp_runtime_run.py
 - run_pr76_native_fp_policy.sh
 - JointAnalysisTest
 - test_pr76_degenerate_kkt_oracle.py
@@ -1106,7 +1115,7 @@
 - test_pr87_rain_density_storage.f90
 - add_rain_process_contract
 - test_pr87_rain_public_store
-- pr87_rain_sedimentation.py
+- test_pr87_rain_sedimentation.py
 - sha
 - test_pr87_number_volume_store
 - summarize_source_representation
@@ -1400,14 +1409,13 @@
 - cp02_kdm6_controls.py
 - plot_cp02_thermo_response.py
 - plot_inner_write_events.py
-- InnerResponseTests
+- PreclampTests
 - ThermoResponseTests
 - cp02_kdm6_inner_response.py
 - cp02_thermo_response.py
 - cp02_preclamp_20261029/runtime/collect.py
 - cp02_preclamp_20261029/runtime/prepare.py
 - cp02_preclamp_20261029/runtime/stage_launch.py
-- PreclampTests
 - Struct
 - cp02_xmm6_producer_20261029/runtime/collect.py
 - cp02_xmm6_producer_20261029/runtime/prepare.py
@@ -1565,7 +1573,6 @@
 - cp02_initial_writer_analysis.py
 - writer_probe.py
 - main
-- replay_analysis.py
 - require_reviews
 - test_cp02_initial_writer_analysis.py
 - plot_cp02_initial_boundaries.py
@@ -1621,11 +1628,9 @@
 - test_canonical_state
 - plot_physical_moment_handoff.py
 - cloud_bal_microphysics_initialization
-- ModelMomentBoundaryTest
 - test_microphysics_initialization
 - test_phase_consumer_native
 - test_phase_initialization_chain
-- initialize_model_moments.py
 - model_moment_driver
 - cloud_bal_phase_moments
 - test_phase_moments
@@ -1635,6 +1640,10 @@
 - cp02_ice_stage_cases.py
 - plot_ice_stage_contract.py
 - plot_ice_stage_trace.py
+- probe.py
+- test_ice_snow_initialization
+- ModelMomentBoundaryTest
+- initialize_model_moments.py
 
 ## God Nodes (most connected - your core abstractions)
 1. `cloud_bal_state_type` - 163 edges
@@ -1649,21 +1658,21 @@
 10. `ReplayPlannerTest` - 56 edges
 
 ## Surprising Connections (you probably didn't know these)
-- `summary_state()` --calls--> `field()`  [INFERRED]
-  tools/pr82_observation_signal_readback.py → tests/pr82_candidate_wps_readback.py
 - `test_rejects_source_drift_before_returning_partial_source()` --calls--> `add_rain_diffusion_probe()`  [INFERRED]
   tests/test_pr87_rain_diffusion_probe.py → tools/pr87_rain_diffusion_probe.py
+- `test_frozen_source_or_helper_drift_is_rejected_without_partial_output()` --calls--> `extend_rain_diffusion_precision()`  [INFERRED]
+  tests/test_pr87_rain_diffusion_precision.py → tools/pr87_rain_diffusion_precision.py
+- `summary_state()` --calls--> `field()`  [INFERRED]
+  tools/pr82_observation_signal_readback.py → tests/pr82_candidate_wps_readback.py
 - `test_area_join_rejects_bad_candidate_chain()` --uses--> `ColumnSummaryError`  [INFERRED]
   tests/test_pr90_cold_column_summary.py → tools/pr90_cold_column_summary.py
 - `test_area_join_rejects_history_grid_mismatch_with_stage_bounds()` --uses--> `ColumnSummaryError`  [INFERRED]
-  tests/test_pr90_cold_column_summary.py → tools/pr90_cold_column_summary.py
-- `test_area_join_rejects_unverified_execution_layout()` --uses--> `ColumnSummaryError`  [INFERRED]
   tests/test_pr90_cold_column_summary.py → tools/pr90_cold_column_summary.py
 
 ## Import Cycles
 - None detected.
 
-## Communities (1735 total, 299 thin omitted)
+## Communities (1744 total, 302 thin omitted)
 
 ### Community 0 - "prepare_operational_comparison.py"
 Cohesion: 0.16
@@ -1686,12 +1695,12 @@ Cohesion: 0.09
 Nodes (59): audit_declared_file(), audit_lightning_observation(), audit_lrs_selection(), audit_satellite_observation(), audit_surface_observation(), audit_temperature_observations(), canonical_sha256(), contained_directory() (+51 more)
 
 ### Community 5 - "balance_operator_type"
-Cohesion: 0.19
-Nodes (25): active_balance_cell_count(), apply_adjoint_metric(), apply_balance_correction(), apply_bounded_model_projection(), apply_continuity_operator(), apply_normal_operator(), apply_normal_operator_work(), balance_operator_type (+17 more)
+Cohesion: 0.14
+Nodes (37): active_balance_cell_count(), apply_adjoint_metric(), apply_balance_correction(), apply_bounded_model_projection(), apply_continuity_operator(), apply_localized_balance(), apply_normal_operator(), apply_normal_operator_work() (+29 more)
 
 ### Community 6 - "test_lt1_candidate.py"
-Cohesion: 0.07
-Nodes (63): digest(), main(), Path, Variable, rows(), run_final_four_lco_lineage_and_forged_receipt(), _set_raw(), test_lco_content_contract() (+55 more)
+Cohesion: 0.22
+Nodes (24): copy_fixture(), digest(), _epoch(), inspect(), main(), make_variants(), manifest_row(), mutate() (+16 more)
 
 ### Community 7 - "plot_cp02_b1_process.py"
 Cohesion: 0.14
@@ -1710,8 +1719,8 @@ Cohesion: 0.26
 Nodes (20): BundleError, _load_spec(), main(), package_bundle(), Path, ValueError, Validate *specification*, copy its files, and write the bundle manifest., Raised when the bundle specification cannot be trusted. (+12 more)
 
 ### Community 11 - "compare_operational_shadow.py"
-Cohesion: 0.11
-Nodes (41): Return the fully verified current generation for a publication root., Return the fully verified current generation for a publication root., verify_current_generation(), Read the field metadata/slabs used by the WPS intermediate format., read_wps(), archive_receipt(), arrays_at_level(), artifact() (+33 more)
+Cohesion: 0.09
+Nodes (50): test_p1_operational_scope_excludes_12_and_has_its_own_authority(), Return the fully verified current generation for a publication root., Return the fully verified current generation for a publication root., verify_current_generation(), archive_receipt(), arrays_at_level(), artifact(), build_candidate() (+42 more)
 
 ### Community 12 - "ReplayPlannerTest"
 Cohesion: 0.10
@@ -1726,8 +1735,8 @@ Cohesion: 0.10
 Nodes (55): MaskedArray, main(), make_manifest(), Path, test_pre_qbal_generation_manifest_contract(), write_manifest(), contained_input(), detached_netcdf() (+47 more)
 
 ### Community 15 - "pr87_rain_diffusion_precision.py"
-Cohesion: 0.06
-Nodes (39): generated(), _fixture(), _procedure(), Pin opt-in compact Shinhong diagnostics and compare stored-state effects., _read_sources(), test_compact_overlay_is_pinned_opt_in_and_preserves_gate_and_fallback(), test_pinned_intel_compact_gate_matches_full_mode_o0_o2(), generated() (+31 more)
+Cohesion: 0.07
+Nodes (41): parametrize, test_final_real64_finiteness_gate_rejects_nan_and_infinity(), test_final_source_rate_gate_uses_assigned_real64_payload(), test_part1_pbl_driver_shinhong_route_is_explicit_and_legacy_fields_are_untouched(), test_source_pins_are_fail_closed(), generated(), test_rejects_source_drift_without_writing_partial_outputs(), _append_call_args() (+33 more)
 
 ### Community 16 - "check_transition_geopotential_scope.py"
 Cohesion: 0.17
@@ -1735,7 +1744,7 @@ Nodes (27): _added_bottom(), _analytic_surface_phi(), _analytic_surface_phi_stag
 
 ### Community 17 - "cloud_bal_state"
 Cohesion: 0.06
-Nodes (88): assign_surface(), canonical_input_spec, canonical_states_equal(), canonical_to_legacy_status(), canonical_vertical_order_valid(), cell_is_usable(), cloud_bal_state, configure_pressure_geometry() (+80 more)
+Nodes (89): assign_surface(), canonical_input_spec, canonical_states_equal(), canonical_to_legacy_status(), canonical_vertical_order_valid(), cell_is_usable(), cloud_bal_state, configure_pressure_geometry() (+81 more)
 
 ### Community 18 - "test_pressure_transition_reference.py"
 Cohesion: 0.11
@@ -1766,8 +1775,8 @@ Cohesion: 0.05
 Nodes (42): Adversarial-review acceptance checklist, Canonical units and schema, Changes, Changes, Changes, Changes, Changes, Changes (+34 more)
 
 ### Community 25 - "initialize_native_moments.py"
-Cohesion: 0.07
-Nodes (61): main(), Path, sha256(), write_new(), PR83PolicySourceIntegrationTests, Integration check against the exact external evidence bound by PR83 policy., TestPR84NativeMomentPolicyEvidence, Pr94HydroPolicyTest (+53 more)
+Cohesion: 0.22
+Nodes (24): _canonical_units(), _check_input_metadata(), _check_same13_input_metadata(), InitializationError, initialize_same13_copy(), main(), _pr84_float32_ceiling(), _pr84_qice_entry_guard() (+16 more)
 
 ### Community 26 - "tests/intel_toolchain.sh"
 Cohesion: 0.08
@@ -1799,7 +1808,7 @@ Nodes (34): active_make_lines(), active_shell_lines(), adapter_is_on_link_path()
 
 ### Community 34 - "compare_baseline.py"
 Cohesion: 0.09
-Nodes (24): compare(), main(), pin(), check(), check_records(), check(), Path, digest() (+16 more)
+Nodes (28): compare(), main(), pin(), check(), check_records(), check(), Path, digest() (+20 more)
 
 ### Community 35 - "Path"
 Cohesion: 0.19
@@ -1858,16 +1867,16 @@ Cohesion: 0.15
 Nodes (28): above_ground_encoding_ok(), bitmask_encoding_ok(), cloud_bal_stage_payload, cloud_bal_state, ieee_arithmetic, iso_fortran_env, netcdf, field3d_ids (+20 more)
 
 ### Community 49 - "cloud_bal_state_type"
-Cohesion: 0.11
-Nodes (40): cloud_bal_state_type, cloud_bal_balance_operator, cloud_bal_column_physics, cloud_bal_real_netcdf, cloud_bal_state, iso_fortran_env, netcdf, install_manufactured_target() (+32 more)
+Cohesion: 0.07
+Nodes (56): cloud_bal_state_type, cloud_bal_balance_operator, cloud_bal_column_physics, cloud_bal_real_netcdf, cloud_bal_state, iso_fortran_env, netcdf, install_manufactured_target() (+48 more)
 
-### Community 50 - "plot_snow_sensitivity.py"
-Cohesion: 0.22
-Nodes (25): _bool(), close(), contingency(), csi_comparison_figure(), display_case(), dose_response_figure(), error_figure(), exploratory_label() (+17 more)
+### Community 50 - "read_global_stage"
+Cohesion: 0.17
+Nodes (22): int64, memmap, _assert_expected_inventory(), _block_paths(), BlockHeader, Call, compare_global(), _coords_for_range() (+14 more)
 
 ### Community 51 - "CP01_COMPLETION_AUDIT_20260909.md"
-Cohesion: 0.11
-Nodes (16): CP01 completion audit — 2026-09-09, Final evidence bundle, Scope and observed limitations, CP01 contract exit matrix — 2026-09-09, CP01 host and species binding — 2026-09-09, Retained input and execution boundary, Selected research profile, Variables, basis and startup coverage (+8 more)
+Cohesion: 0.15
+Nodes (11): CP01 completion audit — 2026-09-09, Final evidence bundle, Scope and observed limitations, CP01 contract exit matrix — 2026-09-09, CP01 host and species binding — 2026-09-09, Retained input and execution boundary, Selected research profile, Variables, basis and startup coverage (+3 more)
 
 ### Community 52 - "certify_actual_saturation_output"
 Cohesion: 0.16
@@ -1879,7 +1888,7 @@ Nodes (25): _current(), _current_id(), _directory_identity(), _fd_identity(), _i
 
 ### Community 54 - "field3d"
 Cohesion: 0.04
-Nodes (37): assign_reversed_core(), dry_density(), mark_real_field(), read_and_assign_hydrometeor(), field3d, initialize_field3d(), reconstruct(), check_extreme_ht() (+29 more)
+Nodes (36): assign_reversed_core(), dry_density(), mark_real_field(), read_and_assign_hydrometeor(), field3d, initialize_field3d(), reconstruct(), check_extreme_ht() (+28 more)
 
 ### Community 55 - "test_hydrostatic_increment"
 Cohesion: 0.19
@@ -1949,9 +1958,9 @@ Nodes (22): analyze(), analyze_arm(), available_column_residual(), boundary_and_
 Cohesion: 0.20
 Nodes (21): build_observed_mask(), cloud_bal_radar_downdraft, config_is_valid(), couple_radar_precipitation(), diagnose_bounded_downdraft(), cloud_bal_moisture, ieee_arithmetic, fill_lower_gaps() (+13 more)
 
-### Community 72 - "pr82_candidate_wps_hook"
-Cohesion: 0.16
-Nodes (11): cloud_bal_state_type, laps_static, netcdf, test_static_reader, ieee_arithmetic, pr82_candidate_wps_hook, write_pr82_candidate_wps(), cloud_bal_state (+3 more)
+### Community 72 - "pr94_hydro_wps_hook"
+Cohesion: 0.11
+Nodes (19): cloud_bal_state_type, laps_static, netcdf, test_static_reader, ieee_arithmetic, pr82_candidate_wps_hook, write_pr82_candidate_wps(), cloud_bal_state (+11 more)
 
 ### Community 74 - "check_physical_contract_shadow.py"
 Cohesion: 0.10
@@ -1962,8 +1971,8 @@ Cohesion: 0.22
 Nodes (8): Fixed receiver rows and stored-state replay, Implementation decision and remaining physical contract, Legacy receiver constraints — 2026-09-21, Necessary conditions before optimization, PR30 follow-up: cancellation and receiver non-worsening, Reproduction and validation artifacts, Scope and frozen inputs, Shared receivers couple the old components
 
 ### Community 76 - "상세 기준 카드"
-Cohesion: 0.16
-Nodes (33): B01 — 등압면 연산자와 모델면 변환 후 정합성, B06 — 독립 verifier와 다격자 수렴, E01 — 원래 QBAL 직접 upstream 입력 재생성, E02 — 전체 KLAPS pinned ifx/NetCDF/HDF5 ABI, E03 — thin full-state writer 및 native round-trip, E04 — legacy 광역 QBAL/bogus-w 호출 대체, E05 — generation 원자성·Lustre capability, E06 — self-contained evidence와 writer 수명 (+25 more)
+Cohesion: 0.20
+Nodes (26): B01 — 등압면 연산자와 모델면 변환 후 정합성, E01 — 원래 QBAL 직접 upstream 입력 재생성, E02 — 전체 KLAPS pinned ifx/NetCDF/HDF5 ABI, E04 — legacy 광역 QBAL/bogus-w 호출 대체, E05 — generation 원자성·Lustre capability, E06 — self-contained evidence와 writer 수명, E07 — 진단 patch와 full candidate 권한 분리, G01 — 최종 목표·비목표와 기능별 승인 범위 고정 (+18 more)
 
 ### Community 77 - "pressure_transition_reference.py"
 Cohesion: 0.34
@@ -2007,7 +2016,7 @@ Nodes (18): cloud_bal_legacy_shadow_adapter, add_terrain_mask(), assert_metadata
 
 ### Community 87 - "cloud_bal_balance_operator"
 Cohesion: 0.11
-Nodes (57): cloud_bal_grid_geometry, field2d, apply_background_continuity_balance(), apply_background_force_prior_refinement(), apply_localized_balance(), assess_pressure_geostrophic_change(), background_prior_boundary_contract_valid(), background_source_is_authoritative() (+49 more)
+Nodes (55): cloud_bal_grid_geometry, field2d, apply_background_continuity_balance(), apply_background_force_prior_refinement(), assess_pressure_geostrophic_change(), background_prior_boundary_contract_valid(), background_source_is_authoritative(), balance_beta_active() (+47 more)
 
 ### Community 88 - "bind_executable"
 Cohesion: 0.17
@@ -2050,8 +2059,8 @@ Cohesion: 0.24
 Nodes (16): qbal_metgrid_wind_reference, check_geometry(), check_time(), check_winds(), compare(), compare_coordinate(), ieee_arithmetic, iso_fortran_env (+8 more)
 
 ### Community 99 - "run_pr82_same13_native_initialization.py"
-Cohesion: 0.16
-Nodes (27): ArgumentParser, build_parser(), effective_namelist(), initialization_receipt_contract(), main(), provenance_paths(), Path, Preflight the V2 prior, consumer binary, and unchanged real boundary. (+19 more)
+Cohesion: 0.22
+Nodes (19): ArgumentParser, build_parser(), effective_namelist(), initialization_receipt_contract(), main(), provenance_paths(), Path, Preflight the V2 prior, consumer binary, and unchanged real boundary. (+11 more)
 
 ### Community 100 - "test_transition_geopotential_reference.py"
 Cohesion: 0.31
@@ -2077,17 +2086,17 @@ Nodes (15): ncgen_command, blocked_environment_name(), bound_environment(), cano
 Cohesion: 0.09
 Nodes (22): Adapter mapping and missing contract pieces, Analysis grid and downstream initialization, CP01 native mass/frame contract, Dry-air advective flux on pressure faces, Exit evidence still required, Explicit pressure-thermo SHADOW route, Explicit six-species phase-transfer candidate, Follow-up: upstream LW3 source frame (+14 more)
 
-### Community 106 - "pr73_native_input_pair_audit.py"
-Cohesion: 0.11
-Nodes (30): PR73NativeInputAuditTest, VariableShape, CommonMomentAuditTest, audit(), column_evidence(), first_unpaired(), main(), Dataset (+22 more)
+### Community 106 - "pr74_common_moment_audit.py"
+Cohesion: 0.20
+Nodes (16): CommonMomentAuditTest, audit(), audit_capture_files(), audit_fields(), _classify(), _declared_output_hashes(), _finite_stats(), _load_geometry_tools() (+8 more)
 
 ### Community 107 - "Physical boundary decision after PR31"
 Cohesion: 0.25
 Nodes (8): Actual available surface evidence, Decision, Evidence needed before changing the problem, Local evidence and limits, Next bounded implementation sequence, Physical boundary decision after PR31, Physical equation and where it belongs, Why the old problem is closed
 
 ### Community 108 - "verify_qbal_lapsprep.py"
-Cohesion: 0.24
-Nodes (16): controls(), corrupt_wps_geometry(), corrupt_wps_qv(), preflight(), Corrupt copied handoff artifacts and require the designated oracle error., Run actual LAPSPREP on malformed source times, without Python preflight., Validate the reviewed products plus the ancillary file used for pressure., sha256() (+8 more)
+Cohesion: 0.28
+Nodes (14): controls(), corrupt_wps_geometry(), corrupt_wps_qv(), preflight(), Corrupt copied handoff artifacts and require the designated oracle error., Run actual LAPSPREP on malformed source times, without Python preflight., Validate the reviewed products plus the ancillary file used for pressure., sha256() (+6 more)
 
 ### Community 109 - "Approved WPS output → actual metgrid reader"
 Cohesion: 0.29
@@ -2146,8 +2155,8 @@ Cohesion: 0.21
 Nodes (11): case_is(), check_writer(), find_domain_name(), get_config(), ishow_timer(), main_case(), set_writer_status(), test_upstream_surface_status (+3 more)
 
 ### Community 124 - "pr87_all_pair_diffusion_precision.py"
-Cohesion: 0.15
-Nodes (16): _read(), sources(), extend_all_pair_diffusion_precision(), _instrument_em(), _instrument_fragment(), _instrument_solve(), Extend the pinned REAL64 diffusion correction to all four Q/N pairs., Return an eight-channel extension bound to the frozen post-PBL inputs. (+8 more)
+Cohesion: 0.10
+Nodes (26): generated(), _read(), sources(), _compile_profile(), _embedded_module(), CompletedProcess, Path, Pinned Intel regression for the final V39 REAL128 diffusion arithmetic. (+18 more)
 
 ### Community 125 - "qbal_lapsprep_stubs.f90"
 Cohesion: 0.14
@@ -2334,8 +2343,8 @@ Cohesion: 0.22
 Nodes (9): PR67OutputSafetyCrosscheckTests, main(), ndarray, Path, _receipt_bound_output(), summarize(), validate_call_headers(), validate_finite_pair() (+1 more)
 
 ### Community 174 - "extend_cloud_diffusion_precision"
-Cohesion: 0.18
-Nodes (13): generated(), _read_source(), sources(), test_pin_mismatch_fails_before_returning_partial_sources(), extend_cloud_diffusion_precision(), _instrument_em(), _instrument_fragment(), _instrument_solve() (+5 more)
+Cohesion: 0.07
+Nodes (31): generated(), _read_source(), sources(), test_pin_mismatch_fails_before_returning_partial_sources(), _fixture(), _procedure(), Pin opt-in compact Shinhong diagnostics and compare stored-state effects., _read_sources() (+23 more)
 
 ### Community 175 - "run_qbal_lapsprep_tests.sh"
 Cohesion: 0.39
@@ -2374,8 +2383,8 @@ Cohesion: 0.25
 Nodes (8): 1. 수학: Barnes 이후의 연직 정보는 원래 빔 기하와 다르다, 2. 상변화: 유한 초기 증분과 물리 가열률을 분리해야 한다, 3. 중력파 제어: 생성 원인을 줄이고 물리적 파동은 보존한다, 4. 수치: 파동의 주파수만으로 오류를 판정할 수 없다, 5. 최소 검증 묶음, 6. 팀 검토의 추가 보완, 다중 레이더·국지 균형초기화 추가 과학 검토, 판정
 
 ### Community 185 - "native_kdm6_trace.py"
-Cohesion: 0.16
-Nodes (11): NativeKdm6TraceTest, Path, write_dump(), main(), Path, The stream is incomplete or does not match the expected first call., read_dump(), _read_exact() (+3 more)
+Cohesion: 0.13
+Nodes (14): NativeKdm6TraceTest, Path, write_dump(), main(), Path, The stream is incomplete or does not match the expected first call., read_dump(), _read_exact() (+6 more)
 
 ### Community 186 - "Operational-original versus diagnostic-patch comparison contract"
 Cohesion: 0.25
@@ -2394,8 +2403,8 @@ Cohesion: 0.25
 Nodes (7): 1. 운형과 연직속도, 2. S-band 반사도와 시선속도, 3. 기울어진 강수 구조와 fall-flux 재구성, 4. 국지 질량-바람 projection, 5. 파동과 동역학적 안전성, Cloud-BAL 과학적 기초와 구현 경계, 결론
 
 ### Community 190 - "pr101_projected_c2_response.py"
-Cohesion: 0.26
-Nodes (22): analyze(), _closed_history_index(), _closed_run(), _compare_first_call(), _crop_active_grid(), _expand_bound_trace(), _history_response(), load_json() (+14 more)
+Cohesion: 0.06
+Nodes (66): _MISSING_CONTROL_ASSETS, closed(), parametrize, Integration gates requiring retained private PR99/PR101 receipts., test_original_c2_receipt_and_input_match_reviewed_preflight_pin(), test_original_c2_trace_inventory_routes_compressed_raw_name(), parametrize, test_accepts_only_a_closed_640_second_arm() (+58 more)
 
 ### Community 193 - "lapsprep_wps"
 Cohesion: 0.29
@@ -2409,9 +2418,9 @@ Nodes (6): barnes_multivariate(), barnes_multivariate_sub(), fnorm_calc(), get_f
 Cohesion: 0.20
 Nodes (11): expected_geometry(), FakeDataset, FakeVariable, make_dataset(), read_fixture(), test_crossing_without_candidate_mask_is_rejected(), test_nontransition_positive_request_keeps_domain_and_rebuilds_interfaces(), test_same_domain_terrain_exclusion_is_preserved() (+3 more)
 
-### Community 197 - "reproduction_probe"
-Cohesion: 0.18
-Nodes (16): add_radar_cell(), core_value_differences(), cloud_bal_balance_operator, cloud_bal_pipeline, cloud_bal_state, iso_fortran_env, make_state(), make_valid() (+8 more)
+### Community 197 - "cp02_initial_boundaries.py"
+Cohesion: 0.15
+Nodes (14): run(), sha(), anchor_rows(), compare_global(), cross_counts(), differing(), main(), read_anchors() (+6 more)
 
 ### Community 198 - "test_landlock_policy.py"
 Cohesion: 0.54
@@ -2441,9 +2450,9 @@ Nodes (3): assert_close(), assert_rates(), test_pr68_velocity_contract
 Cohesion: 0.11
 Nodes (39): _exact_fraction_dot(), geometry_file(), make_wind_pair(), parametrize, Path, test_geometry_builds_metric_normalized_boundary_and_vertical_edges(), test_geometry_rejects_nonmonotone_height_and_bad_map_factors(), test_positive_product_upper_bound_covers_round_down_and_subnormal_products() (+31 more)
 
-### Community 206 - "Cloud-BAL NO-GO 폐합 실행 체크리스트"
-Cohesion: 0.29
-Nodes (7): Cloud-BAL NO-GO 폐합 실행 체크리스트, 권위와 사용 규칙, 단계 요약, 단계별 승인 기록, 상태 정의, 진단 종료와 비교 준비를 분리한다, 현재 실행 순서와 금지 조건
+### Community 206 - "Any"
+Cohesion: 0.22
+Nodes (19): _check_policy_implementation(), _check_same13_policy_implementation(), file_sha256(), initialize_copy(), Any, Path, Reject drift between the frozen policy and executable declarations., Write a new prior-initialized copy and a complete field-hash receipt. (+11 more)
 
 ### Community 207 - "extend_graupel_process_domain"
 Cohesion: 0.13
@@ -2539,7 +2548,7 @@ Nodes (5): compile(), expect_accept(), expect_reject(), mutate_reftime(), run_na
 
 ### Community 235 - "ValueError"
 Cohesion: 0.09
-Nodes (47): fields_for_tag(), load_bound(), main(), sha(), run(), sha(), digest(), field() (+39 more)
+Nodes (48): fields_for_tag(), load_bound(), main(), sha(), run(), sha(), digest(), field() (+40 more)
 
 ### Community 236 - "CompletedStateAuditTests"
 Cohesion: 0.27
@@ -2623,7 +2632,7 @@ Nodes (4): compile(), mutate_reftime(), run_boundary_reftime_contract.sh script,
 
 ### Community 258 - "test_real_shadow_io_contract"
 Cohesion: 0.08
-Nodes (60): balance_operator_config, cloud_bal_pressure_analysis, cloud_bal_real_netcdf, build_live_wps_inventory(), check(), check_candidate_diagnostic_domain_receipt(), check_endpoint_receipt(), check_evaluation_receipt() (+52 more)
+Nodes (61): balance_operator_config, cloud_bal_pressure_analysis, cloud_bal_real_netcdf, build_live_wps_inventory(), check(), check_candidate_diagnostic_domain_receipt(), check_endpoint_receipt(), check_evaluation_receipt() (+53 more)
 
 ### Community 259 - "probe_cases"
 Cohesion: 0.40
@@ -2805,9 +2814,9 @@ Nodes (13): analyze(), main(), publish(), Decode an exact little-endian REAL32 a
 Cohesion: 0.26
 Nodes (3): math_pi_times_500(), _policy(), PR84NativeMomentPolicyTests
 
-### Community 377 - "test_pr87_v42_budget.py"
-Cohesion: 0.30
-Nodes (9): Path, _rain_fixture(), Focused arithmetic and parser checks for the V42 budget diagnostic., _row(), test_column_map_archive_contains_only_hash_bound_2d_maps(), test_rain_ledger_rejects_duplicate_markers_and_bad_geometry(), test_rain_ledger_rejects_receipt_hash_mismatch(), test_rain_ledger_uses_first_step_and_maps_heterogeneous_substeps() (+1 more)
+### Community 377 - "cloud_bal_state_type"
+Cohesion: 0.24
+Nodes (19): account_candidate_endpoint(), assess_physical_joint_candidate(), boundary_has_manufactured_source(), build_compact_balance_beta(), canonicalize_contracted_thermo_storage(), cloud_bal_pipeline_config, evaluate_estimator_candidate(), evaluate_joint_candidate() (+11 more)
 
 ### Community 379 - "run_callback_replay.py"
 Cohesion: 0.35
@@ -2830,8 +2839,8 @@ Cohesion: 0.15
 Nodes (15): _product_inventory(), _product_inventory_at(), RuntimeError, Copy producer outputs into a sealed coordinator snapshot for validation., The candidate generation is incomplete or violates its path contract., The candidate generation is incomplete or violates its path contract., Return safe non-metadata files without following directory links., Reject non-regular producer entries without opening their contents. (+7 more)
 
 ### Community 387 - "Path"
-Cohesion: 0.09
-Nodes (43): main(), sha(), main(), sha(), main(), sha(), main(), sha() (+35 more)
+Cohesion: 0.07
+Nodes (50): main(), sha(), main(), sha(), main(), sha(), main(), sha() (+42 more)
 
 ### Community 389 - "numerator_case.py"
 Cohesion: 0.20
@@ -2841,9 +2850,9 @@ Nodes (11): float_word(), lane_word(), require_freeze(), run(), validate_numerat
 Cohesion: 0.45
 Nodes (10): activity_comparison(), build(), digest(), fixed_support(), load_histories(), main(), metric(), Any (+2 more)
 
-### Community 392 - "candidate_evaluation_inputs_valid"
-Cohesion: 0.21
-Nodes (12): candidate_evaluation_inputs_valid(), field2d, integer_field3d, radar_los_observation_set, field2d_any_allocated(), field2d_arrays_match(), field2d_has_manufactured_source(), integer_field3d_has_manufactured_source() (+4 more)
+### Community 392 - "pr73_native_input_pair_audit.py"
+Cohesion: 0.25
+Nodes (14): PR73NativeInputAuditTest, VariableShape, audit(), column_evidence(), first_unpaired(), main(), Dataset, Path (+6 more)
 
 ### Community 393 - "pr87_graupel_activity_audit.py"
 Cohesion: 0.26
@@ -2869,9 +2878,9 @@ Nodes (5): Evidence and replay, Measures and thermodynamic diagnostics, PR65 sam
 Cohesion: 0.22
 Nodes (9): Concrete available case, CP06-A input readiness for the remaining CP02 native work, Current v3 input after fresh producer/export validation, Empirical cloud omega baseline verified on 2026-09-11, Existing Barnes uncertainty setting — 2026-09-11 correction, Existing processed observations — corrected input scope, Experiment specification, Implementation boundary (+1 more)
 
-### Community 405 - "pr103_time_response.py"
-Cohesion: 0.39
-Nodes (11): build_response(), _finite_number(), _integral(), main(), Path, _read_pair_series(), _read_series(), sha256() (+3 more)
+### Community 405 - "pr77_native_state_run.py"
+Cohesion: 0.34
+Nodes (12): checked_hash(), compile_and_link(), compile_profile(), main(), Path, sha256(), verify_control_helper(), check_startup_policy() (+4 more)
 
 ### Community 407 - "run_cp06a_stationary_omega_actual.sh"
 Cohesion: 0.83
@@ -2905,9 +2914,9 @@ Nodes (4): Build and validation, Execution scope and next decision, PR107: T39 p
 Cohesion: 0.22
 Nodes (9): core_value_differences(), cloud_bal_balance_operator, cloud_bal_pipeline, cloud_bal_pressure_analysis, cloud_bal_real_netcdf, cloud_bal_state, iso_fortran_env, real_shadow_driver (+1 more)
 
-### Community 419 - "SnowSensitivityFigureReplayTests"
-Cohesion: 0.10
-Nodes (22): CompletedProcess, main(), registry(), Path, Baseline identity checks for snow sensitivity figure selection and labels., SnowSensitivityFigureReplayTests, SnowSensitivityFigureUnitTests, Path (+14 more)
+### Community 419 - "plot_snow_sensitivity.py"
+Cohesion: 0.07
+Nodes (47): CompletedProcess, main(), registry(), Path, Baseline identity checks for snow sensitivity figure selection and labels., SnowSensitivityFigureReplayTests, SnowSensitivityFigureUnitTests, Path (+39 more)
 
 ### Community 420 - "test_pressure_radar_reference"
 Cohesion: 0.22
@@ -2917,9 +2926,9 @@ Nodes (16): grid_spec, allocate_grid(), check_case(), cloud_bal_column_physics, 
 Cohesion: 0.22
 Nodes (13): C4FailureClassificationTests, _capture_key(), _capture_source_module(), classify_arm(), create_report(), _full_captures(), _full_key(), _join_replays_to_full_rows() (+5 more)
 
-### Community 422 - "test_pr87_diffusion_intermediate_precision.py"
-Cohesion: 0.33
-Nodes (9): _compile_profile(), _embedded_module(), CompletedProcess, Path, Pinned Intel regression for the final V39 REAL128 diffusion arithmetic., _run(), _sha256_bytes(), test_pinned_intel_actual_manufactured_and_conservation_cases() (+1 more)
+### Community 422 - "pr78_cp06a_spatial_receipt.py"
+Cohesion: 0.34
+Nodes (16): array_sha256(), assert_same_outside(), build_input_receipt(), direct_products(), main(), masked_norm(), native_inputs(), Dataset (+8 more)
 
 ### Community 423 - "column_physics_config"
 Cohesion: 0.30
@@ -2969,13 +2978,13 @@ Nodes (11): analyze(), _draw_maps(), _interaction_delta(), main(), _masks(), Pat
 Cohesion: 0.40
 Nodes (7): hx(), make_complete_trace(), test_complete_nested_phi_vspow_and_dimensionless_watch(), test_gap_and_phi_must_target_same_buffer_cell(), test_hypso2_and_vspow_are_separate_dimensionless_and_pressure_candidates(), test_phi_pairing_rejects_cross_arm_chronology(), write_events()
 
-### Community 438 - "pr103_history_response.py"
-Cohesion: 0.23
-Nodes (14): _analyze(), _append_amplitude(), _append_frame_metrics(), _check_baseline_metrics(), _closed_a_run(), _closed_cohort(), _history_indexes(), _metrics() (+6 more)
+### Community 438 - "read_capture"
+Cohesion: 0.16
+Nodes (11): NativeCaptureTransformTests, inventory(), main(), Any, ndarray, Path, Read a Fortran stream snapshot; rank is explicit to avoid shape guessing., Return compact descriptive statistics without implying physical closure. (+3 more)
 
 ### Community 439 - "cloud_bal_pipeline"
-Cohesion: 0.14
-Nodes (42): account_candidate_endpoint(), add_field_change(), add_optional_field_change(), adjusted_field_allowed(), assess_physical_joint_candidate(), boundary_has_manufactured_source(), build_candidate_evaluation_domain(), build_compact_balance_beta() (+34 more)
+Cohesion: 0.13
+Nodes (35): add_field_change(), add_optional_field_change(), adjusted_field_allowed(), build_candidate_evaluation_domain(), candidate_evaluation_inputs_valid(), cloud_bal_pipeline, cloud_bal_balance_operator, cloud_bal_column_physics (+27 more)
 
 ### Community 440 - "score_ablation.py"
 Cohesion: 0.43
@@ -2985,8 +2994,8 @@ Nodes (7): check_preparation(), equal_attrs(), load_base(), main(), Check every 
 Cohesion: 0.80
 Nodes (4): artifact(), bind_run(), compare_and_parse_tail(), sha()
 
-### Community 442 - "FakeVariable"
-Cohesion: 0.15
+### Community 442 - "test_pr65_pbl_domain_metrics.py"
+Cohesion: 0.18
 Nodes (5): FakeDataset, FakeDimension, FakeTimes, FakeVariable, ndarray
 
 ### Community 443 - "c7/runtime/independent_runtime_audit.py"
@@ -3002,8 +3011,8 @@ Cohesion: 0.33
 Nodes (4): diagnose_qbal_pressure_flux, cloud_bal_grid_geometry, iso_fortran_env, qbal_pressure_flux
 
 ### Community 448 - "test_initialize_b1_rain_psd_prior.py"
-Cohesion: 0.20
-Nodes (18): _candidate_entry(), _initialize(), _state(), test_baseline_entry_mass_may_differ_from_initial_wrfinput(), test_candidate_entry_preflight_rejects_source_number_cap_exceedance(), test_candidate_entry_preflight_reports_startup_stage_changes(), test_candidate_entry_reports_negative_values_as_source_guard_inactive(), test_candidate_entry_uses_inclusive_source_activation_thresholds() (+10 more)
+Cohesion: 0.11
+Nodes (38): _candidate_entry(), _initialize(), _state(), test_baseline_entry_mass_may_differ_from_initial_wrfinput(), test_candidate_entry_preflight_rejects_source_number_cap_exceedance(), test_candidate_entry_preflight_reports_startup_stage_changes(), test_candidate_entry_reports_negative_values_as_source_guard_inactive(), test_candidate_entry_uses_inclusive_source_activation_thresholds() (+30 more)
 
 ### Community 454 - "pr107_t39_first_group_replay.py"
 Cohesion: 0.37
@@ -3021,9 +3030,9 @@ Nodes (5): ieee_arithmetic, iso_fortran_env, legacy_pressure_geometry(), qbal_ph
 Cohesion: 0.38
 Nodes (6): load_module(), fixture, parametrize, source(), test_transform_preserves_physics_and_captures_source_state(), test_transform_rejects_missing_source_anchor()
 
-### Community 458 - "balance_operator_config"
-Cohesion: 0.24
-Nodes (10): balance_operator_config, box_model_increment(), evaluate_candidate_gates(), outside_support_zero(), physical_residual_limit(), project_model_increment(), round_model_increment(), solver_residual_converged() (+2 more)
+### Community 458 - "test_transition_geometry_ledger.py"
+Cohesion: 0.35
+Nodes (14): _independent_geometry_ledger(), main(), _make_fixture(), _mixture_enthalpy(), Dataset, ndarray, Path, Compute the post-thermo -> final ledger without validator helpers. (+6 more)
 
 ### Community 459 - "cp02_failure_state_features.py"
 Cohesion: 0.20
@@ -3034,12 +3043,12 @@ Cohesion: 0.50
 Nodes (3): dump(), geometry(), PairedGraupelVolumeTests
 
 ### Community 463 - "test_operational_shadow_compare.py"
-Cohesion: 0.16
-Nodes (26): expect_rejected(), main(), _run_provenance_tests(), test_archive_receipt_rejects_same_content_path_replacement(), test_compare_roots_reject_symlink_components_and_parent_traversal(), test_invalid_hours_cli_returns_two_without_creating_output(), test_missing_partial_case_writes_non_ready_status_and_returns_three(), test_p1_operational_scope_excludes_12_and_has_its_own_authority() (+18 more)
+Cohesion: 0.29
+Nodes (15): expect_rejected(), main(), _run_provenance_tests(), test_archive_receipt_rejects_same_content_path_replacement(), test_compare_roots_reject_symlink_components_and_parent_traversal(), test_invalid_hours_cli_returns_two_without_creating_output(), test_missing_partial_case_writes_non_ready_status_and_returns_three(), test_p1_report_and_status_seal_12_utc_exclusion_provenance() (+7 more)
 
-### Community 464 - "test_pr103_time_response.py"
-Cohesion: 0.47
-Nodes (9): fixture_readback(), parametrize, test_cli_refuses_to_overwrite_existing_output(), test_full_response_integrates_squared_rms_on_nonuniform_schedule_fixture(), test_legacy_execution_receipt_requires_zero_returncode(), test_new_arm_requires_explicit_closed_receipt_and_fixed_schedule(), test_rejects_negative_rms(), test_rejects_wrong_missing_duplicate_nonfinite_shape_and_unit() (+1 more)
+### Community 464 - "pr102_native_capture_plan.py"
+Cohesion: 0.24
+Nodes (13): _anchor_counts(), _is_subsequence(), main(), make_plan(), _only_insertions(), _pr98_writer_tail(), Path, sha256() (+5 more)
 
 ### Community 465 - "PR94 frozen-C4 cloud response"
 Cohesion: 0.29
@@ -3125,9 +3134,9 @@ Nodes (4): _call(), main(), sha256(), transform()
 Cohesion: 0.60
 Nodes (5): check_candidate(), gate_candidate_input(), main(), module(), run()
 
-### Community 492 - "test_pr101_projected_c2_response.py"
-Cohesion: 0.36
-Nodes (5): closed(), parametrize, test_accepts_only_a_closed_640_second_arm(), test_rejects_control_arm_identity_mismatch(), test_rejects_partial_failed_or_unmatched_run()
+### Community 492 - "test_lsx_candidate.py"
+Cohesion: 0.34
+Nodes (13): digest(), inspect(), make_case(), make_pristine_case(), Path, Variable, Synthetic LSX with pinned actual FSF navigation; not producer output., Write only the two LSX fields consumed by the content contract. (+5 more)
 
 ### Community 495 - "pr99_group_failure_scalar_replay.py"
 Cohesion: 0.38
@@ -3145,17 +3154,17 @@ Nodes (4): main(), Path, read_json(), sha256()
 Cohesion: 0.28
 Nodes (11): ArchivedConsumerTests, assess(), main(), _pin(), _proposal_receipt(), ndarray, Path, _read_arrays() (+3 more)
 
-### Community 504 - "initialize_qnrain"
-Cohesion: 0.30
-Nodes (17): _array_sha256(), file_sha256(), initialize_qnrain(), main(), prepare_candidate(), PriorError, Any, ndarray (+9 more)
+### Community 504 - "transform"
+Cohesion: 0.28
+Nodes (6): Add observers immediately before each unchanged KDM6 state validator., Set gradual underflow on the native main thread and startup OpenMP team., transform(), transform_host_main(), kdm6_source(), NativeStateTransformTest
 
 ### Community 505 - "diagnose_qbal_sloping_faces"
 Cohesion: 0.40
 Nodes (4): diagnose_qbal_sloping_faces, ieee_arithmetic, iso_fortran_env, qbal_sloping_geometry
 
-### Community 506 - "P1 — Diagnostic compare 계약·fail-closed"
-Cohesion: 0.22
-Nodes (9): 2026-09-04 범위·실행 evidence 기록, P1 — Diagnostic compare 계약·fail-closed, P1 operational-comparison 범위 폐합, 대상 파일, 선행조건, 종료/GO gate, 증거, 체크리스트 (+1 more)
+### Community 506 - "Cloud-BAL NO-GO 폐합 실행 체크리스트"
+Cohesion: 0.09
+Nodes (23): 2026-09-04 범위·실행 evidence 기록, Cloud-BAL NO-GO 폐합 실행 체크리스트, P1 — Diagnostic compare 계약·fail-closed, P1 operational-comparison 범위 폐합, P8 — CI / main, 권위와 사용 규칙, 단계 요약, 단계별 승인 기록 (+15 more)
 
 ### Community 507 - "laps_static"
 Cohesion: 0.45
@@ -3222,8 +3231,8 @@ Cohesion: 0.38
 Nodes (11): configure(), coverage(), heatmap(), main(), read_csv(), residual_ecdf(), run(), save() (+3 more)
 
 ### Community 524 - "pr101_upper_wind_fortran_replay.py"
-Cohesion: 0.24
-Nodes (16): _block(), extract_routine(), f90(), generate(), main(), _paired_records(), Path, real32_bits() (+8 more)
+Cohesion: 0.42
+Nodes (8): _block(), extract_routine(), f90(), generate(), main(), _paired_records(), Path, real32_bits()
 
 ### Community 525 - "_regular_bytes_at"
 Cohesion: 0.32
@@ -3234,20 +3243,20 @@ Cohesion: 0.26
 Nodes (13): build_comparison(), build_sample(), finite_number(), grouped_stats(), load_analyzer(), main(), percentile(), plot_comparison() (+5 more)
 
 ### Community 527 - "pr101_upper_wind_replay.py"
-Cohesion: 0.52
-Nodes (11): float32, _active(), _add(), _div(), _f(), _mul(), Apply the source expression for the selected U/V face at k=37..39., replay_face() (+3 more)
+Cohesion: 0.29
+Nodes (19): float32, _active(), _add(), compare(), _div(), _f(), factor_separation(), main() (+11 more)
 
-### Community 528 - "test_pr102_native_ww_bound.py"
-Cohesion: 0.54
-Nodes (7): consumer_arrays(), r32_consumer_cell(), test_candidate_and_hydro_must_share_every_nonwind_consumer_input(), test_constant_source_state_has_zero_reference_and_nonnegative_bound(), test_divergent_candidate_fails_reference_gate_even_when_real32_output_matches(), test_forward_gamma_bound_contains_sequential_real32_source_replay(), test_linear_source_state_matches_source_order_formula_and_sign()
+### Community 528 - "extend_pbl_source_probe"
+Cohesion: 0.29
+Nodes (9): test_shinhong_trace_uses_private_replay_and_precedes_zero_base_gate(), test_source_transform_rejects_unpinned_inputs_and_anchor_drift(), extend_pbl_source_probe(), _instrument_part2(), _instrument_shinhong(), Add read-only diagnostics for the selected Shinhong cloud source. The transform…, Return both hash-pinned diagnostic source transforms., _replace_once() (+1 more)
 
 ### Community 529 - "independent_source.py"
 Cohesion: 0.57
 Nodes (6): f(), main(), Check captured source bytes, address chain and REAL32 arithmetic independently., raw(), rnd(), sha()
 
-### Community 530 - "iso_fortran_env"
+### Community 530 - "pr97_liquid_observer"
 Cohesion: 0.16
-Nodes (9): kdm6_progb_density_pair_valid(), kdm6_rain_process_state_valid(), main, replay, ieee_arithmetic, iso_fortran_env, replay, pr93_freezing_packet_contract (+1 more)
+Nodes (13): kdm6_progb_density_pair_valid(), kdm6_rain_process_state_valid(), main, replay, ieee_arithmetic, iso_fortran_env, replay, pr101_upper_wind_capture (+5 more)
 
 ### Community 531 - "recount_writer_tables.py"
 Cohesion: 0.70
@@ -3293,9 +3302,9 @@ Nodes (4): rows(), run(), sha(), write_csv()
 Cohesion: 0.29
 Nodes (7): P3 — Delta / mass / metrics, 대상 파일, 선행조건, 종료/GO gate, 증거, 체크리스트, 테스트
 
-### Community 543 - "pr94_hydro_wps_hook"
-Cohesion: 0.31
-Nodes (8): cloud_bal_state, iso_fortran_env, netcdf, load2d(), load3d(), load3d_raw(), pr94_hydro_wps_hook, write_pr94_hydro_wps()
+### Community 543 - "TestPR94HydroExternalInput"
+Cohesion: 0.17
+Nodes (3): Pr94HydroPolicyTest, Path, TestPR94HydroExternalInput
 
 ### Community 544 - "main"
 Cohesion: 0.83
@@ -3309,21 +3318,21 @@ Nodes (25): datetime, main(), Path, sha256(), main(), Path, sha256(), main() (+1
 Cohesion: 0.29
 Nodes (7): P6 — Full KLAPS / WPS, 대상 파일, 선행조건, 종료/GO gate, 증거, 체크리스트, 테스트
 
-### Community 547 - "P8 — CI / main"
-Cohesion: 0.29
-Nodes (7): P8 — CI / main, 대상 파일, 선행조건, 종료/GO gate, 증거, 체크리스트, 테스트
+### Community 547 - "kdm6_radar_contract_native.py"
+Cohesion: 0.58
+Nodes (10): archive_member(), compile_candidate(), main(), Path, require_hash(), run_candidate(), run_command(), run_consumer_contract() (+2 more)
 
 ### Community 548 - "pr102_execution_preflight.py"
-Cohesion: 0.53
-Nodes (9): artifact(), build_preflight(), _candidate_prerequisite(), _controls(), main(), Path, read_receipt(), sha256() (+1 more)
+Cohesion: 0.23
+Nodes (12): digest(), PR102PreflightTests, Path, artifact(), build_preflight(), _candidate_prerequisite(), _controls(), main() (+4 more)
 
 ### Community 549 - "Cloud-BAL design review"
-Cohesion: 0.15
-Nodes (26): B01 — native-face 연산자와 handed-off state 일치, B02 — A-grid parity·target sign 왜곡 폐합, B03 — 국지 support·질량 compatibility·배경 보존, B04 — PCG preconditioner·conditioning·성능, B05 — 수상체·바람 증분·vorticity·큰규모 gate, M03 — pressure interface / cell_dp / center spacing 분리, M05 — 수분 분석증분과 dry mass / PSFC 결합, M06 — 바람 frame·투영·metric·w↔omega 계약 (+18 more)
+Cohesion: 0.25
+Nodes (15): B01 — native-face 연산자와 handed-off state 일치, B02 — A-grid parity·target sign 왜곡 폐합, B03 — 국지 support·질량 compatibility·배경 보존, B04 — PCG preconditioner·conditioning·성능, B05 — 수상체·바람 증분·vorticity·큰규모 gate, B06 — 독립 verifier와 다격자 수렴, M03 — pressure interface / cell_dp / center spacing 분리, T03 — 증발·승화·융해와 T/qv 동시 조정 (+7 more)
 
-### Community 550 - "test_pr101_projected_c2_response_native.py"
-Cohesion: 0.47
-Nodes (5): _MISSING_CONTROL_ASSETS, parametrize, Integration gates requiring retained private PR99/PR101 receipts., test_original_c2_receipt_and_input_match_reviewed_preflight_pin(), test_original_c2_trace_inventory_routes_compressed_raw_name()
+### Community 550 - "extend_rain_density_storage"
+Cohesion: 0.25
+Nodes (9): Path, test_density_repair_is_inserted_at_completed_rk_stage(), test_generator_rejects_nonfrozen_solve_source(), test_prepare_cli_requires_rain_diffusion_precision(), test_rain_density_wrapper_with_pinned_intel_o0_o2(), extend_rain_density_storage(), Insert the rain public-storage repair at completed KDM6 RK stages., Check and repair tile rain Q against post-RK AL+ALB density. (+1 more)
 
 ### Community 551 - "test_recount_cp02_weak_strong_balance.py"
 Cohesion: 0.14
@@ -3349,9 +3358,9 @@ Nodes (6): pr65_observation_joint_preflight, ieee_arithmetic, iso_fortran_env, q
 Cohesion: 0.44
 Nodes (9): first_hour(), main(), maps(), paired(), read_csv(), resources(), save(), verify_bundle() (+1 more)
 
-### Community 562 - "extend_fogdes_source_contract"
-Cohesion: 0.46
-Nodes (7): _extend_driver(), _extend_fogdes(), extend_fogdes_source_contract(), Fold the explicit Shinhong cloud source correction into paired FogDES. The opt-…, Transform the V26c FogDES source and pre/post-compact PBL driver., _replace_once(), _sha()
+### Community 562 - "compose"
+Cohesion: 0.36
+Nodes (10): apply_explicit_density_names(), audit_transformed_density(), compose(), extend_density_role_profile(), inventory_all_density_uses(), kdm62d_bounds(), load_unit_transformer(), main() (+2 more)
 
 ### Community 563 - "P4 — Independent generation validation"
 Cohesion: 0.29
@@ -3361,21 +3370,21 @@ Nodes (7): P4 — Independent generation validation, 대상 파일, 선행조건
 Cohesion: 0.22
 Nodes (8): Cloud-BAL 최종 요구사항 체크리스트, 공통 증거 기준, 근거 자료 범례, 사용 규칙, 요구사항 색인, 정적 검토 보완 사항, 폐합 메모, 폐합 판정 규약
 
-### Community 565 - "PR102PreflightTests"
+### Community 565 - "test_lco_evidence.py"
 Cohesion: 0.42
-Nodes (3): digest(), PR102PreflightTests, Path
+Nodes (9): digest(), main(), Path, Variable, rows(), run_final_four_lco_lineage_and_forged_receipt(), _set_raw(), test_lco_content_contract() (+1 more)
 
-### Community 567 - "pr97_liquid_observer"
-Cohesion: 0.39
-Nodes (5): add(), liquid_record(), pr97_liquid_observer, store_error(), two_sum()
+### Community 567 - "M04 — canonical–WPS–native 질량분모 계약"
+Cohesion: 0.36
+Nodes (9): E03 — thin full-state writer 및 native round-trip, E08 — 동일 배경의 알고리즘 비교 및 Δ 분해, M04 — canonical–WPS–native 질량분모 계약, M05 — 수분 분석증분과 dry mass / PSFC 결합, O01 — 실제 cloud analysis ingest 및 수상체 정합성, O03 — H_Z와 종별 retrieval 불확실도, O04 — no-echo / missing / QC-reject 분리, T01 — 수분 분석증분과 물리 수송 ledger 분리 (+1 more)
 
 ### Community 568 - "Physical surface and legacy face mapping — 2026-09-21"
 Cohesion: 0.29
 Nodes (7): Actual execution and validation, Discrete geometry must precede the boundary substitution, Influence is not permission, Physical surface and legacy face mapping — 2026-09-21, Reproduction and retained evidence, Two different column questions, What must change before a physical candidate
 
 ### Community 569 - "verify_shadow_wps_pair.py"
-Cohesion: 0.18
-Nodes (15): geometry(), LambertHemisphereTests, _date_from_epoch(), _inventory(), _lambert_latlon(), main(), Path, Reconstruct a WPS Lambert grid from its SW-corner header. (+7 more)
+Cohesion: 0.30
+Nodes (11): _date_from_epoch(), _inventory(), main(), Path, Check one closed pair against its retained WPS baseline., Return a pair-only semantic receipt for OutputTransaction., Read only the sidecar fields needed for the WPS mapping contract., read_shadow() (+3 more)
 
 ### Community 571 - "pr102_archived_consumer.py"
 Cohesion: 0.81
@@ -3393,13 +3402,17 @@ Nodes (4): make_fixture(), Path, run_replay(), test_original_input_transition_re
 Cohesion: 0.33
 Nodes (6): define_scalar_vars(), delete_file_if_created(), put_mask3d(), put_record_i32(), put_record_real32(), write_cloud_bal_stage_payload()
 
-### Community 575 - "test_derive_cp02_b1_components.py"
-Cohesion: 0.52
-Nodes (6): key_values(), make_inputs(), sha_size(), test_derives_time_integrals_and_signed_zero_caps_by_arm_corner_level_hour(), test_duplicate_latent_or_cell_step_key_fails_closed(), test_missing_latent_input_key_fails_closed()
+### Community 575 - "M06 — 바람 frame·투영·metric·w↔omega 계약"
+Cohesion: 0.39
+Nodes (9): M06 — 바람 frame·투영·metric·w↔omega 계약, M07 — 물리적 top/bottom boundary와 관측시각, O05 — 격자평균 dynamic target 및 R_w/식별가능성, O06 — 완료된 Barnes 산출물의 Cloud-BAL LOS 연결, O07 — 시간·storm-relative trajectory frame, O08 — 낙하속도의 mass-weighted / Z-weighted 분리, T02 — source-to-sink 종별 보존 수송, X01 — 시선속도/Barnes release 완료 범위 보존 (+1 more)
 
 ### Community 577 - "pr82_candidate_wps_readback.py"
 Cohesion: 0.50
 Nodes (4): digest(), field(), Path, read_inventory()
+
+### Community 578 - "extend_graupel_strict_mass"
+Cohesion: 0.36
+Nodes (7): test_source_hash_and_anchor_mutations_are_refused(), test_v23c_graupel_strict_mass_transform_and_pin(), _v23c_source(), extend_graupel_strict_mass(), Pin V23c grouped candidates to the exact graupel bulk-density contract., Enable exact QG/BG mass checks for pair 4, pinned to native V23c., _replace_once()
 
 ### Community 579 - "CP02 model-dynamics increment experiment"
 Cohesion: 0.22
@@ -3413,9 +3426,9 @@ Nodes (8): compare_fields(), digest(), inventory(), main(), perturb(), Change on
 Cohesion: 0.25
 Nodes (8): 2026-09-21 PR #34 후속 경사진 면 재구성, PR36 — 지면 pressure 경향 연결, PR37 — 조건부 하부 표본과 구간 외곽 수지, PR38 — 열역학적 10 m pressure prior와 높이 기준 진단, PR39 — cap 독립 profile 연구와 기존 유량 전환 진단, PR40 — 고정 endpoint profile과 공유면 적분, PR41 — 동일 구간 온도·수분 두께 영향 분리, PR42 — 공통 기준면 상대 지오포텐셜과 수평력
 
-### Community 583 - "test_pr102_response.py"
-Cohesion: 0.38
-Nodes (3): _dry_capture_fixture(), test_dry_column_rate_maps_fixed_columns_and_reports_kg_per_second(), test_dry_column_rate_rejects_support_coordinate_mismatch()
+### Community 583 - "_lambert_latlon"
+Cohesion: 0.42
+Nodes (4): geometry(), LambertHemisphereTests, _lambert_latlon(), Reconstruct a WPS Lambert grid from its SW-corner header.
 
 ### Community 584 - "Partial-layer and finite-top pressure flux research kernel"
 Cohesion: 0.50
@@ -3433,9 +3446,9 @@ Nodes (5): make_histories(), make_run(), test_rejects_history_hash_mismatch(), t
 Cohesion: 0.33
 Nodes (5): Pure score and remapping helpers for the paired producer first-hour experiment.…, Use the pinned historical operator for two checked WRF histories., Categorical and continuous scores plus producer/reference transitions., remap_one_hour(), score_arrays()
 
-### Community 589 - "pr99_compact_stage_crosscheck.py"
-Cohesion: 0.67
-Nodes (3): main(), Path, sha256()
+### Community 589 - "pr94_hydro_control.py"
+Cohesion: 0.69
+Nodes (8): initialize_hydro(), load_receipt(), main(), Any, Path, sha256(), write_final_receipt(), write_policy()
 
 ### Community 590 - "기존 다변량 Barnes 설정과 Cloud-BAL 입력 연결"
 Cohesion: 0.25
@@ -3453,13 +3466,13 @@ Nodes (7): P5 — Physical authority, 대상 파일, 선행조건, 종료/GO gat
 Cohesion: 0.38
 Nodes (9): choose_controls(), inputs(), main(), native_corners(), Greedy geographic comparator for each loss, sorted by canonical flat ID., run(), select(), sha() (+1 more)
 
-### Community 595 - "run.txt"
-Cohesion: 0.60
-Nodes (5): run.txt, run.txt, bytes, path, sha256
+### Community 595 - "transform"
+Cohesion: 0.39
+Nodes (3): Add PR75 failure capture; in treatment, clear FTZ/DAZ at KDM6 entry., transform(), NativeFpPolicyTransformTest
 
-### Community 596 - "snow_extension_20261030/runtime/run_all.py"
-Cohesion: 0.60
-Nodes (4): main(), Path, run_slot(), sha256()
+### Community 596 - "test_pr101_guarded_replay.py"
+Cohesion: 0.48
+Nodes (6): parametrize, recipe(), test_bad_recipe_is_rejected_before_directory_creation(), test_fresh_cwd_bound_inputs_outputs_and_receipt(), test_missing_marker_preserves_closed_failure_receipt(), test_staged_input_mutation_is_not_accepted()
 
 ### Community 597 - "Legacy continuity: 지원영역과 수평 face 계수 정렬"
 Cohesion: 0.50
@@ -3473,29 +3486,45 @@ Nodes (4): Decision and present evidence, Lower-profile domain and prior: bounde
 Cohesion: 0.67
 Nodes (3): COM mismatch isolated to omitted runtime controls, Final controlled four-case same-ELF matrix, Same-ELF producer, supervised runtime and graph refresh
 
+### Community 601 - "validated_window"
+Cohesion: 0.33
+Nodes (6): validated_window, duration_seconds, identity, independent_review, scope, status
+
 ### Community 606 - "weak_strong_balance_20261030/runtime/run_all.py"
 Cohesion: 0.60
 Nodes (4): main(), Path, run_slot(), sha256()
+
+### Community 609 - "CP01 nonzero number wrapper probe — 2026-09-09"
+Cohesion: 0.40
+Nodes (5): Comparison contract, CP01 nonzero number wrapper probe — 2026-09-09, Directory isolation, Execution result, Scope
 
 ### Community 614 - "test_pr87_kdm6_ng_base_diag.py"
 Cohesion: 0.50
 Nodes (3): MonkeyPatch, test_inserts_readonly_values_before_same_fatal_guard(), test_rejects_source_or_fatal_guard_drift()
 
-### Community 615 - "build"
-Cohesion: 0.67
-Nodes (3): build(), Path, sha()
+### Community 615 - "review_raw_sample.py"
+Cohesion: 0.70
+Nodes (4): main(), same32(), scan(), sha()
 
-### Community 618 - "score_species.py"
+### Community 616 - "cp02_zero_candidate_20261029/review/independent_raw.py"
+Cohesion: 0.70
+Nodes (4): main(), packed(), review(), unpack()
+
+### Community 617 - "snow_lower_20261030/runtime/run_all.py"
 Cohesion: 0.60
-Nodes (5): check_inputs(), load_common(), main(), run(), verify_single_field()
+Nodes (4): main(), Path, run_slot(), sha256()
+
+### Community 619 - "run_pr83_same13_native_initialization.py"
+Cohesion: 0.70
+Nodes (4): main(), Path, sha256(), write_new()
 
 ### Community 620 - "snow_sensitivity_20261030/runtime/run_all.py"
 Cohesion: 0.60
 Nodes (4): main(), Path, run_slot(), sha256()
 
-### Community 623 - "initialize_b1_rain_psd_contrast.py"
+### Community 622 - "test_surface_boundary_validator.py"
 Cohesion: 0.67
-Nodes (3): main(), prepare(), Path
+Nodes (3): Path, read(), write_fixture()
 
 ### Community 624 - "Retrospective surface flux and explicit incomplete column budget"
 Cohesion: 0.29
@@ -4145,9 +4174,9 @@ Nodes (3): Evidence, PR76 gradual-underflow policy comparison, Result
 Cohesion: 0.40
 Nodes (4): main(), pr75_read_fp_state(), pr76_apply_gradual(), pr76_read_fp_state()
 
-### Community 6925 - "pr78_cp06a_spatial_receipt.py"
-Cohesion: 0.06
-Nodes (64): archive_member(), compile_candidate(), main(), Path, require_hash(), run_candidate(), run_command(), run_consumer_contract() (+56 more)
+### Community 6925 - "pr78_native_fp_runtime_run.py"
+Cohesion: 0.18
+Nodes (17): sha256(), Add an environment-selected FTZ/DAZ choice to copied PR77 observers., transform_host_main(), transform_kdm6(), add_noah_operand_observer(), build_once(), copy_inputs(), debug_noah_diagnostic() (+9 more)
 
 ### Community 6928 - "run_pr76_native_fp_policy.sh"
 Cohesion: 0.40
@@ -5006,12 +5035,12 @@ Cohesion: 0.50
 Nodes (4): launch_bindings, bytes, path, sha256
 
 ### Community 10572 - "quantizer_limiter"
-Cohesion: 0.21
-Nodes (12): bytes, path, sha256, compile.log, compile.log, quantizer_limiter, O0, O2 (+4 more)
+Cohesion: 0.23
+Nodes (13): bytes, path, sha256, compile.log, run.txt, compile.log, run.txt, quantizer_limiter (+5 more)
 
 ### Community 10585 - "audit.json"
-Cohesion: 0.50
-Nodes (4): bytes, path, sha256, audit.json
+Cohesion: 0.21
+Nodes (8): bytes, path, sha256, audit.json, quantizer_probe.f90, bytes, path, sha256
 
 ### Community 10600 - "pr87_v16_quantizer_probe"
 Cohesion: 0.40
@@ -5050,8 +5079,8 @@ Cohesion: 0.20
 Nodes (9): pr87_prepare_native_cycle.py, sha256, source, pr87_v39_recompose.log, sha256, source, pr87_v39_recomposition_check.json, sha256 (+1 more)
 
 ### Community 10658 - "tools/pr87_prepare_native_cycle.py"
-Cohesion: 0.04
-Nodes (94): cycle_call(), fog_overlay(), joint_storage_module(), pbl_overlay(), prepare(), quiet_ledgers(), Replace only the hash-bound embedded kernel and native update fragment., replace_once() (+86 more)
+Cohesion: 0.05
+Nodes (75): cycle_call(), fog_overlay(), joint_storage_module(), pbl_overlay(), prepare(), quiet_ledgers(), Replace only the hash-bound embedded kernel and native update fragment., replace_once() (+67 more)
 
 ### Community 10670 - "pr87_two_step_v39_20261016/runtime/independent_review/manifest.json"
 Cohesion: 0.20
@@ -5114,8 +5143,8 @@ Cohesion: 0.60
 Nodes (4): Path, Pinned Intel source-extracted regression for explicit FogDES PBL rates., _read_gzip(), test_pr87_fogdes_explicit_pbl_source_on_pinned_intel()
 
 ### Community 10890 - "test_pr87_graupel_diffusion_probe.py"
-Cohesion: 0.19
-Nodes (16): _source(), test_probe_records_mode_qualified_qg_and_qib_without_changing_call(), test_probe_rejects_drifted_preimage(), test_v39_full_source_component_row_is_failure_only_and_p4_scoped(), test_v39_probe_records_complete_qg_qib_stencil_at_actual_failure_cell(), test_v39_transforms_reject_any_unpinned_source(), _v39_em_source(), _v39_native_source() (+8 more)
+Cohesion: 0.18
+Nodes (18): _source(), test_probe_records_mode_qualified_qg_and_qib_without_changing_call(), test_probe_rejects_drifted_preimage(), test_v39_full_source_component_row_is_failure_only_and_p4_scoped(), test_v39_probe_records_complete_qg_qib_stencil_at_actual_failure_cell(), test_v39_transforms_reject_any_unpinned_source(), _v39_em_source(), _v39_native_source() (+10 more)
 
 ### Community 10913 - "test_pr87_horizontal_diffusion64"
 Cohesion: 0.29
@@ -5128,10 +5157,6 @@ Nodes (13): _helper_module(), _source_and_overlay(), test_pr87_ice_sublimation_f
 ### Community 11041 - "add_rain_process_contract"
 Cohesion: 0.25
 Nodes (12): _extract(), Path, _read_archived_source(), test_transform_preserves_pair_only_warm_domain(), test_v13_zero_step_executes_trial_and_preserves_failure_paths(), add_rain_process_contract(), add_status1_warm_trace(), add_valid_zero_step_warm_trial() (+4 more)
-
-### Community 11052 - "pr87_rain_sedimentation.py"
-Cohesion: 0.16
-Nodes (14): MonkeyPatch, test_rain_overlay_preserves_nonrain_fluxes_and_routes_paired_rates(), add_rain_failure_diagnostic(), _extract_helper(), generate_rain_sedimentation(), Generate the frozen V10 KDM6 rain-pair sedimentation overlay. The…, Return source with paired rain transport; reject any source drift., Print one rejected rain column immediately before its unchanged fatal. (+6 more)
 
 ### Community 11058 - "sha"
 Cohesion: 0.83
@@ -5194,8 +5219,8 @@ Cohesion: 0.33
 Nodes (6): latest_actual_host, duration_seconds, identity, independent_review, scope, status
 
 ### Community 11521 - "COUPLED"
-Cohesion: 0.11
-Nodes (20): COUPLED, OFF, earliest_fatal, final_completed_step, receipt, returncode, status, arms (+12 more)
+Cohesion: 0.15
+Nodes (14): COUPLED, OFF, earliest_fatal, final_completed_step, receipt, returncode, status, arms (+6 more)
 
 ### Community 11535 - "validation"
 Cohesion: 0.33
@@ -5306,8 +5331,8 @@ Cohesion: 0.31
 Nodes (10): main(), ValueError, RainFluxCacheError, The source is not a supported frozen preimage or its caller drifted., Store each returned pair in the existing per-column flux arrays., Verify a frozen V42 or composed V43 source, then return corrected source., _replace_exact(), sha256_bytes() (+2 more)
 
 ### Community 11813 - "pr87_v42_budget.py"
-Cohesion: 0.23
-Nodes (26): analyze_arm(), _bottom_flux(), _change_stats(), _expand_bound(), first_call_budget(), _first_call_only_result(), _group_stats(), _history_summary() (+18 more)
+Cohesion: 0.14
+Nodes (35): Path, _rain_fixture(), Focused arithmetic and parser checks for the V42 budget diagnostic., _row(), test_column_map_archive_contains_only_hash_bound_2d_maps(), test_rain_ledger_rejects_duplicate_markers_and_bad_geometry(), test_rain_ledger_rejects_receipt_hash_mismatch(), test_rain_ledger_uses_first_step_and_maps_heterogeneous_substeps() (+27 more)
 
 ### Community 11814 - "PR89_PROCESS_CONSUMER_CONTRACT_20261019.md"
 Cohesion: 0.22
@@ -5798,8 +5823,8 @@ Cohesion: 0.24
 Nodes (10): digest(), Guard, setup_snapshot(), test_bad_backup_is_rejected_without_overwriting_destination(), test_changed_snapshot_restores_hash_bound_backup(), test_identical_rollback_destination_keeps_file_mtime(), test_identical_rollback_symlink_is_rejected(), test_identical_snapshot_symlink_is_rejected() (+2 more)
 
 ### Community 13774 - "pr98_native_effect.py"
-Cohesion: 0.05
-Nodes (73): NativeCaptureTransformTests, Focused checks for native correction inner-product accounting., test_c1_source_build_pin_is_checked(), test_capture_receipt_binding_rejects_wrong_executable_step_and_mutated_input(), test_composition_target_maps_to_actual_native_capture_cell(), test_initial_wind_stats_reject_declared_finite_fill_values(), test_native_triplet_promotes_before_subtracting_float32_snapshots(), test_native_triplet_transposes_face_mask_with_fortran_array() (+65 more)
+Cohesion: 0.10
+Nodes (49): Focused checks for native correction inner-product accounting., test_c1_source_build_pin_is_checked(), test_capture_receipt_binding_rejects_wrong_executable_step_and_mutated_input(), test_composition_target_maps_to_actual_native_capture_cell(), test_initial_wind_stats_reject_declared_finite_fill_values(), test_native_triplet_promotes_before_subtracting_float32_snapshots(), test_native_triplet_transposes_face_mask_with_fortran_array(), test_pair_metrics_preserves_h_dot_b_and_net_norm_identity() (+41 more)
 
 ### Community 13787 - "pr98_boundary640.py"
 Cohesion: 0.73
@@ -5934,16 +5959,16 @@ Cohesion: 0.17
 Nodes (10): Closed 640-second five-arm history response, Closed first-native H/P/N source capture, PR102 STRUCTURED response analysis, Predeclared buffer source diagnostics, Response products, Actual-case proposal, Frozen research policy, PR102 native wind structure candidate design (+2 more)
 
 ### Community 14853 - "pr102_native_ww_bound.py"
-Cohesion: 0.18
-Nodes (31): _add(), BoundedValue, _calc_ww(), calc_ww_reference(), _check_result(), compare_actual(), _compare_fields(), _div() (+23 more)
+Cohesion: 0.14
+Nodes (38): consumer_arrays(), r32_consumer_cell(), test_candidate_and_hydro_must_share_every_nonwind_consumer_input(), test_constant_source_state_has_zero_reference_and_nonnegative_bound(), test_divergent_candidate_fails_reference_gate_even_when_real32_output_matches(), test_forward_gamma_bound_contains_sequential_real32_source_replay(), test_linear_source_state_matches_source_order_formula_and_sign(), _add() (+30 more)
 
 ### Community 14951 - "analyze"
 Cohesion: 0.71
 Nodes (6): analyze(), checked_pin(), checked_reference(), main(), Path, sha256()
 
 ### Community 15029 - "pr102_response.py"
-Cohesion: 0.35
-Nodes (16): analyze(), _closed_structured_run(), _dry_column_rates(), _fixed_masks(), _history_comparisons(), main(), ndarray, Path (+8 more)
+Cohesion: 0.20
+Nodes (19): _dry_capture_fixture(), test_dry_column_rate_maps_fixed_columns_and_reports_kg_per_second(), test_dry_column_rate_rejects_support_coordinate_mismatch(), analyze(), _closed_structured_run(), _dry_column_rates(), _fixed_masks(), _history_comparisons() (+11 more)
 
 ### Community 15046 - "pr102_source_capture_receipts.py"
 Cohesion: 0.76
@@ -6046,8 +6071,8 @@ Cohesion: 0.29
 Nodes (12): assert_subterrain_contracts(), assert_subterrain_vapor(), assert_surface_winds(), build_executable(), compile(), link(), make_fixture(), run_rejected() (+4 more)
 
 ### Community 16138 - "Any"
-Cohesion: 0.08
-Nodes (38): Any, fixture_rows(), HourlyPrecipScoreTests, Path, write_rows(), add_not_evaluated_rows(), build_summary(), hourly_score_title() (+30 more)
+Cohesion: 0.10
+Nodes (28): Any, fixture_rows(), HourlyPrecipScoreTests, Path, write_rows(), add_not_evaluated_rows(), build_summary(), hourly_score_title() (+20 more)
 
 ### Community 16160 - "PrecipitationTransitionTests"
 Cohesion: 0.17
@@ -6082,8 +6107,8 @@ Cohesion: 0.08
 Nodes (50): array_bounds(), array_element(), array_scalar_members(), caller_output(), CallerBoundary, capture_derive_arguments(), current_frame(), DeriveAbiEntry (+42 more)
 
 ### Community 16455 - "test_cp02_inner_capture.py"
-Cohesion: 0.10
-Nodes (11): fixture, capture(), hydro_receipt(), liquid_receipt(), parametrize, recipe(), test_bad_recipe_is_rejected_before_directory_creation(), test_fresh_cwd_bound_inputs_outputs_and_receipt() (+3 more)
+Cohesion: 0.08
+Nodes (5): fixture, capture(), hydro_receipt(), liquid_receipt(), tmp_path()
 
 ### Community 16471 - "test_cp02_capture_storage.py"
 Cohesion: 0.14
@@ -6149,6 +6174,10 @@ Nodes (4): load_validated_profiles(), main(), plot_groups(), sha256()
 Cohesion: 0.51
 Nodes (10): check_pins(), f32_from_hex(), generate(), load_capture(), load_comparison_rows(), main(), make_figures(), read_json() (+2 more)
 
+### Community 16656 - "PreclampTests"
+Cohesion: 0.09
+Nodes (4): skipUnless, InnerResponseTests, PreclampTests, scalar()
+
 ### Community 16677 - "cp02_kdm6_inner_response.py"
 Cohesion: 0.20
 Nodes (31): analyze(), coordinate_key(), expected_outer_address(), f32(), load_json(), main(), ordered_bits(), owned_counts_value() (+23 more)
@@ -6170,8 +6199,8 @@ Cohesion: 0.67
 Nodes (3): digest(), main(), Freeze capture inputs and prepare an Intel MPI diagnostic launch, without…
 
 ### Community 16727 - "Struct"
-Cohesion: 0.07
-Nodes (17): finite_word(), main(), Path, sha256(), DummyBreakpoint, main(), main(), same32() (+9 more)
+Cohesion: 0.06
+Nodes (19): finite_word(), main(), Path, sha256(), DummyBreakpoint, main(), decode(), lane() (+11 more)
 
 ### Community 16731 - "cp02_xmm6_producer_20261029/runtime/collect.py"
 Cohesion: 0.70
@@ -6586,8 +6615,8 @@ Cohesion: 0.54
 Nodes (7): compare_scores(), csv_output(), identity(), Path, Keep each lead and threshold separate; select with exact count fractions., require_identity(), run()
 
 ### Community 18132 - "cp02_state_path.py"
-Cohesion: 0.07
-Nodes (70): run(), sha(), int64, memmap, anchor_rows(), compare_global(), cross_counts(), differing() (+62 more)
+Cohesion: 0.18
+Nodes (34): analyze_pair(), _calls_equal(), _file_records(), _flatten_first(), _float_word(), _global_ownership_arrays(), _inventory_file_summary(), load_schema() (+26 more)
 
 ### Community 18193 - "cp02_state_path_cohorts.py"
 Cohesion: 0.31
@@ -6715,7 +6744,7 @@ Nodes (18): arg(), bounds(), caller_pc(), emit(), Entry, GapWatch, integer(), o1
 
 ### Community 18813 - "cp02_initial_writer_analysis.py"
 Cohesion: 0.10
-Nodes (43): main(), sha(), main(), sha(), main(), sha(), write_csv(), main() (+35 more)
+Nodes (45): main(), sha(), main(), sha(), write_csv(), main(), sha(), bound_writer() (+37 more)
 
 ### Community 18834 - "writer_probe.py"
 Cohesion: 0.19
@@ -6724,10 +6753,6 @@ Nodes (17): address(), bounds(), bytes_at(), emit(), frame_registers(), integer(
 ### Community 18890 - "main"
 Cohesion: 0.83
 Nodes (3): main(), overlay(), sha()
-
-### Community 18897 - "replay_analysis.py"
-Cohesion: 0.90
-Nodes (4): bound_writer(), main(), resolve_json(), sha()
 
 ### Community 18902 - "require_reviews"
 Cohesion: 1.00
@@ -6906,12 +6931,12 @@ Cohesion: 0.17
 Nodes (8): pr83_off_candidate_wps_hook, cp06a_stationary_omega_actual, cloud_bal_balance_operator, cloud_bal_state, iso_fortran_env, cloud_bal_state, iso_fortran_env, pr83_same13_off_driver
 
 ### Community 19906 - "test_canonical_state"
-Cohesion: 0.20
-Nodes (19): check(), cloud_bal_state, ieee_arithmetic, iso_fortran_env, fill_real_field(), fill_surface_field(), invalidate_cell(), make_valid_state() (+11 more)
+Cohesion: 0.21
+Nodes (18): check(), cloud_bal_state, ieee_arithmetic, iso_fortran_env, fill_real_field(), invalidate_cell(), make_valid_state(), set_observational_pair() (+10 more)
 
 ### Community 20051 - "cloud_bal_microphysics_initialization"
-Cohesion: 0.22
-Nodes (18): admissible(), bounded_ratio(), bundle_shape(), cloud_bal_microphysics_initialization, complete_initialization_state(), complete_microphysics(), cloud_bal_state, cloud_bal_state_type (+10 more)
+Cohesion: 0.23
+Nodes (21): admissible(), bounded_ratio(), bundle_shape(), cloud_bal_microphysics_initialization, complete_ice_snow_initialization(), complete_initialization_state(), complete_microphysics(), cloud_bal_state (+13 more)
 
 ### Community 20099 - "test_microphysics_initialization"
 Cohesion: 0.20
@@ -6920,10 +6945,6 @@ Nodes (8): allocate_bundle(), cloud_bal_microphysics_initialization, cloud_bal_s
 ### Community 20113 - "test_phase_initialization_chain"
 Cohesion: 0.17
 Nodes (10): cloud_bal_column_physics, cloud_bal_microphysics_initialization, cloud_bal_phase_moments, cloud_bal_state, cloud_bal_state_type, field3d, iso_fortran_env, field() (+2 more)
-
-### Community 20132 - "initialize_model_moments.py"
-Cohesion: 0.44
-Nodes (9): bundle(), checked_file(), complete_file(), main(), Require a caller policy to be contained within the pinned source profile., read_array(), run_real_and_complete(), sha() (+1 more)
 
 ### Community 20142 - "model_moment_driver"
 Cohesion: 0.22
@@ -6953,16 +6974,30 @@ Nodes (4): main(), sha(), target_rows(), write_figure()
 Cohesion: 0.70
 Nodes (4): draw(), main(), selected_rows(), sha()
 
+### Community 20216 - "probe.py"
+Cohesion: 0.25
+Nodes (11): args(), dims(), emit(), Entry, integer(), mem(), offset(), owns() (+3 more)
+
+### Community 20256 - "test_ice_snow_initialization"
+Cohesion: 0.22
+Nodes (9): check(), cloud_bal_microphysics_initialization, cloud_bal_state, field3d, ieee_arithmetic, iso_fortran_env, fill(), reject() (+1 more)
+
+### Community 20291 - "initialize_model_moments.py"
+Cohesion: 0.35
+Nodes (11): bundle(), checked_file(), complete_file(), main(), Serialize an explicitly sourced joint proposal, never infer one from caps., Require a caller policy to be contained within the pinned source profile., read_array(), run_real_and_complete() (+3 more)
+
 ## Knowledge Gaps
-- **3738 isolated node(s):** `Actual 13 UTC metgrid and research-native initial-state handoff`, `Actual baseline WPS through the existing LAPSPREP`, `Actual-case thermo diagnostics and asymmetric remap bounds (2026-09-09)`, `Actual cloud and humidity continuation`, `Actual coupled transition cross-language check (2026-09-09)` (+3733 more)
-  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 6912 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
-- **299 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
+- **3742 isolated node(s):** `Actual 13 UTC metgrid and research-native initial-state handoff`, `Actual baseline WPS through the existing LAPSPREP`, `Actual-case thermo diagnostics and asymmetric remap bounds (2026-09-09)`, `Actual cloud and humidity continuation`, `Actual coupled transition cross-language check (2026-09-09)` (+3737 more)
+  These have ≤1 connection - possible missing edges or undocumented components. (Counts symbols only; 6925 node(s) total have ≤1 connection when file, concept and rationale nodes are included.)
+- **302 thin communities (<3 nodes) omitted from report** — run `graphify query` to explore isolated nodes.
 
 ## Suggested Questions
 _Questions this graph is uniquely positioned to answer:_
 
 - **Why does `TraceError` connect `native_kdm6_trace.py` to `ValueError`?**
-  _High betweenness centrality (0.010) - this node is a cross-community bridge._
+  _High betweenness centrality (0.009) - this node is a cross-community bridge._
+- **Why does `run()` connect `transform` to `Path`?**
+  _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **Why does `main()` connect `main` to `Path`?**
   _High betweenness centrality (0.007) - this node is a cross-community bridge._
 - **Are the 237 inferred relationships involving `ValueError` (e.g. with `fields_for_tag()` and `load_bound()`) actually correct?**
@@ -6972,11 +7007,9 @@ _Questions this graph is uniquely positioned to answer:_
 - **Are the 5 inferred relationships involving `datetime` (e.g. with `.test_plot_title_uses_row_valid_time_range()` and `_history()`) actually correct?**
   _`datetime` has 5 INFERRED edges - model-reasoned connections that need verification._
 - **What connects `Actual 13 UTC metgrid and research-native initial-state handoff`, `Actual baseline WPS through the existing LAPSPREP`, `Actual-case thermo diagnostics and asymmetric remap bounds (2026-09-09)` to the rest of the system?**
-  _3738 weakly-connected nodes found - possible documentation gaps or missing edges._
-- **Should `Isolated pressure-candidate WPS mapping — 2026-09-08` be split into smaller, more focused modules?**
-  _Cohesion score 0.02 - nodes in this community are weakly interconnected._
-## ice stage contract scoped update
-- Only 12 frozen source paths are structurally extracted.
+  _3742 weakly-connected nodes found - possible documentation gaps or missing edges._
+## ice partition policy scoped update
+- Only 10 frozen source paths are structurally extracted.
 - Manifest updates are selected-path-only with scan_corpus=None; no corpus scan or prune occurs.
 - Other corpus content is retained; document semantics are not re-extracted.
 - Graph structure does not validate runtime behavior, physical assumptions, or scientific approval.

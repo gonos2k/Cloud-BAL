@@ -4,7 +4,7 @@
 caller-attested `real` producer in a fresh temporary working directory, then
 calls `tools/model_moment_driver.f90` linked to the common Cloud-BAL state and
 completion routines. It never launches the forecast. `OUTPUT` and `RECEIPT`
-must be new, distinct paths. The source model fields, including water masses,
+must be new, distinct paths. By default, the source model fields, including water masses,
 wind and thermodynamic fields, are read back unchanged. A failed operation
 removes its published output and temporary files.
 Completion failures report the cell and slot, a reason code (1: invalid or
@@ -71,3 +71,40 @@ nominal source slope/shape constants. The actual KDM6 builds REAL32 coefficients
 and applies source-order branch arithmetic; exact non-adjustment at a PSD
 boundary is not proven by this envelope. Native coefficient/boundary replay and
 first-use evidence remain open.
+
+## Joint ice-snow-number proposal
+
+An optional manifest object `ice_snow_partition: {"path": "/absolute/proposal.npz", "sha256": "..."}`
+selects `complete_ice_snow_initialization` in the same compiled driver. This is
+an explicit external partition, not a cap-driven automatic conversion or a new
+KDM6 process. Its SHA is checked before and after use. Default manifests keep
+the original moment-only path.
+
+The NPZ contains scalar string `source_sha256` matching the exact producer
+output, nonempty UTF-8 string `source` (at most 256 bytes), scalar integer
+`provenance` (observed 1, background 2, explicit prior 3), float32 arrays
+`qi`, `qs`, `ni` in `(z,y,x)`, and a same-shape boolean/integer `valid` mask
+with values 0/1. Mass fields are kg/kg dry air; NI is kg^-1 dry air. All three
+values on the mask form one authoritative proposal. Invalid joint NI is not
+replaced by other candidates. Observations for other moments retain their
+usual priority. In the stream adapter, the field source bit means output
+adapter; scientific provenance remains the caller's separately recorded
+attestation, not proof of observational support.
+
+The common routine requires equal masks, grid/time/units and usable metadata.
+Stored QI+QS must preserve the prior frozen total within epsilon32 times the
+larger total, using REAL64 arithmetic on stored REAL32 values. T and QV stay
+unchanged because ice and snow have equal enthalpy in the common convention.
+It supports no external frozen-mass increment and no other phase exchange.
+The original analytical PSD envelope and REAL32 NI/cap check remain strict;
+passing them does not prove native lambda will be unadjusted at first use.
+Only complete STATUS_OK commits; DEGRADED or failure preserves the entire
+output state.
+
+This mode writes QICE and QSNOW along with the five moments and validates
+returned selected QI/QS/NI/provenance, off-mask mass, nonnegative mass,
+conservation and file readback. Other model fields remain unchanged. Its
+receipt records the proposal source and selected-cell count and retains
+`native_first_use_verified: false`. The historical B1 trace in the
+[joint initialization report](ICE_SNOW_JOINT_INITIALIZATION_20261111.md)
+is separate and does not certify a new joint proposal.
