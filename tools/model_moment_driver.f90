@@ -11,6 +11,8 @@ PROGRAM model_moment_driver
   TYPE(microphysics_completion_policy) :: policy
   INTEGER(int32) :: dims(3), status32, use_theta_m, failed_location(4)
   INTEGER :: nx,ny,nz,status,ios,unit_in,unit_out
+  INTEGER :: failure_reason
+  REAL(real64) :: feasible_interval(2)
   INTEGER(int32), ALLOCATABLE :: valid(:,:,:,:)
   REAL(real32), ALLOCATABLE :: density(:,:,:), pb(:,:,:), theta(:,:,:)
   CHARACTER(4096) :: input_path, output_path
@@ -36,7 +38,7 @@ PROGRAM model_moment_driver
   IF (use_theta_m/=0 .AND. use_theta_m/=1) STOP 11
   state%pressure%value=state%pressure%value+pb
   theta=theta+300.0_real32
-  IF (use_theta_m==1) theta=theta/(1.0_real32+(461.6_real32/287.0_real32)*state%vapor%value)
+  ! NetCDF T is perturbation dry potential temperature for both settings.
   state%temperature%value=theta*(state%pressure%value/100000.0_real32)**(287.0_real32/1004.5_real32)
   CALL activate(state%pressure); CALL activate(state%temperature); CALL activate(state%vapor)
   CALL read_bundle(background); CALL read_bundle(prior); CALL read_bundle(observed)
@@ -46,13 +48,15 @@ PROGRAM model_moment_driver
   policy%source='caller-declared source-bound policy'
   policy%density_source='caller-provided file-state proxy'
   state%moments=background
-  CALL complete_initialization_state(state,output,prior,policy,status,density,observed,failed_location)
+  CALL complete_initialization_state(state,output,prior,policy,status,density,observed,failed_location, &
+    failure_reason=failure_reason,feasible_interval=feasible_interval)
   IF (status==STATUS_OK) background=output%moments
   OPEN(newunit=unit_out,file=TRIM(output_path),access='stream',form='unformatted',status='new',iostat=ios)
   IF (ios/=0) STOP 8
   status32=status
   valid=MERGE(1_int32,0_int32,background%valid)
-  WRITE(unit_out,iostat=ios) status32,failed_location,background%value,valid,background%provenance
+  WRITE(unit_out,iostat=ios) status32,failed_location,background%value,valid,background%provenance, &
+    MINVAL(state%temperature%value),MAXVAL(state%temperature%value),INT(failure_reason,int32),feasible_interval
   IF (ios/=0) STOP 9
   CLOSE(unit_out)
 CONTAINS

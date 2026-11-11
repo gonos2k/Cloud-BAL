@@ -7,6 +7,11 @@ completion routines. It never launches the forecast. `OUTPUT` and `RECEIPT`
 must be new, distinct paths. The source model fields, including water masses,
 wind and thermodynamic fields, are read back unchanged. A failed operation
 removes its published output and temporary files.
+Completion failures report the cell and slot, a reason code (1: invalid or
+missing input, 2: empty analytical interval, 3: inadmissible candidate), and the
+computed interval when available. The interval uses the ideal cap/density;
+native REAL32 rounding can permit a candidate at its boundary. Failures do not
+publish a completed file or receipt.
 
 The JSON manifest contains `stage: "fresh_real_before_model_launch"`, an
 explicit integer `use_theta_m`, `mp_physics: 37`, and `producer`, `driver`, `source`, `build`,
@@ -50,7 +55,10 @@ identities, and hashes of file-state thermodynamic inputs. Density supplied to
 the kernel is computed in real32 as `1/(AL+ALB)` from the model input. WRF may
 recompute AL before advection, so this is a **file-state proxy**; the receipt
 sets `native_first_use_verified` false. Its pressure, Exner and temperature
-formulas describe the input state, not an observed first physics call. This
+formulas describe the input state, not an observed first physics call. NetCDF
+`T` is perturbation dry potential temperature for either `use_theta_m` setting;
+temperature is `(T+300)*(pressure/100000)**(287/1004.5)`. The receipt records
+the minimum and maximum temperatures computed by the driver. This
 handoff does not establish scientific acceptance or forecast performance.
 
 Run the focused fixture integration checks with

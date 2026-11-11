@@ -1,0 +1,62 @@
+{
+  "corpora": {
+    "Cloud-BAL": {
+      "after": {
+        "communities": 1733,
+        "edges": 35359,
+        "nodes": 19508
+      },
+      "before": {
+        "communities": 1714,
+        "edges": 35322,
+        "nodes": 19461
+      }
+    },
+    "KLAPS50": {
+      "after": {
+        "communities": 3688,
+        "edges": 93944,
+        "nodes": 45336
+      },
+      "before": {
+        "communities": 3684,
+        "edges": 93907,
+        "nodes": 45289
+      }
+    }
+  },
+  "extraction_limits": [
+    "Only 11 selected code files structurally extracted; remaining evidence hash-only.",
+    "Fortran cross-file calls and external import edges may be incomplete.",
+    "Graph freshness does not establish runtime or scientific validation."
+  ],
+  "final_validation_sha256": "383f644b962d0fa8b55a3ed6a3a7e07fc2f26d5527dde32daec5ff353136f6ff",
+  "hash_only_pin_count": 8,
+  "open_items": [
+    "Analytical intervals do not establish native REAL32 feasible representation or first-use behavior.",
+    "Phase and slope tests are manufactured and not wired to production phase callers.",
+    "No first native use, new forecast, domain-wide water/energy closure or independent meteorological cases."
+  ],
+  "postpublish_review_sha256": "c925c6d1cafac506e4b7b56e21b5bf66140f25acc38c0dfa1b44057d9af84698",
+  "preserved_prior_snapshots": 266,
+  "prior_manifest_artifacts_preserved": 104,
+  "publish_receipt_sha256": "729ff6b2968507682d875dbec0bbcf93339d6d0dfaddf80d3b5cea2f2fd58c0c",
+  "published_maintained_snapshot_count": 268,
+  "selected_source_sha256": {
+    "src/common/cloud_bal_microphysics_initialization.f90": "aeed11853d28fcd23d23f5a6e743cbe9f0238075f7a25a19a968d846d3bcd199",
+    "src/common/cloud_bal_phase_moments.f90": "c8cf12aad8efb8becbdc23a9dcb036bb30e238163a03fb1f7998b4f7e52d3979",
+    "tests/source_extract_phase_consumer.py": "d528ad130058912826e00a08ffefbb61ac56a4298ebc90168d1553e613be281b",
+    "tests/test_initialize_model_moments.py": "a2c9337cb988e3eb1c9436d5cb9c36335ae99cb18f16fe350e057000d1b36d90",
+    "tests/test_microphysics_initialization.f90": "0c9ea056fe637106fa776968624e51bbea6a1714ebb60519a3dcf466ee41fbcc",
+    "tests/test_phase_consumer_native.f90": "c6c1fed7ee314e6bb60ed154e8d26fa75c017b32023020eb7286dadc68d3dcc9",
+    "tests/test_phase_initialization_chain.f90": "1c1201d30b04fc25cb8f09327b710f26b92055e59bef3b8b9a671aa7101e6722",
+    "tests/test_phase_moments.f90": "160ae3a9c10bc73926b9186f65e13a47a5ba381275df101e332cfccdece3f4fa",
+    "tools/initialize_model_moments.py": "87762f109b99a800b0b2da7135eb893590200c251ee95c8db29a2ffe17be67fa",
+    "tools/model_moment_driver.f90": "e892cfd2a481a4bb72fb1870efddc3f8f2a562da082619f48167bc9a4629ccd0",
+    "tools/plot_moment_feasibility.py": "76e11898fbb74a128dfcfed381340e551b989a03335c7cfa899615ad2f745722"
+  },
+  "snapshot": "2026-11-11-moment-feasibility",
+  "source_commit": "d0366c8b45c230486d2eba36e85804de2d4f657b",
+  "source_copy_receipt_sha256": "d2d11748e0fab181736dd062c58f223a13a9385a1627092de80803e9b0618ee6",
+  "status": "COMPLETE_MAINTENANCE_WITH_OPEN_SCIENTIFIC_ITEMS"
+}

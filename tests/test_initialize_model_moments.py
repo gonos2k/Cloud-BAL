@@ -3,6 +3,7 @@ import base64
 import importlib.util
 import json
 import os
+import struct
 from pathlib import Path
 import tempfile
 import unittest
@@ -205,6 +206,34 @@ class ModelMomentBoundaryTest(unittest.TestCase):
         report = module.run_real_and_complete(self.manifest, self.p / "output.nc", self.p / "receipt.json")
         self.assertEqual(report["use_theta_m"], 1)
 
+    def test_file_dry_theta_restores_temperature_for_both_settings(self):
+        for setting in (0, 1):
+            with self.subTest(use_theta_m=setting):
+                with Dataset(self.template, "r+") as ds:
+                    ds.USE_THETA_M = setting
+                    ds["T"][:] = 0
+                    ds["QVAPOR"][:] = .02
+                    if "THM" not in ds.variables:
+                        ds.createVariable("THM", "f4", module.DIMS)
+                    ds["THM"][:] = 300 * (1 + 461.6 / 287 * .02) - 300
+                self.namelist.write_text(
+                    f"&time_control\n restart = .false.\n/\n&dynamics\n use_theta_m = {setting}\n/\n&physics\n mp_physics = 37\n/\n")
+                with np.load(self.candidates) as old:
+                    arrays = {key: old[key] for key in old.files}
+                arrays["source_sha256"] = module.sha(self.template)
+                np.savez(self.candidates, **arrays)
+                manifest = json.loads(self.manifest.read_text())
+                manifest["use_theta_m"] = setting
+                manifest["inputs"][0]["sha256"] = module.sha(self.namelist)
+                manifest["inputs"][1]["sha256"] = module.sha(self.template)
+                manifest["candidates"]["sha256"] = module.sha(self.candidates)
+                self.manifest.write_text(json.dumps(manifest))
+                report = module.run_real_and_complete(
+                    self.manifest, self.p / f"output{setting}.nc", self.p / f"receipt{setting}.json")
+                thermo = report["completion"]["input_thermodynamics"]
+                self.assertEqual(thermo["temperature"], "(T+300)*exner")
+                np.testing.assert_allclose(thermo["driver_temperature_range_kelvin"], [300, 300], atol=1e-5)
+
     def test_failed_cell_location_is_reported_without_publication(self):
         with np.load(self.candidates) as old:
             arrays = {key: old[key] for key in old.files}
@@ -215,6 +244,59 @@ class ModelMomentBoundaryTest(unittest.TestCase):
         self.manifest.write_text(json.dumps(manifest))
         output, receipt = self.p / "output.nc", self.p / "receipt.json"
         with self.assertRaisesRegex(ValueError, r"location=\[3, 1, 1, 1\]"):
+            module.run_real_and_complete(self.manifest, output, receipt)
+        self.assertFalse(output.exists())
+        self.assertFalse(receipt.exists())
+
+    def test_empty_feasible_interval_is_reported_without_publication(self):
+        policy = json.loads(self.policy.read_text())
+        policy["number_cap"][0] = 500
+        self.policy.write_text(json.dumps(policy))
+        manifest = json.loads(self.manifest.read_text())
+        manifest["policy"]["sha256"] = module.sha(self.policy)
+        self.manifest.write_text(json.dumps(manifest))
+        output, receipt = self.p / "output.nc", self.p / "receipt.json"
+        with self.assertRaisesRegex(ValueError, r"location=\[1, 1, 1, 1\], reason=EMPTY_ANALYTICAL_INTERVAL \(2\), feasible_interval=\[") as error:
+            module.run_real_and_complete(self.manifest, output, receipt)
+        interval = json.loads(str(error.exception).split("feasible_interval=", 1)[1])
+        np.testing.assert_allclose(interval, [float(np.float32(1e-6)) / 2e-10, 500], rtol=1e-6)
+        self.assertFalse(output.exists())
+        self.assertFalse(receipt.exists())
+
+    def test_inconsistent_driver_status_and_reason_roll_back(self):
+        original_run = module.subprocess.run
+        for status, reason in ((20, 2), (10, 2), (-10, 0), (1, 0)):
+            with self.subTest(status=status, reason=reason):
+                def corrupt_driver_output(*args, **kwargs):
+                    result = original_run(*args, **kwargs)
+                    if len(args[0]) == 3 and Path(args[0][1]).name == "driver.in":
+                        path = Path(args[0][2])
+                        data = bytearray(path.read_bytes())
+                        struct.pack_into("=i", data, 0, status)
+                        struct.pack_into("=i", data, len(data) - 20, reason)
+                        path.write_bytes(data)
+                    return result
+                output, receipt = self.p / "output.nc", self.p / "receipt.json"
+                with mock.patch.object(module.subprocess, "run", side_effect=corrupt_driver_output):
+                    with self.assertRaisesRegex(ValueError, "inconsistent driver status and failure reason"):
+                        module.run_real_and_complete(self.manifest, output, receipt)
+                self.assertFalse(output.exists())
+                self.assertFalse(receipt.exists())
+
+    def test_degraded_completion_is_incomplete_and_not_published(self):
+        with np.load(self.candidates) as old:
+            arrays = {key: old[key] for key in old.files}
+        arrays["prior_valid"][0, 0, 0, 2] = 0
+        np.savez(self.candidates, **arrays)
+        policy = json.loads(self.policy.read_text())
+        policy["mass_threshold"][0] = 2e-6
+        self.policy.write_text(json.dumps(policy))
+        manifest = json.loads(self.manifest.read_text())
+        manifest["candidates"]["sha256"] = module.sha(self.candidates)
+        manifest["policy"]["sha256"] = module.sha(self.policy)
+        self.manifest.write_text(json.dumps(manifest))
+        output, receipt = self.p / "output.nc", self.p / "receipt.json"
+        with self.assertRaisesRegex(ValueError, r"reason=INCOMPLETE \(0\)"):
             module.run_real_and_complete(self.manifest, output, receipt)
         self.assertFalse(output.exists())
         self.assertFalse(receipt.exists())

@@ -20,6 +20,8 @@ MODULE cloud_bal_microphysics_initialization
     REAL(real64) :: lower(5) = 0.0_real64
     REAL(real64) :: upper(5) = 0.0_real64
   END TYPE microphysics_completion_policy
+  INTEGER, PARAMETER, PUBLIC :: MOMENT_FAILURE_OTHER=1, MOMENT_FAILURE_EMPTY_ANALYTICAL_INTERVAL=2, &
+    MOMENT_FAILURE_CANDIDATE=3
   PUBLIC :: complete_microphysics, complete_initialization_state
 
 CONTAINS
@@ -28,7 +30,8 @@ CONTAINS
   ! are invalid. Only the selected prior is validated; unused alternatives are ignored.
   ! state and moments must be distinct actual objects, as must all inputs
   ! and the output bundle. The state wrapper below offers a single-state copy.
-  SUBROUTINE complete_microphysics(state,moments,prior,policy,status,native_den,observed,failed_location)
+  SUBROUTINE complete_microphysics(state,moments,prior,policy,status,native_den,observed,failed_location, &
+      failure_reason,feasible_interval)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
     TYPE(moment_bundle), INTENT(INOUT) :: moments
     TYPE(moment_bundle), INTENT(IN) :: prior
@@ -37,12 +40,16 @@ CONTAINS
     REAL(real32), INTENT(IN) :: native_den(:,:,:)
     TYPE(moment_bundle), INTENT(IN), OPTIONAL :: observed
     INTEGER, INTENT(OUT), OPTIONAL :: failed_location(4)
+    INTEGER, INTENT(OUT), OPTIONAL :: failure_reason
+    REAL(real64), INTENT(OUT), OPTIONAL :: feasible_interval(2)
     TYPE(moment_bundle) :: result
     INTEGER :: shape4(4), i,j,k,s
-    REAL(real64) :: mass, candidate
-    LOGICAL :: found, unresolved, has_prior, has_observed, prior_valid
+    REAL(real64) :: mass, candidate, interval(2)
+    LOGICAL :: found, unresolved, has_prior, has_observed, prior_valid, empty_interval
 
     status=STATUS_FAILED
+    IF (PRESENT(failure_reason)) failure_reason=MOMENT_FAILURE_OTHER
+    IF (PRESENT(feasible_interval)) feasible_interval=0.0_real64
     IF (PRESENT(failed_location)) failed_location=0
     shape4=[state%grid%nx,state%grid%ny,state%grid%nz,5]
     IF (ANY(shape4<=0)) RETURN
@@ -85,6 +92,8 @@ CONTAINS
         DO i=1,shape4(1)
           DO s=1,5
             IF (PRESENT(failed_location)) failed_location=[i,j,k,s]
+            IF (PRESENT(feasible_interval)) feasible_interval=0.0_real64
+            empty_interval=.FALSE.
             IF (s==MOMENT_NN) THEN
               mass=0.0_real64
             ELSE
@@ -98,6 +107,19 @@ CONTAINS
               CASE(MOMENT_BG)
                 mass=REAL(state%graupel%value(i,j,k),real64)
               END SELECT
+            END IF
+            ! This analytical interval uses the exact cap/density. Native REAL32
+            ! rounding can admit a boundary candidate even when it is empty;
+            ! therefore use it to classify failure, not to reject candidates.
+            IF (s<=MOMENT_NR .AND. mass>0.0_real64) THEN
+              IF (mass>=policy%mass_threshold(s)) THEN
+                interval(1)=bounded_ratio(mass,policy%upper(s))
+                interval(2)=MIN(bounded_ratio(mass,policy%lower(s)), &
+                  bounded_ratio(policy%number_cap(s),REAL(native_den(i,j,k),real64)))
+                IF (PRESENT(feasible_interval)) feasible_interval=interval
+                empty_interval=interval_is_empty(interval,mass,policy%upper(s),policy%number_cap(s), &
+                  REAL(native_den(i,j,k),real64))
+              END IF
             END IF
             found=.FALSE.
             IF (has_observed) THEN
@@ -130,6 +152,10 @@ CONTAINS
             prior_valid=.FALSE.
             IF (has_prior) prior_valid=prior%valid(i,j,k,s)
             IF (prior_valid) THEN
+              IF (PRESENT(failure_reason)) THEN
+                failure_reason=MOMENT_FAILURE_CANDIDATE
+                IF (empty_interval) failure_reason=MOMENT_FAILURE_EMPTY_ANALYTICAL_INTERVAL
+              END IF
               IF (prior%provenance(i,j,k,s)/=MOMENT_OBSERVED .AND. &
                   prior%provenance(i,j,k,s)/=MOMENT_PRIOR) RETURN
               candidate=prior%value(i,j,k,s)
@@ -144,7 +170,9 @@ CONTAINS
               result%value(i,j,k,s)=candidate
               result%valid(i,j,k,s)=.TRUE.
               result%provenance(i,j,k,s)=prior%provenance(i,j,k,s)
+              IF (PRESENT(failure_reason)) failure_reason=MOMENT_FAILURE_OTHER
             ELSE IF (s==MOMENT_NN .OR. mass>=policy%mass_threshold(s)) THEN
+              IF (PRESENT(failure_reason) .AND. empty_interval) failure_reason=MOMENT_FAILURE_EMPTY_ANALYTICAL_INTERVAL
               RETURN
             ELSE
               unresolved=.TRUE.
@@ -157,11 +185,14 @@ CONTAINS
     status=STATUS_OK
     IF (unresolved) status=STATUS_DEGRADED
     IF (PRESENT(failed_location)) failed_location=0
+    IF (PRESENT(failure_reason)) failure_reason=0
+    IF (PRESENT(feasible_interval)) feasible_interval=0.0_real64
   END SUBROUTINE complete_microphysics
 
   ! Input and output must be distinct actual variables. The output is committed
   ! only after completion succeeds; a failed operation leaves it untouched.
-  SUBROUTINE complete_initialization_state(state,output,prior,policy,status,native_den,observed,failed_location)
+  SUBROUTINE complete_initialization_state(state,output,prior,policy,status,native_den,observed,failed_location, &
+      failure_reason,feasible_interval)
     TYPE(cloud_bal_state_type), INTENT(IN) :: state
     TYPE(cloud_bal_state_type), INTENT(INOUT) :: output
     TYPE(moment_bundle), INTENT(IN) :: prior
@@ -170,11 +201,15 @@ CONTAINS
     REAL(real32), INTENT(IN) :: native_den(:,:,:)
     TYPE(moment_bundle), INTENT(IN), OPTIONAL :: observed
     INTEGER, INTENT(OUT), OPTIONAL :: failed_location(4)
+    INTEGER, INTENT(OUT), OPTIONAL :: failure_reason
+    REAL(real64), INTENT(OUT), OPTIONAL :: feasible_interval(2)
     TYPE(cloud_bal_state_type) :: candidate
     INTEGER :: shape3(3)
     INTEGER(int64) :: valid_time
 
     status=STATUS_FAILED
+    IF (PRESENT(failure_reason)) failure_reason=MOMENT_FAILURE_OTHER
+    IF (PRESENT(feasible_interval)) feasible_interval=0.0_real64
     IF (PRESENT(failed_location)) failed_location=0
     shape3=[state%grid%nx,state%grid%ny,state%grid%nz]
     IF (ANY(shape3<=0)) RETURN
@@ -184,7 +219,8 @@ CONTAINS
     IF (.NOT.field_valid(state%vapor,shape3,valid_time,'kg kg-1 dryair',0.0_real32,0.2_real32)) RETURN
     IF (.NOT.mass_field_valid(state%snow,shape3,valid_time)) RETURN
     candidate=state
-    CALL complete_microphysics(state,candidate%moments,prior,policy,status,native_den,observed,failed_location)
+    CALL complete_microphysics(state,candidate%moments,prior,policy,status,native_den,observed,failed_location, &
+      failure_reason,feasible_interval)
     IF (status/=STATUS_FAILED) output=candidate
   END SUBROUTINE complete_initialization_state
 
@@ -250,6 +286,31 @@ CONTAINS
     IF (exponent>=LOG(HUGE(numerator)) .OR. exponent<=LOG(TINY(numerator))) RETURN
     safe_ratio=.TRUE.
   END FUNCTION safe_ratio
+
+  ! Saturation keeps interval diagnostics representable without floating-point traps.
+  REAL(real64) FUNCTION bounded_ratio(numerator,denominator) RESULT(value)
+    REAL(real64), INTENT(IN) :: numerator,denominator
+    REAL(real64) :: exponent
+    exponent=LOG(numerator)-LOG(denominator)
+    IF (exponent>=LOG(HUGE(value))) THEN
+      value=HUGE(value)
+    ELSE IF (exponent<=LOG(TINY(value))) THEN
+      value=0.0_real64
+    ELSE
+      value=numerator/denominator
+    END IF
+  END FUNCTION bounded_ratio
+
+  LOGICAL FUNCTION interval_is_empty(interval,mass,upper,cap,density)
+    REAL(real64), INTENT(IN) :: interval(2),mass,upper,cap,density
+    interval_is_empty=interval(1)>interval(2)
+    ! When both bounds saturate, compare their logarithms to avoid treating
+    ! two unrepresentable, unequal ratios as an equal interval.
+    IF (interval(1)==interval(2) .AND. &
+        (interval(1)==0.0_real64 .OR. interval(1)==HUGE(0.0_real64))) THEN
+      interval_is_empty=LOG(mass)-LOG(upper)>LOG(cap)-LOG(density)
+    END IF
+  END FUNCTION interval_is_empty
 
   ! Check the values actually read by a REAL32 native model. Reject a candidate
   ! before conversion when it would overflow or underflow; never clip a prior.

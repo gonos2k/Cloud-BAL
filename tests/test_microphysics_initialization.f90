@@ -7,7 +7,8 @@ PROGRAM test_microphysics_initialization
   TYPE(moment_bundle) :: prior, before, observed, absent, partial
   TYPE(microphysics_completion_policy) :: policy
   REAL(real32) :: density(1,1,2)
-  INTEGER :: status, failed_location(4)
+  REAL(real64) :: interval(2), q
+  INTEGER :: status, failed_location(4), failure_reason
 
   CALL initialize_cloud_bal_state(state,1,1,2,0_int64,'test',status)
   IF (status/=STATUS_OK) ERROR STOP 'initialize'
@@ -164,6 +165,56 @@ PROGRAM test_microphysics_initialization
   CALL complete_microphysics(state,output%moments,prior,policy,status,density)
   CALL check(status==STATUS_FAILED,'native rounded value violates PSD bound')
   CALL check(ALL(output%moments%value==before%value),'rounding failure atomic')
+  ! A rejected prior is distinct from a fixed mass with no feasible number.
+  CALL mass(state%cloud_water,1.e-6_real32)
+  q=REAL(state%cloud_water%value(1,1,1),real64)
+  policy%lower(MOMENT_NC)=1.e-10_real64
+  policy%upper(MOMENT_NC)=1.e-9_real64
+  policy%number_cap(MOMENT_NC)=2000.0_real64
+  prior%valid(:,:,:,MOMENT_NC)=.TRUE.
+  prior%value(:,:,:,MOMENT_NC)=1.e-10_real64
+  output%moments%valid(:,:,:,MOMENT_NC)=.FALSE.
+  before=output%moments
+  CALL complete_microphysics(state,output%moments,prior,policy,status,density, &
+    failed_location=failed_location,failure_reason=failure_reason,feasible_interval=interval)
+  CALL check(status==STATUS_FAILED .AND. failure_reason==MOMENT_FAILURE_CANDIDATE, &
+    'infeasible selected prior with nonempty interval')
+  CALL check(ALL(failed_location==[1,1,1,MOMENT_NC]),'candidate failure location')
+  CALL check(ABS(interval(1)-q/policy%upper(MOMENT_NC))<1.e-9_real64 .AND. &
+    interval(2)==2000.0_real64,'candidate interval')
+  CALL check(moment_bundles_equal(output%moments,before),'candidate failure rollback')
+  policy%number_cap(MOMENT_NC)=500.0_real64
+  CALL complete_microphysics(state,output%moments,prior,policy,status,density, &
+    failed_location=failed_location,failure_reason=failure_reason,feasible_interval=interval)
+  CALL check(status==STATUS_FAILED .AND. failure_reason==MOMENT_FAILURE_EMPTY_ANALYTICAL_INTERVAL, &
+    'fixed mass has empty feasible interval')
+  CALL check(interval(1)>interval(2),'empty interval reported')
+  CALL check(moment_bundles_equal(output%moments,before),'empty interval rollback')
+  ! The independent cap applies to native number concentration at this density.
+  density=2.0_real32
+  policy%number_cap(MOMENT_NC)=3000.0_real64
+  prior%value(:,:,:,MOMENT_NC)=8.e-10_real64
+  CALL complete_microphysics(state,output%moments,prior,policy,status,density, &
+    failure_reason=failure_reason,feasible_interval=interval)
+  CALL check(status==STATUS_OK .AND. failure_reason==0,'feasible prior at nonunit density')
+  CALL check(ALL(interval==0.0_real64),'successful completion clears interval')
+  ! Preserve a native background accepted at a REAL32 product rounding boundary.
+  CALL mass(state%cloud_water,1.0_real32)
+  density=NEAREST(1.0_real32,1.0_real32)
+  output%moments%value(:,:,:,MOMENT_NC)=REAL(density(1,1,1),real64)
+  output%moments%provenance(:,:,:,MOMENT_NC)=MOMENT_BACKGROUND
+  policy%upper(MOMENT_NC)=1.0_real64/REAL(density(1,1,1),real64)
+  policy%lower(MOMENT_NC)=policy%upper(MOMENT_NC)/2.0_real64
+  policy%number_cap(MOMENT_NC)=REAL(density(1,1,1)*density(1,1,1),real64)
+  before=output%moments
+  CALL complete_microphysics(state,output%moments,prior,policy,status,density,failure_reason=failure_reason)
+  CALL check(status==STATUS_OK,'native rounded background survives exact interval boundary')
+  CALL check(ALL(output%moments%value(:,:,:,MOMENT_NC)==before%value(:,:,:,MOMENT_NC)), &
+    'rounded background preserved')
+  output%moments%valid(:,:,:,MOMENT_NC)=.FALSE.
+  prior%value(:,:,:,MOMENT_NC)=policy%upper(MOMENT_NC)
+  CALL complete_microphysics(state,output%moments,prior,policy,status,density,failure_reason=failure_reason)
+  CALL check(status==STATUS_OK,'native rounded prior survives exact interval boundary')
   PRINT *, 'microphysics initialization tests passed'
 CONTAINS
   SUBROUTINE check(condition,label)

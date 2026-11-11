@@ -1,0 +1,85 @@
+{
+  "analytical_mask": "q>0 and q>=threshold and float64(q)/upper > min(float64(q)/lower, cap/float64(rho))",
+  "density": "float32(1/float32(AL+ALB)); file-state proxy",
+  "ice_fixed_50um_and_empty": {
+    "count": 1362,
+    "first_ijk_1based": [
+      209,
+      94,
+      17
+    ],
+    "sha256_uint8_zyx_c_order": "3a0830a16306febdc4ca92c0959cf9392df057c84481975aa90cf531d2a44c45"
+  },
+  "ice_fixed_50um_mean_mass_kg": 3.2724923474893685e-11,
+  "ice_fixed_50um_over_cap": {
+    "count": 106128,
+    "first_ijk_1based": [
+      1,
+      228,
+      13
+    ],
+    "sha256_uint8_zyx_c_order": "1deba6cbc3412dfc0882396b9c66200441a7adfaeaae1399a52835f155b3e00c"
+  },
+  "ice_fixed_50um_over_cap_not_empty": {
+    "count": 104766,
+    "first_ijk_1based": [
+      1,
+      228,
+      13
+    ],
+    "sha256_uint8_zyx_c_order": "7af24573002656061fc1dcb3d9b64b389854d184863571e660dcd8b6064fb678"
+  },
+  "policy_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/moment_feasibility_20261111/Cloud-BAL/docs/evidence/physical_moment_handoff_20261110/native/actual_real/policy.json",
+  "policy_sha256": "647126e5215acbb985d39d56564898f7c6f82adb85d05266bf0d2c4ba008a00e",
+  "scope": "Ideal exact-real bounds evaluated in float64, not native REAL32 candidate acceptance or runtime validation.",
+  "script_sha256": "b7f6fff29a6f97bd2e2eaaf12ac58d5b856b27231ec0354f3ab2319aac33d53e",
+  "shape_zyx": [
+    39,
+    282,
+    234
+  ],
+  "source_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/physical_moment_handoff_20261110/native_probe_20261110/preflight_v3/wrfinput_d01",
+  "source_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+  "species": {
+    "NC": {
+      "empty_interval": {
+        "count": 0,
+        "first_ijk_1based": null,
+        "sha256_uint8_zyx_c_order": "780c42c7328e0eaedd3ae20c3d28375a563d8288e54c13f4f164952f53bf60da"
+      },
+      "maximum_mass_concentration_kg_per_m3": 0.003262593810271941,
+      "maximum_q_kg_per_kg": 0.006884201429784298,
+      "number_cap_per_m3": 50000000000.0,
+      "positive_mass_count": 967240,
+      "upper_mean_mass_kg": 3.0300855069345996e-10
+    },
+    "NI": {
+      "empty_interval": {
+        "count": 1362,
+        "first_ijk_1based": [
+          209,
+          94,
+          17
+        ],
+        "sha256_uint8_zyx_c_order": "3a0830a16306febdc4ca92c0959cf9392df057c84481975aa90cf531d2a44c45"
+      },
+      "maximum_mass_concentration_kg_per_m3": 0.00329986904706997,
+      "maximum_q_kg_per_kg": 0.01022245828062296,
+      "number_cap_per_m3": 1000000.0,
+      "positive_mass_count": 253258,
+      "upper_mean_mass_kg": 2.098274638742861e-09
+    },
+    "NR": {
+      "empty_interval": {
+        "count": 0,
+        "first_ijk_1based": null,
+        "sha256_uint8_zyx_c_order": "780c42c7328e0eaedd3ae20c3d28375a563d8288e54c13f4f164952f53bf60da"
+      },
+      "maximum_mass_concentration_kg_per_m3": 0.0019788519214325173,
+      "maximum_q_kg_per_kg": 0.002388704102486372,
+      "number_cap_per_m3": 50000000.0,
+      "positive_mass_count": 202569,
+      "upper_mean_mass_kg": 1.4159232106169902e-05
+    }
+  }
+}
