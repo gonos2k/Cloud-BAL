@@ -1,0 +1,51 @@
+{
+  "corpora": {
+    "Cloud-BAL": {
+      "after": {
+        "communities": 1731,
+        "edges": 35364,
+        "nodes": 19511
+      },
+      "before": {
+        "communities": 1733,
+        "edges": 35359,
+        "nodes": 19508
+      },
+      "community_delta": -2,
+      "edge_delta": 5,
+      "node_delta": 3
+    },
+    "KLAPS50": {
+      "after": {
+        "communities": 3671,
+        "edges": 93949,
+        "nodes": 45339
+      },
+      "before": {
+        "communities": 3688,
+        "edges": 93944,
+        "nodes": 45336
+      },
+      "community_delta": -17,
+      "edge_delta": 5,
+      "node_delta": 3
+    }
+  },
+  "extraction_note": "The retired selected test USE-import node ID reflects an extractor identity change, not removal of a phase function. Fortran cross-file CALL extraction is partial; document semantics were not re-extracted. Graph freshness does not establish runtime or scientific validity.",
+  "maintained_dated_snapshots": {
+    "after": 270,
+    "before": 268
+  },
+  "open_items": [
+    "NI=1362 policy remains unresolved.",
+    "Native first use and a new WRF run remain open.",
+    "Full-domain water-energy budgets, independent cases and forecast skill remain open."
+  ],
+  "selection": [
+    "src/common/cloud_bal_phase_moments.f90",
+    "tests/test_phase_moments.f90"
+  ],
+  "snapshot": "2026-11-11-phase-preconditions",
+  "status": "PUBLISHED_AND_READBACK_PASS",
+  "validation": "Frozen-source pinned Intel O0/O2 validation passed; see ../validation/receipt.json."
+}

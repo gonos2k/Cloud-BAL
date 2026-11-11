@@ -18,6 +18,7 @@ CONTAINS
     IF (.NOT.ieee_is_finite(species(2))) RETURN
     IF (nn<0.0_real64 .OR. nc<0.0_real64) RETURN
     IF (species(2)==0.0_real64 .AND. nc>0.0_real64) RETURN
+    IF (species(2)>0.0_real64 .AND. nc==0.0_real64) RETURN
     IF (nc>HUGE(nn)-nn) RETURN
     nn_new=nn+nc
     t_new=temperature; s_new=species
@@ -40,6 +41,7 @@ CONTAINS
     IF (bg<0.0_real64 .OR. melt<0.0_real64 .OR. species(6)<0.0_real64) RETURN
     IF (melt>species(6)) RETURN
     IF (species(6)==0.0_real64 .AND. bg>0.0_real64) RETURN
+    IF (melt>0.0_real64 .AND. bg==0.0_real64) RETURN
     bg_new=bg
     IF (species(6)>0.0_real64) bg_new=bg*((species(6)-melt)/species(6))
     t_new=temperature; s_new=species
