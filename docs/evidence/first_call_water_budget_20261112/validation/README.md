@@ -1,0 +1,5 @@
+# Validation location and evidence
+
+`receipt.json` and `logs/` are copied from the final PASS run, whose frozen recipe and fresh Intel build scratch reside outside the source checkout at `scratch/first_call_water_budget_20261112/validation_final/`. The receipt includes before/after hashes for every frozen input, including `validation/run.py`, and the separately pinned external CONTROL source used by the replay script. Run `python3 docs/evidence/first_call_water_budget_20261112/validation/run.py [new-sibling-scratch-directory]` from the project root; the recipe rejects any output inside the source checkout.
+
+Two earlier PASS attempts were built inside the checkout, so their build location did not comply with the project scratch rule. Their receipts, logs, and artifacts were moved intact to the external sibling `validation_prior_location/`; their old recorded absolute paths describe their original locations. The final external rerun corrects the location only; it makes no physics change. Native history parity is earlier evidence recorded in the frozen native receipt, not a WRF run repeated by this validator.
