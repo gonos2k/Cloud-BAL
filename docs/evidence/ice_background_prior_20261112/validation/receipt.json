@@ -1,0 +1,101 @@
+{
+  "checks_per_profile": {
+    "existing_python_methods": 19,
+    "fortran_programs": 3,
+    "new_python_methods": 10
+  },
+  "commands": [
+    {
+      "argv": [
+        "bash",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/ice_background_prior_20261112/validation.3sjj83oz/freeze/Cloud-BAL/tests/run_ice_background_prior.sh"
+      ],
+      "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/ice_background_prior_20261112/validation.3sjj83oz/freeze/Cloud-BAL",
+      "exit_code": 0,
+      "label": "native_boundary",
+      "log": "logs/native_boundary.log",
+      "log_sha256": "fff26a7ecbfe708b31df9154f1d84ab82b55dca1dec20a915ce959b2e8639338"
+    },
+    {
+      "argv": [
+        "/usr/bin/python3",
+        "tests/check_test_tiers.py"
+      ],
+      "cwd": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL",
+      "exit_code": 0,
+      "label": "test_registry",
+      "log": "logs/test_registry.log",
+      "log_sha256": "375c601b26e67e0272a8a4637f77aea63daad89cdc6194c1fc00bd47d8e2b2a6"
+    }
+  ],
+  "freeze_sha256_after": {
+    "docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+    "docs/evidence/ice_background_prior_20261112/validation/run.py": "cae0b04aa4cf7d62cb038ae338d909f371d9566fd53dd887aef44533edf3a003",
+    "src/common/cloud_bal_microphysics_initialization.f90": "55291000c908408aa4b980136deec9f92ac9b987fe989edcf494c8cacee92848",
+    "src/common/cloud_bal_state.f90": "205d034e803f9e7294e8d913e46b40174f38caaf82a19d119ffafcacdae494ab",
+    "tests/check_test_tiers.py": "a268db59daa94afad74d426f380420f1d9617d01ddfc118a3f7bf08f3e1434d2",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/python_script_test_allowlist.json": "f4359244c81935be92fb52226b396c7dbfdc006fe43f46802d357a72740c2e7c",
+    "tests/run_ice_background_prior.sh": "d9e572b7e7fe1221f36a4f9b251db282249172cdba4136b6e222a80c7fb70482",
+    "tests/run_unit_tests.sh": "f1bfffa2167bd2b31d5cd90c13c5254fb6f5d2bb4dce0b8cb78b922c47d08c5c",
+    "tests/test_ice_background_prior.f90": "f02c6a9cd009c408b518fe386fc6347f7c29007e1cffd32d8a9e548b32aee452",
+    "tests/test_ice_background_prior.py": "4a2fe83b2fa27546af3c29ca7b6734f5cd4baa75adfb6c4dac2e8893ed3c5336",
+    "tests/test_ice_snow_initialization.f90": "ffc63b33ec0e92772d8069dbe32893f8bc6b0f1c343d29c118abaf148ec9ba23",
+    "tests/test_initialize_model_moments.py": "b942021039679639fc2aeb16e517a5eb18a4151904d4ef95027ca0f8778d04e0",
+    "tests/test_microphysics_initialization.f90": "0c9ea056fe637106fa776968624e51bbea6a1714ebb60519a3dcf466ee41fbcc",
+    "tests/test_tier_exceptions.json": "26e4f15011a77fb03fd1131e85f7cb5944060303b2760f375a65dc3c7b85d3a1",
+    "tools/ice_background_driver.f90": "39555044da567590e296b0092f9e90a803cbd17f1d14ac7d4440195ad2ecb063",
+    "tools/initialize_model_moments.py": "f7f52255a0a6dd6a090f49e9a19a693c209f7844f75ff0874bfb28638111840e",
+    "tools/model_moment_driver.f90": "d3847dc2455b84d36384a673422a711d64e19dc8f1f5fcc21c8b2a32531bc921",
+    "tools/propose_ice_background.py": "f818f542766280064aed15080892837832e152feb99064436eabb65502fed98e"
+  },
+  "profiles": [
+    "pinned Intel audit O0",
+    "pinned Intel strict repro O2"
+  ],
+  "scope": "Synthetic proposal and file handoff; no independent background or new WRF forecast.",
+  "scratch": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/ice_background_prior_20261112/validation.3sjj83oz",
+  "source_sha256_after": {
+    "docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+    "docs/evidence/ice_background_prior_20261112/validation/run.py": "cae0b04aa4cf7d62cb038ae338d909f371d9566fd53dd887aef44533edf3a003",
+    "src/common/cloud_bal_microphysics_initialization.f90": "55291000c908408aa4b980136deec9f92ac9b987fe989edcf494c8cacee92848",
+    "src/common/cloud_bal_state.f90": "205d034e803f9e7294e8d913e46b40174f38caaf82a19d119ffafcacdae494ab",
+    "tests/check_test_tiers.py": "a268db59daa94afad74d426f380420f1d9617d01ddfc118a3f7bf08f3e1434d2",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/python_script_test_allowlist.json": "f4359244c81935be92fb52226b396c7dbfdc006fe43f46802d357a72740c2e7c",
+    "tests/run_ice_background_prior.sh": "d9e572b7e7fe1221f36a4f9b251db282249172cdba4136b6e222a80c7fb70482",
+    "tests/run_unit_tests.sh": "f1bfffa2167bd2b31d5cd90c13c5254fb6f5d2bb4dce0b8cb78b922c47d08c5c",
+    "tests/test_ice_background_prior.f90": "f02c6a9cd009c408b518fe386fc6347f7c29007e1cffd32d8a9e548b32aee452",
+    "tests/test_ice_background_prior.py": "4a2fe83b2fa27546af3c29ca7b6734f5cd4baa75adfb6c4dac2e8893ed3c5336",
+    "tests/test_ice_snow_initialization.f90": "ffc63b33ec0e92772d8069dbe32893f8bc6b0f1c343d29c118abaf148ec9ba23",
+    "tests/test_initialize_model_moments.py": "b942021039679639fc2aeb16e517a5eb18a4151904d4ef95027ca0f8778d04e0",
+    "tests/test_microphysics_initialization.f90": "0c9ea056fe637106fa776968624e51bbea6a1714ebb60519a3dcf466ee41fbcc",
+    "tests/test_tier_exceptions.json": "26e4f15011a77fb03fd1131e85f7cb5944060303b2760f375a65dc3c7b85d3a1",
+    "tools/ice_background_driver.f90": "39555044da567590e296b0092f9e90a803cbd17f1d14ac7d4440195ad2ecb063",
+    "tools/initialize_model_moments.py": "f7f52255a0a6dd6a090f49e9a19a693c209f7844f75ff0874bfb28638111840e",
+    "tools/model_moment_driver.f90": "d3847dc2455b84d36384a673422a711d64e19dc8f1f5fcc21c8b2a32531bc921",
+    "tools/propose_ice_background.py": "f818f542766280064aed15080892837832e152feb99064436eabb65502fed98e"
+  },
+  "source_sha256_before": {
+    "docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+    "docs/evidence/ice_background_prior_20261112/validation/run.py": "cae0b04aa4cf7d62cb038ae338d909f371d9566fd53dd887aef44533edf3a003",
+    "src/common/cloud_bal_microphysics_initialization.f90": "55291000c908408aa4b980136deec9f92ac9b987fe989edcf494c8cacee92848",
+    "src/common/cloud_bal_state.f90": "205d034e803f9e7294e8d913e46b40174f38caaf82a19d119ffafcacdae494ab",
+    "tests/check_test_tiers.py": "a268db59daa94afad74d426f380420f1d9617d01ddfc118a3f7bf08f3e1434d2",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/python_script_test_allowlist.json": "f4359244c81935be92fb52226b396c7dbfdc006fe43f46802d357a72740c2e7c",
+    "tests/run_ice_background_prior.sh": "d9e572b7e7fe1221f36a4f9b251db282249172cdba4136b6e222a80c7fb70482",
+    "tests/run_unit_tests.sh": "f1bfffa2167bd2b31d5cd90c13c5254fb6f5d2bb4dce0b8cb78b922c47d08c5c",
+    "tests/test_ice_background_prior.f90": "f02c6a9cd009c408b518fe386fc6347f7c29007e1cffd32d8a9e548b32aee452",
+    "tests/test_ice_background_prior.py": "4a2fe83b2fa27546af3c29ca7b6734f5cd4baa75adfb6c4dac2e8893ed3c5336",
+    "tests/test_ice_snow_initialization.f90": "ffc63b33ec0e92772d8069dbe32893f8bc6b0f1c343d29c118abaf148ec9ba23",
+    "tests/test_initialize_model_moments.py": "b942021039679639fc2aeb16e517a5eb18a4151904d4ef95027ca0f8778d04e0",
+    "tests/test_microphysics_initialization.f90": "0c9ea056fe637106fa776968624e51bbea6a1714ebb60519a3dcf466ee41fbcc",
+    "tests/test_tier_exceptions.json": "26e4f15011a77fb03fd1131e85f7cb5944060303b2760f375a65dc3c7b85d3a1",
+    "tools/ice_background_driver.f90": "39555044da567590e296b0092f9e90a803cbd17f1d14ac7d4440195ad2ecb063",
+    "tools/initialize_model_moments.py": "f7f52255a0a6dd6a090f49e9a19a693c209f7844f75ff0874bfb28638111840e",
+    "tools/model_moment_driver.f90": "d3847dc2455b84d36384a673422a711d64e19dc8f1f5fcc21c8b2a32531bc921",
+    "tools/propose_ice_background.py": "f818f542766280064aed15080892837832e152feb99064436eabb65502fed98e"
+  },
+  "status": "PASS"
+}

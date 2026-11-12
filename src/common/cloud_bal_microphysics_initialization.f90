@@ -30,8 +30,110 @@ MODULE cloud_bal_microphysics_initialization
   INTEGER, PARAMETER, PUBLIC :: MOMENT_FAILURE_OTHER=1, MOMENT_FAILURE_EMPTY_ANALYTICAL_INTERVAL=2, &
     MOMENT_FAILURE_CANDIDATE=3
   PUBLIC :: complete_microphysics, complete_initialization_state, complete_ice_snow_initialization
+  PUBLIC :: propose_ice_snow_from_background
 
 CONTAINS
+
+  ! A grid identifier is a caller attestation, not proof of matching coordinates.
+  ! The background and proposal must be distinct actual objects. On failure the
+  ! proposal is untouched, including when a later selected cell is invalid.
+  SUBROUTINE propose_ice_snow_from_background(state,background,background_grid_id,selected,proposal, &
+      policy,native_den,status,failed_location)
+    TYPE(cloud_bal_state_type), INTENT(IN) :: state
+    TYPE(ice_snow_partition), INTENT(IN) :: background
+    CHARACTER(LEN=*), INTENT(IN) :: background_grid_id
+    LOGICAL, INTENT(IN) :: selected(:,:,:)
+    TYPE(ice_snow_partition), INTENT(INOUT) :: proposal
+    TYPE(microphysics_completion_policy), INTENT(IN) :: policy
+    REAL(real32), INTENT(IN) :: native_den(:,:,:)
+    INTEGER, INTENT(OUT) :: status
+    INTEGER, INTENT(OUT), OPTIONAL :: failed_location(4)
+    TYPE(ice_snow_partition) :: candidate
+    INTEGER :: dims(3),i,j,k
+    REAL(real64) :: qi_b,qs_b,ni_b,total,target,fraction,mean,qi,qs,ni,stored_total,tolerance
+
+    status=STATUS_FAILED
+    IF (PRESENT(failed_location)) failed_location=0
+    dims=[state%grid%nx,state%grid%ny,state%grid%nz]
+    IF (ANY(dims<=0)) RETURN
+    IF (LEN_TRIM(background_grid_id)==0 .OR. LEN_TRIM(state%grid%grid_id)==0) RETURN
+    IF (background_grid_id/=state%grid%grid_id) RETURN
+    IF (LEN_TRIM(background%source)==0 .OR. background%provenance/=MOMENT_BACKGROUND) RETURN
+    IF (ANY(SHAPE(selected)/=dims) .OR. ANY(SHAPE(native_den)/=dims)) RETURN
+    IF (.NOT.ALL(ieee_is_finite(native_den))) RETURN
+    IF (ANY(native_den<=0.0_real32) .OR. .NOT.policy_valid(policy)) RETURN
+    IF (.NOT.mass_field_valid(state%cloud_ice,dims,state%pressure%valid_time)) RETURN
+    IF (.NOT.mass_field_valid(state%snow,dims,state%pressure%valid_time)) RETURN
+    IF (.NOT.proposal_field_shape(background%cloud_ice,dims,state%pressure%valid_time,'kg kg-1 dryair')) RETURN
+    IF (.NOT.proposal_field_shape(background%snow,dims,state%pressure%valid_time,'kg kg-1 dryair')) RETURN
+    IF (.NOT.proposal_field_shape(background%ice_number,dims,state%pressure%valid_time,'kg-1 dryair')) RETURN
+    candidate=background
+    candidate%cloud_ice%valid=selected
+    candidate%snow%valid=selected
+    candidate%ice_number%valid=selected
+    DO k=1,dims(3)
+      DO j=1,dims(2)
+        DO i=1,dims(1)
+          IF (.NOT.selected(i,j,k)) CYCLE
+          IF (PRESENT(failed_location)) failed_location=[i,j,k,MOMENT_NI]
+          IF (.NOT.proposal_cell_valid(background%cloud_ice,i,j,k)) RETURN
+          IF (.NOT.proposal_cell_valid(background%snow,i,j,k)) RETURN
+          IF (.NOT.proposal_cell_valid(background%ice_number,i,j,k)) RETURN
+          qi_b=REAL(background%cloud_ice%value(i,j,k),real64)
+          qs_b=REAL(background%snow%value(i,j,k),real64)
+          ni_b=REAL(background%ice_number%value(i,j,k),real64)
+          IF ((qi_b>0.0_real64 .AND. ni_b==0.0_real64) .OR. &
+              (qi_b==0.0_real64 .AND. ni_b>0.0_real64)) RETURN
+          IF (qi_b>0.0_real64) THEN
+            mean=qi_b/ni_b
+            IF (mean<policy%lower(MOMENT_NI) .OR. mean>policy%upper(MOMENT_NI)) RETURN
+          END IF
+          total=qi_b+qs_b
+          target=REAL(state%cloud_ice%value(i,j,k),real64)+REAL(state%snow%value(i,j,k),real64)
+          IF (target>0.0_real64 .AND. total==0.0_real64) RETURN
+          qi=0.0_real64; qs=0.0_real64; ni=0.0_real64
+          IF (target>0.0_real64) THEN
+            fraction=qi_b/total
+            qi=fraction*target
+            qs=(qs_b/total)*target
+            IF (.NOT.storable_real32(qi) .OR. .NOT.storable_real32(qs)) RETURN
+            candidate%cloud_ice%value(i,j,k)=REAL(qi,real32)
+            candidate%snow%value(i,j,k)=REAL(qs,real32)
+            IF (qs_b>0.0_real64 .AND. candidate%snow%value(i,j,k)==0.0_real32) RETURN
+            IF (qi_b>0.0_real64) THEN
+              IF (candidate%cloud_ice%value(i,j,k)==0.0_real32) RETURN
+              ni=REAL(candidate%cloud_ice%value(i,j,k),real64)/mean
+              IF (.NOT.storable_real32(ni)) RETURN
+            END IF
+          ELSE
+            candidate%cloud_ice%value(i,j,k)=0.0_real32
+            candidate%snow%value(i,j,k)=0.0_real32
+          END IF
+          candidate%ice_number%value(i,j,k)=REAL(ni,real32)
+          stored_total=REAL(candidate%cloud_ice%value(i,j,k),real64)+ &
+            REAL(candidate%snow%value(i,j,k),real64)
+          tolerance=REAL(EPSILON(1.0_real32),real64)*MAX(target,stored_total)
+          IF (ABS(stored_total-target)>tolerance) RETURN
+          IF (.NOT.admissible(REAL(candidate%ice_number%value(i,j,k),real64), &
+              REAL(candidate%cloud_ice%value(i,j,k),real64),MOMENT_NI,policy,native_den(i,j,k))) RETURN
+        END DO
+      END DO
+    END DO
+    proposal=candidate
+    status=STATUS_OK
+    IF (PRESENT(failed_location)) failed_location=0
+  END SUBROUTINE propose_ice_snow_from_background
+
+  ! Reject subnormal results as unsupported before conversion under the strict
+  ! floating-point profile; this also prevents positive values rounding to zero.
+  LOGICAL FUNCTION storable_real32(value)
+    REAL(real64), INTENT(IN) :: value
+    storable_real32=.FALSE.
+    IF (.NOT.ieee_is_finite(value)) RETURN
+    IF (value<0.0_real64 .OR. value>REAL(HUGE(0.0_real32),real64)) RETURN
+    IF (value>0.0_real64 .AND. value<REAL(TINY(0.0_real32),real64)) RETURN
+    storable_real32=.TRUE.
+  END FUNCTION storable_real32
 
   ! Entirely absent bundles mean no candidates; partially allocated bundles
   ! are invalid. Only the selected prior is validated; unused alternatives are ignored.

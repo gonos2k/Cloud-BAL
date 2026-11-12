@@ -208,6 +208,7 @@ done
 
 bash "$repo_root/tests/run_phase_moment_consumer.sh"
 bash "$repo_root/tests/run_ice_snow_initialization.sh"
+bash "$repo_root/tests/run_ice_background_prior.sh"
 
 for phase_test in test_water_phase_transfer test_pressure_phase_transfer; do
   "$CLOUD_BAL_FC" "${CLOUD_BAL_FREE_FLAGS[@]}" \
