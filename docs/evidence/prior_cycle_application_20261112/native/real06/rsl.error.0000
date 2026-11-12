@@ -1,0 +1,27 @@
+taskid: 0 hostname: KIM-meso-gpu
+ module_io_quilt_old.F        2931 T
+ Ntasks in X            1 , ntasks in Y            1
+  Domain # 1: dx =  5000.000 m
+REAL_EM V4.6.0 PREPROCESSOR
+No git found or not a git repository, git commit version not available.
+ *************************************
+ Parent domain
+ ids,ide,jds,jde            1         235           1         283
+ ims,ime,jms,jme           -4         240          -4         288
+ ips,ipe,jps,jpe            1         235           1         283
+ *************************************
+DYNAMICS OPTION: Eulerian Mass Coordinate
+   alloc_space_field: domain            1 ,             2596074052  bytes allocated
+d01 2026-08-16_06:00:00  Yes, this special data is acceptable to use: OUTPUT FROM METGRID V4.6.0
+d01 2026-08-16_06:00:00  Input data is acceptable to use: met_em.d01.2026-08-16_06:00:00.nc
+ metgrid input_wrf.F first_date_input = 2026-08-16_06:00:00
+ metgrid input_wrf.F first_date_nml = 2026-08-16_06:00:00
+d01 2026-08-16_06:00:00  input_wrf.F: SIZE MISMATCH:  namelist num_metgrid_levels           =           21
+d01 2026-08-16_06:00:00  input_wrf.F: SIZE MISMATCH:  input file BOTTOM-TOP_GRID_DIMENSION  =           25
+d01 2026-08-16_06:00:00 ---- ERROR: Mismatch between namelist and input file dimensions
+NOTE:       1 namelist vs input data inconsistencies found.
+-------------- FATAL CALLED ---------------
+FATAL CALLED FROM FILE:  <stdin>  LINE:    1307
+NOTE:  Please check and reset these options
+-------------------------------------------
+Abort(1) on node 0 (rank 0 in comm 0): application called MPI_Abort(MPI_COMM_WORLD, 1) - process 0

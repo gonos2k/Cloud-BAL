@@ -1,0 +1,29 @@
+{
+  "review": "PASS_WITH_LIMITATIONS",
+  "blocking_findings": [],
+  "reviewed_sha256": {
+    "docs/evidence/prior_cycle_application_20261112/coverage/audit.py": "0315aa0c28b3c95c3ea71967d6caac2585b71d20e7ad5848c4d92e41d6f6a1ab",
+    "docs/evidence/prior_cycle_application_20261112/coverage/cell_driver.f90": "6357b3222583d21c33e612d5b840be9a3df1d737500584a34c64812c9566bfc6",
+    "docs/evidence/prior_cycle_application_20261112/validation/replay.py": "d9ca0fcf88881697faf3511e33f95dab95ac6770985486363387ac6b29d1fac1",
+    "docs/evidence/prior_cycle_application_20261112/figures/plot.py": "b47a36f60dab43f53e9c77e6704f0ed92ffceb9d9ea2ab3df7c1e6da42730a5e",
+    "docs/evidence/prior_cycle_application_20261112/coverage/fixed.bin.gz": "f214c97f45ba5ab5115045d8d8d9058f0907a6cdc650806aeec42b52b97d432a",
+    "docs/evidence/prior_cycle_application_20261112/coverage/diagnostic_only.npz": "6eb1f566594b1a76bdd615014abec8c772987af4d48e1d3e772857f7c79c55b2",
+    "docs/evidence/prior_cycle_application_20261112/coverage/coverage.json": "6a95d4791cacf26d8a4fe779674174f46d91d07cfe63f6c6cf0452c1c2b416da",
+    "docs/evidence/prior_cycle_application_20261112/validation/receipt.json": "08a173adaf85c5889959d57db3a5b5a55b1e7c0a08cd1739544764dd70c45262",
+    "docs/PRIOR_CYCLE_APPLICATION_20261112.md": "4952139a146f32947069dbb19a98d43fadb0e520951a741ab73a5d0a1566470d"
+  },
+  "checks": [
+    "C-order (z,y,x) stream corresponds to Fortran (x,y,z), and k,j,i traversal matches numpy argwhere first failure; fixed mask, selected indices and selected six input fields agree bitwise between stream and diagnostic NPZ.",
+    "Cell driver preserves common routine, policy, density and one selected cell in a 1x1x2 state; full-mask rejection and cell statuses remain separate from an applied initialization.",
+    "Offline replay checks entire status array and selection plus uint32 equality of each successful QI/QS/NI; recorded bulk output byte equality and exact rejection header.",
+    "Independently compared original scratch success-only bulk output against retained diagnostic successful values as uint32: all three fields had zero differing words. This scratch-only comparison is not itself reproduced by the published offline recipe.",
+    "Reported counts recounted from retained NPZ: 294792 selected, 164914 pass, 129878 reject; selected frozen mask equals stream mask.",
+    "Figure column ordering and one-based failure location match retained arrays; all selected background-minus-analysis temperature values fall inside displayed [-4,4] K histogram range.",
+    "Actual selected zero-background-total observation has no cancellation of nonzero positive and negative components.",
+    "Report and bundle distinguish diagnostic NPZ from WRF input, application REJECTED from replay PASS, file-state density from native first use, and overlapping observations from exclusive causes."
+  ],
+  "nonblocking_limitations": [
+    "Historical audit.py subset comparison used floating equality, which treats signed zeros as equal; an independent uint32 comparison of the retained scratch subset found zero differing words. Offline replay compares the individual successful cells bitwise to the published NPZ but does not reconstruct the success-only bulk subset.",
+    "Review uses captured input stream and existing actual run evidence; it does not independently reproduce raw NetCDF extraction, six-hour forecast, scientific source authority, or new first-use physics."
+  ]
+}
