@@ -1,0 +1,38 @@
+{
+  "assumptions": "host rhoair0=1.28 rhowater=1000 rhosnow=100; hail_opt registry default 0, absent in namelist. allowed_to_read is not referenced in init body. Native terminal bit parity holds.",
+  "bounds": "i 118..233, j 72 only, k 1..39; halo remapped",
+  "host_source_sha256": {
+    "Registry.EM_COMMON": "b01855ed80569be04bbd99e43ea1672a60e35590db00145c839b8f74cfd9b07f",
+    "module_model_constants.f90": "c387a51c2992da393551ac63291c79afbf6b78efbca2045a18cf9c94381f9954",
+    "module_physics_init.f90": "3ee667cdfd5be57c9344e8792226f7163fdc9ce13f34b2fc039cadf61b564896"
+  },
+  "instrumented_source_sha256": "736188aea5840dc561c89554a72953a7a7b9c64227ea8ce3061872475ce7b2f4",
+  "native_comparison_scope": "21 three-dimensional fields x 4524 cells plus 8 surface fields x 116 cells; exact IEEE words",
+  "native_return_word_match": {
+    "O0": true,
+    "O2": true
+  },
+  "results_sha256": {
+    "results/O0_comparison.json": "fc0b3dcfb98dc0ce1d58dcb80a164128c020265ca8daf20ccc4d8feabea7f8e6",
+    "results/O2_comparison.json": "a91e630571c1617e13340f82c733c8fe86f9425e67cfe0a4c226710d23411fba",
+    "results/build.log": "e3b0c44298fc1c149afbf4c8996fb92427ae41e4649b934ca495991b7852b855",
+    "results/cp04_schema.json": "fa1a9bcd410b63825a481bb43e7d1b041f218f8ddbf00c355257cd8075903ef2",
+    "results/cp04_t000001-000003_rank3.bin": "0927b8ee126b6f6c1afc948aac5725c6d99648530c66abe6a8e54668600b617c",
+    "results/state_entry_rank3.bin": "1c3542cc6e30ca68de04023d4ed60ed0b2db3035b31e44f8789daa2ca009953d",
+    "results/state_kdm62d_return_rank3.bin": "6e87171928b8de7f4e4367eec5ad3e809acff45ce078837cfbb689f6bbc9a6e0",
+    "results/state_post_process_rank3.bin": "694e2d8950cd7b8cb0e6f78733459bcf046e2b71160ebd37319826c98ad83aae",
+    "results/state_pre_update_rank3.bin": "fbd753f53b2b5d560fa324a2413175548efb86ff4d07943bb0bc303cbae2ad49",
+    "results/state_wrapper_return_rank3.bin": "bbd75843629b103c0f830b1056952c88819b1563e72ce341041d8cb4f35e12eb",
+    "results/surface_cp04_rank3.bin": "7aa422a4a84776a016149fa38bdcc1528448a019d975f154637b3035a691e185",
+    "results/surface_t000001-000003_rank3.bin": "ba67cf2799d99b15e7ad4b1f6bad4c663c17e143407e1f087e149b49cbd85bbf",
+    "results/terminal.bin": "2227c80481669992a206d0f2a4c8123abf08fe1e90e6b3fedf368f48686abf81"
+  },
+  "source_sha256": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+  "status": "PASS",
+  "terminal_sha256": {
+    "O0_instrumented": "2227c80481669992a206d0f2a4c8123abf08fe1e90e6b3fedf368f48686abf81",
+    "O0_original": "2227c80481669992a206d0f2a4c8123abf08fe1e90e6b3fedf368f48686abf81",
+    "O2_instrumented": "2227c80481669992a206d0f2a4c8123abf08fe1e90e6b3fedf368f48686abf81",
+    "O2_original": "2227c80481669992a206d0f2a4c8123abf08fe1e90e6b3fedf368f48686abf81"
+  }
+}

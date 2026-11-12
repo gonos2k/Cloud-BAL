@@ -1,0 +1,258 @@
+{
+  "status": "PASS",
+  "source_sha256": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+  "freeze_sha256_before": {
+    "tools/cp02_first_call_water_budget.py": "f2e7ba8042f4e1825f5a6e9ca17bc3be63b273ba8cea832fd4781aed1100af75",
+    "tools/plot_first_call_water_budget.py": "7d83a0df3340bb7463b8b9b535e2ca115b72612ccd9ff2bbe5425f7177bce919",
+    "tests/test_cp02_first_call_water_budget.py": "9a782f8ed7174428cf04d8c7216cc469a0e29602e6a34b70c7a8b39bc89fc8b2",
+    "tests/run_unit_tests.sh": "1d4cb6d5814338a0a8a8989f1414763f6d91fd82f8c23fbc3ec3ecee693e9946",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/fixtures/kdm6_wrapper/module_wrf_error.F": "2ed7dc6e90e0fe442ffee84512b4998d31c8ec3400d3a7ab6078404065f784a6",
+    "tests/fixtures/kdm6_wrapper/module_model_constants.F": "5b80377fecdc18a5f0ad38d3b6c15cfc86ad5d76701adbbbb08a08698d0f7062",
+    "tests/fixtures/kdm6_wrapper/libmassv.F": "449be0d252beba8c5a42ade42fceb2e582239d1a36db79ef3ad902f0ed82ede1",
+    "tests/fixtures/kdm6_wrapper/wrf_debug_stub.f90": "8e778d1af7818cce2920526ef8bdf9b79d0c838162b1c09461966fdce384ca86",
+    "docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+    "docs/evidence/ice_stage_contract_20261111/native/full/module_mp_radar.F": "5f24e3b5a74dd26499faf1f0bb69b8e7b05e87a56b4746fbfe4fca110020b6b7",
+    "docs/evidence/first_call_water_budget_20261112/native/capturedsmallrecords/rank3.jsonl.gz": "aa08c30cd371fee2fb01c261f6534176ce1003107d666a644d0a7097d5282f22",
+    "docs/evidence/first_call_water_budget_20261112/native/receipt.json": "ea02da551cce7024fb384848dd7253ee07dc9acd47b966ad425ed87ebb3c7416",
+    "docs/evidence/first_call_water_budget_20261112/replay/driver.f90": "b9ebaa0ec0e620856832407d8b94f9e622ae57a4c844bcedd560097f8207b00b",
+    "docs/evidence/first_call_water_budget_20261112/replay/input.py": "7894d3eceb9041d2acc4c7059ed5fba30244bb4cf90b4e8832e85494ba71d912",
+    "docs/evidence/first_call_water_budget_20261112/replay/prepare.py": "7c236db58d414350e5dfcc3b5ab1140b5e9556fe2b96deee432743d655083263",
+    "docs/evidence/first_call_water_budget_20261112/replay/compare.py": "b1c999a27a165e519e3718046d088a80b1ac875cc6c58e7e3e2958bd801bd02f",
+    "docs/evidence/first_call_water_budget_20261112/replay/run.sh": "23a6127f44eef9fb92ae27cbec38551ec8d86c8e3ec53b1443c1a5ce6e956bc5",
+    "docs/evidence/first_call_water_budget_20261112/replay/receipt.json": "6949e08bd599fadca2351f50d0415641076cdfacfa4933c8e9056dcf1b6abfc5",
+    "docs/evidence/first_call_water_budget_20261112/replay/results/cp04_t000001-000003_rank3.bin": "0927b8ee126b6f6c1afc948aac5725c6d99648530c66abe6a8e54668600b617c",
+    "docs/evidence/first_call_water_budget_20261112/replay/results/cp04_schema.json": "fa1a9bcd410b63825a481bb43e7d1b041f218f8ddbf00c355257cd8075903ef2",
+    "docs/evidence/first_call_water_budget_20261112/science/independent_column_ledger.py": "b03bc3844e94d4faa5aecce7a2958622b5c248121fc4a20d99af57210354ff67",
+    "docs/evidence/first_call_water_budget_20261112/science/independent_sediment_ledger.py": "fb07d3cb775128f81e96f2b697090c6206589f003be461e80322bdcfbdd0ed4b",
+    "docs/evidence/first_call_water_budget_20261112/science/column_ledger.json": "6977b2a9954984ebcd5cc1a2cde8d0f0a90540d2694d819912e9b91d21b2903e",
+    "docs/evidence/first_call_water_budget_20261112/science/sediment_ledger.json": "32abe1f881ac0e8cd5658d98bfe50e0a8c52685293d6ed6ec4c02539d4cdb767",
+    "docs/evidence/first_call_water_budget_20261112/science/stage_telescope.csv": "ae6ce8831a7c62e23133fca070a4d42937649060b8fdcec923422968ff9fcd8d",
+    "docs/evidence/first_call_water_budget_20261112/analysis/column_ledger.json": "f632ccc533460598e93d3d3c5a7f56106216feef4d52bcac203f1e706dad0c92",
+    "docs/evidence/first_call_water_budget_20261112/analysis/column_ledger.csv": "45c25a4cba7caba89ff44221c0dd4813d4d15d0ebde103652d52231055d3fc8b",
+    "docs/evidence/first_call_water_budget_20261112/figures/provenance.json": "b797d2953f0261475830acf4cf7c2e56012f76e3d8135897095d5c7208a1398c",
+    "docs/evidence/first_call_water_budget_20261112/figures/column_water.png": "faf6af607908522fb443fb6b2956543f82a0223bd9168b8f10268cbe1bf27794",
+    "docs/evidence/first_call_water_budget_20261112/figures/stage_ledger.png": "5875e30623acdbe62a11680ae918c3a4114c3aab900c3e15b74c22412c6baeba",
+    "docs/evidence/first_call_water_budget_20261112/validation/run.py": "fbf08f46088b609a97c23cecbb3f4bb1abadad17bec2f2b8a1ae8b92f4293efb"
+  },
+  "freeze_sha256_after": {
+    "tools/cp02_first_call_water_budget.py": "f2e7ba8042f4e1825f5a6e9ca17bc3be63b273ba8cea832fd4781aed1100af75",
+    "tools/plot_first_call_water_budget.py": "7d83a0df3340bb7463b8b9b535e2ca115b72612ccd9ff2bbe5425f7177bce919",
+    "tests/test_cp02_first_call_water_budget.py": "9a782f8ed7174428cf04d8c7216cc469a0e29602e6a34b70c7a8b39bc89fc8b2",
+    "tests/run_unit_tests.sh": "1d4cb6d5814338a0a8a8989f1414763f6d91fd82f8c23fbc3ec3ecee693e9946",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/fixtures/kdm6_wrapper/module_wrf_error.F": "2ed7dc6e90e0fe442ffee84512b4998d31c8ec3400d3a7ab6078404065f784a6",
+    "tests/fixtures/kdm6_wrapper/module_model_constants.F": "5b80377fecdc18a5f0ad38d3b6c15cfc86ad5d76701adbbbb08a08698d0f7062",
+    "tests/fixtures/kdm6_wrapper/libmassv.F": "449be0d252beba8c5a42ade42fceb2e582239d1a36db79ef3ad902f0ed82ede1",
+    "tests/fixtures/kdm6_wrapper/wrf_debug_stub.f90": "8e778d1af7818cce2920526ef8bdf9b79d0c838162b1c09461966fdce384ca86",
+    "docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+    "docs/evidence/ice_stage_contract_20261111/native/full/module_mp_radar.F": "5f24e3b5a74dd26499faf1f0bb69b8e7b05e87a56b4746fbfe4fca110020b6b7",
+    "docs/evidence/first_call_water_budget_20261112/native/capturedsmallrecords/rank3.jsonl.gz": "aa08c30cd371fee2fb01c261f6534176ce1003107d666a644d0a7097d5282f22",
+    "docs/evidence/first_call_water_budget_20261112/native/receipt.json": "ea02da551cce7024fb384848dd7253ee07dc9acd47b966ad425ed87ebb3c7416",
+    "docs/evidence/first_call_water_budget_20261112/replay/driver.f90": "b9ebaa0ec0e620856832407d8b94f9e622ae57a4c844bcedd560097f8207b00b",
+    "docs/evidence/first_call_water_budget_20261112/replay/input.py": "7894d3eceb9041d2acc4c7059ed5fba30244bb4cf90b4e8832e85494ba71d912",
+    "docs/evidence/first_call_water_budget_20261112/replay/prepare.py": "7c236db58d414350e5dfcc3b5ab1140b5e9556fe2b96deee432743d655083263",
+    "docs/evidence/first_call_water_budget_20261112/replay/compare.py": "b1c999a27a165e519e3718046d088a80b1ac875cc6c58e7e3e2958bd801bd02f",
+    "docs/evidence/first_call_water_budget_20261112/replay/run.sh": "23a6127f44eef9fb92ae27cbec38551ec8d86c8e3ec53b1443c1a5ce6e956bc5",
+    "docs/evidence/first_call_water_budget_20261112/replay/receipt.json": "6949e08bd599fadca2351f50d0415641076cdfacfa4933c8e9056dcf1b6abfc5",
+    "docs/evidence/first_call_water_budget_20261112/replay/results/cp04_t000001-000003_rank3.bin": "0927b8ee126b6f6c1afc948aac5725c6d99648530c66abe6a8e54668600b617c",
+    "docs/evidence/first_call_water_budget_20261112/replay/results/cp04_schema.json": "fa1a9bcd410b63825a481bb43e7d1b041f218f8ddbf00c355257cd8075903ef2",
+    "docs/evidence/first_call_water_budget_20261112/science/independent_column_ledger.py": "b03bc3844e94d4faa5aecce7a2958622b5c248121fc4a20d99af57210354ff67",
+    "docs/evidence/first_call_water_budget_20261112/science/independent_sediment_ledger.py": "fb07d3cb775128f81e96f2b697090c6206589f003be461e80322bdcfbdd0ed4b",
+    "docs/evidence/first_call_water_budget_20261112/science/column_ledger.json": "6977b2a9954984ebcd5cc1a2cde8d0f0a90540d2694d819912e9b91d21b2903e",
+    "docs/evidence/first_call_water_budget_20261112/science/sediment_ledger.json": "32abe1f881ac0e8cd5658d98bfe50e0a8c52685293d6ed6ec4c02539d4cdb767",
+    "docs/evidence/first_call_water_budget_20261112/science/stage_telescope.csv": "ae6ce8831a7c62e23133fca070a4d42937649060b8fdcec923422968ff9fcd8d",
+    "docs/evidence/first_call_water_budget_20261112/analysis/column_ledger.json": "f632ccc533460598e93d3d3c5a7f56106216feef4d52bcac203f1e706dad0c92",
+    "docs/evidence/first_call_water_budget_20261112/analysis/column_ledger.csv": "45c25a4cba7caba89ff44221c0dd4813d4d15d0ebde103652d52231055d3fc8b",
+    "docs/evidence/first_call_water_budget_20261112/figures/provenance.json": "b797d2953f0261475830acf4cf7c2e56012f76e3d8135897095d5c7208a1398c",
+    "docs/evidence/first_call_water_budget_20261112/figures/column_water.png": "faf6af607908522fb443fb6b2956543f82a0223bd9168b8f10268cbe1bf27794",
+    "docs/evidence/first_call_water_budget_20261112/figures/stage_ledger.png": "5875e30623acdbe62a11680ae918c3a4114c3aab900c3e15b74c22412c6baeba",
+    "docs/evidence/first_call_water_budget_20261112/validation/run.py": "fbf08f46088b609a97c23cecbb3f4bb1abadad17bec2f2b8a1ae8b92f4293efb"
+  },
+  "original_sha256_before": {
+    "tools/cp02_first_call_water_budget.py": "f2e7ba8042f4e1825f5a6e9ca17bc3be63b273ba8cea832fd4781aed1100af75",
+    "tools/plot_first_call_water_budget.py": "7d83a0df3340bb7463b8b9b535e2ca115b72612ccd9ff2bbe5425f7177bce919",
+    "tests/test_cp02_first_call_water_budget.py": "9a782f8ed7174428cf04d8c7216cc469a0e29602e6a34b70c7a8b39bc89fc8b2",
+    "tests/run_unit_tests.sh": "1d4cb6d5814338a0a8a8989f1414763f6d91fd82f8c23fbc3ec3ecee693e9946",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/fixtures/kdm6_wrapper/module_wrf_error.F": "2ed7dc6e90e0fe442ffee84512b4998d31c8ec3400d3a7ab6078404065f784a6",
+    "tests/fixtures/kdm6_wrapper/module_model_constants.F": "5b80377fecdc18a5f0ad38d3b6c15cfc86ad5d76701adbbbb08a08698d0f7062",
+    "tests/fixtures/kdm6_wrapper/libmassv.F": "449be0d252beba8c5a42ade42fceb2e582239d1a36db79ef3ad902f0ed82ede1",
+    "tests/fixtures/kdm6_wrapper/wrf_debug_stub.f90": "8e778d1af7818cce2920526ef8bdf9b79d0c838162b1c09461966fdce384ca86",
+    "docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+    "docs/evidence/ice_stage_contract_20261111/native/full/module_mp_radar.F": "5f24e3b5a74dd26499faf1f0bb69b8e7b05e87a56b4746fbfe4fca110020b6b7",
+    "docs/evidence/first_call_water_budget_20261112/native/capturedsmallrecords/rank3.jsonl.gz": "aa08c30cd371fee2fb01c261f6534176ce1003107d666a644d0a7097d5282f22",
+    "docs/evidence/first_call_water_budget_20261112/native/receipt.json": "ea02da551cce7024fb384848dd7253ee07dc9acd47b966ad425ed87ebb3c7416",
+    "docs/evidence/first_call_water_budget_20261112/replay/driver.f90": "b9ebaa0ec0e620856832407d8b94f9e622ae57a4c844bcedd560097f8207b00b",
+    "docs/evidence/first_call_water_budget_20261112/replay/input.py": "7894d3eceb9041d2acc4c7059ed5fba30244bb4cf90b4e8832e85494ba71d912",
+    "docs/evidence/first_call_water_budget_20261112/replay/prepare.py": "7c236db58d414350e5dfcc3b5ab1140b5e9556fe2b96deee432743d655083263",
+    "docs/evidence/first_call_water_budget_20261112/replay/compare.py": "b1c999a27a165e519e3718046d088a80b1ac875cc6c58e7e3e2958bd801bd02f",
+    "docs/evidence/first_call_water_budget_20261112/replay/run.sh": "23a6127f44eef9fb92ae27cbec38551ec8d86c8e3ec53b1443c1a5ce6e956bc5",
+    "docs/evidence/first_call_water_budget_20261112/replay/receipt.json": "6949e08bd599fadca2351f50d0415641076cdfacfa4933c8e9056dcf1b6abfc5",
+    "docs/evidence/first_call_water_budget_20261112/replay/results/cp04_t000001-000003_rank3.bin": "0927b8ee126b6f6c1afc948aac5725c6d99648530c66abe6a8e54668600b617c",
+    "docs/evidence/first_call_water_budget_20261112/replay/results/cp04_schema.json": "fa1a9bcd410b63825a481bb43e7d1b041f218f8ddbf00c355257cd8075903ef2",
+    "docs/evidence/first_call_water_budget_20261112/science/independent_column_ledger.py": "b03bc3844e94d4faa5aecce7a2958622b5c248121fc4a20d99af57210354ff67",
+    "docs/evidence/first_call_water_budget_20261112/science/independent_sediment_ledger.py": "fb07d3cb775128f81e96f2b697090c6206589f003be461e80322bdcfbdd0ed4b",
+    "docs/evidence/first_call_water_budget_20261112/science/column_ledger.json": "6977b2a9954984ebcd5cc1a2cde8d0f0a90540d2694d819912e9b91d21b2903e",
+    "docs/evidence/first_call_water_budget_20261112/science/sediment_ledger.json": "32abe1f881ac0e8cd5658d98bfe50e0a8c52685293d6ed6ec4c02539d4cdb767",
+    "docs/evidence/first_call_water_budget_20261112/science/stage_telescope.csv": "ae6ce8831a7c62e23133fca070a4d42937649060b8fdcec923422968ff9fcd8d",
+    "docs/evidence/first_call_water_budget_20261112/analysis/column_ledger.json": "f632ccc533460598e93d3d3c5a7f56106216feef4d52bcac203f1e706dad0c92",
+    "docs/evidence/first_call_water_budget_20261112/analysis/column_ledger.csv": "45c25a4cba7caba89ff44221c0dd4813d4d15d0ebde103652d52231055d3fc8b",
+    "docs/evidence/first_call_water_budget_20261112/figures/provenance.json": "b797d2953f0261475830acf4cf7c2e56012f76e3d8135897095d5c7208a1398c",
+    "docs/evidence/first_call_water_budget_20261112/figures/column_water.png": "faf6af607908522fb443fb6b2956543f82a0223bd9168b8f10268cbe1bf27794",
+    "docs/evidence/first_call_water_budget_20261112/figures/stage_ledger.png": "5875e30623acdbe62a11680ae918c3a4114c3aab900c3e15b74c22412c6baeba",
+    "docs/evidence/first_call_water_budget_20261112/validation/run.py": "fbf08f46088b609a97c23cecbb3f4bb1abadad17bec2f2b8a1ae8b92f4293efb"
+  },
+  "original_sha256_after": {
+    "tools/cp02_first_call_water_budget.py": "f2e7ba8042f4e1825f5a6e9ca17bc3be63b273ba8cea832fd4781aed1100af75",
+    "tools/plot_first_call_water_budget.py": "7d83a0df3340bb7463b8b9b535e2ca115b72612ccd9ff2bbe5425f7177bce919",
+    "tests/test_cp02_first_call_water_budget.py": "9a782f8ed7174428cf04d8c7216cc469a0e29602e6a34b70c7a8b39bc89fc8b2",
+    "tests/run_unit_tests.sh": "1d4cb6d5814338a0a8a8989f1414763f6d91fd82f8c23fbc3ec3ecee693e9946",
+    "tests/intel_toolchain.sh": "5439fa3a692acc9ee63571ee8dd8ff1ce50d1810e9339d9ead906f3c817111b4",
+    "tests/fixtures/kdm6_wrapper/module_wrf_error.F": "2ed7dc6e90e0fe442ffee84512b4998d31c8ec3400d3a7ab6078404065f784a6",
+    "tests/fixtures/kdm6_wrapper/module_model_constants.F": "5b80377fecdc18a5f0ad38d3b6c15cfc86ad5d76701adbbbb08a08698d0f7062",
+    "tests/fixtures/kdm6_wrapper/libmassv.F": "449be0d252beba8c5a42ade42fceb2e582239d1a36db79ef3ad902f0ed82ede1",
+    "tests/fixtures/kdm6_wrapper/wrf_debug_stub.f90": "8e778d1af7818cce2920526ef8bdf9b79d0c838162b1c09461966fdce384ca86",
+    "docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+    "docs/evidence/ice_stage_contract_20261111/native/full/module_mp_radar.F": "5f24e3b5a74dd26499faf1f0bb69b8e7b05e87a56b4746fbfe4fca110020b6b7",
+    "docs/evidence/first_call_water_budget_20261112/native/capturedsmallrecords/rank3.jsonl.gz": "aa08c30cd371fee2fb01c261f6534176ce1003107d666a644d0a7097d5282f22",
+    "docs/evidence/first_call_water_budget_20261112/native/receipt.json": "ea02da551cce7024fb384848dd7253ee07dc9acd47b966ad425ed87ebb3c7416",
+    "docs/evidence/first_call_water_budget_20261112/replay/driver.f90": "b9ebaa0ec0e620856832407d8b94f9e622ae57a4c844bcedd560097f8207b00b",
+    "docs/evidence/first_call_water_budget_20261112/replay/input.py": "7894d3eceb9041d2acc4c7059ed5fba30244bb4cf90b4e8832e85494ba71d912",
+    "docs/evidence/first_call_water_budget_20261112/replay/prepare.py": "7c236db58d414350e5dfcc3b5ab1140b5e9556fe2b96deee432743d655083263",
+    "docs/evidence/first_call_water_budget_20261112/replay/compare.py": "b1c999a27a165e519e3718046d088a80b1ac875cc6c58e7e3e2958bd801bd02f",
+    "docs/evidence/first_call_water_budget_20261112/replay/run.sh": "23a6127f44eef9fb92ae27cbec38551ec8d86c8e3ec53b1443c1a5ce6e956bc5",
+    "docs/evidence/first_call_water_budget_20261112/replay/receipt.json": "6949e08bd599fadca2351f50d0415641076cdfacfa4933c8e9056dcf1b6abfc5",
+    "docs/evidence/first_call_water_budget_20261112/replay/results/cp04_t000001-000003_rank3.bin": "0927b8ee126b6f6c1afc948aac5725c6d99648530c66abe6a8e54668600b617c",
+    "docs/evidence/first_call_water_budget_20261112/replay/results/cp04_schema.json": "fa1a9bcd410b63825a481bb43e7d1b041f218f8ddbf00c355257cd8075903ef2",
+    "docs/evidence/first_call_water_budget_20261112/science/independent_column_ledger.py": "b03bc3844e94d4faa5aecce7a2958622b5c248121fc4a20d99af57210354ff67",
+    "docs/evidence/first_call_water_budget_20261112/science/independent_sediment_ledger.py": "fb07d3cb775128f81e96f2b697090c6206589f003be461e80322bdcfbdd0ed4b",
+    "docs/evidence/first_call_water_budget_20261112/science/column_ledger.json": "6977b2a9954984ebcd5cc1a2cde8d0f0a90540d2694d819912e9b91d21b2903e",
+    "docs/evidence/first_call_water_budget_20261112/science/sediment_ledger.json": "32abe1f881ac0e8cd5658d98bfe50e0a8c52685293d6ed6ec4c02539d4cdb767",
+    "docs/evidence/first_call_water_budget_20261112/science/stage_telescope.csv": "ae6ce8831a7c62e23133fca070a4d42937649060b8fdcec923422968ff9fcd8d",
+    "docs/evidence/first_call_water_budget_20261112/analysis/column_ledger.json": "f632ccc533460598e93d3d3c5a7f56106216feef4d52bcac203f1e706dad0c92",
+    "docs/evidence/first_call_water_budget_20261112/analysis/column_ledger.csv": "45c25a4cba7caba89ff44221c0dd4813d4d15d0ebde103652d52231055d3fc8b",
+    "docs/evidence/first_call_water_budget_20261112/figures/provenance.json": "b797d2953f0261475830acf4cf7c2e56012f76e3d8135897095d5c7208a1398c",
+    "docs/evidence/first_call_water_budget_20261112/figures/column_water.png": "faf6af607908522fb443fb6b2956543f82a0223bd9168b8f10268cbe1bf27794",
+    "docs/evidence/first_call_water_budget_20261112/figures/stage_ledger.png": "5875e30623acdbe62a11680ae918c3a4114c3aab900c3e15b74c22412c6baeba",
+    "docs/evidence/first_call_water_budget_20261112/validation/run.py": "fbf08f46088b609a97c23cecbb3f4bb1abadad17bec2f2b8a1ae8b92f4293efb"
+  },
+  "external_replay_source": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_activation_path_20261110/Cloud-BAL/docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90",
+  "external_replay_source_sha256_before": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+  "external_replay_source_sha256_after": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+  "commands": [
+    {
+      "label": "python_tests",
+      "argv": [
+        "/usr/bin/python3",
+        "tests/test_cp02_first_call_water_budget.py",
+        "-v"
+      ],
+      "log": "logs/python_tests.log"
+    },
+    {
+      "label": "intel_replay",
+      "argv": [
+        "bash",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/validation_final/freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/replay/run.sh"
+      ],
+      "log": "logs/intel_replay.log"
+    },
+    {
+      "label": "wrapper_ledger",
+      "argv": [
+        "/usr/bin/python3",
+        "tools/cp02_first_call_water_budget.py",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/validation_final/freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/native/capturedsmallrecords/rank3.jsonl.gz",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/validation_final/work/analysis",
+        "--row-j",
+        "72",
+        "--native-receipt",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/validation_final/freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/native/receipt.json",
+        "--source",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/validation_final/freeze/Cloud-BAL/docs/evidence/cp02_activation_path_20261110/native/source/CONTROL.f90"
+      ],
+      "log": "logs/wrapper_ledger.log"
+    },
+    {
+      "label": "independent_columns",
+      "argv": [
+        "/usr/bin/python3",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/validation_final/freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/science/independent_column_ledger.py",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/validation_final/freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/native/capturedsmallrecords/rank3.jsonl.gz"
+      ],
+      "log": "logs/independent_columns.log"
+    },
+    {
+      "label": "independent_stages",
+      "argv": [
+        "/usr/bin/python3",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/validation_final/freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/science/independent_sediment_ledger.py",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/validation_final/freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/native/capturedsmallrecords/rank3.jsonl.gz",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/validation_final/freeze/first-row-replay.NbxbHcU9/O2_instrumented/cp04_t000001-000003_rank3.bin"
+      ],
+      "log": "logs/independent_stages.log"
+    },
+    {
+      "label": "figures",
+      "argv": [
+        "/usr/bin/python3",
+        "tools/plot_first_call_water_budget.py",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/validation_final/work/analysis/column_ledger.json",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/validation_final/work/independent_stages.json",
+        "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/validation_final/work/figures"
+      ],
+      "log": "logs/figures.log"
+    }
+  ],
+  "exact_comparisons": [
+    {
+      "actual": "freeze/first-row-replay.NbxbHcU9/O0_instrumented/cp04_t000001-000003_rank3.bin",
+      "expected": "freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/replay/results/cp04_t000001-000003_rank3.bin",
+      "sha256": "0927b8ee126b6f6c1afc948aac5725c6d99648530c66abe6a8e54668600b617c"
+    },
+    {
+      "actual": "freeze/first-row-replay.NbxbHcU9/O2_instrumented/cp04_t000001-000003_rank3.bin",
+      "expected": "freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/replay/results/cp04_t000001-000003_rank3.bin",
+      "sha256": "0927b8ee126b6f6c1afc948aac5725c6d99648530c66abe6a8e54668600b617c"
+    },
+    {
+      "actual": "work/analysis/column_ledger.json",
+      "expected": "freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/analysis/column_ledger.json",
+      "sha256": "f632ccc533460598e93d3d3c5a7f56106216feef4d52bcac203f1e706dad0c92"
+    },
+    {
+      "actual": "work/analysis/column_ledger.csv",
+      "expected": "freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/analysis/column_ledger.csv",
+      "sha256": "45c25a4cba7caba89ff44221c0dd4813d4d15d0ebde103652d52231055d3fc8b"
+    },
+    {
+      "actual": "work/independent_columns.json",
+      "expected": "freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/science/column_ledger.json",
+      "sha256": "6977b2a9954984ebcd5cc1a2cde8d0f0a90540d2694d819912e9b91d21b2903e"
+    },
+    {
+      "actual": "work/independent_stages.json",
+      "expected": "freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/science/sediment_ledger.json",
+      "sha256": "32abe1f881ac0e8cd5658d98bfe50e0a8c52685293d6ed6ec4c02539d4cdb767"
+    },
+    {
+      "actual": "work/stage_telescope.csv",
+      "expected": "freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/science/stage_telescope.csv",
+      "sha256": "ae6ce8831a7c62e23133fca070a4d42937649060b8fdcec923422968ff9fcd8d"
+    },
+    {
+      "actual": "work/figures/column_water.png",
+      "expected": "freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/figures/column_water.png",
+      "sha256": "faf6af607908522fb443fb6b2956543f82a0223bd9168b8f10268cbe1bf27794"
+    },
+    {
+      "actual": "work/figures/stage_ledger.png",
+      "expected": "freeze/Cloud-BAL/docs/evidence/first_call_water_budget_20261112/figures/stage_ledger.png",
+      "sha256": "5875e30623acdbe62a11680ae918c3a4114c3aab900c3e15b74c22412c6baeba"
+    }
+  ],
+  "figure_provenance": "content hashes and scope match; absolute path keys differ by frozen work directory",
+  "native_history": "Previously recorded scoped 80-second native history equality; not rerun here. See frozen native/receipt.json.",
+  "replay_scratch": "freeze/first-row-replay.NbxbHcU9"
+}
