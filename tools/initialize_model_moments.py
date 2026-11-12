@@ -123,6 +123,24 @@ def write_ice_snow_partition(path, source_hash, shape, output):
     with np.load(path, allow_pickle=False) as data:
         if str(data["source_sha256"].item()) != source_hash:
             raise ValueError("ice/snow partition source hash mismatch")
+        producer_receipt = None
+        if "producer" in data:
+            if data["producer"].item() != "background_ice_prior_v1":
+                raise ValueError("unsupported ice/snow proposal producer")
+            receipt_name = data["producer_receipt"].item()
+            if (not isinstance(receipt_name, str) or not receipt_name
+                    or Path(receipt_name).name != receipt_name or receipt_name in (".", "..")):
+                raise ValueError("invalid background proposal receipt name")
+            receipt_path = Path(path).parent / receipt_name
+            receipt_hash = sha(receipt_path)
+            proof = json.loads(receipt_path.read_text())
+            if (proof.get("schema") != "background_ice_proposal_receipt_v1" or proof.get("status") != "PASS"
+                    or proof.get("proposal_file") != Path(path).name or proof.get("proposal_sha256") != sha(path)
+                    or proof.get("manifest_sha256") != data["producer_manifest_sha256"].item()
+                    or proof.get("identities", {}).get("analysis", {}).get("sha256") != source_hash):
+                raise ValueError("background proposal receipt does not match commit marker")
+            producer_receipt = {"path": str(receipt_path.resolve()), "sha256": receipt_hash}
+            checked_file(producer_receipt)
         label = data["source"].item()
         if not isinstance(label, str):
             raise ValueError("explicit ice/snow partition source required")
@@ -151,6 +169,8 @@ def write_ice_snow_partition(path, source_hash, shape, output):
     details = {"source": label, "provenance": provenance, "selected_cells": int(active.sum()),
             "authority": "Caller attestation, not verification of observational support.",
             "rule": "Explicit QI/QS/NI; frozen mass preserved within REAL32 storage tolerance; no cap-driven repartition."}
+    if producer_receipt is not None:
+        details["background_producer_receipt"] = producer_receipt
     return details, arrays, active
 
 
@@ -256,6 +276,8 @@ def complete_file(source, target, driver, policy, candidates, work, use_theta_m,
         sources = provenance.reshape((5, *shape[1:]))
         if np.any(sources[1][partition_mask] != partition_details["provenance"]):
             raise ValueError("joint driver disagrees with explicit partition: NI provenance")
+    if partition_details is not None and "background_producer_receipt" in partition_details:
+        checked_file(partition_details["background_producer_receipt"])
     shutil.copy2(source, target)
     with Dataset(target, "r+") as ds:
         for name, value in zip(MOMENT, values):
@@ -288,6 +310,8 @@ def complete_file(source, target, driver, policy, candidates, work, use_theta_m,
         partition_details["maximum_frozen_mass_residual_kg_kg"] = float(np.max(np.abs(residual)))
         partition_details["thermodynamics"] = "T and QV unchanged; ice and snow have equal enthalpy in the common convention."
         partition_details["native_first_use_verified"] = False
+        if "background_producer_receipt" in partition_details:
+            checked_file(partition_details["background_producer_receipt"])
         details["ice_snow_partition"] = partition_details
     return details
 

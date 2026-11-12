@@ -1,0 +1,286 @@
+[
+  {
+    "path": "/var/tmp/firsthour-runtime-plan-20261030/producer_pair/run_HYDRO_BACKGROUND_PRECIP/input/lapsprd/fua/wrf/2622806000600.fua",
+    "exists": true,
+    "sha256": "29a5bbf0e638422c303ee6e992cc1f53529046624bae1037ea5b1b3b927903ff",
+    "dimensions": {
+      "record": 1,
+      "z": 22,
+      "x": 235,
+      "y": 283,
+      "nav": 1,
+      "namelen": 132
+    },
+    "global_attrs": {},
+    "valtime": "2026-08-16T12:00:00+00:00",
+    "reftime": "2026-08-16T06:00:00+00:00",
+    "fields": {
+      "ice": {
+        "dimensions": [
+          "record",
+          "z",
+          "y",
+          "x"
+        ],
+        "units": "kg/m**3",
+        "description": "LAPS Fcst cloud ice",
+        "min": 0.0,
+        "max": 3.8939006117288955e-06,
+        "positive": 91796,
+        "masked": 0
+      },
+      "sno": {
+        "dimensions": [
+          "record",
+          "z",
+          "y",
+          "x"
+        ],
+        "units": "kg/m**3",
+        "description": "LAPS Fcst snow content",
+        "min": 0.0,
+        "max": 0.005699098110198975,
+        "positive": 217641,
+        "masked": 0
+      }
+    },
+    "number_candidates": []
+  },
+  {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/physical_moment_handoff_20261110/native_probe_20261110/preflight_v3/wrfinput_d01",
+    "exists": true,
+    "sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+    "dimensions": {
+      "Time": 1,
+      "DateStrLen": 19,
+      "west_east": 234,
+      "south_north": 282,
+      "bottom_top": 39,
+      "bottom_top_stag": 40,
+      "soil_layers_stag": 4,
+      "dust_erosion_dimension": 3,
+      "west_east_stag": 235,
+      "south_north_stag": 283,
+      "DIM0010": 5,
+      "land_cat_stag": 21,
+      "soil_cat_stag": 16,
+      "urban_wind_directions_stag": 4,
+      "month_hour": 288,
+      "num_ext_model_couple_dom_stag": 1
+    },
+    "global_attrs": {
+      "TITLE": " OUTPUT FROM REAL_EM V4.6.0 PREPROCESSOR",
+      "START_DATE": "2026-08-16_12:00:00",
+      "SIMULATION_START_DATE": "2026-08-16_12:00:00",
+      "DX": "5000.0",
+      "DY": "5000.0",
+      "MAP_PROJ": "1",
+      "CEN_LAT": "38.00001",
+      "CEN_LON": "126.0",
+      "TRUELAT1": "30.0",
+      "TRUELAT2": "60.0",
+      "STAND_LON": "126.0"
+    },
+    "fields": {
+      "QICE": {
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "units": "kg kg-1",
+        "description": "Ice mixing ratio",
+        "min": 0.0,
+        "max": 0.01022245828062296,
+        "positive": 253258,
+        "masked": 0
+      },
+      "QSNOW": {
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "units": "kg kg-1",
+        "description": "Snow mixing ratio",
+        "min": 0.0,
+        "max": 0.02082240581512451,
+        "positive": 146865,
+        "masked": 0
+      },
+      "QNICE": {
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "units": "  kg-1",
+        "description": "Ice Number concentration",
+        "min": 0.0,
+        "max": 0.0,
+        "positive": 0,
+        "masked": 0
+      }
+    },
+    "number_candidates": [
+      "QNICE"
+    ]
+  },
+  {
+    "path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfout_d01_2026-08-16_12:00:00",
+    "exists": true,
+    "sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+    "dimensions": {
+      "Time": 1,
+      "DateStrLen": 19,
+      "west_east": 234,
+      "south_north": 282,
+      "bottom_top": 39,
+      "bottom_top_stag": 40,
+      "soil_layers_stag": 4,
+      "west_east_stag": 235,
+      "south_north_stag": 283,
+      "seed_dim_stag": 2
+    },
+    "global_attrs": {
+      "TITLE": " OUTPUT FROM WRF V4.6.0 MODEL",
+      "START_DATE": "2026-08-16_12:00:00",
+      "SIMULATION_START_DATE": "2026-08-16_12:00:00",
+      "DX": "5000.0",
+      "DY": "5000.0",
+      "MAP_PROJ": "1",
+      "CEN_LAT": "38.00001",
+      "CEN_LON": "126.0",
+      "TRUELAT1": "30.0",
+      "TRUELAT2": "60.0",
+      "STAND_LON": "126.0"
+    },
+    "fields": {
+      "QICE": {
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "units": "kg kg-1",
+        "description": "Ice mixing ratio",
+        "min": 0.0,
+        "max": 0.01022245828062296,
+        "positive": 253258,
+        "masked": 0
+      },
+      "QSNOW": {
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "units": "kg kg-1",
+        "description": "Snow mixing ratio",
+        "min": 0.0,
+        "max": 0.02082240581512451,
+        "positive": 146865,
+        "masked": 0
+      },
+      "QNICE": {
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "units": "  kg-1",
+        "description": "Ice Number concentration",
+        "min": 0.0,
+        "max": 0.0,
+        "positive": 0,
+        "masked": 0
+      }
+    },
+    "number_candidates": [
+      "QNICE"
+    ]
+  },
+  {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_activation_path_20261110/runtime/forecasts/CONTROL/wrfout_d01_2026-08-16_12:00:00",
+    "exists": true,
+    "sha256": "b637f559e5e5e633916b6bcd35e16424c8f3f1f3ef5309ca1ac554a6edd09ef6",
+    "dimensions": {
+      "Time": 1,
+      "DateStrLen": 19,
+      "west_east": 234,
+      "south_north": 282,
+      "bottom_top": 39,
+      "bottom_top_stag": 40,
+      "soil_layers_stag": 4,
+      "west_east_stag": 235,
+      "south_north_stag": 283,
+      "seed_dim_stag": 2
+    },
+    "global_attrs": {
+      "TITLE": " OUTPUT FROM WRF V4.6.0 MODEL",
+      "START_DATE": "2026-08-16_12:00:00",
+      "SIMULATION_START_DATE": "2026-08-16_12:00:00",
+      "DX": "5000.0",
+      "DY": "5000.0",
+      "MAP_PROJ": "1",
+      "CEN_LAT": "38.00001",
+      "CEN_LON": "126.0",
+      "TRUELAT1": "30.0",
+      "TRUELAT2": "60.0",
+      "STAND_LON": "126.0"
+    },
+    "fields": {
+      "QICE": {
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "units": "kg kg-1",
+        "description": "Ice mixing ratio",
+        "min": 0.0,
+        "max": 0.01022245828062296,
+        "positive": 253258,
+        "masked": 0
+      },
+      "QSNOW": {
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "units": "kg kg-1",
+        "description": "Snow mixing ratio",
+        "min": 0.0,
+        "max": 0.02082240581512451,
+        "positive": 146865,
+        "masked": 0
+      },
+      "QNICE": {
+        "dimensions": [
+          "Time",
+          "bottom_top",
+          "south_north",
+          "west_east"
+        ],
+        "units": "  kg-1",
+        "description": "Ice Number concentration",
+        "min": 0.0,
+        "max": 0.0,
+        "positive": 0,
+        "masked": 0
+      }
+    },
+    "number_candidates": [
+      "QNICE"
+    ]
+  }
+]
