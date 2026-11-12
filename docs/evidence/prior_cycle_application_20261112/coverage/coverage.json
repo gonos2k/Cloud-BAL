@@ -1,0 +1,537 @@
+{
+  "identities": {
+    "analysis": {
+      "path": "/var/tmp/six-hour-improved-runtime-20261030/IMPROVED_BG_FIXED/wrfinput_d01",
+      "sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5"
+    },
+    "background": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/prior_forecast/run/wrfout_d01_2026-08-16_12:00:00",
+      "sha256": "1da306199931df895a959b1746b570ee13724e86d8f6684694e00ad65c55d840"
+    },
+    "mask": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/fixed_application/mask.npz",
+      "sha256": "2c10a85057cc959559badbd1eb9d10bde759490ad441d168e92034d9ad0192f1"
+    },
+    "policy": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/fixed_application/policy.json",
+      "sha256": "647126e5215acbb985d39d56564898f7c6f82adb85d05266bf0d2c4ba008a00e"
+    }
+  },
+  "analysis_time": "2026-08-16_12:00:00",
+  "background_cycle": "2026-08-16_06:00:00",
+  "grid_sha256": "97956ad999f5d6cf07213a9497e53d8def3372c77715813cb6b5bd88f7a80d7d",
+  "selected": 294792,
+  "off_mask": 2278740,
+  "accepted": 164914,
+  "rejected": 129878,
+  "rejected_fraction_of_fixed_mask": 0.44057504952644577,
+  "bulk_status": -10,
+  "bulk_first_failure_ijk_slot": [
+    150,
+    228,
+    11,
+    2
+  ],
+  "diagnostic_first_failure_ijk_slot": [
+    150,
+    228,
+    11,
+    2
+  ],
+  "success_subset_bulk_parity": true,
+  "category_scope": "overlapping input/value observations, not exclusive causes or exact rejection reasons",
+  "categories": {
+    "background_negative_any": {
+      "selected": 5,
+      "failed": 5
+    },
+    "background_total_zero": {
+      "selected": 81215,
+      "failed": 81215
+    },
+    "background_ice_positive_number_zero": {
+      "selected": 2,
+      "failed": 2
+    },
+    "background_ice_zero_number_positive": {
+      "selected": 44889,
+      "failed": 44889
+    },
+    "background_snow_only": {
+      "selected": 18456,
+      "failed": 0
+    },
+    "background_mean_outside_policy": {
+      "selected": 183,
+      "failed": 183
+    },
+    "computed_mass_nonzero_below_float32_normal": {
+      "selected": 0,
+      "failed": 0
+    },
+    "computed_mass_above_float32_max": {
+      "selected": 0,
+      "failed": 0
+    },
+    "computed_ni_nonzero_below_float32_normal": {
+      "selected": 0,
+      "failed": 0
+    },
+    "computed_ni_above_float32_max": {
+      "selected": 0,
+      "failed": 0
+    },
+    "rounded_ni_times_density_above_policy_cap": {
+      "selected": 20373,
+      "failed": 20373
+    }
+  },
+  "physical_context": {
+    "pressure_pa": {
+      "selected": {
+        "count": 294792,
+        "min": 5280.033203125,
+        "max": 70269.4296875,
+        "mean": 36656.52554317562,
+        "p25": 25964.767578125,
+        "median": 35560.37890625,
+        "p75": 44205.380859375
+      },
+      "failed": {
+        "count": 129878,
+        "min": 5280.033203125,
+        "max": 70269.4296875,
+        "mean": 35757.121170188926,
+        "p25": 25944.107421875,
+        "median": 32087.6796875,
+        "p75": 46906.9677734375
+      },
+      "passed": {
+        "count": 164914,
+        "min": 9984.095703125,
+        "max": 69751.3984375,
+        "mean": 37364.85134422809,
+        "p25": 28874.099609375,
+        "median": 35713.513671875,
+        "p75": 44185.2939453125
+      }
+    },
+    "temperature_k": {
+      "selected": {
+        "count": 294792,
+        "min": 202.96030143847665,
+        "max": 281.1246797282295,
+        "mean": 250.29345346843758,
+        "p25": 238.48461653622394,
+        "median": 250.44170073674525,
+        "p75": 263.25766956388526
+      },
+      "failed": {
+        "count": 129878,
+        "min": 202.96030143847665,
+        "max": 281.1246797282295,
+        "mean": 247.91875740320793,
+        "p25": 232.28223797288584,
+        "median": 245.27249999237665,
+        "p75": 264.439270945213
+      },
+      "passed": {
+        "count": 164914,
+        "min": 208.7212828691906,
+        "max": 279.8116099034466,
+        "mean": 252.16364505653743,
+        "p25": 243.51783394103097,
+        "median": 253.36084865092582,
+        "p75": 262.2072406665553
+      }
+    },
+    "qv_kg_kg": {
+      "selected": {
+        "count": 294792,
+        "min": 1.1326633284625132e-06,
+        "max": 0.00879471842199564,
+        "mean": 0.0021170163528818086,
+        "p25": 0.000525277151609771,
+        "median": 0.0014234082191251218,
+        "p75": 0.003243518469389528
+      },
+      "failed": {
+        "count": 129878,
+        "min": 1.1326633284625132e-06,
+        "max": 0.00879471842199564,
+        "mean": 0.0019282345636336148,
+        "p25": 0.00023575165687361732,
+        "median": 0.0008083783322945237,
+        "p75": 0.0029044520924799144
+      },
+      "passed": {
+        "count": 164914,
+        "min": 5.306496859702747e-06,
+        "max": 0.008574278093874454,
+        "mean": 0.002265691427308339,
+        "p25": 0.0007916839385870844,
+        "median": 0.0017574807861819863,
+        "p75": 0.0033709676354192197
+      }
+    },
+    "file_dry_density_kg_m3": {
+      "selected": {
+        "count": 294792,
+        "min": 0.08577560633420944,
+        "max": 0.8686855435371399,
+        "mean": 0.5000633776992672,
+        "p25": 0.38971584290266037,
+        "median": 0.48482225835323334,
+        "p75": 0.5859579592943192
+      },
+      "failed": {
+        "count": 129878,
+        "min": 0.08577560633420944,
+        "max": 0.8686855435371399,
+        "mean": 0.4891149607011473,
+        "p25": 0.3778281956911087,
+        "median": 0.45485852658748627,
+        "p75": 0.6155714392662048
+      },
+      "passed": {
+        "count": 164914,
+        "min": 0.1666695922613144,
+        "max": 0.8628202676773071,
+        "mean": 0.5086858021318916,
+        "p25": 0.419803649187088,
+        "median": 0.48944853246212006,
+        "p75": 0.5812406539916992
+      }
+    },
+    "background_pressure_pa": {
+      "selected": {
+        "count": 294792,
+        "min": 5280.0126953125,
+        "max": 70237.046875,
+        "mean": 36642.414394232175,
+        "p25": 25961.888671875,
+        "median": 35551.423828125,
+        "p75": 44187.3271484375
+      },
+      "failed": {
+        "count": 129878,
+        "min": 5280.0126953125,
+        "max": 70237.046875,
+        "mean": 35745.86172940303,
+        "p25": 25940.59521484375,
+        "median": 32083.34765625,
+        "p75": 46901.4794921875
+      },
+      "passed": {
+        "count": 164914,
+        "min": 9984.0830078125,
+        "max": 69586.4296875,
+        "mean": 37348.494332883114,
+        "p25": 28870.4013671875,
+        "median": 35706.65234375,
+        "p75": 44172.634765625
+      }
+    },
+    "background_temperature_k": {
+      "selected": {
+        "count": 294792,
+        "min": 203.00384031287837,
+        "max": 280.78390208832064,
+        "mean": 250.32302269734043,
+        "p25": 238.84271295025493,
+        "median": 250.8401799042959,
+        "p75": 263.0843034678795
+      },
+      "failed": {
+        "count": 129878,
+        "min": 203.00384031287837,
+        "max": 280.78390208832064,
+        "mean": 247.89743244258875,
+        "p25": 232.0615221305034,
+        "median": 245.75989747480506,
+        "p75": 264.28381876256344
+      },
+      "passed": {
+        "count": 164914,
+        "min": 208.56259776856746,
+        "max": 279.6379100502446,
+        "mean": 252.2332959980102,
+        "p25": 243.97009403278497,
+        "median": 253.2976526332357,
+        "p75": 262.0972569058198
+      }
+    },
+    "background_qv_kg_kg": {
+      "selected": {
+        "count": 294792,
+        "min": 0.0,
+        "max": 0.009263499639928341,
+        "mean": 0.0020981529422123813,
+        "p25": 0.0004909684648737311,
+        "median": 0.0014079645625315607,
+        "p75": 0.0032406228710897267
+      },
+      "failed": {
+        "count": 129878,
+        "min": 0.0,
+        "max": 0.009263499639928341,
+        "mean": 0.0018747869919191196,
+        "p25": 0.000204343770747073,
+        "median": 0.0007371731044258922,
+        "p75": 0.002829783479683101
+      },
+      "passed": {
+        "count": 164914,
+        "min": 5.3135654525249265e-06,
+        "max": 0.008062477223575115,
+        "mean": 0.0022740647683289522,
+        "p25": 0.0008123642910504714,
+        "median": 0.0017564923036843538,
+        "p75": 0.003384989337064326
+      }
+    },
+    "background_file_dry_density_kg_m3": {
+      "selected": {
+        "count": 294792,
+        "min": 0.08562289923429489,
+        "max": 0.8684435486793518,
+        "mean": 0.4998890266051444,
+        "p25": 0.39035406708717346,
+        "median": 0.4841756522655487,
+        "p75": 0.5859316289424896
+      },
+      "failed": {
+        "count": 129878,
+        "min": 0.08562289923429489,
+        "max": 0.8684435486793518,
+        "mean": 0.4891063590817434,
+        "p25": 0.37685634940862656,
+        "median": 0.4542034864425659,
+        "p75": 0.6162386834621429
+      },
+      "passed": {
+        "count": 164914,
+        "min": 0.16679620742797852,
+        "max": 0.8615709543228149,
+        "mean": 0.5083809150597588,
+        "p25": 0.4188135415315628,
+        "median": 0.4893569052219391,
+        "p75": 0.5809143930673599
+      }
+    },
+    "background_minus_analysis_pressure_pa": {
+      "selected": {
+        "count": 294792,
+        "min": -832.79296875,
+        "max": 394.796875,
+        "mean": -14.111148943444658,
+        "p25": -14.37109375,
+        "median": -4.125,
+        "p75": -2.0703125
+      },
+      "failed": {
+        "count": 129878,
+        "min": -832.79296875,
+        "max": 394.796875,
+        "mean": -11.259440785896187,
+        "p25": -10.0078125,
+        "median": -3.501953125,
+        "p75": -1.875
+      },
+      "passed": {
+        "count": 164914,
+        "min": -721.640625,
+        "max": 332.6015625,
+        "mean": -16.35701134497564,
+        "p25": -19.6875,
+        "median": -4.72265625,
+        "p75": -2.35546875
+      }
+    },
+    "background_minus_analysis_temperature_k": {
+      "selected": {
+        "count": 294792,
+        "min": -3.6264331964806615,
+        "max": 3.125672340583037,
+        "mean": 0.029569228902845215,
+        "p25": -0.2178503579936759,
+        "median": 0.040613409209043994,
+        "p75": 0.3673136025361643
+      },
+      "failed": {
+        "count": 129878,
+        "min": -3.5474377330471896,
+        "max": 3.091979437297198,
+        "mean": -0.021324960619256192,
+        "p25": -0.31035982245077776,
+        "median": -0.009253730783541414,
+        "p75": 0.34683136262155045
+      },
+      "passed": {
+        "count": 164914,
+        "min": -3.6264331964806615,
+        "max": 3.125672340583037,
+        "mean": 0.06965094147273915,
+        "p25": -0.1603051377675726,
+        "median": 0.07131205922945583,
+        "p75": 0.3833741562810644
+      }
+    },
+    "background_minus_analysis_qv_kg_kg": {
+      "selected": {
+        "count": 294792,
+        "min": -0.0032459816429764032,
+        "max": 0.003432688768953085,
+        "mean": -1.8863410669427374e-05,
+        "p25": -5.102544673718512e-05,
+        "median": -1.336650313987775e-05,
+        "p75": 3.116177686024457e-05
+      },
+      "failed": {
+        "count": 129878,
+        "min": -0.0032459816429764032,
+        "max": 0.003432688768953085,
+        "mean": -5.344757171449522e-05,
+        "p25": -7.240805098263081e-05,
+        "median": -1.8756880308501422e-05,
+        "p75": 1.1299724064883776e-05
+      },
+      "passed": {
+        "count": 164914,
+        "min": -0.002200298011302948,
+        "max": 0.0027446956373751163,
+        "mean": 8.37334102061302e-06,
+        "p25": -4.3078995076939464e-05,
+        "median": -8.779345080256462e-06,
+        "p75": 4.539982182905078e-05
+      }
+    },
+    "background_minus_analysis_dry_density_kg_m3": {
+      "selected": {
+        "count": 294792,
+        "min": -0.009397745132446289,
+        "max": 0.008928656578063965,
+        "mean": -0.00017435109412284515,
+        "p25": -0.0008085370063781738,
+        "median": -0.00029224157333374023,
+        "p75": 0.00028596073389053345
+      },
+      "failed": {
+        "count": 129878,
+        "min": -0.009397745132446289,
+        "max": 0.008928656578063965,
+        "mean": -8.601619403938211e-06,
+        "p25": -0.0007005929946899414,
+        "median": -9.846687316894531e-05,
+        "p75": 0.0005255341529846191
+      },
+      "passed": {
+        "count": 164914,
+        "min": -0.009295225143432617,
+        "max": 0.008593618869781494,
+        "mean": -0.00030488707213285155,
+        "p25": -0.0008779466152191162,
+        "median": -0.0004043281078338623,
+        "p75": 8.26120376586914e-05
+      }
+    }
+  },
+  "density_scope": "file proxy float32 1/(AL+ALB), not first-use",
+  "selection_scope": "fixed analysis positive ice+snow, independent of background pass",
+  "subset_scope": "diagnostic subset only; never published or applied",
+  "diagnostic_only_npz_sha256": "6eb1f566594b1a76bdd615014abec8c772987af4d48e1d3e772857f7c79c55b2",
+  "artifact_identities_before": {
+    "script": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/coverage/audit.py",
+      "sha256": "0315aa0c28b3c95c3ea71967d6caac2585b71d20e7ad5848c4d92e41d6f6a1ab"
+    },
+    "definition": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/fixed_application/definition.json",
+      "sha256": "8047e938d5abf5584398bf9981ad440ffa1c6697bd58fbc3b1c95783693ff30c"
+    },
+    "build_receipt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/coverage/build_verified/build_receipt.json",
+      "sha256": "0ea895d2a812a685a7c3592d7c54a9883db4d91dd872196525465afb5d14f34b"
+    },
+    "state": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/src/common/cloud_bal_state.f90",
+      "sha256": "205d034e803f9e7294e8d913e46b40174f38caaf82a19d119ffafcacdae494ab"
+    },
+    "common": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/src/common/cloud_bal_microphysics_initialization.f90",
+      "sha256": "55291000c908408aa4b980136deec9f92ac9b987fe989edcf494c8cacee92848"
+    },
+    "producer": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/tools/propose_ice_background.py",
+      "sha256": "f818f542766280064aed15080892837832e152feb99064436eabb65502fed98e"
+    },
+    "handoff": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/tools/initialize_model_moments.py",
+      "sha256": "f7f52255a0a6dd6a090f49e9a19a693c209f7844f75ff0874bfb28638111840e"
+    },
+    "bulk_adapter": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/tools/ice_background_driver.f90",
+      "sha256": "39555044da567590e296b0092f9e90a803cbd17f1d14ac7d4440195ad2ecb063"
+    },
+    "cell_adapter": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/coverage/cell_driver.f90",
+      "sha256": "6357b3222583d21c33e612d5b840be9a3df1d737500584a34c64812c9566bfc6"
+    },
+    "bulk_driver": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/coverage/build_verified/bulk_driver",
+      "sha256": "54b7bdc538a101df2210900fb6bde8129eaded4cedf159d1a7f84a058e5af395"
+    },
+    "cell_driver": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/coverage/build_verified/cell_driver",
+      "sha256": "d77103b8798f342e0c06833e1f6e15ed53d0fff631ef3b001898344be7e56a10"
+    }
+  },
+  "artifact_identities_after": {
+    "script": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/coverage/audit.py",
+      "sha256": "0315aa0c28b3c95c3ea71967d6caac2585b71d20e7ad5848c4d92e41d6f6a1ab"
+    },
+    "definition": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/fixed_application/definition.json",
+      "sha256": "8047e938d5abf5584398bf9981ad440ffa1c6697bd58fbc3b1c95783693ff30c"
+    },
+    "build_receipt": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/coverage/build_verified/build_receipt.json",
+      "sha256": "0ea895d2a812a685a7c3592d7c54a9883db4d91dd872196525465afb5d14f34b"
+    },
+    "state": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/src/common/cloud_bal_state.f90",
+      "sha256": "205d034e803f9e7294e8d913e46b40174f38caaf82a19d119ffafcacdae494ab"
+    },
+    "common": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/src/common/cloud_bal_microphysics_initialization.f90",
+      "sha256": "55291000c908408aa4b980136deec9f92ac9b987fe989edcf494c8cacee92848"
+    },
+    "producer": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/tools/propose_ice_background.py",
+      "sha256": "f818f542766280064aed15080892837832e152feb99064436eabb65502fed98e"
+    },
+    "handoff": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/tools/initialize_model_moments.py",
+      "sha256": "f7f52255a0a6dd6a090f49e9a19a693c209f7844f75ff0874bfb28638111840e"
+    },
+    "bulk_adapter": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/tools/ice_background_driver.f90",
+      "sha256": "39555044da567590e296b0092f9e90a803cbd17f1d14ac7d4440195ad2ecb063"
+    },
+    "cell_adapter": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/coverage/cell_driver.f90",
+      "sha256": "6357b3222583d21c33e612d5b840be9a3df1d737500584a34c64812c9566bfc6"
+    },
+    "bulk_driver": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/coverage/build_verified/bulk_driver",
+      "sha256": "54b7bdc538a101df2210900fb6bde8129eaded4cedf159d1a7f84a058e5af395"
+    },
+    "cell_driver": {
+      "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/coverage/build_verified/cell_driver",
+      "sha256": "d77103b8798f342e0c06833e1f6e15ed53d0fff631ef3b001898344be7e56a10"
+    }
+  },
+  "artifact_identities_unchanged": true,
+  "input_identities_unchanged": true
+}

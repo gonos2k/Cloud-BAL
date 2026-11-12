@@ -1,0 +1,106 @@
+{
+  "scope": "Overlapping observations; not exclusive causes or attribution. Only fixed selected cells. Native density is file proxy float32 1/(AL+ALB).",
+  "inputs": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/coverage/actual_12utc/diagnostic_only.npz": "6eb1f566594b1a76bdd615014abec8c772987af4d48e1d3e772857f7c79c55b2",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/fixed_application/policy.json": "647126e5215acbb985d39d56564898f7c6f82adb85d05266bf0d2c4ba008a00e",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/coverage/actual_12utc/coverage.json": "6a95d4791cacf26d8a4fe779674174f46d91d07cfe63f6c6cf0452c1c2b416da",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/production_attempt/attempt.json": "db1674d44cc221c1da7ceb1118579d3e1a2e6b3a77b70ff5c0a688c2304e8832"
+  },
+  "cap_flags": {
+    "count": 20373,
+    "background_volume_above_cap": 0,
+    "background_volume_at_or_below_cap": 20373,
+    "background_volume_multiply": "float32 background QNICE times float32 background density",
+    "target_volume_multiply": "float32 rounded proposed QNICE times float32 analysis density"
+  },
+  "background_mean_outside": {
+    "lower_bound": 2.6055878059182486e-16,
+    "upper_bound": 2.098274638742861e-09,
+    "below_count": 87,
+    "above_count": 96,
+    "relative_lower_deficit": {
+      "count": 87,
+      "min": 0.00672737760007717,
+      "max": 0.9999999999999638
+    },
+    "relative_upper_excess": {
+      "count": 96,
+      "min": 0.0005415044331583133,
+      "max": 7.476554810479466e+18
+    },
+    "relative_violation_all": {
+      "count": 183,
+      "min": 0.0005415044331583133,
+      "max": 7.476554810479466e+18
+    },
+    "float32_eps": 1.1920928955078125e-07
+  },
+  "selected": 294792,
+  "failures": 129878,
+  "flags_union_selected": 148334,
+  "flags_union_failures": 129878,
+  "rejected_not_covered_by_original_flags": 0,
+  "pairwise_overlap_failed": {
+    "background_total_zero & background_ice_zero_number_positive": 16748,
+    "background_mean_outside_policy & rounded_ni_times_density_above_policy_cap": 41
+  },
+  "uncovered_stored_proposal_mean_outside_bounds": 0,
+  "uncovered_mass_sum_tolerance_exceeded": 0,
+  "uncovered_stored_mean_relative_violation": {
+    "count": 0
+  },
+  "first_failed_cell": {
+    "location_ijk_1based": [
+      150,
+      228,
+      11
+    ],
+    "status": -10,
+    "analysis_qice": 0.0,
+    "analysis_qsnow": 2.326788307982497e-05,
+    "analysis_qnice": 0.0,
+    "background_qice": 0.0,
+    "background_qsnow": 0.0,
+    "background_qnice": 0.0,
+    "analysis_density": 0.7988942265510559,
+    "background_density": 0.801789402961731,
+    "background_mean": 0.0,
+    "target_qice_real32": 0.0,
+    "target_qsnow_real32": 0.0,
+    "target_qnice_real32": 0.0,
+    "target_number_volume_real32": 0.0,
+    "background_number_volume_real32": 0.0,
+    "observation_flags": [
+      "background_total_zero"
+    ],
+    "analysis_temperature": 278.1852539755197,
+    "background_temperature": 277.467637068751,
+    "analysis_pressure": 64561.59375,
+    "background_pressure": 64632.83203125,
+    "analysis_qv": 0.0075891874730587006,
+    "background_qv": 0.007632154505699873,
+    "first_applicable_source_guard": "zero total background"
+  },
+  "production_attempt": {
+    "receipt": {
+      "application_status": "REJECTED",
+      "exception_type": "ValueError",
+      "message": "background proposal rejected: location=[150, 228, 11, 2]; no fallback",
+      "proposal_exists": false,
+      "producer_receipt_exists": false,
+      "manifest_sha256": "a23436044fa8e6cd379dc3df0ef91ad1a0b01caec31188b2d6a2766872a34c0a",
+      "rule_changed": false,
+      "mask_changed": false,
+      "new_analysis_input_published": false,
+      "new_analysis_forecast_started": false
+    },
+    "manifest_hash_matches": true,
+    "producer_error_log_sha256": "72140b915a3e3a9f74c732c8bea11a4735495721706e64037bd990afdfecb44a",
+    "directory_entries": [
+      "attempt.json",
+      "authority.json",
+      "manifest.json",
+      "producer_error.log"
+    ]
+  }
+}

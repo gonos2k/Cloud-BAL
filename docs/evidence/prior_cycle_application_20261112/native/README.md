@@ -1,0 +1,7 @@
+# Prior-cycle native execution evidence
+
+These are byte-for-byte copies of small records from the isolated 06–12 UTC forecast and its REAL input-generation attempts. `copy_manifest.json` identifies original absolute paths, copy locations, byte counts, and SHA-256 hashes. Raw NetCDF files, executables, and diagnostic traces are not packaged. Original receipts retain their paths and have not been rewritten.
+
+`real06/` records the unsuccessful first REAL attempt; `real06_inputlevels25/` records the successful retry using the authentic 06-cycle 25-level metgrid input. The successful retry input manifest initially contained staged paths pointing to the failed attempt. The corrected manifest and historical wrong-path manifest are both retained; the corrected validation explains the correction. The original forecast `staging.json` cites the earlier validation hash, while the present validation has a different hash. Earlier validation bytes were not located in a bounded search; `prior_forecast/postrun_metadata_links.json` binds both hashes and the subsequent checks without asserting byte identity.
+
+Forecast `output_inspection.json` records 06 UTC start, 12 UTC valid time, exact B1 grid fingerprint, eight rank completion, and 610 domain cells with QICE positive and QNICE nonpositive. A successful model run does not make this output an eligible full-domain ice background. The forecast run contains no `wrfchainp_d01`; see `chainp_audit.md`.

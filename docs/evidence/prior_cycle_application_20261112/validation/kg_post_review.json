@@ -1,0 +1,255 @@
+{
+  "status": "PASS",
+  "checks": {
+    "KLAPS50_old_snapshots_unchanged": true,
+    "KLAPS50_only_expected_snapshot_added": true,
+    "KLAPS50_status_only_expected_addition": true,
+    "KLAPS50_head_unchanged": true,
+    "KLAPS50_index_unchanged": true,
+    "KLAPS50_tracked_dirty_unchanged_except_destinations": true,
+    "Cloud-BAL_old_snapshots_unchanged": true,
+    "Cloud-BAL_only_expected_snapshot_added": true,
+    "Cloud-BAL_status_only_expected_addition": true,
+    "Cloud-BAL_head_unchanged": true,
+    "Cloud-BAL_index_unchanged": true,
+    "Cloud-BAL_tracked_dirty_unchanged_except_destinations": true,
+    "old_278_new_280": true,
+    "publish_target_count_and_readback": true,
+    "source_copy_target_count_and_readback": true,
+    "source_copy_links_publish": true,
+    "publish_review_lock_binding": true,
+    "agents_unchanged": true,
+    "source_copy_exact_publish_subset": true
+  },
+  "details": {
+    "KLAPS50": {
+      "old_count": 137,
+      "new_count": 138,
+      "missing_snapshots": [],
+      "changed_old_snapshots": [],
+      "added_snapshots": [
+        "2026-11-12-prior-cycle-application"
+      ],
+      "added_status": [],
+      "removed_status": [],
+      "head": "d79b97ea2f4d90ea439ef129cabf014ac73464f1",
+      "index_sha256": "0230ad987ae5192c1e96e6382e726d5053b9f03929482dda33e1d49822d0fbb5",
+      "tracked_dirty_files_checked": 2,
+      "tracked_dirty_intended_changes": [],
+      "tracked_dirty_unexpected_changes": []
+    },
+    "Cloud-BAL": {
+      "old_count": 141,
+      "new_count": 142,
+      "missing_snapshots": [],
+      "changed_old_snapshots": [],
+      "added_snapshots": [
+        "2026-11-12-prior-cycle-application"
+      ],
+      "added_status": [
+        "?? graphify-out/2026-11-12-prior-cycle-application/"
+      ],
+      "removed_status": [],
+      "head": "f837bad0bdf1050a34975d93b178b7dee4420094",
+      "index_sha256": "a95b837e111b9ec2fd45e9b5fc2d17e8235ea76ce2569f36b1209f008c9c28aa",
+      "tracked_dirty_files_checked": 177,
+      "tracked_dirty_intended_changes": [
+        {
+          "path": "graphify-out/GRAPH_REPORT.md",
+          "before": "fc3e8c92ad8cbb38a6fed61c242a485a233ce7394b2c2b0fe69d0506ad4da84b",
+          "after": "08c3700cccce68a95a7cdaa69c59ba51020bb19fae85949df70f885eb4cd2afe"
+        },
+        {
+          "path": "graphify-out/graph.json",
+          "before": "eeb3354b4b299d835755dc329a578b0d6bdc01de6147d1c243351f93557a79fd",
+          "after": "8386c5460e7983c9660625709ed608559c822a05328aedd19a4d0e4b63544171"
+        },
+        {
+          "path": "graphify-out/manifest.json",
+          "before": "4d76680dcbcd39a8a36ddc4ca5e27d488519169ef638b50bc4ee6b5024db6f99",
+          "after": "d875c2d994ef355209ea8238bd07f220695cd7326a9ec9c372761feea398c6f0"
+        }
+      ],
+      "tracked_dirty_unexpected_changes": []
+    },
+    "publish": {
+      "status": "PUBLISHED_AND_READBACK_PASS",
+      "count": 28,
+      "mismatches": [],
+      "targets": [
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/graph.json",
+          "sha256": "9bcef1b38962100ddc68e0f49a3d2713250ef82fcdb1a1fab8966331e813e7d9"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-11-12-prior-cycle-application/graph.json",
+          "sha256": "9bcef1b38962100ddc68e0f49a3d2713250ef82fcdb1a1fab8966331e813e7d9"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/GRAPH_REPORT.md",
+          "sha256": "b9eea6f2f900646190c10b1aa168ecfa5d7f21143374be591bbb69722dd3bd69"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-11-12-prior-cycle-application/GRAPH_REPORT.md",
+          "sha256": "b9eea6f2f900646190c10b1aa168ecfa5d7f21143374be591bbb69722dd3bd69"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/manifest.json",
+          "sha256": "b5d91a108ec3617260d8c15e17346657c1934280df5570a15ba7a2806bc1e0eb"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/graphify-out/2026-11-12-prior-cycle-application/manifest.json",
+          "sha256": "b5d91a108ec3617260d8c15e17346657c1934280df5570a15ba7a2806bc1e0eb"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/graph.json",
+          "sha256": "8386c5460e7983c9660625709ed608559c822a05328aedd19a4d0e4b63544171"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-11-12-prior-cycle-application/graph.json",
+          "sha256": "8386c5460e7983c9660625709ed608559c822a05328aedd19a4d0e4b63544171"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/GRAPH_REPORT.md",
+          "sha256": "08c3700cccce68a95a7cdaa69c59ba51020bb19fae85949df70f885eb4cd2afe"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-11-12-prior-cycle-application/GRAPH_REPORT.md",
+          "sha256": "08c3700cccce68a95a7cdaa69c59ba51020bb19fae85949df70f885eb4cd2afe"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/manifest.json",
+          "sha256": "d875c2d994ef355209ea8238bd07f220695cd7326a9ec9c372761feea398c6f0"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/Cloud-BAL/graphify-out/2026-11-12-prior-cycle-application/manifest.json",
+          "sha256": "d875c2d994ef355209ea8238bd07f220695cd7326a9ec9c372761feea398c6f0"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/wiki/graph-report.md",
+          "sha256": "71de48cdc078dd31a49d0174dc14d15c8817d45274c3a88755c5c8addb1c0023"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/docs/evidence/prior_cycle_application_20261112/kg/wiki/graph-report.md",
+          "sha256": "71de48cdc078dd31a49d0174dc14d15c8817d45274c3a88755c5c8addb1c0023"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/wiki/graph-report-klaps50.md",
+          "sha256": "b9eea6f2f900646190c10b1aa168ecfa5d7f21143374be591bbb69722dd3bd69"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/docs/evidence/prior_cycle_application_20261112/kg/wiki/graph-report-klaps50.md",
+          "sha256": "b9eea6f2f900646190c10b1aa168ecfa5d7f21143374be591bbb69722dd3bd69"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/wiki/graph-report-cloud-bal.md",
+          "sha256": "08c3700cccce68a95a7cdaa69c59ba51020bb19fae85949df70f885eb4cd2afe"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/docs/evidence/prior_cycle_application_20261112/kg/wiki/graph-report-cloud-bal.md",
+          "sha256": "08c3700cccce68a95a7cdaa69c59ba51020bb19fae85949df70f885eb4cd2afe"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/wiki/index.md",
+          "sha256": "afbe5a55c40bce64bdef83d39291b0f63083a9c6de188115c7ced16caa6fc9cc"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/docs/evidence/prior_cycle_application_20261112/kg/wiki/index.md",
+          "sha256": "afbe5a55c40bce64bdef83d39291b0f63083a9c6de188115c7ced16caa6fc9cc"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/wiki/log.md",
+          "sha256": "e04acde3955e0f12b47e65198cac037527146e42aeab9e3874856a89cbad5005"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/docs/evidence/prior_cycle_application_20261112/kg/wiki/log.md",
+          "sha256": "e04acde3955e0f12b47e65198cac037527146e42aeab9e3874856a89cbad5005"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/graphify-out/graph.json",
+          "sha256": "8386c5460e7983c9660625709ed608559c822a05328aedd19a4d0e4b63544171"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/graphify-out/2026-11-12-prior-cycle-application/graph.json",
+          "sha256": "8386c5460e7983c9660625709ed608559c822a05328aedd19a4d0e4b63544171"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/graphify-out/GRAPH_REPORT.md",
+          "sha256": "08c3700cccce68a95a7cdaa69c59ba51020bb19fae85949df70f885eb4cd2afe"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/graphify-out/2026-11-12-prior-cycle-application/GRAPH_REPORT.md",
+          "sha256": "08c3700cccce68a95a7cdaa69c59ba51020bb19fae85949df70f885eb4cd2afe"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/graphify-out/manifest.json",
+          "sha256": "d875c2d994ef355209ea8238bd07f220695cd7326a9ec9c372761feea398c6f0"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/graphify-out/2026-11-12-prior-cycle-application/manifest.json",
+          "sha256": "d875c2d994ef355209ea8238bd07f220695cd7326a9ec9c372761feea398c6f0"
+        }
+      ]
+    },
+    "source_copy": {
+      "status": "COPIED_AND_READBACK_PASS",
+      "count": 11,
+      "mismatches": [],
+      "targets": [
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/docs/evidence/prior_cycle_application_20261112/kg/wiki/graph-report.md",
+          "sha256": "71de48cdc078dd31a49d0174dc14d15c8817d45274c3a88755c5c8addb1c0023"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/docs/evidence/prior_cycle_application_20261112/kg/wiki/graph-report-klaps50.md",
+          "sha256": "b9eea6f2f900646190c10b1aa168ecfa5d7f21143374be591bbb69722dd3bd69"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/docs/evidence/prior_cycle_application_20261112/kg/wiki/graph-report-cloud-bal.md",
+          "sha256": "08c3700cccce68a95a7cdaa69c59ba51020bb19fae85949df70f885eb4cd2afe"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/docs/evidence/prior_cycle_application_20261112/kg/wiki/index.md",
+          "sha256": "afbe5a55c40bce64bdef83d39291b0f63083a9c6de188115c7ced16caa6fc9cc"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/docs/evidence/prior_cycle_application_20261112/kg/wiki/log.md",
+          "sha256": "e04acde3955e0f12b47e65198cac037527146e42aeab9e3874856a89cbad5005"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/graphify-out/graph.json",
+          "sha256": "8386c5460e7983c9660625709ed608559c822a05328aedd19a4d0e4b63544171"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/graphify-out/2026-11-12-prior-cycle-application/graph.json",
+          "sha256": "8386c5460e7983c9660625709ed608559c822a05328aedd19a4d0e4b63544171"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/graphify-out/GRAPH_REPORT.md",
+          "sha256": "08c3700cccce68a95a7cdaa69c59ba51020bb19fae85949df70f885eb4cd2afe"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/graphify-out/2026-11-12-prior-cycle-application/GRAPH_REPORT.md",
+          "sha256": "08c3700cccce68a95a7cdaa69c59ba51020bb19fae85949df70f885eb4cd2afe"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/graphify-out/manifest.json",
+          "sha256": "d875c2d994ef355209ea8238bd07f220695cd7326a9ec9c372761feea398c6f0"
+        },
+        {
+          "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/graphify-out/2026-11-12-prior-cycle-application/manifest.json",
+          "sha256": "d875c2d994ef355209ea8238bd07f220695cd7326a9ec9c372761feea398c6f0"
+        }
+      ]
+    }
+  },
+  "baseline_sha256": "5238149a22320af8e86869351bf1af1e4acb281092e661131fe157af0b75e319",
+  "prepublication_capture_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/kg_pre_review.json",
+  "prepublication_capture_sha256": "3240eaa2af6e96424592313aef0712d7de906704cd0c7463c9012c78eed8533d",
+  "publish_receipt_sha256": "525ed18053cf02c03d398211d5d216e0e2c37e4b69706d71ab11620a0ec08da2",
+  "source_copy_receipt_sha256": "68058667c7825d3b8643e311f12d6710cca81172ba174bea3dc726ec57d19807",
+  "limitations": [
+    "Baseline records HEAD and status, but not index or dirty-file content hashes; the independent prepublication capture supplied those comparisons.",
+    "Graph freshness and publication do not establish runtime or scientific validation."
+  ]
+}

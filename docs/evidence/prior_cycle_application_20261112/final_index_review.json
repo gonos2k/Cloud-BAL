@@ -1,0 +1,22 @@
+{
+  "status": "GO",
+  "reviewed_staged_tree_before_this_receipt": "e696d0bb657677e91b79d9ded6d6ddcb8b016352",
+  "artifact_manifest_sha256": "5e4ac2f4c2cdbf4f07337fd31b85860b8f1979e6129231e378ec2f3f6e2b8044",
+  "staged_paths": 123,
+  "manifest_entries": 122,
+  "manifest_and_final_review_self_excluded": true,
+  "checks": {
+    "staged_paths_equal_manifest_entries_plus_manifest": true,
+    "every_manifest_entry_index_blob_and_worktree_sha256_and_size_equal": true,
+    "no_src_tests_tools_changes": true,
+    "source_active_graph_equals_new_dated_snapshot": true,
+    "selection_lock_source_and_evidence_pins_match": true,
+    "kg_publication_28_targets_match_and_source_receipt_bound": true,
+    "review_and_replay_receipts_bound": true,
+    "authored_staged_diff_check_excluding_native_pass": true,
+    "all_781_full_diff_warnings_are_retained_native_whitespace": true,
+    "all_warning_paths_match_native_copy_manifest_and_original_source_bytes": true
+  },
+  "whitespace_note": "Full git diff --cached --check reports 781 trailing-whitespace warnings in eight native namelist/output/rsl artifacts, byte-identical to retained originals. Authored paths excluding native pass; raw files intentionally preserved.",
+  "limits": "Review covers staged tree before this receipt; root must add this declared manifest-excluded receipt. Replay PASS does not imply application acceptance; application REJECTED."
+}

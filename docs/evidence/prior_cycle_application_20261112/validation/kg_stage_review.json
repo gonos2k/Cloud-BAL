@@ -1,0 +1,68 @@
+{
+  "status": "GO",
+  "checks": {
+    "seven_selected_sources": true,
+    "all_source_and_evidence_pins": true,
+    "receipt_lock_matches": true,
+    "baseline_pin": true,
+    "stage_only": true,
+    "baseline_unmodified": true,
+    "KLAPS50_preservation": true,
+    "KLAPS50_graph_pins": true,
+    "Cloud-BAL_preservation": true,
+    "Cloud-BAL_graph_pins": true,
+    "wiki_pins": true,
+    "receipt_counts_and_snapshots": true,
+    "publisher_28_destinations": true
+  },
+  "graph_comparison": {
+    "KLAPS50": {
+      "untouched_node_loss": 0,
+      "untouched_edge_loss": 0,
+      "untouched_edge_additions": 0,
+      "untouched_manifest_changes": 0,
+      "before": {
+        "communities": 3726,
+        "edges": 94311,
+        "nodes": 45553
+      },
+      "after": {
+        "communities": 3717,
+        "edges": 94348,
+        "nodes": 45582
+      }
+    },
+    "Cloud-BAL": {
+      "untouched_node_loss": 0,
+      "untouched_edge_loss": 0,
+      "untouched_edge_additions": 0,
+      "untouched_manifest_changes": 0,
+      "before": {
+        "communities": 1757,
+        "edges": 35721,
+        "nodes": 19725
+      },
+      "after": {
+        "communities": 1752,
+        "edges": 35758,
+        "nodes": 19754
+      }
+    }
+  },
+  "publisher_destinations": {
+    "maintained_graphs": 12,
+    "wiki": 10,
+    "source_graphs": 6,
+    "total": 28
+  },
+  "publisher_scope": "existing canonical trio/wiki and their new dated snapshots; separate source worktree mirror and snapshots; rollback on failure; no content page writes",
+  "reviewed_sha256": {
+    "selection_lock.json": "2fd2d17f2318fd6a0b7b86f8b86f172994fd5f52ee02951ca685a6e81eae8cdc",
+    "stage_receipt.json": "1bc48ef5d6c4e8c22dda5a10729443a87816a6771f16a34c6990353c6941ec72",
+    "baseline.json": "5238149a22320af8e86869351bf1af1e4acb281092e661131fe157af0b75e319",
+    "stage_kg.py": "710e3dae58861d6354d0f67ec74e1bc7e9aa8af962f90d07e184157cff8ddfc8",
+    "publish_kg.py": "03b6a60170d87f0fa626c132c504ca260a6566d5663252c628651cc724f0ae59",
+    "verify_baseline.py": "50b84dd058d21a4c2e6f79b0236a2b37f8179708746dbe78008712eae171d205"
+  },
+  "limitations": "Structural extraction only; best-effort Fortran cross-file edges and no document semantic extraction. Graph freshness is not runtime or scientific validation."
+}

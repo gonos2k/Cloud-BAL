@@ -1,0 +1,138 @@
+{
+  "interpretation": "Descriptive numeric bins, not physical activation thresholds. Counts are cells, not mass fractions or forecast impacts. Flag groups overlap; no selection or acceptance change. Density is float32 file proxy 1/(AL+ALB).",
+  "input_sha256": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/coverage/actual_12utc/diagnostic_only.npz": "6eb1f566594b1a76bdd615014abec8c772987af4d48e1d3e772857f7c79c55b2",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/fixed_application/policy.json": "647126e5215acbb985d39d56564898f7c6f82adb85d05266bf0d2c4ba008a00e",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/coverage/actual_12utc/coverage.json": "6a95d4791cacf26d8a4fe779674174f46d91d07cfe63f6c6cf0452c1c2b416da"
+  },
+  "mass_bins": [
+    {
+      "interval_kg_kg": "(0,1e-12)",
+      "selected": 0,
+      "accepted": 0,
+      "rejected": 0
+    },
+    {
+      "interval_kg_kg": "[1e-12,1e-9)",
+      "selected": 122,
+      "accepted": 27,
+      "rejected": 95
+    },
+    {
+      "interval_kg_kg": "[1e-9,1e-6)",
+      "selected": 40432,
+      "accepted": 11170,
+      "rejected": 29262
+    },
+    {
+      "interval_kg_kg": "[1e-6,inf)",
+      "selected": 254238,
+      "accepted": 153717,
+      "rejected": 100521
+    }
+  ],
+  "target_mass_quantiles_kg_kg_by_flag": {
+    "background_negative_any": {
+      "count": 5,
+      "min": 1.7021868359279324e-07,
+      "p01": 1.7181929251819383e-07,
+      "p10": 1.8622477284679917e-07,
+      "p25": 2.1023390672780806e-07,
+      "median": 9.435454444428615e-07,
+      "p75": 2.6228253773297183e-06,
+      "p90": 0.0001186801131552784,
+      "p99": 0.00018831448582204758,
+      "max": 0.00019605163834057748
+    },
+    "background_total_zero": {
+      "count": 81215,
+      "min": 4.420016436190721e-12,
+      "p01": 1.3883555141092074e-08,
+      "p10": 1.3712468387439004e-07,
+      "p25": 6.206029468103225e-07,
+      "median": 3.395380645088153e-06,
+      "p75": 5.786345332126075e-05,
+      "p90": 0.00030587834771722653,
+      "p99": 0.0028944426426278378,
+      "max": 0.028264906257390976
+    },
+    "background_ice_positive_number_zero": {
+      "count": 2,
+      "min": 1.1934952581782454e-08,
+      "p01": 1.198322481243963e-08,
+      "p10": 1.2417674888354213e-08,
+      "p25": 1.3141758348211852e-08,
+      "median": 1.4348564114641249e-08,
+      "p75": 1.5555369881070646e-08,
+      "p90": 1.6279453340928285e-08,
+      "p99": 1.671390341684287e-08,
+      "max": 1.6762175647500044e-08
+    },
+    "background_ice_zero_number_positive": {
+      "count": 44889,
+      "min": 1.0243830957101796e-11,
+      "p01": 1.538742587570141e-08,
+      "p10": 4.7451538307541343e-07,
+      "p25": 1.791377712834219e-06,
+      "median": 2.8404184376995545e-05,
+      "p75": 0.000382379144866718,
+      "p90": 0.0013929916894994715,
+      "p99": 0.004627549008873761,
+      "max": 0.027406085282564163
+    },
+    "background_mean_outside_policy": {
+      "count": 183,
+      "min": 1.0344526124583808e-08,
+      "p01": 1.2660543706743966e-08,
+      "p10": 9.356041488217668e-08,
+      "p25": 6.13144663930143e-07,
+      "median": 2.830058292602189e-05,
+      "p75": 0.00032289638329530135,
+      "p90": 0.0010694487194996335,
+      "p99": 0.0021640757378190755,
+      "max": 0.003097856359090656
+    },
+    "rounded_ni_times_density_above_policy_cap": {
+      "count": 20373,
+      "min": 5.006261005746637e-08,
+      "p01": 4.1709845754667186e-06,
+      "p10": 5.7547578035155314e-05,
+      "p25": 0.00033555092522874475,
+      "median": 0.0008458949741907418,
+      "p75": 0.002166055877751205,
+      "p90": 0.003313347825314847,
+      "p99": 0.006111896276488545,
+      "max": 0.02813726244494319
+    }
+  },
+  "ice_zero_number_positive_background_ni_kg_minus1": {
+    "count": 44889,
+    "min": 5.661245795872261e-43,
+    "p01": 1.6479262412758545e-05,
+    "p10": 0.004262018855661154,
+    "p25": 0.5738284587860107,
+    "median": 15.66503620147705,
+    "p75": 342.72552490234375,
+    "p90": 3858.0165039062913,
+    "p99": 113145.90406250024,
+    "max": 2691679.0
+  },
+  "ice_zero_number_positive_background_volume_number_m_minus3": {
+    "count": 44889,
+    "min": 7.567011707354012e-44,
+    "p01": 6.357379243127071e-06,
+    "p10": 0.0020076910499483356,
+    "p25": 0.2900204062461853,
+    "median": 9.841829299926758,
+    "p75": 177.1248016357422,
+    "p90": 1502.58061523438,
+    "p99": 41554.50265625064,
+    "max": 730439.0
+  },
+  "mean_outside": {
+    "count": 183,
+    "target_total_at_least_1e_9": 183,
+    "background_ice_at_least_1e_12": 50,
+    "both_thresholds": 50
+  }
+}

@@ -1,0 +1,25 @@
+{
+  "status": "FROZEN_BEFORE_PRIOR_RESULT_INSPECTION",
+  "frozen_at_utc": "2026-11-12T11:17:21.128066+00:00",
+  "analysis": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/physical_moment_handoff_20261110/native_probe_20261110/preflight_v3/wrfinput_d01",
+    "sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5"
+  },
+  "valid_time": "2026-08-16_12:00:00",
+  "grid_sha256": "97956ad999f5d6cf07213a9497e53d8def3372c77715813cb6b5bd88f7a80d7d",
+  "rule": "ALL cells with float64(stored_QICE)+float64(stored_QSNOW)>0; no background availability or success criterion used",
+  "selected_cells": 294792,
+  "off_mask_cells": 2278740,
+  "domain_cells": 2573532,
+  "mask": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/fixed_application/mask.npz",
+    "sha256": "2c10a85057cc959559badbd1eb9d10bde759490ad441d168e92034d9ad0192f1"
+  },
+  "policy": "Keep PR166 background fraction/mean mass and strict source-bound acceptance; report every unsupported/failed selected cell; do not replace mask with passing subset.",
+  "policy_identity": {
+    "git_source": "docs/evidence/physical_moment_handoff_20261110/native/actual_real/policy.json",
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/fixed_application/policy.json",
+    "sha256": "647126e5215acbb985d39d56564898f7c6f82adb85d05266bf0d2c4ba008a00e",
+    "scope": "Unmodified pre-existing source-bound policy; frozen before evaluating new prior."
+  }
+}
