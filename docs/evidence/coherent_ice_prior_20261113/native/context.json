@@ -1,0 +1,105 @@
+{
+  "schema": "coherent_ice_snapshot_context_v1",
+  "grid_sha256": "97956ad999f5d6cf07213a9497e53d8def3372c77715813cb6b5bd88f7a80d7d",
+  "shape_zyx": [
+    39,
+    282,
+    234
+  ],
+  "cycle_start": "2026-08-16_06:00:00",
+  "valid_time": "2026-08-16_12:00:00",
+  "target_step": 1080,
+  "time_step_seconds": 20,
+  "executable_sha256": "3a286f6691fa94c2dccf55b14e4cbf609b8c9540c2caf83556969932ca9854ea",
+  "microphysics_source_sha256": "f391b211c6e111f92a7213cc5a651606ec6b5826a47063e3057ab2d819e9a595",
+  "capture_script_sha256": "92a560ea3d0829b7fa9e29e2d782d4ea4bd1b25ec5ebcc021c67de86d44f19e5",
+  "mass_basis": "dry_air",
+  "field_units": {
+    "QI": "kg kg-1 dryair",
+    "QS": "kg kg-1 dryair",
+    "QV": "kg kg-1 dryair",
+    "NI": "kg-1 dryair",
+    "DEN": "kg m-3 native KDM wrapper density",
+    "TH": "K dry potential temperature",
+    "PII": "1",
+    "P": "Pa",
+    "DELZ": "m"
+  },
+  "field_basis_limitations": "Labels are caller/native source-contract and ABI interpretations, not an independent density-basis audit. TH*PII reconstructs context temperature and is not an exact inner-KDM temperature claim.",
+  "actual_input_sha256": "222bf0ea976a87c75cae3b9dad79909d00334c159f662d5ab7b2aa99b47dbc76",
+  "actual_boundary_sha256": "95d6b6e08ec23a53c10d7a8dfaabb7bcbc053f98fc7ca90520d77c9c18d34fb1",
+  "replayed_history_sha256": "1da306199931df895a959b1746b570ee13724e86d8f6684694e00ad65c55d840",
+  "baseline_history_sha256": "1da306199931df895a959b1746b570ee13724e86d8f6684694e00ad65c55d840",
+  "clock_evidence": "step1080*20 s and 06\u201312 namelist/log arithmetic; model clock was not read at breakpoint",
+  "coverage_scope": "Only wrapper-return processed physical-domain intersections; no history fill or unsupported-edge values.",
+  "run_verification": [
+    {
+      "path": "run_validation.json",
+      "sha256": "43768b60dae7a26688c50c59f5d773d6a6cf1d1fe8fe659ab8ff26d1858e3f60"
+    },
+    {
+      "path": "input_hashes.json",
+      "sha256": "2834a23ea8a539fea545136c354742823eac75e3a338312de443a56824803901"
+    },
+    {
+      "path": "capture.py",
+      "sha256": "92a560ea3d0829b7fa9e29e2d782d4ea4bd1b25ec5ebcc021c67de86d44f19e5"
+    },
+    {
+      "path": "validate_capture.py",
+      "sha256": "4f1653a97bffdfcfb4e3b601057cd842102a2662e6b40c7ca96792c05f0d253b"
+    },
+    {
+      "path": "launcher.log",
+      "sha256": "2f463dc2f02b28b547eca2e8fce03ee43d469dfdb0b268e38c076eb2e6ab40e4"
+    },
+    {
+      "path": "start.utc",
+      "sha256": "7aeab1771194bc0b3d868f16f5ef88a064b06a70f17dda710b4312c64e30a684"
+    },
+    {
+      "path": "end.utc",
+      "sha256": "cdd05d08800525632a230330c72fe89b147d17498d8667e54c1476a7c0939216"
+    },
+    {
+      "path": "exit.status",
+      "sha256": "9a271f2a916b0b6ee6cecb2426f0b3206ef074578be55d9bc94f6f3fe3ab86aa"
+    },
+    {
+      "path": "ldd.txt",
+      "sha256": "6b1fbb0eea6bb3e20fa2fc3382c0f6300edd57df0fffd6b75918239cb349ecf8"
+    },
+    {
+      "path": "rsl.error.0000",
+      "sha256": "276f292c1b23fc47cfe70483b944aad8ad63e7a268d14b43317743305a7b8c11"
+    },
+    {
+      "path": "rsl.error.0001",
+      "sha256": "bbb0e5f4cb86957fc2d9f160fef3bc33886825efe4da64d2fbd50a6573d3119f"
+    },
+    {
+      "path": "rsl.error.0002",
+      "sha256": "e081ae98fc0bc5de1cbeacde64b9cbe5fb8fe54f34ba26cff3b5c565a78c1de0"
+    },
+    {
+      "path": "rsl.error.0003",
+      "sha256": "b9151f3341ed68ea43b3d82586041d61af501802d46ee11c88dcfb55ed0c47f2"
+    },
+    {
+      "path": "rsl.error.0004",
+      "sha256": "e89e90e60404bf78a6e4ce4b8d9c4870a440bce60032a6d4bbca8f698832a8ff"
+    },
+    {
+      "path": "rsl.error.0005",
+      "sha256": "934e705fd6a961b3bf0a5ff543dbe373588441c40c95dce983ec3c906520deec"
+    },
+    {
+      "path": "rsl.error.0006",
+      "sha256": "89431d3f9d1ad0aeb993744bc312bb75a36a5850fdb493d4a092e0a926f1bc7b"
+    },
+    {
+      "path": "rsl.error.0007",
+      "sha256": "33cd1df8c17f1ea871c146283d35c846c5dbeb07863014fa743cfca2c7d01106"
+    }
+  ]
+}

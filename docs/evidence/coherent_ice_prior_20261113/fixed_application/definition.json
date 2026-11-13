@@ -1,0 +1,22 @@
+{
+  "schema": "coherent_ice_prior_application_definition_v1",
+  "frozen_at_utc": "2026-11-13T04:31:08.720307+00:00",
+  "analysis_sha256": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+  "valid_time": "2026-08-16_12:00:00",
+  "cycle_start": "2026-08-16_06:00:00",
+  "snapshot_boundary": "first matching KDM6 wrapper return at target step1080 per rank, before host zero-out",
+  "mask_policy_sha256": {
+    "mask.npz": "2c10a85057cc959559badbd1eb9d10bde759490ad441d168e92034d9ad0192f1",
+    "policy.json": "647126e5215acbb985d39d56564898f7c6f82adb85d05266bf0d2c4ba008a00e"
+  },
+  "selected_rule": "Original PR167 ALL cells with REAL64(stored analysis QICE)+REAL64(stored analysis QSNOW)>0; no passing-cell or prior availability filter.",
+  "selected_cells": 294792,
+  "coverage_rule": "Exact union of eight captured physical processed intersections; uncovered fields NaN, never filled from history.",
+  "pilot_geometry_selected_covered": 288745,
+  "pilot_geometry_selected_uncovered": 6047,
+  "full_application_gate": "Any selected cell without capture stops full proposal before common generation; no model initialization artifact.",
+  "covered_diagnostic": "Original selected intersect capture coverage may be evaluated only as nonpublishable numerical common-routine diagnostic, with its separate denominator; never an application mask.",
+  "prior_rule": "Existing background fraction and mean-mass preservation only; no new confidence weight, EPS cutoff, PSD value, cap clipping or repartition.",
+  "scientific_prior_confidence": "Not supplied or inferred from positive/admissible moments; remains an open physical policy.",
+  "decision_baseline": "B1 and original 26 conditions unchanged; no claim of new initialization/forecast skill."
+}

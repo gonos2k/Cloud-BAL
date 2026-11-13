@@ -1,0 +1,19 @@
+{
+  "checks": [
+    "Hash-pinned context, manifest, rank metadata and compressed/uncompressed payload identities; source identity rechecked before publication.",
+    "Rank membership and strict bounds/intersection, nine-field mapping, byte offsets, raw and per-field digests, finite values and spatial ordering.",
+    "Overlap rejection, uncovered NaN/coverage handling, snapshot and receipt readback, no-overwrite link publication and owned rollback.",
+    "Seven focused Python tests passed in an external temporary directory."
+  ],
+  "findings": [],
+  "limitations": [
+    "Run verification entries are hash-linked records, not independently evaluated attestations of executable, clock, or physical meaning; receipt states this scope.",
+    "Synthetic test success does not validate real capture, target input, scientific acceptance, or production use."
+  ],
+  "reviewed_file_sha256": {
+    "tests/test_ice_prior_snapshot.py": "c0adeed8928b99a3357f464bd95b22150dc7a5d5566167b0538b3e3636515761",
+    "tools/assemble_ice_prior_snapshot.py": "bdcd9506910357a9b78f5b6cf6277ff7fcde943d387c0a2154514b0d56b3cc7c"
+  },
+  "scope": "Independent source review of information snapshot assembler and seven focused synthetic tests; no compiler or actual native input run.",
+  "status": "PASS_NO_OPEN_FINDINGS"
+}

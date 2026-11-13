@@ -1,0 +1,105 @@
+{
+  "scope": "Read-only diagnostic on the frozen mask intersection with actual snapshot coverage. The 6047 uncovered selected cells remain unavailable; no candidate, acceptance, modified mask, confidence policy, or substitute prior is generated. Source ABI, target event, timing, geometry and provenance require independently verified assembler receipt and native execution review. Pair support and cap observations are not the full Fortran transaction or new-first-use validation.",
+  "input_sha256": {
+    "assembled/snapshot.npz": "0d0e9f134df4df557c3a22d74f84fc01ae8b2ffc65f7320a4bf0172437501479",
+    "assembled/receipt.json": "e2de9474ba26b8413f845c868f6ebda57f519fd90c05b63056ae8d23f115264b",
+    "../physical_moment_handoff_20261110/native_probe_20261110/preflight_v3/wrfinput_d01": "9f8b494dbf5ce765e4320701475d6a65be1f591d72a4f9bf5e929c208be563e5",
+    "../actual_prior_first_use_20261112/prior_forecast/run/wrfout_d01_2026-08-16_12:00:00": "1da306199931df895a959b1746b570ee13724e86d8f6684694e00ad65c55d840",
+    "../first_call_water_budget_20261112/Cloud-BAL/docs/evidence/prior_cycle_application_20261112/frozen_application/mask.npz": "2c10a85057cc959559badbd1eb9d10bde759490ad441d168e92034d9ad0192f1",
+    "../first_call_water_budget_20261112/Cloud-BAL/docs/evidence/prior_cycle_application_20261112/frozen_application/policy.json": "647126e5215acbb985d39d56564898f7c6f82adb85d05266bf0d2c4ba008a00e",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/coherent_ice_prior_20261113/science/analyze_snapshot.py": "233fc7d803f74b5b6be3c63058281165869592db80399c4466c273761e13507d",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/coherent_ice_prior_20261113/science/science_support.py": "b05f57cb54b4c72ccaafe4ffbae397dc7d99f0dec6e14e712ff1cb75e97e0efb"
+  },
+  "receipt_schema": "coherent_ice_snapshot_receipt_v1",
+  "coverage": {
+    "whole_fixed_selected": 294792,
+    "covered_selected": 288745,
+    "uncovered_selected": 6047,
+    "full_grid_covered": 2533440,
+    "full_grid_uncovered": 40092
+  },
+  "history_same_covered_cells": {
+    "selected": 288745,
+    "nonfinite": 0,
+    "negative": 0,
+    "ice_zero_ni_positive": 44881,
+    "ice_positive_ni_zero": 0,
+    "solid_total_zero": 79374,
+    "positive_pair_inside_mean_bounds": 162777,
+    "positive_pair_outside_mean_bounds": 0,
+    "background_pair_and_mass_support_diagnostic": 181233,
+    "computed_rounded_ni_density_above_cap": 20078,
+    "nonfinite_candidate_volume": 0
+  },
+  "coherent_return_covered_cells": {
+    "selected": 288745,
+    "nonfinite": 0,
+    "negative": 0,
+    "ice_zero_ni_positive": 0,
+    "ice_positive_ni_zero": 0,
+    "solid_total_zero": 62076,
+    "positive_pair_inside_mean_bounds": 207652,
+    "positive_pair_outside_mean_bounds": 6,
+    "background_pair_and_mass_support_diagnostic": 226663,
+    "computed_rounded_ni_density_above_cap": 28080,
+    "nonfinite_candidate_volume": 0
+  },
+  "covered_word_differences": {
+    "QI": 44881,
+    "QS": 2073,
+    "NI": 0
+  },
+  "positive_pair_context": {
+    "description": "Positive QI and NI, nonnegative QS, finite captured values; descriptive distribution, no confidence cutoff.",
+    "background_total_kg_kg": {
+      "count": 207658,
+      "min": 1.0014466300222857e-15,
+      "p01": 5.2385311596924764e-14,
+      "p10": 2.4945594563619005e-07,
+      "p25": 1.2148629892294593e-05,
+      "median": 6.0328686132038456e-05,
+      "p75": 0.0001709323797030038,
+      "p90": 0.00035599812113105175,
+      "p99": 0.0013354913240209464,
+      "max": 0.0037394876037524227
+    },
+    "fraction_qi_over_total": {
+      "count": 207658,
+      "min": 1.4392360390050426e-12,
+      "p01": 2.4428933695831364e-08,
+      "p10": 9.41703020793855e-05,
+      "p25": 0.0022715046195042653,
+      "median": 0.017475649849460893,
+      "p75": 0.12364061872853306,
+      "p90": 0.46269778225656993,
+      "p99": 1.0,
+      "max": 1.0
+    },
+    "mean_kg_particle": {
+      "count": 207658,
+      "min": 2.605587706208792e-16,
+      "p01": 2.9762432960631216e-14,
+      "p10": 1.0416819691187818e-12,
+      "p25": 6.323275920677823e-12,
+      "median": 6.454490199556129e-11,
+      "p75": 5.228423979604472e-10,
+      "p90": 1.5367146468706974e-09,
+      "p99": 2.086900813271993e-09,
+      "max": 2.0943963891714016e-09
+    },
+    "analysis_over_background_total": {
+      "count": 207658,
+      "min": 1.52485221168815e-07,
+      "p01": 0.0009633706313216654,
+      "p10": 0.06721900961612073,
+      "p25": 0.4080974832228508,
+      "median": 2.025800488723715,
+      "p75": 16.150454018853182,
+      "p90": 304.02193014556127,
+      "p99": 250399221.20789605,
+      "max": 4011505384113.4385
+    }
+  },
+  "density_scope": "Rounded proposal NI cap uses analysis-file REAL32 1/(AL+ALB), not captured DEN; captured DEN is separate same-call background context.",
+  "uncovered_data": "NaN for all nine fields; excluded only from descriptive covered-cell comparisons, never from frozen mask or a production transaction."
+}

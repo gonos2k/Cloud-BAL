@@ -1,0 +1,39 @@
+{
+  "schema": "coherent_ice_final_native_review_v1",
+  "status": "PASS_WITH_EXPLICIT_APPLICATION_GATE",
+  "findings": [],
+  "checks": {
+    "independent_raw_words_bitwise_compared": 22800960,
+    "rank_count": 8,
+    "field_count": 9,
+    "ordering": "field-major j,k,i to global z,y,x",
+    "captured_cells": 2533440,
+    "domain_cells": 2573532,
+    "uncovered_cells": 40092,
+    "all_uncovered_field_values_nan": true,
+    "selected_cells": 294792,
+    "selected_uncovered_cells": 6047,
+    "manifest_context_and_all_references_sha256_verified": true,
+    "all_89_postrun_input_hashes_match": true,
+    "baseline_and_replay_full_history_sha256_match": true,
+    "eight_normal_inferior_exits_and_zero_launcher_status": true,
+    "regenerated_snapshot_bitwise_equal": true,
+    "seven_assembler_unit_tests_passed": true,
+    "portable_manifest_files_byte_identical": true
+  },
+  "identities": {
+    "manifest_sha256": "14d01598fccc69806fe457959ecfb7fe0e15cb5f51490368b8c8970a7d4b86e1",
+    "snapshot_sha256": "0d0e9f134df4df557c3a22d74f84fc01ae8b2ffc65f7320a4bf0172437501479",
+    "regenerated_snapshot_sha256": "0d0e9f134df4df557c3a22d74f84fc01ae8b2ffc65f7320a4bf0172437501479",
+    "assembler_sha256": "bdcd9506910357a9b78f5b6cf6277ff7fcde943d387c0a2154514b0d56b3cc7c",
+    "tests_sha256": "c0adeed8928b99a3357f464bd95b22150dc7a5d5566167b0538b3e3636515761",
+    "baseline_history_sha256": "1da306199931df895a959b1746b570ee13724e86d8f6684694e00ad65c55d840"
+  },
+  "limitations": [
+    "The selected-cell coverage gate blocks the full application; no history fill is authorized.",
+    "Recorded step-to-clock relation is indirect and first matching wrapper call per rank does not prove every possible tile call was captured.",
+    "NI scalar-base identity, density basis, source-to-object provenance and scientific validity remain independently unestablished.",
+    "Input and output hash parity and launch records substantiate replay comparability but do not prove an identical runtime environment.",
+    "Assembler verifies linked records by identity, not their claims; synthetic tests are not scientific validation."
+  ]
+}
