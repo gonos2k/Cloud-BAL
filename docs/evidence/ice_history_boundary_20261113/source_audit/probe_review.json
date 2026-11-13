@@ -1,0 +1,25 @@
+{
+  "status": "CONDITIONAL_GO_PENDING_RUNTIME_VERIFICATION",
+  "runtime_status": "run in progress; no execution or runtime result asserted by this review",
+  "reviewed_sha256": {
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/ice_history_boundary_20261113/native/probe.py": "d13c672e83664c2a177d15c35b980543b479d4bc64344be859441538f5d50416",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/ice_history_boundary_20261113/native/rank_wrapper.sh": "008e4658cca64c4b7eb76c5150baf1a508aa43a32792de825657e710d3d2d176",
+    "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/ice_history_boundary_20261113/native/launch.sh": "c0fc10c3473df6fe763dd2be0408e3cfa0bcdd8ea7ce5b01d208243a62d078f6"
+  },
+  "findings": [],
+  "checks": [
+    "Exact executable hash enforced; rank 3 only is debugged.",
+    "KDM argument 53 time step, 60\u201377 bounds, 5 QI and 10 NI match known wrapper interface; zero-out arguments 4\u201321 are bounds, QI plane offset and i,k,j indexing match explicit-shape layout.",
+    "QI equality against captured KDM pointer and six memory bounds is checked prior to emitting a zeroout capture.",
+    "The nine coordinate triples map as (k-1,j-1,i-1) to the historical 12 UTC file: first five QICE=0 QNICE>0, last four positive in both. Selection is illustrative, not population-wide."
+  ],
+  "required_postrun_gates": [
+    "Require zero abi_mismatch events; probe emits these but does not abort.",
+    "Require exactly one observed KDM entry/return, zero_b entry/return and zero_a entry/return in temporal order and validate target-cell coverage in each event, including each event tile bounds.",
+    "Verify rank 3, step 1080 time correspondence, original uninstrumented matched histories and all output hashes; compare each event cell to exact 12 UTC history in float32 raw words where that comparison is claimed.",
+    "Probe retains NI pointer obtained at KDM call; it does not independently capture scalar base and compare against P_QNI, nor independently verify memory lifetime. Treat the QNI mapping as KDM pointer continuity contingent on parity, not independently proven live scalar plane.",
+    "Probe does not record zero-out config or physical clock: validate mode, threshold, step-to-time and routine/call placement via retained configuration, runtime evidence and parity; do not present as directly captured configuration.",
+    "Zero a/b each disable after first matching call; later tile/call transitions and other ranks are unobserved. No domain-wide causal attribution."
+  ],
+  "scope": "Source review of frozen script; no runtime mutation, launch or postrun validation."
+}

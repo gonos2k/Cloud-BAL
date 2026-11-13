@@ -1,0 +1,40 @@
+{
+  "status": "PASS",
+  "scope": "Final independent science/document review with direct actual capture, both actual NetCDF hashes and endpoint word comparisons; no source or KG mutation.",
+  "findings": [],
+  "resolved_findings": [
+    {
+      "id": "ite_transcription",
+      "resolution": "Report and independent full-native review now state captured KDM ite 233, zero-b ite 234; zero kte 40 versus KDM 39. Domain ide 235 is separate."
+    }
+  ],
+  "reviewed_file_sha256": {
+    "docs/ICE_HISTORY_BOUNDARY_20261113.md": "6fecda991fbe592f5887d8f0d549a7d922617d616382a79342a0f0ca5efb4c56",
+    "README.md": "6213975406a6ecd7a788f38a615355b404c924e8dbf2612645f5d38e47af93a2",
+    "docs/CURRENT_RESEARCH_STATUS.md": "9ca3eaed009666c3189149a62290a5f12ca80a526ef3fde5dbbc259696ccc4bb",
+    "docs/evidence/ice_history_boundary_20261113/README.md": "d786b6ad7bc7c125571f4a5d0fb65f0c5b58f8bdcdb35f34975d565644f873e9",
+    "docs/evidence/ice_history_boundary_20261113/native/README.md": "d93c6da1bcc1f77a96876ce15fcb12d3c8d861c1e781216cca5a1587150d38d9",
+    "docs/evidence/ice_history_boundary_20261113/native/replay_v2/native_validation.json": "6aed14fafec230f7ee4d02f358a708360bd1a026bde1551c84f2e629e58a4696",
+    "docs/evidence/ice_history_boundary_20261113/native/replay_v2/rank3_capture.jsonl": "88ded2593d2f3a005b52a02d9f39a9b3e27d1a1fa8408bb75f56346915dc0112",
+    "docs/evidence/ice_history_boundary_20261113/native/replay_v2/baseline_selected_words.json": "aead0905629e842bfe670bc355f087090f8084c6a4c239406b71f494fac3384d",
+    "docs/evidence/ice_history_boundary_20261113/native/replay_v2/replayed_selected_words.json": "e6c7a15b4fcaa2130306f91b11efe730262fa9707d127fa3f2e223aa94a62245",
+    "docs/evidence/ice_history_boundary_20261113/native/validate_words.py": "4e1388b6a060281cd8aee15478dcda2b4473ccb67eec45494497d7da063a9f1a",
+    "docs/evidence/ice_history_boundary_20261113/native/public_word_replay/offline_word_validation.json": "d66760d6adb87624281d1520ee128a48a630f738c30540523640ac4c8dac2cc9",
+    "docs/evidence/ice_history_boundary_20261113/source_audit/full_native_review.json": "1f9c0042ba5f8f64fad1415fc0248c3092c180e4b1dbe95f18823b9659bab5e0",
+    "docs/evidence/ice_history_boundary_20261113/validation/code_review.json": "02c47a808ba66c65ca7f2331a779da93436b6ce81c848ff8f485d9f44a3c0e54",
+    "docs/evidence/ice_history_boundary_20261113/science/recount.py": "e15408785b38745ac135e3b5ad5c627ff5f9059ed41b322154905792c616c84c",
+    "docs/evidence/ice_history_boundary_20261113/science/recount.json": "27f87cc4b1e5a7bc2826b0a1a8678bcd61231a5f670d8b567f41186fbe1767e0",
+    "docs/evidence/ice_history_boundary_20261113/science/cap_diagnostics.npz": "c72ab73056d40c5c379d12709712b47bd58de389b321e7825dce08ce72513cbd",
+    "docs/evidence/ice_history_boundary_20261113/figures/plot_constraints.py": "7782091d15d20c55b552ba8c07cc4d47ff1fce6bf8a77fbc3429cdcdb9fd6ce7",
+    "docs/evidence/ice_history_boundary_20261113/figures/cap_constraints.png": "084fc3eccc6ad43c081193c4d65d2a2ed99e4871f4babfd603020d27dcfd7c88",
+    "docs/evidence/ice_history_boundary_20261113/figures/constraints_receipt.json": "871b9deaa180a0c5216ea42a2235802fd196ddf401da904eb41b535f01c4559e"
+  },
+  "independent_actual_checks": [
+    "Six ordered rank-3 events and 54 records; direct values show five subthreshold positive QI to zero at zero-a with NI retained, four QI >= threshold unchanged.",
+    "All nine terminal QI and NI little-endian words match both saved history sample sets; direct SHA-256 of both full NetCDF files equals 1da306199931df895a959b1746b570ee13724e86d8f6684694e00ad65c55d840.",
+    "Counterexample (190,103,23) alpha 459.1471420 and target-volume number 11787583 m^-3; count/statistics and REAL64-only feasibility checked in preliminary review.",
+    "Report explicitly limits sample to outcome-selected nine, does not assign cause to 44889 cells, and does not claim new initialized input or forecast improvement.",
+    "Report distinguishes memory bounds/direct QI pointer from retained NI pointer without independent scalar-base mapping, indirect clock, and uninstrumented history store; fixed configuration and source-object limits stated."
+  ],
+  "limitations": "Physical clock not captured directly; history store and unobserved downstream operations not instrumented; source-to-object and historical forcing lineage remain limited; nine selected cells are not a population estimate."
+}

@@ -1,0 +1,31 @@
+{
+  "status": "PASS",
+  "checks": {
+    "exact_six_event_sequence": true,
+    "nine_cells_baseline_and_replay": true,
+    "nine_matching_rows_per_event": true,
+    "capture_word_encodings_valid": true,
+    "history_word_encodings_valid": true,
+    "kdm_return_to_zero_b_entry": true,
+    "zero_b_return_to_zero_a_entry": true,
+    "zero_a_return_qi_equals_replayed_history": true,
+    "baseline_equals_replayed_history_qi": true,
+    "zero_a_return_ni_equals_replayed_history": true,
+    "baseline_equals_replayed_history_ni": true
+  },
+  "events": [
+    "kdm_entry",
+    "kdm_return",
+    "zero_b_entry",
+    "zero_b_return",
+    "zero_a_entry",
+    "zero_a_return"
+  ],
+  "file_sha256": {
+    "capture": "88ded2593d2f3a005b52a02d9f39a9b3e27d1a1fa8408bb75f56346915dc0112",
+    "baseline": "aead0905629e842bfe670bc355f087090f8084c6a4c239406b71f494fac3384d",
+    "replayed": "e6c7a15b4fcaa2130306f91b11efe730262fa9707d127fa3f2e223aa94a62245",
+    "inputsreceipt": "2834a23ea8a539fea545136c354742823eac75e3a338312de443a56824803901"
+  },
+  "scope": "Offline validation of 54 recorded event-cell records plus 18 saved history-cell pairs; it does not independently read or hash NetCDF inputs or outputs."
+}

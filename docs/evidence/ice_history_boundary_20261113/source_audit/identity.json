@@ -1,0 +1,60 @@
+{
+  "executable": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_activation_path_20261110/runtime/native_build/variants/CONTROL/wrf.exe",
+    "sha256": "3a286f6691fa94c2dccf55b14e4cbf609b8c9540c2caf83556969932ca9854ea"
+  },
+  "prior_run_executable": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/actual_prior_first_use_20261112/prior_forecast/run/wrf.exe",
+    "sha256": "3a286f6691fa94c2dccf55b14e4cbf609b8c9540c2caf83556969932ca9854ea"
+  },
+  "archive": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_activation_path_20261110/runtime/native_build/variants/CONTROL/libwrflib.a",
+    "sha256": "249a2a871790ff7a863c7da8762f50b2f7ed62854cd0533b80c3eea2b7644630"
+  },
+  "original_archive": {
+    "path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/build_FIX/libwrflib.a",
+    "sha256": "fbb908b69da24a3474547a2a5216b4764cc8a1b03c0e15b3201af61546e7a1f4"
+  },
+  "members": {
+    "solve_em.o": {
+      "variant_sha256": "db052c6724f87dc4790ab6e78fefd00813d9f056aeb119b18da72508d02808bf",
+      "original_sha256": "db052c6724f87dc4790ab6e78fefd00813d9f056aeb119b18da72508d02808bf",
+      "byte_identical": true
+    },
+    "module_microphysics_driver.o": {
+      "variant_sha256": "1220212ddbcf1a101887899fa84aa2d6d8a5879b530d1b38d58ecd23e28add8a",
+      "original_sha256": "1220212ddbcf1a101887899fa84aa2d6d8a5879b530d1b38d58ecd23e28add8a",
+      "byte_identical": true
+    },
+    "module_microphysics_zero_out.o": {
+      "variant_sha256": "92e97f4c98d642e3fde6b237519f8d3827db5c096cee2d2a777430685439ae2d",
+      "original_sha256": "92e97f4c98d642e3fde6b237519f8d3827db5c096cee2d2a777430685439ae2d",
+      "byte_identical": true
+    }
+  },
+  "solve_em_lineage": {
+    "path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/host/dyn_em/solve_em.f90",
+    "sha256": "4e1c09c342c9a6382d08a02f7944ada74d5f5b54ba3fca49062bfd628825aaf9"
+  },
+  "driver_lineage": {
+    "path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/host/phys/module_microphysics_driver.f90",
+    "sha256": "149e11e0dc678600f189bd5fb66c190b6253b0663b253d211d929d8b17b0cddc"
+  },
+  "zeroout_lineage": {
+    "path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/host/phys/module_microphysics_zero_out.f90",
+    "sha256": "2669f3c152bf0e777bfb145ba1c296abdf9e270894ae0602638267246cccb9ed"
+  },
+  "registry": {
+    "path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/host/Registry/Registry.EM_COMMON",
+    "sha256": "b01855ed80569be04bbd99e43ea1672a60e35590db00145c839b8f74cfd9b07f"
+  },
+  "mediation": {
+    "path": "/var/tmp/firsthour-runtime-plan-20261030/experiment/host/share/mediation_integrate.f90",
+    "sha256": "60a09942aa6b48fd15c4140aac9af40c61e6544d17221e5143077ce6cc8b8c45"
+  },
+  "build_receipt": {
+    "path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/b1_activation_path_20261110/runtime/native_build/variants/CONTROL/build_receipt.json",
+    "sha256": "903444c401beeaddc6a618fe76a6e486a56407b99479234a9050bad3aa1328b0"
+  },
+  "source_binding_limit": "Copied source tagged fortran_lineage is not proof of compilation to archive members; no DWARF in executable."
+}

@@ -1,0 +1,24 @@
+{
+  "status": "GO",
+  "reviewed_staged_tree_before_this_receipt": "42457a6c9dad88df6b938abcb8eb0974a78975e9",
+  "artifact_manifest_sha256": "423350ddb90792a7878ea486d0991296ef2bd2f6f54c62877afc3d116f620163",
+  "staged_paths": 169,
+  "manifest_entries": 168,
+  "manifest_and_final_review_excluded_from_manifest": true,
+  "checks": {
+    "staged_paths_equal_manifest_entries_plus_manifest": true,
+    "all_manifest_entries_index_blob_and_worktree_sha256_and_size_match": true,
+    "no_production_src_tests_tools_changes": true,
+    "six_source_graph_paths_are_current_trio_and_2026_11_13_snapshot": true,
+    "current_source_graph_trio_equals_dated_snapshot": true,
+    "all_99_native_copy_manifest_entries_match": true,
+    "selection_lock_5_sources_and_143_evidence_pins_match": true,
+    "publisher_28_target_hashes_and_source_copy_receipt_11_match": true,
+    "original_and_revised_validator_and_receipts_identified": true,
+    "review_receipts_report_go_or_pass": true,
+    "authored_staged_diff_check_excluding_retained_native_csv_asm_pass": true,
+    "all_900_full_diff_warnings_match_retained_original_bytes": true
+  },
+  "whitespace_note": "Full diff check reports 900 trailing whitespace warnings across 12 retained native namelist/CSV files, science CSV, and assembly excerpts. Each is byte-identical to the retained source artifact; authored files excluding those scoped files pass.",
+  "limits": "Review covers exact staged tree before this declared manifest-excluded review receipt; root must stage the receipt separately. Nine selected cells are not a domain-wide causal estimate."
+}

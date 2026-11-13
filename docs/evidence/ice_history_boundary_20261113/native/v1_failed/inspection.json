@@ -1,0 +1,196 @@
+{
+  "checks": {
+    "exit_zero": true,
+    "all_ranks_success": true,
+    "input_hashes_unchanged": true,
+    "exact_event_sequence": false,
+    "nine_rows_every_event": false,
+    "no_abi_mismatch": true,
+    "history_byte_identical": true,
+    "all_inspected_history_fields_bit_identical": true,
+    "all_sample_qi_history_equal_zeroout_return": false,
+    "all_sample_ni_history_equal_zeroout_return": false
+  },
+  "events": [],
+  "final_forecast_sha256": "1da306199931df895a959b1746b570ee13724e86d8f6684694e00ad65c55d840",
+  "baseline_forecast_sha256": "1da306199931df895a959b1746b570ee13724e86d8f6684694e00ad65c55d840",
+  "history_field_differences": {
+    "QICE": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "QSNOW": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "QNICE": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "QNCLOUD": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "QRAIN": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "QNRAIN": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "QNCCN": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "QGRAUP": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "QIB": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "AL": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "ALB": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "T": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "P": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "PB": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "QVAPOR": {
+      "different_words": 0,
+      "shape": [
+        1,
+        39,
+        282,
+        234
+      ]
+    },
+    "PH": {
+      "different_words": 0,
+      "shape": [
+        1,
+        40,
+        282,
+        234
+      ]
+    },
+    "PHB": {
+      "different_words": 0,
+      "shape": [
+        1,
+        40,
+        282,
+        234
+      ]
+    },
+    "MU": {
+      "different_words": 0,
+      "shape": [
+        1,
+        282,
+        234
+      ]
+    },
+    "MUB": {
+      "different_words": 0,
+      "shape": [
+        1,
+        282,
+        234
+      ]
+    }
+  },
+  "sample_word_comparison": [],
+  "limitations": [
+    "Nine samples were selected using 12 UTC results and do not support causal frequency over 44889 cells.",
+    "The NI pointer is inherited from KDM and was not independently bound to the scalar base.",
+    "Only the first matching zero-out b/a calls are captured; later calls are unobserved.",
+    "Step 1080 is inferred as final from 20-second fixed-step 06\u201312 namelist and run logs; the probe itself does not capture model clock.",
+    "The capture does not directly instrument history-store calls or read mp_zero_out mode and threshold in memory."
+  ]
+}

@@ -1,0 +1,209 @@
+{
+  "status": "PASS",
+  "checks": {
+    "probe_sha": true,
+    "six_events_exact_order": true,
+    "nine_unique_same_cells": true,
+    "steps": true,
+    "config_and_calls": true,
+    "pointer_and_memory_bounds": true,
+    "words_decode": true,
+    "return_to_cleanup_unchanged": true,
+    "final_history_matches_all_18_words": true,
+    "exit_and_all_ranks": true,
+    "all_words_finite": true,
+    "selected_points_within_each_event_bounds": true
+  },
+  "final_step": 1080,
+  "events": [
+    "kdm_entry",
+    "kdm_return",
+    "zero_b_entry",
+    "zero_b_return",
+    "zero_a_entry",
+    "zero_a_return"
+  ],
+  "cell_count": 9,
+  "observed_qi_changed_at_zero_a": 5,
+  "observed_ni_changed_at_zero_a": 0,
+  "history_sample_words": [
+    {
+      "cell": [
+        138,
+        72,
+        17
+      ],
+      "qi": {
+        "old": "00000000",
+        "new": "00000000",
+        "cleanup": "00000000"
+      },
+      "ni": {
+        "old": "23541037",
+        "new": "23541037",
+        "cleanup": "23541037"
+      }
+    },
+    {
+      "cell": [
+        205,
+        102,
+        17
+      ],
+      "qi": {
+        "old": "00000000",
+        "new": "00000000",
+        "cleanup": "00000000"
+      },
+      "ni": {
+        "old": "956b6341",
+        "new": "956b6341",
+        "cleanup": "956b6341"
+      }
+    },
+    {
+      "cell": [
+        193,
+        97,
+        18
+      ],
+      "qi": {
+        "old": "00000000",
+        "new": "00000000",
+        "cleanup": "00000000"
+      },
+      "ni": {
+        "old": "6ef07141",
+        "new": "6ef07141",
+        "cleanup": "6ef07141"
+      }
+    },
+    {
+      "cell": [
+        153,
+        115,
+        22
+      ],
+      "qi": {
+        "old": "00000000",
+        "new": "00000000",
+        "cleanup": "00000000"
+      },
+      "ni": {
+        "old": "4458253a",
+        "new": "4458253a",
+        "cleanup": "4458253a"
+      }
+    },
+    {
+      "cell": [
+        167,
+        73,
+        31
+      ],
+      "qi": {
+        "old": "00000000",
+        "new": "00000000",
+        "cleanup": "00000000"
+      },
+      "ni": {
+        "old": "7d3a4439",
+        "new": "7d3a4439",
+        "cleanup": "7d3a4439"
+      }
+    },
+    {
+      "cell": [
+        205,
+        79,
+        20
+      ],
+      "qi": {
+        "old": "4e6a4c35",
+        "new": "4e6a4c35",
+        "cleanup": "4e6a4c35"
+      },
+      "ni": {
+        "old": "4766f843",
+        "new": "4766f843",
+        "cleanup": "4766f843"
+      }
+    },
+    {
+      "cell": [
+        172,
+        124,
+        21
+      ],
+      "qi": {
+        "old": "009df535",
+        "new": "009df535",
+        "cleanup": "009df535"
+      },
+      "ni": {
+        "old": "ca121645",
+        "new": "ca121645",
+        "cleanup": "ca121645"
+      }
+    },
+    {
+      "cell": [
+        190,
+        103,
+        23
+      ],
+      "qi": {
+        "old": "d6975432",
+        "new": "d6975432",
+        "cleanup": "d6975432"
+      },
+      "ni": {
+        "old": "ca3b7447",
+        "new": "ca3b7447",
+        "cleanup": "ca3b7447"
+      }
+    },
+    {
+      "cell": [
+        173,
+        79,
+        29
+      ],
+      "qi": {
+        "old": "89fb3233",
+        "new": "89fb3233",
+        "cleanup": "89fb3233"
+      },
+      "ni": {
+        "old": "fcda0c48",
+        "new": "fcda0c48",
+        "cleanup": "fcda0c48"
+      }
+    }
+  ],
+  "sha256": {
+    "probe": "0e8ca0a18abed67af59cb6811fcf422a4a93778f1ce9bab83f44201570c4801a",
+    "capture": "88ded2593d2f3a005b52a02d9f39a9b3e27d1a1fa8408bb75f56346915dc0112",
+    "prior_history": "1da306199931df895a959b1746b570ee13724e86d8f6684694e00ad65c55d840",
+    "replay_history": "1da306199931df895a959b1746b570ee13724e86d8f6684694e00ad65c55d840"
+  },
+  "limits": [
+    "Nine selected rank-3 cells, not domain-wide inference.",
+    "NI pointer is carried from KDM; no independently captured scalar-base mapping.",
+    "Physical clock is not directly captured in probe; event step 1080 is linked to 12 UTC through run configuration and output parity."
+  ],
+  "bounds_note": "Six memory bounds (ims,ime,jms,jme,kms,kme) and both captured pointers match. Tile endpoints differ: KDM ite=233, kte=39; zero_b ite=234, kte=40; zero_a ite=233, kte=40; ide=235 for all. Each selected point lies within its event tile and physical bounds.",
+  "final_native_validation_sha256": "6aed14fafec230f7ee4d02f358a708360bd1a026bde1551c84f2e629e58a4696",
+  "validator_review": {
+    "validate_words_sha256": "45ff40af020e1bffa623111702d7d77cb9950cc2059ce115eeeeb8fec626d59e",
+    "scope": "Offline saved debugger and nine extracted history words; only hashes the supplied inputsreceipt and does not itself verify source NetCDF. Full history hashes and other checks are established by separately retained native_validation and independent NetCDF sample check.",
+    "findings": "No blocker for actual retained records; absent/malformed event data can raise rather than produce INCOMPLETE, and validator does not itself test config, bounds, pointer continuity or full history; those require separately bound native validation and this independent review.",
+    "reviewed_version": "original executed verifier; retained in evidence native/replay_v2/validate_words_initial.py",
+    "retained_original_path": "/NHNHOME/WORKSPACE/26weather002_A/yhlee/KLAPS50/scratch/first_call_water_budget_20261112/Cloud-BAL/docs/evidence/ice_history_boundary_20261113/native/replay_v2/validate_words_initial.py",
+    "retained_original_sha256": "45ff40af020e1bffa623111702d7d77cb9950cc2059ce115eeeeb8fec626d59e",
+    "later_public_validator_sha256": "4e1388b6a060281cd8aee15478dcda2b4473ccb67eec45494497d7da063a9f1a",
+    "later_public_validation_sha256": "d66760d6adb87624281d1520ee128a48a630f738c30540523640ac4c8dac2cc9",
+    "previous_review_sha256": "d305a530707fdb3dff27d87934ced9215dba58e1fee9add800c8ce94937f9721"
+  },
+  "bounds_correction": "Earlier review mistakenly reported KDM ite=235, which is ide; corrected from retained event bounds. Runtime validation, raw capture, values and conclusions unchanged."
+}

@@ -1,0 +1,77 @@
+{
+  "scope": "Descriptive fixed-mask analysis; input density is file proxy. Alpha and density substitution are algebraic diagnostics, not an applied initialization. Continuous REAL64 feasibility is not native replay.",
+  "inputs": {
+    "scratch/actual_prior_first_use_20261112/coverage/actual_12utc/diagnostic_only.npz": "6eb1f566594b1a76bdd615014abec8c772987af4d48e1d3e772857f7c79c55b2",
+    "scratch/actual_prior_first_use_20261112/fixed_application/policy.json": "647126e5215acbb985d39d56564898f7c6f82adb85d05266bf0d2c4ba008a00e"
+  },
+  "source_script_sha256": "e15408785b38745ac135e3b5ad5c627ff5f9059ed41b322154905792c616c84c",
+  "selected": 294792,
+  "qi_zero_ni_positive": {
+    "count": 44889,
+    "qs_zero": 16748,
+    "qs_positive": 28141,
+    "qs_negative": 0
+  },
+  "cap_flag": {
+    "count": 20373,
+    "alpha_target_over_background_total": {
+      "min": 1.1550063737073728,
+      "p01": 2.1503118443757505,
+      "p10": 5.867681584015529,
+      "p25": 14.063750630850349,
+      "median": 38.94228272307144,
+      "p75": 101.99888618437588,
+      "p90": 293.4475471893921,
+      "p99": 23189.455286938115,
+      "max": 1.1344479845268458e+36
+    },
+    "analysis_over_background_density": {
+      "min": 0.9895647324565937,
+      "p01": 0.9931237084404271,
+      "p10": 0.9955369685166013,
+      "p25": 0.9984038665260305,
+      "median": 1.0006110473674097,
+      "p75": 1.0019566232239505,
+      "p90": 1.0026523542140107,
+      "p99": 1.0040057026162814,
+      "max": 1.0092408391944394
+    },
+    "substitute_background_density_still_above": 20363,
+    "substitute_background_density_at_or_below": 10,
+    "already_bad_background_mean": 41
+  },
+  "continuous_real64_feasibility": {
+    "group": 20332,
+    "empty": 8,
+    "nonempty": 20324,
+    "formula": "max(policy_lower, REAL64(stored_qi_REAL32)*REAL64(analysis_density_REAL32)/cap) <= policy_upper",
+    "empty_required_mean_over_upper_minus_one": {
+      "min": 0.006793596934540513,
+      "p01": 0.01733664921525278,
+      "p10": 0.11222411974166319,
+      "p25": 0.5173317826892583,
+      "median": 0.7026721219216487,
+      "p75": 1.5049373319227772,
+      "p90": 2.1001778786029877,
+      "p99": 2.317819768628785,
+      "max": 2.342002200853874
+    },
+    "empty_required_mean_kg_per_particle": {
+      "min": 2.1125294708964486e-09,
+      "p01": 2.134651690112007e-09,
+      "p10": 2.3337516630520347e-09,
+      "p25": 3.1837787981753644e-09,
+      "median": 3.572673731522688e-09,
+      "p75": 5.256046475213771e-09,
+      "p90": 6.505024618264293e-09,
+      "p99": 6.961697076433486e-09,
+      "max": 7.012438460674508e-09
+    }
+  },
+  "representative_cells_sha256": "e7e09f40f7572f10db9c1538e7f30d88b56d7b3ab757a5cb19208c98c29e8487",
+  "cap_diagnostics": {
+    "sha256": "c72ab73056d40c5c379d12709712b47bd58de389b321e7825dce08ce72513cbd",
+    "count": 20373,
+    "scope": "Fixed selected cells with REAL32 proposed NI times REAL32 analysis density proxy above frozen cap. Flat indices are zero-based C order in (k,j,i) full domain. Flags are descriptive; continuous_empty excludes bad background mean and is REAL64 feasibility, not native replay."
+  }
+}

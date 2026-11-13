@@ -1,0 +1,29 @@
+{
+  "status": "GO",
+  "scope": "Independent review of isolated stage only; no canonical publication or write.",
+  "selection_lock_sha256": "b5dffefaf7dbdcb6a6180daab19e30d3eb4ca23c7569fb4a11d4d09bd6fed690",
+  "stage_receipt_sha256": "5e43c90c96bcc8bac2b8139b246c35213ba9951952083328ff55423167e4dc4a",
+  "baseline_sha256": "93debc1b4193cec99ad3fd6808d875b04b2d7477be71b114b7a23361a907a516",
+  "findings": [],
+  "checks": {
+    "canonical_baseline_280_snapshot_dirty_status_pass": true,
+    "all_148_selected_and_hash_only_pins_match": true,
+    "five_selected_source_only_in_raw_extractions": true,
+    "receipt_and_baseline_hashes_match": true,
+    "old_node_ids_all_preserved": true,
+    "untouched_edges_preserved": true,
+    "manifest_no_untouched_row_loss_or_mutation": true,
+    "both_snapshot_trios_and_active_stage_hashes_match": true,
+    "all_staged_wiki_hashes_match": true,
+    "graph_integrity_no_dangling_missing_selfloop_duplicate_pairs": true,
+    "wiki_snapshot_and_extraction_limit_visible": true
+  },
+  "observations": {
+    "KLAPS50": "45582\u219245619 nodes, 94348\u219294416 edges; 5862\u21925867 manifest rows",
+    "Cloud-BAL": "19754\u219219791 nodes, 35758\u219235825 edges; 6218\u21926223 manifest rows",
+    "dated_snapshot_count_before": 280,
+    "selected_source_count": 5,
+    "hash_only_count": 143
+  },
+  "limitations": "Graph extraction is structural and Fortran call relationships are partial; graph freshness does not establish runtime or scientific validity. Separate publisher review and explicit GO remain required."
+}
