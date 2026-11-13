@@ -1,0 +1,26 @@
+{
+  "status": "GO",
+  "review_scope": "Review of retained initial and revised validators plus exported copy manifest; not another native model run.",
+  "revised_validator_sha256": "4e1388b6a060281cd8aee15478dcda2b4473ccb67eec45494497d7da063a9f1a",
+  "initial_executed_validator_sha256": "45ff40af020e1bffa623111702d7d77cb9950cc2059ce115eeeeb8fec626d59e",
+  "initial_offline_receipt_sha256": "b308ac28bca0139e1b7b594a80eb8fed95b8f7ade9082bb5d9cebec1ba17afee",
+  "native_runtime_receipt_sha256": "6aed14fafec230f7ee4d02f358a708360bd1a026bde1551c84f2e629e58a4696",
+  "revised_offline_receipt_sha256": "d66760d6adb87624281d1520ee128a48a630f738c30540523640ac4c8dac2cc9",
+  "native_copy_manifest_sha256": "7a3a836bdb1842d1fa3b617f7cbea80328071027fd2351f6f0106551ee2c2a63",
+  "copy_manifest_entries": 99,
+  "copy_manifest_hash_and_size_mismatches": [],
+  "updated_full_native_review_sha256": "1f9c0042ba5f8f64fad1415fc0248c3092c180e4b1dbe95f18823b9659bab5e0",
+  "previous_full_native_review_sha256": "d305a530707fdb3dff27d87934ced9215dba58e1fee9add800c8ce94937f9721",
+  "checks": [
+    "Revised checker rejects duplicate cell rows and duplicate event labels with ValueError and nonzero process exit.",
+    "It compares numeric float32 encoding against every capture and history hex field; mismatches produce failed check and return 1.",
+    "It requires exact ordered event sequence, exactly nine matching cells per event, phase continuity and endpoint/history words.",
+    "Prior actual runtime and initial offline receipts remain unchanged; original verifier is separately retained and identified by the copy manifest. Revised offline receipt refers to the same actual retained capture and selected words.",
+    "99 exported native copy-manifest entries match their files in SHA256 and length."
+  ],
+  "limits": [
+    "Offline checker does not independently verify NetCDF input or full history, native mode, bounds, pointers, or timestamp. These are covered separately in the native and independent reviews.",
+    "Malformed required fields may raise an exception rather than emit a receipt, but exit nonzero."
+  ],
+  "bounds_correction": "Corrected KDM ite from mistaken 235 (ide) to captured 233; prior bad review preserved outside publication."
+}

@@ -1,0 +1,38 @@
+{
+  "status": "GO_FOR_FULL_RUN_WITH_POSTRUN_GATES",
+  "probe_sha256": "0e8ca0a18abed67af59cb6811fcf422a4a93778f1ce9bab83f44201570c4801a",
+  "pilot_probe_sha256": "0e8ca0a18abed67af59cb6811fcf422a4a93778f1ce9bab83f44201570c4801a",
+  "pilot_capture_sha256": "1d3a6f0af3cc35837fe99f0f7e7148a9f835d5c35d09ec6d1811e5a1ae8b12b4",
+  "pilot_exit": 0,
+  "eight_rank_success": true,
+  "events": [
+    "kdm_entry",
+    "kdm_return",
+    "zero_b_entry",
+    "zero_b_return",
+    "zero_a_entry",
+    "zero_a_return",
+    "target_scope_closed"
+  ],
+  "same_nine_cells_at_each_event": true,
+  "same_qi_and_ni_pointer_at_each_event": true,
+  "step": 1,
+  "next_step": 2,
+  "caller_return_b": "0x13fe83b",
+  "caller_return_a": "0x13feb58",
+  "config_raw_le": "020000000000000077cc2b32",
+  "mode": 2,
+  "all_raw": 0,
+  "threshold": 9.99999993922529e-09,
+  "breakpoint_entries": [
+    "0x2283ac0",
+    "0x20ca2d0",
+    "0x20c9550"
+  ],
+  "postrun_requirements": [
+    "Verify step1080 event order and all target rows; classify nonmatching calls and confirm same pointers and bounds.",
+    "Verify matched 12 UTC histories, all rank completion and source hashes.",
+    "Preserve NI scalar-base independent identification and direct physical-clock linkage as unverified; do not infer domainwide attribution from nine cells."
+  ],
+  "scope": "Pilot calibration and source review; not a full-run or scientific conclusion."
+}
