@@ -1,0 +1,31 @@
+{
+  "schema": "coherent_ice_final_science_report_review_v1",
+  "status": "PASS_NO_OPEN_FINDINGS",
+  "scope": "Independent final report, science diagnostics, common output, fixed application definition, and figure review.",
+  "reviewed_sha256": {
+    "docs/COHERENT_ICE_PRIOR_20261113.md": "f30f6e325ea260e79cfb434c0b5118964918c8dff4b4d3204e407ac38ec1a16a",
+    "docs/evidence/coherent_ice_prior_20261113/fixed_application/definition.json": "740ff3391b4bff122a9b7914e7b4ac70ed36eb23b6a44f488efbf0274043dfa9",
+    "docs/evidence/coherent_ice_prior_20261113/science/README.md": "2ba3862b39212be1d108f45becbe3248c507767dc03eebe99de1208075c5b52e",
+    "docs/evidence/coherent_ice_prior_20261113/science/analyze_snapshot.py": "233fc7d803f74b5b6be3c63058281165869592db80399c4466c273761e13507d",
+    "docs/evidence/coherent_ice_prior_20261113/science/evaluate_common.py": "3c44e9485aaa2851f144f421d2525ca9d0b591cfe03e35f1ed5f2c79f833083f",
+    "docs/evidence/coherent_ice_prior_20261113/science/science_support.py": "b05f57cb54b4c72ccaafe4ffbae397dc7d99f0dec6e14e712ff1cb75e97e0efb",
+    "docs/evidence/coherent_ice_prior_20261113/science/snapshot_diagnostic.json": "5cfdaf630d096b92805b21fc2f2f5cd9f60faccad310d53800dfb290ce0b1aa0",
+    "docs/evidence/coherent_ice_prior_20261113/science/common_receipt.json": "9ece6b2a0a0ee7164842b0270df162a8d18c2588f6c8e7452a062ed6fbb5ea27",
+    "docs/evidence/coherent_ice_prior_20261113/figures/plot_diagnostics.py": "1f54eeb4307e7fbd0b34c53e170b7e5bb1369992c43c27b830dac19fe14e87e4",
+    "docs/evidence/coherent_ice_prior_20261113/figures/diagnostics.png": "5cc4d2e869ce18cec281f61b5ec8fbfe4f13e82cb106cc07b0a4759407ed0533"
+  },
+  "checks": [
+    "All report relative evidence and figure links resolve, including fixed application definition.",
+    "Published read-only analysis rerun produced identical numerical diagnostics and distributions on hash-bound inputs.",
+    "Original common raw status array and receipt hashes checked; 198582 pass and 90163 fail within 288745 captured selected, first failure (150,228,11), bulk header agrees.",
+    "Figure labels and values checked against receipts; descriptive comparisons use the same covered denominator and can overlap.",
+    "Mean-mass preservation algebra and analysis-density cap basis reviewed; distribution claims match their positive-pair population.",
+    "All three published science helper hashes match the helper identities recorded for original execution.",
+    "Frozen definition selects 294792 cells, of which 6047 uncovered; no full proposal was produced."
+  ],
+  "limitations": [
+    "Acceptance and rejection are numerical diagnostic classifications, not scientific approval or partial initialization.",
+    "Clock, independent NI scalar-base identity and DEN mass basis remain unverified; numerical replay does not establish source-to-object provenance or forecast skill.",
+    "Reproduction requires exact identified large scratch inputs and pinned IFX profile; native packet reconstructs snapshot separately."
+  ]
+}

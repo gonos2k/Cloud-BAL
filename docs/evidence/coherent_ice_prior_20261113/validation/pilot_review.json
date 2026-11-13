@@ -1,0 +1,66 @@
+{
+  "status": "GO_FOR_TERMINAL_REPLAY_PENDING_POSTRUN_VALIDATION",
+  "capture_script_sha256": "92a560ea3d0829b7fa9e29e2d782d4ea4bd1b25ec5ebcc021c67de86d44f19e5",
+  "rank_wrapper_sha256": "05cb9cc07c728f1891a8363500f3ec6e626982eae7f3f64a656c0281ab49edeb",
+  "launch_sha256": "84d35d00c351e408f97964a0eff6f630c928ed0dc839815ee0f056a97b54ef9e",
+  "target_step": 1,
+  "rank_count": 8,
+  "rank_outputs": {
+    "0": {
+      "metadata_sha256": "0eff72a9bfc73039ec74d28567061c0ab437f3bec1d0e355eeb0e6b4f6796547",
+      "binary_sha256": "d55ec5ac24010488b5abc05697588b9c3b89364c0cbf996beeee29bdaeeac512"
+    },
+    "1": {
+      "metadata_sha256": "73de86d9ff69baeec5cf2fe1d44b8bb9016d8628e64926411ef09ef35e13f42b",
+      "binary_sha256": "b8da1447c762d4c670507c3f2e5e04bf6fb57c6cad4c3a2038a468e26586d032"
+    },
+    "2": {
+      "metadata_sha256": "994fd995f0be914657947d5dd49c4af9b27e049dc2019b229a985f3a606d611c",
+      "binary_sha256": "c1de029e749a5078e7d858ad556650a35faf913c5b51a2956f92cd3a88b47cca"
+    },
+    "3": {
+      "metadata_sha256": "ec8db68abbeced3d94e1003a7950bdd3ac3649a2ecd59ceae21af64e17a97c66",
+      "binary_sha256": "386c86f736e58f73e82f6997047b88920d78ef42750a31286ab2fa9e370b7d45"
+    },
+    "4": {
+      "metadata_sha256": "ce34057d9826f2843ca4c7c9cd662cb0db733878e4c5aba2e50e83dbd1dc9a45",
+      "binary_sha256": "e2e6a05e372593ab49dd75d5a46c5180bfa92ad73cd90d80cf18ae757891ac33"
+    },
+    "5": {
+      "metadata_sha256": "bf4de25330abf4d92f6faadcf3c1650da1eba55d655f5d70705881511ecb2979",
+      "binary_sha256": "fa24d181b126042caf6d24b15d900d8c811f77875dfaf0c966054f03319d7659"
+    },
+    "6": {
+      "metadata_sha256": "323b6cd3150332b80c14356b525d967371e2f60e32894f44cc138cd01f06dc18",
+      "binary_sha256": "1842c07aefbae2e3527760dba63c7d3dd902d96264ca12f75ba5e73f890f68a4"
+    },
+    "7": {
+      "metadata_sha256": "f7eb2e59e6f357ba10bfdf140fa056a1501387f55f72f148456dea5594518fda",
+      "binary_sha256": "9fadcb281f0c889995d1bed9bbff0083c5a62f0d40fd565b20d66c86fd3e7b1f"
+    }
+  },
+  "checks": {
+    "exact_entry_and_77_arguments": true,
+    "nine_field_arg_order_and_return_phase": true,
+    "per_field_and_full_rank_binary_hash_size": true,
+    "fields_finite_and_den_pii_p_delz_positive": true,
+    "all_eight_success": true,
+    "domain_intersection_disjoint": true
+  },
+  "mass_domain_cells": 2573532,
+  "captured_cells": 2533440,
+  "uncovered_cells": 40092,
+  "overlap_cells": 0,
+  "coverage_description": "i=2..233, j=2..281, k=1..39; perimeter not captured",
+  "limitations": [
+    "Step1 is a pilot, not terminal data.",
+    "The breakpoint disables after first matching call per rank; no direct assertion all possible target calls were observed.",
+    "Coverage is processed-domain intersection, not allocated halo or full mass domain.",
+    "Step-to-clock and scientific independence remain indirect; full forecast parity is a separate gate."
+  ],
+  "postrun_requirements": [
+    "Recheck full step1080 rank data, field sizes and hashes, binary phase and validity/ownership accounting.",
+    "Confirm 8 rank completion, all captured input files unchanged and 12 UTC history full-file parity to original.",
+    "Keep all 40092 uncovered cells invalid unless actually observed and redesign supported; do not fill from history."
+  ]
+}
